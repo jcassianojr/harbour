@@ -1,0 +1,67 @@
+//Teclas Operacionais
+#INCLUDE "INKEY.CH"
+////#INCLUDE "COMANDO.CH"
+#INCLUDE "BOX.CH"
+
+IF ZUSER<>"SUPERVISOR".and. ZUSER <> "SOFTEC"   //So troca Senha
+   ALERTX("Acesso Permitido Somente Para o Supervisor")
+   RETU .F.
+ENDIF
+
+
+PRIV mACEITE:="S",USUARIO:=SPACE(10),mCONTROLE:=""
+MDS("Digite o Usuario")
+@ 24,40 GET USUARIO
+IF ! READCUR()
+   RETU .F.
+ENDIF
+
+IF EMPTY(USUARIO).OR.! VERSEHA("MUSER",,ENCODE(USUARIO))
+   ALERTX("Usu rio N„o Cadastrado")
+   RETU .F.
+ENDIF
+
+
+
+
+PADRAO("FOLOPT","FOLOPT","' '+mITEMENU+' '+STR(mPOSICAO,  2)+' '+mDESCP+' '+mDESCM","mITEMENU+STR(mPOSICAO,2)","FOPTO_40 - Plano de Acessos","I PO Item"+spac(22)+"Mensagem",;
+       {|| iFOPTO4O()},{|| tFOPTO4O()},{|| gFOPTO4O()},,,2)
+RETU .T.
+
+FUNC iFOPTO4O
+MDS("Digite o Menu e a Posicao")
+@  5, 3 GET mITEMENU    PICTURE "!" VALID mITEMENU $ "ABCD"
+@  5,10 GET mPOSICAO    PICTURE "99" RANGE 1,33
+mCHAVE:= mITEMENU+STR(mPOSICAO,2)
+RETU .T.
+
+FUNC tFOPTO4O
+HB_DISPBOX( 3, 0,23,79,B_DOUBLE+" ")
+@  4,  3 SAY "Item   Posi‡„o"
+@  7,  3 SAY "Descri‡„o para o Item do Menu"
+@ 10,  3 SAY "Mensagem para o Item do Menu"
+@ 13,  3 SAY "Linha Coluna Tecla"
+@ 16,  3 SAY "Executar"
+@ 18,  3 SAY "Acessa"
+RETU .T.
+
+
+FUNC gFOPTO4O
+mACEITE:=IF(VERSEHA("MUSERM",,USERMCRI(USUARIO,mITEMENU,mPOSICAO)),"S","N")
+@  5, 3 SAY mITEMENU
+@  5,10 SAY mPOSICAO
+@  8, 3 GET mDESCP
+@ 11, 3 GET mDESCM
+@ 14, 3 GET mLINHA      PICTURE '99'
+@ 14,11 GET mCOLUNA     PICTURE '99'
+@ 14,17 GET mTECLA      PICTURE '999'
+@ 17, 3 GET mEXECUTAR
+@ 19, 3 GET mACEITE
+READCUR()
+IF mACEITE="N"
+   APAGAREG("MUSERM","MUSERM",USERMCRI(USUARIO,mITEMENU,mPOSICAO),.F.,.F.)
+ELSE
+   mCONTROLE:=USERMCRI(USUARIO,mITEMENU,mPOSICAO)
+   NOVOREG("MUSERM","MUSERM",mCONTROLE)
+ENDIF
+RETU .T.

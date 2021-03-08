@@ -1,0 +1,77 @@
+#INCLUDE "BOX.CH"
+
+caRQCUR:=PEGCAMINI("CURSO")+"CURSO"
+caRQEMP:=PEGCAMINI("CUREMP")+"CUREMP"
+cARQEMI:=PEGCAMINI("CUREMI")+"CUREMP"
+v_pic="@S18"
+
+
+PADRAO(cARQEMP,cARQEMP,"STR(mNUMERO,8)+' '+mCOGNOME","mNUMERO","Cadastro de Escolas","Escola",;
+       {|| PEGCHAVE("mNUMERO",ULTIMOREG(cARQEMP,"Numero",.T.),"Numero:")},{|| tFO3F()},{||gFO3F()},{|| FO_FOR("GRUPO='CUREMP'")})
+RETU .T.
+
+
+FUNCTION gFO3F
+@  4, 1 SAY mNUMERO     PICTURE '99999'
+@  4, 8 GET mCOGNOME
+@  4,24 GET mNOME
+@  4,65 GET mPESSOA    PICTURE "!" VALID mPESSOA $ 'FJCO '
+@ 12,54 GET mCGC       PICT (v_pic) WHEN { |oGet| CNPJCPFPICT(oGet,mPESSOA,12,54) }  VALID CNPJCPFVAL(mCGC,mPESSOA)
+@  6, 1 GET mESTADO    PICTURE "!!" VALID CHECKTAB(PADR("UF",4)+PADR(mESTADO,5),24,0,"Estado N„o Cadastrado")
+@  6, 4 GET mCIDADE    VALID CHECKCID(mESTADO,mCIDADE,.T.)
+@  6,35 GET mCEP       PICTURE "99999-999" VALID CHKUFCEP(mCEP,mESTADO)
+@  8, 1 GET mBAIRRO
+@  8,32 GET mENDERECO
+@ 10, 1 GET mEMAIL     valid CHECKEMAIL(mEMAIL)
+@ 10,32 GET mSITE
+@ 12,10 GET mDDD
+@ 12,15 GET mTELEFONE   
+@ 12,25 GET mRAMAL
+@ 12,30 GET mCONTATO
+@ 13,10 GET mDDD1
+@ 13,15 GET mTELEFONE1  
+@ 13,25 GET mRAMAL1
+@ 13,30 GET mCONTATO1
+@ 14,10 GET mDDDFAX
+@ 14,15 GET mTELEFAX    
+@ 14,54 GET mIESTADUAL  VALID VALIE(mIESTADUAL,mESTADO,mPESSOA)
+READCUR()
+IF MDG("Deseja Alterar Cursos da Escolha")
+   xNUMERO:=mNUMERO
+   PADRAO(cARQEMI,cARQEMI,"' '+STR(mNUMERO,  5)+' '+mCURSO+' '+mDESCUR","STR(mNUMERO,5)+mCURSO","Curso da Escolha","Escola Curso     Descricao",;
+         {||iFO3FA()},{|| tFO3FA()},{||gFO3FA()},{|| FO_FOR("GRUPO='CUREMP'")},{.F.,"NUMERO=xNUMERO",.F.})
+   mNUMERO:=xNUMERO
+ENDIF
+RETU .T.
+
+FUNC tFO3F
+HB_DISPBOX( 2, 0,23,79,B_SINGLE+" ")
+@  3,  1 SAY "Numero Cognome"+spac(9)+"Nome"+spac(37)+"Pessoa"
+@  4, 67 SAY "(FJO)"
+@  5,  1 SAY "UF Cidade"+spac(25)+"CEP"
+@  7,  1 SAY "Bairro"+spac(25)+"Endereco"
+@  9,  1 SAY "Email"+spac(26)+"Site"
+@ 11, 10 SAY "DDD  Telefone  Ramal Contato"+spac(16)+"CGC"
+@ 12,  1 SAY "Telefone"
+@ 13, 54 SAY "I.Estadual"
+@ 14,  1 SAY "Fax"
+RETU .T.
+
+
+
+FUNC tFO3FA
+HB_DISPBOX( 2, 0,23,79,B_SINGLE+" ")
+@  3,  1 SAY "Escola Curso     Descricao"
+RETU .T.
+
+FUNC gFO3FA
+VERSEHA(CARQCUR,,mCURSO,"DESCUR",'"CURSO Nao CadastradO"',.T.,{{"DESCUR","mDESCUR"}})
+RETU .T.
+
+FUNC iFO3FA
+MDS('Curso : ')
+@ 24,40 GET mCURSO  VALID VERSEHA(CARQCUR,,mCURSO,"DESCUR",'"CURSO N„o CadastradO"',.T.,{{"DESCUR","mDESCUR"}})
+READCUR()
+mNUMERO:=xNUMERO
+mCHAVE:= STR(xNUMERO,5)+mCURSO
+RETU .T.

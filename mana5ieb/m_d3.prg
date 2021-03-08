@@ -1,0 +1,68 @@
+MDI("Lan‡ar Composicao Produtos pela Sequencia")
+
+
+//Filtro da Listagem
+FILTRO:=''
+FILTRO:=RFILORD("MS06",.F.,FILTRO)
+
+IF ! USEMULT({{"MS06",1,1},{"MS03",1,99}})
+    RETU .F.
+ENDIF
+
+
+DBSELECTAR("MS06")
+IF ! EMPTY(FILTRO)
+   SET FILTER TO &FILTRO
+ENDIF
+DBGOTOP()
+WHILE ! EOF()
+  @ 24,00 SAY CODIGO
+  yCODIGO:=CODIGO
+  aCOMP:={}
+  aQTDE:={}
+  WHILE yCODIGO=CODIGO.AND. ! EOF()
+     nPECAS:=IF(PCHORA>0,1/PCHORA,0)
+     IF FATOR#0
+        nPECAS:=nPECAS*FATOR
+     ENDIF
+     MD301("H",CODMP02)
+     MD301("H",CODMP02B)
+     MD301("H",CODMP02C)
+     MD301("H",CODMP02D)
+     MD301("E",CODMP01)
+     MD301("T",CODMP03)
+     DBSKIP()
+  ENDDO
+  DBSELECTAR("MS03")
+  FOR W=1 TO LEN(aCOMP)
+      DBGOTOP()
+      DBSEEK(yCODIGO+aCOMP[W])
+      IF ! FOUND()
+         netrecapp()
+         FIELD->CODIGO:=yCODIGO
+         FIELD->TIPOENT:=LEFT(aCOMP[W],1)
+         FIELD->CODCOMP:=SUBSTR(aCOMP[W],2)
+         FIELD->QTDDE:=aQTDE[W]
+         FIELD->TOTAL:=ROUND(QTDDE*PRECO,2)
+         IF LEFT(aCOMP[W],1) $ "EHT"
+            FIELD->NOMECOMP:=OBTER(ESTQARQ(LEFT(aCOMP[W],1),1),SUBSTR(aCOMP[W],2),"NOME")
+         ENDIF
+      ELSE
+         NETGRVCAM("QTDDE",aQTDE[W])
+      ENDIF
+  NEXT W
+  DBSELECTAR("MS06")
+ENDDO
+
+
+FUNC MD301(cTIP,cCOD)
+IF ! EMPTY(cCOD)
+    nPOS:=ASCAN(aCOMP,cTIP+cCOD)
+    IF nPOS>0
+       aQTDE[nPOS]+=nPECAS
+    ELSE
+       AADD(aCOMP,cTIP+cCOD)
+       AADD(aQTDE,nPECAS)
+    ENDIF
+ENDIF
+RETU .T.

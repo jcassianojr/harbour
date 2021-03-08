@@ -1,0 +1,47 @@
+FUNC TEMPOR //Para colar a funcao na linkedicao
+TIMEVALID()
+ADDMONTH()
+descend()
+ceiling()
+RETU .T.
+FUNC M_DY
+RETU .T.
+FUNC M_DZ
+RETU .T.
+FUNC M_D1
+RETU .T.
+FUNC FLUXO
+RETU .T.
+FUNC M_CT //Chamada para linkedicao addmonth
+RETU .T.
+FUNC M_CW
+RETU .T.
+FUNC M_CX
+RETU .T.
+FUNC M_CY
+RETU .T.
+FUNC M_CZ
+RETU .T.
+FUNC M_C1
+RETU .T.
+FUNC M_C2
+RETU .T.
+FUNC M_C3
+RETU .T.
+FUNC M_C4
+RETU .T.
+FUNC M_C5
+RETU .T.
+FUNC M_C6
+RETU .T.
+FUNC M_C7
+RETU .T.
+
+FUNC AGEN
+RETU .T.
+
+FUNC TELE
+RETU .T.
+
+FUNC NOTEP
+RETU .T.

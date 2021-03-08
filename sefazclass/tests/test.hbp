@@ -1,0 +1,5 @@
+test.prg
+../sefazclass.hbc
+
+-q -m -n -w3 -es2
+-strip

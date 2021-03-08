@@ -1,0 +1,38 @@
+CABE2('FOPTO_29 - Apagando Arquivos de Movimenta‡„o')
+nMES:=MONTH(DATE())
+nANO:=YEAR(DATE())
+MDS('Confirme a Competˆncia')
+@ 24,40 GET nMES
+@ 24,50 GET nANO
+IF ! READCUR()
+   RETU .F.
+ENDIF
+IF ! MDG("Vocˆ tem certeza")
+   RETU .F.
+ENDIF
+IF ! MDG("Vocˆ realmente tem certeza")
+   RETU .F.
+ENDIF
+cMESANO:=SUBSTR(STRZERO(nANO,4),3,2)+STRZERO(nMES,2)
+FO29APG("PN","Movimento Mes")
+FO29APG("PT","Totais do Mes")
+FO29APG("PD","Arquivo de Migracao Importa‡ao Relogio")
+FO29APG("PA","Arquivo de Migracao Importa‡ao Refeitorio")
+FO29APG("PP","Arquivo de Migracao Importa‡ao Portaria")
+FO29APG("PE","Escala de Revezamento")
+FO29APG("PO","Ocorrencias Avulsas")
+FO29APG("PM","Horarios Avulsos")
+FO29APG("PH","Corre‡ao Horarios")
+FO29APG("PX","Creditos Avulsos")
+FO29APG("BK","Requisicao Bco Horas Principal")
+FO29APG("BH","Requisi‡ao Bco Horas Secundario")
+
+
+FUNCtion FO29APG(cARQ,cDIZ)
+cARQ:=cARQ+cMESANO
+cDIZ:="Apagar "+Cdiz
+IF MDG(cDIZ)
+   DELETEFILE(ZDIRE+cARQ+".DBF")
+   DELETEFILE(ZDIRE+cARQ+"."+cRDDEXT)
+ENDIF
+RETUrn .T.

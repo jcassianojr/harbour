@@ -1,0 +1,79 @@
+FUNCTION FIX02(cVALOR)
+IF EMPTY(cVALOR)
+   return ""   
+ENDIF
+IF valtype(cVALOR)<>"C"
+   RETURN ""	
+ENDIF	
+cVALOR:=RANGEREPL(chr(0),chr(31),cVALOR," ")
+cVALOR:=RANGEREPL(chr(127),chr(255),cVALOR," ")
+cVALOR:=ALLTRIM(cVALOR)
+RETURN cVALOR
+
+FUNCtion FIXNUM(cCAMPO)
+IF VALTYPE(cCAMPO)# "N"
+   RETUrn 0
+ENDIF	
+RETURN cCAMPO
+
+
+FUNCtion FIXSTR(cCAMPO,lTRIM)
+IF valtype(cCAMPO)<>"C"
+   RETURN ""	
+ENDIF	
+IF VALTYPE(lTRIM) <> 'L'
+    lTRIM:=.F.
+ENDIF
+RETURN IF(lTRIM,ALLTRIM(cCAMPO),cCAMPO)
+
+
+FUNCtion FIXDATS(cCAMPO)
+IF valtype(cCAMPO)<>"C"
+   RETURN ""	
+ENDIF	
+if cCAMPO='01/01/1900' .OR. TIRAOUT(cCAMPO)='01011900'
+   RETURN ""
+ENDIF
+//if TIRAOUT(cCAMPO)='00000101' //sqllite
+//   RETURN ""
+//ENDIF
+RETURN cCAMPO
+
+
+FUNCTION FIXDATA(cCAMPO)
+IF VALTYPE(cCAMPO)<>'C' .AND. VALTYPE(cCAMPO)<>'D'
+   RETURN CToD(Space(8))
+ELSE
+   IF ValType(cCAMPO)="D"	
+   	  RETURN cCAMPO
+   ENDIF	
+   cCAMPO:=Left(cCAMPO,10)
+   cCAMPO:=StrTran(cCAMPO,"-","")
+   cCAMPO:=SToD(cCAMPO)
+ENDIF	
+RETURN cCAMPO
+
+FUNCTION FIXLOGIC(cCAMPO)
+IF VALtYPE(cCAMPO)<>'L'
+   RETURN .f.
+ENDIF	
+RETURN cCAMPO
+
+FUNCTION FIXHORA(cCampo)
+cCAMPO:=FIXSTR(cCAMPO)
+cCAMPO:=SubStr(cCAMPO,At(" ",cCAMPO)+1)
+cCAMPO:=Left(cCAMPO,5)
+cCAMPO:=StrTran(cCAMPO,":",".")
+RETURN cCAMPO
+
+
+FUNCTION DateToMySQL( dDate )
+LOCAL cString
+cString := StrZero( Year( dDate ), 4 ) + "-" + StrZero( Month( dDate ), 2 ) + "-" + StrZero( Day( dDate ), 2 )
+IF cString == "0000-00-00"
+   cString := "NULL"
+ENDIF
+RETURN cString
+
+
+//sqllite '0000-01-01 00:00:00''0000-01-01 00:00:00'
