@@ -85,7 +85,7 @@ WHILE .T.
          ENDIF
          IF MDG("Configurar Menus do ManaW")
             PADRAO(0,1,0,"WINOPT","I PO Item"+spac(17)+"Mensagem",;
-             "' '+mITEMENU+' '+STR(mPOSICAO,2)+' '+mDESCP+' '+SUBSTR(ALLTRIM(mDESCM),1,40)","MCC")
+             "' '+mITEMENU+' '+STR(mPOSICAO,3)+' '+mDESCP+' '+SUBSTR(ALLTRIM(mDESCM),1,40)","MCC")
          ENDIF
          IF MDG("Configurar Acessos do Sysw")
             PADRAO(0,1,0,"SYSOPT","I PO Item"+spac(17)+"Mensagem",;

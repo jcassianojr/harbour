@@ -49,18 +49,6 @@ para ZUSER,cSENHA,cDEBUG
 
 MVINFOConfTela("MANA5")
 
-//hb_gtInfo( HB_GTI_ICONFILE, "aplicativo.ico" )
-//hb_gtInfo( HB_GTI_WINTITLE, "aplicativo - WVG" )
-//HB_GtInfo( HB_GTI_FONTNAME, "Lucida Console" ) // fonte
-//Hb_GtInfo( HB_GTI_SELECTCOPY,.T.)
-//Hb_GtInfo( HB_GTI_RESIZABLE, .T. )
-//HB_GtInfo( HB_GTI_ISFULLSCREEN, .F. ) //.t. nao aparece _x barra de titulo
-//HB_GTINFO( HB_GTI_CLOSABLE, .T. )
-//HB_GtInfo( HB_GTI_MAXIMIZED, .T. ) //starts in Maximized Window
-//hb_gtInfo( HB_GTI_ALTENTER, .T. )   // allow <Alt-Enter> for full screen
-//hb_gtInfo( HB_GTI_CLOSEMODE, 1 )    // 1 - sends HB_K_CLOSE on Window x-Close
-
-
 netregosok()
 HB_IDLESTATE()
 HB_LANGSELECT('PT')   
@@ -311,12 +299,9 @@ IF XDECODE(OBTER("MUSER",ENCODE(ZUSER),"EQUIVALE")) = "SUPERVIS"
    ENDIF
    ZSUPER := .T.
 ENDIF
-//IF ZSUPER
-//   ALERTX("Acesso Supervisor")
-//ENDIF
 IF !ZSUPER
    if !VERSEHA("MUSER",ENCODE(ZUSER))
-      ALERTX("Usu rio N„o Cadastrado")
+      ALERTX("Usuario Nao Cadastrado")
       quit
    endif
    if XDECDAT(OBTER("MUSER",ENCODE(ZUSER),"VALIDADE")) < ZDATA
@@ -345,10 +330,10 @@ endif
 mUSUARIO := alltrim(ZUSER)
 mID      := alltrim(NNETSTAID())  //criado voltar 1 ate achar compativel harbour
 IF cDEBUG = "NAO" .AND. mID # REPL("0",12)
-   if !NOVOREG("MUSERN",mUSUARIO,.F.)
-      if !ZSUPER
+   if ! NOVOREG("MUSERN",mUSUARIO,.F.)
+      if ! ZSUPER
          if OBTER("MUSERN",mUSUARIO,"ID") # mID .AND. OBTER("MUSERN",mUSUARIO,"ID") # REPL("0",12)
-            ALERTX("Vocˆ esta com o sistema aberto em outro terminal")
+            ALERTX("Voce esta com o sistema aberto em outro terminal")
             quit
          endif
       endif
@@ -361,6 +346,17 @@ IF DAY(OBTER("MP04",ZIDFOLHA,"DEMITIDO",,,,,,CTOD(SPACE(8)))) > 0
    ALERTX("Funcionario: "+str(zidfolha)+" Demitido")
    quit
 ENDIF
+
+zUSERCHV:=""
+ZUSERENC:=ENCODE(ZUSER)
+               FOR X:=1 TO len(ZUSERENC)
+			     nCHAR:=ASC(SUBSTR(ZUSERENC,x,1)) 
+			      IF NCHAR>0
+			      	zUSERCHV+=StrZero(nCHAR,3)
+			      ENDIF
+			  NEXT
+      //alert(zUSERCHV)
+
 
 IF AT("ITAESBR2",UPPER(CURDIR())) > 0
    ALERTX("Voce esta na Firma II Filial")
@@ -383,7 +379,7 @@ MMENU()
 *+
 *+
 *+
-func ARQENT(cARQ,cNTX,cEXP,lMES,cDRIVER)
+function ARQENT(cARQ,cNTX,cEXP,lMES,cDRIVER)
 
 
 if valtype(lMES) # "L"
@@ -396,7 +392,7 @@ cARQ := ZDIRC+cARQ
 cNTX := ZDIRC+cNTX
 if ! file(cARQ+".DBF")
    if lMES
-      ALERTX("Falta Arquivo Configu‡„o "+cARQ)
+      ALERTX("Falta Arquivo Configucao "+cARQ)
       quit
    else
       retu .F.

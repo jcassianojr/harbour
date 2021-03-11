@@ -42,8 +42,8 @@ IF !READCUR()
    RETU .F.
 ENDIF
 
-IF EMPTY(USUARIO) .OR. !VERSEHA("MUSER",ENCODE(USUARIO))
-   ALERTX("Usu rio N„o Cadastrado")
+IF EMPTY(USUARIO) .OR. ! VERSEHA("MUSER",ENCODE(USUARIO))
+   ALERTX("Usuario NAo Cadastrado")
    RETU .F.
 ENDIF
 
@@ -235,35 +235,29 @@ mCONTROLE := ENCODE(cTIPO+mCODIGO+USUARIO)
 mACEITE   := PEGMCS("R",mCONTROLE)
 @ 24,30 GET mACEITE         
 IF !READCUR()
-   RETU .T.
+   RETURN .T.
 ENDIF
 GRVMCS(mACEITE = "N","R",mCONTROLE)
-RETU .T.
+RETURN .T.
 
 
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function MSC203()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNC MSC203(cVAR)   //Windows
-
+FUNCTION MSC203(cVAR)   //Windows WINOPT(MUSERW)cVAR="W" SYSOPT(MUSERB)cVAR="B"
 mCONTROLE := ENCODE(mITEMENU+STRZERO(mPOSICAO,3)+USUARIO)
 mACEITE   := PEGMCS(cVAR,mCONTROLE)
+mPOSTELA  := zUSERCHV
 @ 24,30 GET mACEITE         
-IF !READCUR()
-   RETU .T.
+IF ! READCUR()
+   RETURN .T.
 ENDIF
 GRVMCS(mACEITE = "N",cVAR,mCONTROLE)
-RETU .T.
+RETURN .T.
 
 
 *+--------------------------------------------------------------------
@@ -293,18 +287,12 @@ RETU .T.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Function GRVMCS()
-*+
-*+
+*+    Function GRVMCS(lCOND,cARQ,eVAR,lENC)
+*+    lCOND=true inclui false exclui
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNC GRVMCS(lCOND,cARQ,eVAR,lENC)
-
+FUNCTION GRVMCS(lCOND,cARQ,eVAR,lENC)
 IF VALTYPE(lENC) # "L"
    lENC := .F.
 ENDIF
