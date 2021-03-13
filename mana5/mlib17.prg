@@ -37,14 +37,11 @@
 *+
 *+
 *+
-func PEGBUS(cARQ,nIND,cTITULO)
-
-
-// *****************************
+funcTION PEGBUS(cARQ,nIND,cTITULO)
 local RETORNO
 local FORMULA
 local cTELA   := savescreen(4,5,24 - 3,63)
-HB_dispbox(4,5,24 - 3,63,B_DOUBLE)
+HB_dispbox(4,5,24 - 3,63,B_DOUBLE+" ")
 if valtype(nIND) # "N"
    nIND := 1
 endif
@@ -54,7 +51,7 @@ else
    @  5,7 say "Digite a Busca"         
 endif
 for X := 1 to 3
-   if !empty(aIND[nIND,X,3])
+   if ! empty(aIND[nIND,X,3])
       priv cVARGET := aIND[nIND,X,3]
       cLEN := &cVARGET.
       @ X * 2+6,7 say aIND[nIND,X,4]         

@@ -1,10 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : mlib40.prg
-*+
-*+
 *+
 *+    Sistema   : MANAEXO
 *+
@@ -12,39 +8,26 @@
 *+
 *+    Autor     : Jorge Cassiano
 *+
-*+    Copyright (c) 2010, Jorge Cassiano
+*+    Copyright (c) 2021, Jorge Cassiano
 *+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
+*+    Documentado em 13/03/2021
 *+
 *+--------------------------------------------------------------------
 *+
 
 
 //Teclas Operacionais
-//#INCLUDE "TECLASM.CH"
 #INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
-// #INCLUDE "MEMOGET.CH"
-
-
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function PADRAX()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
 *+
 *+
-func PADRAX
+function PADRAX
 
 //Recebendo Parametro de Trabalho
 para wPAX,wpPAX,wcPAX,aWARQ,PAXCAB,PAXDIZ,bPAXTEL,bPAXGET,bPAXEN2,bDELSEC,;
@@ -335,28 +318,24 @@ endif
 
 //Opera��o de Inclus�o
 if OPRPAX = 1
-   IF !padraolib("I","Inclusao n�o Liberado",aWARQ[1])
+   IF ! padraolib("I","Inclusao nao Liberado",aWARQ[1])
       RETU .F.
    ENDIF
-   CRIARVARS(aWARQ[1])
+   CRIARVARS(aWARQ[1]) 
    if valtype(bPAXINS) = "B"
-      //      ALERTX("bloco pre")
       lTMPRETU := eval(bPAXINS)
-      //      ALERTX(strval(Ltmpretu))
       IF VALTYPE(lTMPRETU) = "L"
-         //         ALERTX(" logico")
-         IF !lTMPRETU
-            //            ALERTX("retornando")
-            RETU .F.
+         IF ! lTMPRETU
+            RETURN .F.
          ENDIF
       ENDIF
    endif
+   ALTD()
    PEGBUS()
    if valtype(bPOSINS) = "B"
-      //      ("bloco pos")
       eval(bPOSINS)
    endif
-   if !NOVOREG(aWARQ[1],mCHAVE)
+   if ! NOVOREG(aWARQ[1],mCHAVE)
       retu .F.
    endif
    INCLUI := .T.

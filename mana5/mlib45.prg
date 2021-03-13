@@ -1,10 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : mlib45.prg
-*+
-*+
 *+
 *+    Sistema   : MANAEXO
 *+
@@ -12,13 +8,9 @@
 *+
 *+    Autor     : Jorge Cassiano
 *+
-*+    Copyright (c) 2010, Jorge Cassiano
+*+    Copyright (c) 2021, Jorge Cassiano
 *+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
+*+    Documentado em 13/03/2O21
 *+
 *+--------------------------------------------------------------------
 *+
@@ -29,27 +21,19 @@
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function ZAPARQ()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func ZAPARQ(aARQ)
-
-
+funcTION ZAPARQ(aARQ)
 local W
 if valtype(aARQ) # "A"
    ALERTX("Parametro ZAPARQ n„o ‚ Matriz")
-   retu .F.
+   return .F.
 endif
 for W := 1 to len(aARQ)
    MDS("Zerando Arquivo: "+aARQ[W,1])
-   while !USEREDE(aARQ[W,1],0,99)
+   while ! USEREDE(aARQ[W,1],0,99)
    enddo
    zap
    dbsetorder(1)
@@ -65,19 +49,11 @@ next W
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function NOVOREG()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func NOVOREG(cARQ,eCHAVE,lMES,lLOG,nIND)
-
-
+function NOVOREG(cARQ,eCHAVE,lMES,lLOG,nIND)
 local RETORNO := .F.
 if valtype(lMES) # "L"
    lMES := .T.
@@ -86,7 +62,7 @@ if valtype(lLOG) # "L"
    lLOG := .T.
 endif
 if !USEREDE(cARQ,1,99)
-   retu .F.
+   retuRN .F.
 endif
 IF VALTYPE(nIND) = "N"
    DBSETORDER(nIND)
@@ -101,59 +77,45 @@ dbunlock()
 dbcommit()
 dbclosearea()
 if !RETORNO .and. lMES
-   ALERTX("Registro j  cadastrado com esta chave")
+   ALERTX("Registro ja cadastrado com esta chave")
 endif
 if lLOG
    gravalog(eCHAVE,"INS",cARQ)
 endif
-retu RETORNO
+retuRN RETORNO
 
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function USEMULT()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func USEMULT(aARQ)
-
-
+function USEMULT(aARQ)
 local W
 if valtype(aARQ) # "A"
-   ALERTX("Parametro USEMULT n„o ‚ Matriz")
-   retu .F.
+   ALERTX("Parametro USEMULT nAo E Matriz")
+   retuRN .F.
 endif
 for W := 1 to len(aARQ)
    if !USEREDE(aARQ[W,1],aARQ[W,2],aARQ[W,3])
       dbcloseall()
-      retu .F.
+      retuRN .F.
    endif
    if aARQ[W,3] = 99
       dbsetorder(1)
    endif
 next W
-retu .T.
+retuRN .T.
 
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function NOVOOPE()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func NOVOOPE(cARQ,eCHAVE)
+funcTION NOVOOPE(cARQ,eCHAVE)
 
 
 if valtype(cARQ) = "C"
@@ -165,25 +127,19 @@ if !dbseek(eCHAVE)
    REPLVARS()
 else
    MDS("Registro ja Cadastrado: "+STRVAL(cARQ)+STRVAL(eCHAVE))
-   retu .F.
+   retuRN .F.
 endif
-retu .T.
+retuRN .T.
 
 //Arquivo,Lock
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function NOVOOPA()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func NOVOOPA(cARQ,lUNL,lREP,lCHECK)
+funcTION NOVOOPA(cARQ,lUNL,lREP,lCHECK)
 
 if valtype(lUNL) # "L"
    lUNL := .T.
@@ -204,19 +160,13 @@ endif
 if lUNL
    dbunlock()
 endif
-retu .T.
+retuRN .T.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function ntxtmp()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 //function ntxtmp
 //local carq
