@@ -169,7 +169,7 @@ IF ASCAN(aUF,cUF)=0
 ENDIF   
 
 if ZNERRO=0
-   if ! ValidIE( cInscricao, cUF ) //funcao classe sefaz
+   if ! ValidIE( cINSC, cUF ) //funcao classe sefaz
       ZNERRO:=6
       ZERRO:="Inscricao Invalida"
   endif

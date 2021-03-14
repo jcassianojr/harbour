@@ -3,7 +3,7 @@
 *+    FLIB08.PRG
 *+
 *+    Functions: Function CHECKIMP(nTIP,lIMPHP)
-*+               Function IMPEND()
+*+               Function IMPEND()17
 *+               Function IMPSTR(cVAR)
 *+               Function IMPCHR(cVAR)
 *+               Function IMPFOL(cVAR)
@@ -12,6 +12,7 @@
 *+               Function filetohtml(cFILE)
 *+               Function filetoRTF(cFILE)
 *+               Function filetoTXTWin(cFILE)
+*+               Function filezebrapdf(cFILE)
 *+               Function fileconvert(cFILE,cTIPO)
 *+               Function impext(cARQ)
 *+               Function filetoemail(cARQ,cASSUNTO,cCORPOMSG)
@@ -24,7 +25,7 @@
 *+    2 - LPT&1
 *+    3 - LPT&2
 *+    4 - LPT&3
-*+   16 - Re&direcinal Porta
+*+    5 - Impressora Windows W&INPRN PRINTUSB()
 *+    6 - &TXT DOS    (OEM)
 *+    7 - TXT WindowS (&ANSI)
 *+    8 - &HTML
@@ -35,7 +36,7 @@
 *+   13 - C&OM1
 *+   14 - CO&M2
 *+   15 - &EMAIL
-*+    5 - Impressora Windows W&INPRN PRINTUSB()
+*+   16 - Re&direcinal Porta
 *+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
 
 
@@ -50,7 +51,7 @@
 *+
 *+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
 *+
-function CHECKIMP( nTIP, lIMPHP )
+function CHECKIMP( nTIP, lIMPHP,lZEBRA )
 
 local RETORNO     := .F.
 local cTELA
@@ -68,6 +69,9 @@ priv aMENUPROMPTS := {}
 if valtype( lIMPHP ) # "L"
    lIMPHP := .F.
 endif
+if valtype( lZEBRA ) # "L"
+   lZEBRA := .F.
+endif
 set print to
 if valtype( nTIP ) # "N"
    nTIPSPO := 2     //LPT1
@@ -79,22 +83,25 @@ if nTIPSPO = 0
    CLSBOX( 6, 0, 17, 80 )
    HB_dispbox( 6, 0, 17, 79, B_DOUBLE+" ")
    while .T.
-      oPCAO( 07, 01, " &Video                           ", 86 )
-      oPCAO( 08, 01, " LPT&1 Impressora                 ", 49 )
-      oPCAO( 09, 01, " LPT&2 Impressora                 ", 50 )
-      oPCAO( 10, 01, " LPT&3 Impressora                 ", 51 )
-      oPCAO( 11, 01, " Impressora Windows &WINPRN       ", 84 )
-      oPCAO( 12, 01, " &TXT Arquivo Texto Dos(OEM)      ", 84 )
-      oPCAO( 13, 01, " TXT Arquivo Texto Windows(&Ansi) ", 65 )
-      OPCAO( 14, 01, " &HTML                            ", 72 )
-      oPCAO( 07, 41, " &RTF(Rith Text Format)           ", 82 )
-      oPCAO( 08, 41, " &PDF(Portable Document Format)   ", 80 )
-      oPCAO( 09, 41, " Programa E&xterno                ", 87 )
-      oPCAO( 10, 41, " Impressora w&Indows RAW          ", 73 )
-      oPCAO( 11, 41, " C&OM1                            ", 79 )
-      oPCAO( 12, 41, " CO&M2                            ", 77 )
-      oPCAO( 13, 41, " &Email                           ", 69 )      
-      oPCAO( 14, 41, " Re&dicionar Portas               ", 68 )
+      oPCAO( 07, 01, " &Video                           ", 86 ) //1 
+      oPCAO( 08, 01, " LPT&1 Impressora                 ", 49 ) //2
+      oPCAO( 09, 01, " LPT&2 Impressora                 ", 50 ) //3
+      oPCAO( 10, 01, " LPT&3 Impressora                 ", 51 ) //4
+      oPCAO( 11, 01, " Impressora Windows &WINPRN       ", 84 ) //5
+      oPCAO( 12, 01, " &TXT Arquivo Texto Dos(OEM)      ", 84 ) //6
+      oPCAO( 13, 01, " TXT Arquivo Texto Windows(&Ansi) ", 65 ) //7
+      OPCAO( 14, 01, " &HTML                            ", 72 ) //8
+      oPCAO( 07, 41, " &RTF(Rith Text Format)           ", 82 ) //9
+      oPCAO( 08, 41, " &PDF(Portable Document Format)   ", 80 ) //10
+      oPCAO( 09, 41, " Programa E&xterno                ", 87 ) //11
+      oPCAO( 10, 41, " Impressora w&Indows RAW          ", 73 ) //12
+      oPCAO( 11, 41, " C&OM1                            ", 79 ) //13
+      oPCAO( 12, 41, " CO&M2                            ", 77 ) //14
+      oPCAO( 13, 41, " &Email                           ", 69 )  //15   
+      oPCAO( 14, 41, " Re&dicionar Portas               ", 68 ) //16
+	  IF lZEBRA
+		 oPCAO( 14, 41, " Preview &Zebra pdf                ", 90) //17
+	 ENDIF
       nTIPSPO := menu(, 0 )
       IF nTIPSPO = 11
          ALERTX("Opcao Desativada")
@@ -144,7 +151,7 @@ if nTIPSPO = 0
    enddo
    restscreen( 6, 0, 17, 80, cTELA )
 endif
-if nTIPSPO < 1 .or. nTIPSPO > 16
+if nTIPSPO < 1 .or. nTIPSPO > if(zebra,17,16)
    retu .F.
 endif
 nPORTA     := 0
@@ -215,7 +222,7 @@ if nTIPSPO = 2 .or. nTIPSPO = 3 .or. nTIPSPO = 4
       endif
    enddo
 endif
-if nTIPSPO > 5 .and. nTIPSPO < 11   //TXT OEM TXT ANSI HTML RTF PDF
+if (nTIPSPO > 5 .and. nTIPSPO < 11) .OR. nTIPSPO=17  //TXT OEM TXT ANSI HTML RTF PDF ZEBRA_17
    //cARQSPO := "c:\temp\nome000" + space( 20 )
    cARQSPO :=STRTRAN(TMPFILE( "TXT" ),".TXT","")+SPACE(30) //"c:\temp\nome000" + space( 20 )
    MDS( "Digite o Nome do Arquivo " )
@@ -262,7 +269,7 @@ set print to
 if nTIPSPO = 1      //Video
    VERTXT( cARQSPO )
 endif
-if nTIPSPO = 6      //txt oem
+if nTIPSPO = 6     //txt oem 
    cFILE:= cARQSPO
 endif
 if nTIPSPO = 7      //txt Win
@@ -300,7 +307,11 @@ if lAPAGA.AND.(nTIPSPO = 1 .or. nTIPSPO =7 .or. nTIPSPO = 8 .or. nTIPSPO = 9 .or
    ferase( cARQSPO )     //11 nao pode apagar pois e externo
                          //demais direto na porta
 endif
-if nTIPSPO = 6 .or. nTIPSPO =7  .or. nTIPSPO = 8 .or. nTIPSPO = 9 .or. nTIPSPO = 10
+if nTIPSPO = 17
+   cFILE:=filezebrapdf(cARQSPO)
+endif
+
+if nTIPSPO = 6 .or. nTIPSPO =7  .or. nTIPSPO = 8 .or. nTIPSPO = 9 .or. nTIPSPO = 10 
    IF lIMPEMAIL
       filetoemail(cFILE)   
    ELSE
@@ -1041,7 +1052,35 @@ Function PrintUSB(DocPrinter,xPRINTER)
        oPrinter:destroy()
        Return(.t.)
 
+function filezebrapdf(cARQSPO)
+cFILE := substr( cARQSPO, 1, at( ".", cARQSPO ) - 1 )
+cFILE += ".pdf"
+oServerWS := Win_OleCreateObject("MSXML2.ServerXMLHTTP")
+oXMLDoc   := Win_OleCreateObject("MSXML2.DOMDocument")
+   
+cUrlWS := 'http://api.labelary.com/v1/printers/8dpmm/labels/4x6/0/' 
+//cData :=  '"^XA^MMT^PW400^LL0400^LS0^FT5,384^A0N,41,40^FH\^FDwww.pctoledo.com.br^FS^BY1,3,99^FT70,322^BCN,,Y,N^FD>:Forum do Programador^FS^FT10,46^A0N,38,60^FH\^FDLinguagem ZPL^FS^BY1,3,104^FT96,182^B3N,N,,Y,N^FD1135265909+^FS^PQ1,0,1,Y^XZ"'
+cDATA:= '"'+strtran(STRTRAN(hb_memoread(CARSPOR),CHR(13),""),chr(10),"")+'"'
 
+nResolve := 5 * 1000  
+nConnect := 5 * 1000  
+nSend    := 30 * 1000  
+nReceive := 30 * 1000  
+   
+With Object oServerWS
+   :SetTimeouts( nResolve, nConnect, nSend, nReceive )
+   :Open( "POST", cUrlWS, .F. )
+   :SetRequestHeader( "Content-Type", 'application/x-www-form-urlencoded; charset="utf-8"' )
+   :SetRequestHeader( "Accept", "application/pdf")
+   :SetRequestHeader( "Content-Length", hb_NtoS( 3000 ) ) //3000 ‚ o m ximo
+   :Send( cData )
+   Do While :readyState != 4
+      :WaitForResponse( 1000 )
+   Enddo
+   cResp := :responseBody
+   Hb_Memowrit(cFILE, cResp )
+End
+return cFILE
 
 *+­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­
 *+
