@@ -152,7 +152,7 @@ while ! eof()
 		  dbselectar("cidconv")
 		  dbgotop()
 		  if dbseek(eBUSCA)
-			 eBUSCA:=ESTDES+CIDDES
+			 eBUSCA:=ESTDES+ALLTRIM(CIDDES)
 		  ENDIF
 		  dbselectar("MD10")
 		  dbsetorder(1)
