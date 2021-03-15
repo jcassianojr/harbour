@@ -129,12 +129,13 @@ DO WHILE copia<=narq
             ENDIF
          ENDDO
          IF LOWER(CHR(KEY))='t'
-            IF ! HB_FILEEXISTS('COMMAND.COM')
-               MDT('N„o existe o COMMAND.COM, sa¡da negada.')
+            IF ! HB_FILEEXISTS(GetEnv("COMSPEC") //'COMMAND.COM')
+               MDT('Nao existe o "+GetEnv("COMSPEC"+", ou saida negada.')
                LOOP
             ENDIF
             MDT('Digite exit para retornar ao programa')
-            swpruncmd("C:\COMMAND.COM")
+			hb_run( GetEnv( "COMSPEC" )
+            //hb_run("C:\COMMAND.COM")
          ELSEIF LOWER(CHR(KEY))='d'
             QUIT
          ENDIF

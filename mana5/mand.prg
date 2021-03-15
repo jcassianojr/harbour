@@ -84,9 +84,9 @@ WHILE .T.
       CASE KEY = 6 
          PADRAO(0,1,0,"AGENDA","Data     Compromisso","' '+DTOC(mCDDATA)+' '+mOBS1","MDF")
       CASE KEY = 7 
-         PADRAO(0,1,0,"NOTA","Nome"+spac(7)+"Descricao","' '+mNOME+' '+mOBS1","MDG")
+         PADRAO(0,1,0,"NOTA","Nome"+spac(7)+"Descrição","' '+mNOME+' '+mOBS1","MDG")
       CASE KEY = 8 
-         PADRAO(0,1,0,"MCOPIA","Nome   Descri‡„o","' '+mNOME+' '+mDESCRICAO ","MDH")
+         PADRAO(0,1,0,"MCOPIA","Nome   Descricao","' '+mNOME+' '+mDESCRICAO ","MDH")
       CASE KEY = 9
          COROLD  := SETCOLOR(COR("MDI001"))
          COMANDO := SPAC(80)
@@ -94,26 +94,26 @@ WHILE .T.
          @ 24,40 GET COMANDO PICT "@S35"        
          READCUR()
          IF !EMPTY(COMANDO)
-            TELA := SAVESCREEN(00,00,08,79)
-            SAVE SCREE
+		    aSALVO:=SALVAA()
             SETCOLOR(COR("MDI002"))
-            swpruncmd(COMANDO)
+            hb_run(COMANDO)
             MDS("Tecle algo para Continuar")
             INKEY(0)
-            RESTSCREEN(00,00,08,79,TELA)
+			RESTAA(aSALVO)
          ENDIF
          SETCOLOR(COROLD)
-         @ 24,00 CLEA
+         
       CASE KEY = 10
-         SETCURSOR(1)
-         TELA := SAVESCREEN(00,00,08,79)
+	     aSALVO:=SALVAA()
          SETCOLOR(COR("MDJ002"))
          CLS
-         QOUT('PARA RETORNAR AO MANA5 TECLE EXIT <ENTER>')
-         INI := 'COMMAND.COM'
-         swpruncmd(INI)
-         RESTSCREEN(00,00,08,79,TELA)
-         SETCOLOR(COROLD)
+         IF ! HB_FILEEXISTS(GetEnv("COMSPEC") //'COMMAND.COM')
+            MDT('Nao existe o "+GetEnv("COMSPEC"+", ou saida negada.')
+            LOOP
+         ENDIF
+         MDT('Digite exit para retornar ao programa')
+		 hb_run( GetEnv( "COMSPEC" )
+		 RESTAA(ASALVO)
       CASE KEY = 11 
          M_DK()
       CASE KEY = 12 

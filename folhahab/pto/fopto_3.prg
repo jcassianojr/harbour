@@ -97,15 +97,19 @@ while .T.
       FOPTO_3k(2)
    case OPCAO = 24   //1 wrpt folha
        cCAM:=ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
-       cCAM+="WRPTF.EXE $"+ALLTRIM(zUSER)+"%#"
-       hb_run(cCAM)
+      // cCAM+="WRPTF.EXE $"+ALLTRIM(zUSER)+"%#"
+	  //"$"+ALLTRIM(zUSER)+"%#"
+      // hb_run(cCAM)
+	  ShellExecute ( NIL, "Open", cCAM+"WRPTF.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, SW_SHOWNORMAL )
    case OPCAO = 25   //2 wrtp rh
        cCAM:=ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
-       cCAM+="WRPTX.EXE $"+ALLTRIM(zUSER)+"%RH#"
-       hb_run(cCAM)
+       //cCAM+="WRPTX.EXE $"+ALLTRIM(zUSER)+"%RH#"
+       //hb_run(cCAM)
+	   ShellExecute ( NIL, "Open", cCAM+"WRPTX.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, SW_SHOWNORMAL )
    case OPCAO = 26   //3 wrtp integrado
        cCAM:=ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
-       cCAM+="WRPTI.EXE $"+ALLTRIM(zUSER)+"%RH#"
+       //cCAM+="WRPTI.EXE $"+ALLTRIM(zUSER)+"%RH#"
+	   ShellExecute ( NIL, "Open", cCAM+"WRPTI.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, SW_SHOWNORMAL )
    case Opcao = 27
        WIN_PRINTDLGDC()
    case Opcao = 28

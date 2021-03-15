@@ -705,7 +705,7 @@ do while .T.
                com_line := M->run_com
                @ 24,  0
                set cursor on
-               swpruncmd(run_com)
+               hb_run(run_com)
                set cursor OFF
             endif
          enddo

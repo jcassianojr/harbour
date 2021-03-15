@@ -99,7 +99,7 @@ while .T.
       cVAR := ALLTRIM(aITEM[KEY,6])
       IF LEFT(cVAR,1) = "#"
          cVAR := SUBSTR(cVAR,2)
-         swpruncmd(cVAR)
+         hb_run(cVAR)
       ELSE
          IF EMPTY(cVAR)
             ALERTX("NÆo Disponivel/NÆo Configurada")

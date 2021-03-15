@@ -85,7 +85,7 @@ IF CC=1
          VERTXT(DADO)
       CASE OP=5
          TELA=SAVESCREEN(00,00,24,79)
-         swpruncmd(ARQUIVO)
+         hb_run(ARQUIVO)
          RESTSCREEN(00,00,24,79,TELA)
       CASE OP=6 ; EDITARQ(ARQ)
       CASE OP=7

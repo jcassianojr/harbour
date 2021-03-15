@@ -670,7 +670,7 @@ cRUN += PROFILESTRING( "PRINTER.INI", "PRGEXT", "PRE" + strzero( nRUN, 2 ), "" )
 cRUN += cARQ + " "
 cRUN += PROFILESTRING( "PRINTER.INI", "PRGEXT", "PAR" + strzero( nRUN, 2 ), "" ) + " "
 cRUN := strtran( cRUN, "  ", " " )      //Tira duplos Espacos
-swpruncmd(cRUN)
+bb_run(cRUN)
 retu .t.
 */
 

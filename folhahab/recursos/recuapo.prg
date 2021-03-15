@@ -41,26 +41,29 @@ WHILE .T.
        CASE OP=7 ; M_DL()
        CASE OP=8
            SETCURSOR(1)
-           COMANDO:=SPAC(80)
-           MDS('Qual o comando desejado:')
-           @ 24,40 GET COMANDO PICT "@S35"
-           READCUR()
-           IF ! EMPTY(DADO)
-              TELA=SAVESCREEN(00,00,08,79)
-              SAVE SCREE
-              swpruncmd(DADO)
-              MDS("Tecle algo para Continuar")
-              INKEY(0)
-              RESTSCREEN(00,00,08,79,TELA)
-          ENDIF
+           COMANDO := SPAC(80)
+			MDS('Qual o comando desejado:')
+			@ 24,40 GET COMANDO PICT "@S35"        
+			READCUR()
+			IF !EMPTY(COMANDO)
+				aSALVO:=SALVAA()
+				SETCOLOR(COR("MDI002"))
+				hb_run(COMANDO)
+				MDS("Tecle algo para Continuar")
+				INKEY(0)
+				RESTAA(aSALVO)
+			ENDIF
+ 
        CASE OP=9
-          SETCURSOR(1)
-          TELA=SAVESCREEN(00,00,08,79)
-          CLEAR
-          QOUT('PARA RETORNAR AO RECURSOS TECLE EXIT <ENTER>')
-          INI='COMMAND.COM'
-          swpruncmd(INI)
-          RESTSCREEN(00,00,08,79,TELA)
+           aSALVO:=SALVAA()
+			CLS
+			IF ! HB_FILEEXISTS(GetEnv("COMSPEC") //'COMMAND.COM')
+				MDT('Nao existe o "+GetEnv("COMSPEC"+", ou saida negada.')
+				LOOP
+			ENDIF
+			MDT('Digite exit para retornar ao programa')
+			hb_run( GetEnv( "COMSPEC" )
+			RESTAA(ASALVO)
        CASE OP = 10   ; EDITARQ("\CONFIG.SYS")
        CASE OP = 11   ; EDITARQ("\AUTOEXEC.BAT")
        OTHERWISE ; RETU

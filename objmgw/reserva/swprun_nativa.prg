@@ -5,6 +5,29 @@
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 //hbblink.hbc tem afuncao nativa fazer migracao depois
+//RunShell( cCommand, cProgram, lAsync, lBackground )
+//SwpRunCmd( cCommand, nMem, cRunPath, cTempPath )
+//aqui sai para o outro diretorio
+// WAPI_SHELLEXECUTE ShellExecute( ( HWND ) hb_parptr( 1 ),
+//                                            HB_PARSTR( 2, &hOperation, NULL ), /* edit, explore, open, print, play?, properties? */
+                                            //HB_PARSTRDEF( 3, &hFile, NULL ),
+                                            //HB_PARSTR( 4, &hParameters, NULL ),
+                                            //HB_PARSTR( 5, &hDirectory, NULL ),
+                                            //hb_parnidef( 6, SW_SHOWNORMAL ) /* nShowCmd *
+// wapi_ShellExecuteWait([<hWnd>], [<cOperation>], [<cFile>], [<cParameters>],
+//                            [<cWorkDirectory>], [<nShowCmd>]) ? nResult
+//wapi_ShellExecute( 0, 0, cFILE,"", 0, 1 )											
+//ShellExecute(oOWNER:Handle(),String2Psz("print"),String2Psz(cFileNm),String2Psz(""),String2Psz(""),SW_SHOWNORMAL)		xsharp	
+           //wapi_shellExecute(0,"open",cARQIMP)
+			//ShellExecute ( NIL, "Open", cDANFEVIEW+"danfeview.exe", cARQIMP, cDANFEVIEW, SW_SHOWNORMAL )
+			//ShellExecute ( NIL, "Open", cDANFEVIEW+"unidanfe.exe", "arquivo="+cARQIMP+" visualizar=1", cDANFEVIEW, SW_SHOWNORMAL )
+			//ShellExecute ( NIL, "Open", cDANFEVIEW+"unidanfe.exe", "arquivo="+cARQIMP+" visualizar=1", cDANFEVIEW, SW_SHOWNORMAL )
+ //WAPI_ShellExecute( NIL, "open", cFile, "",, WIN_SW_SHOWNORMAL )
+//	  WAPI_ShellExecute( NIL, "open", cFile, "",, )
+//HB_RUN( <cCommand> ) -> <nErrorLevel> __RUN
+
+			
+											
 
 FUNCTION SwpRunCmd( cCommand, nuMem, cRunPath, cTempPath )
 
@@ -50,6 +73,7 @@ IF ! Empty( cRunPath )
     ENDIF
 ENDIF
 
+//HB_RUN t_nErrorLevel := hb_run( cCommand ) 
 __Run( cCommand, @nRet )
 SwpErrLev( nRet )
 
