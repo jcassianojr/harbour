@@ -47,19 +47,31 @@ RETU .T.
 *!
 *!*****************************************************************************
 FUNCTION CHECKMOTDEM()   
-IF EMPTY(RAISDEM)
+if empty(motivo)
+   return .t. //nao checa mas retorna true pois pode estar sendo usado no get when
+endif
+IF EMPTY(RAISDEM) //todos busca motivo mais o campo de retorno e diferente
    RAISDEM:=OBTER("FO_RCAU","",MOTIVO,"RAIS")
 ENDIF
 IF EMPTY(FGTSMOT)
-   FGTSMOT:=OBTER("FO_RCAU","",MOTIVO,"CODGRE")
+   FGTSMOT:=OBTER("FO_RCAU","",motivo,"CODGRE")
 ENDIF
 IF EMPTY(PGFGTS)
-   PGFGTS:=OBTER("FO_RCAU","",MOTIVO,"PAGAFGTS")
+   PGFGTS:=OBTER("FO_RCAU","",motivo,"PAGAFGTS")
 ENDIF
 IF EMPTY(MOTIVODEM)
    MOTIVODEM:=OBTER("FO_RCAU","",MOTIVO,"CAGED")
 ENDIF
 RETURN .T.
+
+FUNCTION CHECKSEXO(cNOME,cSEXO,lGRAVA)
+IF EMPTY(cSEXO) //quando nao for no when checar no modulo antes de chamar para melhorar performace
+   CSEXO:=OBTER("NOMESEXO","",cNOME,"CLASSIFICA")
+   IF lGRAVA
+      SEXO:=cSEXO
+   ENDIF	  
+ENDIF
+RETURN cSEXO //usar alltrue no when
 
 *!*****************************************************************************
 *!
