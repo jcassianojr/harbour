@@ -7,6 +7,7 @@
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
 REQUEST HB_LANG_PT
+REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 REQUEST HB_GT_WVG_DEFAULT
 
@@ -17,13 +18,30 @@ REQUEST HB_GT_WVG_DEFAULT
 function main
 PARA ZUSER,cSENHA
 
-set date BRITI
-set score OFF
-SET TALK OFF
-set conf OFF
-set dele on
-set mess to 6 CENTER
-set softseek on     // QDO PROCURA UM REGISTRO VIA SEEK E NAO ACHA PARA NO PROXIMO
+
+HB_IDLESTATE()
+Set( _SET_CODEPAGE, "PTISO")   
+HB_LANGSELECT('PT') 
+rddsetdefault( "DBFCDX" )
+Set( _SET_OPTIMIZE, .t.)
+Set( _SET_DELETED, .t.)
+Set( _SET_SOFTSEEK, .t.)
+__SetCentury( .t. )
+Set( _SET_EPOCH, year( date() ) - 60 )
+Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+SetCursor(.t.)
+
+Set( _SET_SCOREBOARD, .f. )
+//Set( _SET_TYPEAHEAD, 50 )
+//Set( _SET_WRAP, .t. )
+//Set( _SET_EXACT, .f. )
+Set( _SET_CONFIRM, .F.)
+
+SET TALK OFF ''checar nao tem ainda na std.ch changelog.txt
+
+
+Set( _SET_MESSAGE, 6 , .T. )
+//set mess to 6 CENTER
 
 MVINFOConfTela("Folha Modulo Ponto")
 
@@ -43,29 +61,24 @@ ZCTRALMOCO:=""
 
 
 
-set key 39 to AC_AGUDO                  //SET-UP ACENTUACAO
-set key 94 to AC_CIRC
-set key 96 to AC_CRASE
-set key 126 to AC_TIL
-set key K_ALT_S to LIGA_ACENTO          //A TECLA ALT_S LIGA E DESLIGA A ACENTUACAO
+ACENTUA=.T.
+SetKey( 39, {|| AC_AGUDO() } )
+SetKey( 94, {|| AC_CIRC() } )
+SetKey( 96, {|| AC_CRASE() } )
+SetKey( 126, {|| AC_TIL() } )
+SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
 
-ACENTUA := .T.
-set key K_F1 to HELP                    // AJUDA ON LINE
-set key K_F2 to TELE                    // AGENDA TELEFONICA
-set key K_F3 to NOTEP                   // BLOCO DE ANOTACOES
-set key K_F4 to AGEN                    // AGENDA
-set key K_F5 to TECLAS                  // TECLADO
-//set key K_F6 to GRMEMO                  // MEMORANDO
-set key K_F7 to CALEND                  // CALENDARIO
-set key K_F8 to CALC                    // CALCULADORA
-set key K_F9 to RELOGIO                 // RELOGIO
-set key K_F10 to MUDADATA               // ALTERACAO DE DATA OPERACIONAL
-set key K_F12 to SECULO
-set epoch to year( date() ) - 60        //Flutuante
+SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
 
-RDDSETDEFAULT("DBFCDX")
+SetKey( K_F2, {|| TELE() } )
+SetKey( K_F3, {|| NOTEP() } )
+SetKey( K_F4, {|| AGEN() } )
+SetKey( K_F5, {|| TECLAS() } )
+SetKey( K_F8, {|| hb_run("calc") } )
+SetKey( K_F10, {|| MUDADATA() } )
+
 cRDDEXT="CDX"
-SET OPTIMIZE ON
 
 deletaarq("TEMP*.*")
 deletaarq("*.tmp")

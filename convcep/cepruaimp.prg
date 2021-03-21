@@ -11,9 +11,16 @@ setmode(25,80)
 cls
 	
 rddsetdefault( "DBFCDX" )
-SET OPTIMIZE ON
-set deleted on
-set softseek on
+//SET OPTIMIZE ON
+//set deleted on
+//set softseek on
+Set( _SET_OPTIMIZE, .t.)
+Set( _SET_DELETED, .t.)
+Set( _SET_SOFTSEEK, .t.)
+__SetCentury( .t. )
+Set( _SET_EPOCH, year( date() ) - 60 )
+Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+
 
 
 use cepruaimp new exclusive

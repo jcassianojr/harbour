@@ -10,7 +10,8 @@
 HELPDBF := "FOPTO30"
 
 while .T.
-   set century off
+   //set century off
+   __SetCentury( .f. ) //para os relatorios nao cortarem a data ou exibir * volta para true no return
    CABE3( 'FOPTO_3 - Relatorios', 23 )
    OPCAO( 04, 01, " &A - Ponto Escrito  ENT/SAI     ", 65, " Emite Cart„o de Ponto Escrito, Apenas Entrada e Sa¡da " )
    OPCAO( 05, 01, " &B - Ponto Escrito  Passagens   ", 66, " Emite Cart„o de Ponto Escrito, Todas Passagens do dia " )
@@ -100,16 +101,19 @@ while .T.
       // cCAM+="WRPTF.EXE $"+ALLTRIM(zUSER)+"%#"
 	  //"$"+ALLTRIM(zUSER)+"%#"
       // hb_run(cCAM)
-	  ShellExecute ( NIL, "Open", cCAM+"WRPTF.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, SW_SHOWNORMAL )
+	  WAPI_ShellExecute ( NIL, "Open", cCAM+"WRPTF.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, 1 )
+	//  hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
+	// essSW_SHOWNORMAL = 1
+	  
    case OPCAO = 25   //2 wrtp rh
        cCAM:=ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
        //cCAM+="WRPTX.EXE $"+ALLTRIM(zUSER)+"%RH#"
        //hb_run(cCAM)
-	   ShellExecute ( NIL, "Open", cCAM+"WRPTX.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, SW_SHOWNORMAL )
+	   WAPI_ShellExecute ( NIL, "Open", cCAM+"WRPTX.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, 1 )
    case OPCAO = 26   //3 wrtp integrado
        cCAM:=ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
        //cCAM+="WRPTI.EXE $"+ALLTRIM(zUSER)+"%RH#"
-	   ShellExecute ( NIL, "Open", cCAM+"WRPTI.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, SW_SHOWNORMAL )
+	   WAPI_ShellExecute ( NIL, "Open", cCAM+"WRPTI.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, 1 )
    case Opcao = 27
        WIN_PRINTDLGDC()
    case Opcao = 28
@@ -118,6 +122,7 @@ while .T.
         fopto_32()
         //printersetup()       
    otherwise
+     __SetCentury( .t. )
       retu
    endcase
 enddo

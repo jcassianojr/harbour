@@ -203,7 +203,6 @@ fo_vt.prg
 ..\lis\folis_d9.prg
 c:\develop\harbour\objmgw\comp.PRG
 c:\develop\harbour\objmgw\feriado.PRG
-c:\develop\harbour\objmgw\disk50.PRG
 c:\develop\harbour\objmgw\disk51.PRG
 c:\develop\harbour\objmgw\disk52.PRG
 c:\develop\harbour\objmgw\disk53.PRG
@@ -215,7 +214,6 @@ c:\develop\harbour\objmgw\disk61.PRG
 c:\develop\harbour\objmgw\disk62.PRG
 c:\develop\harbour\objmgw\disk63.PRG
 c:\develop\harbour\objmgw\disk64.PRG
-c:\develop\harbour\objmgw\disk65.PRG
 c:\develop\harbour\objmgw\disk66.PRG
 c:\develop\harbour\objmgw\disk68.PRG
 c:\develop\harbour\objmgw\disk70.PRG
@@ -236,9 +234,7 @@ c:\develop\harbour\objmgw\mmouseN.PRG
 c:\develop\harbour\objmgw\netdbf.PRG      
 c:\develop\harbour\objmgw\pdf.PRG
 c:\develop\harbour\objmgw\profile.PRG     
-c:\develop\harbour\objmgw\seculo.PRG
 c:\develop\harbour\objmgw\error.prg
-C:\develop\harbour\objmgw\swprun.prg
 C:\develop\harbour\objmgw\validaie.prg
 c:\develop\harbour\objmgw\wvgini.prg
 c:\develop\harbour\sefazclass\source\ze_inscestadual.prg

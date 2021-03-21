@@ -7,9 +7,10 @@
 *
 * arquivos do correio na maioria tem header e footer por isso
 * e deletado o primeiro e ultima na importacaoCE
+#INCLUDE "INKEY.CH"
 
+REQUEST HB_CODEPAGE_PTISO
 REQUEST HB_LANG_PT
-REQUEST HB_CODEPAGE_PT850
 REQUEST DBFCDX
 
 function main()
@@ -17,27 +18,86 @@ function main()
 MVINFOConfTela("convcep - atualizador de cep")
 
 netregosok()
+
 HB_IDLESTATE()
+Set( _SET_CODEPAGE, "PTISO")   
 HB_LANGSELECT('PT') 
-HB_SETCODEPAGE('PT850')
-hb_cdpSelect( "PT850" )
-    
 rddsetdefault( "DBFCDX" )
-SET OPTIMIZE ON
-set deleted on
-set softseek on
+Set( _SET_OPTIMIZE, .t.)
+Set( _SET_DELETED, .t.)
+Set( _SET_SOFTSEEK, .t.)
+__SetCentury( .t. )
+Set( _SET_EPOCH, year( date() ) - 60 )
+Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+SetCursor(.t.)
+
+//Set( _SET_SCOREBOARD, .f. )
+//Set( _SET_TYPEAHEAD, 50 )
+//Set( _SET_WRAP, .t. )
+//Set( _SET_EXACT, .f. )
+//Set( _SET_CONFIRM, .F.) //checar alguns .t.
+//Set( _SET_CONSOLE, .F. )
+//SetCursor(.t. )
+
+/*
+ACENTUA=.T.
+SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
+HB_KEYINS(K_ALT_S)
+HB_KEYINS(K_F12)
+cVAR:="   "
+@ 24,00 GET cVAR
+READ
 
 SETMODE(25,80)
 cls
-
 clear
+*/
+
+/*
+ACENTUA=.T.
+SetKey( 39, {|| AC_AGUDO() } )
+SetKey( 94, {|| AC_CIRC() } )
+SetKey( 96, {|| AC_CRASE() } )
+SetKey( 126, {|| AC_TIL() } )
+SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
+
+SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
+
+SetKey( K_F2, {|| TELE() } )
+SetKey( K_F3, {|| NOTEP() } )
+SetKey( K_F4, {|| AGEN() } )
+SetKey( K_F5, {|| TECLAS() } )
+SetKey( K_F10, {|| MUDADATA() } )
+
+SetKey( K_F8, {|| hb_run("calc") } )
+
+SetKey( K_, {|| () } ) //taskmgr Taskmgr.exe /7 /startup SYSINFO
+SET KEY K_F6  TO GRMEMO      //  chamar hb_run memoria windows
+SET KEY K_F7  TO CALEND      //  chamar hb_run do windons   timedate.cpl
+SET KEY K_F9  TO RELOGIO     // RELOGIO       chamar hb_run do windons ou manter mostra na tela pode usar muitos recursos de memoria
+RELOGIO()
+
+SET KEY K_F12 TO SECULO    cheacar uso ano referencia 
+
+charmap.exe
+msinfo32.exe
+
+//PATHX:=HB_CWD()
+//Set( _SET_PATH, PATHX)
+//ALERT(Set( _SET_PATH))
+
+ //  SetKey( K_F9, {|| k := hb_SetKeySave( NIL ), ;
+//      SetKey( K_F9, {|| hb_SetKeySave( k ) } ) } )
+//   SetKey( K_F8, {|| SubMain() }, {|| F8Active } )
+   SetKey( K_F7, {|| F8Active := ! F8Active } )
+*/
+
 
 aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
             "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
             "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO" ,"EX","XX"}
-
-           
-
 			
 Lmunicipios:=.f.
             

@@ -27,7 +27,7 @@ SetColor( "" )
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 function video()
-set device to screen
+Set( _SET_DEVICE, "SCREEN" ) //set device to screen
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -36,7 +36,7 @@ set device to screen
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 function impressora()
-set device to print
+Set( _SET_DEVICE, "PRINTER" ) //set device to print
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -117,7 +117,7 @@ return  .F.
 *+
 function MDS( cMES )
 local OLDCOR := setcolor()
-set color to
+SetColor("") // set color to
 @ maxrow(), 0 say padr( cMES, 80 )
 setcolor( OLDCOR )
 return .T.

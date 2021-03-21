@@ -107,12 +107,12 @@ WHILE .T.
 	     aSALVO:=SALVAA()
          SETCOLOR(COR("MDJ002"))
          CLS
-         IF ! HB_FILEEXISTS(GetEnv("COMSPEC") //'COMMAND.COM')
+         IF ! HB_FILEEXISTS(GetEnv("COMSPEC")) 
             MDT('Nao existe o "+GetEnv("COMSPEC"+", ou saida negada.')
             LOOP
          ENDIF
          MDT('Digite exit para retornar ao programa')
-		 hb_run( GetEnv( "COMSPEC" )
+		 hb_run( GetEnv( "COMSPEC" ))
 		 RESTAA(ASALVO)
       CASE KEY = 11 
          M_DK()

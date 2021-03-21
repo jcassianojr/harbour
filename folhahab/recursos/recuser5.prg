@@ -9,43 +9,42 @@
 *:
 *:  Procs & Fncts: RECUSER5()
 *:
-*:          Chama: CABE2()            (fun‡„o    em RECUPROC.PRG)
-*:               : CERTEZA()          (fun‡„o    em RECUPROC.PRG)
-*:               : ESPERA()           (fun‡„o    em RECUPROC.PRG)
+*:          Chama: CABE2()            (fun‡ao    em RECUPROC.PRG)
+*:               : CERTEZA()          (fun‡ao    em RECUPROC.PRG)
+*:               : ESPERA()           (fun‡ao    em RECUPROC.PRG)
 *:
 *: Outros Arquivos: DESTINO
 *:               : DBF
 *:               : &DESTINO
 *:
-*:     Documentado 05/13/94 em 15:46                DISK!  vers„o 5.01
+*:     Documentado 05/13/94 em 15:46                DISK!  versao 5.01
 *:*****************************************************************************
 
 #INCLUDE "BOX.CH"
-function recuser5
-PARA CC
+function recuser5(cc)
 CABE2('Fazendo Copia de Reserva')
 SETCOLOR("+R/W")
 HB_dispbox( 8, 0, 21, 79,B_DOUBLE+" ")
 @ 09,02 SAY "Copia de Reserva :"
 @ 10,00 SAY '+'+REPL('-',78)+'Ý'
-@ 12,04 SAY "Esta opc„o serve para fazer copia de reserva de seus arquivos de dados,"
+@ 12,04 SAY "Esta opcao serve para fazer copia de reserva de seus arquivos de dados,"
 @ 13,04 SAY "ou seja, seus arquivos serao copiados do disco rigido  para  disquetes."
-@ 15,06 SAY "Para  fazer  a  copia  basta indicar em qual drive ser„o gravados"
+@ 15,06 SAY "Para  fazer  a  copia  basta indicar em qual drive serao gravados"
 @ 16,06 SAY "TECLE [A:] OU [B:] e depois digite o grupo de arquivos que deseja"
 @ 17,06 SAY "uma copia de reserva."
-@ 19,10 SAY "Depois basta seguir as orienta‡”es que aparecem no rodap‚."
+@ 19,10 SAY "Depois basta seguir as orientacoes que aparecem no rodape."
 SETCOLOR("W/N")
-IF ! MDG('Voce tˆm certeza')
+IF ! MDG('Voce tem certeza')
    RETU
 ENDIF
 DRIVE=' :'
 MAS='*.DBF       '
 Mds('QUAL O DRIVE DESEJADO: ')
-@ 23,25 GET DRIVE VALID DRIVE $'A:B:'
+@ 23,25 GET DRIVE VALID DRIVE $ 'A:B:'
 READCUR()
 spacotot = DISKSPACE (ASC(SUBSTR(DRIVE,1))-64)
 IF spacotot < 360000 .OR. spacotot > 362496 .AND. spacotot <= 1200000
-   IF ! MDG('Disquete j  cont‚m informa‡”es, Deseja continuar')
+   IF ! MDG('Disquete j  contem informacoes, Deseja continuar')
       RETU
    ENDIF
 ENDIF
@@ -74,7 +73,7 @@ IF CC=2
    NEXT X
 ENDIF
 IF NARQ=0
-   MDT('N„o existem arquivos para copiar')
+   MDT('Nao existem arquivos para copiar')
    RETU
 ENDIF
 SETCOLOR("W/R")
@@ -98,7 +97,7 @@ TOTDISK=ROUND(TOTDISK/273224,0)
 IF TOTDISK=0
    TOTDISK=1
 ENDIF
-Mdt('Vocˆ precisa ter '+STR(totdisk,4)+' disco(s) para armazenar '+STR(narq,4)+' arquivo(s)')
+Mdt('Voce precisa ter '+STR(totdisk,4)+' disco(s) para armazenar '+STR(narq,4)+' arquivo(s)')
 copia=1
 disco=0
 newdisk=1
@@ -129,12 +128,12 @@ DO WHILE copia<=narq
             ENDIF
          ENDDO
          IF LOWER(CHR(KEY))='t'
-            IF ! HB_FILEEXISTS(GetEnv("COMSPEC") //'COMMAND.COM')
+            IF ! HB_FILEEXISTS(GetEnv("COMSPEC")) //'COMMAND.COM')
                MDT('Nao existe o "+GetEnv("COMSPEC"+", ou saida negada.')
                LOOP
             ENDIF
             MDT('Digite exit para retornar ao programa')
-			hb_run( GetEnv( "COMSPEC" )
+			hb_run( GetEnv( "COMSPEC" ))
             //hb_run("C:\COMMAND.COM")
          ELSEIF LOWER(CHR(KEY))='d'
             QUIT
@@ -149,7 +148,7 @@ DO WHILE copia<=narq
    IF TAMARQ[COPIA]>362496
       MDT('S¢ pode ser copiado com o comando BACKUP')
    ELSEIF DISKSPACE(DRIVE)<TAMARQ[COPIA]
-      MDS('Atualmente n„o h  espaco')
+      MDS('Atualmente nao h  espaco')
       FLAG=1
    ELSE
       MDS('Copiando: '+ORIGEM)

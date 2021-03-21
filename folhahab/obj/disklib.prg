@@ -576,7 +576,8 @@ FUNCTION PEGFOLPAT()
    makedir(ZDIRN)
 
    cPATH:=ZDIRE+";"+ZDIRN
-   set path to &cPath.
+   Set( _SET_PATH, cPATH)
+   //ser path to &cPath.
    //ZDIRE+= "\"
    //ZDIRN+= "\"
 RETURN .T.

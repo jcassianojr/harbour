@@ -27,6 +27,7 @@
 #INCLUDE "HBGTINFO.CH"
 REQUEST HB_GT_WVG_DEFAULT
 REQUEST HB_LANG_PT
+REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 
 #INCLUDE "INKEY.CH"
@@ -76,42 +77,44 @@ IF VALTYPE(cSENHA) = "C"
    cSENHA := UPPER(cSENHA)
 ENDIF
 
-set typeahead to 1000   // QTDE DE TECLAS LIBERADAS BUFFER
-set wrap on   // HABILITA AS TECLAS DE SETAS P/SE MOVEREM
-set deleted on  // IGNORAR OS REGISTROS DELETADOS (NAO MOSTRAR NA TELA)
-set date BRITISH  // SISTEMA DE DATA BRITANICO [ EM PORTUGUES]
-set softseek on   // QDO PROCURA UM REGISTRO VIA SEEK E NAO ACHA PARA NO PROXIMO
-set exclusive OFF   // EM AMBIENTE DE REDE DIVERSOS USUARIOS
-set exact OFF   // NIVEL DE COMPARACAO PARCIAL
-set cursor on   // HABILITA O CURSOR A APARECER
+
+HB_IDLESTATE()
+Set( _SET_CODEPAGE, "PTISO")    
+rddsetdefault( "DBFCDX" )
+Set( _SET_OPTIMIZE, .t.)
+Set( _SET_DELETED, .t.)
+Set( _SET_SOFTSEEK, .t.)
+__SetCentury( .t. )
+Set( _SET_EPOCH, year( date() ) - 60 )
+Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 
 
-RDDSETDEFAULT("DBFCDX")
+Set( _SET_TYPEAHEAD, 50 )
+Set( _SET_WRAP, .t. )
+Set( _SET_EXACT, .f. )
+SetCursor(.t.)
+
 cRDDEXT := "CDX"
-SET OPTIMIZE ON
 
 
-// * POSICIONANDO AS TECLAS DE FUNCAO
-set key K_F1 to HELP  // AJUDA ON LINE
-set key K_F2 to TELE  // AGENDA TELEFONICA
-set key K_F3 to NOTEP   // BLOCO DE ANOTACOES
-set key K_F4 to AGEN  // AGENDA
-set key K_F5 to TECLAS  // TECLADO
-//set key K_F6 to GRMEMO  // MEMORANDO
-set key K_F7 to CALEND  // CALENDARIO
-set key K_F8 to CALC  // CALCULADORA
-set key K_F9 to RELOGIO   // RELOGIO
-set key K_F10 to MUDADATA   // ALTERACAO DE DATA OPERACIONAL
-set key K_F12 to SECULO
-set epoch to year(date()) - 60  //Flutuante
+ACENTUA=.T.
+SetKey( 39, {|| AC_AGUDO() } )
+SetKey( 94, {|| AC_CIRC() } )
+SetKey( 96, {|| AC_CRASE() } )
+SetKey( 126, {|| AC_TIL() } )
+SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
 
-//  SET TECLAS DE ACENTUACAO
-set key 39 to AC_AGUDO
-set key 94 to AC_CIRC
-set key 96 to AC_CRASE
-set key 126 to AC_TIL
-set key K_ALT_S to LIGA_ACENTO  //A TECLA ALT_S LIGA E DESLIGA A ACENTUACAO
-ACENTUA := .T.
+SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
+
+SetKey( K_F2, {|| TELE() } )
+SetKey( K_F3, {|| NOTEP() } )
+SetKey( K_F4, {|| AGEN() } )
+SetKey( K_F5, {|| TECLAS() } )
+SetKey( K_F10, {|| MUDADATA() } )
+
+SetKey( K_F8, {|| hb_run("calc") } )
+
 
 
 //Inicializa o Mouse Clipper 5.3c

@@ -9,6 +9,7 @@
 #INCLUDE "HBGTINFO.CH"
 REQUEST HB_GT_WVG_DEFAULT
 REQUEST HB_LANG_PT
+REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 
 #INCLUDE "INKEY.CH"
@@ -18,52 +19,51 @@ PARA ZUSER,cSENHA
 
 MVINFOConfTela("Folha rescisao e ferias")
 
-/*
-//hb_gtInfo( HB_GTI_ICONFILE, "aplicativo.ico" )
-hb_gtInfo( HB_GTI_WINTITLE, "aplicativo - WVG" )
-HB_GtInfo( HB_GTI_FONTNAME, "Lucida Console" ) // fonte
-Hb_GtInfo( HB_GTI_SELECTCOPY,.T.)
-Hb_GtInfo( HB_GTI_RESIZABLE, .T. )
-HB_GtInfo( HB_GTI_ISFULLSCREEN, .F. ) //.t. nao aparece _x barra de titulo
-HB_GTINFO( HB_GTI_CLOSABLE, .T. )
-HB_GtInfo( HB_GTI_MAXIMIZED, .T. ) //starts in Maximized Window
-hb_gtInfo( HB_GTI_ALTENTER, .T. )   // allow <Alt-Enter> for full screen
-hb_gtInfo( HB_GTI_CLOSEMODE, 1 )    // 1 - sends HB_K_CLOSE on Window x-Close
-*/
 
 netregosok()
-HB_LANGSELECT('PT')       
+
 HB_IDLESTATE()
+Set( _SET_CODEPAGE, "PTISO")   
+HB_LANGSELECT('PT') 
+rddsetdefault( "DBFCDX" )
+Set( _SET_OPTIMIZE, .t.)
+Set( _SET_DELETED, .t.)
+Set( _SET_SOFTSEEK, .t.)
+__SetCentury( .t. )
+Set( _SET_EPOCH, year( date() ) - 60 )
+Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+SetCursor(.t.)
 
-clear
-set soft on
-set cons OFF
-SET TALK OFF
-SET SAFE OFF
-set date BRIT
-set cons OFF
-set dele on
+//Set( _SET_SCOREBOARD, .f. )
+//Set( _SET_TYPEAHEAD, 50 )
+//Set( _SET_WRAP, .t. )
+//Set( _SET_EXACT, .f. )
+//Set( _SET_CONFIRM, .F.) //checar alguns .t.
 
-set key 39 to AC_AGUDO                  //SET-UP ACENTUACAO
-set key 94 to AC_CIRC
-set key 96 to AC_CRASE
-set key 126 to AC_TIL
-set key K_ALT_S to LIGA_ACENTO          //A TECLA ALT_S LIGA E DESLIGA A ACENTUACAO
+SETMODE(25,80)
+cls
 
-ACENTUA := .T.
-set key K_F1 to HELP                    // AJUDA ON LINE
-set key K_F2 to TELE                    // AGENDA TELEFONICA
-set key K_F3 to NOTEP                   // BLOCO DE ANOTACOES
-set key K_F4 to AGEN                    // AGENDA
-set key K_F5 to TECLAS                  // TECLADO
-//set key K_F6 to GRMEMO                  // MEMORANDO
-set key K_F7 to CALEND                  // CALENDARIO
-set key K_F8 to CALC                    // CALCULADORA
-set key K_F9 to RELOGIO                 // RELOGIO
-set key K_F10 to MUDADATA               // ALTERACAO DE DATA OPERACIONAL
-set key K_F11 to SECULO
+Set( _SET_CONSOLE, .F. )
+SET TALK OFF ''checar nao tem ainda na std.ch changelog.txt
+SET SAFETY OFF ''checar nao tem ainda na std.ch changelog.txt
 
-set epoch to year( date() ) - 60        //Flutuante
+
+ACENTUA=.T.
+SetKey( 39, {|| AC_AGUDO() } )
+SetKey( 94, {|| AC_CIRC() } )
+SetKey( 96, {|| AC_CRASE() } )
+SetKey( 126, {|| AC_TIL() } )
+SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
+
+SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
+
+SetKey( K_F2, {|| TELE() } )
+SetKey( K_F3, {|| NOTEP() } )
+SetKey( K_F4, {|| AGEN() } )
+SetKey( K_F5, {|| TECLAS() } )
+SetKey( K_F8, {|| hb_run("calc") } )
+SetKey( K_F10, {|| MUDADATA() } )
 
 
 RELOGIO()
@@ -81,10 +81,7 @@ zNERRO:=0
 
 
 //
-RDDSETDEFAULT("DBFCDX")
 cRDDEXT="CDX"
-SET OPTIMIZE ON
-
 
 IF ! NETUSE("CONFIGU",,,,,.F.,) //BREDE("CONFIGU",1)
    RETU

@@ -11,7 +11,8 @@
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 REQUEST HB_LANG_PT
-REQUEST HB_CODEPAGE_PT850
+//REQUEST HB_CODEPAGE_PT850
+REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 REQUEST ADSCDX
 REQUEST HB_GT_WVG_DEFAULT
@@ -25,9 +26,21 @@ REQUEST HB_GT_WVG_DEFAULT
 
 
 FUNCTION MAIN()
-set date BRITI
-set century on
+
 netregosok()
+
+HB_IDLESTATE()
+Set( _SET_CODEPAGE, "PTISO")   
+HB_LANGSELECT('PT') 
+rddsetdefault( "DBFCDX" )
+Set( _SET_OPTIMIZE, .t.)
+Set( _SET_DELETED, .t.)
+Set( _SET_SOFTSEEK, .t.)
+__SetCentury( .t. )
+Set( _SET_EPOCH, year( date() ) - 60 )
+Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+SetCursor(.t.)
+
 
 public n_files
 public keystroke
@@ -86,19 +99,24 @@ public zANOSEP:="/"
 public zCNVCHAR:="N"
 
 
-HB_IDLESTATE()  
-HB_LANGSELECT('PT')      
-HB_SETCODEPAGE('PT850')
-hb_cdpSelect( "PT850" )
+//HB_IDLESTATE()  
+//HB_LANGSELECT('PT')      
+//HB_SETCODEPAGE('PT850')
+//hb_cdpSelect( "PT850" )
  
 rddsetdefault( "DBFCDX" )
-SET OPTIMIZE ON
-set cursor OFF
-save screen
-set scoreboard OFF
-set softseek on
-set dele on
-set epoch to year( date() - 60 )        //Flutuante
+HB_IDLESTATE()
+Set( _SET_CODEPAGE, "PTISO")    
+rddsetdefault( "DBFCDX" )
+Set( _SET_OPTIMIZE, .t.)
+Set( _SET_DELETED, .t.)
+Set( _SET_SOFTSEEK, .t.)
+__SetCentury( .t. )
+Set( _SET_EPOCH, year( date() ) - 60 )
+Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+
+Set( _SET_SCOREBOARD, .f. )
+
 
 
 clear
@@ -124,7 +142,8 @@ func_title := { "Ajuda", "Abrir", "Criar", "Salvar", "Editar", "Apoio", "Mover",
 public mGetVar
 
 PATHX := HB_CWD()                 // VARIAVEIS DE TRABALHO
-set path to &PATHX
+Set( _SET_PATH, PATHX)
+
 HELPARQ  := "DBUHELP"
 READVAR  := ""
 ABERTURA := .T.
@@ -207,22 +226,21 @@ com_line := param1
 
 
 
-ACENTUA := .T.   //SET TECLAS PARA ACENTUACAO
+ACENTUA=.T.
 SetKey( 39, {|| AC_AGUDO() } )
 SetKey( 94, {|| AC_CIRC() } )
 SetKey( 96, {|| AC_CRASE() } )
 SetKey( 126, {|| AC_TIL() } )
-SetKey( K_ALT_S, {|| LIGA_ACENTO() } )
-SetKey( K_F1, {|| HELP() } )
+SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
+SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
+
 
 lVERTXT := .T.
 lEDITXT := .T.
 
 //Teclas Especiais
-//SET KEY 22      TO CSRINSERT  &&MODIFICA O CURSOR INSERIR/SOBREPOR
-//SetKey( K_ALT_V, {|| hb_gtInfo( HB_GTI_CLIPBOARDPASTE ) } )
 SetKey( K_ALT_V, {|| hb_gtInfo( HB_GTI_CLIPBOARDPASTE, .T. ) } )
-//
 SetKey( K_ALT_O, {|| XPOSESQ() } )
 SetKey( K_ALT_P, {|| XPOSDIR() } )
 SetKey( K_ALT_F, {|| XGRATXT() } )
@@ -238,8 +256,6 @@ SetKey( K_ALT_INS, {|| XALTINS() } )
 SetKey( K_CTRL_DEL, {|| XCTRLDEL () } )
 SetKey( K_CTRL_INS, {|| XCTRLINS() } )
 
-
-RELOGIO( 23 )
 
 if empty(param1)
    param1:="*.dbf"
@@ -510,9 +526,9 @@ do while .T.
    case M->sysfunc = 9
       do case
       case M->func_sel = 1
-         CALEND()
+       //  CALEND()
       case M->func_sel = 2
-         CALC()
+         hb_run("calc") //CALC()
       case M->func_sel = 3
          VERTXT()
       case M->func_sel = 4
@@ -704,9 +720,9 @@ do while .T.
             if .not. empty( M->run_com ) .and. M->keystroke = 13
                com_line := M->run_com
                @ 24,  0
-               set cursor on
+			   SetCursor(.t.)
                hb_run(run_com)
-               set cursor OFF
+			   SetCursor(.f.)
             endif
          enddo
       endif
@@ -720,18 +736,18 @@ do while .T.
       array_dir( "*.dbf", dbf_list )
       array_dir( "*" + XEXT(), ntx_list )
       array_dir( "*.vew", vew_list )
-      cur_area := 0
+      cur_area := 0 
       sysfunc  := 0
 
    otherwise
       help_code := 1
       set_view()
       if M->keystroke = 27
-         set typeahead to 0
-         close DATABASES
-         restore screen
-         set cursor on
-         set color to
+	     Set( _SET_TYPEAHEAD, 0 )
+         dbcloseall()
+         __XRestScreen()
+		 SetCursor(.t.)
+		 SetColor( "" )
          quit
       endif
    endcase

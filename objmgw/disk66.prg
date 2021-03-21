@@ -14,7 +14,7 @@
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-func TECLAS( cPRO, nLIN, cVAR )
+function TECLAS( cPRO, nLIN, cVAR ) //ajuda nas teclas
 local I      := 0
 priv HELPDBF := "TECLAS"
 while .T.
@@ -36,6 +36,16 @@ while .T.
    case cPRO = "INKEY" 
       exit
    case cPRO = "MENU" 
+      exit
+   case cPRO = "MSGYESNO" 
+      exit
+   case cPRO = "MSGEXCLAMATION" 
+      exit
+   case cPRO = "MSGWARNING" 
+      exit
+   case cPRO = "MSGSTOP" 
+      exit
+   case cPRO = "ALERT" 
       exit
    endcase
    I ++

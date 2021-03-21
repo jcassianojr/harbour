@@ -11,6 +11,7 @@
 *:*****************************************************************************
 
 REQUEST HB_LANG_PT
+REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 REQUEST HB_GT_WVG_DEFAULT
 
@@ -38,38 +39,45 @@ hb_gtInfo( HB_GTI_CLOSEMODE, 1 )    // 1 - sends HB_K_CLOSE on Window x-Close
 */
 
 netregosok()
-HB_LANGSELECT('PT')       
+
 HB_IDLESTATE()
+Set( _SET_CODEPAGE, "PTISO") 
+HB_LANGSELECT('PT') 
+  
+rddsetdefault( "DBFCDX" )
+Set( _SET_OPTIMIZE, .t.)
+Set( _SET_DELETED, .t.)
+Set( _SET_SOFTSEEK, .t.)
+__SetCentury( .t. )
+Set( _SET_EPOCH, year( date() ) - 60 )
+Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+Set( _SET_SCOREBOARD, .f. )
+Set( _SET_TYPEAHEAD, 50 )
+Set( _SET_WRAP, .t. )
+Set( _SET_EXACT, .f. )
+SetCursor(.t.)
+Set( _SET_CONFIRM, .t.)
 
 
-SET DATE BRITI
-SET SCORE OFF
-SET TALK OFF
-SET DELE ON
-SET CONF OFF
-SET SOFT ON
+SET TALK OFF ''checar nao tem ainda na std.ch changelog.txt
 
-
-SET KEY  39 TO AC_AGUDO          &&SET-UP ACENTUACAO
-SET KEY  94 TO AC_CIRC
-SET KEY  96 TO AC_CRASE
-SET KEY 126 TO AC_TIL
-SET KEY K_ALT_S TO LIGA_ACENTO   &&A TECLA ALT_S LIGA E DESLIGA A ACENTUACAO
 
 ACENTUA=.T.
-SET KEY K_F1  TO HELP        // AJUDA ON LINE
-SET KEY K_F2  TO TELE        // AGENDA TELEFONICA
-SET KEY K_F3  TO NOTEP       // BLOCO DE ANOTACOES
-SET KEY K_F4  TO AGEN        // AGENDA
-SET KEY K_F5  TO TECLAS      // TECLADO
-//SET KEY K_F6  TO GRMEMO      // MEMORANDO
-SET KEY K_F7  TO CALEND      // CALENDARIO
-SET KEY K_F8  TO CALC        // CALCULADORA
-SET KEY K_F9  TO RELOGIO     // RELOGIO
-SET KEY K_F10 TO MUDADATA    // ALTERACAO DE DATA OPERACIONAL
-SET KEY K_F12 TO SECULO
+SetKey( 39, {|| AC_AGUDO() } )
+SetKey( 94, {|| AC_CIRC() } )
+SetKey( 96, {|| AC_CRASE() } )
+SetKey( 126, {|| AC_TIL() } )
+SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
 
-SET EPOCH TO YEAR(DATE())-60 //Flutuante
+SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
+
+SetKey( K_F2, {|| TELE() } )
+SetKey( K_F3, {|| NOTEP() } )
+SetKey( K_F4, {|| AGEN() } )
+SetKey( K_F5, {|| TECLAS() } )
+SetKey( K_F8, {|| hb_run("calc") } )
+SetKey( K_F10, {|| MUDADATA() } )
 
 RELOGIO()
 
@@ -121,10 +129,6 @@ ZDATA:=DATE()
 ANO=YEAR(DXDIA)
 CONSEN=.T.
 
-
-//
-RDDSETDEFAULT("DBFCDX")
-SET OPTIMIZE ON
 cRDDEXT="CDX"
 
 IF ! NETUSE("CONFIGU",,,,,.F.,)

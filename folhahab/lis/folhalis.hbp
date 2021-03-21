@@ -82,7 +82,6 @@ imprais.PRG
 ..\OBJ\FO1w.prg
 ..\OBJ\FO7w.prg
 C:\develop\harbour\objmgw\comp
-C:\develop\harbour\objmgw\disk50
 C:\develop\harbour\objmgw\disk52
 C:\develop\harbour\objmgw\disk53
 C:\develop\harbour\objmgw\disk54
@@ -93,13 +92,11 @@ C:\develop\harbour\objmgw\disk61
 C:\develop\harbour\objmgw\disk62
 C:\develop\harbour\objmgw\disk63
 C:\develop\harbour\objmgw\disk64
-C:\develop\harbour\objmgw\disk65
 C:\develop\harbour\objmgw\disk66
 C:\develop\harbour\objmgw\disk70
 C:\develop\harbour\objmgw\disk71
 C:\develop\harbour\objmgw\disk72
-C:\develop\harbour\objmgw\flib04hab
-C:\develop\harbour\objmgw\flib08
+C:\develop\harbour\objmgw\error.prg
 C:\develop\harbour\objmgw\f_decode
 C:\develop\harbour\objmgw\f_encode
 C:\develop\harbour\objmgw\f_freadl
@@ -107,14 +104,13 @@ C:\develop\harbour\objmgw\f_ismemo
 C:\develop\harbour\objmgw\f_makedb
 C:\develop\harbour\objmgw\f_mmopac
 C:\develop\harbour\objmgw\f_tempfi
+C:\develop\harbour\objmgw\flib04hab
+C:\develop\harbour\objmgw\flib08
 C:\develop\harbour\objmgw\mlib06
 C:\develop\harbour\objmgw\mlib16
 C:\develop\harbour\objmgw\mmousen
 C:\develop\harbour\objmgw\netdbf
 C:\develop\harbour\objmgw\pdf
 C:\develop\harbour\objmgw\profile
-C:\develop\harbour\objmgw\seculo
-C:\develop\harbour\objmgw\error.prg
-C:\develop\harbour\objmgw\swprun.prg
 c:\develop\harbour\objmgw\wvgini.prg
 

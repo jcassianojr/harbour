@@ -566,7 +566,7 @@ WHILE cPRO="READCUR".OR.cPRO="(B)FPAD"
    nPRO++
 ENDDO
 IF TYPE(cVAR)="D"
-   CALEND()
+  // CALEND()
    IF VALTYPE(READVAR)="D"
       IF MDG("USAR "+STRVAL(READVAR))
          &cVAR. := READVAR
@@ -604,7 +604,7 @@ IF TYPE(cVAR)="N"
       CASE cVAR="MHORARIO"
            &cVAR.=ESCOLHEXI( "FOPTOHOR", &cVAR., "' '+mCODIGO+' '+STR(mENT,  6, 2)+' '+STR(mALMI,  6, 2)+' '+STR(mALMF,  6, 2)+' '+STR(mSAI,  6, 2)", "NUMERO")     
       OTHERWISE
-        CALC()
+      //  CALC()
         IF VALTYPE(READVAR)="N"
            IF MDG("USAR "+STRVAL(READVAR))
               READVAR:= READVAR

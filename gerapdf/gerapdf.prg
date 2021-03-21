@@ -8,11 +8,14 @@ FUNCTION Main( cXmlDocumento, cLogoFile, cXmlAuxiliar )
 
    LOCAL  oDanfe,  cTEMPFILE
    
-
-   SET DATE BRITISH   
+HB_IDLESTATE()
+Set( _SET_CODEPAGE, "PTISO")
+__SetCentury( .t. )
+Set( _SET_EPOCH, year( date() ) - 60 )
+Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+  
    SetMode( 25, 80 )
    cls
-   Set( _SET_CODEPAGE, "PTISO" )
    SetColor( "W/B,N/W,,,W/B" )
 
    aXML:={}
@@ -62,8 +65,10 @@ RETURN NIL
 FUNCTION PDFOpen( cFile )
 
    IF File( cFile )
-      //WAPI_ShellExecute( NIL, "open", cFile, "",, WIN_SW_SHOWNORMAL )
-	  WAPI_ShellExecute( NIL, "open", cFile, "",, )
+      //WAPI_ShellExecute( NIL, "open", cFile, "",, WIN_SW_SHOWNORMAL )   essSW_SHOWNORMAL = 1
+	  	//  hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
+
+	  WAPI_ShellExecute( NIL, "open", cFile, "","", 1)
       Inkey(1)
    ENDIF
 

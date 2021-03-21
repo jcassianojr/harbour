@@ -65,7 +65,7 @@ else
 endif
 IF !lACHEI
    IF TYPE(cVAR) = "D"
-      CALEND()
+     // CALEND()
       IF VALTYPE(READVAR) = "D"
          IF MDG("USAR "+STRVAL(READVAR))
             &cVAR. := READVAR
@@ -73,7 +73,7 @@ IF !lACHEI
       ENDIF
    ENDIF
    IF TYPE(cVAR) = "N"
-      CALC()
+      //CALC()
       IF VALTYPE(READVAR) = "N"
          IF MDG("USAR "+STRVAL(READVAR))
             READVAR := READVAR
