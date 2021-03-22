@@ -2,9 +2,10 @@
 *+
 *+    Source Module => DISK72.PRG
 *+
-*+    Functions: Function FILENAMES()
-*+               Function TIRAEXT()
-*+               Function DELETAARQ()
+*+    Functions: Function FILENAMES(GRUPO ,cCASE)
+*+               Function TIRAEXT(cFile, opcional cEXT) ''so troca se passar cext senao so tira a extensao
+*+               Function TROCAEXT(cFile, cEXT) 
+*+               Function DELETAARQ(cGRUPO)
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
@@ -49,6 +50,15 @@ FUNCTION TIRAEXT( cFile, cEXT )             //Arquivo teste.txt ->teste se cext=
       cFilename += "." + cEXT
    endif
    retu cFileName
+
+*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+
+*+    Function TROCAEXT ''compatibilizar chamada com chamada trocaext ja em alguns programa evitando trocar o nome da funcao e evitar que nao exista
+*+
+*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+
+FUNCTION TROCAEXT(cFile, cEXT)
+RETURN TIRAEXT( cFile, cEXT )
 
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн

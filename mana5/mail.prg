@@ -241,11 +241,8 @@ RETU .T.
 *+
 *+
 *+
-FUNC MAILFIX()
-
-ALERTX(MEMOPACK(ZDIRP+"MAIL\MAIL"))
-ALERTX(MEMOPACK(ZDIRP+"MAIL\MAILPG"))
-IF !USEREDE("MAIL",0,0,,,300)   //
+FUNCTION MAILFIX() ''efetua limpeza da pack e recria para reduzir os memos ->memopack
+IF ! USEREDE("MAIL",0,0,,,300)   //
    ALERTX("Arquivo MAIL em uso")
    RETU .F.
 ENDIF
@@ -261,6 +258,8 @@ nLASTREC := LASTREC()
 zei_fort(nLASTREC,,,0)
 DBEVAL({|| netgrvcam("NUMERO",RECNO())},,{|| zei_fort(nLASTREC,,,1)})
 DBCLOSEALL()
+ALERTX(MEMOPACK(ZDIRP+"MAIL\MAIL",.t.,.t.,"DBFCDX"))
+
 
 IF !USEREDE("MAILPG",0,0)   //
    ALERTX("Arquivo MAILPG em uso")
@@ -278,5 +277,5 @@ nLASTREC := LASTREC()
 zei_fort(nLASTREC,,,0)
 DBEVAL({|| netgrvcam("NUMERO",RECNO())},,{|| zei_fort(nLASTREC,,,1)})
 DBCLOSEALL()
-
+ALERTX(MEMOPACK(ZDIRP+"MAIL\MAILPG",.t.,.t.,"DBFCDX"))
 

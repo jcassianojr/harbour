@@ -3,22 +3,23 @@
 *+    Function MEMOPACK()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+
 *+
-function MEMOPACK( packlist,lMES,lINFO ) //Array Arquivos se texto convert array
-
 #include "set.ch"
+#include "dbinfo.ch"
 
+function MEMOPACK( packlist,lMES,lINFO,cUSORDD ) //Array Arquivos se texto convert array
 local counter
 local old_delete
 local real_recs
 local ret_value
 local cARQNOME
-
 private temp_file
+
 cOLDRDD:=RDDSETDEFAULT()
 
 if valtype(Packlist)="C"
-   packlist:={packlist}
+   packlist:={packlist} 'funcao trabalha com matriz de arquivos se passar um arquivo cria a matriz com somente ele
 endif
 
 
@@ -32,11 +33,11 @@ for counter := 1 to len( packlist )
 
     cARQNOME:=packlist[ counter ]
 
-    if ! ismemo(cARQNOME,lMES,lINFO)
+    if ! ismemo(cARQNOME,lMES,lINFO) //varre a estrutura para ver ser se tem algum campo memo na f_ismemo
        exit
     endif
 
-    nVERSAO:=INFOTIPODBF(cARQNOME,lMES)
+    nVERSAO:=INFOTIPODBF(cARQNOME,lMES) //traz o tipo pelo reader na f_ismemo
     //0 Sem memo 1 dbf/dbt 2 dbf/fpt
 
     IF ! (nVERSAO=1.OR.nVERSAO=2.or.nVERSAO=3)
@@ -44,11 +45,15 @@ for counter := 1 to len( packlist )
       exit
     endif
 
+	IF EMPTY(cUSORDD)
+		cNTXEXT:=".DBT"
+		IF nVERSAO=2
+		   cNTXEXT:=".FPT"
+		ENDIF
+    else
+	    cNTXEXT:=hb_rddInfo( RDDI_MEMOEXT) //a extensao do rdiinfo memo do destino vem com ponto
 
-    cNTXEXT:=".DBT"
-    IF nVERSAO=2
-       cNTXEXT:=".FPT"
-    ENDIF
+    endif	
 
    //  Verifica se todos os arquivos do array especificado existem.
    if .not. HB_FILEEXISTS( cARQNOME + '.DBF' )
@@ -62,15 +67,24 @@ for counter := 1 to len( packlist )
    endif
 
    //  Abre a base de dados e obtem a contagem de registros.
-   IF nVERSAO=1
-      RDDSETDEFAULT("DBFNTX")
-   ENDIF
-   IF nVERSAO=2
-      RDDSETDEFAULT("DBFCDX")
-   ENDIF
-   IF nVERSAO=3
-      RDDSETDEFAULT("DBFMDX")
-   ENDIF
+   IF EMPTY(cUSORDD)
+	   IF nVERSAO=1
+		  RDDSETDEFAULT("DBFNTX")
+	   ENDIF
+	   IF nVERSAO=2
+		  RDDSETDEFAULT("DBFCDX")
+	   ENDIF
+	   IF nVERSAO=3
+	       ret_value := '8 - driver DBFMDX nao mais disponivel ' 
+	       EXIT
+		  //RDDSETDEFAULT("DBFMDX")
+	   ENDIF  
+	ELSE
+	  RDDSETDEFAULT(cUSORDD)
+    ENDIF	
+	   
+	   
+   
    
    DBUSEAREA(.T.,,cARQNOME,,.F.)
    if ! neterr()

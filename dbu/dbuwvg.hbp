@@ -17,7 +17,7 @@ xhb.hbc
 rddads.hbc
 
 DBUwvg.PRG  
-dbt2fptx.prg
+dbucnvmemo.prg
 dbucnv.prg
 dbucopy.prg
 dbudoc.prg    
@@ -30,7 +30,7 @@ dbustru.prg
 dbuutil.prg
 dbuver.prg
 dbuview.prg
-fpt2dbtx.prg 
+
 C:\develop\harbour\objmgw\netdbf.prg
 C:\develop\harbour\objmgw\comp.prg  
 C:\develop\harbour\objmgw\disk54.prg

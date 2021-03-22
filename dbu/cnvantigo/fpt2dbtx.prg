@@ -5,21 +5,58 @@
 
 *
 *
+function convertmemo()
+nOLDTIPO=TIPODBF
+alert("escolha origem")
+tipodbfesc()
+nORITIPO:=TIPODEF
+cORIMEMO:=hb_rddInfo( RDDI_MEMOEXT)  //a extensao do origem memo do destino vem com ponto
+cORIDRIVER:=RDDNOME(TIPODBF)
+alert("escolha destino")
+tipodbfesc()
+nDESTIPO:=TIPODEF
+cDESMEMO:=hb_rddInfo( RDDI_MEMOEXT) //a extensao do rdiinfo memo do destino vem com ponto
+cDESDRIVER:=RDDNOME(TIPODBF)
+
+
+
+      USE (ARQ) ALIAS NTX SHARED NEW VIA  (cORIDRIVER) //"DBFNTX" 	via driver antigo
+
+    @ 12,05 SAY "Exportando estrutura do arquivo... "
+    COPY STRUCTURE TO (ARQ2)              //criando a estrutura usa o rdddefauld destino ultimo atribuido
+    IF file(ARQ2+".DBF") .AND. file(ARQ2+cDESMEMO") // ".FPT" a extensao do rdiinfo memo do destino
+       ?? "SUCESSO!"
+    ENDIF
+
+    USE (ARQ2) ALIAS CDX EXCLUSIVE NEW VIA (cDESDRIVER)  //abre a copiausa o rdddefauld destino ultimo atribuido
+
+    @ 13,05 SAY "Importando registros p/ CDX..."
+    SELE CDX
+    
+    nLASTREC:=NetRegCount(arq)
+    zei_fort( nLASTREC,,,0)
+    
+    APPEND FROM (ARQ) VIA (cORIDRIVER)  while zei_fort(nLASTREC,,,1)  //"DBFNTX" 	via driver antigo
+
+    DBCLOSEALL()
+
+
+RDDNOME(nOLDTIPO) //retorna tipo anterior
+
 function fpt2dbt()
+
+
 LOCAL RAIZ[ADIR("*.FPT")]
 AR := {}
 CLS
 
-//REQUEST DBFCDX //ja ao carregar o programa
 
 SETCURSOR(0)
 SETCOLOR("W+/B")
 CLS
 @ 00,00 SAY REPLI(" ",79) COLOR "W+/BG"
 @ 24,00 SAY REPLI(" ",79) COLOR "W+/BG"
-//@ 00,02 SAY "-- FPT2DBT v1.0 --  CONVERSOR DE BASES DBFCDX PARA DBFNTX " COLOR "W+/BG"
-//@ 24,02 SAY "Anderson Cardoso Silva - www.caclipper.cjb.net" COLOR "W+/BG"
-@ 02,00 SAY PADC("Transforma‡„o DBFCDX -> DBFNTX",79) COLOR "BG+/B"
+@ 02,00 SAY PADC("Transformacao DBFCDX -> DBFNTX",79) COLOR "BG+/B"
 *------------
 
 *** 1o. ESTAGIO
@@ -28,7 +65,7 @@ CLS
 @ 05,00 SAY "Criando a lista de DBFs a serem alterados..."
 ADIR("*.FPT", RAIZ) // LISTA DE DBFs
 @ 05,00 SAY "                                            "
-@ 05,00 SAY "Verificando fun‡„o 1x1 de DBFxFPT..."
+@ 05,00 SAY "Verificando funcao 1x1 de DBFxFPT..."
 
 @ 07,05 SAY "Progresso: 0%" //16
 CNT := Y := AP := PC := 0
@@ -55,7 +92,7 @@ DO WHILE X <= FIM
           *PC -= (CNT/FI)
           //------
           IF !lTODOS
-             nCUAL := ALERTX("OOOPS! Falha na fun‡„o... N„o existe o arquivo "+ARQ+"! CONTINUA?",{"NAO","SIM","SIM P/ TODOS"})
+             nCUAL := ALERTX("OOOPS! Falha na funcao... Nao existe o arquivo "+ARQ+"! CONTINUA?",{"NAO","SIM","SIM P/ TODOS"})
           ENDIF
           IF nCUAL = 1
              ? "Programa abortado devido a nao existencia de uma co-relacao"
@@ -86,9 +123,6 @@ FOR T=1 TO FIM
     ENDIF
     aADD(aTEMP, cDBFTMP)
 NEXT
-//@ 15,05 SAY "PRONTO! TECLE ALGO P/ ENTRAR NO 2o. ESTAGIO" COLOR "GR+/R*"
-//TONE(100,1)
-//INKEY(0)
 
 
 *** 2o. ESTAGIO - CRIANDO DBFNTX E IMPORTANDO REGISTROS
@@ -147,9 +181,7 @@ NEXT
 @ 02,00 SAY "3o. ESTAGIO -RENOMEANDO ARQUIVOS TEMPORARIOS P/ ARQUIVO ATUAL"
 @ 03,00 SAY "AGORA  PRECISO ESTAREM FORA DA REDE!" COLOR "GR+/B"
 
-//@ 05,00 SAY "TECLE ALGO QUANDO PRONTO..." COLOR "GR+/R*"
-//INKEY(0)
-//@ 05,00 CLEA TO 05,79
+
 
 CNT := Y := AP := PC := 0
 @ 07,05 SAY "Progresso: 0%" //16

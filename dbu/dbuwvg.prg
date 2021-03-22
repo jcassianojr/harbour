@@ -13,8 +13,26 @@
 REQUEST HB_LANG_PT
 //REQUEST HB_CODEPAGE_PT850
 REQUEST HB_CODEPAGE_PTISO
-REQUEST DBFCDX
-REQUEST ADSCDX
+REQUEST DBFNTX //1 DBF&NTX DBF INDEX=NTX
+REQUEST DBFCDX //2 DBF&CDX DBF INDEX=CDX
+REQUEST ADSCDX //3 &ADSCDX DBF INDEX=CDX  SET FILETYPE TO ADT CDX NTX  ADS ADSADT ADSNTX ADSCDX ADSVFP
+REQUEST ADSNTX //4
+REQUEST ADSVFP  //5
+REQUEST ADSADT  //6
+REQUEST DBTCDX //7 D&BTCDX DBF CDX MEMO=DBT
+REQUEST FPTCDX //8 &SMTCDX DBF CDX MEMO=SMT
+REQUEST SMTCDX //9 &FPTCDX DBF CDX MEMO=FPT
+//Microsoft FoxPro create an IDX index file similar ntx
+//REQUEST DBFNDX nao tem mais a rdd removido tipos dbulib.prg A dBASE III standard index file (.NDX)
+//REQUEST DBFMDX nao tem mais a rdd removido tipos dbulib.prg dBASE IV  mdx index files can contain up to 47 individual index files in a single mdx file
+//Possiveis inclusao
+//SIXCDX SISNTX SISNSX SuccessWare Index Driver (SIx Driver) replaces the default NTX/DBT index and memo driver with an NSX/SMT  single-file index https://www.apollodb.com/sixrdd.asp
+//DBFNSX
+//HSCDX
+//RLCDX
+//VFPCDX
+//verificar outros rdd como sql e array texto
+
 REQUEST HB_GT_WVG_DEFAULT
 
 //#require "gtwvg"
@@ -97,6 +115,7 @@ public zANOTAM:="2"
 public zANOFOR:="DMA"
 public zANOSEP:="/"
 public zCNVCHAR:="N"
+public zMEMOEXT:=".CDX"
 
 
 //HB_IDLESTATE()  
@@ -239,7 +258,7 @@ SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
 lVERTXT := .T.
 lEDITXT := .T.
 
-//Teclas Especiais
+//Teclas Especiais set pois no dbu usa o read padrao nao o modificado readcur que seta esta configuracao
 SetKey( K_ALT_V, {|| hb_gtInfo( HB_GTI_CLIPBOARDPASTE, .T. ) } )
 SetKey( K_ALT_O, {|| XPOSESQ() } )
 SetKey( K_ALT_P, {|| XPOSDIR() } )
@@ -282,12 +301,12 @@ FOR iLOOP=1 TO LEN(aPARAM)
            multidocs(7,param1)
        case AT("/FIX",aPARAM[iLOOP])>0
             if mdg( "Fixar? " +zdire) = "S"
-		 	   FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo)},param1)
+		 	   FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))},param1)
             endif
        case AT("/ZER",aPARAM[iLOOP])>0
            if mdg( "Zerar? " +zdire)
               if md( "Realmente Zerar?" +zdire)
-                FAZERDBF( { || dbuzap() }, .t. ,{|| copybkdbf(ARQUIVO)},{||memopack(arquivo)},param1)
+                FAZERDBF( { || dbuzap() }, .t. ,{|| copybkdbf(ARQUIVO)},{||memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))},param1)
               endif  
            endif
       case AT("/AJU",aPARAM[iLOOP])>0 
@@ -417,7 +436,7 @@ abrir_b[ 3 ] = "sysfunc = 0 .AND. .NOT. box_open"
 DECLARE criar_b[ 11 ]
 criar_m:={"Database","Indice","DBF->TEC","DBF->DBE","DBF->DLM","DBF->SDF" ,;
                  "DBF->XML(Ava)","DBF->XML(Basico)","SDF->DBF","DLM->DBF","DBE->DBF"}
-criar_m[5]:=ZEXPOREXT+ZDELIMITE+ZANOFOR+ZANOSEP+ZANOTAM+"d"+ZDECSIM+ZCNVCHAR                 
+criar_m[5]:=ZEXPOREXT+ZDELIMITE+ZANOFOR+ZANOSEP+ZANOTAM+"d"+ZDECSIM+ZCNVCHAR +ZMEMOEXT            
 
 criar_b[ 1 ] = "sysfunc = 0"
 FOR X=2 TO 8
@@ -463,14 +482,14 @@ setar_b[ 5 ] = "sysfunc = 0"
 setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
-util_m := { "Calendario", "Calculadora", "Ver TXT", "Editar TXT",;
+util_m := { "sem uso", "Calculadora", "Ver TXT", "Editar TXT",;
             "TECs","DBEs","DLMs","SDFs","XMLs(Avan)","XMLs(Basico)","FixarTodos","ZeraTodos",;
-            "DBEs->DBF","Recriar","FPT2DBT","DBT2FPT"}
+            "DBEs->DBF","Recriar","cnv memo","sem uso"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
      util_b[x]:="EMPTY(cur_dbf)"
 next x
-util_m[7]:=ZEXPOREXT+ZDELIMITE+ZANOFOR+ZANOSEP+ZANOTAM+"d"+ZDECSIM+ZCNVCHAR
+util_m[7]:=ZEXPOREXT+ZDELIMITE+ZANOFOR+ZANOSEP+ZANOTAM+"d"+ZDECSIM+ZCNVCHAR+zMEMOEXT
 
 DECLARE dbf_list[ adir( "*.dbf" ) + 20 ]
 DECLARE ntx_list[ adir( "*" + XEXT() ) + 20 ]
@@ -526,7 +545,9 @@ do while .T.
    case M->sysfunc = 9
       do case
       case M->func_sel = 1
+	    // futua opcao calendario do windows ou usar outro utilitario
        //  CALEND()
+	   alertx("funcionalidade a ser implentada")
       case M->func_sel = 2
          hb_run("calc") //CALC()
       case M->func_sel = 3
@@ -551,13 +572,13 @@ do while .T.
            multidocs(7)
       case M->func_sel = 11
            if rsvp( "Fixar Todos ? (S/N)" ) = "S"
-               FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo)})
+               FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
                stat_msg( "Fixar Todos Concluido" )
            endif
       case M->func_sel = 12
            if rsvp( "Zerar Todos ? (S/N)" ) = "S"
               if mdg( "Realmente Zerar Todos ? (S/N)" )
-                 FAZERDBF( { || dbuzap() }, .t. ,{|| copybkdbf(ARQUIVO)},{||memopack(arquivo)})
+                 FAZERDBF( { || dbuzap() }, .t. ,{|| copybkdbf(ARQUIVO)},{||memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
                  stat_msg( "Zerar Todos Concluido" )
               endif
            endif
@@ -576,13 +597,14 @@ do while .T.
               endif
            endif
       case M->func_sel = 15
-          if rsvp( "Converter FPT para DBT" ) = "S"
-             fpt2dbt()
+          if rsvp( "Converter memos entre formatos" ) = "S" //funcao unica para conversao usando rdd conforme escolha
+             //fpt2dbt() //dbt2fpt()
           ENDIF
-      case M->func_sel = 16
-          if rsvp( "Converter DBT para FPT" ) = "S"
-             dbt2fpt()
-          ENDIF
+      case M->func_sel = 16 // podera ser usado para outro menu pois agora a funcao e unica 
+	       alertx("usar opcao acima converter memos")
+          //if rsvp( "Converter memos entre formatos" ) = "S"
+             //dbt2fpt()
+          //ENDIF
       endcase
       sysfunc := 0
    case M->sysfunc = 5
@@ -652,7 +674,7 @@ do while .T.
       sysfunc := 0
    case M->sysfunc = 6 .and. M->func_sel < 7
       if empty( M->cur_dbf )
-         view_err := "Nao h  arquivo de dados na corrente area selecionada"
+         view_err := "Nao ha arquivo de dados na corrente area selecionada"
          sysfunc  := 0
          loop
       endif
@@ -861,7 +883,7 @@ retu .T.
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-func LAYOUT()
+function LAYOUT()
 
 clea
 for n := 2 to len( func_title )
@@ -869,7 +891,7 @@ for n := 2 to len( func_title )
    @  1, ( 9 * n ) - 18 say padc( func_title[ n ], 9 )
 next
 @  2,  0 say replicate( "-", 80 )
-@ 23,  0 say "DBU - DataBase Utilit rio - Gerenciador de Banco de Dados"
+@ 23,  0 say "DBU - DataBaseUtilitario"
 retu .T.
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||

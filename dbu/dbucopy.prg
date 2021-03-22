@@ -757,14 +757,15 @@ endcase
 setcolor( saveColor )
 return 2
 
-func copybkdbf(cFILE)
+funcTION copybkdbf(cFILE)
 copyback(TIRAEXT(cFILE),TIRAEXT(cFILE),'DBF',"BAK")
 copyback(TIRAEXT(cFILE),TIRAEXT(cFILE),"DBT","BBT")
 copyback(TIRAEXT(cFILE),TIRAEXT(cFILE),"FPT","BPT")
-retu
+copyback(TIRAEXT(cFILE),TIRAEXT(cFILE),"SMT","BMT")
+retuRN
 
 
-func copyback(cORI,cBAK,cEXT,cEXTBAK)
+funcTION copyback(cORI,cBAK,cEXT,cEXTBAK)
 IF VALTYPE(cEXTBAK)#"C"
    cEXTBACK:="BAK"
 ENDIF
@@ -778,6 +779,6 @@ stat_msg( "Criando Backup "+cORI )
 if file( cORI)
    filecopy(cORI,cBAK)
 ENDIF
-RETU .T.
+RETURN .T.
 
 *+ EOF: DBUCOPY.PRG

@@ -1228,15 +1228,25 @@ otherwise
                           substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) + ".bak"
       name_temp := substr( filename, 1, rat( hb_ps(), filename ) ) + ;
                            temparq + ".bak"
-      dbt_spec := substr( filename, 1, rat( ".", filename ) ) + ;
-                          "DBT"
-      dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) + ;
-                          "DBT"
+	  IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "DBT")					   
+		 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "DBT"
+		 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "DBT"
+	  endif	  
+
+	  IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "FPT")					   
+		 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "FPT"
+		 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "FPT"
+	  endif	  
+
+	  IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "SMT")					   
+		 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "SMT"
+		 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "SMT"
+	  endif	  
 
       if file( dbt_spec )
 
          if new_name = "S"
-            new_name := rsvp( "Aten‡„cao: Memos sera„o perdidos" + ;
+            new_name := rsvp( "Atencao: Memos serao perdidos" + ;
                               "...Continue? (S/N)" )
 
             if new_name <> "S"
