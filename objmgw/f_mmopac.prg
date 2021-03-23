@@ -19,7 +19,7 @@ private temp_file
 cOLDRDD:=RDDSETDEFAULT()
 
 if valtype(Packlist)="C"
-   packlist:={packlist} 'funcao trabalha com matriz de arquivos se passar um arquivo cria a matriz com somente ele
+   packlist:={packlist} //'funcao trabalha com matriz de arquivos se passar um arquivo cria a matriz com somente ele
 endif
 
 

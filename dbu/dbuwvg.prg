@@ -9,39 +9,34 @@
 *+               Function READDBU()
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-
-REQUEST HB_LANG_PT
-//REQUEST HB_CODEPAGE_PT850
-REQUEST HB_CODEPAGE_PTISO
-REQUEST DBFNTX //1 DBF&NTX DBF INDEX=NTX
-REQUEST DBFCDX //2 DBF&CDX DBF INDEX=CDX
-REQUEST ADSCDX //3 &ADSCDX DBF INDEX=CDX  SET FILETYPE TO ADT CDX NTX  ADS ADSADT ADSNTX ADSCDX ADSVFP
-REQUEST ADSNTX //4
-REQUEST ADSVFP  //5
-REQUEST ADSADT  //6
-REQUEST DBTCDX //7 D&BTCDX DBF CDX MEMO=DBT
-REQUEST FPTCDX //8 &SMTCDX DBF CDX MEMO=SMT
-REQUEST SMTCDX //9 &FPTCDX DBF CDX MEMO=FPT
-//Microsoft FoxPro create an IDX index file similar ntx
-//REQUEST DBFNDX nao tem mais a rdd removido tipos dbulib.prg A dBASE III standard index file (.NDX)
-//REQUEST DBFMDX nao tem mais a rdd removido tipos dbulib.prg dBASE IV  mdx index files can contain up to 47 individual index files in a single mdx file
-//Possiveis inclusao
-//SIXCDX SISNTX SISNSX SuccessWare Index Driver (SIx Driver) replaces the default NTX/DBT index and memo driver with an NSX/SMT  single-file index https://www.apollodb.com/sixrdd.asp
-//DBFNSX
-//HSCDX
-//RLCDX
-//VFPCDX
-//verificar outros rdd como sql e array texto
-
-REQUEST HB_GT_WVG_DEFAULT
-
-//#require "gtwvg"
-
+#include "dbinfo.ch"
 #INCLUDE "INKEY.CH"
 #INCLUDE "BOX.CH"
 #include "ads.ch"
 #INCLUDE "HBGTINFO.CH"
 
+
+REQUEST HB_LANG_PT
+REQUEST HB_CODEPAGE_PTISO
+REQUEST HB_GT_WVG_DEFAULT
+
+
+REQUEST DBFNTX //1 DBF&NTX DBF INDEX=NTX
+REQUEST DBFCDX //2 DBF&CDX DBF INDEX=CDX
+REQUEST ADSCDX //3 &ADSCDX DBF INDEX=CDX  SET FILETYPE TO ADT CDX NTX  ADS ADSADT ADSNTX ADSCDX ADSVFP
+REQUEST ADSNTX //4
+REQUEST ADSVFP //5
+REQUEST ADSADT  //6
+REQUEST DBTCDX //7 D&BTCDX DBF CDX MEMO=DBT
+REQUEST FPTCDX //8 &SMTCDX DBF CDX MEMO=SMT
+REQUEST SMTCDX //9 &FPTCDX DBF CDX MEMO=FPT
+REQUEST SIXCDX //10SIXCDX SISNTX SISNSX SuccessWare Index Driver (SIx Driver) replaces the default NTX/DBT index and memo driver with an NSX/SMT  single-file index https://www.apollodb.com/sixrdd.asp
+REQUEST DBFNSX //11
+//Microsoft FoxPro create an IDX index file similar ntx
+//REQUEST DBFNDX nao tem mais a rdd removido tipos dbulib.prg A dBASE III standard index file (.NDX)
+//REQUEST DBFMDX nao tem mais a rdd removido tipos dbulib.prg dBASE IV  mdx index files can contain up to 47 individual index files in a single mdx file
+//Possiveis inclusao
+//VFPCDX
 
 FUNCTION MAIN()
 
@@ -116,12 +111,7 @@ public zANOFOR:="DMA"
 public zANOSEP:="/"
 public zCNVCHAR:="N"
 public zMEMOEXT:=".CDX"
-
-
-//HB_IDLESTATE()  
-//HB_LANGSELECT('PT')      
-//HB_SETCODEPAGE('PT850')
-//hb_cdpSelect( "PT850" )
+public zusovia:="DBFCDX"
  
 rddsetdefault( "DBFCDX" )
 HB_IDLESTATE()
@@ -250,8 +240,8 @@ SetKey( 39, {|| AC_AGUDO() } )
 SetKey( 94, {|| AC_CIRC() } )
 SetKey( 96, {|| AC_CRASE() } )
 SetKey( 126, {|| AC_TIL() } )
-SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
-SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
+SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERTX( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alertX("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
 SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
 
 
@@ -436,7 +426,7 @@ abrir_b[ 3 ] = "sysfunc = 0 .AND. .NOT. box_open"
 DECLARE criar_b[ 11 ]
 criar_m:={"Database","Indice","DBF->TEC","DBF->DBE","DBF->DLM","DBF->SDF" ,;
                  "DBF->XML(Ava)","DBF->XML(Basico)","SDF->DBF","DLM->DBF","DBE->DBF"}
-criar_m[5]:=ZEXPOREXT+ZDELIMITE+ZANOFOR+ZANOSEP+ZANOTAM+"d"+ZDECSIM+ZCNVCHAR +ZMEMOEXT            
+criar_m[5]:=ZEXPOREXT           
 
 criar_b[ 1 ] = "sysfunc = 0"
 FOR X=2 TO 8
@@ -489,7 +479,7 @@ util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.
 FOR X=5 TO 16
      util_b[x]:="EMPTY(cur_dbf)"
 next x
-util_m[7]:=ZEXPOREXT+ZDELIMITE+ZANOFOR+ZANOSEP+ZANOTAM+"d"+ZDECSIM+ZCNVCHAR+zMEMOEXT
+util_m[7]:=ZEXPOREXT
 
 DECLARE dbf_list[ adir( "*.dbf" ) + 20 ]
 DECLARE ntx_list[ adir( "*" + XEXT() ) + 20 ]
@@ -598,6 +588,7 @@ do while .T.
            endif
       case M->func_sel = 15
           if rsvp( "Converter memos entre formatos" ) = "S" //funcao unica para conversao usando rdd conforme escolha
+		     convertmemo() 
              //fpt2dbt() //dbt2fpt()
           ENDIF
       case M->func_sel = 16 // podera ser usado para outro menu pois agora a funcao e unica 
@@ -884,14 +875,14 @@ retu .T.
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 function LAYOUT()
-
-clea
+clear
 for n := 2 to len( func_title )
    @  0, ( 9 * n ) - 18 say padc( "F"+STR(N,1) , 8 )
    @  1, ( 9 * n ) - 18 say padc( func_title[ n ], 9 )
 next
 @  2,  0 say replicate( "-", 80 )
-@ 23,  0 say "DBU - DataBaseUtilitario"
+@ 23,  0 say "DBdbf: "+zUSOVIA+" Memo:"+hb_rddInfo( RDDI_MEMOEXT)+" Index:"+hb_rddInfo( RDDI_ORDBAGEXT)+" Exp:"+ZEXPOREXT+" DELI:"+ZDELIMITE+" Ano:"+ZANOFOR+ZANOSEP+ZANOTAM +" SepDec:"+ZDECSIM+ZCNVCHAR
+
 retu .T.
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||

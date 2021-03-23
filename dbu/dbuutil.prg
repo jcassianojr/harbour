@@ -1,3 +1,4 @@
+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 *+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUUTIL.PRG
@@ -1755,8 +1756,10 @@ return ( 0 )
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-function rsvp
+function rsvp(cMES)
+RETURN IF(MsgYesNo( cMES ),"S","N")
 
+/*
 parameters string
 private c
 
@@ -1778,6 +1781,7 @@ do while .not. ( M->c $ "SN" + chr( 27 ) )
 enddo
 
 return M->c
+*/
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -2014,7 +2018,7 @@ k := ""
 
 if file( M->filename )
 
-   if XEXT() = ".ntx"
+   if lower(XEXT()) = ".ntx"
       k_pos := 23
 
    else
@@ -2178,14 +2182,14 @@ endif
 setcolor( saveColor )
 return trim( M->wk_str )
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function OBTER()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func OBTER( XARQ, XINX, XSEE, XCAM )    //SEEK MAIS RETORNO CAMPO
 
+*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+
+*+    Function OBTER() usada em replace
+*+
+*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+
+function OBTER( XARQ, XINX, XSEE, XCAM )    //SEEK MAIS RETORNO CAMPO
 DBF_USO := alias()
 use &XARQ index &XINX NEW SHARED
 while neterr()
@@ -2197,7 +2201,7 @@ dbclosearea()
 if !empty( DBF_USO )
    sele &DBF_USO
 endif
-retu ( OBTIDO )
+return  OBTIDO 
 
 
 

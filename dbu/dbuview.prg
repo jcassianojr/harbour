@@ -2935,17 +2935,14 @@ function pegparexp
 	   IF zEXPOREXT="JSON"
 	      zDELIMITE:=""
 	   ENDIF
-	   
-       
-	   
 
        @ MAxrow(),0 clear
        @ MAxrow()-2,0 clear 
        @ MAXROW()-1,0 CLEAR
-
     
-      criar_m[5]:=ZEXPOREXT+ZDELIMITE+ZANOFOR+ZANOSEP+ZANOTAM+"d"+ZDECSIM
-      util_m[7]:=ZEXPOREXT+ZDELIMITE+ZANOFOR+ZANOSEP+ZANOTAM+"d"+ZDECSIM
+      criar_m[5]:=ZEXPOREXT
+      util_m[7]:=ZEXPOREXT
+	  layout()
 return 
 
 *+ EOF: DBUVIEW.PRG

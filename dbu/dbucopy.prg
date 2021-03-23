@@ -758,19 +758,16 @@ setcolor( saveColor )
 return 2
 
 funcTION copybkdbf(cFILE)
-copyback(TIRAEXT(cFILE),TIRAEXT(cFILE),'DBF',"BAK")
-copyback(TIRAEXT(cFILE),TIRAEXT(cFILE),"DBT","BBT")
-copyback(TIRAEXT(cFILE),TIRAEXT(cFILE),"FPT","BPT")
-copyback(TIRAEXT(cFILE),TIRAEXT(cFILE),"SMT","BMT")
+copyback(TIRAEXT(cFILE),"DBF") //incluir novas se necessaio
+copyback(TIRAEXT(cFILE),"DBT")
+copyback(TIRAEXT(cFILE),"FPT")
+copyback(TIRAEXT(cFILE),"SMT")
+copyback(TIRAEXT(cFILE),"CDX")
 retuRN
 
-
-funcTION copyback(cORI,cBAK,cEXT,cEXTBAK)
-IF VALTYPE(cEXTBAK)#"C"
-   cEXTBACK:="BAK"
-ENDIF
-cORI:=cORI+"."+cEXT
-cBAK:=cBAK+"."+cEXTBAK
+FUNCTION copyback(cFILE)
+cBAK:=cFILE+"+_backup_."+cEXT
+cORI:=cFILE+"."+cEXT
 if file( cBAK  )
    stat_msg( "Apagando Backup Anterior "+cBAK )
    DELETEFILE( cBAK )
@@ -780,5 +777,6 @@ if file( cORI)
    filecopy(cORI,cBAK)
 ENDIF
 RETURN .T.
+
 
 *+ EOF: DBUCOPY.PRG
