@@ -10,7 +10,7 @@
 
 #include "box.ch" 
 
-SET MESS TO 23 CENTER
+Set( _SET_MESSAGE, 23 , .T. )
 WHILE .T.
    HELPDBF="FO7"
    CABEX("Menu do Cadastro de Sal rios")

@@ -25,18 +25,6 @@ PARA ZUSER,cSENHA
 
 MVINFOConfTela("Modulo Folha Anuais")
 
-/*
-hb_gtInfo( HB_GTI_ICONFILE, "folhapto.ico" )
-hb_gtInfo( HB_GTI_WINTITLE, "folhapto - WVG" )
-HB_GtInfo( HB_GTI_FONTNAME, "Lucida Console" ) // fonte
-Hb_GtInfo( HB_GTI_SELECTCOPY,.T.)
-Hb_GtInfo( HB_GTI_RESIZABLE, .T. )
-HB_GtInfo( HB_GTI_ISFULLSCREEN, .F. ) //.t. nao aparece _x barra de titulo
-HB_GTINFO( HB_GTI_CLOSABLE, .T. )
-HB_GtInfo( HB_GTI_MAXIMIZED, .T. ) //starts in Maximized Window
-hb_gtInfo( HB_GTI_ALTENTER, .T. )   // allow <Alt-Enter> for full screen
-hb_gtInfo( HB_GTI_CLOSEMODE, 1 )    // 1 - sends HB_K_CLOSE on Window x-Close
-*/
 
 netregosok()
 

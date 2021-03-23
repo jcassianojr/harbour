@@ -84,30 +84,6 @@ RETUrn cUSER
 function MDG( cMES, nOPT )
 RETURN MsgYesNo( cMES )
 
-/*
-priv aMENUPROMPTS := {}
-MDS( cMES )
-pCOR := setcolor()
-if valtype( nOPT ) = "N"
-   nOPT := if( nOPT = 1, nOPT, 2 )
-else
-   nOPT := 2
-endif
-hb_keyClear() 
-//clear typeahead
-keyboard ""
-@ maxrow(),70 PROMPT "SIM"
-@ maxrow(),74 PROMPT "NAO"
-MENU TO nOpT
-MOUSE_B := 0
-if nOPT = 1
-   retu ( .T. )
-endif
-set color to
-@ maxrow(), 00 clea
-setcolor( pCOR )
-return  .F.
-*/
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+

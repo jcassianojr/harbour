@@ -758,25 +758,24 @@ setcolor( saveColor )
 return 2
 
 funcTION copybkdbf(cFILE)
-copyback(TIRAEXT(cFILE),"DBF") //incluir novas se necessaio
-copyback(TIRAEXT(cFILE),"DBT")
-copyback(TIRAEXT(cFILE),"FPT")
-copyback(TIRAEXT(cFILE),"SMT")
-copyback(TIRAEXT(cFILE),"CDX")
+LOCAL aARQ
+LOCAL XY
+LOCAL cORI
+LOCAL cBAK
+aARQ:=directory(tiraext(cFILE)+".*") //pega todas dados.dbf dados.cdx dados.fpt .... --> dados.*
+FOR XY:=1 TO LEN(aARQ)
+    cORI := lower(aARQ[XY,1])
+	cBAK := "copia_"+cORI
+	if file( cBAK  )
+	   stat_msg( "Apagando Backup Anterior "+cBAK )
+	   DELETEFILE( cBAK )
+	endif
+	stat_msg( "Criando Backup "+cORI )
+	if file( cORI)
+	   filecopy(cORI,cBAK)
+	ENDIF
+NEXT XY   
 retuRN
-
-FUNCTION copyback(cFILE)
-cBAK:=cFILE+"+_backup_."+cEXT
-cORI:=cFILE+"."+cEXT
-if file( cBAK  )
-   stat_msg( "Apagando Backup Anterior "+cBAK )
-   DELETEFILE( cBAK )
-endif
-stat_msg( "Criando Backup "+cORI )
-if file( cORI)
-   filecopy(cORI,cBAK)
-ENDIF
-RETURN .T.
 
 
 *+ EOF: DBUCOPY.PRG

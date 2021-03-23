@@ -20,7 +20,7 @@ return NIL
 *+
 function menu( nCurrentPrompt, nMES )
 IF VALTYPE(nMES)="N"
-   SET MESSAGE TO nMES CENTER
+	Set( _SET_MESSAGE, nMES , .T. )
 ENDIF    
 menu to nCurrentPrompt
 return nCurrentPrompt

@@ -14,7 +14,7 @@
 PRIV HELPDBF
 HELPDBF="FOD"
 
-SET MESS TO 23 CENTER
+Set( _SET_MESSAGE, 23 , .T. )
 WHILE .T.
    op:=4
    CABEX('Menu Principal de Calculos')

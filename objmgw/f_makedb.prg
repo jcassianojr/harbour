@@ -83,7 +83,7 @@ DO WHILE .NOT. EMPTY(dbf_name)
       * B. dados existe. Ativa sinaliz. e abre b. dados p/uso exclusivo.
       dbf_exist = .T.
       IF ! netuse(dbf_name,cDRIVER,.F.,.F.,.T.,.F.,30) //BREDE(DBF_NAME,0,.T.,.T.)
-          SET CURSOR ON
+		  SetCursor(.t.)
           if Lquit
              QUIT
           else
@@ -262,7 +262,7 @@ DO WHILE .NOT. EMPTY(dbf_name)
         * Se base de dados existir, copia todos os registros da copia.
         IF dbf_exist
             IF ! netuse(dbf_name,cDRIVER,.F.,.F.,.T.,.F.,30) //BREDE(DBF_NAME,0,.T.,.T.)
-                SET CURSOR ON
+				SetCursor(.t.)
                 IF lQUIT
                     QUIT
                 ELSE

@@ -22,8 +22,7 @@ WHILE .T.
    MDI(" ˛ Menu Principal do Sistema")
    SETCOLOR('N/N')
    @ 24,00 SAY REPLICATE(" ",80)
-   // MDS("Vocà est† no Menu Principal")
-   SET MESSAGE TO 3 CENTER
+   Set( _SET_MESSAGE, 3 , .T. )
    SETCOLOR(ZCOR006)
    @  8,  0 SAY " €€€  €€€€€€€€€   €€€     €€€€€€€   €€€€€€€   €€€€€€€‹    €€€€€€€€       €€€   "
    @  9,  0 SAY "∞€€€ ∞∞∞∞€€€∞∞  ∞€€€€€   ∞€€€∞∞∞  ∞€€€∞∞∞∞€€ ∞€€€∞∞∞€€‹  ∞€€€∞∞∞€€€    ∞€€€€€  "
@@ -37,11 +36,11 @@ WHILE .T.
    SETCOLOR("W+/N")
    @ 19, 18 SAY "      GERENCIADOR  DE  BANCO  DE  DADOS"
    SETCOLOR(SUBSTR(ZCOR007,AT(",",ZCOR007)+1))
-   @ 22,00 SAY "              Ajuda        Telememo        Anotaáîes        Agenda        Teclas "
-   @ 23,00 SAY "              Mem¢ria      Calend†rio      Calculadora      Rel¢gio       Data   "
+   @ 22,00 SAY "              Ajuda        Telememo        Anotaaoes        Agenda        Teclas "
+   @ 23,00 SAY "              Memeria      Calendario      Calculadora      Relegio       Data   "
    SETCOLOR(SUBSTR(ZCOR007,RAT(",",ZCOR007)+1))
    @ 22,0 SAY "Teclas de"
-   @ 23,0 SAY " Funáîes "
+   @ 23,0 SAY " Funaoes "
    SETCOLOR(ZCOR007)
    @ 22,11 SAY "F1"
    @ 22,24 SAY "F2"
@@ -55,9 +54,9 @@ WHILE .T.
    @ 23,70 SAY "F10"
    SETCOLOR(ZCOR005)
    OPCAO( 2, 0, " &Cadastros  ",67,"Entra no Sub-Menu de Cadastros")
-   OPCAO( 2,13, " &Relat¢rios ",82,"Entra no Sub-Menu de Relat¢rios")
-   OPCAO( 2,26, " &ParÉmetros ",80,"Entra no Sub-Menu de Parametros")
-   OPCAO( 2,39, " &Serviáos   ",83,"Entra no Sub-Menu de Serviáos")
+   OPCAO( 2,13, " &Relaterios ",82,"Entra no Sub-Menu de Relaterios")
+   OPCAO( 2,26, " &Parametros ",80,"Entra no Sub-Menu de Parametros")
+   OPCAO( 2,39, " &Servicos   ",83,"Entra no Sub-Menu de Servicos")
    OPCAO( 2,52, " &Manual     ",77,"Apresenta o Manual")
    OPCAO( 2,65, " &Encerrar   ",69,"Encerra o Programa")
    KEY:=MENU()
@@ -79,5 +78,5 @@ WHILE .T.
 ENDDO
 
 
-FUNC ACESSO
-RETU .T.
+FUNCTION ACESSO
+RETURN .T.

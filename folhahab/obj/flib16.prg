@@ -37,9 +37,9 @@ IF VALTYPE(aGET)="C"    //Recebeu o Codigo do layout e nao a matriz
    aGET:=EDITPEG(aGET)  //Pega o relatorio
 ENDIF
 IF VALTYPE(nMES)#"N"
-   SET MESS TO 24 CENTER
+	Set( _SET_MESSAGE, 24 , .T. )
 ELSE
-   SET MESS TO &nMES
+	Set( _SET_MESSAGE, nMES , .T. )
 ENDIF
 IF EMPTY(aGET)
    ALERTX("Layout de Edi‡„o Vazio")

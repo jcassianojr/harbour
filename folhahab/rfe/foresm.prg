@@ -20,7 +20,7 @@
 
 #INCLUDE "BOX.CH"
 
-SET MESS TO 6 CENT
+Set( _SET_MESSAGE, 6 , .T. )
 WHILE .T.
    SETCOLOR("+W/BR,N/W")
    @ 00,00 CLEA

@@ -15,8 +15,7 @@
 PRIV HELPDBF
 HELPDBF:="FO5"
 
-
-SET MESS TO 22 CENTER
+Set( _SET_MESSAGE, 22 , .T. )
 WHILE .T.
    CABEX ("Menu do Cadastro Departamento Unidades")
    @ 11,04 PROM "1 - Depto          " MESS 'Inclui Depto Setor Secao'

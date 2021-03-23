@@ -72,7 +72,7 @@ ENDIF
 IF ! CHECKIMP(0)
    RETU .F.
 ENDIF
-SET DEVI TO PRINT
+IMPRESSORA()
 IF ! Empty(msetup)
    msetup=ALLTRIM(msetup)
    @ PROW(),0 SAY &msetup
@@ -96,7 +96,7 @@ WHILE ! lFIM
 ENDDO
 fclose(nHANDLE)
 IMPFOL()
-SET DEVI TO SCRE
+VIDEO()
 IMPEND()
 RETU .T.
 

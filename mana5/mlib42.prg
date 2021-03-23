@@ -97,9 +97,9 @@ if valtype(aGET) = "C"  //Recebeu o Codigo do layout e nao a matriz
    aGET := EDITPEG(aGET)  //Pega o relatorio
 endif
 if valtype(nMES) # "N"
-   set mess to 24 CENTER
+	Set( _SET_MESSAGE, 24 , .T. )
 else
-   set mess to &nMES
+	Set( _SET_MESSAGE, nMES , .T. )
 endif
 if empty(aGET)
    ALERTX("Layout de Edi��o Vazio")

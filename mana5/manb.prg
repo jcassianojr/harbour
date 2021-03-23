@@ -86,7 +86,7 @@ ENDIF
 
 WHILE .T.
    MDI(" Ý Vocˆ est  escolhendo o Cadastro para Listagem")
-   SET MESSAGE TO 2 CENTER
+   Set( _SET_MESSAGE, 2, .T. )
    SETCOLOR(ZCOR008)
    FOR X := 1 TO 11
       OPCAO(X * 2+2,1," &"+LTRIM(aMENU[X]),ASC(LEFT(ALLTRIM(aMENU[X]),1)),aMESS[X])

@@ -42,7 +42,7 @@ WHILE .T.
    SETCOLOR('N/N')
    @ 24,00 SAY REPLICATE(" ",80)         
    // MDS("Voc€ est  no Menu Principal")
-   SET MESSAGE TO 3 CENTER
+   Set( _SET_MESSAGE, 3, .T. )
    SETCOLOR(ZCOR006)
    @  8,0 SAY " ЫЫЫ  ЫЫЫЫЫЫЫЫЫ   ЫЫЫ     ЫЫЫЫЫЫЫ   ЫЫЫЫЫЫЫ   ЫЫЫЫЫЫЫЬ    ЫЫЫЫЫЫЫЫ       ЫЫЫ   "         
    @  9,0 SAY "°ЫЫЫ °°°°ЫЫЫ°°  °ЫЫЫЫЫ   °ЫЫЫ°°°  °ЫЫЫ°°°°ЫЫ °ЫЫЫ°°°ЫЫЬ  °ЫЫЫ°°°ЫЫЫ    °ЫЫЫЫЫ  "         

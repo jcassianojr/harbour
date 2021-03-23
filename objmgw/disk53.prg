@@ -45,20 +45,23 @@ setcursor( if( readinsert(), 1, 2 ) )
 set key K_ALT_Q to XBHOR                //--CONVERT hora to decimal  *100/60
 set key K_ALT_W to XCHOR                //--CONVERT decimal to horas  *60/100
 set key K_ALT_I to XLERTXT              //-Le um Arquivo de Texto
-set key K_ALT_O to XPOSESQ              //Posiona a Esquerda
-set key K_ALT_P to XPOSDIR              //Posiona a Direita
-set key K_ALT_F to XGRATXT              //-Grava o Campo Armazenado
-set key K_ALT_G to XCENTER              //Centra o Texto
-set key K_ALT_H to xcaptxt              //-Armazena um arquivo de Texto
-set key K_ALT_J to xediwor              //-Edita o dado armazenado
-set key K_ALT_K to xtirace              //Remove a Acentua??o
-set key K_ALT_L to Xexpand              //-COLOCA UM ESPACO EM CADA LETRA
-set key K_ALT_B to Xcapfirs             //INICIAIS EM MAIUSCULAS RESTO MINUSCULAS
-set key K_ALT_N to Xconvmin             //TUDO EM MINUSCULAS
-set key K_ALT_M to Xconvmai             //TUDO EM MAIUSCULAS
-set key K_ALT_INS to Xaltins            //-ALT+INS  traz o valor armazena
-set key K_CTRL_DEL to Xctrldel          //-ctrl+del apaga e armazena
-set key K_CTRL_INS to Xctrlins          //-CTRL+INS armazena
+--SetKey( K_ALT_V, {|| hb_gtInfo( HB_GTI_CLIPBOARDPASTE, .T. ) } ) //necessario estar em hmg
+SetKey( K_ALT_O, {|| XPOSESQ() } )
+SetKey( K_ALT_P, {|| XPOSDIR() } )
+SetKey( K_ALT_F, {|| XGRATXT() } )
+SetKey( K_ALT_G, {|| XCENTER() } )
+SetKey( K_ALT_H, {|| xcaptxt() } )
+SetKey( K_ALT_J, {|| xediwor() } )
+SetKey( K_ALT_K, {|| xtirace() } )
+SetKey( K_ALT_L, {|| XEXPAND() } )
+SetKey( K_ALT_B, {|| XCAPFIRS() } )
+SetKey( K_ALT_N, {|| XCONVMIN() } )
+SetKey( K_ALT_M, {|| XCONVMAI() } )
+SetKey( K_ALT_INS, {|| XALTINS() } )
+SetKey( K_CTRL_DEL, {|| XCTRLDEL () } )
+SetKey( K_CTRL_INS, {|| XCTRLINS() } )
+
+
 read
 set key K_ALT_INS to
 set key K_CTRL_DEL to

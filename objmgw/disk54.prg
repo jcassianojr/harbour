@@ -24,7 +24,7 @@ func AC_AGUDO
 
 set key 39 to
 ACENTUAR( "AGU" )
-set key 39 to AC_AGUDO
+SetKey( 39, {|| AC_AGUDO() } )
 retu
 
 *+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
@@ -119,12 +119,12 @@ retu
 *+
 func liga_acento
 
-if ALERTX( "Ligar Acentua‡„o", { "Sim", "N„o" } ) = 1
-   set key 39 to AC_AGUDO
-   set key 94 to AC_CIRC
-   set key 96 to AC_CRASE
-   set key 126 to AC_TIL
-   if ALERTX( "Acentua‡„o para Windows", { "Sim", "N„o" } ) = 1
+if mdg( "Ligar Acentuacao")
+	 SetKey( 39, {|| AC_AGUDO() } )
+	SetKey( 94, {|| AC_CIRC() } )
+	SetKey( 96, {|| AC_CRASE() } )
+	SetKey( 126, {|| AC_TIL() } )
+   if MDG( "Acentuacao para Windows")
       ACENTUA := .F.
    else
       ACENTUA := .T.

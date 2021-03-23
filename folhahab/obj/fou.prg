@@ -11,8 +11,7 @@
 
 IMPHP()
 
-
-SET MESS TO 23 CENTER
+Set( _SET_MESSAGE, 23 , .T. )
 WHILE .T.
    CABEX ('Experiencia / Admissao / Demissao')
    MD()

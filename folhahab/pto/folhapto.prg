@@ -41,7 +41,7 @@ SET TALK OFF ''checar nao tem ainda na std.ch changelog.txt
 
 
 Set( _SET_MESSAGE, 6 , .T. )
-//set mess to 6 CENTER
+
 
 MVINFOConfTela("Folha Modulo Ponto")
 
