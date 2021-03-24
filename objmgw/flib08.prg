@@ -37,6 +37,7 @@
 *+   14 - CO&M2
 *+   15 - &EMAIL
 *+   16 - Re&direcinal Porta
+*+   17 - preview zebra
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 
 
@@ -93,14 +94,14 @@ if nTIPSPO = 0
       OPCAO( 14, 01, " &HTML                            ", 72 ) //8
       oPCAO( 07, 41, " &RTF(Rith Text Format)           ", 82 ) //9
       oPCAO( 08, 41, " &PDF(Portable Document Format)   ", 80 ) //10
-      oPCAO( 09, 41, " Programa E&xterno                ", 87 ) //11
+      oPCAO( 09, 41, "                                  ", 87 ) //11 oPCAO( 09, 41, " Programa E&xterno                ", 87 ) //11
       oPCAO( 10, 41, " Impressora w&Indows RAW          ", 73 ) //12
       oPCAO( 11, 41, " C&OM1                            ", 79 ) //13
       oPCAO( 12, 41, " CO&M2                            ", 77 ) //14
-      oPCAO( 13, 41, " &Email                           ", 69 )  //15   
+      oPCAO( 13, 41, "                                  ",    )  //15 //oPCAO( 13, 41, " &Email                           ", 69 )  //15   
       oPCAO( 14, 41, " Re&dicionar Portas               ", 68 ) //16
 	  IF lZEBRA
-		 oPCAO( 14, 41, " Preview &Zebra pdf                ", 90) //17
+		 oPCAO( 15, 41, " Preview &Zebra pdf                ", 90) //17
 	 ENDIF
       nTIPSPO := menu(, 0 )
       IF nTIPSPO = 11
@@ -108,6 +109,9 @@ if nTIPSPO = 0
          loop
       ENDIF
       if nTIPSPO = 15
+	     ALERTX("Opcao Desativada")
+         loop
+	     /* Pergunta no final se quer email
          lIMPEMAIL:=.T.
          nTIPSPO:=6
          CLSBOX( 6, 0, 17, 80 )
@@ -117,6 +121,9 @@ if nTIPSPO = 0
          OPCAO( 11, 01, " &HTML                            ", 72 )
          oPCAO( 12, 01, " &RTF(Rith Text Format)           ", 82 )
          oPCAO( 13, 01, " &PDF(Portable Document Format)   ", 80 )
+		 IF lZEBRA
+		    oPCAO( 14, 41, " Preview &Zebra pdf                ", 90) 
+	     ENDIF
          nTIPEMAIL := menu(, 0 )
          do case
             case nTIPEMAIL=1
@@ -129,7 +136,9 @@ if nTIPSPO = 0
                  nTIPSPO:=9
             case nTIPEMAIL=5
                  nTIPSPO:=10
+				 
          endcase
+		 */
       endif
       if nTIPSPO = 16
          nPORTA   := 1
@@ -311,8 +320,14 @@ if nTIPSPO = 17
    cFILE:=filezebrapdf(cARQSPO)
 endif
 
-if nTIPSPO = 6 .or. nTIPSPO =7  .or. nTIPSPO = 8 .or. nTIPSPO = 9 .or. nTIPSPO = 10 
-   IF lIMPEMAIL
+*+    6 - &TXT DOS    (OEM)
+*+    7 - TXT WindowS (&ANSI)
+*+    8 - &HTML
+*+    9 - &RTF
+*+   10 - &PDF
+*+   17 - preview zebra
+if nTIPSPO = 6 .or. nTIPSPO =7  .or. nTIPSPO = 8 .or. nTIPSPO = 9 .or. nTIPSPO = 10 .or. nTIPSPO = 17
+   IF MDG("Email=SIM VISUALIZAR=NAO")
       filetoemail(cFILE)   
    ELSE
       wapi_ShellExecute( 0, 0, cFILE,"", 0, 1 )
@@ -1060,7 +1075,7 @@ oXMLDoc   := Win_OleCreateObject("MSXML2.DOMDocument")
    
 cUrlWS := 'http://api.labelary.com/v1/printers/8dpmm/labels/4x6/0/' 
 //cData :=  '"^XA^MMT^PW400^LL0400^LS0^FT5,384^A0N,41,40^FH\^FDwww.pctoledo.com.br^FS^BY1,3,99^FT70,322^BCN,,Y,N^FD>:Forum do Programador^FS^FT10,46^A0N,38,60^FH\^FDLinguagem ZPL^FS^BY1,3,104^FT96,182^B3N,N,,Y,N^FD1135265909+^FS^PQ1,0,1,Y^XZ"'
-cDATA:= '"'+strtran(STRTRAN(hb_memoread(CARSPOR),CHR(13),""),chr(10),"")+'"'
+cDATA:= '"'+strtran(STRTRAN(hb_memoread(CARQSPO),CHR(13),""),chr(10),"")+'"'
 
 nResolve := 5 * 1000  
 nConnect := 5 * 1000  

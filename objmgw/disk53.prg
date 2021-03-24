@@ -45,7 +45,7 @@ setcursor( if( readinsert(), 1, 2 ) )
 set key K_ALT_Q to XBHOR                //--CONVERT hora to decimal  *100/60
 set key K_ALT_W to XCHOR                //--CONVERT decimal to horas  *60/100
 set key K_ALT_I to XLERTXT              //-Le um Arquivo de Texto
---SetKey( K_ALT_V, {|| hb_gtInfo( HB_GTI_CLIPBOARDPASTE, .T. ) } ) //necessario estar em hmg
+//--SetKey( K_ALT_V, {|| hb_gtInfo( HB_GTI_CLIPBOARDPASTE, .T. ) } ) //necessario estar em hmg
 SetKey( K_ALT_O, {|| XPOSESQ() } )
 SetKey( K_ALT_P, {|| XPOSDIR() } )
 SetKey( K_ALT_F, {|| XGRATXT() } )

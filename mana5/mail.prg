@@ -1,41 +1,17 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : mail.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
 *+    Function mail()
 *+
+*+    Sistema   : MANAEXO
+*+    Linguagem : Harbour
+*+    Copyright (c) 2021, Jorge Cassiano
 *+
+*+    Documentado em 23/03/2021
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
+
 function mail
 
 PARA cARQ
@@ -114,17 +90,11 @@ DBCLOSEALL()
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function MAILDELUSR()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNC MAILDELUSR
+FUNCtion MAILDELUSR
 
 cUSER := SPACE(15)
 MDS("Digite o Nome do Usuario")
@@ -138,17 +108,11 @@ MAILDELETE("cUSER=ALLTRIM(DESTINO)")
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function MAILDELCOD()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNC MAILDELCOD
+FUNCtion MAILDELCOD
 
 cUSER := SPACE(8)
 MDS("Digite o Codigo")
@@ -162,17 +126,11 @@ MAILDELETE("cUSER=ERRO")
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function MAILDELDATA()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNC MAILDELDATA
+FUNCtion MAILDELDATA
 
 dDATA := ZDATA
 MDS("Digite o Data Final")
@@ -186,17 +144,11 @@ MAILDELETE("DATA<=dDATA",dDATA)
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function MAILDELETE()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNC MAILDELETE(cCOND,dDATA)
+FUNCtion MAILDELETE(cCOND,dDATA)
 
 MDS("")
 IF VALTYPE(dDATA) # "D"
@@ -231,17 +183,11 @@ RETU .T.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function MAILFIX()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNCTION MAILFIX() ''efetua limpeza da pack e recria para reduzir os memos ->memopack
+FUNCTION MAILFIX() //''efetua limpeza da pack e recria para reduzir os memos ->memopack
 IF ! USEREDE("MAIL",0,0,,,300)   //
    ALERTX("Arquivo MAIL em uso")
    RETU .F.

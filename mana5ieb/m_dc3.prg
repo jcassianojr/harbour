@@ -1,8 +1,20 @@
 //#INCLUDE "COMANDO.CH"
 
-function m_dc3
-PARA nTIPO
-MDI(" Ý Imprimir Etiquetas")
+function m_dc3(nTIPO)
+LOCAL cARQZPL:=SPACE(80)
+MDI("  Imprimir Etiquetas")
+
+if ntipo=99
+   @ 24,00 get cARQZPL
+   return
+   If file(cARQZPL)
+      cPDFILE:=filezebrapdf(cARQSPO)
+	  IF cPDFILE
+		wapi_ShellExecute( 0, 0, cPDFILE,"", 0, 1 )
+	  ENDIF	
+   endif	  
+endif
+
 IF nTIPO=4
    cFORN:=UPPER(OBTER("CODIMP","MDC3EY","CONTEUDO"))
 ELSE
