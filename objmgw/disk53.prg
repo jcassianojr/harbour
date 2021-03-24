@@ -42,9 +42,9 @@
 function Readcur        //DESLIGA E LIGA O CURS PARA UM READ
 
 setcursor( if( readinsert(), 1, 2 ) )
-set key K_ALT_Q to XBHOR                //--CONVERT hora to decimal  *100/60
-set key K_ALT_W to XCHOR                //--CONVERT decimal to horas  *60/100
-set key K_ALT_I to XLERTXT              //-Le um Arquivo de Texto
+setkey(K_ALT_Q to XBHOR                //--CONVERT hora to decimal  *100/60
+setkey(K_ALT_W to XCHOR                //--CONVERT decimal to horas  *60/100
+setkey(K_ALT_I to XLERTXT              //-Le um Arquivo de Texto
 //--SetKey( K_ALT_V, {|| hb_gtInfo( HB_GTI_CLIPBOARDPASTE, .T. ) } ) //necessario estar em hmg
 SetKey( K_ALT_O, {|| XPOSESQ() } )
 SetKey( K_ALT_P, {|| XPOSDIR() } )
@@ -63,23 +63,23 @@ SetKey( K_CTRL_INS, {|| XCTRLINS() } )
 
 
 read
-set key K_ALT_INS to
-set key K_CTRL_DEL to
-set key K_CTRL_INS to
-set key K_ALT_B to
-set key K_ALT_N to
-set key K_ALT_M to
-set key K_ALT_L to
-set key K_ALT_K to
-set key K_ALT_J to
-set key K_ALT_H to
-set key K_ALT_G to
-set key K_ALT_F to
-set key K_ALT_O to
-set key K_ALT_P to
-set key K_ALT_I to
-set key K_ALT_Q to
-set key K_ALT_W to
+setkey(K_ALT_INS,nil)
+setkey(K_CTRL_DEL,nil)
+setkey(K_CTRL_INS,nil)
+setkey(K_ALT_B,nil)
+setkey(K_ALT_N,nil)
+setkey(K_ALT_M,nil)
+setkey(K_ALT_L,nil)
+setkey(K_ALT_K,nil)
+setkey(K_ALT_J,nil)
+setkey(K_ALT_H,nil)
+setkey(K_ALT_G,nil)
+setkey(K_ALT_F,nil)
+setkey(K_ALT_O,nil)
+setkey(K_ALT_P,nil)
+setkey(K_ALT_I,nil)
+setkey(K_ALT_Q,nil)
+setkey(K_ALT_W,nil)
 setcursor( 0 )
 if lastkey() == K_ESC
    return .F.
