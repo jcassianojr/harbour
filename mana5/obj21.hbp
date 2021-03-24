@@ -171,6 +171,7 @@ M_CV.prg
 M_DA.prg
 M_DB.prg
 M_DC.prg
+M_DC3.prg
 M_DD.prg
 M_DK.prg
 M_DL.prg
@@ -197,7 +198,7 @@ c:\develop\harbour\objmgw\disk56.prg
 c:\develop\harbour\objmgw\disk57.prg
 c:\develop\harbour\objmgw\disk59.prg
 c:\develop\harbour\objmgw\disk61.prg
-c:\develop\harbour\objmgw\disk62.prg
+#c:\develop\harbour\objmgw\disk62.prg
 c:\develop\harbour\objmgw\disk63.prg
 c:\develop\harbour\objmgw\disk64.prg
 c:\develop\harbour\objmgw\disk66.prg

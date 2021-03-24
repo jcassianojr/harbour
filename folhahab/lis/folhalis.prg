@@ -67,7 +67,7 @@ SetKey( K_F5, {|| TECLAS() } )
 SetKey( K_F8, {|| hb_run("calc") } )
 SetKey( K_F10, {|| MUDADATA() } )
 
-RELOGIO()
+//RELOGIO()
 
 HELPARQ="FOLREL"                         &&nome da dbf do help
 READVAR=""

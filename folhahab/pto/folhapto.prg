@@ -100,7 +100,7 @@ if lMOUSE
 endif
 
 
-RELOGIO()
+//RELOGIO()
 
 //Variaveis Controle Impressora,Video Arquivo
 cARQSPO:=""

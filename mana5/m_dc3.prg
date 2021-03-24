@@ -2,17 +2,49 @@
 
 function m_dc3(nTIPO)
 LOCAL cARQZPL:=SPACE(80)
+LOCAL cCAMZPL:=SPACE(80)
+LOCAL nPOS:=0
+LOCAL aARQZLP:={}
 MDI("  Imprimir Etiquetas")
 
+if ntipo=98
+   @ 23,00 say "digite o caminhos com os arquivos zpl"
+   @ 24,00 get cCAMZPL
+   READCUR()
+   cCAMZPL:=ALLTRIM(CCAMZPL)
+   IF RIGHT(cCAMZPL)<>"\"
+      cCAMZPL+="\"
+   ENDIF
+   
+   aARQZLP:=FILENAMES(CCAMZPL+"*.Zpl")
+   
+   nPOS:=ESCARR(aARQZLP,7,7,21,78,aARQZLP,nPOS,"Arquivos zpl")
+   
+   IF nPOS>0
+       cARQZPL:=aARQZLP[nPOS]
+	   If file(cCAMZPL+cARQZPL)
+		  cPDFILE:=filezebrapdf(cCAMZPL+cARQZPL)
+		  IF cPDFILE
+			wapi_ShellExecute( 0, 0, cPDFILE,"", cCAMZPL, 1 )
+		//  hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
+		// essSW_SHOWNORMAL = 1
+		  ENDIF	
+	   endif
+    endif
+    return 	
+endif
 if ntipo=99
+   @ 23,00 say "digite o caminho do arquivo zpl)"
    @ 24,00 get cARQZPL
-   return
+   reADCUR()
+   cARQZPL:=ALLTRIM(CARQZPl)
    If file(cARQZPL)
-      cPDFILE:=filezebrapdf(cARQSPO)
+      cPDFILE:=filezebrapdf(cARQZPL)
 	  IF cPDFILE
 		wapi_ShellExecute( 0, 0, cPDFILE,"", 0, 1 )
 	  ENDIF	
-   endif	  
+   endif	
+   return   
 endif
 
 IF nTIPO=4

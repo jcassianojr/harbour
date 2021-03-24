@@ -80,7 +80,7 @@ deletaarq("TEMP*.*")
 deletaarq("*.tmp")
 deletaarq("*.LOG")
 
-RELOGIO()
+//RELOGIO()
 
 //Inicializa o Mouse Clipper 5.3c
 SET ( _SET_EVENTMASK, HB_INKEY_ALL)

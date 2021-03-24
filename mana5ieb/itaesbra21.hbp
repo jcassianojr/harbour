@@ -247,7 +247,7 @@ M_BY6.prg
 M_BZ1.prg
 M_D3.prg
 M_DC2.prg
-M_DC3.prg
+..\mana5\M_DC3.prg
 M_DT.prg
 M_DU.prg
 M_DV.prg
@@ -267,7 +267,7 @@ C:\develop\harbour\objmgw\disk56.prg
 C:\develop\harbour\objmgw\disk57.prg
 C:\develop\harbour\objmgw\disk59.prg
 C:\develop\harbour\objmgw\disk61.prg
-C:\develop\harbour\objmgw\disk62.prg
+#C:\develop\harbour\objmgw\disk62.prg
 C:\develop\harbour\objmgw\disk63.prg
 C:\develop\harbour\objmgw\disk64.prg
 C:\develop\harbour\objmgw\disk66.prg

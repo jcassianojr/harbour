@@ -42,9 +42,9 @@
 function Readcur        //DESLIGA E LIGA O CURS PARA UM READ
 
 setcursor( if( readinsert(), 1, 2 ) )
-setkey(K_ALT_Q to XBHOR                //--CONVERT hora to decimal  *100/60
-setkey(K_ALT_W to XCHOR                //--CONVERT decimal to horas  *60/100
-setkey(K_ALT_I to XLERTXT              //-Le um Arquivo de Texto
+setkey(K_ALT_Q, {|| XBHOR() } )               //--CONVERT hora to decimal  *100/60
+setkey(K_ALT_W, {|| XCHOR() } )                //--CONVERT decimal to horas  *60/100
+setkey(K_ALT_I, {|| XLERTXT() } )              //-Le um Arquivo de Texto
 //--SetKey( K_ALT_V, {|| hb_gtInfo( HB_GTI_CLIPBOARDPASTE, .T. ) } ) //necessario estar em hmg
 SetKey( K_ALT_O, {|| XPOSESQ() } )
 SetKey( K_ALT_P, {|| XPOSDIR() } )

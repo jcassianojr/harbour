@@ -84,7 +84,7 @@ SetKey( K_F5, {|| TECLAS() } )
 SetKey( K_F8, {|| hb_run("calc") } )
 SetKey( K_F10, {|| MUDADATA() } )
 
-RELOGIO()
+//RELOGIO()
 
 set( _SET_EVENTMASK, HB_INKEY_ALL)
 lMOUSE:=.F.
