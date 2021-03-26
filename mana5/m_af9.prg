@@ -24,8 +24,8 @@
 *+
 
 MDI("Criar Arquivo BCN->COBSCAD.DBF")
-
-CAMINHO := "\COBBCN\"+SPACE(40)
+CAMINHO := ProfileString( "MANA5.INI", "PATH", "COBBCN",HB_CWD()+"\COBBCN" )+SPACE(40)//
+//CAMINHO := "\COBBCN\"+SPACE(40)
 MDS("Digite o Caminho")
 @ 24,30 GET CAMINHO         
 IF !READCUR()

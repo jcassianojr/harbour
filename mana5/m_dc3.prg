@@ -8,6 +8,7 @@ LOCAL aARQZLP:={}
 MDI("  Imprimir Etiquetas")
 
 if ntipo=98
+   cCAMZPL:=padr(ProfileString( "MANA5.INI", "PATH", "ZPL", HB_CWD()),80)
    @ 23,00 say "digite o caminhos com os arquivos zpl"
    @ 24,00 get cCAMZPL
    READCUR()
@@ -34,10 +35,11 @@ if ntipo=98
     return 	
 endif
 if ntipo=99
-   @ 23,00 say "digite o caminho do arquivo zpl)"
-   @ 24,00 get cARQZPL
-   reADCUR()
-   cARQZPL:=ALLTRIM(CARQZPl)
+   cARQZPL:=win_GetOpenFileName(, "Arquivos ZPL", ProfileString( "MANA5.INI", "PATH", "ZPL", HB_CWD()), "Modelos ZPL", "*.ZPL", 1 )
+//   @ 23,00 say "digite o caminho do arquivo zpl)"
+//   @ 24,00 get cARQZPL
+//   reADCUR()
+//   cARQZPL:=ALLTRIM(CARQZPl)
    If file(cARQZPL)
       cPDFILE:=filezebrapdf(cARQZPL)
 	  IF cPDFILE

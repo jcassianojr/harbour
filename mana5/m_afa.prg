@@ -24,7 +24,9 @@
 *+
 
 MDI("Criar Arquivo Sudameris->CLIENTES.DBF")
-CAMINHO := "\COBSUDA\"+SPACE(40)
+CAMINHO := ProfileString( "MANA5.INI", "PATH", "COBSUDA",HB_CWD()+"\COBSUDA" )+SPACE(40)//
+
+//CAMINHO := "\COBSUDA\"+SPACE(40)
 MDS("Digite o Caminho")
 @ 24,30 GET CAMINHO         
 IF !READCUR()

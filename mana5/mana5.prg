@@ -429,16 +429,26 @@ retu .T.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Function NNETSTAID()
-*+
-*+
+*+    Function NNETSTAID() funcao de netware de lib especifica nao migrada harbour
+*+    retorna 1 verificar novamente se ha equivalente (verifiquei em 2020)
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 function NNETSTAID()
-
 return "1"
+
+
+FUNCTION PEGCAMINI(cARQ,cCAM)
+IF VALTYPE(cCAM)#"C"
+   cCAM:=ProfileString( "MANA5.INI", cARQ+ ".DBF", "CAMINHO", ZDIRE )
+ENDIF
+CCAM:=StrTran(CCAM,"[AA]",Right(StrZero(ANOUSO,4),2))
+CCAM:=StrTran(CCAM,"[AAAA]",StrZero(ANOUSO,4))
+CCAM:=StrTran(CCAM,"[MM]",StrZero(MESTRAB,2))
+CCAM:=StrTran(CCAM,"[ZZZ]",StrZero(NREMP,3))	
+CCAM:=StrTran(CCAM,"[ZZ]",StrZero(NREMP,2))
+CCAM:=StrTran(CCAM,"[Z]",StrZero(NREMP,1))        
+CCAM:=StrTran(CCAM,"[III]",StrZero(ZCODMANA5,3))	
+CCAM:=StrTran(CCAM,"[II]",StrZero(ZCODMANA5,2))
+CCAM:=StrTran(CCAM,"[I]",StrZero(ZCODMANA5,1))        
+RETU cCAM

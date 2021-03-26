@@ -59,7 +59,8 @@ if empty( mCGCCOMP )
    mCGCCOMP := mCGC
 endif
 
-mCAMINHO := "p:\novell\ITAESBRA\ARQUIVO\" + cTIPO + strzero( mNRNOTA, 7 ) + ".TXT" + space( 20 )
+
+mCAMINHO := ProfileString( "MANA5.INI", "PATH", "INVOICE",HB_CWD()+"\ARQUIVO" ) + cTIPO + strzero( mNRNOTA, 7 ) + ".TXT" + space( 20 )
 if nTIPO = 2 .and. !empty( mCFONEWB )
    mCFONEW := mCFONEWB
 endif

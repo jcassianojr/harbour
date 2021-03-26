@@ -24,7 +24,8 @@
 *+
 
 MDI("Criar Arquivo Itau->DBSAC.DBF")
-CAMINHO := "\ITAUSIG\"+SPACE(40)
+CAMINHO := ProfileString( "MANA5.INI", "PATH", "ITAUSIG",HB_CWD()+"\ITAUSIG" )+SPACE(40)//
+//"\ITAUSIG\"+SPACE(40)
 MDS("Digite o Caminho")
 @ 24,30 GET CAMINHO         
 IF !READCUR()

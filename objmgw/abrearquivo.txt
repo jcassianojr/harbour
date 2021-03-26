@@ -1,3 +1,33 @@
+--->cFILE:=win_GetOpenFileName(, "Arquivos", "", "txt", "*.txt", 1 )
+--->cFILE:=win_GetOpenFileName(, "Arquivos", HB _CWD(), "txt", "*.txt", 1 )
+
+win_GetOpenFileName( Flags, cTitle, InitDir, cDefExt,acFilter, nFilterIndex, nBufferSize, cDefName)
+
+
+
+Cfile:=WIN_GETSAVEFILENAME( , "Salvar txt como", "c:\temp\","txt", "*.txt" , 1,, "nome01.txt")
+ARQUIVO:=WIN_GETSAVEFILENAME(        , "Salvar Gerencial", HB_CWD(),"txt"   , "*.txt" , 1            ,               , "gerencial.txt")
+cFILE := win_GetSaveFileName( Flags, cTitle            , cInitDir, cDefExt, acFilter, @nFilterIndex, /*nBufferSize*/, cDefName )
+
+
+HB_CWD() 
+
+caRQ:=PEGCAMINI("MD10")+"MD10"
+
+
+FUNCTION PEGCAMINI(cARQ,cCAM)
+   cCAM:=ProfileString( "FOLHA.INI", cARQ+ ".DBF", "CAMINHO", ZDIRE )
+   
+   
+
+ProfileString( cINIFile, cSection, cKey, cDefault )
+
+hb_fNameSplit( copio,,@cFILETMP,@cEXTTMP)
+hb_FNameSplit( cFileName, @cDir, @cName, @cExt )
+cFileName := hb_FNameMerge( cDir, Lower( cName ), Lower( cExt ) )
+
+
+
 hWnd:     Handle to parent window
 cPath:    (optional) if OFN_ALLOWMULTISELECT the path is stored
 cTitle:   Window Title

@@ -24,7 +24,9 @@
 *+
 
 MDI("Criar Arquivo Banco do Brasil->BBSAC.DBF")
-CAMINHO := "\BBCBR\DADOS\"+SPACE(40)
+//CAMINHO := "\BBCBR\DADOS\"+SPACE(40)
+CAMINHO := ProfileString( "MANA5.INI", "PATH", "BBCBR",HB_CWD()+"\BBCBR\DADOS\" )+SPACE(40)//
+
 MDS("Digite o Caminho")
 @ 24,30 GET CAMINHO         
 IF !READCUR()

@@ -16,9 +16,9 @@ DO CASE
    CASE nTIPO=2
       CABE2( 'FOPTO_25 - Exportar   Totais para      Folha' )
    CASE nTIPO=3
-      CABE2( 'FOPTO_25 - Exportar   Refei‡äes        Folha' )
+      CABE2( 'FOPTO_25 - Exportar   Refeicos        Folha' )
    CASE nTIPO=4                                 
-      CABE2( 'FOPTO_25 - Transferir Refei‡äes        Folha' )
+      CABE2( 'FOPTO_25 - Transferir Refeicos        Folha' )
    CASE nTIPO=5
       CABE2( 'FOPTO_25 - Exportar   Saldo Banco Hora Folha' )
    CASE nTIPO=6
@@ -26,7 +26,7 @@ DO CASE
    CASE nTIPO=7
       CABE2( 'FOPTO_25 - Ver Arq. Totais Exportados  Folha' )
    CASE nTIPO=8
-      CABE2( 'FOPTO_25 - Ver Arq .Exportados     Refei‡äes' )
+      CABE2( 'FOPTO_25 - Ver Arq .Exportados     Refeicos' )
       
 endcase
 
@@ -120,16 +120,19 @@ if nTIPO=2.OR.nTIPO=3.OR.nTIPO=5.OR.nTIPO=7.OR.nTIPO=8
       ALERTX("Formula Nao Preenchida")
       retu .f.
    ENDIF
-   @ 23,00 SAY "confirme o caminho"
-   @ 24,00 get cARQUIVO
-   IF ! READCUR()
-      RETU .F.
-   ENDIF
-   cARQUIVO:=ALLTRIM(CARQUIVO)
+  // cCAMUSO:=SPACE(80)
+  // cARQUSO:=SPACE(80)
+   cARQUIVO=WIN_GETSAVEFILENAME(        , "Exportar", HB_CWD(),"txt"   , "*.txt" , 1            ,               , cARQUIVO)
+   //@ 23,00 SAY "confirme o caminho"
+   //@ 24,00 get cARQUIVO
+   //IF ! READCUR()
+   //   RETU .F.
+   //ENDIF
+   //cARQUIVO:=ALLTRIM(CARQUIVO)
    IF nTIPO<>7.AND.nTIPO<>8
      nHANDLE := fcreate( cARQUIVO )
      IF FERROR()#0
-        ALERTX("Erro na Cria‡„o do Arquivo")
+        ALERTX("Erro na Criacao do Arquivo")
         RETU
      ENDIF
    ENDIF  

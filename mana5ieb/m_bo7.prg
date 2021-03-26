@@ -26,9 +26,9 @@ mDATANF  := mDATAEM := substr( dtos( ZDATA ), 3, 8 )
 mETAPA   := "25" //Retira
 mHORAEM  := mHORANF := left( strtran( time(), ":", "" ), 4 )
 IF nTIPO=1
-   mCAMINHO := "p:\novell\EDIWISE\MANA5\"
+   mCAMINHO := ProfileString( "MANA5.INI", "PATH", "DESADVGM",HB_CWD()+"\EDIWISE\MANA5\" ) //"p:\novell\EDIWISE\MANA5\"
 ELSE
-   mCAMINHO := "p:\novell\ITAESBRA\ARQUIVO\"
+   mCAMINHO := ProfileString( "MANA5.INI", "PATH", "DESADVELE",HB_CWD()+"\ARQUIVO\" ) //"p:\novell\ITAESBRA\ARQUIVO\"
 ENDIF
 mREPOR   := "N"
 mGERAAE  := " "

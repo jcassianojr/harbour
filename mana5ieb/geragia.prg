@@ -55,11 +55,14 @@ HB_dispbox( 4, 0, 23, 79, B_DOUBLE)
 IF ! READCUR()
    RETU .F.
 ENDIF
-cARQUIVO:="C:\TEMP\G"+cANO+cMES+STRZERO(ZNUMERO,1)+".TXT"+SPACE(20)
-@ 06, 20 get cARQUIVO
-IF ! READCUR()
-   RETU .F.
-ENDIF
+
+cARQUIVO:=WIN_GETSAVEFILENAME(, "Salvar GIA","C:\TEMP\","txt", "*.txt" , 1 , , "G"+cANO+cMES+STRZERO(ZNUMERO,1)+".TXT")
+
+//cARQUIVO:="C:\TEMP\G"+cANO+cMES+STRZERO(ZNUMERO,1)+".TXT"+SPACE(20)
+//@ 06, 20 get cARQUIVO
+//IF ! READCUR()
+//   RETU .F.
+//ENDIF
 
 if ! useMULT({{"APUCFOUF",1,99},{"APUCFO",1,99},{"APUCFOZF",1,99}})
    dbclosearea()
@@ -72,7 +75,7 @@ SET CENTURY ON
 cARQUIVO:=STRTRAN(cARQUIVO," ","")
 USO:=FCREATE(cARQUIVO)
 if ferror() # 0
-   ALERTX( "Erro na Cria‡„o do Arquivo" )
+   ALERTX( "Erro na Criacao do Arquivo" )
    retu
 endif
 //Mestre
@@ -83,7 +86,7 @@ FWRITE(USO,LEFT(TIRAOUT(TIME()),6))
 FWRITE(USO,"0000")
 FWRITE(USO,cLAYOUT) //203 ate versao 7.3 //204 versao 7.4 //205 versao 7.5
 FWRITE(USO,"0001") //So Uma Empresa //Somente um 05
-FWRITE(USO,CHR(13)+CHR(10))
+FWRITE(USO,HB_OSNEWLINE())
 //Empresa
 QT10:=0
 DBSELECTAR("APUCFO")
@@ -114,7 +117,7 @@ FWRITE(USO,STRZERO(QT10,4))
 FWRITE(USO,STRZERO(QT20,4))
 FWRITE(USO,STRZERO(QT30,4))
 FWRITE(USO,STRZERO(QT31,4))
-FWRITE(USO,CHR(13)+CHR(10))
+FWRITE(USO,HB_OSNEWLINE())
 
 DBSELECTAR("APUCFOUF")
 DBSETORDER(3) //Novo CFO Codigo UFGIA
@@ -150,7 +153,7 @@ WHILE ! EOF()
    FWRITE(USO,GRVVAL(0,15,2)) //Imposto Substituido
    FWRITE(USO,GRVVAL(0,15,2)) //Outros Impostos
    FWRITE(USO,STRZERO(QT14,4))
-   FWRITE(USO,CHR(13)+CHR(10))
+   FWRITE(USO,HB_OSNEWLINE())
    IF LEFT(cCFONEW,1)="2".OR.LEFT(cCFONEW,1)="6" //Somente Interestduais
       DBSELECTAR("APUCFOUF")
       DBSEEK(cCFONEW)
@@ -180,7 +183,7 @@ WHILE ! EOF()
                 FWRITE(USO,"0") //Sem Zona Franca/alc
                 FWRITE(USO,STRZERO(0,4)) //qt18 reg18zona franca
              ENDIF
-             FWRITE(USO,CHR(13)+CHR(10))
+             FWRITE(USO,HB_OSNEWLINE())
           ENDIF
           IF nZONA>0
              DBSELECTAR("APUCFOZF")
@@ -192,7 +195,7 @@ WHILE ! EOF()
                   FWRITE(USO,GRVVAL(VALOR,15,2))
                   FWRITE(USO,TIRAOUT(CNPJ))
                   FWRITE(USO,CODMUN)
-                  FWRITE(USO,CHR(13)+CHR(10))
+                  FWRITE(USO,HB_OSNEWLINE())
                   DBSKIP()
              ENDDO
           ENDIF

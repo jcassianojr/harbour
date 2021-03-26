@@ -23,8 +23,7 @@ aTIP:={}
 CTA10:=CTA20:=CTA25:=CTA31:=CTA32:=CTA35:=CTA40:=0
 CTA43:=CTA45:=CTA50:=CTA60:=CTA70:=CTA80:=0
 CTFOL:=ATIVOS:=SALM:=0
-aTELA:=TELAPEG("CAGED")  //Pega o relatorio
-CAMINHO :="C:\TEMP\"+SPACE(30)
+aTELA:=TELAPEG("CAGED")
 cCOMANO :=STRZERO(YEAR(DXDIA),4)
 cCOMMES :=STRZERO(MESTRAB,2)
 cCONTATO:=PADR(OBTER("FIRMA",,NREMP,"RESPONSAV"),20)
@@ -39,14 +38,15 @@ ELSE
    mPORTE:="2"
 ENDIF
 
-cARQNOM:="C"+cCOMANO+".M"+cCOMMES
 
-@ 16,00 SAY 'Arquivo'
-@ 18,00 SAY 'Caminho para gerar arquivo'
+
+
+//@ 16,00 SAY 'Arquivo'
+//@ 18,00 SAY 'Caminho para gerar arquivo'
 @ 20,00 SAY 'Confime a Competencia'
-@ 22,00 SAY 'Digite Cabe‡ario Complementar'
-@ 16,40 GET cARQNOM
-@ 18,40 GET CAMINHO
+@ 22,00 SAY 'Digite Cabecario Complementar'
+//@ 16,40 GET cARQNOM
+//@ 18,40 GET CAMINHO
 @ 20,40 GET cCOMMES
 @ 20,45 GET cCOMANO
 @ 22,40 GET POS1
@@ -54,8 +54,10 @@ IF ! READCUR()
    RETU
 ENDIF
 
+cARQ:=WIN_GETSAVEFILENAME(        , "Arquivo caged", "c:\temp\","txt"   , "*.txt" , 1            ,               , "C"+cCOMANO+".M"+cCOMMES)
 
-IF ! netuse(pes) //AREDE(PES,PES,0)
+
+IF ! netuse(pes) 
    RETU
 ENDIF
 FILTRO='((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MES.AND.YEAR(DEMITIDO)>=ANO)).AND.CATEGORIA<>"11".AND.CATEGORIA<>"05"'
@@ -69,7 +71,7 @@ WHILE ! EOF()
       PETELA(4)
       FOUC2A(1)
    ENDIF
-   IF YEAR(ADMITIDO)<ANO.OR.MONTH(ADMITIDO)<MES
+   IF YEAR(ADMITIDO)<ANO.OR.MONTH(ADMITIDO)<MESc
       ATIVOS++
    ENDIF
    DBSKIP()
@@ -99,11 +101,11 @@ IF MDG("Gerar arquivo Rais")
      DBCLOSEALL()
      RETU
    ENDIF
-   cARQ:=ALLTRIM(CAMINHO)+cARQNOM
+   
    nSEQ:=1
    USO=FCREATE(cARQ)     &&ABRINDO ARQUIVO
    IF FERROR()#0
-      ALERTX("Erro na Cria‡„o do Arquivo")
+      ALERTX("Erro na Criacao do Arquivo")
       RETU
    ENDIF
    DBSELECTAR("FIRMA")
@@ -295,7 +297,7 @@ ELSE
    @  8, 36 SAY "DEMISSAO"
 ENDIF
 READCUR()
-set key K_F11 to 
+setkey( K_F11 , nil )
 DO CASE
    CASE MOTIVODEM = 10 ; CTA10++
    CASE MOTIVODEM = 20 ; CTA20++

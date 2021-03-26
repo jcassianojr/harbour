@@ -27,13 +27,17 @@
 // *******************
 // * GERA DOCUMENTA€ŽO
 // *******************
-cARQ := space(50)
-cCR  := chr(13)+chr(10)
-MDS("Digite o Nome do Arquivo")
-@ 24,40 get cARQ pict "@S30"        
-if !READCUR()
-   retu .F.
-endif
+//cCR  := chr(13)+chr(10) trocado por hb_osnewline()
+
+cARQ:=WIN_GETSAVEFILENAME(        , "Salvar Documentacao", HB_CWD(),"txt"   , "*.txt" , 1            ,               , "documentacao.txt")
+
+
+//MDS("Digite o Nome do Arquivo")
+//@ 24,40 get cARQ pict "@S30"        
+//if !READCUR()
+//   retu .F.
+//endif
+
 cTIPO := "D"
 MDS("(D)ocumento (I)ni")
 @ 24,40 get cTIPO valid cTIPO $ "DI"        
@@ -70,7 +74,7 @@ endif
 
 nHANDLE := fcreate(alltrim(cARQ))
 if ferror() # 0
-   ALERTX("Erro na Cria‡„o do Arquivo")
+   ALERTX("Erro na Criacao do Arquivo")
    retu
 endif
 nARQ  := len(aARQ)
@@ -83,20 +87,20 @@ for Y := 1 to nARQ
    mDESCRICAO := aDES[Y]
    MDS(mARQUIVO)
    if cTIPO = "D"
-      fwrite(nHANDLE,'Ö'+replicate('-',78)+'·'+cCR)
-      fwrite(nHANDLE,'Ý'+padc(alltrim(mARQUIVO)+".DBF",78)+'Ý'+cCR)
-      fwrite(nHANDLE,'Ý'+padc("Descri‡„o: "+alltrim(mDESCRICAO),78)+'Ý'+cCR)
-      fwrite(nHANDLE,'Ó'+replicate('-',78)+'½'+cCR)
-      fwrite(nHANDLE,'Sum rio dos Campos:'+cCR)
-      fwrite(nHANDLE,replicate('=',78)+cCR)
-      fwrite(nHANDLE,''+cCR)
+      fwrite(nHANDLE,'Ö'+replicate('-',78)+'·'+HB_OSNEWLINE())
+      fwrite(nHANDLE,'Ý'+padc(alltrim(mARQUIVO)+".DBF",78)+'Ý'+HB_OSNEWLINE())
+      fwrite(nHANDLE,'Ý'+padc("Descricao: "+alltrim(mDESCRICAO),78)+'Ý'+HB_OSNEWLINE())
+      fwrite(nHANDLE,'Ó'+replicate('-',78)+'½'+HB_OSNEWLINE())
+      fwrite(nHANDLE,'Sum rio dos Campos:'+HB_OSNEWLINE())
+      fwrite(nHANDLE,replicate('=',78)+HB_OSNEWLINE())
+      fwrite(nHANDLE,''+HB_OSNEWLINE())
    else
-      fwrite(nHANDLE,"["+alltrim(mARQUIVO)+".DBF]"+cCR)
+      fwrite(nHANDLE,"["+alltrim(mARQUIVO)+".DBF]"+HB_OSNEWLINE())
    endif
    if mARQUIVO # HELPARQ
       IF USEREDE(alltrim(mARQUIVO),1,0)
          if cTIPO = "D"
-            fwrite(nHANDLE,str(fcount(),5)+' Campos Definidos'+cCR)
+            fwrite(nHANDLE,str(fcount(),5)+' Campos Definidos'+HB_OSNEWLINE())
          endif
          aESTRU := dbstruct()
          dbclosearea()
@@ -106,14 +110,14 @@ for Y := 1 to nARQ
    else
       dbselectar(HELPARQ)
       if cTIPO = "D"
-         fwrite(nHANDLE,str(fcount(),5)+' Campos Definidos'+cCR)
+         fwrite(nHANDLE,str(fcount(),5)+' Campos Definidos'+HB_OSNEWLINE())
       endif
       aESTRU := dbstruct()
    endif
    if cTIPO = "D"
-      fwrite(nHANDLE,''+cCR)
-      fwrite(nHANDLE,"Campo Nome"+spac(7)+"Tipo     Tam Dec Descri‡„o"+cCR)
-      fwrite(nHANDLE,replicate('-',78)+cCR)
+      fwrite(nHANDLE,''+HB_OSNEWLINE())
+      fwrite(nHANDLE,"Campo Nome"+spac(7)+"Tipo     Tam Dec Descricao"+HB_OSNEWLINE())
+      fwrite(nHANDLE,replicate('-',78)+HB_OSNEWLINE())
    endif
    FIM := len(aESTRU)
    for X := 1 to FIM
@@ -133,7 +137,7 @@ for Y := 1 to nARQ
          endif
       endif
       if cTIPO = "D"
-         fwrite(nHANDLE,cCR)
+         fwrite(nHANDLE,HB_OSNEWLINE())
       endif
       dbselectar("DICI")
       dbgotop()
@@ -162,30 +166,30 @@ for Y := 1 to nARQ
    dbclosearea()
    FIM := len(aIND)
    if cTIPO = "D"
-      fwrite(nHANDLE,+cCR)
-      fwrite(nHANDLE,"Sum rio dos Indices"+cCR)
-      fwrite(nHANDLE,replicate('=',78)+cCR)
-      fwrite(nHANDLE,cCR)
-      fwrite(nHANDLE,str(FIM,4)+' Indices Definidos:'+cCR)
-      fwrite(nHANDLE,cCR)
-      fwrite(nHANDLE,'Nome       Descri‡„o'+cCR)
-      fwrite(nHANDLE,'           Express„o Chave'+cCR)
-      fwrite(nHANDLE,replicate('=',78)+cCR)
+      fwrite(nHANDLE,+HB_OSNEWLINE())
+      fwrite(nHANDLE,"Sum rio dos Indices"+HB_OSNEWLINE())
+      fwrite(nHANDLE,replicate('=',78)+HB_OSNEWLINE())
+      fwrite(nHANDLE,HB_OSNEWLINE())
+      fwrite(nHANDLE,str(FIM,4)+' Indices Definidos:'+HB_OSNEWLINE())
+      fwrite(nHANDLE,HB_OSNEWLINE())
+      fwrite(nHANDLE,'Nome       Descricao'+HB_OSNEWLINE())
+      fwrite(nHANDLE,'           Express„o Chave'+HB_OSNEWLINE())
+      fwrite(nHANDLE,replicate('=',78)+HB_OSNEWLINE())
    else
-      fwrite(nHANDLE,"NUMMAINTAINED="+str(FIM,1)+cCR)
+      fwrite(nHANDLE,"NUMMAINTAINED="+str(FIM,1)+HB_OSNEWLINE())
    endif
    for I := 1 to FIM
       if cTIPO = "D"
-         fwrite(nHANDLE,padr(aIND[I],10)+" "+padr(aIN1[I],50)+cCR)
-         fwrite(nHANDLE,"           "+aCHA[I]+cCR)
-         fwrite(nHANDLE,"----------"+cCR)
+         fwrite(nHANDLE,padr(aIND[I],10)+" "+padr(aIN1[I],50)+HB_OSNEWLINE())
+         fwrite(nHANDLE,"           "+aCHA[I]+HB_OSNEWLINE())
+         fwrite(nHANDLE,"----------"+HB_OSNEWLINE())
       else
-         fwrite(nHANDLE,"MAINTAIN"+str(I - 1,1)+"="+alltrim(aIND[I])+".NTX"+cCR)
-         fwrite(nHANDLE,"INDEX"+str(I - 1,1)+"="+alltrim(aCHA[I])+cCR)
+         fwrite(nHANDLE,"MAINTAIN"+str(I - 1,1)+"="+alltrim(aIND[I])+".NTX"+HB_OSNEWLINE())
+         fwrite(nHANDLE,"INDEX"+str(I - 1,1)+"="+alltrim(aCHA[I])+HB_OSNEWLINE())
       endif
    next
    if cTIPO = "I"
-      fwrite(nHANDLE,cCR)
+      fwrite(nHANDLE,HB_OSNEWLINE())
    endif
    xGRAF ++
 next Y
@@ -213,11 +217,11 @@ do case
    case cTIP = "C"
       cTIPO := "Caracter"
    case cTIP = "N"
-      cTIPO := "N£merico"
+      cTIPO := "Numerico"
    case cTIP = "D"
       cTIPO := "Data    "
    case cTIP = "L"
-      cTIPO := "L¢gico  "
+      cTIPO := "Logico  "
    case cTIP = "M"
       cTIPO := "Memo    "
    otherwise

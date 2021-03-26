@@ -300,12 +300,13 @@ return .T.
 function xcaptxt
 local CURSOR  := setcursor( 1 )
 local getlist := {}
-priv nomearq  := space( 60 )
-@ 24, 00 clea
-@ 24, 01 say "Digite o nome do Arquivo"
-@ 24, 40 get nomearq                    pict "@S40"
-read
-nomearq := alltrim( nomearq )
+//priv nomearq  := space( 60 )
+//@ 24, 00 clea
+//@ 24, 01 say "Digite o nome do Arquivo"
+//@ 24, 40 get nomearq                    pict "@S40"
+//read
+//nomearq := alltrim( nomearq )
+nomearq := win_GetOpenFileName(, "Ler conteudo", HB_CWD(), "txt", "*.txt", 1 )
 if file( nomearq )
    if Filesize( nomearq ) > 64000
       ALERTX( "Arquivo muito Grande" )
@@ -313,7 +314,7 @@ if file( nomearq )
       READVAR := hb_memoread( nomearq )
    endif
 else
-   ALERTX( "N?o Encontrei o Arquivo" )
+   ALERTX( "Nao Encontrei o Arquivo" )
 endif
 @ 24, 00 clea
 setcursor( CURSOR )
@@ -329,12 +330,13 @@ function XGRATXT
 
 local GETLIST := {}
 local CURSOR  := setcursor( 1 )
-priv NOMEARQ  := space( 60 )
-@ 24, 00 clea
-@ 24, 01 say "Digite o nome do Arquivo"
-@ 24, 40 get NOMEARQ                    pict "@S40"
-read
-NOMEARQ := alltrim( NOMEARQ )
+//priv NOMEARQ  := space( 60 )
+//@ 24, 00 clea
+//@ 24, 01 say "Digite o nome do Arquivo"
+//@ 24, 40 get NOMEARQ                    pict "@S40"
+//read
+//NOMEARQ := alltrim( NOMEARQ )
+NOMEARQ :=WIN_GETSAVEFILENAME(, "Salvar conteudo", HB_CWD(),"txt"   , "*.txt" , 1)
 hb_memowrit( NOMEARQ, strtran( STRVAL( READVAR ), chr( 141 ) + chr( 10 ), chr( 13 ) + chr( 10 ) ) )
 setcursor( CURSOR )
 @ 24, 00 clea

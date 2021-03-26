@@ -22,7 +22,9 @@ nREG70  := 0
 nREG75  := 0
 cANO:=STRZERO(YEAR(ZDATA),4)
 cMES:=STRZERO(MONTH(ZDATA),2)
-cARQ:="C:\TEMP\S"+cANO+cMES+STRZERO(ZNUMERO,1)+".TXT"+SPACE(10)
+//cARQ:="C:\TEMP\S"+cANO+cMES+STRZERO(ZNUMERO,1)+".TXT"+SPACE(10)
+cARQ:=WIN_GETSAVEFILENAME(, "Salvar Sintegra","C:\TEMP\","txt", "*.txt" , 1 , , "S"+cANO+cMES+STRZERO(ZNUMERO,1)+".TXT")
+
 
 MDI( " Gera SINTEGRA " )
 if !USEREDE( "MANEMP", 1, 1 )
@@ -155,7 +157,7 @@ fwrite( uso, dtos( dFIM ) )
 fwrite( uso, cCON )
 fwrite( uso, cOPE )
 fwrite( uso, cFIN )
-fwrite( USO, chr( 13 ) + chr( 10 ) )
+fwrite( USO, HB_OSNEWLINE())
 
 fwrite( uso, "11" )
 fwrite( uso, ACEPAD( cENDERECO, 34 ) )
@@ -165,7 +167,7 @@ fwrite( uso, ACEPAD( cBAIRRO, 15 ) )
 fwrite( uso, strzero( val( TIRAOUT( cCEP ) ), 8 ) )
 fwrite( uso, ACEPAD( cCONTATO, 28 ) )
 fwrite( uso, "00" + cDDD + cTELEFONE )
-fwrite( USO, chr( 13 ) + chr( 10 ) )
+fwrite( USO, HB_OSNEWLINE())
 
 if GRAVA50 = "S"
    SINTG01( "SINT50" )
@@ -213,7 +215,7 @@ if GRAVA54 = "S"
          fwrite( uso, GRVVAL( BASESUB, 12, 2 ) ) //13 Base de Calculo Sub Tributaria
          fwrite( uso, GRVVAL( VALORIPI, 12, 2 ) ) //15
          fwrite( uso, GRVVAL( ICM, 4, 2 ) ) //16
-         fwrite( USO, chr( 13 ) + chr( 10 ) )
+         fwrite( USO, HB_OSNEWLINE())
          nREG54 ++
          mCODIGORED:=CODIGORED
          IF ITEM<=990 //991 a 999 frete seguro outros
@@ -257,7 +259,7 @@ if GRAVA54 = "S" //75 54 acima
             fwrite( uso, GRVVAL( 0, 5, 2 ) )
          ENDIF
          fwrite( uso, GRVVAL( SUBICM, 13, 2 ) )
-         fwrite( USO, chr( 13 ) + chr( 10 ) )
+         fwrite( USO, HB_OSNEWLINE())
          nREG75 ++
       endif
       dbskip()
@@ -311,7 +313,7 @@ fwrite( uso, "99" )
 fwrite( uso, strzero( nGER, 8 ) )
 fwrite( uso, space( nSPACE ) )
 fwrite( uso, "1" )
-fwrite( USO, chr( 13 ) + chr( 10 ) )
+fwrite( USO, HB_OSNEWLINE())
 
 fclose( USO )
 dbcloseall()
@@ -415,7 +417,7 @@ while !eof()
          fwrite( uso, space( 1 ) ) //Codigo Antecipacao tributaria
          fwrite( uso, space( 29 ) )
       ENDIF
-      fwrite( USO, chr( 13 ) + chr( 10 ) )
+      fwrite( USO, HB_OSNEWLINE())
       DO CASE
          CASE cARQ = "SINT50"
              nREG50 ++

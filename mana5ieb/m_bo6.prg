@@ -16,7 +16,7 @@ nDEC     := 0
 nSEQ     := 0
 cPLANTA  := "C1 "
 cDOCA    := "B1" + space( 12 )
-cCAMINHO := "\CDA\TXT\" + space( 40 )
+cCAMINHO := ProfileString( "MANA5.INI", "PATH", "AVB",HB_CWD()+"\CDA\TXT\" )+SPACE(40)  //"\CDA\TXT\" + space( 40 )
 cTIME    := strtran( time(), ":", "" )
 cENTREGA := substr( dtos( ZDATA + 1 ), 3 )
 

@@ -87,19 +87,20 @@ WHILE ! EOF()
    DBSKIP()
 ENDDO
 
-IF ! NETUSE("TILRESG",,,,,.F.,) //BREDE("TILRESG",0)
+IF ! NETUSE("TILRESG",,,,,.F.,) 
    RETU
 ENDIF
 
 IF MDG('Deseja Gravar em Arquivo')
-   ARQUIVO='GERENCIAL.TXT'
-   MDS('Confirme o nome do Arquivo')
-   @ 24,40 GET ARQUIVO
-   READCUR()
+   //ARQUIVO='GERENCIAL.TXT'
+   //MDS('Confirme o nome do Arquivo')
+   //@ 24,40 GET ARQUIVO
+   //READCUR()
+   ARQUIVO:=WIN_GETSAVEFILENAME( , "Salvar Gerencial", HB_CWD(),"txt", "*.txt" , 1,, "gerencial.txt")
    USO=FCREATE(ARQUIVO)
    IF FERROR()#0
-      ALERTX("Erro na Cria‡„o do Arquivo")
-      RETU
+      ALERTX("Erro na Criacao do Arquivo")
+      RETUrn .f.
    ENDIF
    FWRITE(USO,REPL('-',240)+CHR(13)+CHR(10))
    FWRITE(USO,'RESUMO GERENCIAL'+CHR(13)+CHR(10))

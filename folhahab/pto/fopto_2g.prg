@@ -11,20 +11,22 @@ CABE2( "FOPTO_2G - Importar Ocorrencias" )
 cPO := "PO" + ANOMESW //ANOWORK + strzero( MES, 2 )
 CHECKCRI( cPO, "FO_POCO", "STR(NUMERO,8)+DTOS(OCOINI)" )
 
-cARQ := space( 40 )
-MDS( "Digite o Nome do Arquivo" )
-@ 24, 30 get cARQ
-if !READCUR()
-   retu .F.
-endif
-cARQ := alltrim( cARQ )
+//cARQ := space( 40 )
+//MDS( "Digite o Nome do Arquivo" )
+//@ 24, 30 get cARQ
+//if !READCUR()
+//   retu .F.
+//endif
+//cARQ := alltrim( cARQ )
+cARQ:=win_GetOpenFileName(, "Arquivos de Ocorrencias",HB_CWD(), "Arquivos de Ocorrencias", "*.*", 1 )
+
 if ! HB_FILEEXISTS( cARQ )
-   ALERTX( "N„o encontrei Arquivo: " + cARQ )
+   ALERTX( "Nao encontrei Arquivo: " + cARQ )
    retu .F.
 endif
 nHANDLE := fopen( cARQ )
 if nHANDLE <= 0
-   ALERTX( "N„o Consegui abrir o Arquivo: " + cARQ )
+   ALERTX( "Nao Consegui abrir o Arquivo: " + cARQ )
    retu .F.
 endif
 lCONF:=MDG("Conferir funcionario a funcionario")
@@ -111,7 +113,7 @@ for W := 1 to len( aNUM )
       endif
    else
       IF lCONF
-         ALERTX( "Funcion rio n„o Cadastrado: " + str( mNUMERO ) )
+         ALERTX( "Funcion rio nao Cadastrado: " + str( mNUMERO ) )
       ENDIF
    endif
 next W

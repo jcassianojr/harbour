@@ -11,15 +11,18 @@ CABE2( "FOPTO_4V - Importar Escala de Revezamento" )
 cPE := "PE" + ANOMESW 
 CHECKCRI( cPE, "FOPTOREV", "GRUPO+DTOS(DATA)" )
 
-cARQ := space( 40 )
-MDS( "Digite o Nome do Arquivo" )
-@ 24, 30 get cARQ
-if !READCUR()
-   retu .F.
-endif
-cARQ := alltrim( cARQ )
+//cARQ := space( 40 )
+//MDS( "Digite o Nome do Arquivo" )
+//@ 24, 30 get cARQ
+//if !READCUR()
+//   retu .F.
+//endif
+//cARQ := alltrim( cARQ )
+cARQ:=win_GetOpenFileName(, "Arquivos de Escala de Revezamento",HB_CWD(), "Arquivos de Escala de Revezamento", "*.*", 1 )
+
+
 if ! HB_FILEEXISTS( cARQ )
-   ALERTX( "N„o encontrei Arquivo: " + cARQ )
+   ALERTX( "Nao encontrei Arquivo: " + cARQ )
    retu .F.
 endif
 
@@ -29,7 +32,7 @@ if ! NETUSE(cPE)
 endif
 nHANDLE := fopen( cARQ )
 if nHANDLE <= 0
-   ALERTX( "N„o Consegui abrir o Arquivo: " + cARQ )
+   ALERTX( "Nao Consegui abrir o Arquivo: " + cARQ )
    dbcloseall()
    retu .F.
 endif
