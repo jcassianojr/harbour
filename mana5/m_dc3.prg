@@ -7,7 +7,7 @@ LOCAL nPOS:=0
 LOCAL aARQZLP:={}
 MDI("  Imprimir Etiquetas")
 
-if ntipo=98
+if ntipo=98 .or. ntipo=88
    cCAMZPL:=padr(ProfileString( "MANA5.INI", "PATH", "ZPL", HB_CWD()),80)
    @ 23,00 say "digite o caminhos com os arquivos zpl"
    @ 24,00 get cCAMZPL
@@ -16,37 +16,37 @@ if ntipo=98
    IF RIGHT(cCAMZPL)<>"\"
       cCAMZPL+="\"
    ENDIF
-   
+
    aARQZLP:=FILENAMES(CCAMZPL+"*.Zpl")
-   
+
    nPOS:=ESCARR(aARQZLP,7,7,21,78,aARQZLP,nPOS,"Arquivos zpl")
-   
+
    IF nPOS>0
        cARQZPL:=aARQZLP[nPOS]
-	   If file(cCAMZPL+cARQZPL)
+	   If file(cCAMZPL+cARQZPL) .and. ntipo=98 //tipo 88 sofrera macro subtirtuicao variaveis
 		  cPDFILE:=filezebrapdf(cCAMZPL+cARQZPL)
 		  IF cPDFILE
 			wapi_ShellExecute( 0, 0, cPDFILE,"", cCAMZPL, 1 )
 		//  hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
 		// essSW_SHOWNORMAL = 1
-		  ENDIF	
+		  ENDIF
 	   endif
     endif
-    return 	
+    return
 endif
-if ntipo=99
+if ntipo=99 .or. ntipo=89
    cARQZPL:=win_GetOpenFileName(, "Arquivos ZPL", ProfileString( "MANA5.INI", "PATH", "ZPL", HB_CWD()), "Modelos ZPL", "*.ZPL", 1 )
 //   @ 23,00 say "digite o caminho do arquivo zpl)"
 //   @ 24,00 get cARQZPL
 //   reADCUR()
 //   cARQZPL:=ALLTRIM(CARQZPl)
-   If file(cARQZPL)
+   If file(cARQZPL) .and. ntipo=99 //tipo 89 sofrera macro subtirtuicao variaveis
       cPDFILE:=filezebrapdf(cARQZPL)
 	  IF cPDFILE
 		wapi_ShellExecute( 0, 0, cPDFILE,"", 0, 1 )
-	  ENDIF	
-   endif	
-   return   
+	  ENDIF
+   endif
+   return
 endif
 
 IF nTIPO=4
@@ -99,6 +99,64 @@ cKANBAN:=STRTRAN(cKANBAN," ","")
 cCODIGO:=ALLTRIM(cCODIGO)
 cDATANF:=STRZERO(YEAR(dDATANF),4)+"-"+STRZERO(MONTH(dDATANF),2)+"-"+STRZERO(DAY(dDATANF),2)
 cFORN:=ALLTRIM(cFORN)
+if nTIPO=88 .OR. nTIPO=89
+   IF nTIPO=88 //89 Ja esta com o caminho
+      cARQZPL:=cCAMZPL+cARQZPL
+	ENDIF
+	IF FILE(cARQZPL)
+       cETIQUETA:=HB_MEMOREAD(cARQZPL)
+	   //nem sempre o nome da substituicao sera igual a variaveis 
+	   //
+	   //atencao a sequencia exemplo cDATANF cDATA usar mais palavras longas na frente 
+	   aTROCA:={}
+	   aVALOR:={}
+	   AADD(aTROCA,"cBARSIZ")
+	   AADD(aVALOR,cBARSIZ)
+	   AADD(aTROCA,"cCLINOME")
+	   AADD(aVALOR,cCLINOME)
+	   AADD(aTROCA,"cCODFNT")
+	   AADD(aVALOR,cCODFNT)
+	   AADD(aTROCA,"cCODIGO")
+	   AADD(aVALOR,cCODIGO)
+	   AADD(aTROCA,"cCODSIZ")
+	   AADD(aVALOR,cCODSIZ)
+	   AADD(aTROCA,"cDATANF")
+	   AADD(aVALOR,cDATANF)
+	   AADD(aTROCA,"cDATA")
+	   AADD(aVALOR,cDATA)
+	   AADD(aTROCA,"cDELIV")
+	   AADD(aVALOR,cDELIV)
+	   AADD(aTROCA,"cEQUIP")
+	   AADD(aVALOR,cEQUIP)
+	   AADD(aTROCA,"cETIQ")
+	   AADD(aVALOR,cETIQ)
+	   AADD(aTROCA,"cFORN")
+	   AADD(aVALOR,CcFORN)
+	   AADD(aTROCA,"cINSP")
+	   AADD(aVALOR,cINSP)
+	   AADD(aTROCA,"cKANBAN")
+	   AADD(aVALOR,cKANBAN)
+	   AADD(aTROCA,"cLOTE")
+	   AADD(aVALOR,cLOTE)
+	   AADD(aTROCA,"cNOME")
+	   AADD(aVALOR,cNOME)
+	   AADD(aTROCA,"cQTDE")
+	   AADD(aVALOR,cQTDE)
+	   AADD(aTROCA,"cUSING")
+	   AADD(aVALOR,cUSING)
+	   
+
+//	   AADD(aTROCA,"")
+///	   AADD(aVALOR,C)
+
+	   
+	   FOR XYZ:=1 TO LEN(aTROCA)
+	        cETIQUETA:=STRTRAN(cETIQUETA,aTROCA[XYZ],aVALOR[ZYZ])
+	   NEXT XYZ
+    ENDIF
+ENDIF
+
+
 IF lPERG
    IF ! CHECKIMP(0,,.T.)
       RETU .F.
@@ -109,6 +167,18 @@ ELSE
    ENDIF
 ENDIF
 IMPRESSORA()
+IF nTIPO=88 .OR. nTIPO=89
+   //imprimindo toda etiquetas
+   //caso nao imprmir corretamnet usar memolinecount e uma a uma memoline
+   @ PROW()  ,0 SAY cETIQUETA
+   IF AT("^PQ",cETIQUETA) //Inclui quantidade se faltou no layout
+      @ PROW()+1,0 SAY "^PQ"+cETIQ+",0,0,N"
+   ENDIF
+   IF AT("^XZ",cETIQUETA) //inclui fechamento se faltou no layout
+      @ PROW()+1,0 SAY "^XZ"
+   ENDIF
+  
+ENDIF
 IF nTIPO=1
    @ PROW()  ,0 SAY "^XA"
    @ PROW()+1,0 SAY "^PRC"
