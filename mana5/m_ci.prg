@@ -15,12 +15,11 @@
 *+--------------------------------------------------------------------
 *+
 
-function m_ci
+#include "adordd.ch"
+#include "try.ch"
 
-para nTIPO
-
+function m_ci(ntipo)
 MDI("Usuarios e Senhas de Acesso")
-
 if nTIPO = 1
    while .T.
       MDS("Digite Nova Senha")
@@ -166,6 +165,10 @@ RETURN out_string
 *+--------------------------------------------------------------------
 *+
 function gerapostela
+cCAMWRPT:=ProfileString( "MANA5.INI", "PATH", "WRPT", HB_CWD())
+cCAMCONT:=ProfileString( "MANA5.INI", "PATH", "CONTROLE", HB_CWD())
+cCAMSYSU:=ProfileString( "MANA5.INI", "PATH", "SYSUSERL", HB_CWD())
+
 if USEREDE("MUSER",1,99)
 	dbsetorder(1) //
 	dbgotop()
@@ -176,6 +179,26 @@ if USEREDE("MUSER",1,99)
 		cSENHA:=DECODE(FIELD->SENHA)
 		ENCODEPOS(cSENHA,10,.t.)       //senha comeca na 10+1 postel11
 		dbunlock()
+		
+		aCHAVE:={}
+		cCHAVEUSR:=""
+		ENCODEPOS(cUSUARIO,0,.F.)
+		FOR X:=1 TO LEN(aCHAVE)
+			cCHAVEUSR+=STRZERO(aCHAVE[X],3) 
+		NEXT X
+		
+		aCHAVE:={}
+		cSENHAUSR:=""
+		ENCODEPOS(cSENHA,0,.F.)
+		FOR X:=1 TO LEN(aCHAVE)
+			cSENHAUSR+=STRZERO(aCHAVE[X],3) 
+		NEXT X
+
+		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCAMWRPT)
+		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCAMCONT)
+		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCAMSYSU)
+		
+		
 	   dbskip()
 	enddo
 ENDIF
@@ -210,3 +233,58 @@ for z:=1 to 2
 	ENDIF
 NEXT Z
 return .t.
+
+*+--------------------------------------------------------------------
+*+
+*+    Function gravaposTELA() gera postela para login windows usa outra charset nos mdb
+*+
+*+--------------------------------------------------------------------
+*+
+
+function gravaposTELA(cUSUARIO,cPOSTELAa,cPOSTELAB,cCAMBASE)
+cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+try
+   oConn:=WIN_OLECreateObject( "ADODB.Connection" )
+   with object oConn
+      :ConnectionString:=cConn
+      :Open()
+   END  //end do with
+catch oErr
+   //ShowAdoError(oERR,oCoNn)   
+   dbcloseall()   
+   return 
+end
+
+oComm:=WIN_OLECreateObject( "ADODB.Command" )
+
+
+cCOMANDO:="UPDATE USUARIO SET POSTELAA = '"+cPOSTELAA+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+
+cLINHAS+=cCOMANDO+HB_OSNEWLINE()
+
+try
+        with object oComm
+                 :CommandText:=cCOMANDO
+                 :CommandType:=adCmdText
+                 :ActiveConnection:=oConn
+                 :Execute()
+            end
+end			
+			
+			
+cCOMANDO:="UPDATE USUARIO SET POSTELAB = '"+cPOSTELAB+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+
+cLINHAS+=cCOMANDO+HB_OSNEWLINE()
+
+try
+        with object oComm
+                 :CommandText:=cCOMANDO
+                 :CommandType:=adCmdText
+                 :ActiveConnection:=oConn
+                 :Execute()
+            end
+end	
+
+oConn:Close()
+oConn:=NIL		
+

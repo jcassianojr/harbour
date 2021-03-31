@@ -1,12 +1,10 @@
+-incpath=c:\devprg\hb32\addons\rddado\
+
 -3rd=hbide_version=1.0
 -3rd=hbide_title=Mana5
 -3rd=hbide_output=obj21
  
 -lng=pt_BR
-
-#-lhbct
-#-lpng
-#-llibhpdf
 
 hbwin.hbc
 hbtip.hbc
@@ -14,7 +12,6 @@ xhb.hbc
 hbhpdf.hbc
 hbmisc.hbc
 gtwvg.hbc
-#hbblink.hbc migrar c:\develop\harbour\objmgw\swprun.prg
  
 MANA5.prg
 MLIB.prg
@@ -198,7 +195,6 @@ c:\develop\harbour\objmgw\disk56.prg
 c:\develop\harbour\objmgw\disk57.prg
 c:\develop\harbour\objmgw\disk59.prg
 c:\develop\harbour\objmgw\disk61.prg
-#c:\develop\harbour\objmgw\disk62.prg
 c:\develop\harbour\objmgw\disk63.prg
 c:\develop\harbour\objmgw\disk64.prg
 c:\develop\harbour\objmgw\disk66.prg

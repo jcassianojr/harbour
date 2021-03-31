@@ -1,3 +1,4 @@
+-incpath=c:\devprg\hb32\addons\rddado\
 #
 # itaesbra.hbp
 #
@@ -267,7 +268,6 @@ C:\develop\harbour\objmgw\disk56.prg
 C:\develop\harbour\objmgw\disk57.prg
 C:\develop\harbour\objmgw\disk59.prg
 C:\develop\harbour\objmgw\disk61.prg
-#C:\develop\harbour\objmgw\disk62.prg
 C:\develop\harbour\objmgw\disk63.prg
 C:\develop\harbour\objmgw\disk64.prg
 C:\develop\harbour\objmgw\disk66.prg
