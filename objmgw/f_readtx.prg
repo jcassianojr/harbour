@@ -25,7 +25,7 @@ start_line = IF(start_line = NIL, 1, start_line)
 
 
 * Se o arquivo nao puder ser aberto, encerra a funcao.
-IF (handle := FOPEN(text_file)) > 0
+IF (handle := hb_FOPEN(text_file)) > 0
 
     * Grava a tela antiga e a area de texto delimitada por uma moldura.
 //    old_screen = SCRNSAVE(top, left, bottom, right)

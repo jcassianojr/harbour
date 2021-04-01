@@ -239,7 +239,7 @@ if cOPER="D"
 endif
 
 IF lTXT   
-    nHANDLE := fopen( cARQ )
+    nHANDLE := hb_fopen( cARQ )
     if nHANDLE <= 0
        ALERTX( "Nao Consegui abrir o Arquivo: " + cARQ )
        fclose(Nhangrv)

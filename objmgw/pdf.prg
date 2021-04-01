@@ -21,7 +21,7 @@
      endif
 	
 	   nLINES      :=FLineCount(cARQ)
-     nFileHandle := FOpen( cARQ )
+     nFileHandle := hb_FOpen( cARQ )
 
 	   Private page, height, width, def_font, font
 	   Private pdf := HPDF_New()

@@ -439,7 +439,7 @@ ENDIF
 DBSELECTAR(cARQ)
 INITVARS()
 CLRVARS()
-nHANDLE := fopen(cARQUIVO)
+nHANDLE := hb_fopen(cARQUIVO)
 IF nHANDLE <= 0
    DBCLOSEALL()
    ALERTX("Erro Abrindo "+Carquivo)

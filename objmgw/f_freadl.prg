@@ -53,40 +53,6 @@ ELSE
     ENDIF
 ENDIF
 
-*+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
-*+
-*+    Function flinecount(cARQ) //funcao nativa xhb
-*+
-*+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
-*+
-//function flinecount(cARQ,line_len,lremchrexp,cDELI)
-//LOCAL nHANDLE
-//LOCAL nLINHAS
-//LOCAL LINHA
-//nLINHAS:=0
-//nHANDLE := fopen( cARQ )
-//if nHANDLE <= 0
-//   ALERTX( "N?o Consegui abrir o Arquivo: " + cARQ )
-//endif
-//while .T.
-//   LINHA:=FREADLINE( nHANDLE,line_len,lremchrexp,cDELI)
-//   IF LINHA = "__FINAL__"
-//      exit
-//   else
-//      nLINHAS:=nLINHAS+1
-//   endif
-//enddo
-//fclose( nHANDLE )
-//return nLINHAS
 
-*+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
-*+
-*+    Function Data_Hora_ARQ(vArq) //funcao nativa harbour fdate() ftime()
-*+
-*+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
-*+
-//Function Data_Hora_ARQ(vArq)
-//aDir  := Directory( vArq )
-//aRet  := Transform(DtoC(aDir[1,3]),"@d")
-//aRet2 := aDir[1,4]
-//Return( aRet + " - " + aRet2 )
+
+

@@ -55,7 +55,7 @@ ENDIF
 ret_value:=-1
 cMES:="Parece Nao Ser DBF"
 
-handle = FOPEN(filename , 0)
+handle = hb_FOPEN(filename , 0)
 
 
 * Se nao ocorrer erro na abertura, carrega o primeiro byte.

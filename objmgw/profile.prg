@@ -87,7 +87,7 @@ if rat( ".", cFile ) == 0
    cFile := upper( alltrim( cFile ) ) + ".INI"
 endif
 
-nHandle := fopen( cFile, FO_READ + FO_SHARED )
+nHandle := hb_fopen( cFile, FO_READ + FO_SHARED )
 
 if nHandle > 0
    nFileLen := fseek( nHandle, 0, FS_END )
@@ -292,7 +292,7 @@ otherwise
 
 endcase
 
-nHandle := fopen( cFile, FO_READ + FO_EXCLUSIVE )
+nHandle := hb_fopen( cFile, FO_READ + FO_EXCLUSIVE )
 
 if ferror() == 2
    nHandle := fcreate( cFile, 0 )

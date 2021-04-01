@@ -2026,7 +2026,7 @@ if file( M->filename )
 
    endif
 
-   handle := fopen( M->filename )
+   handle := hb_fopen( M->filename )
 
    if ferror() = 0
       buffer := space( 512 )

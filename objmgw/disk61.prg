@@ -32,7 +32,7 @@ IF ! file(xarquivo)
    ALERTX("Arquivo nao Encontrado")
    RETU .F.
 ENDIF
-nHANDLE  := fopen( xARQUIVO )
+nHANDLE  := hb_fopen( xARQUIVO )
 if nHANDLE = 0
    ALERTX( "Arquivo nAo Pode ser Aberto" )
 endif

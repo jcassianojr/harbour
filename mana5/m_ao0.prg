@@ -157,7 +157,7 @@ dbgobottom()
 nREG := NUMERO
 nREG ++
 dbsetorder(3)   //Produto Planta Programa
-nHANDLE := fopen(cARQUIVO)
+nHANDLE := hb_fopen(cARQUIVO)
 IF nHANDLE <= 0
    DBCLOSEALL()
    ALERTX("Erro Abrindo "+Carquivo)

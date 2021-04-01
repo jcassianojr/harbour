@@ -559,7 +559,7 @@ RETURN fileconvert( cFILE, "TXTWIN" )
 *+
 function fileconvert( cFILE, cTIPO )
 local x
-nHANDLE := fopen( cFILE )
+nHANDLE := hb_fopen( cFILE )
 if nHANDLE = 0
    ALERTX( "Arquivo nao Pode ser Aberto" )
 endif

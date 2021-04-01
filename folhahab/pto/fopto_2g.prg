@@ -24,7 +24,7 @@ if ! HB_FILEEXISTS( cARQ )
    ALERTX( "Nao encontrei Arquivo: " + cARQ )
    retu .F.
 endif
-nHANDLE := fopen( cARQ )
+nHANDLE := hb_fopen( cARQ )
 if nHANDLE <= 0
    ALERTX( "Nao Consegui abrir o Arquivo: " + cARQ )
    retu .F.

@@ -159,7 +159,7 @@ FUNCTION HTML_ERRORLOG
         HtmArch := HtmL_Ini(hb_cwd()+"ErrorLog.Htm","Harbour Errorlog File")
         Html_Line(HtmArch)
     Else
-        HtmArch := FOPEN(hb_cwd()+"ErrorLog.Htm",2)
+        HtmArch := hb_FOPEN(hb_cwd()+"ErrorLog.Htm",2)
         FSeek(HtmArch,0,2)    //End Of File
     EndIf
 RETURN (HtmArch)

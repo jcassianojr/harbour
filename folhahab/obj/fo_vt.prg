@@ -19,7 +19,7 @@ DBSETORDER(2)
 
 cLINHA      := ""
 nLINES      := FLineCount(cARQUIVO)
-nFileHandle := FOpen( cARQUIVO)
+nFileHandle := hb_FOpen( cARQUIVO)
 
 zei_fort( nLines,,,0)
 
@@ -106,7 +106,7 @@ dbsetorder(2)
 
 cLINHA      := ""
 nLINES      := FLineCount("STTWOP.TXT")
-nFileHandle := FOpen( "STTWOP.TXT" )
+nFileHandle := hb_FOpen( "STTWOP.TXT" )
 
 
 

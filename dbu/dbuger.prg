@@ -112,7 +112,7 @@ if file( DBF_NAME + ".DBF" )
    endif
    ferase( DBF_NAME + ".DBF" )
 endif
-nhandle := fopen( M->FILENAME )
+nhandle := hb_fopen( M->FILENAME )
 if nHANDLE <= 0
    ALERTX( "Nao Foi Possivel Abrir Arquivo Constrututor" )
 endif

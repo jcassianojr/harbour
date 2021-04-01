@@ -30,7 +30,7 @@ endif
 if ! NETUSE(cPE) 
    retu .f.
 endif
-nHANDLE := fopen( cARQ )
+nHANDLE := hb_fopen( cARQ )
 if nHANDLE <= 0
    ALERTX( "Nao Consegui abrir o Arquivo: " + cARQ )
    dbcloseall()
