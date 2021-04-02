@@ -1,0 +1,9 @@
+@echo off
+SET HB_ARCHITECTURE=win
+set HB_COMPILER=mingw
+set HB_PATH=c:\devprg\hb32
+SET HB_MINGW=c:\devprg\hb32\comp\mingw
+SET INCLUDE_DIR=%HB_PATH%\include;%HB_MINGW%\include\
+SET LIB_DIR=%HB_PATH%\lib\win\mingw\;%HB_MINGW%\lib\
+set PATH=%HB_PATH%\bin\;%HB_MINGW%\bin\
+SET HB_WITH_CAIRO=%HB_PATH%\cairo\
