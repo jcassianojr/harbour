@@ -16,7 +16,7 @@ hbtip.hbc
 xhb.hbc
 rddads.hbc
 
-DBUwvg.PRG  
+DBU.PRG  
 dbucnvmemo.prg 
 dbucnv.prg
 dbucopy.prg
@@ -30,13 +30,13 @@ dbustru.prg
 dbuutil.prg
 dbuver.prg
 dbuview.prg
+dbuXLS.prg
 
 C:\develop\harbour\objmgw\netdbf.prg
 C:\develop\harbour\objmgw\comp.prg  
 C:\develop\harbour\objmgw\disk54.prg
 C:\develop\harbour\objmgw\disk53.prg
 C:\develop\harbour\objmgw\disk56.prg
-C:\develop\harbour\objmgw\disk62.prg
 C:\develop\harbour\objmgw\f_mmopac.prg
 C:\develop\harbour\objmgw\disk55.prg 
 C:\develop\harbour\objmgw\disk57.prg
@@ -51,6 +51,5 @@ C:\develop\harbour\objmgw\f_makedb.prg
 C:\develop\harbour\objmgw\f_ismemo.prg       
 C:\develop\harbour\objmgw\mmousen.prg
 C:\develop\harbour\objmgw\mlib06.prg
-C:\develop\harbour\objmgw\XLS.prg
 C:\develop\harbour\objmgw\error.prg
 c:\develop\harbour\objmgw\wvgini.prg

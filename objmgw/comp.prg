@@ -1,6 +1,11 @@
 #include "try.ch"
 #include "box.ch"
 
+
+
+function hb_fopen(cARQ)
+return fopen(carq)
+
 *+ננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננ
 *+
 *+    Function alltrue()

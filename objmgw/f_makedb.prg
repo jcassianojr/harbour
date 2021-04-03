@@ -47,7 +47,7 @@ IF VALTYPE(cArqDic)#"C"
     RETU
 ELSE
     * Retorna ao DOS se o arq. do dicion. de dados nao puder ser aberto.
-    handle = Fb_OPEN(cArqDic)
+    handle = hb_fOPEN(cArqDic)
     IF handle <= 0
         ERROUSO('N?o foi poss­vel abrir o arquivo dicion rio'+cArqDic,lQUIT,cOLDRDD)
         RETU
