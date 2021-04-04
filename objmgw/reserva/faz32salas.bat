@@ -11,6 +11,8 @@ rem HB_BIN_INSTALL=bin/
 rem HB_LIB_INSTALL=lib/
 rem HB_INC_INSTALL=include/
 rem mingw32-make.exe clean install
+set HB_BUILD_CONTRIBS=yes
+set HB_BUILD_PARTS=all
 mingw32-make.exe install
 
 
