@@ -57,18 +57,19 @@ return hb_rddInfo( RDDI_ORDBAGEXT)
 
 FUNCtion tipodbfesc
 aAMBIENTE:=SALVAA()
-HB_dispbox( 6, 22, 20, 55, B_DOUBLE+" ")
+HB_dispbox( 6, 22, 21, 55, B_DOUBLE+" ")
 OPCAO(  8, 24, "DBF&NTX DBF INDEX=NTX   ", 78 ) //N 1
 OPCAO(  9, 24, "DBF&CDX DBF INDEX=CDX   ", 67 ) //C 2
 OPCAO( 10, 24, "&ADSCDX DBF INDEX=CDX   ", 65 ) //A 3
 OPCAO( 11, 24, "ADSNT&X DBF INDEX=NTX   ", 88 ) //X 4
-OPCAO( 12, 24, "ADS&VFP TABLE=VFP       ", 86 ) //V 5
+OPCAO( 12, 24, "ADSVF&P TABLE=VFP       ", 80 ) //P 5
 OPCAO( 13, 24, "ADSAD&T TABLE=ADS       ", 84 ) //T 6
 OPCAO( 14, 24, "D&BTCDX DBF CDX MEMO=DBT", 66 ) //B 7
 OPCAO( 15, 24, "&SMTCDX DBF CDX MEMO=SMT", 83 ) //S 8
 OPCAO( 16, 24, "&FPTCDX DBF CDX MEMO=FPT", 70 ) //F 9
 OPCAO( 17, 24, "S&IXCDX DBF CDX         ", 73 ) //I 10
 OPCAO( 18, 24, "&DBFNSX DBF NSX         ", 68 ) //D 11
+OPCAO( 19, 24, "DBFBLOB MEMO=DB&V       ", 86 ) //V 12
 KEY := menu( 2, 0 )
 if KEY > 0
    TIPODBF := KEY
@@ -124,6 +125,9 @@ do case
 	case TIPODBF = 11
 	  USOVIA := "DBFNSX"  
 	  rddSetDefault( "DBFNSX" )	  
+	case TIPODBF = 12
+	  USOVIA := "DBFBLOB"  
+	  rddSetDefault( "DBFBLOB" )	  
 	otherwise
 	   USOVIA := "DBFCDX"
 	   rddsetdefault( "DBFCDX" )

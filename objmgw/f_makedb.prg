@@ -177,7 +177,7 @@ DO WHILE .NOT. EMPTY(dbf_name)
    DBCLOSEAREA()
 
    * Testa os sinalizadores e recria a base de dados, se necessario.
-   IF dbf_exist .AND. (create_dbf.OR.lCRIA)
+   IF dbf_exist .AND. (create_dbf .OR. lCRIA)
 
         * Existe uma base de dados antiga. Cria copias de seguranca.
         * Remove todas as copias de seguranca antigas, se houver.
@@ -187,25 +187,32 @@ DO WHILE .NOT. EMPTY(dbf_name)
         lMEMO:=ISMEMO(dbf_name,.f.,.f.)
         memoflds = INFOTIPODBF(dbf_name,.F.)
         memoext=""
-        if memoflds=1
+        if memoflds=131
            memoext= ".DBT"
            RDDSETDEFAULT("DBFNTX")
         endif
-        if memoflds=2
+        if memoflds=245
            memoext= ".FPT"
            cDRIVER="DBFCDX"
            RDDSETDEFAULT("DBFCDX")
         endif
-        if memoflds=3
+        if memoflds=139 //Na memo pack tratara driver sem uso
            memoext= ".DBT"
            cDRIVER="DBFCDX"
            RDDSETDEFAULT("DBFMDX")
         endif
+        if memoflds=229
+           memoext= ".SMT"
+           cDRIVER="SMTCDX"
+           RDDSETDEFAULT("SMTCDX")
+        endif
+
+		if empty(memoext)
+		   memoext:=hb_rddInfo( RDDI_MEMOEXT)
+		endif
+		
 
         dbf_memo:=dbf_name+MEMOEXT
-
-
-
 
 
         * Troca nome dos arquivos da base de dados antiga pelo da copia.
@@ -221,7 +228,7 @@ DO WHILE .NOT. EMPTY(dbf_name)
         ENDIF
 
 
-        IF .NOT. file(temp_dbf) .OR.  (lmemo.AND. ! file(temp_dbt)) //memoflds>0
+        IF .NOT. file(temp_dbf) .OR.  (lmemo .AND. ! file(temp_dbt)) //memoflds>0
              ERROUSO('Arquivos de reservas nao podem ser criados ' + dbf_name,lQUIT,cOLDRDD)
              RETURN 
         ENDIF

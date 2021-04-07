@@ -38,21 +38,22 @@ for counter := 1 to len( packlist )
     endif
 
     nVERSAO:=INFOTIPODBF(cARQNOME,lMES) //traz o tipo pelo reader na f_ismemo
-    //0 Sem memo 1 dbf/dbt 2 dbf/fpt
-
-    IF ! (nVERSAO=1.OR.nVERSAO=2.or.nVERSAO=3)
+   
+    IF ! (nVERSAO=131 .OR. nVERSAO=245 .or. nVERSAO=139)
       ret_value := '6 - Nao Possui Memo' + cARQNOME
       exit
     endif
 
 	IF EMPTY(cUSORDD)
-		cNTXEXT:=".DBT"
-		IF nVERSAO=2
-		   cNTXEXT:=".FPT"
+		cNTXEXT:=".DBT"    //rddSetDefault("DBTCDX")
+		IF nVERSAO=245
+		   cNTXEXT:=".FPT" //rddSetDefault( "FPTCDX" )
+		ENDIF
+		IF nVERSAO=229
+		   cNTXEXT:=".SMT"  //rddSetDefault( "SMTCDX" )
 		ENDIF
     else
-	    cNTXEXT:=hb_rddInfo( RDDI_MEMOEXT) //a extensao do rdiinfo memo do destino vem com ponto
-
+	    cNTXEXT:=hb_rddInfo( RDDI_MEMOEXT) //a extensao do rdiinfo memo do destino vem com parametro
     endif	
 
    //  Verifica se todos os arquivos do array especificado existem.
@@ -68,17 +69,22 @@ for counter := 1 to len( packlist )
 
    //  Abre a base de dados e obtem a contagem de registros.
    IF EMPTY(cUSORDD)
-	   IF nVERSAO=1
-		  RDDSETDEFAULT("DBFNTX")
+	   IF nVERSAO=131
+		  RDDSETDEFAULT("DBFNTX") //rddSetDefault("DBTCDX")
 	   ENDIF
-	   IF nVERSAO=2
-		  RDDSETDEFAULT("DBFCDX")
+	   IF nVERSAO=245
+		  RDDSETDEFAULT("DBFCDX") //rddSetDefault( "FPTCDX" )
 	   ENDIF
-	   IF nVERSAO=3
+	   IF nVERSAO=229
+		  RDDSETDEFAULT("SMTCDX") //rddSetDefault( "SMTCDX" ) SIXCDX
+	   ENDIF
+	   IF nVERSAO=139
 	       ret_value := '8 - driver DBFMDX nao mais disponivel ' 
 	       EXIT
 		  //RDDSETDEFAULT("DBFMDX")
-	   ENDIF  
+	   ENDIF
+
+	   
 	ELSE
 	  RDDSETDEFAULT(cUSORDD)
     ENDIF	
