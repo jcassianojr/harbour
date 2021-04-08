@@ -1,3 +1,4 @@
+//agora nativa Win_PrintDlgDC()
 #pragma BEGINDUMP
 
    #define _WIN32_WINNT   0x0400

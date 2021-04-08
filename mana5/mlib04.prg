@@ -75,7 +75,7 @@ IF dbseek(cSIGLA+upper(TIRACE(&cNOME.)))
    aLAT[ 2 ] := LONGITUDE
    aLAT[ 3 ] := HEMISFERIO
    IF CORSIT = 1
-      ZRUA := "C"+STRZERO(CEPNUSEQ,6)
+      ZRUA := "C" + cCODIBGE
    ENDIF
 endif
 IF dbseek(zESTADO+zCIDADE)

@@ -1,6 +1,24 @@
 #include "try.ch"
 #include "box.ch"
 
+//Win_PrintDlgDC() dialogo impressora nativo
+/* win_PrintDlgDC( [@<cDevice>], [<nFromPage>], [<nToPage>], [<nCopies>] )
+ *                --> <hDC>
+ */
+ /* win_GetOpenFileName( [[@]<nFlags>], [<cTitle>], [<cInitDir>], [<cDefExt>], ;
+ *                      [<acFilter>], [[@]<nFilterIndex>], [<nBufferSize>], [<cDefName>] )
+ *    --> <cFilePath> | <cPath> + e"\0" + <cFile1> [ + e"\0" + <cFileN> ] | ""
+ *
+ */
+/* win_GetSaveFileName( [[@]<nFlags>], [<cTitle>], [<cInitDir>], [<cDefExt>], ;
+ *                      [<acFilter>], [[@]<nFilterIndex>], [<nBufferSize>], [<cDefName>] )
+ *    --> <cFilePath> | <cPath> + e"\0" + <cFile1> [ + e"\0" + <cFileN> ] | ""
+ *
+ */
+/* win_PrintDlgDC( [@<cDevice>], [<nFromPage>], [<nToPage>], [<nCopies>] )
+ *                --> <hDC>
+ */
+
 
 
 function hb_fopen(cARQ)
@@ -378,4 +396,18 @@ DO CASE
   OTHERWISE
 		MsgExclamation( cText )
 ENDCASE
+
+
+//Win_PrintDlgDC() dialogo impressora nativo
+/* win_PrintDlgDC( [@<cDevice>], [<nFromPage>], [<nToPage>], [<nCopies>] )
+ *                --> <hDC>
+ */
+
+FUNCTION shellexecprint(cARQUIVO)
+LOCAL cPrn,ncop := 1
+Win_PrintDlgDC( @cPrn,,,ncop)
+IF !( EMPTY( cPrn ) )
+    wapi_ShellExecute( 0, "print",cARQUIVO, cPrn , 0, 0 )
+ENDIF
+RETURN
 

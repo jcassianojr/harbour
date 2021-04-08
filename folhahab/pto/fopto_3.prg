@@ -120,7 +120,7 @@ while .T.
         imphp()       
    case opcao = 29
         fopto_32()
-        //printersetup()       
+		//Win_PrintDlgDC()     
    otherwise
      __SetCentury( .t. )
       retu

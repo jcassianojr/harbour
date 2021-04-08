@@ -31,15 +31,13 @@ Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 SetCursor(.t.)
 
-
-
-
 aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
             "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
             "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO" ,"EX","XX"}
 			
 Lmunicipios:=.f.
             
+			
 if file("municipios.dbf") .and. file("md10imp.dbf") .and. MsgYesNo("importar municipios/sped")
    use md10imp new exclusive
    ZAP
@@ -415,34 +413,8 @@ IF MsgYesNo("Ajustar tipos de rua")
 			    ENDIF
 			endif	
 
-			//Ja ajustado agora char 1 em branco no campo apenas para nao travar programas associados a tabelas de rua
-			/*
-            IF VAL(TITULO)>0  //''01,02... gravado numero por engano
-			   FIELD->TITULO=""
-			ENDIF 
-			
-			IF ! EMPTY(TITULO) .AND. AT(ALLTRIM(TITULO),RUA)>0
-			   FIELD->TITULO=""
-			ENDIF
-			
-			IF ! EMPTY(TITULO) .AND. AT(ALLTRIM(TITULO),RUA)=0
-			   FIELD->RUA:=ALLTRIM(TITULO)+" "+RUA
-			   FIELD->TITULO=""	   
-			ENDIF
-			*/
 			
 			
-			//montar tratamento ate
-            //nPOS:=AT(" ATE ",RUA) // ATE 99999
-            //IF nPOS>0
-			//   cRUA:=ALLTRIM(LEFT(RUA,nPOS-1))
-			//   cTIPO:=ALLTRIM(substr(RUA,nPOS+4))
-			//   ALERTX(rua)
-			//   ALERTX(cRUA)
-			//   ALERTX(cTIPO)
-			//   Quit
-			//ENDIF
-			   
 			
 			
 			 
@@ -611,29 +583,6 @@ if MsgYesNo( "Ajustar DDD Fixas Estados" )
       dbselectar( "MD10" )
       dbskip()
    enddo
-   /*
-   dbselectar("MDUFDDD")
-   dbsetorder(3) //ddd
-   dbselectar("anatel")
-   dbgotop()
-   while ! eof()
-      mDDD:=DDD
-      mUF:=UF
-      IF EMPTY(mUF).AND. ! EMPTY(mDDD)
-         dbselectar("MDUFDDD")
-         dbgotop()
-         if dbseek(mDDD)
-            mUF:=UF
-         endif
-      ENDIF
-      dbselectar("anatel")
-      IF EMPTY(UF).AND.! EMPTY(mUF)
-         netgrvcam("UF",mUF)
-      ENDIF
-      dbskip()
-   enddo
-   dbcloseall()
-   */
    fwrite( nUSO, chr( 26 ) )
    fclose( nUSO )
 endif

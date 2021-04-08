@@ -23,8 +23,8 @@
 *+--------------------------------------------------------------------
 *+
 
-MDI(" Ý Apagando Tabelas CEPS")
-MDS("Apagando Tabelas")
+MDI(" Recriar configuracao Tabelas CEPS")
+MDS("Apagando configuracao Tabelas")
 IF !USEREDE("MD01",0,99)
    RETU .F.
 ENDIF
@@ -69,11 +69,12 @@ WHILE !EOF()
    DBSKIP()
 ENDDO
 
+mds("recriando")
 DBSELECTAR("MD10")
 DBGOTOP()
 WHILE !EOF()
    IF CORSIT = 1 .AND. CEPNUSEQ > 0   //Possui CEP Localidade
-      mARQUIVO := "C"+STRZERO(CEPNUSEQ,6)
+      mARQUIVO := "C" + cCODIBGE
       mDESCR   := ALLTRIM("CEP:"+UF+":"+NOME)
       DBSELECTAR("MANARQ")
       netrecapp()

@@ -3,7 +3,7 @@
 *+    FLIB08.PRG
 *+
 *+    Functions: Function CHECKIMP(nTIP,lIMPHP)
-*+               Function IMPEND()17
+*+               Function IMPEND()
 *+               Function IMPSTR(cVAR)
 *+               Function IMPCHR(cVAR)
 *+               Function IMPFOL(cVAR)
@@ -270,6 +270,8 @@ return RETORNO
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 *+
 function IMPEND(lAPAGA)
+LOCAL cTELA
+LOCAL nOPCAO
 IF VALTYPE(lAPAGA)#"L"
    lAPAGA:=.T.
 ENDIF
@@ -327,11 +329,23 @@ endif
 *+   10 - &PDF
 *+   17 - preview zebra
 if nTIPSPO = 6 .or. nTIPSPO =7  .or. nTIPSPO = 8 .or. nTIPSPO = 9 .or. nTIPSPO = 10 .or. nTIPSPO = 17
-   IF MDG("Email=SIM VISUALIZAR=NAO")
-      filetoemail(cFILE)   
-   ELSE
-      wapi_ShellExecute( 0, 0, cFILE,"", 0, 1 )
-   ENDIF   
+   cTELA := savescreen( 6, 0, 17, 80 )
+   CLSBOX( 6, 0, 17, 80 )
+   HB_dispbox( 6, 0, 17, 79, B_DOUBLE+" ")
+   oPCAO( 07, 01, " &Imprimir  ", 73 ) //1 
+   oPCAO( 08, 01, " &Abrir     ", 65 ) //2
+   oPCAO( 09, 01, " &Email     ", 69 ) //3
+   oPCAO( 10, 01, " &Retornar  ", 82 ) //4
+   nOPCAO := menu(, 0 )
+   restscreen( 6, 0, 17, 80, cTELA )
+   DO CASE
+      CASE nOPCAO=1
+	       shellexecprint(cFILE)
+	  CASE nOPCAO=2
+			wapi_ShellExecute( 0, "open", cFILE,"", 0, 1 )
+	  CASE nOPCAO=3
+	        filetoemail(cFILE)
+   ENDCASE
 endif
 cIMPORI:=""
 lIMPEMAIL:=.F.
@@ -359,7 +373,7 @@ retu cVAR
 *+
 function IMPCHR( cCAR )     //Passada codigo ascii
 if type( "nTIPSPO" ) = "U" .OR. nTIPSPO = 2 .or. nTIPSPO=3 ;
-                           .or. nTIPSPO= 4   .OR. nTIPSPO=13 ; 
+                           .or. nTIPSPO= 4  .OR. nTIPSPO=13 ; 
                            .OR. nTIPSPO=14  .OR. nTIPSPO=5  //lpt123 com12 winusb/troca tamanho letra
 else
    retu ""

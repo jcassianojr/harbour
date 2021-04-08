@@ -37,7 +37,7 @@
 *+
 *+
 *+
-func ENDCID(cESTADO,cCIDADE,eENDCID,eENDCEP,eENDNUM)
+funcTION ENDCID(cESTADO,cCIDADE,eENDCID,eENDCEP,eENDNUM)
 
 LOCAL nCORSIT
 cARQCEP := space(8)
@@ -48,7 +48,7 @@ cNUM    := &eENDNUM.
 cCIDADE := upper(TIRACE(cCIDADE))
 nCORSIT := OBTER("MD10",cESTADO+cCIDADE,"CORSIT")
 IF nCORSIT = 1
-   cARQCEP := "C"+STRZERO(OBTER("MD10",cESTADO+cCIDADE,"CEPNUSEQ"),6)
+   cARQCEP := "C"+OBTER("MD10",cESTADO+cCIDADE,"CODIBGE")
 ENDIF
 if empty(cARQCEP)
    retu .T.
@@ -58,7 +58,7 @@ if empty(cENDCID)
    &eENDCID. := cEND
    &eENDCEP. := cCEP
 else
-   if !CHECKCEP(cARQCEP,cEND,cNUM)
+   if ! CHECKCEP(cARQCEP,cEND,cNUM)
       ENDCIDP(cARQCEP)
       &eENDCID. := cEND
       &eENDCEP. := cCEP
@@ -71,17 +71,11 @@ retu .T.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function ENDCIDP()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func ENDCIDP(cARQ)
+funcTION ENDCIDP(cARQ)
 
 
 local xTELA := savescreen(00,00,24,79)
@@ -121,42 +115,28 @@ METBRO(cARQ,{{"RUA","mRUA"}},{cCOR,cCOR,cCOR,cCOR,cCOR},;
  {|| RUA+' '+CEP},{|| ALLTRUE()},;
  {|| ALLTRUE()},,,3,,,{|| eENDCID()},cEND)
 restscreen(00,00,24,79,xTELA)
-retu .T.
+return .T.
 
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function eENDCID()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func eENDCID
-
-
+funcTION eENDCID
 cEND := RUA
 cCEP := CEP
-retu .T.
+return .T.
 
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function CHECKCEP()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func CHECKCEP(cARQ,cEND,cNUM)
+funcTION CHECKCEP(cARQ,cEND,cNUM)
 
 
 local cLADO
