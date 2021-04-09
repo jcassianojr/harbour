@@ -90,7 +90,7 @@ dbselectar(cARQ)
 while !eof()
    mESTADO := &cESTADO.
    mCIDADE := &cCIDADE.
-   if mESTADO <> "XX".AND. mESTADO <> "EX"
+   if mESTADO <> "XX" .AND. mESTADO <> "EX" .AND. mESTADO <> "??"
       dbselectar("MD10")
       dbgotop()
       if dbseek(mESTADO+upper(TIRACE(mCIDADE)))
@@ -98,7 +98,7 @@ while !eof()
          ZDDD      := DDD
          ZCEP      := INICEP
          ZCEPFIM   := FIMCEP
-         ZRUA      := "C" + cCODIBGE //STRZERO(CEPNUSEQ,6)   //alltrim( ARQUIVO )
+         ZRUA      := "C" + cCODIBGE 
          aLAT[ 1 ] := LATITUDE
          aLAT[ 2 ] := LONGITUDE
          aLAT[ 3 ] := HEMISFERIO

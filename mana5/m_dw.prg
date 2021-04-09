@@ -73,7 +73,7 @@ mds("recriando")
 DBSELECTAR("MD10")
 DBGOTOP()
 WHILE !EOF()
-   IF CORSIT = 1 .AND. CEPNUSEQ > 0   //Possui CEP Localidade
+   IF val(cCODIBGE) > 0   //CEP Localidade =ibge
       mARQUIVO := "C" + cCODIBGE
       mDESCR   := ALLTRIM("CEP:"+UF+":"+NOME)
       DBSELECTAR("MANARQ")

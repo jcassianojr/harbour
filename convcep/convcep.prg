@@ -72,10 +72,8 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. MsgYesNo( "Importar C
    dbgotop()
    while ! eof()   
 
-		mCEPNUSEQ := 0 // Agora ibge mantendo zero ate remover de vez da base checando programas que usam md10
-        mNOME     := md10imp->nome        
+	    mNOME     := md10imp->nome        
         mUF       := md10imp->uf
-        mCORTIP   := md10imp->cortip
         mNOME     := tratanome( mNOME,.T.,.T. )     
         mDDD      := md10imp->DDD
         mCODIBGE  := md10imp->CODIBGE        
@@ -121,9 +119,6 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. MsgYesNo( "Importar C
            endif
         ENDIF   
         IF lACHEI
-          // if ! empty(mCORTIP) // Atualiza se tiver o tipo novo estiver preenchido
-          //     md10->CORTIP := mCORTIP 
-          // endif           
            if ! empty(mDDD)  .AND. EMPTY(md10->DDD)           
                md10->DDD := mDDD
            endif   
@@ -152,10 +147,7 @@ if MsgYesNo( "Ajustar Arquivo Checagem 5 Digitos MD10->MD11" )
    while !eof()
       @ 24, 70 say recno()
       mCEPINI := left( INICEP, 5 )
-      mCEPFIM := left( INICEP, 5 )
-      if CORSIT = 1                     //Ceps por Rua
-         mCEPFIM := left( FIMCEP, 5 )
-      endif
+      mCEPFIM := left( FIMCEP, 5 )
       if !empty( mCEPINI )
          dbselectar( "MD11" )
          mCEPINI := val( mCEPINI )
@@ -646,48 +638,32 @@ if MsgYesNo( "Gerar Log Duplicidades/Ajustes" )
 
 
    //codibge
-   aAPAGA:={}
    dbsetorder( 3 )
    dbgotop()
    while !eof()
       @ 24, 00 say UF + NOME
       nSEQ := Codibge
       nRECOLD:=RECNO()
-      mTIPOLD:=CORTIP
       IF ! EMPTY(CODIBGE)
          cUFCOD:=CODUF(CODIBGE,"UF")
-         IF cUFCOD<>UF
+         IF cUFCOD<>UF ''Checagem 2 digitos inicial da codibge do estado
             fwrite( nUSO, "CodIBGE <> UF : "+Codibge + " " + UF +"<>"+cUFCOD + " " + NOME + +HB_OSNEWLINE())
          ENDIF
       ENDIF
       dbskip()
       if !eof()
-         if nSEQ = Codibge
-            if UF <> "XX" .and. ! empty(codibge)               
-               IF CORTIP<>"M" //apaga ibge se for (L)ogradouro ou (P)rovincia
-                  AADD(aAPAGA,RECNO()) //limpa ibge depois para nao perder ordenacao
-               else
-                  IF mTIPOLD="M"
-                     fwrite( nUSO, "IBGE: "+Codibge + " " + UF + " " + NOME + +HB_OSNEWLINE())
-                  ELSE
-                     AADD(aAPAGA,nRECOLD) 
-                  ENDIF                  
-               ENDIF
-            endif            
+         if nSEQ = CodIBGE
+            if UF <> "XX" .and. ! empty(codibge)  //ibge duplicado
+               fwrite( nUSO, "CODIBGE: "+CodiBGE + " " + UF + " " + NOME + +HB_OSNEWLINE() )
+            endif
          endif
       endif
+	  
    enddo
    
-   for z=1 to len(aAPAGA)
-       dbgoto(aAPAGA[Z])
-       netreclock()
-       field->codibge:=""
-       field->codirrf:=""
-       dbunlock()       
-   next z
 
    //codirrf
-   dbsetorder( 5 )
+   dbsetorder( 4 )
    dbgotop()
    while !eof()
       @ 24, 00 say UF + NOME
@@ -695,7 +671,7 @@ if MsgYesNo( "Gerar Log Duplicidades/Ajustes" )
       dbskip()
       if !eof()
          if nSEQ = Codirrf
-            if UF <> "XX" .and. ! empty(codirrf)
+            if UF <> "XX" .and. ! empty(codirrf) //irrf duplicado
                fwrite( nUSO, "IRRF: "+Codirrf + " " + UF + " " + NOME + +HB_OSNEWLINE() )
             endif
          endif
@@ -753,10 +729,8 @@ IF MsgYesNo("Contar Cidades")
    WHILE ! EOF()
       nQTDECID:=0
       cUF = UF
-      WHILE cUF=UF.AND.! EOF()
-          IF CORTIP="M" .and. ! empty(codibge)
+      WHILE cUF=UF.AND.! EOF() //todos agora na MD1O sao M com codigo ibge 
              nQTDECID++
-          ENDIF   
           @ 24,00 SAY UF+" "+NOME
           DBSKIP()
       ENDDO

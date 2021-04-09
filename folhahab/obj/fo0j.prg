@@ -1,3 +1,4 @@
+
 *:*****************************************************************************
 *:
 *:       FO0J.PRG: Alterar Tabela de Imposto de Renda
@@ -16,10 +17,6 @@
 *:               : FOKS               (processo  em FO0J.PRG)
 *:               : FOKG               (processo  em FO0J.PRG)
 *:
-*:     Arq. Dados: CODIRRF
-*:
-*:         Indice: CODIRRF    Codigo de Retencao
-*:                             CODIGO
 *:
 *:     Documentado 05/13/94 em 14:54                DISK!  vers„o 5.01
 *:*****************************************************************************

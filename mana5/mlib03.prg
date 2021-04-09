@@ -47,7 +47,7 @@ func CHECKUF(cSIGLA)
 if lastkey() = K_UP .or. lastkey() = K_DOWN
    retu .T.
 endi
-IF cSIGLA = "XX"
+IF cSIGLA = "XX" .or. cSIGLA = "EX" .OR. cSIGLA = "??"
    ZRUA := ""
 ENDIF
 if !VERSEHA("MD05",&cSIGLA.,"'Estado de : '+NOMEEXT")

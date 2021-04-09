@@ -136,7 +136,7 @@ while ! eof()
    ENDIF
    
    eBUSCA   :=cUF+TRATANOME(cCIDADE)
-   nCEPNUSEQ:=0 //sequencia sempre zero pois agora e o ibge como sequencia
+   ncodibge:=0 //sequencia sempre zero pois agora e o ibge como sequencia
    eLOCALBAI:=0
    lACHEI:=.F.
    @ 24,00 say  cUF+ cCIDADE + STR(RECNO()) + "/" + STR(nLASTREC)   
@@ -144,15 +144,14 @@ while ! eof()
 	   dbselectar("MD10")
 	   dbsetorder(1)
 	   dbgotop()
-	   if dbseek(eBUSCA)
-		  //nCEPNUSEQ:=MD10->CEPNUSEQ     
+	   if dbseek(eBUSCA)     
 		  cCODIBGE:=alltrim(MD10->CODIBGE)
 		  IF VAL(MD10->CODIBGE)>0
-			nCEPNUSEQ:=VAL(MD10->CODIBGE)
+			ncodibge:=VAL(MD10->CODIBGE)
 		  ENDIF
 		  lACHEI:=.T.
 	   endif
-	   if nCEPNUSEQ=0
+	   if ncodibge=0
 		  dbselectar("cidconv")
 		  dbgotop()
 		  if dbseek(eBUSCA)
@@ -161,16 +160,15 @@ while ! eof()
 		  dbselectar("MD10")
 		  dbsetorder(1)
 		  dbgotop()
-		  if dbseek(eBUSCA)
-//			 nCEPNUSEQ:=MD10->CEPNUSEQ     
+		  if dbseek(eBUSCA)     
 			cCODIBGE:=alltrim(MD10->CODIBGE)
 	 		IF VAL(MD10->CODIBGE)>0
-				nCEPNUSEQ:=VAL(MD10->CODIBGE)
+				ncodibge:=VAL(MD10->CODIBGE)
 			ENDIF
 			 lACHEI:=.T.
 		  endif      
 	   endif
-	   if nCEPNUSEQ=0 .AND. AT("(",cCIDLOOP)>0  //cidades com nome parentes
+	   if ncodibge=0 .AND. AT("(",cCIDLOOP)>0  //cidades com nome parentes
 		  eBUSCA   :=cUF+TRATACIDADE(cCIDLOOP)
 		  dbselectar("MD10")
 		  dbsetorder(1)
@@ -178,20 +176,19 @@ while ! eof()
 		  if dbseek(eBUSCA)
 			cCODIBGE:=alltrim(MD10->CODIBGE)
 	 		IF VAL(MD10->CODIBGE)>0
-				nCEPNUSEQ:=VAL(MD10->CODIBGE)
+				ncodibge:=VAL(MD10->CODIBGE)
 			ENDIF
 			 lACHEI:=.T.
 		  endif      
 	   endif
    endif	   
-   if nCEPNUSEQ=0 .AND. ! EMPTY(cCODIBGE)
+   if ncodibge=0 .AND. ! EMPTY(cCODIBGE)
      dbselectar("MD10")
      dbsetorder(3)
 	 dbgotop()
 	 if dbseek(cCODIBGE)
-//	    nCEPNUSEQ:=MD10->CEPNUSEQ
  		IF VAL(MD10->CODIBGE)>0
-			nCEPNUSEQ:=VAL(MD10->CODIBGE)
+			ncodibge:=VAL(MD10->CODIBGE)
 		ENDIF
 		IF EMPTY(cUF) .OR. EMPTY(cCIDADE)
            cUF      :=MD10->UF
@@ -203,7 +200,7 @@ while ! eof()
    endif
    
    
-   if nCEPNUSEQ=0  .AND. lACHEI
+   if ncodibge=0  .AND. lACHEI
       /*
 			   dbselectar("MD10")
 			   dbgotop()
@@ -217,20 +214,16 @@ while ! eof()
      */		   
    ENDIF
    
-   if nCEPNUSEQ=0  .AND. lACHEI      
-      nCEPNUSEQ:=9999999 //tratado abaixo pois ibge 7 digitos cepnrua 6
+   if ncodibge=0  .AND. lACHEI      
+      ncodibge:=9999999 //tratado abaixo pois ibge 7 digitos cepnrua 6
    endif
    lCEPRUA:=.F.
    
    
    
-    IF nCEPNUSEQ>0//agora sempre ibge
-	   //IF nCEPNUSEQ=9999999
+    IF ncodibge>0//agora sempre ibge
 	   cARQRUA := "C" + cCODIBGE
-       nCEPNUSEQ:=val(cCODIBGE)
-	   //ELSE
-	   //cARQRUA := "C" + strzero( nCEPNUSEQ, 6 )	   
-	   //endif
+       ncodibge:=val(cCODIBGE)
 	   if ! file( cARQRUA + ".dbf" ) 
    	      fileCOPY("CEPRUA.DBF",cARQRUA+".DBF")
 		  dbusearea( .T., "DBFCDX", cARQRUA,, .T. )
@@ -428,7 +421,7 @@ while ! eof()
 		 
 		 if empty(field->chvbai) .AND. ! EMPTY(cBAIRRO)                        		 
 			nCHVBAI:=0			 
-			eBUSCA:=STR(nCEPNUSEQ,7)+cBAIRRO
+			eBUSCA:=STR(ncodibge,7)+cBAIRRO
 			dbselectar("cepbai")
 			dbsetorder(4) // nome bairro
 			dbgotop()
@@ -436,7 +429,7 @@ while ! eof()
 			   nCHVBAI:=bai_nu_seq
 			endif			 
 		    if nCHVBAI=0 
-			   eBUSCA:=STR(nCEPNUSEQ,7)+cBAIRRO
+			   eBUSCA:=STR(ncodibge,7)+cBAIRRO
 			   dbselectar("cepbai")
 			   dbsetorder(5) // nome bairro abreviado
 			   dbgotop()
@@ -450,7 +443,7 @@ while ! eof()
 			   dbselectar("cepbai")
 			   dbappend()
 			   cepbai->bai_nu_seq:=nLASTBAIRRO
-			   cepbai->loc_nu_seq:=nCEPNUSEQ
+			   cepbai->loc_nu_seq:=ncodibge
 			   cepbai->bai_no    :=cBAIRRO
 			   cepbai->bai_no_abr:=cBAIRRO
 			   nCHVBAI:=bai_nu_seq

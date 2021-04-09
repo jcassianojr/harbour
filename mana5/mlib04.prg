@@ -53,7 +53,7 @@ ZCEP    := ""
 ZCEPFIM := ""
 ZKM     := 0
 ZRUA    := ""
-if cSIGLA = "XX"
+if cSIGLA = "XX" .or. cSIGLA = "EX" .OR. cSIGLA = "??"
    MDS("Exterior nao ser  checada cidade")
    retu .T.
 endif
@@ -74,9 +74,7 @@ IF dbseek(cSIGLA+upper(TIRACE(&cNOME.)))
    aLAT[ 1 ] := LATITUDE
    aLAT[ 2 ] := LONGITUDE
    aLAT[ 3 ] := HEMISFERIO
-   IF CORSIT = 1
-      ZRUA := "C" + cCODIBGE
-   ENDIF
+   ZRUA := "C" + cCODIBGE
 endif
 IF dbseek(zESTADO+zCIDADE)
    aLAT[ 4 ] := LATITUDE
