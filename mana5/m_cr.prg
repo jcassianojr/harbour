@@ -24,7 +24,7 @@
 *+
 
 IF MDG("Revisar Roteiro")
-   PADRAO(0,1,0,"MANATU","Origem   Destino","' '+mARQUIVO1+' '+mARQUIVO2","MCR")
+   PADRAO(0,1,0,"MANATU","Origem   Destino Indice","' '+mARQUIVO1+' '+mARQUIVO2+' '+STRZERO(mINDICE,2)","MCR")
 ENDIF
 
 IF !USEREDE("MANATU",1,1)
@@ -32,7 +32,7 @@ IF !USEREDE("MANATU",1,1)
 ENDIF
 DBGOTOP()
 WHILE !EOF()
-   ATUALIZA(ALLTRIM(ARQUIVO1),ALLTRIM(ARQUIVO2))
+   ATUALIZA(ALLTRIM(ARQUIVO1),ALLTRIM(ARQUIVO2),,INDICE)
    DBSELECTAR("MANATU")
    DBSKIP()
 ENDDO
@@ -43,32 +43,33 @@ DBCLOSEALL()
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Function ATUALIZA()
-*+
-*+
+*+    Function ATUALIZA(cORIGEM,cDESTINO,lAPAGAORIGEM,nINDICE)
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNC ATUALIZA(xARQUIVO1,xARQUIVO2,lAPAGA)
+FUNCTION ATUALIZA(xARQUIVO1,xARQUIVO2,lAPAGA,nIND)
 
-IF VALTYPE(lAPAGA) # "L"
+IF VALTYPE(lAPAGA) # "L" 
    lAPAGA := .T.
 ENDIF
+IF VALTYPE(nIND)<>"N" 
+   nIND:=1
+ENDIF   
+IF nIND=0
+   nIND:=1
+ENDIF
+
 IF ! file(xARQUIVO1+".DBF")
-   RETU .F.
+   RETURN .F.
 ENDIF
-IF !USECHK(xARQUIVO1,,.T.)
-   RETU .F.
+IF ! USECHK(xARQUIVO1,,.T.)
+   RETURN .F.
 ENDIF
-IF !USEREDE(xARQUIVO2,1,99)
+IF ! USEREDE(xARQUIVO2,1,99)
    DBCLOSEALL()
-   RETU .F.
+   RETURN .F.
 ENDIF
-DBSETORDER(1)
+DBSETORDER(nIND)
 xBUSCA := INDEXKEY()
 
 
