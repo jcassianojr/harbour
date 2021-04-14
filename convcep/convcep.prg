@@ -646,7 +646,7 @@ if MsgYesNo( "Gerar Log Duplicidades/Ajustes" )
       nRECOLD:=RECNO()
       IF ! EMPTY(CODIBGE)
          cUFCOD:=CODUF(CODIBGE,"UF")
-         IF cUFCOD<>UF ''Checagem 2 digitos inicial da codibge do estado
+         IF cUFCOD<>UF //Checagem 2 digitos inicial da codibge do estado
             fwrite( nUSO, "CodIBGE <> UF : "+Codibge + " " + UF +"<>"+cUFCOD + " " + NOME + +HB_OSNEWLINE())
          ENDIF
       ENDIF
