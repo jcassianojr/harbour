@@ -11,9 +11,6 @@ ENDIF
 if valtype(nINDICE2)#"N"
    nINDICE2:=1
 endif
-//IF VALTYPE(xINDICE2)#"C"
-//   xINDICE2=xARQUIVO2
-//ENDIF
 IF ! NETUSE(xARQUIVO1,,,,,.F.,) 
    RETU .F.
 ENDIF
@@ -51,8 +48,9 @@ WHILE ! EOF()
       do case   
          case xARQUIVO1="NEWPAISES" .AND. EMPTY(UF)
               NETRECLOCK()
-              FIELD->UF:="EX"              
+              FIELD->UF:="EX"  
               dbunlock()
+			  REPLVARS( .T. , .T.)
          case xARQUIVO1="NEWCNAE2" .AND. EMPTY(ALIQ_ATV) .and. ! empty(mALIQ_ATV)
               netreclock()
               field->ALIQ_ATV:=mALIQ_ATV

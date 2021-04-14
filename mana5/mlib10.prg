@@ -44,7 +44,7 @@ func VERUF(eCEP,eUF,eCID)
 LOCAL X
 LOCAL lCONT := .T.
 LOCAL cCEP
-if &eUF. = "XX"  .OR.  &eUF. = "EX"  &eUF. = "??"//Nao Checa Exterior
+if &eUF. = "XX"  .OR.  &eUF. = "EX" .or. &eUF. = "??" //Nao Checa Exterior
    ZRUA    := ""
    ZDDD    := ""
    ZCEP    := ""

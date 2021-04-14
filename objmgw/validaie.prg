@@ -1,5 +1,3 @@
-
-
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 *+    Module => validae.PRG
@@ -30,15 +28,15 @@ ZERRO:=""
 
 
 if lastkey() = K_UP .or. lastkey() = K_DOWN
-   retu .T.         //Mandou Proceguir
+   retu .T.         //Mandou Prosseguir
 endif
 
 IF VALTYPE(lMES)<>"L"
    lMES:=.T.
 ENDIF
-IF VALTYPE(lOLD)<>"L"
-   lOLD:=.T.
-ENDIF
+//IF VALTYPE(lOLD)<>"L" //SP TIPO P tradado pela formula ValidIE_SP
+//   lOLD:=.T.
+//ENDIF
 
 
 if ( empty( cinsc ) )   
@@ -51,17 +49,19 @@ if ( empty( cUF) )
    ZERRO:="Estado em Branco"
 endif
 
+
+
 if cUF = "XX".OR.cUF = "EX"
-   if left( upper( cINSC ), 5 ) = "ISENT"   .OR.  cINSC = "00000000000000"
-      return .T.         //Exterior
+   if left( upper( cINSC ), 5 ) = "ISENT"   .OR.  cINSC = "00000000000000" 
+      return .T.         //Exterior //isent
    else   
       ZNERRO:=3
       ZERRO:="Exterior <> Isento ou 00000000000000"
    endif
 endif
 
-if left( upper( cINSC ), 5 ) = "ISENT" // isento isenta
-   return .T.         
+if left( upper( cINSC ), 5 ) = "ISENT" .OR. (at("NAO",upper(cINSC))>0 .AND. at("CONTRIB",upper(cINSC))>0 )
+   return .T.    //isento isenta //nao contribuinte     
 endif
 
 
@@ -78,9 +78,11 @@ cINSC := strtran( cINSC, "/", "" )
 cINSC := STRTRAN(cINSC,'ME','')           //Micro Empresa
 cINSC := STRTRAN(cINSC,' ','')
 cINSC := STRTRAN(cINSC,',','')
-if ! lOLD
-   cINSC := STRTRAN(cINSC,'P','')           //Produtor rural sp tratado pela formula 
-ENDIF   
+
+
+//if ! lOLD
+//   cINSC := STRTRAN(cINSC,'P','')   //SP TIPO P tradado pela formula ValidIE_SP
+//ENDIF   
 
 
 if LEN(cINSC)<8

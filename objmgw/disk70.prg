@@ -16,16 +16,15 @@
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
-//////#INCLUDE "COMANDO.CH"
 
-//  GravaCampo Funao Replace otimizada
+//  GravaCampo Funcaao Replace otimizada
 //  aCAMPO (Matriz ou Variavel) //Requer Haspas sofrer  Macro
 //  aVAR   (Matriz ou Variavel) //Requer Haspas sofrer  Macro
 //  cUSO   (Mensagem Auxiliar caso Haja Erro
 //  Somente grava se o tipo do campo do arquivo for igual ao da varivel
 //  Nao Grava se o campo do arquivo nao existir
-//  Caso o campo seja caracter e a variavel no faz as conversoes e grava
-//  Caso o campo seja MEMO  e a variavel no faz as conversoes e grava
+//  Caso o campo seja caracter e a variavel nao faz as conversoes e grava
+//  Caso o campo seja MEMO  e a variavel nao faz as conversoes e grava
 //  Caso o campo seja numerico corta os dados caso o tamanho da varivel
 //       seja maior que o campo e grava
 //  Exibe uma mensagem do erro no video
@@ -35,13 +34,14 @@
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function GravaCampo()
 *+
-*+    Called from ( disk70.prg   )   1 - function replvars()
+*+    Function GravaCampo(aCAMPO, aVAR, cUSO, lLOCK, lMES, lMACRO ,lLOG)
+*+
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-func GravaCampo( aCAMPO, aVAR, cUSO, lLOCK, lMES, lMACRO ,lLOG)
+*+
+function GravaCampo( aCAMPO, aVAR, cUSO, lLOCK, lMES, lMACRO ,lLOG)
 
 local cERRO
 local nHANDLE
@@ -79,7 +79,7 @@ if lLOCK
    netreclock()
 endif
 aSTRU := dbstruct()
-if valtype( aCAMPO ) = "C" .and. valtype( aVAR ) = "C"      //nao  mantriz
+if valtype( aCAMPO ) = "C" .and. valtype( aVAR ) = "C"      //nao E mantriz
    eVAR   := aVAR
    eCAMPO := aCAMPO
    aCAMPO := { eCAMPO }                 //Vira uma matriz
@@ -88,10 +88,6 @@ endif
 for XCAMPO := 1 to len( aVAR )
    eVAR   := aVAR[ XCAMPO ]
    eCAMPO := aCAMPO[ XCAMPO ]
-   
-   //@ 24,60 SAY eCAMPO
-   //@ 24,70 SAY &eVAR.
-    
    if lMACRO
       cTIPOV := type( eVAR )
    else
@@ -171,18 +167,18 @@ if lLOCK
    dbunlock()
 endif
 dbcommit()
-retu .T.
+return .T.
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function GravaERRO()
 *+
-*+    Called from ( disk70.prg   )   2 - function gravacampo()
+*+    Function GravaERRO(cARQ, aMES)
+*+
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-func GravaERRO( cARQ, aMES )
-
+*+
+function GravaERRO( cARQ, aMES )
 local X
 if valtype( cARQ ) # "C"
    cARQ := "ERRO.TXT"
@@ -200,6 +196,7 @@ for X := 1 to len( aMES )
    fwrite( nHandle, STRVAL( aMES[ X ] ) + chr( 13 ) + chr( 10 ) )
 next X
 fclose( nHandle )
+return .T.
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -207,15 +204,14 @@ fclose( nHandle )
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-function CLRVARS( cOPER )
-
+function CLRVARS()
 local aSTRU
 aSTRU := dbstruct()
 for XPOS := 1 to len( aSTRU )
    field_name  := "m" + lower( aSTRU[ XPOS, 1 ] )
    &field_name := MAKEVAR( aSTRU[ XPOS, 2 ], aSTRU[ xPOS, 3 ], aSTRU[ xPOS, 4 ] )
 next
-retu .t.
+return .t.
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -224,7 +220,6 @@ retu .t.
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 function EQUVARS
-
 //  Carrega dos campos da b. de dados as variaveis de memoria criadas por INITVARS.
 local field_cnt    := fcount()
 local counter      := 0
@@ -243,7 +238,6 @@ return .T.
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 function FREEVARS
-
 //  Libera as variaveis criadas por INITVARS.
 local counter      := 0
 local field_cnt    := fcount()
@@ -262,7 +256,6 @@ return .T.
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 function INITVARS
-
 //  Cria variaveis de memoria para cada campo da base de dados ativa.
 //  Atencao: Esta rotina declara uma variavel de memoria PUBLICA para
 //  cada campo da base de dados selecionada. Libera as variaveis,
@@ -281,12 +274,11 @@ return .T.
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function REPLVARS()
+*+    Function REPLVARS(lCHECK)
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-function REPLVARS( lCHECK )
-
+function REPLVARS( lCHECK,lVAZIO )
 //  Substitui o registro pelo valor das variaveis de memoria.
 local field_cnt    := fcount()
 local counter      := 0
@@ -296,6 +288,10 @@ private field_name
 if valtype( lCHECK ) # "L"
    lCHECK := .T.
 endif
+if valtype( lVAZIO ) # "L"
+   lVAZIO := .F.
+endif
+
 //  Obtem o numero de campos.
 field_cnt := fcount()
 if lCHECK           //Com Checagem chama gravacampo
@@ -304,14 +300,18 @@ if lCHECK           //Com Checagem chama gravacampo
    aVAR := {}
    for counter := 1 to field_cnt
       field_name := lower( field( counter ) )
-      aadd( Acam, field_name )
-      aadd( AVAR, "m" + field_name )
+	  IF .not. lVAZIO .or. (empty(field->&field_name) .and. ! empty(m&field_name))
+		 aadd( Acam, field_name )
+         aadd( AVAR, "m" + field_name )
+	  ENDIF	 
    next
-   gravacampo( aCAM, aVAR,,, )
+   gravacampo( aCAM, aVAR,,, )   //GravaCampo(aCAMPO, aVAR, cUSO, lLOCK, lMES, lMACRO ,lLOG)
 else                //Sem checagem
    for counter := 1 to field_cnt
       field_name         := lower( field( counter ) )
-      field->&field_name := m&field_name
+	  IF .not. lVAZIO .or. (empty(field->&field_name) .and. ! empty(m&field_name))
+         field->&field_name := m&field_name
+	  endif	 
    next
 endif
 return .T.
@@ -320,12 +320,10 @@ return .T.
 *+
 *+    Function MAKEVAR()
 *+
-*+    Called from ( disk70.prg   )   1 - function clrvars()
-*+                                   1 - function make_empty()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-func MAKEVAR( cTIPO, nLEN, nDEC )
+function MAKEVAR( cTIPO, nLEN, nDEC )
 local eRETU
 eRETU := NIL
 if valtype( nLEN ) # "N"
@@ -335,16 +333,16 @@ if valtype( nDEC ) # "N"
    nDEC := 0
 endif
 do case
-case cTIPO = "C" .or. cTIPO = "M"
-   eRETU := spac( nLEN )
-case cTIPO = "D"
-   eRETU := ctod( "  /  /  " )
-case cTIPO = "L"
-   eRETU := .F.
-case cTIPO = "N"
-   eRETU := val( str( 0, nLEN, nDEC ) )
+	case cTIPO = "C" .or. cTIPO = "M"
+	   eRETU := spac( nLEN )
+	case cTIPO = "D"
+	   eRETU := ctod( "  /  /  " )
+	case cTIPO = "L"
+	   eRETU := .F.
+	case cTIPO = "N"
+	   eRETU := val( str( 0, nLEN, nDEC ) )
 endcase
-retu eRETU
+return eRETU
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -352,8 +350,7 @@ retu eRETU
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-func MAKE_EMPTY( eCAMPO )
-
+function MAKE_EMPTY( eCAMPO )
 local eRETU
 local aSTRU
 local xPOSDBF

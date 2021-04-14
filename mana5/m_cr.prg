@@ -1,24 +1,14 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : m_cr.prg
 *+
-*+
-*+
-*+    Sistema   : MANAEXO
+*+    Sistema   : MANA5
 *+
 *+    Linguagem : Harbour
 *+
-*+    Autor     : Jorge Cassiano
+*+    Copyright (c) 2021, Jorge Cassiano
 *+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
+*+    Documentado em 15/04/2021
 *+
 *+--------------------------------------------------------------------
 *+
@@ -73,8 +63,6 @@ DBSETORDER(nIND)
 xBUSCA := INDEXKEY()
 
 
-
-
 MDS("Aguarde Atualizando")
 DBSELECTAR(xARQUIVO1)
 INITVARS()
@@ -88,7 +76,19 @@ zei_fort(nLASTREC,,,0)
 DBGOTOP()
 WHILE !EOF()
    EQUVARS()
-   NOVOOPE(xARQUIVO2,&xBUSCA.)
+   IF ! NOVOOPE(xARQUIVO2,&xBUSCA.) 
+      dbgotop()
+      IF DBSEEK(&xBUSCA.)
+	     dbrlock()
+         REPLVARS( .T. , .T.) //Se nao incluir grava os campos em branco
+		 dbunlock()
+		 IF xARQUIVO2="MF01" .AND. EMPTY(FIELD->BANCO) .AND. LEFT(FIELD->NUMERO,1)<>"M" //mantendo codigo banco
+		     dbrlock()
+			 FIELD->BANCO:=VAL(FIELD->NUMERO) //antes eram so numero agora tem banco comecando com M
+			 dbunlock()
+		 ENDIF
+	  ENDIF
+   ENDIF
    DBSELECTAR(xARQUIVO1)
    DBSKIP()
    ZEI_FORT(nLASTREC,,,1)
