@@ -6,7 +6,8 @@
 
 
 MDS('Aguarde Atualizando tabelas')
-for x=1 to 8
+//os arquivos do aci vem com delimitador linux chr 10 pspad,notepad... trocar para limitador linha dos chr(13)+chr(10)
+for x=1 to 10
    do case
       case x=1
          cARQTXT:="CBO2002Grandegrupo.csv"   
@@ -31,9 +32,19 @@ for x=1 to 8
          cARQCBO:="FO_CBON"
       case x=8
          cARQTXT:="aci_atividade_economica.data"      
-         cARQCBO:="FO_CNAE2"		 
+         cARQCBO:="FO_CNAE2"	
+      case x=9
+         cARQTXT:="aci_cep.data"      
+         cARQCEP5:=PEGCAMINI("MD11")+"MD11"
+		 cARQCBO:="aci_cep"
+      case x=10
+         cARQTXT:="aci_ddd.data"
+		 cARQCBO:=PEGCAMINI("MDUFDDD")+"MDUFDDD"
    endcase  
-   IF FILE(cARQtxt).AND.NETUSE(cARQCBO)      
+   IF FILE(cARQtxt) .AND. NETUSE(cARQCBO)  
+      IF X=9
+	     NETUSE(cARQCEP5)
+      ENDIF	  
       MDS(cARQTXT)
       nFile := HB_FUse(cARQTXT)
       nLASTREC:=hb_flastrec()
@@ -45,6 +56,9 @@ for x=1 to 8
          cCODIGO:='0'
          nINSTR :=0
 		 cNOME:=''
+		 cDDD:=""
+		 cUF :=""
+		 cCEP:=""
 		 if x<7
             aVALOR  :=HB_ATokens(cLINHA,";")
             cCODIGO:=aVALOR[1]
@@ -61,15 +75,46 @@ for x=1 to 8
             cCODIGO:=aVALOR[1]
             cNOME  :=aVALOR[2]
          ENDIF
-         if val(cCODIGO)>0 //alguns sao descritivos e nao codigos
+		 IF x=9
+		    cCODIGO:=cLINHA //cCODIGO:=LEFT(cCEP,5) //usado no seek
+			cCEP:=cCODIGO
+			cCEP5:=LEFT(cCEP,5)
+		 ENDIF
+        IF x=10
+            aVALOR  :=HB_ATokens(cLINHA,",")
+            cCODIGO:=aVALOR[1] //68,AC o ddd e o primeiro campo a uf o segundo
+            cNOME  :=aVALOR[2]
+			cDDD:=cCODIGO
+            cUF:=cNOME
+			cCODIGO:=cUF+cDDD //usado no seek
+         ENDIF
+ 		 
+		 
+         if val(cCODIGO)>0 .or. x=10 //alguns sao descritivos e nao codigos
             dbgotop()
             if ! dbseek(cCODIGO)
                netrecapp()
-               field->codigo:=cCODIGO
+			   if x<>9 .and. x<>10
+                  field->codigo:=cCODIGO
+			   endif
+               if x=9
+			      field->cep:=cCEP
+				  dbselectar("md11")
+				  dbgotop()
+				  if ! dbseek(cCEP5)
+				     netrecapp()
+					 field->cep:=cCEP
+				  endif
+				  dbselectar("aci_cep")
+               endif			  
+               if x=10
+			      field->DDD:=cDDD
+				  field->uf :=Cuf
+               endif			  
             else   
                dbrlock()
             endif
-			IF cARQCBO<>"FO_CNAE2"
+			IF cARQCBO<>"FO_CNAE2" .and. x<>9 .and. x<>10
 				IF EMPTY(field->nome) .AND. ! EMPTY(cNOME)
 					field->nome  :=cnome            
 				ENDIF
@@ -79,7 +124,7 @@ for x=1 to 8
 					field->descricao  :=cnome            
 				ENDIF
 			ENDIF	
-            IF cARQCBO<>"FO_CBOG" .AND.  cARQCBO<>"FO_CBOD" .AND. cARQCBO<>"FO_CNAE2"
+            IF cARQCBO<>"FO_CBOG" .AND.  cARQCBO<>"FO_CBOD" .AND. cARQCBO<>"FO_CNAE2" .and. x<>9 .and. x<>10
                IF EMPTY(field->cagedesco) .AND. nINSTR>0
                   field->cagedesco:=nINSTR
                ENDIF

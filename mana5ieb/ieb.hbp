@@ -162,7 +162,7 @@ hbmisc.hbc
 ..\mana5\M_DRC.prg
 ..\mana5\M_DW.prg
 ..\mana5\M_Dn.prg
-..\mana5\TEMP.prg
+..\mana5\comp1.prg
 ..\mana5\cnab400r.prg
 ..\mana5\m_AS3.prg
 ..\mana5\m_AS99.prg
@@ -254,7 +254,7 @@ M_DU.prg
 M_DV.prg
 M_SINT.prg
 M_SINTG.prg
-temp3.prg
+comp3.prg
 
 c:\develop\harbour\folhahab\lis\foldirf.prg
 

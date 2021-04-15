@@ -517,68 +517,6 @@ endif
 
 
 
-if MsgYesNo( "Ajustar DDD Fixas Estados" )
-   nUSO := fcreate( "SEMDDD.TXT" )
-   netuse("MD10")
-   netuse("MDUFDDD")
- //  netuse("anatel")
-   dbselectar( "MD10" )
-   dbgotop()
-   while !eof()
-      mUF     := UF
-      mDDD    := DDD
-      mCIDADE := NOME
-      if ! empty(mddd)
-         dbselectar("mdufddd")
-         dbgotop()
-         if ! dbseek(mUF+mddd)
-            netrecapp()
-            field->uf:=mUF
-            field->ddd:=Mddd
-         endif
-      endif
-      dbselectar( "MD10" )
-      if empty( mDDD )
-         mDDDTMP := ""
-         do case
-         case mUF = "AC"
-            mDDDTMP := "68"
-         case mUF = "AL"
-            mDDDTMP := "82"
-         case mUF = "AP"
-            mDDDTMP := "96"
-         case mUF = "PB"
-            mDDDTMP := "83"
-         case mUF = "SE"
-            mDDDTMP := "79"
-         case mUF = "MS"
-            mDDDTMP := "67"
-         case mUF = "RN"
-            mDDDTMP := "84"
-         case mUF = "RO"
-            mDDDTMP := "69"
-         case mUF = "RR"
-            mDDDTMP := "95"
-         case mUF = "DF"
-            mDDDTMP := "61"
-         case mUF = "TO"
-            mDDDTMP := "63"
-         endcase
-         if ! empty( mDDDTMP ) //.AND.eMPTY(DDD)
-            netgrvcam("DDD",mDDDTMP)
-            mDDD := mDDDTMP
-         endif
-      endif
-      if empty( mDDD )
-         fwrite( nUSO, mUF + " " + mCIDADE + HB_OSNEWLINE() )
-      endif
-      dbselectar( "MD10" )
-      dbskip()
-   enddo
-   fwrite( nUSO, chr( 26 ) )
-   fclose( nUSO )
-endif
-
 IF MsgYesNo("Cruzar md10xmd10NAO")
    netuse("MD10")
    netuse("MD10NAO")

@@ -182,8 +182,8 @@ M_DRC.prg
 M_DU.prg
 M_D1.prg
 M_DW.prg
-TEMP.prg
-TEMP2.prg
+comp1.prg
+comp2.prg
 mlibmail.prg
 ..\MANA5IEB\m_a2.prg
 c:\develop\harbour\objmgw\comp.prg
