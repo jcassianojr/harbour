@@ -64,6 +64,7 @@ if file("pgcn.dbf") .and. file("md10imp.dbf") .and. MsgYesNo("importar pgcn ddd 
 endif
 
 
+
 if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. MsgYesNo( "Importar Cidades md10imp.dbf" )))
    use md10imp new shared
    netuse("cidconv")
