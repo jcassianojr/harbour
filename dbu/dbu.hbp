@@ -31,6 +31,7 @@ dbuutil.prg
 dbuver.prg
 dbuview.prg
 dbuXLS.prg
+dbusincdbf.prg
 
 C:\develop\harbour\objmgw\netdbf.prg
 C:\develop\harbour\objmgw\comp.prg  

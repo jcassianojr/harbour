@@ -273,23 +273,29 @@ endif
 
 FOR iLOOP=1 TO LEN(aPARAM)
     do case
+      case AT("/XMLA",aPARAM[iLOOP])>0
+           multidocs(1,"*.dbf")
+//           FAZERDBF( {|| dbf2xml() }, .F. ,,,param1)
+    
        case AT("/TEC",aPARAM[iLOOP])>0 
            IF MDG("Gerar Observacoes")
-              multidocs(2,param1)
+              multidocs(2,param1)  //.tam
            ELSE
-              multidocs(3,param1)
-           ENDIF	          
+              multidocs(3,param1)  //.tec
+           ENDIF	
+      case AT("/TAM",aPARAM[iLOOP])>0 
+	       multidocs(2,param1)
       case AT("/DBE",aPARAM[iLOOP])>0 
-	          multidocs(4,param1)
+	       multidocs(4,param1)
       case AT("/DLM",aPARAM[iLOOP])>0 
            pegparexp()
            multidocs(5,param1)
       case AT("/SDF",aPARAM[iLOOP])>0 
             multidocs(6,param1)
-      case AT("/XMLA",aPARAM[iLOOP])>0
-           FAZERDBF( {|| dbf2xml() }, .F. ,,,param1)
       case AT("/XML",aPARAM[iLOOP])>0 
            multidocs(7,param1)
+      case AT("/JSON",aPARAM[iLOOP])>0 
+           multidocs(8,param1)
        case AT("/FIX",aPARAM[iLOOP])>0
             if mdg( "Fixar? " +zdire) = "S"
 		 	   FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))},param1)
@@ -473,9 +479,9 @@ setar_b[ 5 ] = "sysfunc = 0"
 setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
-util_m := { "sem uso", "Calculadora", "Ver TXT", "Editar TXT",;
-            "TECs","DBEs","DLMs","SDFs","XMLs(Avan)","XMLs(Basico)","FixarTodos","ZeraTodos",;
-            "DBEs->DBF","Recriar","cnv memo","sem uso"}
+util_m := { "Rem Reg Dup", "Calculadora", "Ver TXT", "Editar TXT",;
+            "Exportar","sem uso","sem uso","sem uso","sem uso","sem uso","FixarTodos","ZeraTodos",;
+            "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
      util_b[x]:="EMPTY(cur_dbf)"
@@ -536,31 +542,39 @@ do while .T.
    case M->sysfunc = 9
       do case
       case M->func_sel = 1
-	    // futua opcao calendario do windows ou usar outro utilitario
-       //  CALEND()
-	   alertx("funcionalidade a ser implentada")
+          if rsvp( "Limpar Registros Duplicados" ) = "S" 
+             limparegdupdbf()
+         ENDIF
       case M->func_sel = 2
-         hb_run("calc") //CALC()
+         hb_run("calc") 
       case M->func_sel = 3
          VERTXT()
       case M->func_sel = 4
          EDITXT()
       case M->func_sel = 5
-           IF MDG("Gerar Observacoes")
-              multidocs(2,param1)
-           ELSE
-              multidocs(3,param1)
-           ENDIF	          
+          multidocs(0) //passa 0 par a perguntar
+          // IF MDG("Gerar Observacoes")
+          //    multidocs(2)  //tec
+          // ELSE
+          //    multidocs(3)  //tam
+          // ENDIF	          
       case M->func_sel = 6
-         multidocs(4)
+         alertx("funcao nao disponivel")
+       // multidocs(4) //dbe
       case M->func_sel = 7
-         multidocs(5)
+         alertx("funcao nao disponivel")
+         //pegparexp()
+         //multidocs(5)  //dlm
       case M->func_sel = 8
-         multidocs(6)
+         alertx("funcao nao disponivel")
+         //multidocs(6)  //sdf
       case M->func_sel = 9
-           FAZERDBF( {|| dbf2xml() }, .F. ,,,"*.dbf")
+         alertx("funcao nao disponivel")
+           //multidocs(1,"*.dbf")
+           //FAZERDBF( {|| dbf2xml() }, .F. ,,,"*.dbf")  //xmla
       case M->func_sel = 10
-           multidocs(7)
+         alertx("funcao nao disponivel")
+           //multidocs(7)  //xml
       case M->func_sel = 11
            if rsvp( "Fixar Todos ? (S/N)" ) = "S"
                FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
@@ -588,15 +602,13 @@ do while .T.
               endif
            endif
       case M->func_sel = 15
-          if rsvp( "Converter memos entre formatos" ) = "S" //funcao unica para conversao usando rdd conforme escolha
+          if rsvp( "Converter memos entre formatos" ) = "S" 
 		     convertmemo() 
-             //fpt2dbt() //dbt2fpt()
           ENDIF
       case M->func_sel = 16 // podera ser usado para outro menu pois agora a funcao e unica 
-	       alertx("usar opcao acima converter memos")
-          //if rsvp( "Converter memos entre formatos" ) = "S"
-             //dbt2fpt()
-          //ENDIF
+          if rsvp( "Sincronizar Tabelas" ) = "S" 
+		     dBUsincdbf()
+          ENDIF
       endcase
       sysfunc := 0
    case M->sysfunc = 5

@@ -11,7 +11,32 @@
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-//////#INCLUDE "COMANDO.CH"
+#INCLUDE "BOX.CH"
+
+FUNCTION PEGTIPO2VAL()
+   nLASTREC:=LASTREC()
+   zei_fort( nLASTREC,,,0)
+   DBGOTOP()
+   WHILE ! EOF()
+      FOR X=1 TO nFIELDS
+          @ 3,40 SAY PADR(aESTRU[X][1])
+          nVAL:=FIELDGET(X)
+          IF aESTRU[X][2]="N"
+             IF nVAL>aVAL[X]
+                aVAL[X]:=nVAL
+             ENDIF
+          ENDIF
+          IF aESTRU[X][2]="C"
+             nVAL:=LEN(ALLTRIM(nVAL))
+             IF nVAL>aVAL[X]
+                aVAL[X]:=nVAL
+             ENDIF
+          ENDIF
+      NEXT X
+      ZEI_FORT(nLASTREC,,,1)
+      DBSKIP()
+   ENDDO
+RETURN
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
@@ -45,39 +70,14 @@ aESTRU := dbstruct()
 nFIELDS:=LEN(aESTRU)
 AVAL:=ARRAY(nFIELDS)
 AFILL(aVAL,0)
-IF tDOC=3
-   IF MDG("Gerar Observacoes")
-      tDOC=2
-   ENDIF
-ENDIF
-
 IF tDOC=2 //Verificando o tamanho utilizado por cada campo
-   nLASTREC:=LASTREC()
-   zei_fort( nLASTREC,,,0)
-   DBGOTOP()
-   WHILE ! EOF()
-      FOR X=1 TO nFIELDS
-          @ 3,40 SAY PADR(aESTRU[X][1])
-          nVAL:=FIELDGET(X)
-          IF aESTRU[X][2]="N"
-             IF nVAL>aVAL[X]
-                aVAL[X]:=nVAL
-             ENDIF
-          ENDIF
-          IF aESTRU[X][2]="C"
-             nVAL:=LEN(ALLTRIM(nVAL))
-             IF nVAL>aVAL[X]
-                aVAL[X]:=nVAL
-             ENDIF
-          ENDIF
-      NEXT X
-      ZEI_FORT(nLASTREC,,,1)
-      DBSKIP()
-   ENDDO
+   PEGTIPO2VAL()
 ENDIF
 PegcsUB(tDOC)
 GRAVADOC( tdoc, stru_base, aESTRU,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
 stat_msg( "Documentacao Gerada" )
+
+
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
@@ -115,11 +115,38 @@ IF  tDOC = 5 .OR.  tDOC = 6
    IF ZEXPOREXT="SQL" .AND. tDOC = 5
       cSUBTIPO:="SQL"
    ENDIF
-   
 ELSE
    lDOCCAB:=.T.
 ENDIF
+IF  tDOC = 8
+   lDOCDAD:= .T.
+   lDOCRECNO:=.F. //A id do recno ja faz parte do json
+ENDIF
 
+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+    Function pegtipodoc()
+*+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*   
+Function pegtipodoc()
+LOCAL tDOC
+tDOC:=0
+  aAMBIENTE:=SALVAA()
+  HB_dispbox( 6, 22, 21, 55, B_DOUBLE+" ")
+  OPCAO(  8, 24, "XML&A ", 65 ) //A 1
+  OPCAO(  9, 24, "&TAM  ", 74 ) //T 3
+  OPCAO( 10, 24, "TE&C  ", 67 ) //C 2
+  OPCAO( 11, 24, "&DBE  ", 68 ) //D 4
+  OPCAO( 12, 24, "DL&M  ", 77 ) //M 5
+  OPCAO( 13, 24, "&SDF  ", 83 ) //S 6
+  OPCAO( 14, 24, "&XML  ", 88 ) //X 7
+  OPCAO( 15, 24, "&JSON ", 74 ) //J 8
+  tdoc := menu( 2, 0 )
+  RESTAA(aAMBIENTE)
+return tDOC
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
@@ -128,23 +155,36 @@ ENDIF
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 funcTION multidocs
-para tDOC,cMASK           //Passara outra funcao
+para tDOC,cMASK           //Passara outra funcao manter aqui para ficar como priv
 IF valtype(cMASK)#"C"
    cMASK:="*.DBF"
 endif
-lDOCCAB:=.F.
-lDOCDAD:=.F.
+
+IF tDOC=0
+  tdoc := pegtipodoc()
+  if tdoc=0
+     return .f.
+  endif
+ENDIF
+IF tDOC=5 //parametros da exportacao
+    pegparexp()
+ENDIF
+lDOCCAB  :=.F.
+lDOCDAD  :=.F.
 lDOCRECNO:=.F.
-cSUBTIPO:=" "
-PegcsUB(tDOC)
-FAZERDBF( { || multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO) }, .F.,,,cMASK )
+cSUBTIPO :=" "
+PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+if tdoc=1
+   FAZERDBF( {|| dbf2xml() }, .F. ,,,cMASK)
+else
+   FAZERDBF( {|| multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO) }, .F.,,,cMASK )
+endif   
 stat_msg( "Documentacao Gerada" )
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 *+    Function multidocg()
 *+
-*+    Called from ( dbudoc.prg   )   1 - function multidocs()
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
@@ -153,17 +193,21 @@ aESTRU  := dbstruct()
 cARQDIC:=TIRAEXT(memvar->ARQUIVO) 
 aVAL:=ARRAY(LEN(aESTRU))
 AFILL(aVAL,0)
+nFIELDS:=LEN(aESTRU)
+IF tDOC=2 //Verificando o tamanho utilizado por cada campo
+   PEGTIPO2VAL()
+ENDIF
+//altd()
 GRAVADOC( tdoc,cARQDIC, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 *+    Function FAZERDBF()
 *+
-*+    Called from ( dbudoc.prg   )   1 - function multidocs()
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-func FAZERDBF( bUSO, lSHARE ,bPRE,bPOS,cMASK)
+function FAZERDBF( bUSO, lSHARE ,bPRE,bPOS,cMASK)
 IF VALTYPE(cMASK)#"C"
     cMASK:="*.DBF"
 ENDIF
@@ -204,8 +248,17 @@ local cLIN := hb_osnewline() //chr( 13 ) + chr( 10 )
 LOCAL cVAL
 LOCAL cCAMPO
 
+IF tDOC=0
+  tdoc := pegtipodoc()
+  if tdoc=0
+     return .f.
+  endif
+  IF tDOC=5 //parametros da exportacao
+      pegparexp()
+  ENDIF
+  PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+ENDIF
 
-nFIELDS := len( aESTRU )
 
 IF zEXPOREXT="XML" .AND. tDOC = 5
    tDOC := 7
@@ -235,11 +288,12 @@ endcase
 if file( cARQGRV )
    ferase( cARQGRV )
 endif
+
 nFIELDS := len( aESTRU )
 cTEXTO  := ""
 if nFIELDS = 0
    stat_msg( "Nao exitem campos na area selecionada" )
-   retu
+   return .f.
 endif
 if tDOC = 4
    cTEXTO += 'DBFDEF ' + cARQ + cLIN
@@ -284,7 +338,7 @@ if lDOCCAB
       do case
           case tDOC = 3  .OR. tDOC=2
              cOBS:=SPACE(35)
-             IF tDOC=2.AND.aVAL[X]>0
+             IF tDOC=2 .AND. aVAL[X]>0
                 cOBS:=padr(STRZERO(aVAL[X]),35)
              ENDIF
              cTEXTO += '| ' + str( X, 3 ) + ' | ' + ;
@@ -389,7 +443,7 @@ if tDOC = 6
   cTEXTO += cLIN
 ENDIF
 
-If tDOC= 5.AND.cSUBTIPO="TDB" //ja aberto em cima
+If tDOC= 5 .AND. cSUBTIPO="TDB" //ja aberto em cima
 ELSE
    nHANDLEDOC:=FCREATE( cARQGRV)
    IF LEN(cTEXTO)>0
@@ -424,11 +478,11 @@ IF lDOCDAD
        ENDIF   
        nXLS++
        DO CASE
-          CASE tDOC = 7.AND.cSUBTIPO="PCK"
+          CASE tDOC = 7 .AND. cSUBTIPO="PCK"
                cTEXTO+="<ROW RowState="+CHR(34)+"12"+CHR(34)
-          CASE tDOC= 5.AND.cSUBTIPO="TRH"
+          CASE tDOC= 5 .AND. cSUBTIPO="TRH"
                cTEXTO+="<tr>"         +cLIN
-          CASE tDOC = 7.AND.cSUBTIPO="ISO"
+          CASE tDOC = 7 .AND. cSUBTIPO="ISO"
                cTEXTO += "<Registro>" + cLin
           CASE zEXPOREXT="SQL"
                cTEXTO += "insert into " + alias() + " values ("
@@ -440,13 +494,13 @@ IF lDOCDAD
 	   
        FOR X=1 TO nFIELDS
           cCAMPO:=aESTRU[ X, 1 ]
-          IF tDOC = 7.AND.cSUBTIPO="PCK"
+          IF tDOC = 7 .AND. cSUBTIPO="PCK"
              cTEXTO+=" "+ALLTRIM(cCAMPO)+"="+CHR(34)
           ENDIF
-          If tDOC= 5.AND.cSUBTIPO="TRH"
+          If tDOC= 5 .AND. cSUBTIPO="TRH"
              cTEXTO+="<td align="+CHR(34)+"right"+CHR(34)+">"
           ENDIF
-          IF tDOC = 7.AND.cSUBTIPO="ISO"
+          IF tDOC = 7 .AND. cSUBTIPO="ISO"
              cTEXTO+="<"+cCAMPO+">"
           ENDIF
 
@@ -485,18 +539,18 @@ IF lDOCDAD
                    cTEXTO+=ALLTRIM(STRVAL(nVAL,aESTRU[X][3],aESTRU[X][4],ZDECSIM))
           ENDCASE
           DO CASE
-             CASE tDOC = 7.AND.cSUBTIPO="PCK"
+             CASE tDOC = 7 .AND. cSUBTIPO="PCK"
                   cTEXTO+=CHR(34)
-             CASE tDOC= 5.AND.cSUBTIPO="TRH"
+             CASE tDOC= 5 .AND. cSUBTIPO="TRH"
                   cTEXTO+="</td>"+CHR(13)+CHR(10)
-             CASE tDOC= 5.AND.cSUBTIPO="TDB"
+             CASE tDOC= 5 .AND. cSUBTIPO="TDB"
                   xlsWrite( nHANDLEDOC, nXLS, X, cTEXTO )
                   cTEXTO:=""
-             CASE ((tDOC=5.AND.cSUBTIPO="TAB").or.tDOC=6)
+             CASE ((tDOC=5 .AND. cSUBTIPO="TAB").or.tDOC=6)
                   IF X<>nFIELDS
                      cTEXTO+=ZDELIMITE
                   ENDIF
-             CASE tDOC = 7.AND.cSUBTIPO="ISO"
+             CASE tDOC = 7 .AND. cSUBTIPO="ISO"
                   cTEXTO+="</"+cCAMPO+">" + cLIN
 			 case Tdoc= 8
                   hb_HSet(hRecord, FieldName(x), Ctexto )//FieldGet(nField)) // for each record, hrecord holds a hash of column name: column value			 				  
@@ -507,13 +561,13 @@ IF lDOCDAD
           ENDCASE
        NEXT X
        DO CASE
-          CASE tDOC = 7.AND.cSUBTIPO="PCK"
+          CASE tDOC = 7 .AND. cSUBTIPO="PCK"
                cTEXTO+="/>"+cLIN
           CASE tDOC=6
                cTEXTO+=cLIN
-          CASE tDOC= 5.AND.cSUBTIPO="TRH"
+          CASE tDOC= 5 .AND. cSUBTIPO="TRH"
               cTEXTO+="</tr>"+cLIN
-          CASE tDOC = 7.AND.cSUBTIPO="ISO"
+          CASE tDOC = 7 .AND. cSUBTIPO="ISO"
                cTEXTO += "</Registro>" + cLIN
           CASE zEXPOREXT="SQL"
                cTEXTO += ") ; " + cLIN               
@@ -522,7 +576,7 @@ IF lDOCDAD
                cTEXTO += cLIN
        ENDCASE
        do case 
-	      case tDOC= 5.AND.cSUBTIPO="TDB" //ja aberto em cima
+	      case tDOC= 5 .AND. cSUBTIPO="TDB" //ja aberto em cima
 		  case tdoc=8 
 		       hb_HSet(hRecords, LTRIM(STR(RecNo())), hRecord) // like so, a hash of recno: hash of columns/values of this record  
 		  otherwise        
@@ -533,21 +587,21 @@ IF lDOCDAD
        DBSKIP()
    ENDDO
 ENDIF
-if tDOC = 7.AND.cSUBTIPO="PCK"
+if tDOC = 7 .AND. cSUBTIPO="PCK"
    cTEXTO+="</ROWDATA>" + cLIN
    cTEXTO +="</DATAPACKET>" + cLIN
 ENDIF
-if tDOC = 7.AND.cSUBTIPO="ISO"
+if tDOC = 7 .AND. cSUBTIPO="ISO"
    cTEXTO += "</Dados>" + cLIN
    cTEXTO+= "</DataRoot>"+cLIN
 endif
-If tDOC= 5.AND.cSUBTIPO="TRH"
+If tDOC= 5 .AND. cSUBTIPO="TRH"
   cTEXTO+="</table>"+cLIN
   cTEXTO+="</body>"+cLIN
   cTEXTO+="</html>"+cLIN
 ENDIF
 IF LEN(cTEXTO)>0
-   If tDOC= 5.AND.cSUBTIPO="TDB" //ja aberto em cima
+   If tDOC= 5 .AND. cSUBTIPO="TDB" //ja aberto em cima
    ELSE
       FWRITE(nHANDLEDOC, cTEXTO )
    ENDIF
@@ -556,7 +610,7 @@ if tDOC=8
    fSeek(nHandledoc, 0, 2)
    fWrite(nHandledoc, hb_jsonEncode( hRecords, .T. ))
 endif
-If tDOC= 5.AND.cSUBTIPO="TDB" //ja aberto em cima
+If tDOC= 5 .AND. cSUBTIPO="TDB" //ja aberto em cima
    xlsClose( nHANDLEDOC )
 ELSE
    FCLOSE(nHANDLEDOC )
