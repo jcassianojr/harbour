@@ -57,16 +57,18 @@ md1FAZ("FIRMA","CIDADE","ESTADO",{"DDD"})
 md1FAZ("SINDICAT","CIDADE","ESTADO",{"DDD"})
 md1FAZ("TOMADOR","CIDADE","ESTADO",{"DDD","DDD1","DDDFAX"})
 md1FAZ("VTOPER","CIDADE","ESTADO",{"DDD","DDD1","DDDFAX"})
-md1FAZ("cnpjxml","CIDADE","UF",{"DDD"})
-md1FAZ("cnpjxmlfec","CIDADE","UF",{"DDD"})
-md1FAZ("sintcert","CIDADE","UF",{"DDD"})
-md1FAZ("sintcertfec","CIDADE","UF",{"DDD"})
+md1FAZ("cnpjxml","CIDADE","UF",{"DDD"},{{"CEP","ENDERECO","BAIRRO","ENDTIP"}})
+md1FAZ("cnpjxmlfec","CIDADE","UF",{"DDD"},{{"CEP","ENDERECO","BAIRRO","ENDTIP"}})
+md1FAZ("sintcert","CIDADE","UF",{"DDD"},{{"CEP","ENDERECO","BAIRRO","ENDTIP"}})
+md1FAZ("sintcertfec","CIDADE","UF",{"DDD"},{{"CEP","ENDERECO","BAIRRO","ENDTIP"}})
 md1FAZ("sintpend","CIDADE","UF",{"DDD"})
+md1FAZ("rhsel","CIDADE","ESTADO",,{{"CEP","ENDER","BAIRRO","ENDTIP"}})
 
 
+//{{"CEP","ENDERECO","BAIRRO","ENDTIP"}} cCEP,eRUA,eBAI,eTIP //multidimensional pois pode ter mais de um endeteco
+//{{"CEP","ENDER","BAIRRO","ENDTIP"}}
 
-
-FUNCTION MD1FAZ(cARQ,cESTADO,cCIDADE,aDDD)
+FUNCTION MD1FAZ(cARQ,cESTADO,cCIDADE,aDDD,aCEP)
 
 aLAT := {"","","","","",""}
 cARQ := alltrim(cARQ)
@@ -80,7 +82,7 @@ if !USEREDE("MD10",1,1)
 endif
 dbselectar("MD10")
 dbgotop()
-IF dbseek(zESTADO+zCIDADE)
+IF dbseek(zESTADO+zCIDADE) //LOCAL DE ORIGEM USADO PARA O CALCGEOKM
    aLAT[ 4 ] := LATITUDE
    aLAT[ 5 ] := LONGITUDE
    aLAT[ 6 ] := HEMISFERIO
@@ -111,13 +113,21 @@ while !eof()
          ZRUA    := ""
       endif
       dbselectar(cARQ)
-      for i=1 to len(addd)
-          cVAR:=aDDD[I]
-          cDDD:=&cVAR.
-          if empty(cDDD) .and. ! empty(zddd)
-             NETGRVCAM(cVAR,zDDD)
-          endif          
-      next i
+      IF VALTYPE(aDDD)="A"
+        for i=1 to len(addd)
+            cVAR:=aDDD[I]
+            cDDD:=&cVAR.
+            if empty(cDDD) .and. ! empty(zddd)
+               NETGRVCAM(cVAR,zDDD)
+            endif          
+        next i
+      endif  
+      IF VALTYPE(aCEP)="A"
+        for i=1 to len(aCEP)
+            CHECK5CEP(aCEP[I][1],aCEP[I][2],aCEP[I][3],aCEP[I][4],.F.)         //CHECK5CEP(cCEP,eRUA,eBAI,eTIP,lMES)
+        next i
+      ENDIF
+      
    endif
    dbskip()
 enddo

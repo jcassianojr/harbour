@@ -431,9 +431,9 @@ abrir_b[ 2 ] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
 abrir_b[ 3 ] = "sysfunc = 0 .AND. .NOT. box_open"
 
 DECLARE criar_b[ 11 ]
-criar_m:={"Database","Indice","DBF->TEC","DBF->DBE","DBF->DLM","DBF->SDF" ,;
-                 "DBF->XML(Ava)","DBF->XML(Basico)","SDF->DBF","DLM->DBF","DBE->DBF"}
-criar_m[5]:=ZEXPOREXT           
+criar_m:={"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso" ,;
+                 "sem  uso","sem  uso","SDF->DBF","DLM->DBF","DBE->DBF"}
+//criar_m[5]:=ZEXPOREXT   //agora usa geradoc 0 que pergunta o tipo  de exportacao        
 
 criar_b[ 1 ] = "sysfunc = 0"
 FOR X=2 TO 8
@@ -486,7 +486,7 @@ util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.
 FOR X=5 TO 16
      util_b[x]:="EMPTY(cur_dbf)"
 next x
-util_m[7]:=ZEXPOREXT
+//util_m[7]:=ZEXPOREXT //agora usa multidocs 0 que pegunta o tipo de exportacao
 
 DECLARE dbf_list[ adir( "*.dbf" ) + 20 ]
 DECLARE ntx_list[ adir( "*" + XEXT() ) + 20 ]
@@ -661,17 +661,23 @@ do while .T.
                help_code := 5
                make_ntx()
             case M->func_sel = 3
-               GERADOC( 3 )
+                geradoc(0)
+             //  GERADOC( 3 )
             case M->func_sel = 4
-               GERADOC( 4 )
+                    //  GERADOC( 4 )
+                alertx("funcao nao disponivel")
             case M->func_sel = 5
-               GERADOC( 5 )
+                //  GERADOC( 5 )
+                alertx("funcao nao disponivel")
             case M->func_sel = 6
-               GERADOC( 6 )
+                //  GERADOC( 6 )
+                alertx("funcao nao disponivel")
             case M->func_sel = 7
-               Dbf2Xml()
+                // Dbf2Xml()
+                alertx("funcao nao disponivel")
             case M->func_sel = 8
-               GERADOC( 7 )
+                // GERADOC( 7 )
+                alertx("funcao nao disponivel")
             endcase
          endif
       endcase

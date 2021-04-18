@@ -48,8 +48,8 @@ funcTION GERADOC( tdoc )
 
 local stru_name
 local stru_base
-local aESTRU
-local nFIELDS
+//local aESTRU usada na pegval2 nao pode ser local
+//local nFIELDS usada na pegval2 nao pode ser local
 local stru_nome
 local cTEXTO
 lDOCCAB:=.F.
@@ -59,6 +59,18 @@ cSUBTIPO:=" "
 if empty( M->cur_dbf )
    retu .F.
 endif
+
+IF tDOC=0
+  tdoc := pegtipodoc()
+  if tdoc=0
+     return .f.
+  endif
+  IF tDOC=5 //parametros da exportacao
+      pegparexp()
+  ENDIF
+ENDIF
+
+
 stat_msg( "Lendo Estrutura do Arquivo" )
 stru_name := M->cur_dbf
 stru_base := substr( stru_name, 1, at( ".", stru_name ) - 1 )
@@ -259,6 +271,10 @@ IF tDOC=0
   PegcsUB(tDOC)  //pegar o subtipo conforme tipo
 ENDIF
 
+if tdoc=1
+   Dbf2Xml()
+   return .t.
+endif
 
 IF zEXPOREXT="XML" .AND. tDOC = 5
    tDOC := 7

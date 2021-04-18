@@ -1,10 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : mlib10.prg
-*+
-*+
 *+
 *+    Sistema   : MANAEXO
 *+
@@ -14,11 +10,7 @@
 *+
 *+    Copyright (c) 2010, Jorge Cassiano
 *+
-*+
-*+
 *+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
@@ -29,17 +21,12 @@
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function VERUF()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
 *+
-*+
-func VERUF(eCEP,eUF,eCID)
+function VERUF(eCEP,eUF,eCID)
 
 LOCAL X
 LOCAL lCONT := .T.
@@ -93,41 +80,25 @@ retu .T.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function VERDDD()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
 *+
-*+
-func VERDDD(cVAR)
-
-
+function VERDDD(cVAR)
 if empty(ZDDD)
    retu .T.
 endif
 &cVAR. := ZDDD
-retu .F.
-
+return .F.
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function VERCEP()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func VERCEP(cVAR)
-
-
+function VERCEP(cVAR)
 local cCEP
 cCEP := &cVAR.
 if !empty(ZCEP) .and. empty(ZCEPFIM)
@@ -141,78 +112,69 @@ cCEP  := left(cCEP,5)+"-"+right(cCEP,3)
 if !empty(ZCEP) .and. empty(ZCEPFIM)
    keyboard repl(chr(K_RIGHT),5)
 endif
-retu .T.
+return .T.
 
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function VERKM()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func VERKM(cVAR)
-
-
+function VERKM(cVAR)
 if empty(ZKM)
    retu .T.
 endif
 &cVAR. := ZKM
-retu .F.
+return .F.
 
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Function CHECK5CEP()
-*+
-*+
+*+    Function CHECK5CEP(cCEP,eRUA,eBAI,eTIP,lMES)
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func CHECK5CEP(cCEP,eRUA,eBAI,eTIP)
+function CHECK5CEP(cCEP,eRUA,eBAI,eTIP,lMES)
 
-local cCEP8  := left(cCEP,5)+right(cCEP,3)
+local cCEP8  := TIRAOUT(cCEP) //left(cCEP,5)+right(cCEP,3) 12345-123 OU 1234578
 local nCHVBA
-if empty(ZRUA)  //nao tem ceps por rua
+IF VALTYPE(lMES)<>"L"
+    lMES:=.T.
+ENDIF
+
+if empty(ZRUA) .AND. lMES //nao tem ceps por rua
    VERSEHA("MD11",left(cCEP,5),,"'Verifique 5 digitos cep'",.T.)
 else
-   //   if VERSEHA( ZRUA, cCEP8, "ALLTRIM(TIPO)+' '+ALLTRIM(TITULO)+' '+ALLTRIM(RUA)+' '+ALLTRIM(BAI)", "'Cep da Rua n„o Cadastrado '+ZRUA", .T., 2 )
-   if VERSEHA(ZRUA,cCEP8,"ALLTRIM(TIPO)+' '+ALLTRIM(RUA)","'Cep da Rua n„o Cadastrado '+ZRUA",.T.,2)
-      if valtype(eRUA) = "C"
+   if VERSEHA(ZRUA,cCEP8,"ALLTRIM(TIPO)+' '+ALLTRIM(RUA)","'Cep da Rua nao Cadastrado '+ZRUA",lMES,2) //,.T.,2)
+      if valtype(eRUA) = "C" .AND. ! EMPTY(eRUA)
          if empty(&eRUA)
-            if valtype(eTIP) = "C" .and. empty(&eTIP)
-               //               &eRUA := padr( OBTER( ZRUA, cCEP8, "ALLTRIM(TITULO)+' '+ALLTRIM(RUA)", 2 ), 40 )
+            if valtype(eTIP) = "C"  .AND. ! EMPTY(eTIP) .and. empty(&eTIP)
                &eRUA := padr(OBTER(ZRUA,cCEP8,"ALLTRIM(RUA)",2),40)
                &eTIP := padr(OBTER(ZRUA,cCEP8,"ALLTRIM(TIPO)",2),40)
             else
-               //               &eRUA := padr( OBTER( ZRUA, cCEP8, "ALLTRIM(TIPO)+' '+ALLTRIM(TITULO)+' '+ALLTRIM(RUA)", 2 ), 40 )
                &eRUA := padr(OBTER(ZRUA,cCEP8,"ALLTRIM(TIPO)+' '+ALLTRIM(RUA)",2),40)
             endif
          endif
       endif
-      if valtype(eBAI) = "C"
+      if valtype(eTIP) = "C" .AND. ! EMPTY(eTIP)
+        IF empty(&eTIP)
+           &eTIP := padr(OBTER(ZRUA,cCEP8,"ALLTRIM(TIPO)",2),40)
+         ENDIF  
+      ENDIF
+      if valtype(eBAI) = "C" .AND. ! EMPTY(eBAI)
          if empty(&eBAI)
             nCHVBA := OBTER(ZRUA,cCEP8,"CHVBAI",2)
-            //            &eBAI := padr( OBTER("CEPBAI",nCHVBA, "BAI_NO_ABR"), 30 )
             &eBAI := padr(OBTER("CEPBAI",nCHVBA,"BAI_NO"),30)
          endif
       endif
    endif
 endif
-if !empty(ZCEPFIM)
+if ! empty(ZCEPFIM)  .AND. lMES
    cCEP := left(cCEP,5)
    if cCEP < left(ZCEP,5) .or. cCEP > left(ZCEPFIM,5)
       ALERTX("Fora da Faixa Ceps da Cidade de "+ZCEP+" a "+ZCEPFIM)
    endif
 endif
-retu .T.
+return .T.
 

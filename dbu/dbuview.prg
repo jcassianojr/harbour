@@ -2940,8 +2940,8 @@ function pegparexp
        @ MAxrow()-2,0 clear 
        @ MAXROW()-1,0 CLEAR
     
-      criar_m[5]:=ZEXPOREXT
-      util_m[7]:=ZEXPOREXT
+     // criar_m[5]:=ZEXPOREXT agora usa geradoc 0 que pergunta o tipo  de exportacao
+     // util_m[7]:=ZEXPOREXT agora usa multidocs 0 que pegunta o tipo de exportacao
 	  layout()
 return 
 
