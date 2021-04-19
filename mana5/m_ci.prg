@@ -167,7 +167,7 @@ RETURN out_string
 function gerapostela
 cCAMWRPT:=ProfileString( "MANA5.INI", "PATH", "WRPT", HB_CWD())
 cCAMCONT:=ProfileString( "MANA5.INI", "PATH", "CONTROLE", HB_CWD())
-cCAMSYSU:=ProfileString( "MANA5.INI", "PATH", "SYSUSERL", HB_CWD())
+cCAMSYSU:=ProfileString( "MANA5.INI", "PATH", "SYSUSER", HB_CWD())
 
 if USEREDE("MUSER",1,99)
 	dbsetorder(1) //
