@@ -286,6 +286,7 @@ ENDIF
 
 
 do case
+  //  case tDOC = 1 //acima dbf2xml
 	case tDOC = 2
 	   cARQGRV += ".TAM"
 	case tDOC = 3
@@ -484,7 +485,7 @@ endif
 IF lDOCDAD
    nLASTREC:=LASTREC()
    zei_fort( nLASTREC,,,0)
-   nXLS:=1
+   nXLS:=0
    DBGOTOP()
    WHILE ! EOF()
        IF tDOC = 5 .AND. lDOCRECNO
@@ -534,15 +535,20 @@ IF lDOCDAD
                       CASE zCNVCHAR="A"
                           nVAL:=win_oemtoansi(nVAL) //hb_oemtoansi(nVAL)
                    ENDCASE
-                   IF tDOC = 7 //xml
-                      cTEXTO+=str2html(nVAL)
-                   ELSE
-                      IF zEXPOREXT="SQL"
-                        cTEXTO+="'"+nVAL+"'"
-                      ELSE
-                        cTEXTO+=nVAL
-                      ENDIF  
-                   endif
+                   //IF tDOC = 7 //xml
+                   //   cTEXTO+=str2html(nVAL)
+                   //ELSE
+                      DO CASE
+                         CASE tDOC = 7 //xml
+                              cTEXTO+=str2html(nVAL)
+                         CASE zEXPOREXT="SQL"
+                             cTEXTO+="'"+nVAL+"'" //sql string recenbem aspas simples
+                         CASE zEXPOREXT="DLM" .AND. (zREGSEP=chr(34) .OR. zREGSEP=chr(39))    //dlm que char recebem aspas ou dupla aspas
+                              cTEXTO+=zREGSEP+nVAL+ZREGSEP
+                         OTHERWISE
+                             cTEXTO+=nVAL
+                      ENDCASE
+                   //endif
               CASE aESTRU[X][2]="D"
                    IF EMPTY(nVAL)
                       cTEXTO+=""
@@ -571,7 +577,7 @@ IF lDOCDAD
 			 case Tdoc= 8
                   hb_HSet(hRecord, FieldName(x), Ctexto )//FieldGet(nField)) // for each record, hrecord holds a hash of column name: column value			 				  
             OTHERWISE
-                  IF X<>nFIELDS
+                  IF X<>nFIELDS  //O Ultimo campo nao recebe delimitador
                      Ctexto+=Zdelimite
                   endif
           ENDCASE
@@ -587,14 +593,15 @@ IF lDOCDAD
                cTEXTO += "</Registro>" + cLIN
           CASE zEXPOREXT="SQL"
                cTEXTO += ") ; " + cLIN               
-	      case Tdoc=8		   
+	      case Tdoc=8	
+               //Abaixo	   
           OTHERWISE
                cTEXTO += cLIN
        ENDCASE
        do case 
 	      case tDOC= 5 .AND. cSUBTIPO="TDB" //ja aberto em cima
 		  case tdoc=8 
-		       hb_HSet(hRecords, LTRIM(STR(RecNo())), hRecord) // like so, a hash of recno: hash of columns/values of this record  
+		       hb_HSet(hRecords, LTRIM(STR(nxls)), hRecord) // like so, a hash of recno: hash of columns/values of this record  RecNo() usa nxls para ficar sequencial
 		  otherwise        
 			FWRITE(nHANDLEDOC, cTEXTO )
        ENDcase

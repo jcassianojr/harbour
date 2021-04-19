@@ -113,6 +113,7 @@ public zANOSEP:="/"
 public zCNVCHAR:="N"
 public zMEMOEXT:=".CDX"
 public zusovia:="DBFCDX"
+public zREGSEP:=" "
  
 rddsetdefault( "DBFCDX" )
 HB_IDLESTATE()
@@ -900,7 +901,7 @@ for n := 2 to len( func_title )
    @  1, ( 9 * n ) - 18 say padc( func_title[ n ], 9 )
 next
 @  2,  0 say replicate( "-", 80 )
-@ 23,  0 say "DBdbf: "+zUSOVIA+" Memo:"+hb_rddInfo( RDDI_MEMOEXT)+" Index:"+hb_rddInfo( RDDI_ORDBAGEXT)+" Exp:"+ZEXPOREXT+" DELI:"+ZDELIMITE+" Ano:"+ZANOFOR+ZANOSEP+ZANOTAM +" SepDec:"+ZDECSIM+ZCNVCHAR
+@ 23,  0 say "DBdbf: "+zUSOVIA+" Memo:"+hb_rddInfo( RDDI_MEMOEXT)+" Index:"+hb_rddInfo( RDDI_ORDBAGEXT)+" Exp:"+ZEXPOREXT+" DELI:"+ZDELIMITE+" Ano:"+ZANOFOR+ZANOSEP+ZANOTAM +" SepDec:"+ZDECSIM+" Cnv Oem:"+ZCNVCHAR+" SepReg:"+Zregsep
 
 retu .T.
 

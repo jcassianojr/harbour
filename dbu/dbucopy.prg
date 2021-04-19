@@ -87,6 +87,7 @@ else
    DECLARE boxarray[ 10 ]
 
    if M->func_sel = 1
+      pegparexp()
       help_code := 12
       bcur      := 2
       boxarray[ 1 ] = "copy_title(sysparam)"
@@ -95,6 +96,7 @@ else
       okee_dokee := "do_copy()"
 
    else
+      pegparexp()
       help_code := 15
       bcur      := 10
       boxarray[ 1 ] = "appe_title(sysparam)"
@@ -175,107 +177,132 @@ done := .F.
 
 do case
 
-case empty( M->filename )
-   error_msg( "Destino nao selecionado" )
-
-case M->filename == M->cur_dbf
-   error_msg( "Arquivo nao pode ser copiado para se mesmo" )
-
-case .not. empty( M->for_cond ) .and. type( M->for_cond ) <> "L"
-   error_msg( "PARA condiaao nao a uma expressao lagica" )
-
-case .not. empty( M->while_cond ) .and. type( M->while_cond ) <> "L"
-   error_msg( "ENQUANTO condiaao nao a uma expressao lagica" )
-
-otherwise
-   if file( M->filename )
-      if rsvp( "Arquivo Destino " + if( aseek( M->dbf, M->filename ) > 0, ;
-               "Esta aberto", "Existe" ) + "...Sobreponha? (S/N)" ) <> "S"
-         return .F.
-      endif
-   endif
-
-   stat_msg( "Copiando" )
-
-   if aseek( M->dbf, M->filename ) > 0
-      select( aseek( M->dbf, M->filename ) )
-      dbclosearea()
-      need_field := need_ntx := need_relat := need_filtr := .T.
-   endif
-
-   select( M->cur_area )
-
-   if rat( lower(M->def_ext), lower(M->filename) ) = len( M->filename ) - 3
-      add_name := .not. HB_FILEEXISTS( name( M->filename ) + M->def_ext )
-   else
-      add_name := .F.
-   endif
-
-   if empty( M->for_cond )
-      for_cond := ".T."
-   endif
-
-   if empty( M->while_cond )
-      while_cond := ".T."
-
-      if M->how_many = 0
-         go top
-
-      endif
-   endif
-
-
-   nLASTREC:=LASTREC()
-   zei_fort( nLASTREC,,,0)
-    
-   do case
-
-   case M->mode = 1 .and. M->how_many = 0
-      COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1)  for &for_cond
-
-   case M->mode = 1 .and. M->how_many > 0
-      COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1);
-      for &for_cond
-
-      case M->mode = 2 .and. M->how_many = 0
-         COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond;
-         SDF
-
-      case M->mode = 2 .and. M->how_many > 0
-         COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1);
-         for &for_cond SDF
-
+  case empty( M->filename )
+     error_msg( "Destino nao selecionado" )
+  
+  case M->filename == M->cur_dbf
+     error_msg( "Arquivo nao pode ser copiado para se mesmo" )
+  
+  case .not. empty( M->for_cond ) .and. type( M->for_cond ) <> "L"
+     error_msg( "PARA condiaao nao a uma expressao lagica" )
+  
+  case .not. empty( M->while_cond ) .and. type( M->while_cond ) <> "L"
+     error_msg( "ENQUANTO condiaao nao a uma expressao lagica" )
+  
+  otherwise
+     if file( M->filename )
+        if rsvp( "Arquivo Destino " + if( aseek( M->dbf, M->filename ) > 0, ;
+                 "Esta aberto", "Existe" ) + "...Sobreponha? (S/N)" ) <> "S"
+           return .F.
+        endif
+     endif
+  
+     stat_msg( "Copiando" )
+  
+     if aseek( M->dbf, M->filename ) > 0
+        select( aseek( M->dbf, M->filename ) )
+        dbclosearea()
+        need_field := need_ntx := need_relat := need_filtr := .T.
+     endif
+  
+     select( M->cur_area )
+  
+     if rat( lower(M->def_ext), lower(M->filename) ) = len( M->filename ) - 3
+        add_name := .not. HB_FILEEXISTS( name( M->filename ) + M->def_ext )
+     else
+        add_name := .F.
+     endif
+  
+     if empty( M->for_cond )
+        for_cond := ".T."
+     endif
+  
+     if empty( M->while_cond )
+        while_cond := ".T."
+  
+        if M->how_many = 0
+           go top
+  
+        endif
+     endif
+  
+  
+     nLASTREC:=LASTREC()
+     zei_fort( nLASTREC,,,0)
+      
+     do case
+  
+         case M->mode = 1 .and. M->how_many = 0
+            COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1)  for &for_cond
+      
+         case M->mode = 1 .and. M->how_many > 0
+            COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1)       for &for_cond
+  
+         case M->mode = 2 .and. M->how_many = 0
+           COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond          SDF
+  
+         case M->mode = 2 .and. M->how_many > 0
+           COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1)          for &for_cond SDF
+  
          case M->mode = 3 .and. M->how_many = 0
-            COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond;
-            DELIMITED
-
+         
+         
+            DO CASE
+               CASE zREGSEP=chr(34) .OR. zREGSEP=chr(39)
+                    COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH ( { zDELIMITE, zREGSE } )
+               CASE  zDELIMITE=","
+                    COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED
+               CASE zDELIMITE="9"
+                    COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH TAB
+               CASE zDELIMITE="|"
+                    COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH PIPE
+               OTHERWISE     
+                    COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH &zDELIMITE
+            ENDCASE
+       
+//              COPY to &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond  DELIMITED
+  
          case M->mode = 3 .and. M->how_many > 0
-            COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1);
-            for &for_cond DELIMITED
+  
+          DO CASE
+               CASE zREGSEP=chr(34) .OR. zREGSEP=chr(39)
+                    COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH ( { zDELIMITE, zREGSE } )
+               CASE  zDELIMITE=","
+                    COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED
+               CASE zDELIMITE="9"
+                    COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED WITH TAB
+               CASE zDELIMITE="|"
+                    COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED WITH PIPE
+               OTHERWISE     
+                    COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED WITH &zDELIMITE
+            ENDCASE
+    
+  
+  //            COPY to &filename next M->how_many while &while_cond..and.zei_fort(nLASTREC,,,1)  for &for_cond DELIMITED
+  
+     endcase
+  
+     if aseek( M->dbf, M->filename ) > 0
+        select( aseek( M->dbf, M->filename ) )
+         DBUREDE( filename,, ABERTURA )
+     endif
+  
+     if file( name( M->filename ) + M->def_ext ) .and. M->add_name
+         new_el := afull( &files ) + 1
+  
+         if M->new_el <= len( &files )
+            &files[ M->new_el ] = M->filename
+            array_sort( &files )
+  
+         endif
+     endif
+  
+    stat_msg( "Arquivo Copiado" )
+    done := .T.
 
-            endcase
+endcase
 
-            if aseek( M->dbf, M->filename ) > 0
-               select( aseek( M->dbf, M->filename ) )
-               DBUREDE( filename,, ABERTURA )
-            endif
-
-            if file( name( M->filename ) + M->def_ext ) .and. M->add_name
-               new_el := afull( &files ) + 1
-
-               if M->new_el <= len( &files )
-                  &files[ M->new_el ] = M->filename
-                  array_sort( &files )
-
-               endif
-            endif
-
-            stat_msg( "Arquivo Copiado" )
-            done := .T.
-
-         endcase
-
-         return M->done
+return M->done
 
 *+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 *+
@@ -378,12 +405,37 @@ otherwise
    case M->mode = 3 .and. M->how_many = 0
       nLASTREC:=FLINECOUNT(filename)
       zei_fort( nLASTREC,,,0)
-      append from &filename while &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED
-
+      DO CASE
+         CASE zREGSEP=chr(34) .OR. zREGSEP=chr(39)
+              append from &filename while &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH ( { zDELIMITE, zREGSE } )
+         CASE  zDELIMITE=","
+              append from &filename while &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED
+         CASE zDELIMITE="9"
+              append from &filename while &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH TAB
+         CASE zDELIMITE="|"
+              append from &filename while &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH PIPE
+         OTHERWISE     
+              append from &filename while &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH &zDELIMITE
+      ENDCASE
    case M->mode = 3 .and. M->how_many > 0
       nLASTREC:=FLINECOUNT(filename)
       zei_fort( nLASTREC,,,0)
-      append from &filename next M->how_many while  &while_cond..and.zei_fort(nLASTREC,,,1) for &for_cond DELIMITED
+      DO CASE
+         CASE zREGSEP=chr(34) .OR. zREGSEP=chr(39)
+              append from &filename next M->how_many while  &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH ( { zDELIMITE, zREGSE } )
+         CASE  zDELIMITE=","
+              append from &filename next M->how_many while  &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED
+         CASE zDELIMITE="9"
+              append from &filename next M->how_many while  &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED WITH TAB
+         CASE zDELIMITE="|"
+              append from &filename next M->how_many while  &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED WITH PIPE
+         OTHERWISE     
+              append from &filename next M->how_many while  &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED  WITH &zDELIMITE
+      ENDCASE
+      
+      
+      
+//      append from &filename next M->how_many while  &while_cond. .and. zei_fort(nLASTREC,,,1) for &for_cond DELIMITED
 
    endcase
 

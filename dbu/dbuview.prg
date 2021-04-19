@@ -2902,9 +2902,11 @@ function pegparexp
        @ maxrow()-2,0 say "Delimitador ,;|#~ 9=(TAB)"
        @ maxrow()-2,30 say "Extensao DLM,CVS,UNL,XLS,XML,SQL,JSON" 
        
-       @ maxrow()-1,0 say  "Separador Decimal (,)(.) "
-       @ maxrow()-1,27 say "Digitos Ano 2/4"
-       @ maxrow()-1,45 say "Separador Data (/)(-)( )"
+       @ maxrow()-1,0 say  "Separador Decimal ,. "
+       @ maxrow()-1,23 say "Digitos Ano 2/4"
+       @ maxrow()-1,41 say "Separador Data /-( )"
+       @ maxrow()-1,64 say "Sep Reg "+chr(34)+chr(39)+"( ) "
+       
         
        @ maxrow()  ,0 say  "Formato data Ano/mes/dia DMA AMD MDA SQL"
        @ maxrow()  ,38 say "Converter (N)ao oemto(A)nsi ansito(O)em"  
@@ -2912,12 +2914,15 @@ function pegparexp
        @ maxrow()-2,26 get zDELIMITE PICT "!"    VALID zDELIMITE $ ",;|#~9"       
        @ maxrow()-2,68 get zEXPOREXT PICT "!!!!"  VALID zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
           
-       @ maxrow()-1,24 get zDECSIM               VALID zDECSIM $ ",."       
-       @ maxrow()-1,42 get zANOTAM   PICT "9"    VALID zANOTAM $ "24"
-       @ maxrow()-1,70 get zANOSEP               VALID zANOSEP $ "/- "
+       @ maxrow()-1,21 get zDECSIM               VALID zDECSIM $ ",."       
+       @ maxrow()-1,39 get zANOTAM   PICT "9"    VALID zANOTAM $ "24"
+       @ maxrow()-1,62 get zANOSEP               VALID zANOSEP $ "/- "
+       @ maxrow()-1,78 get zregSEP               VALID zregsEP $ chr(34)+chr(39)+" "
+       
        
        @ maxrow()  ,33 get zANOFOR   PICT "!!!"  VALID zANOFOR="DMA".OR.zANOFOR="AMD".OR.zANOFOR="MDA" .OR. zANOFOR="SQL"
        @ maxrow()  ,78 get zCNVCHAR  PICT "!"    VALID zCNVCHAR $ "NAO"  
+        
         
        readcur() 
 	   
