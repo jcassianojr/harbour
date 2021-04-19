@@ -530,9 +530,9 @@ IF lDOCDAD
                    nVAL:=ALLTRIM(STRVAL(nVAL))
                    DO CASE
                       CASE zCNVCHAR="O"
-                          nVAL:=HB_ansitooem(nVAL)
+                          nVAL:=win_ANSIToOEM(nVAL) //HB_ansitooem(nVAL)
                       CASE zCNVCHAR="A"
-                          nVAL:=hb_oemtoansi(nVAL)
+                          nVAL:=win_oemtoansi(nVAL) //hb_oemtoansi(nVAL)
                    ENDCASE
                    IF tDOC = 7 //xml
                       cTEXTO+=str2html(nVAL)

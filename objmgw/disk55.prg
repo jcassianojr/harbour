@@ -9,9 +9,9 @@
 *+    Ddia()     VEM NUMERO DIA , RETORNA DIA POR EXTENSO
 *+    data2STR(dData,cFOR,cSEP,cDIG) retorna uma data formatada
 *+    DifDatas(dDataInicial,dDataFinal)   retorna quantidade de ano/mes/dias
-*+    str2html(cStr, lAnsi, lTudo )  harbour AnsiToHtml() OemToHtml()  hbtip.lib
-*+    GRVVAL()   -->numero para strzero sem .
-*+    CAPFIRS2() Capitalizar + de ou ...
+*+    str2html(cStr, lAnsi, loem )  harbour   tip_StrToHtml hbtip.lib hb_oemtoansi() HB_ansitooem()
+*+    GRVVAL()   -->numero para strzero sem . //muitos layout de exportacao nao usam separadores . , centesimal decimal
+*+    CAPFIRS2() Capitalizar corrigindo palavras  como de ou e os ...
 *+    TIRAOUT()  remove .:/-
 *+    CHOR()     100/60 decimal para base 60 minutos
 *+    BHOR()     60/100 base 60 para decimal
@@ -26,9 +26,12 @@
 *+    DTOL         =BOM()      CA-TOOLS/HARBOUR  Determina o ultimo dia do mes a partir de um valor de data.
 *+    SEMANAANO    =WEEK()     CA-TOOLS/HARBOUR  retorna a semana do ano
 *+    ANO_BISSEXTO =ISLEAP()   CA-TOOLS/HARBOUR  retorna falso ou verdadeiro
-*+    convansi( ctexto )   =hb_oemtoansi()
-*+    convoem( ctexto )    =HB_ansitooem()
+*+    convansi( ctexto )   =hb_oemtoansi() win_oemtoansi
+*+    convoem( ctexto )    =HB_ansitooem() win_ANSIToOEM
 *+    Function StrLogic(cVAL,lDEFAULT) convert text to logical (true,.t.,....)
+*+    Function aconvertend() matriz com os tipos de endereco rua avenida...
+*+    function MinutoToHora( horas )
+*+    Function Sonumero(cInString,lPONTO,lVIRGULA)
 *+
 *+  added new .prg functions to mange date and timestamp values:
 *+      HB_DATETIME() -> <tTimeStamp>
@@ -79,7 +82,7 @@ functiOn convansi( ctexto )
 if valtype( cTEXTO ) # "C"
    retu cTEXTO
 endif
-cTEXTO := hb_oemtoansi(cTEXTO)
+cTEXTO := win_oemtoansi(cTEXTO) //hb_oemtoansi(cTEXTO)
 return cTEXTO
 
 *+ðððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððð
@@ -93,28 +96,30 @@ function convoem( ctexto )
 if valtype( cTEXTO ) # "C"
    retu cTEXTO
 endif
-cTEXTO := HB_ansitooem(cTEXTO)
+cTEXTO := win_ansitooem(cTEXTO)  //HB_ansitooem(cTEXTO)
 return cTEXTO
-
+ 
 
 *+ðððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððð
 *+
-*+    Function str2html(cStr, lAnsi, lTudo )
+*+    Function str2html(cStr, lAnsi, loem )
 *+
 *+ðððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððððð
 *+
-FUNCTION str2html( cStr, lAnsi, lTudo )
+FUNCTION str2html( cStr, lAnsi, loem )
 IF VALTYPE(lANSI)<>"L"
   lAnsi:=.F.
 ENDIF
-IF VALTYPE(lTUDO)<>"L"
-  lTudo:=.T.
+IF VALTYPE(loem)<>"L"
+  loem:=.T.
 ENDIF
 IF lansi
-  cSTR:=AnsiToHtml( cSTR)
-else
-  cSTR:=OemToHtml( cSTR)
+  cSTR:=win_oemtoansi(cSTR)    //AnsiToHtml( cSTR)
+endif  
+if loem
+  cSTR:=win_ANSIToOEM(cSTR)   //OemToHtml( cSTR)
 endif
+cSTR:=tip_StrToHtml(cSTR)
 return cSTR
 
 *+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
@@ -142,6 +147,13 @@ ret_string:= strtran(ret_string , " Ou ", " ou " )
 ret_string:= strtran(ret_string , " Com ", " com " )
 string:=ret_string //Caso passar @como parametro
 return ret_string
+
+*+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*+
+*+    Function Sonumero(cInString,lPONTO,lVIRGULA)
+*+
+*+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*+
 
 FUNCTION Sonumero(cInString,lPONTO,lVIRGULA)
 local nIter,cThisLetter
@@ -419,26 +431,26 @@ cDIA := strzero( day( dDATA ), 2 )
 cMES := strzero( month( dDATA ), 2 )
 cANO := strzero( year( dDATA ), 4 )
 do case
-case nDIA = 1 //dia DD
-   cRETU += cDIA + cSEP
-case nDIA = 2 //Seg  01
-   cRETU += left( CDIA( dDATA ), 3 ) + cSEP + cDIA + cSEP
-case nDIA = 3 //segunda 01
-   cRETU += CDIA( dDATA ) + cSEP + cDIA + cSEP
+  case nDIA = 1 //dia DD
+     cRETU += cDIA + cSEP
+  case nDIA = 2 //Seg  01
+     cRETU += left( CDIA( dDATA ), 3 ) + cSEP + cDIA + cSEP
+  case nDIA = 3 //segunda 01
+     cRETU += CDIA( dDATA ) + cSEP + cDIA + cSEP
 endcase
 do case
-case nMES = 1 //mes NN
-   cRETU += cMES + cSEP
-case nMES = 2 //mes CCC jan,fev...
-   cRETU += left( CMES( dDATA ), 3 ) + cSEP
-case nMES = 3 //mes estenso janeiro,fevereito
-   cRETU += CMES( dDATA ) + cSEP
+  case nMES = 1 //mes NN
+     cRETU += cMES + cSEP
+  case nMES = 2 //mes CCC jan,fev...
+     cRETU += left( CMES( dDATA ), 3 ) + cSEP
+  case nMES = 3 //mes estenso janeiro,fevereito
+     cRETU += CMES( dDATA ) + cSEP
 endcase
 do case
-case nANO = 1 //Ano 2 digitos
-   cRETU += right( cANO, 2 )
-case nANO = 2 //Ano 4 digitos
-   cRETU += cANO
+  case nANO = 1 //Ano 2 digitos
+     cRETU += right( cANO, 2 )
+  case nANO = 2 //Ano 4 digitos
+     cRETU += cANO
 endcase
 return cRETU
 
@@ -726,23 +738,28 @@ function rad2deg(rad)
 //   ENDIF
 //   RETURN VAL(STRZERO(INT(DIV(A,60)),3,0)+"."+STRZERO(MOD(A,60),2,0))
 
+*+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*+
+*+    Function MinutoToHora( horas )
+*+
+*+   //MinutoToHora( "240:00" )
+*+  devolve 14400 minutos
+*+  MinutoToHora( "240:00" ) - MinutoToHora( "120:00" )
+*+  devolve 7200 minutos
+*+  Transforma minutos em horario
+*+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*+
+
 FUNCTION MinutoToHora( horas )
-  //MinutoToHora( "240:00" )
-  //devolve 14400 minutos
-  //MinutoToHora( "240:00" ) - MinutoToHora( "120:00" )
-  //devolve 7200 minutos
-   // Transforma minutos em horario
-//   IF VALTYPE( horas ) = 'C'
-//      BEEP()
-      // MENSAGEM('Calculo com NUMEROS retornando CARACTER')
-//      RETURN .F.
-//   ELSE
-      RETURN INT(horas/60)+(MOD(horas,60)/100)
-//   ENDIF
+RETURN INT(horas/60)+(MOD(horas,60)/100)
 
 
-
-
+*+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*+
+*+    Function aconvertend()
+*+
+*+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*+
 FUNCTION aconvertend()
 local aCNV:={}
 AADD(aCNV,{"R ","R"})

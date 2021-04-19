@@ -704,7 +704,7 @@ mNOME     := strtran( mNOME, "?", "C" )               //tirar os ?
 mNOME     := strtran( mNOME, "?", "c" )               //tirar os ?
 mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
 IF lANSI
-   mNOME     := HB_ansitooem(mNOME)
+   mNOME     :=win_ANSIToOEM(mNOME) //HB_ansitooem(mNOME)
 ENDIF
 IF lACEN
    mNOME     := TIRACE(mNOME)
