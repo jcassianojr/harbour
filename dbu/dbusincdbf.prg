@@ -82,6 +82,54 @@ RDDNOME(nOLDTIPO) //retorna tipo anterior
 RESTAA(aAMBIENTE)
 alert("sincronizado")
 
+
+*************************
+function sortdbf()
+LOCAL aCAMPOS
+
+aAMBIENTE:=SALVAA()
+nOLDTIPO=TIPODBF
+cSORTED:=SPACE(60)
+
+alert("escolha origem")
+tipodbfesc()
+nORITIPO:=TIPODBF
+cORIDRIVER:=RDDNOME(TIPODBF)
+cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
+
+alert("escolha destino")
+tipodbfesc()
+nDESTIPO:=TIPODBF
+cDESDRIVER:=RDDNOME(TIPODBF)
+cARQDES:=trocaext(cARQORI,"_sorted.dbf")
+
+
+@ MAXROW(),0 SAY "Campos (,)"
+@ MAXROW(),COL()+1 GET cSORTED
+READ
+IF AT("INDEXKEY",cSORTED)>0
+   //aCAMPOS:=HB_ATOKENS(INDEXKEY(),"+") criar funcao para pegar so o nome removendo assim ctod str outros
+ELSE
+   aCAMPOS:=HB_ATOKENS(cSORTED,",")
+ENDIF   
+ 
+MDT("Fazendo copia de destino: "+"sortet_"+cARQORI)
+filecopy(cARQORI ,cARQDES)
+
+MDT("abrindo arquivo de origem: "+cARQORI)
+USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER) 
+
+mdt("Ordenando por: "+cSORTED)
+//__dbSort( cToFileName, aFields, bFor, bWhile, nNext, nRecord, lRest, cRDD     , nConnection, cCodePage )
+__dbSort( cARQDES      , aCAMPOS,     ,       ,      ,        ,      ,cDESDRIVER,            ,           )
+
+
+
+RDDNOME(nOLDTIPO) //retorna tipo anterior
+RESTAA(aAMBIENTE)
+alert("sincronizado")
+
+
 *************************
 function limparegdupdbf()
 

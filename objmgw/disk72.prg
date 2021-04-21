@@ -39,7 +39,7 @@ retu RET_ARRAY
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function TIRAEXT()
+*+    Function TIRAEXT(cFile, cEXT)
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -47,7 +47,10 @@ FUNCTION TIRAEXT( cFile, cEXT )             //Arquivo teste.txt ->teste se cext=
    LOCAL cFILENAME 
    hb_fNameSplit( cFile,,@cFILENAME )
    if valtype( cEXT ) = "C"
-      cFilename += "." + cEXT
+      IF AT(".",cEXT)=0
+        cEXT += "." + cEXT
+      ENDIF
+      cFilename += cEXT
    endif
    retu cFileName
 

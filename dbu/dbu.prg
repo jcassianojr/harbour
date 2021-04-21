@@ -481,7 +481,7 @@ setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
 util_m := { "Rem Reg Dup", "Calculadora", "Ver TXT", "Editar TXT",;
-            "Exportar","sem uso","sem uso","sem uso","sem uso","sem uso","FixarTodos","ZeraTodos",;
+            "Exportar","Sort DBF","sem uso","sem uso","sem uso","sem uso","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
@@ -553,15 +553,9 @@ do while .T.
       case M->func_sel = 4
          EDITXT()
       case M->func_sel = 5
-          multidocs(0) //passa 0 par a perguntar
-          // IF MDG("Gerar Observacoes")
-          //    multidocs(2)  //tec
-          // ELSE
-          //    multidocs(3)  //tam
-          // ENDIF	          
+          multidocs(0) //passa 0 par a perguntar o formato
       case M->func_sel = 6
-         alertx("funcao nao disponivel")
-       // multidocs(4) //dbe
+          sortdbf()
       case M->func_sel = 7
          alertx("funcao nao disponivel")
          //pegparexp()

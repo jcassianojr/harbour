@@ -1,10 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Programa  : m_cv.prg
-*+
-*+
+*+    Programa  : m_cv.prg  Manutencao Especial de Arquivos manarq manarq1 manfec duplicidades inexistes cruzamento 
 *+
 *+    Sistema   : MANAEXO
 *+
@@ -13,8 +9,6 @@
 *+    Autor     : Jorge Cassiano
 *+
 *+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
 *+
 *+    Documentado em 30-Ago-2011 as 10:55 am
 *+
@@ -25,12 +19,7 @@
 
 
 MDI("Manutencao Especial de Arquivos")
-FILMCV  := ""
-FILMCV  := RFILORD(zARQ1,.F.)
-aARQX   := {}
-lFIXAR  := MDG("Fixar Arquivo")
-lAPAGA  := MDG("Excluir Arquivos Fechados Inexistentes")
-lFECMES := MDG("Fechamento Mensal")
+lFECMES := MDG("Efetuar Fechamento Mensal")
 
 
 IF lFECMES
@@ -54,7 +43,15 @@ IF lFECMES
          eval(cVAR)
       NEXT N
    ENDIF
+   RETURN .t.
 ENDIF
+
+FILMCV  := ""
+FILMCV  := RFILORD(zARQ1,.F.)
+aARQX   := {}
+lFIXAR  := MDG("Fixar Arquivo")
+lAPAGA  := MDG("Excluir Arquivos Fechados Inexistentes")
+
 
 if lFIXAR .or. lAPAGA
    if !USECHK(ZDIRC+"MANARQ",ZDIRC+"MANARQ",.T.)
@@ -95,28 +92,34 @@ if lFIXAR .or. lAPAGA
       ZEI_FORT(nLASTREC,.T.,nPOSREC)
       nPOSREC ++
    enddo
-   dbcloseall()
-
-   if !lFIXAR
-      retu
+   if lFIXAR
+      DBSELECTAR("MANARQ")
+      pack
+      DBSELECTAR("MANARQ1")
+      pack
    endif
 
-   nLASTREC := len(aARQX)
-   for X := 1 to nLASTREC
-      mARQUIVO := aARQX[X]
-      @ 24,00 say padr(mARQUIVO,80)         
-      if mARQUIVO # "MANARQ" .and. mARQUIVO # "MANARQ1"
-         if USEREDE(mARQUIVO,0,99,,,300)
-            pack
-            dbclosearea()
-         endif
-      endif
-      ZEI_FORT(nLASTREC,.F.,X)
-   next
+   
+   dbcloseall()
+
+   if lFIXAR
+     nLASTREC := len(aARQX)
+     for X := 1 to nLASTREC
+        mARQUIVO := aARQX[X]
+        @ 24,00 say padr(mARQUIVO,80)         
+        if mARQUIVO # "MANARQ" .and. mARQUIVO # "MANARQ1"
+           if USEREDE(mARQUIVO,0,99,,,300)
+              pack
+              dbclosearea()
+           endif
+        endif
+        ZEI_FORT(nLASTREC,.F.,X)
+     next
+  endif
 endif
 
-if mdg("Apagar Duplicidades Configuracao Indexa‡Æo")
-   if !USECHK(ZDIRC+"MANARQ1",ZDIRC+"MANARQ",.T.)
+if mdg("Apagar Duplicidades Configuracao Indexacao")
+   if ! USECHK(ZDIRC+"MANARQ1",ZDIRC+"MANARQ",.T.)
       dbcloseall()
       retu .F.
    endif
@@ -131,6 +134,9 @@ if mdg("Apagar Duplicidades Configuracao Indexa‡Æo")
          endif
       endif
    enddo
+   if lFIXAR
+      pack
+   endif
    dbcloseall()
 endif
 
@@ -156,6 +162,10 @@ if mdg("Apagar Indices sem Arquivo")
       ENDIF
       DBSKIP()
    ENDDO
+   if lFIXAR
+      DBSELECTAR("MANARQ1")
+      pack
+   endif
    dbcloseall()
 endif
 
