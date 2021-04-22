@@ -55,11 +55,6 @@ private stru_name
 private wstru_buff
 private temparq
 
-temparq := tmpfile()
-temparq := substr( temparq, 1, at( ".", temparq ) - 1 )
-if file( TEMPARQ + '.dbf' )
-   ferase( TEMPARQ + '.dbf' )
-endif
 
 old_help  := help_code
 saveColor := setcolor( M->color7 )
@@ -152,11 +147,14 @@ empty_row := "           |           |       |    "
 not_empty := "           | Caracter  |    10 |    "
 
 if .not. empty( M->cur_dbf )
+
    stat_msg( "Lendo Estrutura do Arquivo" )
    stru_name := M->cur_dbf
+   temparq:=trocaext(stru_name, "_stru.dbf" )
+   
    select( M->cur_area )
 
-   COPY to &temparq STRUCTURE EXTENDED
+   __dbCopyXStruct( temparq ) //COPY to &temparq STRUCTURE EXTENDED
 
    select 10
    DBUREDE( temparq )
@@ -166,8 +164,13 @@ if .not. empty( M->cur_dbf )
    stat_msg( "" )
 
 else
+
+   
+   stru_name:=WIN_GETSAVEFILENAME( , "Novo Arquivo", HB_CWD(),"dbf", "*.txt" , 1,, "novoarquivo.dbf")
+   temparq:=trocaext(stru_name,"_stru.dbf")
+   
    select 10
-   CREATE &temparq
+   __dbCreate( temparq,,, .F., ) //CREATE &temparq
   
    netrecapp()
    field->field_type := "C"
@@ -176,7 +179,7 @@ else
 
    stru_ok   := .F.
    is_append := .T.
-   stru_name := ""
+ //  stru_name := "" zera para pegar abaixo o novo no nome mas feito aqui pelo win_getsavefilename
 
 endif
 
@@ -898,8 +901,9 @@ if select( TEMPARQ ) # 0
    dbselectar( TEMPARQ )
 endif
 dbclosearea()
-ferase( temparq + ".dbf" )
-ferase( temparq + ".TMP" )
+ferase(temparq)
+//ferase( temparq + ".dbf" )
+//ferase( temparq + ".TMP" )
 stat_msg( "" )
 
 restscreen( 8, 20, 23, 59, M->wstru_buff )
@@ -1168,7 +1172,7 @@ private rec1
 do case
 
 case empty( filename )
-   error_msg( "Nome de Arquivo n„o fornecido" )
+   error_msg( "Nome de Arquivo nao fornecido" )
    stru_done := .F.
 
 otherwise
@@ -1224,30 +1228,37 @@ otherwise
          endif
       endif
 
-      name_bak := substr( filename, 1, rat( hb_ps(), filename ) ) + ;
-                          substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) + ".bak"
-      name_temp := substr( filename, 1, rat( hb_ps(), filename ) ) + ;
-                           temparq + ".bak"
-	  IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "DBT")					   
-		 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "DBT"
-		 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "DBT"
+
+      name_bak  := trocaext(filename,"_temp.dbf") //substr( filename, 1, rat( hb_ps(), filename ) ) +  substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) + ".bak"
+      name_temp := trocaext(temparq,"_temp.dbf") //substr( filename, 1, rat( hb_ps(), filename ) ) +  temparq + ".bak"
+
+      cORIMEMO:=hb_rddInfo( RDDI_MEMOEXT)
+
+      cFILEMEMO:=TROCAEXT(filename,cORIMEMO)
+	  IF FILE(cFILEMEMO)					   
+		 dbt_spec := cFILEMEMO //substr( filename, 1, rat( ".", filename ) )  +   "DBT"
+		 dbt_temp := trocaext(cFILEMEMO,"_TEMP"+_cORIMEMO)//substr( name_temp, 1, rat( ".", name_temp ) ) +  "DBT"
 	  endif	  
 
-	  IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "FPT")					   
-		 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "FPT"
-		 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "FPT"
-	  endif	  
+//	  IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "DBT")					   
+//		 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "DBT"
+//		 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "DBT"
+//	  endif	  
 
-	  IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "SMT")					   
-		 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "SMT"
-		 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "SMT"
-	  endif	  
+	 // IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "FPT")					   
+	//	 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "FPT"
+	//	 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "FPT"
+	  //endif	  
+
+	  //IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "SMT")					   
+	//	 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "SMT"
+	//	 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "SMT"
+	 // endif	  
 
       if file( dbt_spec )
 
          if new_name = "S"
-            new_name := rsvp( "Atencao: Memos serao perdidos" + ;
-                              "...Continue? (S/N)" )
+            new_name := rsvp( "Atencao: Memos serao perdidos ...Continue? (S/N)" )
 
             if new_name <> "S"
                DBUREDE( temparq )
@@ -1260,12 +1271,12 @@ otherwise
          if file( DBT_TEMP )
             ferase( DBT_TEMP )
          endif
-         rename &dbt_spec to &dbt_temp
+         
+         Frename(dbt_spec,dbt_temp) //         rename &dbt_spec to &dbt_temp
 
       endif
 
-      stat_msg( if( new_name <> "S", "Alterando estrutura do Arquivo", ;
-                "Alternado nome(s) de campo" ) )
+      stat_msg( if( new_name <> "S", "Alterando estrutura do Arquivo",  "Alternado nome(s) de campo" ) )
 
       if file( NAME_BAK )
          ferase( NAME_BAK )
@@ -1285,10 +1296,11 @@ otherwise
       if new_name = "S"
          dbselectar( substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) )
          dbclosearea()
-         temparq2 := temparq + ".txt"
+         temparq2 := trocaext(temparq , ".txt")
          DBUREDE( name_bak )
          nLASTREC:=LASTREC()
          zei_fort( nLASTREC,,,0)
+         
          COPY to &temparq2 SDF while zei_fort(nLASTREC,,,1)
          dbclosearea()
          DBUREDE( filename )
@@ -1307,10 +1319,10 @@ otherwise
       endif
 
       if file( name_temp )
-         erase &name_temp
+         ferase(name_temp) //erase &name_temp
       endif
       if file( dbt_temp )
-         erase &dbt_temp
+         ferase(dbt_temp) //erase &dbt_temp
       endif
 
       if is_open
@@ -1327,8 +1339,7 @@ otherwise
       CREATE &filename from &temparq
       dbclosearea()
 
-      if at( ".dbf", lower(filename) ) = len( filename ) - 3 .and. ;
-             HB_FILEEXISTS( name( filename ) + ".dbf" ) .and. add_name
+      if at( ".dbf", lower(filename) ) = len( filename ) - 3 .and.  HB_FILEEXISTS( name( filename ) + ".dbf" ) .and. add_name
          i := afull( dbf_list ) + 1
 
          if i <= len( dbf_list )
