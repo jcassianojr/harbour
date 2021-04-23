@@ -170,7 +170,8 @@ else
    temparq:=trocaext(stru_name,"_stru.dbf")
    
    select 10
-   __dbCreate( temparq,,, .F., ) //CREATE &temparq
+  // __dbCreate( temparq,,, .F., ) //CREATE &temparq
+   dbcreate(temparq)
   
    netrecapp()
    field->field_type := "C"
