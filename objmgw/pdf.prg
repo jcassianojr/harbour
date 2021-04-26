@@ -13,11 +13,11 @@
 
      if ! HB_FILEEXISTS( cARQ )
         ALERTX( "Falta Arquivo " + cARQ )
-        retu ""
+        return ""
      endif
 
      IF valtype(cFileToSave)#"C"
-       cFileToSave := substr( cARQ, 1, at( ".", cARQ ) - 1 ) + ".PDF"
+       cFileToSave := trocaext(cARQ,".PDF") //substr( cARQ, 1, at( ".", cARQ ) - 1 ) + ".PDF"
      endif
 	
 	   nLINES      :=FLineCount(cARQ)
@@ -48,7 +48,7 @@
      @ maxrow(),0 say "Gerando PDF"
      zei_fort( nLines,,,0)
 	   DO WHILE HB_FReadLine( nFileHandle, @cLinha ) == 0
-        IF cLINHA="##page##"
+        IF cLINHA="##page##" //salto pagina indicada na geracao do txt
            vCONT=79
         ELSE
             cLINHA := RANGEREM( chr( 0 ), chr( 09 ), cLINHA )            // CHR(13)+CHR(10)

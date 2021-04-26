@@ -47,11 +47,6 @@ dbsetorder(1) //
 cARQUIVO:="CEPBAI"
 dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
 ordlistadd( cARQUIVO)
-//dbsetorder(1)
-//dbgobottom()
-//nLASTBAIRRO:=BAI_NU_SEQ //pega a ultima sequencia
-//dbsetorder(4) // localcep + nome
-
 //trabalhando por id para preenher vaos depois retornar pelo ultimo id
 nLASTBAIRRO:=1
 idbairro()
@@ -421,31 +416,30 @@ while ! eof()
 		 
 		 if empty(field->chvbai) .AND. ! EMPTY(cBAIRRO)                        		 
 			nCHVBAI:=0			 
-			eBUSCA:=STR(ncodibge,7)+cBAIRRO
+			eBUSCA:=ALLTRIM(cBAIRRO) //antes a chave era a cidade e o bairro STR(ncodibge,7)+cBAIRRO agora so o nome do bairro
 			dbselectar("cepbai")
-			dbsetorder(4) // nome bairro
+			dbsetorder(2) //    4 cep_bai_old nome bairro agora na cep_bai nova e o indice 2
 			dbgotop()
 			if dbseek(eBUSCA)               
 			   nCHVBAI:=bai_nu_seq
 			endif			 
-		    if nCHVBAI=0 
-			   eBUSCA:=STR(ncodibge,7)+cBAIRRO
-			   dbselectar("cepbai")
-			   dbsetorder(5) // nome bairro abreviado
-			   dbgotop()
-				if dbseek(eBUSCA)               
-				   nCHVBAI:=bai_nu_seq
-				endif
-			 endif
-			 if nCHVBAI=0   //inclui o bairro         
-			   //nLASTBAIRRO++
+		    //if nCHVBAI=0  //as tabelas novas e buscas web nao trazem mais o nome reduzido utilizando agora so nome
+			//   eBUSCA:=STR(ncodibge,7)+cBAIRRO
+			//   dbselectar("cepbai")
+			//   dbsetorder(5) // nome bairro abreviado
+			//   dbgotop()
+			//	if dbseek(eBUSCA)               
+			//	   nCHVBAI:=bai_nu_seq
+			//	endif
+			 //endif
+			 if nCHVBAI=0   //inclui o bairro
 			   idbairro() //utilizando idbairro ate completar os vaos no id
 			   dbselectar("cepbai")
 			   dbappend()
 			   cepbai->bai_nu_seq:=nLASTBAIRRO
-			   cepbai->loc_nu_seq:=ncodibge
+			   //cepbai->loc_nu_seq:=ncodibge
 			   cepbai->bai_no    :=cBAIRRO
-			   cepbai->bai_no_abr:=cBAIRRO
+			   //cepbai->bai_no_abr:=cBAIRRO
 			   nCHVBAI:=bai_nu_seq
 			   dbunlock()	
 			 endif
@@ -545,4 +539,4 @@ while dbseek(nLASTBAIRRO)
 	 nLASTBAIRRO++
 	 @ 24,00 say "bairro"+str(nlastbairro)
 enddo	 
-dbsetorder(4) // localcep + nome
+dbsetorder(2) // antes 4 localcep ibge + nome agora so o nome index 2
