@@ -647,6 +647,7 @@ IF MsgYesNo("Reindexar Arquivos Ruas")
        cARQRUA := "C" + strzero( X, 6 )
        @ 24,00 SAY cARQRUA
        IF file(cARQRUA+".DBF")
+          NETPACK(cARQRUA)
           IF FERASE(cARQRUA+".CDX")=0 .OR. ! FILE(cARQRUA+".CDX")
              NETUSE(cARQRUA,,,,,.F.,)
              nLASTREC:=LASTREC()

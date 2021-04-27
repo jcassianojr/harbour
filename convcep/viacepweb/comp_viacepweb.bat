@@ -1,3 +1,3 @@
 rem SET PATH=C:\hb32\bin\..\bin;%PATH%
-call C:\devprg\hb32\setar32
-hbmk2 viacepweb.prg  -b hbtip.hbc xhb.hbc
+call C:\devprg\hb64MGW10\HB64MGW10
+hbmk2 viacepweb.prg  -b hbtip.hbc xhb.hbc gtwvg.hbc

@@ -45,6 +45,10 @@ Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 
    CLS
+lRUAVAZIA:=MSGYESNO("Checar Ruas Em Branco")
+lBAIRROVAZIO:=MSGYESNO("Checar Bairro em Branco")
+lNOMECURTO:=MSGYESNO("Checar Ruas com nomes menores que 5 letras")     
+
    
    nGRAVA:=FCREATE("cepruaimp.csv")
    cLINHA:="cep,codibge,rua,obs,bairro,cidade,uf"+HB_OSNEWLINE()
@@ -70,7 +74,12 @@ index on CEP tag cep
 		ordlistadd( cFILECEP)
 	  
 	  @ 23,00 say cFILECEP
-	   SET FILTER TO EMPTY(RUA) .or. empty(field->chvbai)
+      cFILTRO:=""
+      cFILTRO+=IF(lRUAVAZIA    , " EMPTY(RUA) "                                            , "")
+      cFILTRO+=IF(lBAIRROVAZIO , IF(EMPTY(cFILTRO),""," .OR. ") + " EMPTY(CHVBAI) "        , "")
+      cFILTRO+=IF(lNOMECURTO   , IF(EMPTY(cFILTRO),""," .OR. ") + " LEN(ALLTRIM(RUA))<=5 " , "")
+	   SET FILTER TO &cFILTRO. //EMPTY(RUA) .or. empty(field->chvbai)
+
 	   ntotrec:=reccount()
 	   NRECUSO:=0
 	   
@@ -87,8 +96,7 @@ index on CEP tag cep
 		    
 			
 		  
-		  
-		  if empty(field->rua) .or. empty(field->chvbai)
+		  if .T. //empty(field->rua) .or. empty(field->chvbai) filtro acima
 		     
 			  cCEP:=field->cep
 			  dbselectar("cepruaimp")
@@ -383,3 +391,11 @@ FUNCTION XmlTransform( cXml )
    NEXT
 
    RETURN cXml
+
+FUNCTION MsgYesNo( cText )
+
+   LOCAL lValue
+
+   lValue := wapi_MessageBox( wvgSetAppWindow():hWnd, cText, "Confirmacao", WIN_MB_YESNO + WIN_MB_ICONQUESTION + WIN_MB_DEFBUTTON2 )  == 6 //6=WIN_IDYES
+
+   RETURN lValue

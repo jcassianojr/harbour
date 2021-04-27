@@ -43,6 +43,10 @@ dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
 ordlistadd( cARQUIVO)
 dbsetorder(1) //
 
+cARQUIVO:="CEPBAILX"
+dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
+ordlistadd( cARQUIVO)
+
 
 cARQUIVO:="CEPBAI"
 dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
@@ -437,16 +441,30 @@ while ! eof()
 			   dbselectar("cepbai")
 			   dbappend()
 			   cepbai->bai_nu_seq:=nLASTBAIRRO
-			   //cepbai->loc_nu_seq:=ncodibge
-			   cepbai->bai_no    :=cBAIRRO
-			   //cepbai->bai_no_abr:=cBAIRRO
+    		   cepbai->bai_no    :=cBAIRRO
+			   //cepbai->loc_nu_seq:=ncodibge //agora a chave e so o nome do bairro
+			   //cepbai->bai_no_abr:=cBAIRRO  //as bases nao trazem mais o bairro abreviado
 			   nCHVBAI:=bai_nu_seq
 			   dbunlock()	
 			 endif
-			 dbselectar(cARQRUA)
-			 IF nCHVBAI>0
+			 //Grava a chave
+             dbselectar(cARQRUA)
+			 IF nCHVBAI>0 .and. (empty(field->chvbai) .or. field->chvbai<>nCHVBAI ) //sem o codigo do bairro ou bairro trocou de nome
 				field->chvbai:=nCHVBAI 
-			 ENDIF		   
+			 ENDIF
+             IF nCHVBAI>0 //grava tambem na cepbailx (bairros cidades)
+        	    eBUSCA:=cCODIBGE+STR(nCHVBAI,7) 
+			    dbselectar("cepbailx")
+			    dbsetorder(1) // ibge chave bairro
+			    dbgotop()
+			    if ! dbseek(eBUSCA)               
+                    dbappend()
+                   cepbailx->BAI_NU_NEW :=nCHVBAI
+                   cepbailx->CODIBGE    := cCODIBGE
+                endif
+                dbunlock()
+             ENDIF
+             dbselectar(cARQRUA)
 		 endif	 
         DBUNLOCK()
       ENDIF   
@@ -457,7 +475,7 @@ while ! eof()
       dbselectar(cARQRUA)
       dbclosearea()
    ENDIF
-   dbselectar("cepruaimp") //skip loop acima
+   dbselectar("cepruaimp") //skip no loop acima linhas acima
 enddo
 dbcloseall()
 FCLOSE(nUSO)
@@ -492,6 +510,7 @@ IF npOS>0
    cNOME:=ALLTRIM(cNOME)
 ENDIF
 cNOME:=STRTRAN(cNOME,")","")
+cNOME:=tratanome(cNOME)
 RETURN cNOME
 
 

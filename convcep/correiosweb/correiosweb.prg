@@ -35,6 +35,12 @@ Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
    ? cId
    Inkey(0)
      
+     
+     
+lRUAVAZIA:=MSGYESNO("Checar Ruas Em Branco")
+lBAIRROVAZIO:=MSGYESNO("Checar Bairro em Branco")
+lNOMECURTO:=MSGYESNO("Checar Ruas com nomes menores que 5 letras")   
+lAPAGANAO:=MSGYESNO("Apaga Nao encontrado")
    
    nGRAVA:=FCREATE("cepruaimp.csv")
    cLINHA:="cep,rua,bairro,cidade,uf"+HB_OSNEWLINE()
@@ -42,6 +48,9 @@ Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
    FWRITE(nGRAVA,cLINHA)
    
 use cepruaimp new exclusive
+
+dbRecall() //retorna os que nao achou na busca anterior pois uf cidade estao em branco e o cepruaimp deleta para tratativas
+           // o web service tem limite diario de consultas assim nao busca novamente nao consumindo o web service
 index on CEP tag cep
 
 
@@ -59,7 +68,11 @@ index on CEP tag cep
 		ordlistadd( cFILECEP)
 	  
 	  @ 23,00 say cFILECEP
-	   SET FILTER TO EMPTY(RUA) .or. empty(field->chvbai)
+      cFILTRO:=""
+      cFILTRO+=IF(lRUAVAZIA    , " EMPTY(RUA) "                                            , "")
+      cFILTRO+=IF(lBAIRROVAZIO , IF(EMPTY(cFILTRO),""," .OR. ") + " EMPTY(CHVBAI) "        , "")
+      cFILTRO+=IF(lNOMECURTO   , IF(EMPTY(cFILTRO),""," .OR. ") + " LEN(ALLTRIM(RUA))<=5 " , "")
+	   SET FILTER TO &cFILTRO. //EMPTY(RUA) .or. empty(field->chvbai)
 	   ntotrec:=reccount()
 	   NRECUSO:=0
 	   
@@ -74,11 +87,11 @@ index on CEP tag cep
 			  @ 24,20 SAY nRECUSO
 		
 		    
-			
+			 
 		  
 		  
-		  if empty(field->rua) .or. empty(field->chvbai)
-		     
+		  if .T. //empty(field->rua) .or. empty(field->chvbai) regra no filtro acima
+		      lTEMCEP:=.T. //marca true para nao apagar se consultra cep nao encontrar vira false
 			  cCEP:=field->cep
 			  dbselectar("cepruaimp")
 			  if ! dbseek(cCEP) //Ja pesquisado
@@ -90,7 +103,7 @@ index on CEP tag cep
 				cId :=""
 
 			  
-			     ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
+			     lTEMCEP:=ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
 
 				 
 				  IF ! empty(cEndereco+cBairro)
@@ -107,10 +120,10 @@ index on CEP tag cep
 					  dbselectar("cepruaimp")
 					  dbappend()
 					  field->cep:=cCEP
-					  field->bairro:=UPPER(cBairro)
-					  field->cidade:=UPPER(cCIDADE)
 					  field->rua:=UPPER(cendereco)
+                      field->bairro:=UPPER(cBairro)
 					  field->uf:=UPPER(cUF)
+					  field->cidade:=UPPER(cCIDADE)
 					  
 					  cLINHA:=cCEP +","+CENDERECO+","+cBairro+","+CCIDADE +","+cUF+HB_OSNEWLINE()
 							 
@@ -122,13 +135,23 @@ index on CEP tag cep
 					  dbselectar("cepruaimp") //grava para nao buscr online novamente
 					  dbappend()
 					  field->cep:=cCEP
+                      if ! empty(cCIDADE) .AND. ! EMPTY(cUF)
+                         field->cidade:=UPPER(cCIDADE)
+                         field->uf:=UPPER(cUF)
+                      endif
 				  
 				  endif	 
 			 endif	  
 		  endif
 		  DBSELECTAR(cFILECEP)
+          if lapaganao .and. ! lTEMCEP
+             dbdelete()
+          endif
+          
 		  dbskip()		
 	   ENDDO
+       DBSELECTAR(cFILECEP)
+       dbclosearea()
     endif   
    
 	NEXT KK   
@@ -136,23 +159,6 @@ index on CEP tag cep
 
    
    
-   
-   
-   
-   /*
-   cCep := "03676080"
-   ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
-
-   ? cCep
-   ? cBairro
-   ? cCidade
-   ? cEndereco
-   ? cUF
-   ? cId
-   Inkey(0)
-   */
-
-   RETURN NIL
 
 STATIC FUNCTION ConsultaCep( cCep, cBairro, cCidade, cEndereco, cUF, cId )
 
@@ -173,7 +179,8 @@ STATIC FUNCTION ConsultaCep( cCep, cBairro, cCidade, cEndereco, cUF, cId )
    ENDWITH
    ? oSefaz:cXmlRetorno
 
-   RETURN NIL
+   RETURN AT("CEP NAO ENCONTRADO",oSefaz:cXmlRetorno)=0
+   //RETURN NIL
 
 STATIC FUNCTION SoapEnvelope( cCEP )
 
@@ -193,3 +200,12 @@ STATIC FUNCTION SoapEnvelope( cCEP )
 
 FUNCTION AppVersaoExe(); RETURN ""
 FUNCTION AppUserName(); RETURN ""
+
+
+FUNCTION MsgYesNo( cText )
+
+   LOCAL lValue
+
+   lValue := wapi_MessageBox( wvgSetAppWindow():hWnd, cText, "Confirmacao", WIN_MB_YESNO + WIN_MB_ICONQUESTION + WIN_MB_DEFBUTTON2 )  == 6 //6=WIN_IDYES
+
+   RETURN lValue
