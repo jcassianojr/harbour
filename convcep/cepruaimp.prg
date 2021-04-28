@@ -19,6 +19,8 @@ Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 
 
+use cepruaerr new exclusive
+zap
 
 use cepruaimp new exclusive
 index on UF+CIDADE+CEP tag ufcidade
@@ -168,7 +170,7 @@ while ! eof()
 		  endif      
 	   endif
 	   if ncodibge=0 .AND. AT("(",cCIDLOOP)>0  //cidades com nome parentes
-		  eBUSCA   :=cUF+TRATACIDADE(cCIDLOOP)
+		  eBUSCA   :=cUF+TRATACIDADE(cCIDLOOP,cUF)
 		  dbselectar("MD10")
 		  dbsetorder(1)
 		  dbgotop()
@@ -248,6 +250,12 @@ while ! eof()
 	    if ! empty(alltrim(cUF+" "+cCIDADE+" "+cCODIBGE))
 	       fwrite(nUSO,cUF+" "+cCIDLOOP+" "+cCODIBGE+hb_osnewline())
 		endif   
+        dbselectar("cepruaerr")
+        dbappend()
+        cepruaerr->cep:=cepruaimp->cep
+        cepruaerr->obs:=cUF+"/"+cCIDLOOP
+        
+        
 		dbselectar("cepruaimp")
 		dbdelete() //deletando os erros para nao fazer na proxima rodada
 		dbskip()
@@ -503,14 +511,25 @@ cNOME:= strtran( alltrim( cNOME ), "'", " " )
 RETURN cNOME
 
 
-function tratacidade(cNOME) //algumas vem com nome no parentes
+function tratacidade(cNOME,cUF) //algumas vem com nome no parentes distrito(cidade)
+cDISTRITO:=""
 npOS:=AT("(",cNOME)
 IF npOS>0   
+   cDISTRITO:=tratanome(SUBSTR(cNOME,1,nPOS-1))
    cNOME:=SUBSTR(cNOME,nPOS+1)
    cNOME:=ALLTRIM(cNOME)
 ENDIF
 cNOME:=STRTRAN(cNOME,")","")
 cNOME:=tratanome(cNOME)
+dbselectar("cidconv")
+dbgotop()
+if ! dbseek(cUF+cDISTRITO)
+   dbappend()
+   cidconv->ESTADO:=cUF
+   cidconv->CIDORI:=cDISTRITO
+   cidconv->ESTDES:=cUF
+   cidconv->CIDDES:=cNOME
+endif
 RETURN cNOME
 
 
