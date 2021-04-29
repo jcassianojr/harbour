@@ -31,9 +31,16 @@ Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 SetCursor(.t.)
 
+            
+            
 aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
             "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
             "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO" ,"EX","XX"}
+
+aIBGE:= { "12", "27", "13", "16", "29", "23", "53", "32", "52", ;
+          "21", "31", "50", "51", "15", "25", "26", "22", "41", ;
+          "33", "24", "11", "14", "43", "42", "28", "35", "17" ,"99","99"} //ex xx 99.99999 padrao speds alguns no lugar de 54
+            
 			
 Lmunicipios:=.f.
             
@@ -72,7 +79,6 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. MsgYesNo( "Importar C
    dbselectar("md10imp")
    dbgotop()
    while ! eof()   
-
 	    mNOME     := md10imp->nome        
         mUF       := md10imp->uf
         mNOME     := tratanome( mNOME,.T.,.T. )     
@@ -80,7 +86,11 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. MsgYesNo( "Importar C
         mCODIBGE  := md10imp->CODIBGE        
         mINICEP   := md10imp->INICEP
         mFIMCEP   := md10imp->FIMCEP    
-        IF EMPTY(mUF) .AND. ! EMPTY(mCODIBGE) //pega uf arquivos que so tem o ibge
+        mAREA     := md10imp->AREA
+        IF ! EMPTY(mUF) .AND. aSCAN(aIBGE,mUF)>0 //A uf esta com codigo e nao com a sigla
+            mUF:=CODUF(mUF,"UF")
+        ENDIF
+        IF EMPTY(mUF) .AND. ! EMPTY(mCODIBGE) .AND.  aSCAN(aIBGE,LEFT(mCODIBGE,2))>0 //pega uf pelo ibge
 		   mUF:=CODUF(mCODIBGE,"UF")
 		endif
 		@ MAXROW(),00 SAY mUF+" "+mNOME
@@ -131,6 +141,9 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. MsgYesNo( "Importar C
            endif   
            if ! empty(mFIMCEP)   .AND. VAL(md10->FIMCEP)=0
                md10->FIMCEP := mFIMCEP
+           endif 
+           if  mAREA>0   .AND. md10->AREA=0
+               md10->AREA := mAREA
            endif 
            dbunlock()
         ENDIF          
@@ -751,7 +764,9 @@ RETURN lRETU
 function coduf(cBUSCA,cTIPO) //ibge
 local nPos:=0
 local cRETU:="??"
-LOCAL aUF,aIBGE
+
+/*
+LOCAL aUF,aIBGE //Moviada para o comeco pois e feita checagem
 
 aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
             "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
@@ -759,8 +774,8 @@ aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
 
 aIBGE:= { "12", "27", "13", "16", "29", "23", "53", "32", "52", ;
           "21", "31", "50", "51", "15", "25", "26", "22", "41", ;
-          "33", "24", "11", "14", "43", "42", "28", "35", "17" ,"54","54"}
-
+          "33", "24", "11", "14", "43", "42", "28", "35", "17" ,"99","99"} //ex xx 99.99999 padrao speds alguns no lugar de 54
+*/
 
 IF VALTYPE(cTIPO)<>"C"
    cTIPO:="UF"

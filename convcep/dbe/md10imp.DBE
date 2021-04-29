@@ -1,0 +1,22 @@
+DBFDEF md10imp
+   UF         C   2  0
+   NOME       C  35  0
+   DDD        C   2  0
+   INICEP     C   8  0
+   FIMCEP     C   8  0
+   INICEP2    C   8  0
+   FIMCEP2    C   8  0
+   CODIRRF    C   5  0
+   CODIBGE    C   7  0
+   ZONAELE    N   4  0
+   CODTEL     C   5  0
+   NOMTEL     C   4  0
+   ALTITUDE   N   6  0
+   AREA       N  12  3
+   INIIE      C   3  0
+   LATITUDE   C   8  0
+   LONGITUDE  C   8  0
+   HEMISFERIO C   1  0
+   LOGIX      C   5  0
+ENDDEF
+ENDFILE
