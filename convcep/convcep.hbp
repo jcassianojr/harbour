@@ -1,8 +1,4 @@
--3rd=hbide_version=1.0
--3rd=hbide_title=convcep21
--3rd=hbide_output=convcep21
-
-#-manifest=c:\hb32\harb_win10.mft
+-manifest=convcep.Manifest
 
 hbct.hbc
 hbwin.hbc
@@ -24,4 +20,3 @@ C:\develop\harbour\objmgw\mlib06.prg
 C:\develop\harbour\objmgw\mlib16.prg
 C:\develop\harbour\objmgw\error.prg
 c:\develop\harbour\objmgw\wvgini.prg
-
