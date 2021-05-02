@@ -2,7 +2,7 @@
 *+
 *+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUSTRU.PRG
 *+
-*+    Functions: Procedure modi_stru()
+*+    Functions:  modi_stru()
 *+               Function stru_row()
 *+               Function stru_item()
 *+               Function no_append()
@@ -17,7 +17,7 @@
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Procedure modi_stru()
+*+    modi_stru()
 *+
 *+    Called from ( dbu.prg      )   1 -
 *+
@@ -25,7 +25,7 @@
 *+
 
 #INCLUDE "BOX.CH"
-procedure modi_stru
+function modi_stru
 
 local saveColor
 private filename
@@ -916,7 +916,7 @@ return
 *+
 *+    Function stru_row()
 *+
-*+    Called from ( dbustru.prg  )   5 - procedure modi_stru()
+*+    Called from ( dbustru.prg  )   5 - modi_stru()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -947,7 +947,7 @@ return 0
 *+
 *+    Function stru_item()
 *+
-*+    Called from ( dbustru.prg  )   3 - procedure modi_stru()
+*+    Called from ( dbustru.prg  )   3 - modi_stru()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -984,7 +984,7 @@ return 0
 *+
 *+    Function no_append()
 *+
-*+    Called from ( dbustru.prg  )   3 - procedure modi_stru()
+*+    Called from ( dbustru.prg  )   3 - modi_stru()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -1008,7 +1008,7 @@ return 0
 *+
 *+    Function stru_ck()
 *+
-*+    Called from ( dbustru.prg  )  11 - procedure modi_stru()
+*+    Called from ( dbustru.prg  )  11 - modi_stru()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+

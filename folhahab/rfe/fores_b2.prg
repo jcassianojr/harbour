@@ -7,13 +7,13 @@
 *:      Copyright (c) 1994,  SOFTEC  S/C Ltda.
 *:  Atualizado em: 04/26/94      9:02
 *:
-*:  Procs & Fncts: FORES_B2()
+*:   & Fncts: FORES_B2()
 *:               : CABB2
 *:               : CABB22
 *:
 *:          Chama: MDL()              (fun‡„o    em FORESP.PRG)
-*:               : CABB2              (processo  em FORES_B2.PRG)
-*:               : CABB22             (processo  em FORES_B2.PRG)
+*:               : CABB2              (  em FORES_B2.PRG)
+*:               : CABB22             (  em FORES_B2.PRG)
 *:
 *:    Arq. Dados : FO_FER - Remanejamento de Ferias
 *:
@@ -124,12 +124,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: CABB2
+*!       CABB2
 *!
 *!    Chamado por: FORES_B2.PRG
 *!
 *!*****************************************************************************
-PROC CABB2
+FUNCTION CABB2
 FL = FL + 1
 @ PROW()  ,  1 SAY IMPSTR(cIMPEXP)
 @ PROW()+1, 20 SAY IMPCHR(cIMPTIT)+MSG2
@@ -149,12 +149,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: CABB22
+*!       CABB22
 *!
 *!    Chamado por: FORES_B2.PRG
 *!
 *!*****************************************************************************
-PROC CABB22
+FUNCTION CABB22
 DBSELECTAR(PES)
 @ PROW()+1, 0 SAY '|'+STR(NUMERO,5)+'|'+NOME
 @ PROW()  ,37 SAY '|'+DTOC(ADMITIDO)+'|'

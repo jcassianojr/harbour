@@ -1,14 +1,7 @@
-#
-# $Id: dbu.hbp 11177 2009-05-29 16:38:23Z vszakats $
-#
-
 -gtwvg
 -gui 
 -lng=pt_BR
-#-manifest=c:\hb32\harb_win10.mft
-#-compr
-#-strip
-
+-manifest=folhalis.Manifest
 
 hbct.hbc
 hbwin.hbc
@@ -16,7 +9,6 @@ hbtip.hbc
 xhb.hbc
 hbhpdf.hbc
 hbmisc.hbc
-
 
 folhalis.PRG 
 folism.PRG 

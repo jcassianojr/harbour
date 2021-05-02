@@ -55,14 +55,14 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: TABIRRF
+*!       TABIRRF
 *!
 *!    Chamado por: FOD9.PRG
 *!               : FOD2.PRG
 *!               : FOD1B.PRG
 *!
 *!*****************************************************************************
-PROC TABIRRF
+FUNCTION TABIRRF
 if !  netuse("TABIRRF") //BREDE("TABIRRF",1)
    retu .f.
 endif

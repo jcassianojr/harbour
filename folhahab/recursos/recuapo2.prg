@@ -7,15 +7,15 @@
 *:      Copyright (c) 1994,  SOFTEC  S/C Ltda.
 *:  Atualizado em: 04/28/94     11:16
 *:
-*:  Procs & Fncts: RECUAPO2()
+*:   & Fncts: RECUAPO2()
 *:               : FOLUTIL3
 *:               : FOLUTIL4
 *:               : FOLUTIL5
 *:
 *:          Chama: CABE2()            (fun‡„o    em RECUPROC.PRG)
-*:               : FOLUTIL3           (processo  em RECUAPO2.PRG)
-*:               : FOLUTIL4           (processo  em RECUAPO2.PRG)
-*:               : FOLUTIL5           (processo  em RECUAPO2.PRG)
+*:               : FOLUTIL3           (  em RECUAPO2.PRG)
+*:               : FOLUTIL4           (  em RECUAPO2.PRG)
+*:               : FOLUTIL5           (  em RECUAPO2.PRG)
 *:
 *:     Documentado 05/13/94 em 15:46                DISK!  vers„o 5.01
 *:*****************************************************************************
@@ -45,12 +45,12 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOLUTIL3
+*!      FOLUTIL3
 *!
 *!    Chamado por: RECUAPO2.PRG
 *!
 *!*****************************************************************************
-PROC folutil3
+FUNCTION folutil3
 D=DAY(DATE())
 M=MONTH(DATE())
 A=YEAR(DATE())
@@ -74,12 +74,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOLUTIL4
+*!       FOLUTIL4
 *!
 *!    Chamado por: RECUAPO2.PRG
 *!
 *!*****************************************************************************
-PROC folutil4
+FUNCTION folutil4
 D1=DATE()
 D2=DATE()
 MD()
@@ -94,12 +94,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOLUTIL5
+*!       FOLUTIL5
 *!
 *!    Chamado por: RECUAPO2.PRG
 *!
 *!*****************************************************************************
-PROC folutil5
+FUNCTION folutil5
 PARAMETER CC
 D1=DATE()
 N1=0

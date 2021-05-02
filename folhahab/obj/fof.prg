@@ -77,10 +77,10 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOFF
+*!       FOFF
 *!
 *!*****************************************************************************
-PROC FOFF
+FUNCTION FOFF
 WHILE .T.
    CABEX  ("Menu de Impress„o de Holleriths")
    RESTSCREEN(07,00,21,21,TELA)
@@ -116,14 +116,14 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOFF2
+*!       FOFF2
 *!
-*!    Chamado por: FOFF               (processo  em FOF.PRG)
+*!    Chamado por: FOFF               (  em FOF.PRG)
 *!
 *!          Chama: FOFHOL()           (fun‡„o    em FOFHOL.PRG)
 *!
 *!*****************************************************************************
-PROC FOFF2
+FUNCTION FOFF2
 WHILE .T.
    CABEX ("Menu de Impress„o de Holleriths")
    RESTSCREEN(07,00,21,21,TELA)

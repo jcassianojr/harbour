@@ -35,12 +35,12 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOEE
+*!      FOEE
 *!
 *!    Chamado por: FOE.PRG
 *!
 *!*****************************************************************************
-PROC FOEE
+FUNCTION FOEE
 WHILE .T.
    CABEX("Menu de Exibicao de Dados")
    RESTSCREEN(07,00,19,22,TELA)

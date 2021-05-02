@@ -949,8 +949,8 @@ endif
 *+
 *+    Called from ( dbu.prg      )   1 -
 *+                ( dbucopy.prg  )   1 - function do_copy()
-*+                                   1 - function do_append()
-*+                ( dbustru.prg  )   1 - procedure modi_stru()
+*+                                   1 - do_append()
+*+                ( dbustru.prg  )   1 - modi_stru()
 *+                                   6 - function do_modstru()
 *+                ( dbuview.prg  )   1 - function do_opendbf()
 *+                                   1 - function clear_dbf()

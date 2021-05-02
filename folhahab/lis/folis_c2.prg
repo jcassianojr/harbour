@@ -89,12 +89,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: CABVAR
+*!       CABVAR
 *!
 *!    Chamado por: FOLIS_C2.PRG
 *!
 *!*****************************************************************************
-PROC CABVAR
+function CABVAR
 FL++
 @ PROW()  ,00 SAY IMPCHR(cIMPTIT)+MSG2
 @ PROW()+1,50 SAY TIME()

@@ -1,11 +1,4 @@
 -incpath=c:\devprg\hb32\extras\rddado\
-#
-# itaesbra.hbp
-#
-
-#-lng=pt_BR
-#-compr
-#-strip
 
 hbct.hbc
 hbwin.hbc
@@ -17,7 +10,8 @@ hbmisc.hbc
 -gtwvg
 -gui 
 -lng=pt_BR
-#-manifest=c:\hb32\harb_win10.mft
+-manifest=mana5ieb.Manifest
+
 
 ..\mana5\MANA5.prg
 ..\mana5\MAIL.prg

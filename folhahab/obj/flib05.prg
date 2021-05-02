@@ -7,7 +7,7 @@
 *+               Function RCAMPO()
 *+               Function FILTRO()
 *+               Function FILORD()
-*+               Procedure DFILTRO()
+*+               DFILTRO()
 *+
 *+    Reformatted by Click! 2.03 on May-28-2003 at  9:11 am
 *+
@@ -267,13 +267,13 @@ RETURN
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Procedure DFILTRO()
+*+    DFILTRO()
 *+
 *+    Called from ( flib05.prg   )   1 - function rfiltro()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-proc DFILTRO( TFILTRO )
+function DFILTRO( TFILTRO )
 
 TFILTRO := strtran( TFILTRO, ".AND.", " E " )
 TFILTRO := strtran( TFILTRO, ".OR.", " OU " )

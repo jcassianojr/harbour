@@ -1,14 +1,9 @@
 -incpath=c:\devprg\hb32\extras\rddado\
 
-
--3rd=hbide_version=1.0
--3rd=hbide_title=folhapto21
--3rd=hbide_output=folhapto21
- 
 -gtwvg
 -gui 
 -lng=pt_BR
-#-manifest=c:\hb32\harb_win10.mft
+-manifest=folhapto.Manifest
 
 hbct.hbc
 hbwin.hbc

@@ -1,17 +1,7 @@
-#
-# $Id: dbu.hbp 11177 2009-05-29 16:38:23Z vszakats $
-#
-
-
-#-lng=pt_BR
-#-compr
-#-strip
-
 -gtwvg
 -gui 
 -lng=pt_BR
-#-manifest=c:\hb32\harb_win10.mft
-
+-manifest=folha1.Manifest
 
 hbct.hbc
 hbwin.hbc
@@ -19,7 +9,6 @@ hbtip.hbc
 xhb.hbc
 hbhpdf.hbc
 hbmisc.hbc
-
 
 folha1.PRG
 disk01.PRG

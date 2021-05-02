@@ -8,14 +8,14 @@
 *:      Copyright (c) 1994,  SOFTEC  S/C Ltda.
 *:  Atualizado em: 04/25/94     11:04
 *:
-*:  Procs & Fncts: FO0J()
+*:   & Fncts: FO0J()
 *:               : FOKT
 *:               : FOKS
 *:               : FOKG
 *:
-*:          Chama: FOKT               (processo  em FO0J.PRG)
-*:               : FOKS               (processo  em FO0J.PRG)
-*:               : FOKG               (processo  em FO0J.PRG)
+*:          Chama: FOKT               ( em FO0J.PRG)
+*:               : FOKS               (  em FO0J.PRG)
+*:               : FOKG               ( em FO0J.PRG)
 *:
 *:
 *:     Documentado 05/13/94 em 14:54                DISK!  vers„o 5.01
@@ -52,12 +52,12 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOKT
+*!      FOKT
 *!
 *!    Chamado por: FO0J.PRG
 *!
 *!*****************************************************************************
-PROC FOKT
+FUNCTION FOKT
 @ 05,00 CLEA
 @ 05,00 SAY "+"+REPL('-',78)+"+"
 @ 06,00 SAY "Ý Alterando dados Tabela do IRRF do mˆs     -"+SPAC(34)+"Ý"
@@ -81,12 +81,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOKS
+*!      FOKS
 *!
 *!    Chamado por: FO0J.PRG
 *!
 *!*****************************************************************************
-PROC FOKS
+FUNCTION FOKS
 @ 06,40 SAY NMES
 @ 06,46 SAY EMES
 @ 10,09 SAY DESAL1
@@ -128,12 +128,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOKG
+*!       FOKG
 *!
 *!    Chamado por: FO0J.PRG
 *!
 *!*****************************************************************************
-PROC FOKG
+FUNCTION FOKG
 NETRECLOCK()
 @ 06,40 SAY NMES
 @ 06,46 SAY EMES

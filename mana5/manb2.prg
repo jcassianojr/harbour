@@ -477,7 +477,7 @@ RETU .T.
 *+
 *+
 *+
-*+    Procedure LISTAR1()
+*+    LISTAR1()
 *+
 *+
 *+
@@ -485,7 +485,7 @@ RETU .T.
 *+
 *+
 *+
-PROCEDURE LISTAR1
+FUNCTION LISTAR1
 
 
 @ 22,00
@@ -833,7 +833,7 @@ RETURN
 *+
 *+
 *+
-*+    Procedure LISTAR2()
+*+    LISTAR2()
 *+
 *+
 *+
@@ -841,7 +841,7 @@ RETURN
 *+
 *+
 *+
-PROC LISTAR2
+FUNCTION LISTAR2
 
 PARA P01,P02
 IF P01 = 1
@@ -1012,7 +1012,7 @@ RETURN
 *+
 *+
 *+
-*+    Procedure LISTAR3()
+*+     LISTAR3()
 *+
 *+
 *+
@@ -1020,7 +1020,7 @@ RETURN
 *+
 *+
 *+
-PROCEDURE LISTAR3
+FUNCTION LISTAR3
 
 PARA P01,P02
 IF P01 = 1
@@ -1179,7 +1179,7 @@ RETURN
 *+
 *+
 *+
-*+    Procedure LISTAR4()
+*+    LISTAR4()
 *+
 *+
 *+
@@ -1187,7 +1187,7 @@ RETURN
 *+
 *+
 *+
-PROCEDURE LISTAR4
+FUNCTION LISTAR4
 
 PARA P01,P02
 IF P01 = 1
@@ -1341,7 +1341,7 @@ RETURN
 *+
 *+
 *+
-*+    Procedure LISTAR5()
+*+     LISTAR5()
 *+
 *+
 *+
@@ -1349,7 +1349,7 @@ RETURN
 *+
 *+
 *+
-PROCEDURE LISTAR5
+FUNCTION LISTAR5
 
 PARA P01,P02
 IF P01 = 1
@@ -1499,7 +1499,7 @@ RETURN
 *+
 *+
 *+
-*+    Procedure IMPRIME()
+*+     IMPRIME()
 *+
 *+
 *+
@@ -1507,7 +1507,7 @@ RETURN
 *+
 *+
 *+
-PROCEDURE IMPRIME
+FUNCTION IMPRIME
 
 PARA P01,P02,P03
 ARQU := STR(P02,1)

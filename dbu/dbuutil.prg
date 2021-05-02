@@ -33,7 +33,7 @@
 *+               Function read_key()
 *+               Function raw_key()
 *+               Function q_check()
-*+               Procedure clear_gets()
+*+               clear_gets()
 *+               Function all_fields()
 *+               Function not_target()
 *+               Function dup_ntx()
@@ -1030,7 +1030,7 @@ return M->done_ok
 *+    Function filebox()
 *+
 *+    Called from ( dbuger.prg   )   3 - function geradbf()
-*+                ( dbustru.prg  )   1 - procedure modi_stru()
+*+                ( dbustru.prg  )   1 - modi_stru()
 *+                ( dbuview.prg  )   1 - function open_dbf()
 *+                                   1 - function get_ntx()
 *+                                   1 - function save_view()
@@ -1187,7 +1187,7 @@ return 2
 *+
 *+    Function sysmenu()
 *+
-*+    Called from ( dbuedit.prg  )   1 - procedure browse()
+*+    Called from ( dbuedit.prg  )   1 - browse()
 *+                                   1 - function xmemo()
 *+                ( dbuutil.prg  )   1 - function itemlist()
 *+                                   1 - function key_ready()
@@ -1292,7 +1292,7 @@ return menu_func <> 0
 *+
 *+    Called from ( dbucopy.prg  )   1 - function scope_num()
 *+                ( dbuedit.prg  )   1 - static function exitkey()
-*+                ( dbustru.prg  )   2 - procedure modi_stru()
+*+                ( dbustru.prg  )   2 - modi_stru()
 *+                ( dbuutil.prg  )   1 - function i_func()
 *+                                   1 - function sysmenu()
 *+                                   1 - function mu_func()
@@ -1380,7 +1380,7 @@ return M->r
 *+
 *+    Called from ( dbucopy.prg  )   1 - function scope_num()
 *+                ( dbuedit.prg  )   1 - static function doget()
-*+                ( dbustru.prg  )   1 - procedure modi_stru()
+*+                ( dbustru.prg  )   1 - modi_stru()
 *+                ( dbuutil.prg  )   1 - function enter_rc()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -1402,7 +1402,7 @@ return 0
 *+
 *+    Called from ( dbucopy.prg  )   1 - function scope_num()
 *+                ( dbuedit.prg  )   1 - static function doget()
-*+                ( dbustru.prg  )   1 - procedure modi_stru()
+*+                ( dbustru.prg  )   1 - modi_stru()
 *+                ( dbuutil.prg  )   1 - function enter_rc()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -1460,10 +1460,10 @@ return ( 0 )
 *+
 *+    Function key_ready()
 *+
-*+    Called from ( dbustru.prg  )   1 - procedure modi_stru()
+*+    Called from ( dbustru.prg  )   1 - modi_stru()
 *+                ( dbuutil.prg  )   1 - function multibox()
 *+                                   1 - function read_key()
-*+                ( dbuview.prg  )   1 - procedure set_view()
+*+                ( dbuview.prg  )   1 - set_view()
 *+                                   1 - function set_relation()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -1480,9 +1480,9 @@ return ( sysmenu() .or. M->keystroke <> 0 )
 *+
 *+    Function read_key()
 *+
-*+    Called from ( dbustru.prg  )   1 - procedure modi_stru()
+*+    Called from ( dbustru.prg  )   1 - modi_stru()
 *+                ( dbuutil.prg  )   1 - function multibox()
-*+                ( dbuview.prg  )   1 - procedure set_view()
+*+                ( dbuview.prg  )   1 - set_view()
 *+                                   1 - function set_relation()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -1527,10 +1527,10 @@ return k
 *+    Function q_check()
 *+
 *+    Called from ( dbu.prg      )   1 -
-*+                ( dbuedit.prg  )   1 - procedure browse()
-*+                ( dbustru.prg  )   1 - procedure modi_stru()
+*+                ( dbuedit.prg  )   1 - browse()
+*+                ( dbustru.prg  )   1 - modi_stru()
 *+                ( dbuutil.prg  )   1 - function multibox()
-*+                ( dbuview.prg  )   1 - procedure set_view()
+*+                ( dbuview.prg  )   1 - set_view()
 *+                                   1 - function set_relation()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -1541,11 +1541,11 @@ return ( M->cur_func <> M->sysfunc .or. M->keystroke = 27 )
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Procedure clear_gets()
+*+    clear_gets()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-procedure clear_gets
+function clear_gets
 
 parameters dummy1, dummy2, dummy3
 
@@ -1557,7 +1557,7 @@ return
 *+    Function all_fields()
 *+
 *+    Called from ( dbu.prg      )   1 -
-*+                ( dbucopy.prg  )   1 - procedure capprep()
+*+                ( dbucopy.prg  )   1 - capprep()
 *+                ( dbustru.prg  )   1 - function do_modstru()
 *+                ( dbuview.prg  )   1 - function open_dbf()
 *+                                   1 - function get_field()
@@ -1583,7 +1583,7 @@ return 0
 *+
 *+    Function not_target()
 *+
-*+    Called from ( dbuindx.prg  )   1 - procedure make_ntx()
+*+    Called from ( dbuindx.prg  )   1 -make_ntx()
 *+                ( dbustru.prg  )   1 - function do_modstru()
 *+                ( dbuview.prg  )   2 - function channel()
 *+
@@ -1697,7 +1697,7 @@ return ( 0 )
 *+                ( dbustru.prg  )   1 - function field_check()
 *+                                   1 - function do_modstru()
 *+                ( dbuutil.prg  )   1 - function rsvp()
-*+                ( dbuview.prg  )   2 - procedure set_view()
+*+                ( dbuview.prg  )   2 - set_view()
 *+                                   1 - function open_dbf()
 *+                                   3 - function do_opendbf()
 *+                                   1 - function get_ntx()
@@ -1788,7 +1788,7 @@ return M->c
 *+    Function name()
 *+
 *+    Called from ( dbucopy.prg  )   2 - function do_copy()
-*+                ( dbuindx.prg  )   2 - procedure make_ntx()
+*+                ( dbuindx.prg  )   2 - make_ntx()
 *+                                   2 - function do_index()
 *+                ( dbustru.prg  )   2 - function do_modstru()
 *+                ( dbuutil.prg  )   1 - function setup()
@@ -1837,11 +1837,11 @@ return substr( M->s + space( M->n ), 1, M->n )
 *+
 *+    Called from ( dbucopy.prg  )   5 - function do_copy()
 *+                                   4 - function do_append()
-*+                ( dbuindx.prg  )   1 - procedure make_ntx()
-*+                ( dbustru.prg  )   1 - procedure modi_stru()
+*+                ( dbuindx.prg  )   1 - make_ntx()
+*+                ( dbustru.prg  )   1 - modi_stru()
 *+                                   1 - function do_modstru()
 *+                ( dbuutil.prg  )   1 - function dup_ntx()
-*+                ( dbuview.prg  )   1 - procedure set_view()
+*+                ( dbuview.prg  )   1 - set_view()
 *+                                   1 - function do_opendbf()
 *+                                   1 - function do_fsel()
 *+
@@ -1914,14 +1914,14 @@ return 0
 *+    Function afull()
 *+
 *+    Called from ( dbucopy.prg  )   1 - function do_copy()
-*+                ( dbuedit.prg  )   1 - procedure browse()
+*+                ( dbuedit.prg  )   1 - browse()
 *+                ( dbuindx.prg  )   1 - function do_index()
 *+                ( dbustru.prg  )   1 - function do_modstru()
 *+                ( dbuutil.prg  )   2 - function setup()
 *+                                   1 - function itemlist()
 *+                                   1 - function aseek()
 *+                                   1 - function array_sort()
-*+                ( dbuview.prg  )   1 - procedure set_view()
+*+                ( dbuview.prg  )   1 - set_view()
 *+                                   4 - function channel()
 *+                                   1 - function bar_menu()
 *+                                   1 - function list_array()
@@ -1979,7 +1979,7 @@ return 0
 *+    Function array_dir()
 *+
 *+    Called from ( dbu.prg      )   6 -
-*+                ( dbucopy.prg  )   1 - procedure capprep()
+*+                ( dbucopy.prg  )   1 - capprep()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -1999,7 +1999,7 @@ return 0
 *+
 *+    Function ntx_key()
 *+
-*+    Called from ( dbuindx.prg  )   1 - procedure make_ntx()
+*+    Called from ( dbuindx.prg  )   1 - make_ntx()
 *+                                   1 - function ntx_done()
 *+                                   1 - function ntx_exist()
 *+                ( dbuview.prg  )   1 - function ctrl_key()
@@ -2050,16 +2050,16 @@ return M->k
 *+    Function isdata()
 *+
 *+    Called from ( dbucopy.prg  )   1 - function scope_num()
-*+                ( dbuedit.prg  )   1 - procedure browse()
+*+                ( dbuedit.prg  )   1 - browse()
 *+                                   1 - static function exitkey()
-*+                ( dbustru.prg  )   3 - procedure modi_stru()
+*+                ( dbustru.prg  )   3 - modi_stru()
 *+                ( dbuutil.prg  )   1 - function multibox()
 *+                                   1 - function i_func()
 *+                                   1 - function getfile()
 *+                                   2 - function get_exp()
 *+                                   1 - function get_k_trim()
 *+                                   1 - function mu_func()
-*+                ( dbuview.prg  )   1 - procedure set_view()
+*+                ( dbuview.prg  )   1 - set_view()
 *+                                   2 - function channel()
 *+                                   1 - function bar_func()
 *+                                   1 - function open_dbf()
@@ -2095,7 +2095,7 @@ return ( space( M->n - len( M->string ) ) + M->string )
 *+    Function hi_cur()
 *+
 *+    Called from ( dbu.prg      )   3 -
-*+                ( dbuview.prg  )   2 - procedure set_view()
+*+                ( dbuview.prg  )   2 - set_view()
 *+                                   1 - function get_filter()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -2118,7 +2118,7 @@ return 0
 *+    Function dehi_cur()
 *+
 *+    Called from ( dbu.prg      )   3 -
-*+                ( dbuview.prg  )   2 - procedure set_view()
+*+                ( dbuview.prg  )   2 - set_view()
 *+                                   1 - function get_filter()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн

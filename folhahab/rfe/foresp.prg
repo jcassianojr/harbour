@@ -202,10 +202,10 @@ RETU(VALORINSS)
 
 *!*****************************************************************************
 *!
-*!      Procedure: CALCDEPE
+*!       CALCDEPE
 *!
 *!*****************************************************************************
-PROC CALCDEPE                                       &&CALCULA VALOR DEPENDENTES
+FUNCTION CALCDEPE                                       &&CALCULA VALOR DEPENDENTES
 VAL4=IF(DEP>QTDEIRRF,(QTDEIRRF * VDEPENDE),(DEP * VDEPENDE))
 IF mFATORIRRF#0
    VAL4:= ROUND(VAL4/mFATORIRRF,2)
@@ -335,10 +335,10 @@ RETU .T.
 
 *!*****************************************************************************
 *!
-*!      Procedure: FODZER
+*!      FODZER
 *!
 *!*****************************************************************************
-PROC FODZER
+FUNCTION FODZER
 GRAPP=1
 GRAPT=LASTREC()
 GRAPT('AGUARDE  EXCLUINDO VALORES = 0.00')

@@ -33,12 +33,12 @@ RETU(.T.)
 
 *!*****************************************************************************
 *!
-*!      Procedure: NSHOW
+*!       NSHOW
 *!
 *!    Chamado por: NSHOW1()           (fun‡„o    em RECUPROC.PRG)
 *!
 *!*****************************************************************************
-PROC NSHOW                                   &&AVISA QUE O ARQUIVO ESTA VAZIO
+FUNCTION NSHOW                                   &&AVISA QUE O ARQUIVO ESTA VAZIO
 SETCOLOR("W/N")
 @ 8,0 CLEAR
 SETCOLOR("+W/BR")
@@ -75,11 +75,11 @@ RETU(.T.)
 *!
 *!         Fun‡„o: NSHOW1()
 *!
-*!    Chamado por: EDITA2             (processo  em RECUETI1.PRG)
-*!               : EDITA              (processo  em RECUETI2.PRG)
+*!    Chamado por: EDITA2             (  em RECUETI1.PRG)
+*!               : EDITA              (  em RECUETI2.PRG)
 *!               : RECUSER3.PRG
 *!
-*!          Chama: NSHOW              (processo  em RECUPROC.PRG)
+*!          Chama: NSHOW              ( em RECUPROC.PRG)
 *!
 *!*****************************************************************************
 FUNC NSHOW1               &&VERIFICA SE O ARQUIVO ESTA VAZIO ANTES DO DBEDIT

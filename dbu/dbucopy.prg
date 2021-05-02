@@ -2,7 +2,7 @@
 *+
 *+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUCOPY.PRG
 *+
-*+    Functions: Procedure capprep()
+*+    Functions: function capprep()
 *+               Function copy_title()
 *+               Function trg_getfil()
 *+               Function do_copy()
@@ -26,11 +26,11 @@
 #INCLUDE "BOX.CH"
 *+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 *+
-*+    Procedure capprep()
+*+    function capprep()
 *+
 *+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 *+
-procedure capprep
+function capprep
 
 private filename
 private files

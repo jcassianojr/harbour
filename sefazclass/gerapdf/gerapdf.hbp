@@ -1,5 +1,8 @@
 -incpath=c:\develop\harbour\sefazclass\include\
 
+-manifest=gerapdf.Manifest
+-lng=pt_BR
+
 gerapdf.prg
 c:\develop\harbour\sefazclass\source\ze_sefazclass.prg
 c:\develop\harbour\sefazclass\source\ze_miscfunc.prg
@@ -15,17 +18,7 @@ c:\develop\harbour\sefazclass\source\ze_sefazxmlclass.prg
 c:\develop\harbour\sefazclass\source\ze_sefazcapicom.prg
 c:\develop\harbour\sefazclass\source\ze_digitodoc.prg
 
-
 hbwin.hbc
 hbzebra.hbc
 hbhpdf.hbc
 hbct.hbc
-
-#-m
-#-n
-#-w3
-#-es2
-#-compr
-#-strip
-#-jobs=1
-#-inc

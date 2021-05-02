@@ -36,10 +36,10 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOGAA
+*!       FOGAA
 *!
 *!*****************************************************************************
-PROC FOGAA
+FUNCTION FOGAA
 WHILE .T.
    CABEX("Planilha de Entrada de Dados: ")
    RESTSCREEN(07,00,15,22,TELA)
@@ -60,10 +60,10 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOGBB
+*!       FOGBB
 *!
 *!*****************************************************************************
-PROC FOGBB
+FUNCTION FOGBB
 WHILE .T.
    CABEX("Planilha de Horario Trabalho: ")
    RESTSCREEN(07,00,15,22,TELA)

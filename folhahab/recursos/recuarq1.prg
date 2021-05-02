@@ -7,11 +7,11 @@
 *:      Copyright (c) 1994,  SOFTEC  S/C Ltda.
 *:  Atualizado em: 05/12/94     12:13
 *:
-*:  Procs & Fncts: RECUARQ1()
+*:   & Fncts: RECUARQ1()
 *:               : ARQTEL
 *:               : MDG2()
 *:
-*:               : ARQTEL             (processo  em RECUARQ1.PRG)
+*:               : ARQTEL             (  em RECUARQ1.PRG)
 *:               : MDG2()             (fun‡„o    em RECUARQ1.PRG)
 *:               : RECULER()          (fun‡„o    em RECULER.PRG)
 *:               : EDITARQ()          (fun‡„o    em ?)
@@ -154,12 +154,12 @@ RETU(.F.)
 
 *!*****************************************************************************
 *!
-*!      Procedure: ARQTEL
+*!      ARQTEL
 *!
 *!    Chamado por: RECUARQ1.PRG
 *!
 *!*****************************************************************************
-PROC ARQTEL
+FUNCTION ARQTEL
 HB_dispbox( 8, 0, 24, 47,B_DOUBLE+" ")
 @ 09,02 SAY "Arquivo"+SPAC(6)+"Tamanho   Data"+SPAC(7)+"Hora"
 @ 10,00 SAY 'Ç'+REPL('-',46)+'¶'

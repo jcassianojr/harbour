@@ -1,7 +1,7 @@
 #include "error.ch"
 #INCLUDE "COMMON.CH"
 *------------------------------------------------------------------------------*
-PROCEDURE ErrorSys
+FUNCTION ErrorSys
 *------------------------------------------------------------------------------*
 
 	ErrorBlock( { | oError | DefError( oError ) } )

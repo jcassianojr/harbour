@@ -7,17 +7,17 @@
 *:      Copyright (c) 1994,  SOFTEC  S/C Ltda.
 *:  Atualizado em: 04/25/94     12:06
 *:
-*:  Procs & Fncts: FOGE()
+*:   & Fncts: FOGE()
 *:               : HORPADT
 *:               : HORPADS
 *:               : HORPADG
 *:               : HORPADL
 *:
 *:          Chama: CABEX()            (fun‡„o    em FOLPROC.PRG)
-*:               : HORPADT            (processo  em FOGE.PRG)
-*:               : HORPADS            (processo  em FOGE.PRG)
-*:               : HORPADG            (processo  em FOGE.PRG)
-*:               : HORPADL            (processo  em FOGE.PRG)
+*:               : HORPADT            (  em FOGE.PRG)
+*:               : HORPADS            (  em FOGE.PRG)
+*:               : HORPADG            ( em FOGE.PRG)
+*:               : HORPADL            (  em FOGE.PRG)
 *:
 *:     Arq. Dados: HORPAD
 *:
@@ -90,12 +90,12 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: HORPADS
+*!       HORPADS
 *!
 *!    Chamado por: FOGE.PRG
 *!
 *!*****************************************************************************
-PROC HORPADS
+FUNCTION HORPADS
 @ 10, 22 SAY NOME
 @ 13, 16 SAY D1
 @ 14, 16 SAY D2
@@ -108,12 +108,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: HORPADG
+*!       HORPADG
 *!
 *!    Chamado por: FOGE.PRG
 *!
 *!*****************************************************************************
-PROC HORPADG
+FUNCTION HORPADG
 netreclock()
 @ 10, 22 SAY NOME
 @ 13, 16 GET D1
@@ -129,12 +129,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: HORPADT
+*!       HORPADT
 *!
 *!    Chamado por: FOGE.PRG
 *!
 *!*****************************************************************************
-PROC HORPADT
+FUNCTON HORPADT
 HB_dispbox( 8, 0, 22, 79,B_DOUBLE+" ")
 @ 10,02 SAY "Horario Padr…o "+REPL('-',2)+CHR(16)
 @ 13,02 SAY "Segunda    "+CHR(26)
@@ -148,12 +148,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: HORPADL
+*!      HORPADL
 *!
 *!    Chamado por: FOGE.PRG
 *!
 *!*****************************************************************************
-PROC HORPADL
+FUNCTION HORPADL
 MDT('M¢dulo em Implanta‡„o')
 RETU
 *: FIM: FOGE.PRG

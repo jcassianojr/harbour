@@ -2,7 +2,7 @@
 *+
 *+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUINDX.PRG
 *+
-*+    Functions: Procedure make_ntx()
+*+    Functions: make_ntx()
 *+               Function ntx_title()
 *+               Function ntx_getfil()
 *+               Function ntx_done()
@@ -18,13 +18,13 @@
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Procedure make_ntx()
+*+    make_ntx()
 *+
 *+    Called from ( dbu.prg      )   1 -
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-procedure make_ntx
+function make_ntx
 
 local saveColor
 private filename

@@ -7,7 +7,7 @@
 *:      Copyright (c) 1994,  SOFTEC  S/C Ltda.
 *:  Atualizado em: 04/28/94     11:27
 *:
-*:  Procs & Fncts: RECUGER1()
+*:   & Fncts: RECUGER1()
 *:               : CAD1()
 *:               : TELATIP
 *:
@@ -79,7 +79,7 @@ RETU
 *!         Fun‡„o: CAD1()
 *!
 *!    Chamado por: CAD()              (fun‡„o    em RECUETI1.PRG, chamado  no Dbedit())
-*!               : LISTA              (processo  em RECUETI2.PRG)
+*!               : LISTA              ( em RECUETI2.PRG)
 *!
 *!*****************************************************************************
 FUNC CAD1
@@ -122,10 +122,10 @@ RETU(1)
 
 *!*****************************************************************************
 *!
-*!      Procedure: TELATIP
+*!       TELATIP
 *!
 *!    Chamado por: CAD()              (fun‡„o    em RECUETI1.PRG, chamado  no Dbedit())
-*!               : LISTA              (processo  em RECUETI2.PRG)
+*!               : LISTA              (  em RECUETI2.PRG)
 *!
 *!*****************************************************************************
 FUNCTION TELATIP

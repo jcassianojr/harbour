@@ -2,7 +2,7 @@
 *+
 *+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUEDIT.PRG
 *+
-*+    Functions: Procedure browse()
+*+    Functions:  browse()
 *+               Function xmemo()
 *+               Static Function tog_insert()
 *+               Static Function show_insert()
@@ -31,11 +31,11 @@
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Procedure browse()
+*+    Punction browse()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-proc browse
+function browse
 
 local i
 local j
@@ -509,7 +509,7 @@ return ( nRet )
 *+
 *+    Static Function tog_insert()
 *+
-*+    Called from ( dbuedit.prg  )   1 - procedure browse()
+*+    Called from ( dbuedit.prg  )   1 - browse()
 *+                                   1 - function xmemo()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -548,7 +548,7 @@ return ( 0 )
 *+
 *+    Static Function statline()
 *+
-*+    Called from ( dbuedit.prg  )   3 - procedure browse()
+*+    Called from ( dbuedit.prg  )   3 - browse()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -598,7 +598,7 @@ return ( 0 )
 *+
 *+    Static Function move_ptr()
 *+
-*+    Called from ( dbuedit.prg  )   1 - procedure browse()
+*+    Called from ( dbuedit.prg  )   1 - browse()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -881,7 +881,7 @@ return ( .f. )
 *+
 *+    Static Function DoGet()
 *+
-*+    Called from ( dbuedit.prg  )   1 - procedure browse()
+*+    Called from ( dbuedit.prg  )   1 -  browse()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -1022,7 +1022,7 @@ return ( keystroke )
 *+
 *+    Static Function FreshOrder()
 *+
-*+    Called from ( dbuedit.prg  )   2 - procedure browse()
+*+    Called from ( dbuedit.prg  )   2 -  browse()
 *+                                   1 - static function doget()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -1051,7 +1051,7 @@ return ( NIL )
 *+
 *+    Static Function Skipped()
 *+
-*+    Called from ( dbuedit.prg  )   1 - procedure browse()
+*+    Called from ( dbuedit.prg  )   1 -  browse()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+

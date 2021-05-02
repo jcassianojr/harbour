@@ -1,4 +1,4 @@
-*:*****************************************************************************
+3*:*****************************************************************************
 *:
 *:    FOLMENU.PRG:  MENU PRINCIPAL DA FOLHA DE PAGAMENTO
 *:      Linguagem: Clipper 5.x
@@ -83,10 +83,10 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: MENU7
+*!       MENU7
 *!
 *!*****************************************************************************
-PROC MENU7
+FUNCTION MENU7
 PRIV HELPDBF
 HELPDBF="FO7"
 WHILE .T.
@@ -137,10 +137,10 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: MENUC
+*!       MENUC
 *!
 *!*****************************************************************************
-PROC MENUC
+FUNCTION MENUC
 PRIV HELPDBF
 HELPDBF="FOC"
 WHILE .T.
@@ -167,9 +167,9 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: MENUCC
+*!       MENUCC
 *!
-*!    Chamado por: MENUC              (processo  em FOLMENU.PRG)
+*!    Chamado por: MENUC              (  em FOLMENU.PRG)
 *!
 *!          Chama: CABEX()            (fun??o    em FOLPROC.PRG)
 *!               : CLSCOR()           (fun??o    em COMANDO.CH)
@@ -178,7 +178,7 @@ RETU
 *!               : FO6L()             (fun??o    em FO6.PRG)
 *!
 *!*****************************************************************************
-PROC MENUCC
+FUNCTION MENUCC
 WHILE .T.
    CABEX('Imprimir Cadastros')
    SETCOLOR("+N/BG")
@@ -209,10 +209,10 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: MENUA
+*!       MENUA
 *!
 *!*****************************************************************************
-PROC MENUA
+FUNCTION MENUA
 PRIV HELPDBF
 HELPDBF="FOA"
 WHILE .T.
@@ -234,10 +234,10 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: MENU6
+*!       MENU6
 *!
 *!*****************************************************************************
-PROC MENU6
+FUNCTION MENU6
 PRIV HELPDBF
 HELPDBF="FOG"
 WHILE .T.

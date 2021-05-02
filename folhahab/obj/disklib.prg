@@ -2,11 +2,11 @@
 *+
 *+    Source Module => C:\DEVELOP\CLIPPER\FOLHA\OBJ\DISKLIB.PRG
 *+
-*+    Functions: Procedure NOTEP()
-*+               Procedure AGEN()
+*+    Functions: NOTEP()
+*+                AGEN()
 *+               Function LOGOTIPO()
 *+               Function FIM()
-*+               Procedure QUADRO()
+*+               QUADRO()
 *+               Function NEXTREC()
 *+               Function PREVREC()
 *+               Function DELEREC()
@@ -25,7 +25,7 @@
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-*+    Procedure NOTEP()
+*+    NOTEP()
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
@@ -40,7 +40,7 @@ return .t.
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-*+    Procedure AGEN()
+*+    AGEN()
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
@@ -101,10 +101,10 @@ return  .T.
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-*+    Procedure QUADRO()
+*+    QUADRO()
 *+
-*+    Called from ( disklib.prg  )   1 - procedure notep()
-*+                                   1 - procedure agen()
+*+    Called from ( disklib.prg  )   1 - notep()
+*+                                   1 - agen()
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
@@ -211,7 +211,7 @@ retu .T.
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-function OBSSAY( LIN )  //PROC AUXILIAR DE TRABALHO
+function OBSSAY( LIN )  // AUXILIAR DE TRABALHO
 
 setcolor( "+N/W" )
 @ LIN, 09     say OBS1
@@ -229,12 +229,12 @@ return  .T.
 *+
 *+    Function OBSGET()
 *+
-*+    Called from ( disklib.prg  )   1 - procedure notep()
-*+                                   1 - procedure agen()
+*+    Called from ( disklib.prg  )   1 - notep()
+*+                                   1 - agen()
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-function OBSGET( LIN )  //PROC AUXILIAR DE TRABALHO
+function OBSGET( LIN )  //AUXILIAR DE TRABALHO
 
 setcolor( "+GR/B" )
 @ LIN, 09     get OBS1

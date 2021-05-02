@@ -1,4 +1,6 @@
 -manifest=convcep.Manifest
+-lng=pt_BR
+
 
 hbct.hbc
 hbwin.hbc

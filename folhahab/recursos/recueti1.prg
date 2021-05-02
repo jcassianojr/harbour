@@ -7,11 +7,11 @@
 *:      Copyright (c) 1994,  SOFTEC  S/C Ltda.
 *:  Atualizado em: 04/28/94     11:26
 *:
-*:  Procs & Fncts: RECUETI1()
+*:   & Fncts: RECUETI1()
 *:               : EDITA2
 *:               : CAD()
 *:
-*:          Chama: EDITA2             (processo  em RECUETI1.PRG)
+*:          Chama: EDITA2             (  em RECUETI1.PRG)
 *:
 *:     Arq. Dados: ETIQ1 - ETIQUETA SIMPLES
 *:               : ETIQ2 - LAYOUT DE TAMANHO DE ETIQUETA
@@ -47,7 +47,7 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: EDITA2
+*!       EDITA2
 *!
 *!    Chamado por: RECUETI1.PRG
 *!
@@ -55,7 +55,7 @@ RETU
 *!               : CAD()              (fun‡„o    em RECUETI1.PRG, chamado  no Dbedit())
 *!
 *!*****************************************************************************
-PROC EDITA2
+FUNCTION EDITA2
 @ 08,00 CLEAR
 IMPRIME=.F.
 PES1=SPAC(12)
@@ -89,9 +89,9 @@ RETU
 *!
 *!         Fun‡„o: CAD()
 *!
-*!    Chamado por: EDITA2             (processo  em RECUETI1.PRG)
+*!    Chamado por: EDITA2             (  em RECUETI1.PRG)
 *!
-*!          Chama: TELATIP            (processo  em RECUGER1.PRG)
+*!          Chama: TELATIP            (  em RECUGER1.PRG)
 *!               : CAD1()             (fun‡„o    em RECUGER1.PRG, chamado  no Dbedit())
 *!
 *!*****************************************************************************

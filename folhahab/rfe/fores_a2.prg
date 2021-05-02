@@ -92,10 +92,10 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: GRAVAREM
+*!       GRAVAREM
 *!
 *!*****************************************************************************
-PROC GRAVAREM                                    &&GRAVA DADOS DO REMANEJAMENTO
+FUNCTION GRAVAREM                                    &&GRAVA DADOS DO REMANEJAMENTO
 IF DAY(DAT)=29.AND.MONTH(DAT)=02
    DAT++
 ENDIF

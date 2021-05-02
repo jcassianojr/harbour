@@ -1,10 +1,7 @@
 -incpath=c:\devprg\hb32\extras\rddado\
 
--3rd=hbide_version=1.0
--3rd=hbide_title=Mana5
--3rd=hbide_output=obj21
- 
 -lng=pt_BR
+-manifest=folha1.Manifest
 
 hbwin.hbc
 hbtip.hbc

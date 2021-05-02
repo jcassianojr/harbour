@@ -23,7 +23,7 @@ RETURN .T.
 
 *!*****************************************************************************
 *!
-*!      Procedure: INCIDE
+*!       INCIDE
 *!
 *!    Chamado por: GRAVA2()           (funcao    em FOLPROC.PRG)
 *!
@@ -39,7 +39,7 @@ RETURN
 
 *!*****************************************************************************
 *!
-*!      Procedure: GRAVA1
+*!       GRAVA1
 *!
 *!    Chamado por: GRAVA2()           (funcao    em FOLPROC.PRG)
 *!
@@ -63,7 +63,7 @@ RETURN
 
 *!*****************************************************************************
 *!
-*!      Procedure: GRAVA
+*!      GRAVA
 *!
 *!    Chamado por: GRAVA2()           (funcao    em FOLPROC.PRG)
 *!
@@ -80,9 +80,9 @@ RETURN
 *!  CRT    Numero Funcionario (!Publica)
 *!  VALOR  Gravar em Valor(!Publica)
 *!
-*!          Chama: INCIDE             (processo  em FOLPROC.PRG)
-*!               : GRAVA              (processo  em FOLPROC.PRG)
-*!               : GRAVA1             (processo  em FOLPROC.PRG)
+*!          Chama: INCIDE             (  em FOLPROC.PRG)
+*!               : GRAVA              (  em FOLPROC.PRG)
+*!               : GRAVA1             (  em FOLPROC.PRG)
 *!
 *!*****************************************************************************
 
@@ -139,7 +139,7 @@ RETURN XSAL
 
 *!*****************************************************************************
 *!
-*!      Procedure: FODZER
+*!       FODZER
 *!
 *!*****************************************************************************
 FUNCTION FODZER
@@ -224,7 +224,7 @@ RETURN .T.
 
 *!*****************************************************************************
 *!
-*!      Procedure: NSHOW
+*!       NSHOW
 *!
 *!    Chamado por: NSHOW1()           (funcao    em FOLPROC.PRG)
 *!

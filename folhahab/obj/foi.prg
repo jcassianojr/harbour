@@ -39,19 +39,19 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOII
+*!       FOII
 *!
 *!    Chamado por: FOI.PRG
 *!
-*!          Chama: FOIIA              (processo  em FOI.PRG)
-*!               : FOIIB              (processo  em FOI.PRG)
+*!          Chama: FOIIA              (  em FOI.PRG)
+*!               : FOIIB              (  em FOI.PRG)
 *!               : FOID()             (fun‡„o    em FOID.PRG)
 *!               : FOID1()            (fun‡„o    em FOID1.PRG)
 *!               : FOIF1()            (fun‡„o    em FOIF1.PRG)
 *!               : FOIB()             (fun‡„o    em FOIB.PRG)
 *!
 *!*****************************************************************************
-PROC FOII
+FUNCTION FOII
 WHILE .T.
    CABEX ("Menu de Resumos - Opera‡„o a realizar")
    RESTSCREEN(07,00,21,19,TELA)
@@ -86,9 +86,9 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOIIA
+*!       FOIIA
 *!
-*!    Chamado por: FOII               (processo  em FOI.PRG)
+*!    Chamado por: FOII                 em FOI.PRG)
 *!
 *!          Chama: FOIA()             (fun‡„o    em FOIA.PRG)
 *!               : FOI20()            (fun‡„o    em FOI20.PRG)
@@ -98,7 +98,7 @@ RETU
 *!               : FOIF0()            (fun‡„o    em FOIF0.PRG)
 *!
 *!*****************************************************************************
-PROC FOIIA
+FUNCTION FOIIA
 WHILE .T.
    CABEX ("Menu de Resumos - Arquivo para Acumular")
    RESTSCREEN(07,00,21,19,TELA)
@@ -128,16 +128,16 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOIIB
+*!       FOIIB
 *!
-*!    Chamado por: FOII               (processo  em FOI.PRG)
+*!    Chamado por: FOII               (  em FOI.PRG)
 *!
 *!          Chama: FOI2B()            (fun‡„o    em FOI2B.PRG)
 *!               : FOI2A()            (fun‡„o    em FOI2A.PRG)
 *!               : FOIC1()            (fun‡„o    em FOIC1.PRG)
 *!
 *!*****************************************************************************
-PROC FOIIB
+FUNCTION FOIIB
 WHILE .T.
    CABEX ("Menu de Resumos - Grupo a Listar")
    RESTSCREEN(07,00,21,19,TELA)

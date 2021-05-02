@@ -53,10 +53,10 @@ ENDDO
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOAA1
+*!       FOAA1
 *!
 *!*****************************************************************************
-PROC FOAA1
+FUNCTION FOAA1
 WHILE .T.
    CABEX("Menu de Entrada de Dados")
    RESTSCREEN(05,00,23,24,TELA)
@@ -170,10 +170,10 @@ RETU .T.
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOAA2 //Sub Menu VT
+*!       FOAA2 //Sub Menu VT
 *!
 *!*****************************************************************************
-PROC FOAA2
+FUNCTION FOAA2
 WHILE .T.
    CABEX("Menu de Entrada de Vale Transporte")
    RESTSCREEN(05,00,23,24,TELA)
@@ -203,10 +203,10 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOAA3
+*!       FOAA3
 *!
 *!*****************************************************************************
-PROC FOAA3
+FUNCTION FOAA3
 WHILE .T.
    CABEX("Exclusao de Entrada de Dados")
    RESTSCREEN(05,00,23,24,TELA)
@@ -228,10 +228,10 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: FOAA4
+*!       FOAA4
 *!
 *!*****************************************************************************
-PROC FOAA4
+FUNCTION FOAA4
 WHILE .T.
    CABEX("Menu de Entrada de Dados")
    RESTSCREEN(05,00,23,24,TELA)

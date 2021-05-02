@@ -179,12 +179,12 @@ RETU
 
 *!*****************************************************************************
 *!
-*!      Procedure: CABRAIS
+*!       CABRAIS
 *!
 *!    Chamado por: FOLIS_C9.PRG
 *!
 *!*****************************************************************************
-PROC CABRAIS
+function CABRAIS
 @ PROW()+SALTO,5 SAY MSG2
 @ PROW()+2,7 SAY ENDERR
 @ PROW()+1,103 SAY STRZERO(FL,4)+'/'+XLF2

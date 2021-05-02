@@ -2,7 +2,7 @@
 *+
 *+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUVIEW.PRG
 *+
-*+    Functions: Procedure SET_VIEW()
+*+    Functions: SET_VIEW()
 *+               Function channel()
 *+               Function bar_menu()
 *+               Function bar_func()
@@ -49,11 +49,11 @@
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Procedure SET_VIEW()
+*+    SET_VIEW()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-procedure SET_VIEW
+function SET_VIEW
 
 local saveColor
 private bar_line
@@ -406,7 +406,7 @@ return
 *+
 *+    Function channel()
 *+
-*+    Called from ( dbuview.prg  )   4 - procedure set_view()
+*+    Called from ( dbuview.prg  )   4 - set_view()
 *+                                   1 - function draw_view()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -623,7 +623,7 @@ return 0
 *+
 *+    Function bar_menu()
 *+
-*+    Called from ( dbuview.prg  )   2 - procedure set_view()
+*+    Called from ( dbuview.prg  )   2 - set_view()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -794,7 +794,7 @@ return 0
 *+
 *+    Function set_deflt()
 *+
-*+    Called from ( dbuview.prg  )   7 - procedure set_view()
+*+    Called from ( dbuview.prg  )   7 - set_view()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -856,7 +856,7 @@ return 0
 *+
 *+    Function draw_view()
 *+
-*+    Called from ( dbuview.prg  )   5 - procedure set_view()
+*+    Called from ( dbuview.prg  )   5 - set_view()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -934,7 +934,7 @@ return 0
 *+
 *+    Function d_copy()
 *+
-*+    Called from ( dbuview.prg  )   1 - procedure set_view()
+*+    Called from ( dbuview.prg  )   1 - set_view()
 *+                                   1 - function channel()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -967,8 +967,8 @@ return 0
 *+
 *+    Function open_dbf()
 *+
-*+    Called from ( dbustru.prg  )   1 - procedure modi_stru()
-*+                ( dbuview.prg  )   1 - procedure set_view()
+*+    Called from ( dbustru.prg  )   1 - modi_stru()
+*+                ( dbuview.prg  )   1 - set_view()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -1388,7 +1388,7 @@ return M->done
 *+
 *+    Function set_relation()
 *+
-*+    Called from ( dbuview.prg  )   1 - procedure set_view()
+*+    Called from ( dbuview.prg  )   1 - set_view()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -2070,7 +2070,7 @@ return M->key
 *+
 *+    Function get_filter()
 *+
-*+    Called from ( dbuview.prg  )   1 - procedure set_view()
+*+    Called from ( dbuview.prg  )   1 - set_view()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -2178,7 +2178,7 @@ return M->done
 *+
 *+    Function clear_dbf()
 *+
-*+    Called from ( dbuview.prg  )   1 - procedure set_view()
+*+    Called from ( dbuview.prg  )   1 - set_view()
 *+                                   1 - function do_opendbf()
 *+                                   1 - function do_openvew()
 *+
@@ -2453,7 +2453,7 @@ return 0
 *+
 *+    Function save_view()
 *+
-*+    Called from ( dbuview.prg  )   1 - procedure set_view()
+*+    Called from ( dbuview.prg  )   1 - set_view()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -2712,7 +2712,7 @@ return 0
 *+    Function set_from()
 *+
 *+    Called from ( dbu.prg      )   1 -
-*+                ( dbuview.prg  )   1 - procedure set_view()
+*+                ( dbuview.prg  )   1 - set_view()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+

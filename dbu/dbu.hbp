@@ -1,13 +1,7 @@
-#
-# $Id: dbu.hbp 11177 2009-05-29 16:38:23Z vszakats $
-#
-
 -gtwvg
 -gui
 -lng=pt_BR
--compr
--strip
-#-manifest=c:\hb32\harb_win10.mft
+-manifest=dbu.Manifest
 
 
 hbct.hbc
