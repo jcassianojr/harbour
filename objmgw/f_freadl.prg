@@ -4,6 +4,7 @@
 *+
 *+    Function FREADLINE(handle, line_len,lremchrexp) le uma linha
 *+    FUNCTION FDELIM (cARQ, line_len) verifica se o delimitador e chr(13)chr(10) dos ou chr(10) linux
+*+    SplitCommaAspas(cLINHA) "33600823";"0001";"07";"1";"SALGADOS DA ERIDIANA";"08" todos os campos estao delimitados por ";"
 *+
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 
@@ -107,3 +108,24 @@ IF EMPTY(cRETU)
 ENDIF
 RETURN cRETU
 
+
+*+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+*+
+*+    SplitCommaAspas(cLINHA)
+*+    todos os campos devem estar com aspas 
+*+
+*+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+
+FUNCTION SplitCommaAspas(cLINHA)
+LOCAL aRETU,cVALOR,nPOS
+//CLINHA:='"33600823";"0001";"07";"1";"SALGADOS DA ERIDIANA";"08";"20190722";"01";"";"";"20190513";"5620104";"1096100,1093702";"RUA";"EMILIO VASCONCELOS";"288";"";"CENTRO";"39790000";"MG";"4011";"33";"88333829";"";"";"";"";"adelano.deptofiscal@gmail.com";"";"'
+aRETU:={}
+while at('";"',cLINHA)>0
+    nPOS:=at('";"',cLINHA)
+    cVALOR:=SUBSTR(cLINHA,2,nPOS-2)
+    cLINHA:=SUBSTR(cLINHA,nPOS+2)
+//    ALERT(cVALOR)
+//    ALERT(cLINHA)
+    AADD(aRETU,cVALOR)
+enddo
+RETURN aRETU
