@@ -11,6 +11,8 @@ FUNCTION MAKEDBF (cArqDic,lQUIT,lCRIA,cDRIVER)
 * que possa impedir a atualizacao para a versao correta.
 
 # include "box.ch"
+# include "dbinfo.ch"
+
 # define f_names  1
 # define f_types  2
 # define f_lens   3

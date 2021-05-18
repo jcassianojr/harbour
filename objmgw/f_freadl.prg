@@ -3,12 +3,24 @@
 *+    f_freadl.prg         funcoes de arquivos
 *+
 *+    Function FREADLINE(handle, line_len,lremchrexp) le uma linha
-*+    Function flinecount(Carq)    conta numero de linhas    //nativa harbour flnecount()
-*+    Function Data_Hora_ARQ(cArq)  retorna data e hora do arquivo //nativa harbour fdate() ftime()
+*+    FUNCTION FDELIM (cARQ, line_len) verifica se o delimitador e chr(13)chr(10) dos ou chr(10) linux
 *+
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 
 #include "Directry.ch"
+
+/*
+    cDELIM:=FDELIM (cARQIMP,1024) //acha o delimitador chr(13)+chr(10) dos ou chr(10) linux usado abaixo no freadline
+    nFILE:=FOPEN(cARQIMP) //abre o arquivo
+     WHILE .T.  
+        cLINHA:=FREADLINE (nFILE, 1024 ,.T. ,cDELIM) //FREADLINE (handle, line_len,lremchrexp,cDELI)
+        IF cLINHA='__FINAL__' //freadline retorna __FINAL__   quando nao e mais linhas
+           EXIT
+        ENDIF
+        //operacoes da rotina
+     enddo
+     fclose(nFILE)   //fecha o arquivo
+*/
 
 *****************************************************************
 * FUNCTION FREADLINE (handle, line_len,lremchrexp,cDELI)
@@ -54,5 +66,44 @@ ELSE
 ENDIF
 
 
-
+*+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+*+
+*+    FUNCTION FDELIM (cARQ, line_len) verifica se o delimitador e chr(13)chr(10) dos ou chr(10) linux
+*+
+*+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+FUNCTION FDELIM (cARQ, line_len)
+LOCAL buffer, line_end, num_bytes,nhandle,cRETU
+IF VALTYPE(line_len) <> 'N'
+    line_len = 1024
+ENDIF
+cRETU:=""
+buffer = SPACE(line_len)
+nHANDLE:=FOPEN(cARQ)
+num_bytes = FREAD(nhandle, @buffer, line_len)
+FCLOSE(NHANDLE)
+line_end = AT(CHR(13)+CHR(10), buffer)
+IF line_end > 0
+   cRETU:=CHR(13)+CHR(10) //dos
+  // alert("dos")
+   return cRETU
+endif
+line_end = AT(CHR(10), buffer)
+IF line_end > 0
+   cRETU:=CHR(10)  //linux
+  // alert("linux")
+   return cRETU
+endif
+IF EMPTY(cRETU)
+  line_end = AT(CHR(255)+CHR(254), buffer)
+  IF line_end > 0
+     cRETU:=CHR(255)+ CHR(254) //unicode
+  endif
+ENDIF
+IF EMPTY(cRETU)
+  line_end = AT(CHR(239)+CHR(187)+CHR(191), buffer)
+  IF line_end > 0
+     cRETU:=CHR(239)+ CHR(187)+CHR(191) //utf-8
+  endif
+ENDIF
+RETURN cRETU
 
