@@ -128,4 +128,7 @@ while at('";"',cLINHA)>0
 //    ALERT(cLINHA)
     AADD(aRETU,cVALOR)
 enddo
+IF LEN(cLINHA)>0 //caso o ultimo campo nao tenha delimitador
+    AADD(aRETU,strtran(cLINHA,'"',''))
+ENDIF
 RETURN aRETU
