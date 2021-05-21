@@ -189,7 +189,7 @@ endif
 if ! HB_FILEEXISTS( cARQ )
    nhandle := fcreate( cARQ )
 else
-   nhandle := hb_fopen( cARQ, 1 )
+   nhandle := fopen( cARQ, 1 )
    fseek( nhandle, 0, 2 )
 endif
 for X := 1 to len( aMES )
