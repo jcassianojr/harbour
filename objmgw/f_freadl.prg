@@ -52,7 +52,11 @@ IF line_end = 0
     RETURN('__FINAL__')
 ELSE
     * Move o ponteiro para o inicio da proxima linha.
-    FSEEK(handle, (num_bytes * -1) + line_end + 1, 1)
+    IF cDELI=CHR(10) //*-1 negativo pois o buffer passa do ponto e precisa retornar ao final real da linha
+       FSEEK(handle, (num_bytes * -1) + line_end , 1) //chr(10) e so um caractere nao  precisa somar +1
+    ELSE
+       FSEEK(handle, (num_bytes * -1) + line_end + 1, 1) //como chr(13)+chr(10) sao dois caracteres precisa somar +1
+    ENDIF   
     * E retorna a linha atual.
     IF lREMCHREXP
        cRETU:= SUBSTR(buffer, 1, line_end - 1)
@@ -122,7 +126,11 @@ LOCAL aRETU,cVALOR,nPOS
 aRETU:={}
 while at('";"',cLINHA)>0
     nPOS:=at('";"',cLINHA)
-    cVALOR:=SUBSTR(cLINHA,2,nPOS-2)
+    IF LEFT(cLINHA,1)='"' //as vezes o primeiro campo nao e "33600823"; e sim 33600823";
+       cVALOR:=SUBSTR(cLINHA,2,nPOS-2)
+    ELSE
+       cVALOR:=SUBSTR(cLINHA,1,nPOS-1)
+    ENDIF   
     cLINHA:=SUBSTR(cLINHA,nPOS+2)
 //    ALERT(cVALOR)
 //    ALERT(cLINHA)
