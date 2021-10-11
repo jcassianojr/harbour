@@ -1287,13 +1287,17 @@ METHOD NFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente, cIndSinc ) CLASS
    ELSE
       ::cXmlRecibo := ::cXmlRetorno
       ::cRecibo    := XmlNode( ::cXmlRecibo, "nRec" )
+      ::cStatus    := Pad( XmlNode( XmlNode( ::cXmlRetorno, "infProt" ), "cStat" ), 3 )
+      ::cMotivo    := XmlNode( XmlNode( ::cXmlRetorno, "infProt" ), "xMotivo" )
+      IF Empty( ::cStatus )
+         ::cStatus := Pad( XmlNode( ::cXmlRetorno, "cStatus" ), 3 )
+         ::cMotivo := XmlNode( ::cXmlRetorno, "xMotivo" )
+      ENDIF
       IF ::cStatus != "999"
-         ::cStatus    := Pad( XmlNode( ::cXmlRecibo, "cStat" ), 3 )
-         ::cMotivo    := XmlNode( ::cXmlRecibo, "xMotivo" )
-         IF ! Empty( ::cRecibo )
+         //IF ! Empty( ::cRecibo )
             ::cXmlProtocolo := ::cXmlRetorno
             ::cXmlRetorno   := ::NfeGeraAutorizado( ::cXmlDocumento, ::cXmlProtocolo )
-         ENDIF
+         //ENDIF
       ENDIF
    ENDIF
 
