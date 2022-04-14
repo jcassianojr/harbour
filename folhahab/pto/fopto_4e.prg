@@ -74,10 +74,10 @@ function gFOPTO4E
 @ 11,50 get mCESTA    valid mCESTA $ "SNV "
 @ 11,72 get mVT       valid mVT $ "SN "
 @ 12,06 GET mCPF      PICTURE "999.999.999-99" VALID VALCPF(mCPF)
-@ 12,25 GET mRGTIP    VALID mRGTIP="RG" .OR. mRGTIP="RGE" .OR. mRGTIP="RIC"
-@ 12,29 GET mRGUF     PICT "!!" VALID CHECKTAB(PADR("UF",4)+PADR(mRGUF,5),24,0,"Estado Nao Cadastrado")
+@ 12,25 GET mRGTIP    VALID mRGTIP="RG" .OR. mRGTIP="RGE" .OR. mRGTIP="RIC"  .OR. mRGTIP="CPF"
+@ 12,29 GET mRGUF     PICT "!!" VALID mRGTIP="CPF" .OR. CHECKTAB(PADR("UF",4)+PADR(mRGUF,5),24,0,"Estado Nao Cadastrado")
 @ 12,32 get mRG       VALID ALLTRUE(CHECKRG(FORMATARG(mRG,mRGTIP),.T.,mRGTIP,mNASC,mRGUF))
-@ 12,47 GET mRGEMIS   VALID VERSEHA("ORGEMISS",,mRGEMIS,"NOME",'"Orgao emissor nao cadastrado"')
+@ 12,47 GET mRGEMIS   VALID mRGTIP="CPF" .OR. VERSEHA("ORGEMISS",,mRGEMIS,"NOME",'"Orgao emissor nao cadastrado"')
 @ 13,43 get mPIS      VALID VALPIS(mPIS,.T.,.T.,mEVINC) 
 @ 13,60 get mCNS      VALID ALLTRUE(VALCNS(mCNS))
 @ 14,06 GET mPAI      PICT "@S30"

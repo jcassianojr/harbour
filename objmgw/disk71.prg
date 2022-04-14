@@ -32,17 +32,19 @@ local nPOS
 local cDAC
 cDAC = ""
 IF VALTYPE(cTIPO)="C"
-   IF cTIPO="RNE" .OR.  cTIPO="RIC"  
+   IF cTIPO="RNE" .OR.  cTIPO="RIC"  .OR.  cTIPO="CPF"
       return VALOR
    ENDIF
 ENDIF
-If Valor = "ISENTO" .OR. At("RNE",valor) >0 .OR. At("RIC",valor) >0 //registro nacional estrangeiro
+If At("ISENT",valor) >0  .OR. At("RNE",valor) >0 .OR. At("RIC",valor) .OR. At("CPF",valor)>0 //registro nacional estrangeiro
    return VALOR
 End If
 IF VAL(valor)=0
    return valor
 ENDIf
-
+IF VALCPF(VALOR,.F.)
+   return valor        
+ENDIF
 valor := alltrim(valor)
 valor := upper(valor)
 nPOS = at( "-",Valor)
@@ -113,22 +115,35 @@ ENDIF
 ZDAC:=" "
 ZNERRO:=0
 ZERRO:=""
-Valor:= StrTran(Valor,".","")  //tiraout tambem tira o traco(-) nao pode ser usada aqui
-IF Valor = "ISENTO" 
-   RETUrn .T.
-ENDIF
+IF VALTYPE(cTIPO)="C"  .AND. At("ISENT",valor) >0 
+   return .t.
+ENDIF 
 IF Len(Valor) = 0
    znerro:=7
-   zerro:="RG/RNE/RIC em branco"
+   zerro:="RG/RNE/RIC/CPF em branco"
 ENDIF
 IF (VALTYPE(cTIPO)="C" .AND. cTIPO="RNE" ).OR. At("RNE",valor) >0 
    return .t.
-ENDIF   
+ENDIF 
+IF At("CPF",valor) >0
+   cTIPO:="CPF"
+   valor:=strtran(valor,'CPF','')
+ENDIF
+IF Valcpf( VALOR ,.F.)
+   IF VALTYPE(cTIPO)<>"C" .OR. (VALTYPE(cTIPO)="C" .AND. cTIPO<>"CPF" )
+      IF LMES
+         ALERTX("Preencha o tipo como CPF")
+      ENDIF  
+   ENDIF
+ENDIF  
 IF At("RIC",valor) >0
    cTIPO:="RIC"
    valor:=strtran(valor,'RIC','')
 ENDIF
-//IF LEN(valor)=11 AS Vezes o RG e digitado errado com 11 digitos somente 11 digitos nao garante que e RIC
+Valor:= StrTran(Valor,".","")  //tiraout tambem tira o traco(-) nao pode ser usada aqui
+
+
+//IF LEN(valor)=11 AS Vezes o RG e digitado errado com 11 digitos somente 11 digitos nao garante que e RIC //Agora valida cpf que tambem e 11
 //   cTIPO:="RIC" 
 //ENDIF
 IF VALTYPE(cTIPO)<>'C'
