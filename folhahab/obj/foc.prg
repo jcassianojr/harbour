@@ -50,7 +50,7 @@ ENDDO
 *!       FOC1
 *!
 *!*****************************************************************************
-FUNCTON FOC1
+FUNCTiON FOC1
 WHILE .T.
    HELPDBF="FOC"
    CABEX("Menu De Impress„o de Dados")

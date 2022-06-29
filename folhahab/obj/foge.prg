@@ -134,7 +134,7 @@ RETU
 *!    Chamado por: FOGE.PRG
 *!
 *!*****************************************************************************
-FUNCTON HORPADT
+FUNCTiON HORPADT
 HB_dispbox( 8, 0, 22, 79,B_DOUBLE+" ")
 @ 10,02 SAY "Horario Padr…o "+REPL('-',2)+CHR(16)
 @ 13,02 SAY "Segunda    "+CHR(26)

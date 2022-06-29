@@ -1,7 +1,7 @@
 -incpath=c:\devprg\hb32\extras\rddado\
 
 -lng=pt_BR
--manifest=folha1.Manifest
+-manifest=mana5.Manifest
 
 hbwin.hbc
 hbtip.hbc
@@ -182,7 +182,7 @@ M_DW.prg
 comp1.prg
 comp2.prg
 mlibmail.prg
-..\MANA5IEB\m_a2.prg
+MANA5IEB\m_a2.prg
 c:\develop\harbour\objmgw\comp.prg
 c:\develop\harbour\objmgw\disk55.prg
 c:\develop\harbour\objmgw\disk52.prg
