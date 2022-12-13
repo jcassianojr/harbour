@@ -9,6 +9,7 @@ MDS('Aguarde Atualizando tabelas')
 //os arquivos do aci vem com delimitador linux chr 10 pspad,notepad... trocar para limitador linha dos chr(13)+chr(10)
 //cbo http://www.mtecbo.gov.br/cbosite/pages/downloads.jsf
 //incluir CBO2002PerfilOcupacional,csv
+//https://caged.maisemprego.mte.gov.br/portalcaged/paginas/TL_downloads.xhtml
 for x=1 to 10
    do case
       case x=1
