@@ -39,13 +39,9 @@ Set( _SET_CONFIRM, .F.)
 
 SET TALK OFF ''checar nao tem ainda na std.ch changelog.txt
 
-
 Set( _SET_MESSAGE, 6 , .T. )
 
-
 MVINFOConfTela("Folha Modulo Ponto")
-
-
 
 netregosok()
 HB_LANGSELECT('PT')
@@ -59,8 +55,6 @@ ZERRO:=""
 zNERRO:=0
 ZCTRALMOCO:=""
 
-
-
 ACENTUA=.T.
 SetKey( 39, {|| AC_AGUDO() } )
 SetKey( 94, {|| AC_CIRC() } )
@@ -68,9 +62,7 @@ SetKey( 96, {|| AC_CRASE() } )
 SetKey( 126, {|| AC_TIL() } )
 SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
 SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
-
 SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
-
 SetKey( K_F2, {|| TELE() } )
 SetKey( K_F3, {|| NOTEP() } )
 SetKey( K_F4, {|| AGEN() } )
@@ -87,7 +79,6 @@ deletaarq("*.LOG")
 //Inicializa o Mouse
 set( _SET_EVENTMASK, HB_INKEY_ALL )
 
-
 lMOUSE       := mpresent()
 MOUSE_X      := 0
 MOUSE_Y      := 0
@@ -98,9 +89,6 @@ if lMOUSE
    msetbounds()
    msetcursor( .T. )
 endif
-
-
-//RELOGIO()
 
 //Variaveis Controle Impressora,Video Arquivo
 cARQSPO:=""
@@ -130,7 +118,6 @@ INFOR( "FIRMA", "NRCLIEN", "FIRMA" ,.T.)
 INFOR("FOPTONTX","DBF+NTX+STR(SEQ,3)","FOPTONTX",.T.)
 INFOR("FOPTOCOM","STR(ANO,4)+STR(MES,2)+STR(EMPRESA,8)","FOPTOCOM",.T.)
 
-
 ZDATA := date()
 IF VALTYPE(ZUSER)#"C"
    ZUSER := space( 10 )
@@ -148,10 +135,9 @@ endif
 ZUSER := upper( ZUSER )
 
 ZSUPER:= .F.
-IF ZUSER = "SUPERVISOR".AND.ZUSER="SOFTEC"
+IF ZUSER = "SUPERVISOR"  .OR. ZUSER="SOFTEC"
    ZSUPER:=.T.
 ENDIF
-
 
 
 IF AT("__$",ZUSER)>0.AND.AT("%__",ZUSER)>0
@@ -160,29 +146,39 @@ IF AT("__$",ZUSER)>0.AND.AT("%__",ZUSER)>0
    cSENHA:= XDECODE( OBTER( "MUSER", , ENCODE( ZUSER ), "SENHA" ) )
 ENDIF
 
-
-if ZUSER <> "SUPERVISOR"
-   if ! VERSEHA( "MUSER", , ENCODE( ZUSER ) )
-      ALERTX( "Usuario Nao Cadastrado" )
-      quit
-   endif
-   if XDECDAT( OBTER( "MUSER", , ENCODE( ZUSER ), "VALIDADE" ) ) < ZDATA
-      ALERTX( "Se acesso expirou comunique ao Supervisor" )
-      quit
-   endif
+MDS("Senha")
+if empty(cSENHA)
+   cSENHA := PEGAPASS(24,10,8,,"*",.T.)
 endif
 
+IF ZUSER = "ADMLOG" .Or. ZUSER = "ADMINISTRADOR" .Or. ZUSER = "ADMIN" 
+   cUSUARIO := "SUPERVISOR"
+END IF
 
-
-
-IF EMPTY(cSENHA)
-   MDS( "Senha" )
-   cSENHA:=PEGAPASS( 24, 10, 8,, "*", .T. )
+IF ZUSER<>"SUPERVISOR"
+   IF ! VERSEHA("MUSER",,ENCODE(ZUSER))
+      ALERTX("Usuario Nao Cadastrado")
+      QUIT
+   ENDIF
+   IF XDECDAT(OBTER("MUSER",,ENCODE(ZUSER),"VALIDADE"))<ZDATA
+      ALERTX("Seu acesso expirou comunique ao Supervisor")
+      QUIT
+   ENDIF
 ENDIF
-IF cSENHA # XDECODE( OBTER( "MUSER", , ENCODE( ZUSER ), "SENHA" ) )
-   ALERTX( "Senha nao Confere, retente ou comunique ao Supervisor" )
-   quit
-ENDIF
+
+
+//23/12/2022 checagem hash ou senha
+cCHAVE :=StrToHex(hb_SHA256(ALLTRIM(UPPER(zuser))+alltrim(UPPER(cSENHA)), .t.))
+//alertX(CCHAVE)
+
+if cCHAVE = OBTER("MUSER",ENCODE(ZUSER),"CHAVEH")
+  // ALERTX("HASH OK")
+else
+  if cSENHA # XDECODE(OBTER("MUSER",ENCODE(ZUSER),"SENHA"))
+     ALERTX("Senha nao Confere, retente ou comunique ao Supervisor")
+     quit
+  endif
+endif
 
 READVAR  := ""
 OP_SENHA := 0
@@ -194,10 +190,8 @@ public DADO
 
 MUDADATA()
 
-
 //Controle Secundario Ponto
 lSECBCO:=.F.
-
 
 while .T.
    LOGOTIPO( "MODULO PONTO" )
@@ -276,7 +270,5 @@ while .T.
    endif
 enddo
 
-
 *+ EOF: FOLHAPTO.PRG
-
 

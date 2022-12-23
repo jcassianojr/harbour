@@ -19,12 +19,9 @@ REQUEST HB_LANG_PT
 REQUEST DBFCDX
 
 #INCLUDE "INKEY.CH"
-////#INCLUDE "COMANDO.CH"
-
 
 function main
 PARA ZUSER,cSENHA
-
 
 MVINFOConfTela("Folha")
 
@@ -43,19 +40,12 @@ __SetCentury( .t. )
 Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 SetCursor(.t.)
-
 Set( _SET_SCOREBOARD, .f. )
-//Set( _SET_TYPEAHEAD, 50 )
 Set( _SET_WRAP, .t. )
-//Set( _SET_EXACT, .f. )
-//Set( _SET_CONFIRM, .t.)
-
 Set( _SET_CONSOLE, .F. )
 
 SET TALK OFF ''checar nao tem ainda na std.ch changelog.txt
 SET SAFETY OFF ''checar nao tem ainda na std.ch changelog.txt
-
-
 
 SETCOLOR("W+/N")
 
@@ -66,9 +56,7 @@ SetKey( 96, {|| AC_CRASE() } )
 SetKey( 126, {|| AC_TIL() } )
 SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
 SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
-
 SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
-
 SetKey( K_F2, {|| TELE() } )
 SetKey( K_F3, {|| NOTEP() } )
 SetKey( K_F4, {|| AGEN() } )
@@ -79,8 +67,6 @@ SetKey( K_F10, {|| MUDADATA() } )
 deletaarq("TEMP*.*")
 deletaarq("*.tmp")
 deletaarq("*.LOG")
-
-//RELOGIO()
 
 //Inicializa o Mouse Clipper 5.3c
 SET ( _SET_EVENTMASK, HB_INKEY_ALL)
@@ -95,7 +81,6 @@ IF lMOUSE
    MSETCURSOR ( .T. )
 ENDIF
 
-
 //Variaveis Controle Impressora,Video Arquivo
 cARQSPO:=""
 nTIPSPO:=0
@@ -107,8 +92,6 @@ cIMPNER:=CHR(27)+CHR(70)
 cIMPORI:=""
 lIMPEMAIL:=.F.
 
-
-
 HELPARQ="FOLREL"
 HELPDBF="FOLHA1"
 READVAR=""
@@ -118,11 +101,7 @@ ZCODMANA5=1
 ZERRO:=""
 zNERRO:=0
 
-
-
 cRDDEXT:="CDX"
-
-
 
 IF ! NETUSE("CONFIGU",,,,,.F.,)
    RETU
@@ -138,9 +117,7 @@ ZMOEDA05 := ALLTRIM(MOEDA05)
 ZMOEDA06 := ALLTRIM(MOEDA06)
 DBCLOSEALL()
 
-
 LOGOTIPO("FOLHA DE PAGAMENTO")
-//CO = '|'
 
 PCK=.F.
 DXDIA=DATE()
@@ -169,22 +146,38 @@ IF EMPTY(ZUSER)
 ENDIF
 ZUSER:=UPPER(ZUSER)
 
+MDS("Senha")
+if empty(cSENHA)
+   cSENHA := PEGAPASS(24,10,8,,"*",.T.)
+endif
+
+IF ZUSER = "ADMLOG" .Or. ZUSER = "ADMINISTRADOR" .Or. ZUSER = "ADMIN" 
+   cUSUARIO := "SUPERVISOR"
+END IF
+
 IF ZUSER<>"SUPERVISOR"
    IF ! VERSEHA("MUSER",,ENCODE(ZUSER))
       ALERTX("Usuario Nao Cadastrado")
       QUIT
    ENDIF
    IF XDECDAT(OBTER("MUSER",,ENCODE(ZUSER),"VALIDADE"))<ZDATA
-      ALERTX("Se acesso expirou comunique ao Supervisor")
+      ALERTX("Seu acesso expirou comunique ao Supervisor")
       QUIT
    ENDIF
 ENDIF
 
-MDS("Senha")
-IF PEGAPASS(24,10,8,,"*",.T.) # XDECODE(OBTER("MUSER",,ENCODE(ZUSER),"SENHA"))
-   ALERTX("Senha nao Confere, retente ou comunique ao Supervisor")
-   QUIT
-ENDIF
+//23/12/2022 checagem hash ou senha
+cCHAVE :=StrToHex(hb_SHA256(ALLTRIM(UPPER(zuser))+alltrim(UPPER(cSENHA)), .t.))
+//alertX(CCHAVE)
+
+if cCHAVE = OBTER("MUSER",ENCODE(ZUSER),"CHAVEH")
+  // ALERTX("HASH OK")
+else
+  if cSENHA # XDECODE(OBTER("MUSER",ENCODE(ZUSER),"SENHA"))
+     ALERTX("Senha nao Confere, retente ou comunique ao Supervisor")
+     quit
+  endif
+endif
 
 
 WHILE .T.

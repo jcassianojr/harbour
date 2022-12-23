@@ -1,18 +1,17 @@
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Source Module => C:\CLIPPER\FOLHA\PTO\FOPTO_4P.PRG
+*+    FOPTO_4P.PRG
 *+
 *+    Functions: Function iFOPTO4P()
 *+               Function tFOPTO4P()
 *+               Function gFOPTO4P()
 *+
-*+    Reformatted by Click! 2.03 on Sep-17-2000 at 12:08 pm
+*+    23/12/2022 incluindo hash
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
-//Teclas Operacionais
+
 #INCLUDE "INKEY.CH"
-////#INCLUDE "COMANDO.CH"
 #INCLUDE "BOX.CH"
 
 if ZUSER <> "SUPERVISOR".and. ZUSER <> "SOFTEC"            //So troca Senha
@@ -32,7 +31,7 @@ retu .T.
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-func iFOPTO4P
+function iFOPTO4P
 
 mUSUARIO := space( 10 )
 MDS( "Digite o Usuario" )
@@ -40,7 +39,7 @@ MDS( "Digite o Usuario" )
 READCUR()
 mUSUARIO := XENCODE( mUSUARIO )
 mCHAVE   := mUSUARIO
-retu .T.
+return .T.
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -50,12 +49,12 @@ retu .T.
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-func tFOPTO4P
+function tFOPTO4P
 
 HB_dispbox( 2, 0, 23, 79,B_DOUBLE+" ")
 @  3,  1 say "Usuario    Validade Equivalencia"
-@  5,  1 say "Senha" + spac( 6 ) + "Fonte Letra NЇ Folha"
-retu .T.
+@  5,  1 say "Senha" + spac( 6 ) + "Fonte Letra No Folha"
+return .T.
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -65,7 +64,7 @@ retu .T.
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-func gFOPTO4P
+function gFOPTO4P
 
 mUSUARIO  := padr( XDECODE( mUSUARIO ), 10 )
 mEQUIVALE := padr( XDECODE( mEQUIVALE ), 10 )
@@ -84,11 +83,14 @@ mVALIDADE := XDECDAT( mVALIDADE )
 @ 10, 10 get mEMAIL_POR
 @ 10, 15 get mEMAIL_SER
 READCUR()
+//cria antes do encode
+mCHAVEH:=StrToHex(hb_SHA256(upper(ALLTRIM( mUSUARIO ))+upper(alltrim( mSENHA )), .t. ))
+
 mUSUARIO  := XENCODE( mUSUARIO )
 mEQUIVALE := XENCODE( mEQUIVALE )
 mSENHA    := XENCODE( mSENHA )
 mVALIDADE := XENCODE( strtran( dtoc( mVALIDADE ), '/', '' ) )
 mCHAVE    := mUSUARIO
-retu .T.
+return .T.
 
 *+ EOF: FOPTO_4P.PRG
