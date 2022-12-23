@@ -178,6 +178,9 @@ if USEREDE("MUSER",1,99)
 		ENCODEPOS(cUSUARIO,0,.t.)
 		cSENHA:=DECODE(FIELD->SENHA)
 		ENCODEPOS(cSENHA,10,.t.)       //senha comeca na 10+1 postel11
+        cCHAVEH:=StrToHex(hb_SHA256(ALLTRIM(cUSUARIO)+alltrim(cSENHA), .t.))
+        FIELD->CHAVEH:=cCHAVEH
+        
 		dbunlock()
 		
 		aCHAVE:={}
@@ -194,13 +197,14 @@ if USEREDE("MUSER",1,99)
 			cSENHAUSR+=STRZERO(aCHAVE[X],3) 
 		NEXT X
 
-		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCAMWRPT)
-		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCAMCONT)
-		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCAMSYSU)
+		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMWRPT)
+		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMCONT)
+		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMSYSU)
 		
 		
 	   dbskip()
 	enddo
+    dbcloseall()
 ENDIF
 
 for z:=1 to 2
@@ -230,6 +234,7 @@ for z:=1 to 2
 			dbunlock()
 		   dbskip()
 		enddo
+        dbcloseall()
 	ENDIF
 NEXT Z
 return .t.
@@ -241,8 +246,18 @@ return .t.
 *+--------------------------------------------------------------------
 *+
 
-function gravaposTELA(cUSUARIO,cPOSTELAa,cPOSTELAB,cCAMBASE)
-cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+function gravaposTELA(cUSUARIO,cPOSTELAa,cPOSTELAB,cCHAVEH,cCAMBASE)
+//altd()
+//IF ! FILE(cCAMBASE)
+//   RETURN ALERT(cCAMBASE)
+//ENDIF
+//cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+//     "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=P:\NOVELL\ITAESBRA\PECAS\FMP04CPF.MDB;Mode=Share Deny None"
+
+cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+
+            
+        
 try
    oConn:=WIN_OLECreateObject( "ADODB.Connection" )
    with object oConn
@@ -250,17 +265,40 @@ try
       :Open()
    END  //end do with
 catch oErr
-   //ShowAdoError(oERR,oCoNn)   
-   dbcloseall()   
+   ShowAdoError(oERR,oCoNn)   
    return 
 end
+
+oRSDES:= WIN_OLECreateObject('ADODB.RecordSet')
+oRSDES:CursorLocation := 3
 
 oComm:=WIN_OLECreateObject( "ADODB.Command" )
 
 
+  cCOMANDO = "SELECT * FROM USUARIO WHERE USUARIO = '"+cUSUARIO+"' ;"
+
+      TRY
+        oRSDES:Open(cCOMANDO, oConN, adOpenDynamic, adLockOptimistic )
+      CATCH oERR
+        ShowADOError(oERR,oConn,cCOMANDO)          
+      END
+      If oRSDES:EOF 
+      //---->inclusao do usuario com max do id    
+      //   cCOMANDO = "INSERT INTO USUARIO (USUARIO)"
+      //   cCOMANDO+= " VALUES ('"+cUSUARIO+"') ;"
+    //    with object oComm
+     //         :CommandText:=cCOMANDO
+     //         :CommandType:=adCmdText
+     //         :ActiveConnection:=oConn
+     //         :Execute()
+    //     end
+      EndIf
+      oRSDES:Close()
+
+
 cCOMANDO:="UPDATE USUARIO SET POSTELAA = '"+cPOSTELAA+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
 
-cLINHAS+=cCOMANDO+HB_OSNEWLINE()
+//cLINHAS+=cCOMANDO+HB_OSNEWLINE()
 
 try
         with object oComm
@@ -274,7 +312,7 @@ end
 			
 cCOMANDO:="UPDATE USUARIO SET POSTELAB = '"+cPOSTELAB+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
 
-cLINHAS+=cCOMANDO+HB_OSNEWLINE()
+//cLINHAS+=cCOMANDO+HB_OSNEWLINE()
 
 try
         with object oComm
@@ -284,6 +322,21 @@ try
                  :Execute()
             end
 end	
+
+cCOMANDO:="UPDATE USUARIO SET CHAVEH = '"+cCHAVEH+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+
+//cLINHAS+=cCOMANDO+HB_OSNEWLINE()
+
+try
+        with object oComm
+                 :CommandText:=cCOMANDO
+                 :CommandType:=adCmdText
+                 :ActiveConnection:=oConn
+                 :Execute()
+            end
+end	
+
+
 
 oConn:Close()
 oConn:=NIL		
