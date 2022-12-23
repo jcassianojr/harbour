@@ -1,10 +1,7 @@
 *+--------------------------------------------------------------------
 *+
 *+
-*+
 *+    Programa  : mana5.prg
-*+
-*+
 *+
 *+    Sistema   : MANAEXO
 *+
@@ -12,13 +9,9 @@
 *+
 *+    Autor     : Jorge Cassiano
 *+
-*+    Copyright (c) 2010, Jorge Cassiano
+*+    Copyright (c) 2022, Jorge Cassiano
 *+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
+*+    23/12/2022 login por senha e hash
 *+
 *+--------------------------------------------------------------------
 *+
@@ -54,13 +47,9 @@ netregosok()
 HB_IDLESTATE()
 HB_LANGSELECT('PT')   
 
-
-
 IF VALTYPE(cDEBUG) # "C"
    cDEBUG := "NAO"
 ENDIF
-
-
 
 IF cDEBUG = "SIM"
    INKEY(0)
@@ -87,15 +76,12 @@ Set( _SET_SOFTSEEK, .t.)
 __SetCentury( .t. )
 Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
-
-
 Set( _SET_TYPEAHEAD, 50 )
 Set( _SET_WRAP, .t. )
 Set( _SET_EXACT, .f. )
 SetCursor(.t.)
 
 cRDDEXT := "CDX"
-
 
 ACENTUA=.T.
 SetKey( 39, {|| AC_AGUDO() } )
@@ -104,18 +90,13 @@ SetKey( 96, {|| AC_CRASE() } )
 SetKey( 126, {|| AC_TIL() } )
 SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
 SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
-
 SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
-
 SetKey( K_F2, {|| TELE() } )
 SetKey( K_F3, {|| NOTEP() } )
 SetKey( K_F4, {|| AGEN() } )
 SetKey( K_F5, {|| TECLAS() } )
 SetKey( K_F10, {|| MUDADATA() } )
-
 SetKey( K_F8, {|| hb_run("calc") } )
-
-
 
 //Inicializa o Mouse Clipper 5.3c
 set(_SET_EVENTMASK,HB_INKEY_ALL )
@@ -294,6 +275,11 @@ endif
 ZUSER  := upper(ZUSER)
 ZSUPER := .F.
 
+MDS("Senha")
+if empty(cSENHA)
+   cSENHA := PEGAPASS(24,10,8,,"*",.T.)
+endif
+
 
 IF ZUSER = "ADMLOG" .Or. ZUSER = "ADMINISTRADOR" .Or. ZUSER = "ADMIN" 
    cUSUARIO := "SUPERVISOR"
@@ -319,14 +305,21 @@ IF !ZSUPER
    endif
 endif
 
-MDS("Senha")
-if empty(cSENHA)
-   cSENHA := PEGAPASS(24,10,8,,"Ý",.T.)
+
+//23/12/2022 checagem hash ou senha
+cCHAVE :=StrToHex(hb_SHA256(ALLTRIM(UPPER(zuser))+alltrim(UPPER(cSENHA)), .t.))
+//alertX(CCHAVE)
+
+if cCHAVE = OBTER("MUSER",ENCODE(ZUSER),"CHAVEH")
+  // ALERTX("HASH OK")
+else
+  if cSENHA # XDECODE(OBTER("MUSER",ENCODE(ZUSER),"SENHA"))
+     ALERTX("Senha nao Confere, retente ou comunique ao Supervisor")
+     quit
+  endif
 endif
-if cSENHA # XDECODE(OBTER("MUSER",ENCODE(ZUSER),"SENHA"))
-   ALERTX("Senha n„o Confere, retente ou comunique ao Supervisor")
-   quit
-endif
+
+
 if len(alltrim(cSENHA)) < 8
    ALERTX("Senha com menos de 8 digitos - Troque a Senha")
    M_CI(1)
