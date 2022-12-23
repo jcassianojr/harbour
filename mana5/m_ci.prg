@@ -37,6 +37,8 @@ if nTIPO = 1
          netreclock()
          field->SENHA   := XENCODE(mSENHA)
          field->DATATRO := ZDATA+90
+         FIELD->CHAVEH:=StrToHex(hb_SHA256(ALLTRIM(zuser)+alltrim(mSENHA), .t.))
+         
          dbunlock()
       endif
       dbclosearea()
