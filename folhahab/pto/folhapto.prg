@@ -160,7 +160,7 @@ IF ZUSER<>"SUPERVISOR"
       ALERTX("Usuario Nao Cadastrado")
       QUIT
    ENDIF
-   IF XDECDAT(OBTER("MUSER",,ENCODE(ZUSER),"VALIDADE"))<ZDATA
+   IF XDECDAT(OBTER("MUSER", ,ENCODE(ZUSER),"VALIDADE"))<ZDATA
       ALERTX("Seu acesso expirou comunique ao Supervisor")
       QUIT
    ENDIF
@@ -171,10 +171,11 @@ ENDIF
 cCHAVE :=StrToHex(hb_SHA256(ALLTRIM(UPPER(zuser))+alltrim(UPPER(cSENHA)), .t.))
 //alertX(CCHAVE)
 
-if cCHAVE = OBTER("MUSER",ENCODE(ZUSER),"CHAVEH")
+if cCHAVE = OBTER("MUSER",,ENCODE(ZUSER),"CHAVEH")
+   // cARQ,eSemUso, KEYINDEX, cCAMPO, nIND, nROW, nCOL, cMES, cMES2, cDEF
   // ALERTX("HASH OK")
 else
-  if cSENHA # XDECODE(OBTER("MUSER",ENCODE(ZUSER),"SENHA"))
+  if cSENHA # XDECODE(OBTER("MUSER", ,ENCODE(ZUSER),"SENHA"))
      ALERTX("Senha nao Confere, retente ou comunique ao Supervisor")
      quit
   endif

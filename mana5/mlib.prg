@@ -427,15 +427,9 @@ retu TFILTRO
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Function OBTER()
-*+
-*+
+*+    Function OBTER() estq funcao e diferente da obter dos modulos folha
 *+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 func OBTER(cARQ,KEYINDEX,cCAMPO,nIND,nROW,nCOL,cMES,cMES2,cDEF)   //SEEK MAIS RETORNO CAMPO
 

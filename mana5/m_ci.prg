@@ -52,9 +52,14 @@ else
 //         bPOSREP,bPAXINS,PAXCOR,bPOSIGU,bPAXTEC,bANTREP,bPOSINS,bPOSEDI,eFILTRO
 
 	   
-	   IF MDG("Gerar postela chave para user windows")
-	      gerapostela()
+	   IF MDG("Gerar postela chave para Muser mana5")
+	      gerapostela(1)
 	   endif
+       
+       	IF MDG("Gerar postela chave para Muser folha")
+	      gerapostela(2)
+	   endif
+       
    ELSE
       ALERTX("Somente Administrador")
    ENDIF
@@ -166,12 +171,28 @@ RETURN out_string
 *+
 *+--------------------------------------------------------------------
 *+
-function gerapostela
+function gerapostela(nARQ)
+LOCAL cARQMUSER
+LOCAL lOPEN
 cCAMWRPT:=ProfileString( "MANA5.INI", "PATH", "WRPT", HB_CWD())
 cCAMCONT:=ProfileString( "MANA5.INI", "PATH", "CONTROLE", HB_CWD())
 cCAMSYSU:=ProfileString( "MANA5.INI", "PATH", "SYSUSER", HB_CWD())
 
-if USEREDE("MUSER",1,99)
+lOPEN:=.F.
+IF nARQ=1
+   lOPEN:=USEREDE("MUSER",1,99)
+ENDIF
+IF nARQ=2
+   cARQMUSER:=ProfileString( "MANA5.INI", "PATH", "MUSERFOLHA", HB_CWD())+"MUSER"
+   ALERT(cARQMUSER)
+   lOPEN:=USECHK(cARQMUSER,,.T.)
+   //USECHK(cARQ,cIND,lSHA,cDRIVER,lNEW,nTIME)
+   ALERT(cARQMUSER)
+ENDIF
+
+
+
+if lOPEN
 	dbsetorder(1) //
 	dbgotop()
 	while ! eof()
@@ -207,6 +228,10 @@ if USEREDE("MUSER",1,99)
 	   dbskip()
 	enddo
     dbcloseall()
+ENDIF
+
+IF nARQ=2 //nao processa para muserM MUSERB da folha
+   return 
 ENDIF
 
 for z:=1 to 2

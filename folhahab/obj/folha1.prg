@@ -170,10 +170,10 @@ ENDIF
 cCHAVE :=StrToHex(hb_SHA256(ALLTRIM(UPPER(zuser))+alltrim(UPPER(cSENHA)), .t.))
 //alertX(CCHAVE)
 
-if cCHAVE = OBTER("MUSER",ENCODE(ZUSER),"CHAVEH")
+if cCHAVE = OBTER("MUSER",,ENCODE(ZUSER),"CHAVEH")
   // ALERTX("HASH OK")
 else
-  if cSENHA # XDECODE(OBTER("MUSER",ENCODE(ZUSER),"SENHA"))
+  if cSENHA # XDECODE(OBTER("MUSER",,ENCODE(ZUSER),"SENHA"))
      ALERTX("Senha nao Confere, retente ou comunique ao Supervisor")
      quit
   endif

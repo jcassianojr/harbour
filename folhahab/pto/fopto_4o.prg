@@ -32,8 +32,8 @@ RETUrn .T.
 
 FUNCtion tFOPTO4O
 HB_DISPBOX( 3, 0,23,79,B_DOUBLE+" ")
-@  4,  3 SAY "Item   Posi‡„o"
-@  7,  3 SAY "Descri‡„o para o Item do Menu"
+@  4,  3 SAY "Item   Posicao"
+@  7,  3 SAY "Descricao para o Item do Menu"
 @ 10,  3 SAY "Mensagem para o Item do Menu"
 @ 13,  3 SAY "Linha Coluna Tecla"
 @ 16,  3 SAY "Executar"
