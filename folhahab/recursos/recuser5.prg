@@ -143,7 +143,7 @@ DO WHILE copia<=narq
       ENDIF
    ENDDO
    FCLOSE(HANDLE)
-   hb_FILEDELETE(DESTINO)
+   FILEDELETE(DESTINO)
    MDS(ORIGEM+', verificando tamanho')
    IF TAMARQ[COPIA]>362496
       MDT('S¢ pode ser copiado com o comando BACKUP')
