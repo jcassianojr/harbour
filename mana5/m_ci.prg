@@ -282,8 +282,6 @@ function gravaposTELA(cUSUARIO,cPOSTELAa,cPOSTELAB,cCHAVEH,cCAMBASE)
 //     "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=P:\NOVELL\ITAESBRA\PECAS\FMP04CPF.MDB;Mode=Share Deny None"
 
 cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
-
-            
         
 try
    oConn:=WIN_OLECreateObject( "ADODB.Connection" )
@@ -322,48 +320,41 @@ oComm:=WIN_OLECreateObject( "ADODB.Command" )
       EndIf
       oRSDES:Close()
 
-
-cCOMANDO:="UPDATE USUARIO SET POSTELAA = '"+cPOSTELAA+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
-
-//cLINHAS+=cCOMANDO+HB_OSNEWLINE()
-
-try
+if ! empty(cPOSTELAA)
+    cCOMANDO:="UPDATE USUARIO SET POSTELAA = '"+cPOSTELAA+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+    try
         with object oComm
-                 :CommandText:=cCOMANDO
-                 :CommandType:=adCmdText
-                 :ActiveConnection:=oConn
-                 :Execute()
-            end
-end			
-			
-			
-cCOMANDO:="UPDATE USUARIO SET POSTELAB = '"+cPOSTELAB+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+             :CommandText:=cCOMANDO
+             :CommandType:=adCmdText
+             :ActiveConnection:=oConn
+             :Execute()
+        end
+    end	
+endif    		
 
-//cLINHAS+=cCOMANDO+HB_OSNEWLINE()
+if ! empty(cPOSTELAB)
+  cCOMANDO:="UPDATE USUARIO SET POSTELAB = '"+cPOSTELAB+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+  try
+      with object oComm
+           :CommandText:=cCOMANDO
+           :CommandType:=adCmdText
+           :ActiveConnection:=oConn
+           :Execute()
+      end
+  end	
+endif
 
-try
-        with object oComm
-                 :CommandText:=cCOMANDO
-                 :CommandType:=adCmdText
-                 :ActiveConnection:=oConn
-                 :Execute()
-            end
-end	
-
-cCOMANDO:="UPDATE USUARIO SET CHAVEH = '"+cCHAVEH+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
-
-//cLINHAS+=cCOMANDO+HB_OSNEWLINE()
-
-try
-        with object oComm
-                 :CommandText:=cCOMANDO
-                 :CommandType:=adCmdText
-                 :ActiveConnection:=oConn
-                 :Execute()
-            end
-end	
-
-
+if ! empty(cCHAVEH)
+  cCOMANDO:="UPDATE USUARIO SET CHAVEH = '"+cCHAVEH+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+  try
+      with object oComm
+          :CommandText:=cCOMANDO
+          :CommandType:=adCmdText
+          :ActiveConnection:=oConn
+          :Execute()
+      end
+  end
+endif  	
 
 oConn:Close()
 oConn:=NIL		
