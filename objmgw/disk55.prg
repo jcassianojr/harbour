@@ -544,7 +544,8 @@ SWITCH Upper( cVal )
       CASE "ON"
       CASE "Y"
       CASE "1"  
-      CASE "T"    
+      CASE "T"   
+      CASE "S"        
          RETURN .T.
       CASE ".F."
       CASE "FALSE"
@@ -553,7 +554,7 @@ SWITCH Upper( cVal )
       CASE "OFF"
       CASE "N"
       CASE "0"    
-      CASE "F"       
+      CASE "F"   
       CASE "<NULL>"
       CASE "NULL"
       CASE "NUL"
@@ -577,6 +578,7 @@ ENDIF
 IF VALTYPE(cFORMATO)<>"C"
    cFORMATO:="" //escolhe otherwise SIM NAO
 ENDIF
+cFORMATO:=ALLTRIM(cFORMATO)
 cRETURN:=""
 DO CASE 
    CASE cFORMATO=".T."

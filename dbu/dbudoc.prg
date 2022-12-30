@@ -556,7 +556,7 @@ IF lDOCDAD
                       cTEXTO+=DATA2STR(nVAL,ZANOFOR,ZANOSEP,ZANOTAM)
                    ENDIF   
               CASE aESTRU[X][2]="L"
-                   cTEXTO+=IF(nVAL,"1","0")
+                   cTEXTO+=logic2str(nval,0,0,zSEPLOGIC) // Strval( xdado, nLEN, nDEC, cSEPDEC ) IF(nVAL,"1","0")
               CASE aESTRU[X][2]="N"
                    cTEXTO+=ALLTRIM(STRVAL(nVAL,aESTRU[X][3],aESTRU[X][4],ZDECSIM))
           ENDCASE

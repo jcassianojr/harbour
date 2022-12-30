@@ -105,6 +105,7 @@ public com_line
 public curs_on
 public ld_cha:="-"
 public zDELIMITE:=","
+public zSEPLOGIC:="1   "
 public zEXPOREXT:="DLM"
 public zDECSIM:="."
 public zANOTAM:="2"
@@ -895,9 +896,10 @@ for n := 2 to len( func_title )
    @  1, ( 9 * n ) - 18 say padc( func_title[ n ], 9 )
 next
 @  2,  0 say replicate( "-", 80 )
-@ 23,  0 say "DBdbf: "+zUSOVIA+" Memo:"+hb_rddInfo( RDDI_MEMOEXT)+" Index:"+hb_rddInfo( RDDI_ORDBAGEXT)+" Exp:"+ZEXPOREXT+" DELI:"+ZDELIMITE+" Ano:"+ZANOFOR+ZANOSEP+ZANOTAM +" SepDec:"+ZDECSIM+" Cnv Oem:"+ZCNVCHAR+" SepReg:"+Zregsep
+@ MAXROW()-2,  0 say "DBdbf("+zUSOVIA+") Memo("+hb_rddInfo( RDDI_MEMOEXT)+") Index("+hb_rddInfo( RDDI_ORDBAGEXT)+") Exportar Para("+ZEXPOREXT+") Delimitador("+ZDELIMITE+")" 
+@ MAXROW()-1,  0 say "Sepador Decimal("+ZDECSIM+") Oem Ansi("+ZCNVCHAR+") Separador Registro("+Zregsep+")"+" Ano("+ZANOFOR+ZANOSEP+ZANOTAM +") Logico("+zSEPLOGIC+")"
 
-retu .T.
+return .T.
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+

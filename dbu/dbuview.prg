@@ -2896,26 +2896,32 @@ return line
 function pegparexp
        //30/12/2O22 Inclusao MYS MYSQL 2000-12-01 e DHZ 2000-12-01  00:00:00
        zEXPOREXT:=PADR(zEXPOREXT,4)
+       
+       @ MAxrow()-4,0 clear
+       @ MAxrow()-3,0 clear
        @ MAxrow()-2,0 clear 
        @ MAXROW()-1,0 CLEAR
        @ MAXROW()  ,0 CLEAR
-       @ maxrow()-2,0  say "Delimitador ,;|#~ 9=(TAB)"
-       @ maxrow()-2,30 say "Extensao DLM,CVS,UNL,XLS,XML,SQL,JSON" 
-       @ maxrow()-1,0  say  "Separador Decimal ,. "
-       @ maxrow()-1,23 say "Digitos Ano 2/4"
-       @ maxrow()-1,41 say "Separador Data /-( )"
-       @ maxrow()-1,64 say "Sep Reg "+chr(34)+chr(39)+"( ) "
-       @ maxrow()  ,0  say  "(D)ia(M)es(A)no DMA AMD MDA SQL MYS DHZ"
-       @ maxrow()  ,38 say "Converter (N)ao oemto(A)nsi ansito(O)em"  
+       
+       @ maxrow()-4,0  say "Delimitador ,;|#~ 9=(TAB)"
+       @ maxrow()-4,30 say "Extensao DLM,CVS,UNL,XLS,XML,SQL,JSON" 
+       @ maxrow()-3,0  say "Separador Decimal ,. "
+       @ maxrow()-3,23 say "Digitos Ano 2/4"
+       @ maxrow()-3,41 say "Separador Data /-( )"
+       @ maxrow()-3,64 say "Sep Reg "+chr(34)+chr(39)+"( ) "
+       @ maxrow()-2 ,0 say "(D)ia(M)es(A)no DMA AMD MDA SQL MYS DHZ"
+       @ maxrow()-1 ,0 say "Logico= TRUE .T. ON YES SIM 1 T Y S"
+       @ maxrow()   ,0 say "Converter (N)ao oemto(A)nsi ansito(O)em"  
 
-       @ maxrow()-2,26 get zDELIMITE PICT "!"     VALID zDELIMITE $ ",;|#~9"       
-       @ maxrow()-2,68 get zEXPOREXT PICT "!!!!"  VALID zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
-       @ maxrow()-1,21 get zDECSIM                VALID zDECSIM $ ",."       
-       @ maxrow()-1,39 get zANOTAM   PICT "9"     VALID zANOTAM $ "24"
-       @ maxrow()-1,62 get zANOSEP                VALID zANOSEP $ "/- "
-       @ maxrow()-1,78 get zregSEP                VALID zregsEP $ chr(34)+chr(39)+" "
-       @ maxrow()  ,33 get zANOFOR   PICT "!!!"   VALID zANOFOR="DMA".OR.zANOFOR="AMD".OR.zANOFOR="MDA" .OR. zANOFOR="SQL" .OR. zANOFOR="MYS" .OR. zANOFOR="DHZ"
-       @ maxrow()  ,78 get zCNVCHAR  PICT "!"     VALID zCNVCHAR $ "NAO"  
+       @ maxrow()-4,26 get zDELIMITE PICT "!"     VALID zDELIMITE $ ",;|#~9"       
+       @ maxrow()-4,68 get zEXPOREXT PICT "!!!!"  VALID zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
+       @ maxrow()-3,21 get zDECSIM                VALID zDECSIM $ ",."       
+       @ maxrow()-3,39 get zANOTAM   PICT "9"     VALID zANOTAM $ "24"
+       @ maxrow()-3,62 get zANOSEP                VALID zANOSEP $ "/- "
+       @ maxrow()-3,78 get zregSEP                VALID zregsEP $ chr(34)+chr(39)+" "
+       @ maxrow()-2,45 get zANOFOR   PICT "!!!"   VALID zANOFOR="DMA" .OR. zANOFOR="AMD" .OR. zANOFOR="MDA" .OR. zANOFOR="SQL" .OR. zANOFOR="MYS" .OR. zANOFOR="DHZ"
+       @ maxrow()-1,45 get zSEPLOGIC              valid zSEPLOGIC="TRUE" .OR. zSEPLOGIC=".T. " .OR. zSEPLOGIC="YES " .OR. zSEPLOGIC="ON  " .OR. zSEPLOGIC="SIM " .OR. zSEPLOGIC="1   " .OR. zSEPLOGIC="T   " .OR. zSEPLOGIC="Y   " .OR. zSEPLOGIC="S   "
+       @ maxrow()  ,45 get zCNVCHAR  PICT "!"     VALID zCNVCHAR $ "NAO"  
        readcur() 
 	   
 	   zEXPOREXT=ALLTRIM(ZEXPOREXT)

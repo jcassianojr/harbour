@@ -133,7 +133,7 @@ local d
 local sRet
 
 if valtype( x ) == "L"
-   sRet := iif( x, "1", "0" )
+   sRet := logic2str(x,0,0,zSEPLOGIC) //iif( x, "1", "0" )
 elseif valtype( x ) == "D"
    d := x
    if empty( d )
