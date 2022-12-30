@@ -49,12 +49,25 @@ for x=1 to 10
 	     NETUSE(cARQCEP5)
       ENDIF	  
       MDS(cARQTXT)
-      nFile := HB_FUse(cARQTXT)
-      nLASTREC:=hb_flastrec()
-      zei_fort( nLASTREC,,,0)
-      hb_fgotop()
-      DO WHILE .NOT. HB_FEof()
-         cLINHA:=HB_FREADLN()  
+      
+      
+    nLASTREC:=FLINECOUNT(cARQTXT)
+    zei_fort( nLASTREC,,,0)
+    
+    cDELIM:=FDELIM (cARQTXT,1024) //acha o delimitador chr(13)+chr(10) dos ou chr(10) linux usado abaixo no freadline
+    nFILE:=FOPEN(cARQTXT) //abre o arquivo   
+      
+   
+      DO WHILE .T.
+         
+         cLINHA:=FREADLINE (nFILE, 1024 ,.T. ,cDELIM) //FREADLINE (handle, line_len,lremchrexp,cDELI)
+         
+                
+          IF cLINHA='__FINAL__' //freadline retorna __FINAL__   quando nao e mais linhas
+             EXIT
+          ENDIF
+        
+         
          MDS(padr(cLINHA,40))
          cCODIGO:='0'
          nINSTR :=0
@@ -92,6 +105,7 @@ for x=1 to 10
 			cCODIGO:=cUF+cDDD //usado no seek
          ENDIF
  		 
+         cNOME:=TIRACE(cNOME)
 		 
          if val(cCODIGO)>0 .or. x=10 //alguns sao descritivos e nao codigos
             dbgotop()
@@ -134,10 +148,10 @@ for x=1 to 10
             ENDIF   
             dbunlock()
          endif   
+  
          zei_fort(nLASTREC,,,1)
-         HB_FSkip(1)
       ENDDO
-      HB_FUse()
+      fclose(nFILE)   //fecha o arquivo
       dbcloseall()
     //  filedelete(Carqtxt)
       hb_FileDelete(Carqtxt)
