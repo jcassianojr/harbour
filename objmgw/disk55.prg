@@ -527,6 +527,8 @@ RETUrn Val(Chora)
 *+
 *+    Function StrLogic()
 *+
+*+   30/12/2O22 Incluso opçoes Y N e 0 1 e T F
+*+ 
 *+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
 *+
 function StrLogic(cVAL,lDEFAULT)
@@ -539,12 +541,18 @@ SWITCH Upper( cVal )
       CASE "YES"
       CASE "SIM"
       CASE "ON"
+      CASE "Y"
+      CASE "1"  
+      CASE "T"    
          RETURN .T.
       CASE ".F."
       CASE "FALSE"
       CASE "NO"
       CASE "NAO"
       CASE "OFF"
+      CASE "N"
+      CASE "0"    
+      CASE "F"       
       CASE "<NULL>"
       CASE "NULL"
       CASE "NUL"
