@@ -15,7 +15,7 @@
 *+    TIRAOUT()  remove .:/-
 *+    CHOR()     100/60 decimal para base 60 minutos
 *+    BHOR()     60/100 base 60 para decimal
-*+    Strval( xdado, nLEN, nDEC, cSEPDEC )  converte variaval para string cSEPDEC->Numero(.,)  cSEPDEC->DATA(DMY/4) formatos veja data2st
+*+    Strval( xdado, nLEN, nDEC, cSEPDEC )  converte variaval para string 
 *+    ctohora() converte carater HH:MM numerico hh.mm
 *+    geotodec(cVAL,cHEM) convert posicao geo para decimal
 *+    calcgeokm(lat1,lon1,lat2,lon2,unit)     calcula distancia dois pontos
@@ -562,15 +562,58 @@ ENDSWITCH
 RETURN lDEFAULT
 
 
+*+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*+
+*+    Function Logic2Str(Ctipo)
+*+
+*+   30/12/2O22 Incluso opçoes Y N e 0 1 e T F
+*+ 
+*+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*+
+function Logic2Str(lValor,cFORMATO)
+LOCAL cRETURN AS STRING
+IF VALTYPE(lVALOR)<>"L"
+   lVALOR:=.F.
+ENDIF
+IF VALTYPE(cFORMATO)<>"C"
+   cFORMATO:="" //escolhe otherwise SIM NAO
+ENDIF
+cRETURN:=""
+DO CASE 
+   CASE cFORMATO=".T."
+        cRETURN:=IF(lVALOR,".T.",".F.")
+  CASE cFORMATO="TRUE"
+        cRETURN:=IF(lVALOR,"TRUE","FALSE")
+  CASE cFORMATO="YES"
+        cRETURN:=IF(lVALOR,"YES","NO")
+  CASE cFORMATO="SIM"
+        cRETURN:=IF(lVALOR,"SIM","NAO")                
+  CASE cFORMATO="ON"
+        cRETURN:=IF(lVALOR,"ON","OFF")
+  CASE cFORMATO="Y"
+        cRETURN:=IF(lVALOR,"Y","N")
+  CASE cFORMATO="1"
+        cRETURN:=IF(lVALOR,"1","0")
+  CASE cFORMATO="T"
+        cRETURN:=IF(lVALOR,"T","F")       
+  OTHERWISE
+      cRETURN:=IF(lVALOR,"SIM","NAO")                          
+ENDCASE
+RETURN cRETURN
+
 
 *+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
 *+
 *+    Function Strval()
+*+    cSEPDEC Numero .,
+*+    cSEPDEC DATA   DMY/4 formatos veja data2str
+*+    cSEPDEC LOGIC formatos  veja logic2srt
+*+
+*+    30/12/2022 utiliza logic2srt para logic
 *+
 *+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
 *+
-function Strval( xdado, nLEN, nDEC, cSEPDEC,lESPACO ) //cSEPDEC Numero .,
-                                                      //cSEPDEC DATA   DMY/4 formatos veja data2str
+function Strval( xdado, nLEN, nDEC, cSEPDEC,lESPACO ) 
 local retval := "",i,cVALTYPE
 if valtype(lESPACO)#"L"
    lESPACO:=.F.   
@@ -619,7 +662,7 @@ do case
             ENDIF
          ENDIF
     case cvaltype = "L"
-       retval := if( xdado, "Sim", "Nao" )
+       retval := Logic2Str(xdado,cSEPDEC)   //if( xdado, "Sim", "Nao" )
     otherwise
        do case
          case xDADO == NIL
