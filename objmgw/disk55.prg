@@ -214,6 +214,7 @@ return cVAR
 *+    cFOR= DMA AMD MDA DMY YMD MDY ADM YDM SQL DMY/4 DMY2 DMY4 DMY-4 
 *+    cSEP = /-.              (compatibilidade usar formato 5 digitos DMY/4)
 *+    cDIG 2 ou 4             (compatibilidade usar formato 5 digitos) 
+*+    30/12/2O22 Inclusao MYS MYSQL 2000-12-01 e DHZ 2000-12-01  00:00:00
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -283,7 +284,7 @@ DO CASE
            cRETU := "NULL"
         ENDIF 
     CASE cFOR="DHZ"
-        cRETU:=StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) + ""     
+        cRETU:=StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) + " 00:00:00"     
    CASE cFOR="SQL"
         cRETU:="convert(datetime, '" + DTOC(dDATA)+ "', 103)"
    CASE cFOR="DMY"

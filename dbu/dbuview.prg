@@ -2905,7 +2905,7 @@ function pegparexp
        @ maxrow()-1,23 say "Digitos Ano 2/4"
        @ maxrow()-1,41 say "Separador Data /-( )"
        @ maxrow()-1,64 say "Sep Reg "+chr(34)+chr(39)+"( ) "
-       @ maxrow()  ,0 say  "Formato data Ano/mes/dia DMA AMD MDA SQL MYS"
+       @ maxrow()  ,0 say  "(D)ia(M)es(A)no DMA AMD MDA SQL MYS DHZ"
        @ maxrow()  ,38 say "Converter (N)ao oemto(A)nsi ansito(O)em"  
 
        @ maxrow()-2,26 get zDELIMITE PICT "!"    VALID zDELIMITE $ ",;|#~9"       
@@ -2914,7 +2914,7 @@ function pegparexp
        @ maxrow()-1,39 get zANOTAM   PICT "9"    VALID zANOTAM $ "24"
        @ maxrow()-1,62 get zANOSEP               VALID zANOSEP $ "/- "
        @ maxrow()-1,78 get zregSEP               VALID zregsEP $ chr(34)+chr(39)+" "
-       @ maxrow()  ,33 get zANOFOR   PICT "!!!"  VALID zANOFOR="DMA".OR.zANOFOR="AMD".OR.zANOFOR="MDA" .OR. zANOFOR="SQL" .OR. zANOFOR="MYS"
+       @ maxrow()  ,33 get zANOFOR   PICT "!!!"  VALID zANOFOR="DMA".OR.zANOFOR="AMD".OR.zANOFOR="MDA" .OR. zANOFOR="SQL" .OR. zANOFOR="MYS" .OR. zANOFOR="DHZ"
        @ maxrow()  ,78 get zCNVCHAR  PICT "!"    VALID zCNVCHAR $ "NAO"  
        readcur() 
 	   
