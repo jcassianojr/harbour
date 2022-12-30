@@ -68,12 +68,13 @@ RETURN cCAMPO
 
 
 FUNCTION DateToMySQL( dDate )
-LOCAL cString
-cString := StrZero( Year( dDate ), 4 ) + "-" + StrZero( Month( dDate ), 2 ) + "-" + StrZero( Day( dDate ), 2 )
-IF cString == "0000-00-00"
-   cString := "NULL"
-ENDIF
-RETURN cString
+RETURN data2str(dDate,"MYS","-","4")
+//LOCAL cString
+//cString := StrZero( Year( dDate ), 4 ) + "-" + StrZero( Month( dDate ), 2 ) + "-" + StrZero( Day( dDate ), 2 )
+//IF cString == "0000-00-00"
+//   cString := "NULL"
+//ENDIF
+//RETURN cString
 
 
 //sqllite '0000-01-01 00:00:00''0000-01-01 00:00:00'

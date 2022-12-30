@@ -277,6 +277,13 @@ IF cSEP = "4" // Ano 4 digitos passado na quarta posicao DMY4
    cANO:= right( cANO, 4 )
 ENDIF
 DO CASE
+  CASE cFOR="MYS"
+        cRETU:=StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) 
+        IF cRETU == "0000-00-00"
+           cRETU := "NULL"
+        ENDIF 
+    CASE cFOR="DHZ"
+        cRETU:=StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) + ""     
    CASE cFOR="SQL"
         cRETU:="convert(datetime, '" + DTOC(dDATA)+ "', 103)"
    CASE cFOR="DMY"
