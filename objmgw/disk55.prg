@@ -28,10 +28,11 @@
 *+    ANO_BISSEXTO =ISLEAP()   CA-TOOLS/HARBOUR  retorna falso ou verdadeiro
 *+    convansi( ctexto )   =hb_oemtoansi() win_oemtoansi
 *+    convoem( ctexto )    =HB_ansitooem() win_ANSIToOEM
-*+    Function StrLogic(cVAL,lDEFAULT) convert text to logical (true,.t.,....)
-*+    Function aconvertend() matriz com os tipos de endereco rua avenida...
-*+    function MinutoToHora( horas )
-*+    Function Sonumero(cInString,lPONTO,lVIRGULA)
+*+    StrLogic(cVAL,lDEFAULT) convert text to logical 
+*+    Logic2Str(lValor,cFORMATO)   convert logical to text
+*+    aconvertend() matriz com os tipos de endereco rua avenida...
+*+    MinutoToHora( horas )
+*+    Sonumero(cInString,lPONTO,lVIRGULA)
 *+
 *+  added new .prg functions to mange date and timestamp values:
 *+      HB_DATETIME() -> <tTimeStamp>
@@ -564,10 +565,8 @@ RETURN lDEFAULT
 
 *+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
 *+
-*+    Function Logic2Str(Ctipo)
+*+    Function Logic2Str(lValor,cFORMATO)
 *+
-*+   30/12/2O22 Incluso opçoes Y N e 0 1 e T F
-*+ 
 *+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
 *+
 function Logic2Str(lValor,cFORMATO)
