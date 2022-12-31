@@ -43,8 +43,6 @@ aIBGE:= { "12", "27", "13", "16", "29", "23", "53", "32", "52", ;
             
 			
 Lmunicipios:=.f.
-            
-			
 if file("municipios.dbf") .and. file("md10imp.dbf") .and. MsgYesNo("importar municipios/sped")
    use md10imp new exclusive
    ZAP
@@ -67,12 +65,56 @@ if file("pgcn.dbf") .and. file("md10imp.dbf") .and. MsgYesNo("importar pgcn ddd 
    append from pgcn
    dbclosearea()
    lpgcn:=.t.
-   
 endif
 
+/* CE_F anatel  https://sistemas.anatel.gov.br/areaarea/N_Download/Tela.asp?varMod=Publico&SISQSmodulo=7179
+1 Sigla UF                            char 02
+02 Sigla CNL                           char 04
+03 Codigo CNL                          char 05
+04 Nome da Localidade                  char 50
+05 Nome do Municipio                   char 50
+06 Cod. da Area Tarifacao              char 05   2 primeiros digitos DDD  CE_F dois campos ddd 2 CODARTAR 3 
+07 Prefixo                             char 07
+08 Prestadora                          char 30
+09 Num. da Faixa Inicial               char 04
+10 Num. da Faixa Final                 char 04
+11 Latitude                            char 08 (*)
+12 Hemisferio                          char 05
+13 Longitude                           char 08 (*)
+14 Sigla CNL da Área Local             char 04
 
+OBSERVAÇÕES:                                               
+1) Os campos marcados com (*), Latitude e Longitude foram
+   alterados para o formato GGMMSSCC, 
+   onde:
+   GG = Grau,
+   MM = Minuto,
+   SS = Segundo e
+   CC = Centésimos de Segundo
+*/
 
-if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. MsgYesNo( "Importar Cidades md10imp.dbf" )))
+lCE_F:=.f.
+if file("ce_f.txt") .and. file("CE_F.dbf") .and. file("md10imp.dbf") .and. MsgYesNo("importar CE_F anatel")
+   nLASTREC:=0
+   if MsgYesNo("importar CE_F.txt para ce_f.dbf")
+     use ce_f new exclusive
+     nLASTREC:=FLINECOUNT("ce_f.txt")
+     zei_fort( nLASTREC,,,0)
+     append from ce_f.txt SDF WHILE zei_fort(nLASTREC,,,1)
+     dbclosearea()
+   ENDIF  
+   
+   if MsgYesNo("importar CE_F.DBF para MD10IMP.dbf")   
+     zei_fort( nLASTREC,,,0) 
+     use md10imp new exclusive
+     ZAP
+     append from CE_F  WHILE zei_fort(nLASTREC,,,1)
+     dbclosearea()
+   ENDIF   
+   lCE_F:=.t.
+endif
+
+if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. lCE_F .or. MsgYesNo( "Importar Cidades md10imp.dbf" )))
    use md10imp new shared
    netuse("cidconv")
    netuse("MD10")
@@ -87,6 +129,15 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. MsgYesNo( "Importar C
         mINICEP   := md10imp->INICEP
         mFIMCEP   := md10imp->FIMCEP    
         mAREA     := md10imp->AREA
+        
+        mNOMTEL     := md10imp->NOMTEL
+        mCODTEL     := md10imp->CODTEL
+        mlatitude   := md10imp->latitude
+        mlongitude  := md10imp->longitude
+        mhemisferio := md10imp->hemisferio
+        
+        
+        
         IF ! EMPTY(mUF) .AND. aSCAN(aIBGE,mUF)>0 //A uf esta com codigo e nao com a sigla
             mUF:=CODUF(mUF,"UF")
         ENDIF
@@ -142,6 +193,21 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. MsgYesNo( "Importar C
            if ! empty(mFIMCEP)   .AND. VAL(md10->FIMCEP)=0
                md10->FIMCEP := mFIMCEP
            endif 
+           if ! empty(mNOMTEL)   .AND. VAL(md10->NOMTEL)=0
+               md10->NOMTEL := mNOMTEL
+           endif
+            if ! empty(mCODTEL)   .AND. VAL(md10->CODTEL)=0
+               md10->CODTEL := mCODTEL
+           endif
+            if ! empty(mLATITUDE)   .AND. VAL(md10->LATITUDE)=0
+               md10->LATITUDE := LATITUDE
+           endif
+            if ! empty(mLONGITUDE)   .AND. VAL(md10->LONGITUDE)=0
+               md10->LONGITUDE :=LONGITUDE
+           endif
+             if ! empty(mHEMISFERIO)   .AND. VAL(md10->HEMISFERIO)=0
+               md10->HEMISFERIO :=HEMISFERIO
+           endif        
            if  mAREA>0   .AND. md10->AREA=0
                md10->AREA := mAREA
            endif 
@@ -706,7 +772,7 @@ IF VALTYPE(lANSI)<>"L"
    lANSI:=.F.
 ENDIF
 IF VALTYPE(lACEN)<>"L"
-   lACEN:=.F.
+   lACEN:=.T.
 ENDIF
 mNOME     := strtran( alltrim( mNOME ), "'", " " )    //tirar como d'agua d'olho
 mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
