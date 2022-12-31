@@ -115,6 +115,7 @@ if file("ce_f.txt") .and. file("CE_F.dbf") .and. file("md10imp.dbf") .and. MsgYe
 endif
 
 if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. lCE_F .or. MsgYesNo( "Importar Cidades md10imp.dbf" )))
+   nUSO := fcreate( "MD10IMP.TXT" )
    use md10imp new shared
    netuse("cidconv")
    netuse("MD10")
@@ -212,11 +213,14 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. lCE_F .or. MsgYesNo( 
                md10->AREA := mAREA
            endif 
            dbunlock()
+        ELSE
+           fwrite( nUSO, "CODIBGE: "+MCodiBGE + " " + MUF + " " + MNOME + +HB_OSNEWLINE() )
         ENDIF          
         dbselectar("md10imp")
         dbskip()  
     enddo         
     dbcloseall()
+    FCLOSE(nUSO)
 endif
 
 if MsgYesNo( "Ajustar Arquivo Checagem 5 Digitos MD10->MD11" )
