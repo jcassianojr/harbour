@@ -787,8 +787,8 @@ IF lACEN
 ENDIF
 mNOME     := strtran( mNOME, ".", " " )               //tirar os .
 mNOME     := strtran( mNOME, ",", " " )               //tirar os ,
-//mNOME     := strtran( mNOME, "?", "C" )               //tirar os ? 
-//mNOME     := strtran( mNOME, "?", "c" )               //tirar os ?
+//mNOME     := strtran( mNOME, "?", "C" )               //tirar os ?  tirace ja trata este regra
+//mNOME     := strtran( mNOME, "?", "c" )               //tirar os ?  tirace ja trata esta regra
 mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
 IF lANSI
    mNOME     :=win_ANSIToOEM(mNOME) //HB_ansitooem(mNOME)
