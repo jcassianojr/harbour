@@ -497,13 +497,25 @@ texto := strtran( texto, "/", "" )
 return texto    
 
 
-function tratanome(cNOME)
+function tratanome(cNOME,lANSI,lACEN)
 LOCAL npOS
+IF VALTYPE(lANSI)<>"L"
+   lANSI:=.F.
+ENDIF
+IF VALTYPE(lACEN)<>"L"
+   lACEN:=.T.
+ENDIF
 cNOME:=ALLTRIM(cNOME)
 npOS:=AT("(",cNOME)
 IF npOS>0   
    cNOME:=SUBSTR(cNOME,1,nPOS-1)
    cNOME:=ALLTRIM(cNOME)
+ENDIF
+IF lACEN
+   mNOME     := TIRACE(mNOME)
+ENDIF
+IF lANSI
+   mNOME     :=win_ANSIToOEM(mNOME) //HB_ansitooem(mNOME)
 ENDIF
 cNOME:=STRTRAN(cNOME,"&39;"," ")
 cNOME:=STRTRAN(cNOME,"-"," ")
