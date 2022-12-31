@@ -782,16 +782,16 @@ mNOME     := strtran( alltrim( mNOME ), "'", " " )    //tirar como d'agua d'olho
 mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
 mNOME     := strtran( mNOME, "-", " " )               //tirar os tracos
 mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
+IF lACEN
+   mNOME     := TIRACE(mNOME)
+ENDIF
 mNOME     := strtran( mNOME, ".", " " )               //tirar os .
 mNOME     := strtran( mNOME, ",", " " )               //tirar os ,
-mNOME     := strtran( mNOME, "?", "C" )               //tirar os ?
-mNOME     := strtran( mNOME, "?", "c" )               //tirar os ?
+//mNOME     := strtran( mNOME, "?", "C" )               //tirar os ? 
+//mNOME     := strtran( mNOME, "?", "c" )               //tirar os ?
 mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
 IF lANSI
    mNOME     :=win_ANSIToOEM(mNOME) //HB_ansitooem(mNOME)
-ENDIF
-IF lACEN
-   mNOME     := TIRACE(mNOME)
 ENDIF
 mNOME     := ALLTRIM(UPPER(mNOME))
 nPOS:=AT("(",mNOME)
