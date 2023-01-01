@@ -11,13 +11,16 @@
 #include "Directry.ch"
 
 /*
+   
+    nao user nFILE apresentou erro usando outro nome como nFILEUSO
+    
     nLASTREC:=FLINECOUNT(cARQIMP)
     zei_fort( nLASTREC,,,0)
     
     cDELIM:=FDELIM (cARQIMP,1024) //acha o delimitador chr(13)+chr(10) dos ou chr(10) linux usado abaixo no freadline
-    nFILE:=FOPEN(cARQIMP) //abre o arquivo
+    nFILEuso:=FOPEN(cARQIMP) //abre o arquivo
      WHILE .T.  
-        cLINHA:=FREADLINE (nFILE, 1024 ,.T. ,cDELIM) //FREADLINE (handle, line_len,lremchrexp,cDELI)
+        cLINHA:=FREADLINE (nFILEuso, 1024 ,.T. ,cDELIM) //FREADLINE (handle, line_len,lremchrexp,cDELI)
         
         //operacoes da rotina
         
@@ -28,7 +31,7 @@
         zei_fort(nLASTREC,,,1)
        
      enddo
-     fclose(nFILE)   //fecha o arquivo
+     fclose(nFILEuso)   //fecha o arquivo
 */
 
 *****************************************************************

@@ -489,13 +489,6 @@ dbcloseall()
 FCLOSE(nUSO)
 
 
-function TIRAOUT( TEXTO )
-texto := strtran( texto, ".", "" )
-texto := strtran( texto, ":", "" )
-texto := strtran( texto, "-", "" )
-texto := strtran( texto, "/", "" )
-return texto    
-
 
 function tratanome(cNOME,lANSI,lACEN)
 LOCAL npOS
@@ -512,14 +505,15 @@ IF npOS>0
    cNOME:=ALLTRIM(cNOME)
 ENDIF
 IF lACEN
-   mNOME     := TIRACE(mNOME)
+   cNOME     := TIRACE(cNOME)
 ENDIF
 IF lANSI
-   mNOME     :=win_ANSIToOEM(mNOME) //HB_ansitooem(mNOME)
+   cNOME     :=win_ANSIToOEM(cNOME) 
 ENDIF
-cNOME:=STRTRAN(cNOME,"&39;"," ")
-cNOME:=STRTRAN(cNOME,"-"," ")
-cNOME:= strtran( alltrim( cNOME ), "'", " " )
+cNOME:=STRTRAN(cNOME ,"&39;"," ")
+cNOME:=STRTRAN(cNOME ,"-"   ," ")
+cNOME:=strtran(cNOME ,"'"   ," ") //Ex Pau d´alho
+cNOME:=STRTRAN(cNOME ,'"'   ," ") //Ex Pay d"alho
 RETURN cNOME
 
 
@@ -590,3 +584,7 @@ while dbseek(nLASTBAIRRO)
 	 @ 24,00 say "bairro"+str(nlastbairro)
 enddo	 
 dbsetorder(2) // antes 4 localcep ibge + nome agora so o nome index 2
+return 
+
+function vertxt
+return .t.
