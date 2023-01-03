@@ -250,25 +250,24 @@ while ! eof()
 	    if ! empty(alltrim(cUF+" "+cCIDADE+" "+cCODIBGE))
 	       fwrite(nUSO,cUF+" "+cCIDLOOP+" "+cCODIBGE+hb_osnewline())
 		endif   
-        dbselectar("cepruaerr")
-        dbappend()
-        cepruaerr->cep:=cepruaimp->cep
-        cepruaerr->obs:=cUF+"/"+cCIDLOOP
-        
-        
+        if ! empty(cepruaimp->RUA) .and. ! empty(cepruaimp->bairro )
+           dbselectar("cepruaerr")
+           dbappend()
+           cepruaerr->cep:=cepruaimp->cep
+           cepruaerr->obs:=cepruaimp->obs
+           cepruaerr->RUA:=cepruaimp->RUA
+           cepruaerr->Bairro:=cepruaimp->bairro
+           cepruaerr->ibge:=cepruaimp->igbe 
+           cepruaerr->uf:=cepruaimp->uf
+           cepruaerr->cidade:=cepruaimp->cidade
+        endif 
 		dbselectar("cepruaimp")
 		dbdelete() //deletando os erros para nao fazer na proxima rodada
 		dbskip()
 		loop
     endif	
  
-    
- 
- 
    dbselectar("cepruaimp")
-   
-   
-   
    while cUFLOOP=cepruaimp->UF .AND. cCIDLOOP=ALLTRIM(cepruaimp->CIDADE) .AND. ! EOF()
       @ 24,00 say  cUF+ cCIDADE + CEP + STR(RECNO()) + "/" + STR(nLASTREC)
       IF lCEPRUA   //grava ou skip abaixo uf/cidade         

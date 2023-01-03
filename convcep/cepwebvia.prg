@@ -22,6 +22,7 @@ Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 
 
+nERRO:=0
 /*
    CLS
    
@@ -316,11 +317,17 @@ ENDCLASS
    
 METHOD New( cCEP )
 
+   IF nERRO>10
+      ? 'Open erro >10'
+      RETURN NIL
+   ENDIF
+
    oHttp := TIPClientHTTP():new( "http://viacep.com.br/ws/" + cCEP + "/piped/" )
 
    IF ! oHttp:open()
      // alert('open erro')
      ? 'open erro'
+      nERRO++
 	  RETURN NIL
    ENDIF
 
