@@ -1,6 +1,6 @@
 -incpath=c:\develop\harbour\sefazclass\include\
 
--manifest=gerapdf.Manifest
+# -manifest=gerapdf.Manifest comentado erro compilacao 32 bits
 -lng=pt_BR
 
 gerapdf.prg

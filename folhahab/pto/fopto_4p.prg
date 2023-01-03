@@ -84,8 +84,9 @@ mVALIDADE := XDECDAT( mVALIDADE )
 @ 10, 15 get mEMAIL_SER
 READCUR()
 //cria antes do encode
-mCHAVEH:=StrToHex(hb_SHA256(upper(ALLTRIM( mUSUARIO ))+upper(alltrim( mSENHA )), .t. ))
-
+IF ! EMPTY(mUSUARIO ) .AND ! EMPTY(mSENHA )
+    mCHAVEH:=StrToHex(hb_SHA256(upper(ALLTRIM( mUSUARIO ))+upper(alltrim( mSENHA )), .t. ))
+ENDIF
 mUSUARIO  := XENCODE( mUSUARIO )
 mEQUIVALE := XENCODE( mEQUIVALE )
 mSENHA    := XENCODE( mSENHA )

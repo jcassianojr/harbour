@@ -1,6 +1,5 @@
--manifest=cepruaimp.Manifest
+#-manifest=cepruaimp.Manifest  comentado erro compilacao 32 bits
 -lng=pt_BR
-
 
 hbct.hbc
 #hbwin.hbc

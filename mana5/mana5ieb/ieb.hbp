@@ -10,7 +10,7 @@ hbmisc.hbc
 -gtwvg
 -gui 
 -lng=pt_BR
--manifest=mana5ieb.Manifest
+#-manifest=mana5ieb.Manifest  comentado erro compilacao 32 bits
 
 
 ..\mana5\MANA5.prg

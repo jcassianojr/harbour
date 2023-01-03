@@ -1,7 +1,7 @@
 -gtwvg
 -gui 
 -lng=pt_BR
--manifest=folhalis.Manifest
+#-manifest=folhalis.Manifest  comentado erro compilacao 32 bits
 
 hbct.hbc
 hbwin.hbc

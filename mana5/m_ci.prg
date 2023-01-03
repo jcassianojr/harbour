@@ -37,8 +37,9 @@ if nTIPO = 1
          netreclock()
          field->SENHA   := XENCODE(mSENHA)
          field->DATATRO := ZDATA+90
-         FIELD->CHAVEH:=StrToHex(hb_SHA256(ALLTRIM(zuser)+alltrim(mSENHA), .t.))
-         
+         IF ! EMPTY(ZUSER) .AND. ! EMPTY(mSENHA)
+               FIELD->CHAVEH:=StrToHex(hb_SHA256(ALLTRIM(zuser)+alltrim(mSENHA), .t.))
+         ENDIF
          dbunlock()
       endif
       dbclosearea()
@@ -201,9 +202,10 @@ if lOPEN
 		ENCODEPOS(cUSUARIO,0,.t.)
 		cSENHA:=DECODE(FIELD->SENHA)
 		ENCODEPOS(cSENHA,10,.t.)       //senha comeca na 10+1 postel11
-        cCHAVEH:=StrToHex(hb_SHA256(ALLTRIM(cUSUARIO)+alltrim(cSENHA), .t.))
-        FIELD->CHAVEH:=cCHAVEH
-        
+        IF ! EMPTY(cUSUARIO) .AND. ! EMPTY(cSENHA)
+           cCHAVEH:=StrToHex(hb_SHA256(ALLTRIM(cUSUARIO)+alltrim(cSENHA), .t.))
+           FIELD->CHAVEH:=cCHAVEH
+        ENDIF
 		dbunlock()
 		
 		aCHAVE:={}
@@ -275,14 +277,10 @@ return .t.
 *+
 
 function gravaposTELA(cUSUARIO,cPOSTELAa,cPOSTELAB,cCHAVEH,cCAMBASE)
-//altd()
-//IF ! FILE(cCAMBASE)
-//   RETURN ALERT(cCAMBASE)
-//ENDIF
 //cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
-//     "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=P:\NOVELL\ITAESBRA\PECAS\FMP04CPF.MDB;Mode=Share Deny None"
+//     "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=P:\NOVELL\ITAESBRA\PECAS\FMP04CPF.MDB;Mode=Share Deny None" //32 bits ole odbc
 
-cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bits ole  odbc
         
 try
    oConn:=WIN_OLECreateObject( "ADODB.Connection" )

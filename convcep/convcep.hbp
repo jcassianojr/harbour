@@ -1,6 +1,5 @@
--manifest=convcep.Manifest
+#-manifest=convcep.Manifest  comentado erro compilacao 32 bits
 -lng=pt_BR
-
 
 hbct.hbc
 hbwin.hbc

@@ -1,7 +1,7 @@
 -gtwvg
 -gui 
 -lng=pt_BR
--manifest=recursos.Manifest
+#-manifest=recursos.Manifest  comentado erro compilacao 32 bits
 
 hbct.hbc
 hbwin.hbc
