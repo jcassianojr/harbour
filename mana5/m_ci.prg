@@ -175,6 +175,7 @@ RETURN out_string
 function gerapostela(nARQ)
 LOCAL cARQMUSER
 LOCAL lOPEN
+LOCAL cCHAVEV
 cCAMWRPT:=ProfileString( "MANA5.INI", "PATH", "WRPT", HB_CWD())
 cCAMCONT:=ProfileString( "MANA5.INI", "PATH", "CONTROLE", HB_CWD())
 cCAMSYSU:=ProfileString( "MANA5.INI", "PATH", "SYSUSER", HB_CWD())
@@ -185,10 +186,10 @@ IF nARQ=1
 ENDIF
 IF nARQ=2
    cARQMUSER:=ProfileString( "MANA5.INI", "PATH", "MUSERFOLHA", HB_CWD())+"MUSER"
-   ALERT(cARQMUSER)
+ //  ALERT(cARQMUSER)
    lOPEN:=USECHK(cARQMUSER,,.T.)
    //USECHK(cARQ,cIND,lSHA,cDRIVER,lNEW,nTIME)
-   ALERT(cARQMUSER)
+//   ALERT(cARQMUSER)
 ENDIF
 
 
@@ -206,7 +207,6 @@ if lOPEN
            cCHAVEH:=StrToHex(hb_SHA256(ALLTRIM(cUSUARIO)+alltrim(cSENHA), .t.))
            FIELD->CHAVEH:=cCHAVEH
         ENDIF
-		dbunlock()
 		
 		aCHAVE:={}
 		cCHAVEUSR:=""
@@ -223,11 +223,20 @@ if lOPEN
 		NEXT X
 
         IF nARQ=1 //so processa muser do mana5
-    		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMWRPT)
-    		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMCONT)
-    		gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMSYSU)
+    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMWRPT)
+            IF ! EMPTY(cCHAVEV)
+               FIELD->CHAVEWW:=cCHAVEV
+            ENDIF
+    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMCONT)
+            IF ! EMPTY(cCHAVEV)
+               FIELD->CHAVEWC:=cCHAVEV
+            ENDIF
+    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMSYSU)
+             IF ! EMPTY(cCHAVEV)
+               FIELD->CHAVEWS:=cCHAVEV
+            ENDIF           
 		endif
-		
+		DBUNLOCK()
 	   dbskip()
 	enddo
     dbcloseall()
@@ -277,8 +286,10 @@ return .t.
 *+
 
 function gravaposTELA(cUSUARIO,cPOSTELAa,cPOSTELAB,cCHAVEH,cCAMBASE)
+LOCAL cCHAVEV
 //cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
 //     "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=P:\NOVELL\ITAESBRA\PECAS\FMP04CPF.MDB;Mode=Share Deny None" //32 bits ole odbc
+cCHAVEV:=""
 
 cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bits ole  odbc
         
@@ -290,7 +301,7 @@ try
    END  //end do with
 catch oErr
    ShowAdoError(oERR,oCoNn)   
-   return 
+   return ""
 end
 
 oRSDES:= WIN_OLECreateObject('ADODB.RecordSet')
@@ -306,7 +317,10 @@ oComm:=WIN_OLECreateObject( "ADODB.Command" )
       CATCH oERR
         ShowADOError(oERR,oConn,cCOMANDO)          
       END
-      If oRSDES:EOF 
+      If .NOT. oRSDES:EOF 
+         cCHAVEV:=oRSDES:fields("CHAVEV"):value  
+      //   ALERT(cCHAVEV)
+      ELSE   
       //---->inclusao do usuario com max do id    
       //   cCOMANDO = "INSERT INTO USUARIO (USUARIO)"
       //   cCOMANDO+= " VALUES ('"+cUSUARIO+"') ;"
@@ -357,4 +371,4 @@ endif
 
 oConn:Close()
 oConn:=NIL		
-
+RETURN cCHAVEV
