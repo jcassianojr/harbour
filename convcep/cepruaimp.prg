@@ -35,10 +35,6 @@ dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
 ordlistadd( cARQUIVO)
 dbsetorder(1) //
 
-//cARQUIVO:="MD05"
-//dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
-//ordlistadd( cARQUIVO)
-//dbsetorder(1) //
 
 cARQUIVO:="CIDCONV"
 dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
@@ -142,33 +138,12 @@ while ! eof()
    lACHEI:=.F.
    @ 24,00 say  cUF+ cCIDADE + STR(RECNO()) + "/" + STR(nLASTREC)   
    if ! empty(cUF) .AND. ! EMPTY(cCIDADE)
-	   dbselectar("MD10")
-	   dbsetorder(1)
-	   dbgotop()
-	   if dbseek(eBUSCA)     
-		  cCODIBGE:=alltrim(MD10->CODIBGE)
-		  IF VAL(MD10->CODIBGE)>0
-			ncodibge:=VAL(MD10->CODIBGE)
-		  ENDIF
-		  lACHEI:=.T.
-	   endif
-	   if ncodibge=0
-		  dbselectar("cidconv")
-		  dbgotop()
-		  if dbseek(eBUSCA)
-			 eBUSCA:=ESTDES+ALLTRIM(CIDDES)
-		  ENDIF
-		  dbselectar("MD10")
-		  dbsetorder(1)
-		  dbgotop()
-		  if dbseek(eBUSCA)     
-			cCODIBGE:=alltrim(MD10->CODIBGE)
-	 		IF VAL(MD10->CODIBGE)>0
-				ncodibge:=VAL(MD10->CODIBGE)
-			ENDIF
-			 lACHEI:=.T.
-		  endif      
-	   endif
+       cCODIBGE:=BUSCAIBGE(cUF,cCIDADE)
+       ncodibge:=VAL(cCODIBGE)
+       if ! empty(cCODIBGE)
+          lACHEI:=.T.
+       ENDIF
+   
 	   if ncodibge=0 .AND. AT("(",cCIDLOOP)>0  //cidades com nome parentes
 		  eBUSCA   :=cUF+TRATACIDADE(cCIDLOOP,cUF)
 		  dbselectar("MD10")
@@ -201,26 +176,10 @@ while ! eof()
    endif
    
    
-   if ncodibge=0  .AND. lACHEI
-      /*
-			   dbselectar("MD10")
-			   dbgotop()
-			   if ! dbseek(eBUSCA)
-                  dbappend()
-				  md10->uf:=cUF
-				  md10->nome:=cCIDADE
-				  
-				  dbrlock()
-			   endif
-     */		   
-   ENDIF
-   
    if ncodibge=0  .AND. lACHEI      
       ncodibge:=9999999 //tratado abaixo pois ibge 7 digitos cepnrua 6
    endif
    lCEPRUA:=.F.
-   
-   
    
     IF ncodibge>0//agora sempre ibge
 	   cARQRUA := "C" + cCODIBGE
@@ -488,7 +447,7 @@ dbcloseall()
 FCLOSE(nUSO)
 
 
-
+/*
 function tratanome(cNOME,lANSI,lACEN)
 LOCAL npOS
 IF VALTYPE(lANSI)<>"L"
@@ -514,7 +473,7 @@ cNOME:=STRTRAN(cNOME ,"-"   ," ")
 cNOME:=strtran(cNOME ,"'"   ," ") //Ex Pau d´alho
 cNOME:=STRTRAN(cNOME ,'"'   ," ") //Ex Pay d"alho
 RETURN cNOME
-
+*/
 
 function tratacidade(cNOME,cUF) //algumas vem com nome no parentes distrito(cidade)
 cDISTRITO:=""
@@ -538,6 +497,7 @@ endif
 RETURN cNOME
 
 
+/*
 function coduf(cBUSCA,cTIPO) //ibge
 local nPos:=0
 local cRETU:="??"
@@ -572,7 +532,7 @@ ELSE    //sigla uf->codigo
    endif
 ENDIF
 Return cRETU
-
+*/
 
 function idbairro
 dbselectar("cepbai")

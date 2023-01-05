@@ -10,7 +10,6 @@
 *+             FUNCTION CNPJCPFPICT(oGet,v_Tipo,nROW,nCOL)  
 *+             FUNCTION CNPJCPFVAL(cCGC,cPESSOA,cESTADO)
 *+             function VALCEI(wk_cei,lMES) 
-*+             function coduf(cBUSCA,cTIPO) //ibge
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
@@ -360,52 +359,3 @@ IF ZNERRO>0
 ENDIF
 return .T.
 
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function coduf()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function coduf(cBUSCA,cTIPO) //cTIPO UF=codigo->sigla SI=sigla->codigo
-local nPos:=0
-local cRETU:="  "
-LOCAL aUF,aIBGE
-
-aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
-            "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
-            "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO" ,"EX","XX"}
-
-aIBGE:= { "12", "27", "13", "16", "29", "23", "53", "32", "52", ;
-          "21", "31", "50", "51", "15", "25", "26", "22", "41", ;
-          "33", "24", "11", "14", "43", "42", "28", "35", "17" ,"54","54"}
-
-/*
-          aIRRF   := { "01", "27", "02,98", "06", "33", "13", "DF", "56", "57,92", ;
-             "08", "41", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
-             "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO" ,"EX","XX"}
-*/
-          
-IF EMPTY(cBUSCA)
-   RETURN cRETU
-ENDIF
-IF VALTYPE(cTIPO)<>"C"
-   cTIPO:="UF"
-ENDIF
-//@ 23,00 SAY cBUSCA
-//inkey(0)
-IF cTIPO="UF" // codigo->Sigla uf
-   IF LEN(cBUSCA)>2 //codigo ibge 7 digitos 2 primeiros estados
-      cBUSCA:=SUBSTR(cBUSCA,1,2)
-   ENDIF
-   nPos:=ascan( aIBGE, cBUSCA )
-   if nPos>0
-      cRETU:=aUF[nPos] // retorna o codigo do Estado
-   endif
-ELSE    //SI sigla uf->codigo
-   nPos:=ascan( aUF, cBUSCA )
-   if nPos>0
-      cRETU:=aIBGE[nPos] // retorna o codigo numerico do estado
-   endif
-ENDIF
-Return cRETU

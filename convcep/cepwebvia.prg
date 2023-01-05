@@ -370,9 +370,3 @@ METHOD New( cCEP )
 RETURN Self
   
   
-FUNCTION TRATANOME(cNOME)
-//cNOME:=XmlTransform( cNOME)
-//cNOME:=STRTRAN(cNOME,","," ")
-//cNOME:=STRTRAN(cNOME,"‚","e")
-RETURN cNOME
-
