@@ -293,13 +293,27 @@ if nTIPSPO = 9      //rtf
    cFILE:=FILETOrtf( cARQSPO )
 endif
 if nTIPSPO = 10     //pdf
-   if mdg("PDF Interno (SIM) PdfCreator (NAO) " )      
-      cFILE:=filetopdf( cARQSPO )
-   else
-      PrintUSB(cARQSPO,"PDFCreator")
-      nTIPSPO=-1 //-1 para nao processar mais nada
-      //FILEtoprwin( cARQSPO,3 )
-   endif   
+   cTELA := savescreen( 6, 0, 17, 80 )
+   CLSBOX( 6, 0, 17, 80 )
+   HB_dispbox( 6, 0, 17, 79, B_DOUBLE+" ")
+   oPCAO( 07, 01, " &Interno   ", 73 ) //1 
+   oPCAO( 08, 01, " &PDFCreator", 80 ) //2
+   oPCAO( 09, 01, " &MS PDF    ", 77 ) //3
+   oPCAO( 10, 01, " &Retornar  ", 82 ) //4
+   nOPCAO := menu(, 0 )
+   restscreen( 6, 0, 17, 80, cTELA )
+   DO CASE
+      CASE nOPCAO=1
+	       cFILE:=filetopdf( cARQSPO ) 
+	  CASE nOPCAO=2
+	       PrintUSB(cARQSPO,"PDFCreator")
+           nTIPSPO=-1 //-1 para nao processar mais nada		
+	  CASE nOPCAO=3
+           PrintUSB(cARQSPO,"Microsoft Print To PDF")
+           nTIPSPO=-1 //-1 para nao processar mais nada	 
+ 	  CASE nOPCAO=4
+           nTIPSPO=-1 //-1 para nao processar mais nada	                
+   ENDCASE
 endif
 /*
 if nTIPSPO = 11     //imprime usuando externo desativada
@@ -345,6 +359,8 @@ if nTIPSPO = 6 .or. nTIPSPO =7  .or. nTIPSPO = 8 .or. nTIPSPO = 9 .or. nTIPSPO =
 			wapi_ShellExecute( 0, "open", cFILE,"", 0, 1 )
 	  CASE nOPCAO=3
 	        filetoemail(cFILE)
+   	  CASE nOPCAO=4
+           nTIPSPO=-1 //-1 para nao processar mais nada	             
    ENDCASE
 endif
 cIMPORI:=""
