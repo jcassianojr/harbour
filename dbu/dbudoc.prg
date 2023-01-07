@@ -209,7 +209,6 @@ nFIELDS:=LEN(aESTRU)
 IF tDOC=2 //Verificando o tamanho utilizado por cada campo
    PEGTIPO2VAL()
 ENDIF
-//altd()
 GRAVADOC( tdoc,cARQDIC, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -682,16 +681,18 @@ case cTIPO = 'D'
 case cTIPO = 'M'
    cRETU := 'string'
 endcase
-retu cRETU
+return cRETU
 
 
-func dbuzap()
+function dbuzap()
 zap
+return .t.
 
-func dbupack()
+function dbupack()
 pack
+return .t.
 
-FUNC DBETODBF(cMASK,lLAY,lCRIA)
+FUNCTION DBETODBF(cMASK,lLAY,lCRIA)
 IF VALTYPE(cMASK)#"C"
     cMASK:="*.DBF"
 ENDIF

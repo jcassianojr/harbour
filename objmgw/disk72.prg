@@ -1,6 +1,6 @@
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Source Module => DISK72.PRG
+*+    Module => DISK72.PRG
 *+
 *+    Functions: Function FILENAMES(GRUPO ,cCASE)
 *+               Function TIRAEXT(cFile, opcional cEXT) ''so troca se passar cext senao so tira a extensao
@@ -12,8 +12,6 @@
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 *+    Function FILENAMES()
-*+
-*+    Called from ( disk72.prg   )   1 - function deletaarq()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -48,7 +46,7 @@ FUNCTION TIRAEXT( cFile, cEXT )             //Arquivo teste.txt ->teste se cext=
    hb_fNameSplit( cFile,,@cFILENAME )
    if valtype( cEXT ) = "C"
       IF AT(".",cEXT)=0
-        cEXT += "." + cEXT
+        cEXT := "." + cEXT
       ENDIF
       cFilename += cEXT
    endif
@@ -71,7 +69,6 @@ RETURN TIRAEXT( cFile, cEXT )
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 function DELETAARQ( cGRUPO )
-
 local aRETU
 local X
 if valtype( cGRUPO ) # "C"

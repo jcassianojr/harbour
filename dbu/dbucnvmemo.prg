@@ -15,7 +15,6 @@ cDESMEMO:=hb_rddInfo( RDDI_MEMOEXT) //a extensao do rdiinfo memo do destino vem 
 cDESDRIVER:=RDDNOME(TIPODBF)
 
 cBUSCA:="*"+cORIMEMO
-ALTD()
 aARQMEMOS:=directory(cBUSCA) // ".FPT" a extensao do rdiinfo memo do destino vem com o ponto
 IF LEN(aARQMEMOS)=0
    ALERTX("Sem arquivos: "+cORIMEMO)
