@@ -329,7 +329,12 @@ function str2data(cDATA,cFOR,cSEP,cDIG)
 local cDIA,cMES,cANO
 LOCAL dDATA := CTOD(SPACE(8)) 
 LOCAL nLENANO:=4
+
+//padrao para o case abaixo
 IF VALTYPE(cFOR)#"C"
+   cFOR:="DMA"
+ENDIF
+IF cFOR="DMY"
    cFOR:="DMA"
 ENDIF
 IF VALTYPE(cSEP)#"C"
@@ -370,7 +375,7 @@ DO CASE
         cANO:=SUBSTR(cDATA,1,nLENANO)
         cDIA:=SUBSTR(cDATA,nLENANO+1,2)
         cMES:=SUBSTR(cDATA,nLENANO+3)   
-   OTHERWISE
+   OTHERWISE   //"DMA" //DMY //Padrao acima
         cDIA:=SUBSTR(cDATA,1,2)
         cMES:=SUBSTR(cDATA,3,2)       
         cANO:=SUBSTR(cDATA,5)        
