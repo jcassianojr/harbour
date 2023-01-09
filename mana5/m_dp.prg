@@ -1,42 +1,25 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Programa  : m_dp.prg
-*+
-*+
+*+    Programa  : m_dp.prg Gera documetacao estrutura arquivos
 *+
 *+    Sistema   : MANAEXO
 *+
 *+    Linguagem : Harbour
 *+
-*+    Autor     : Jorge Cassiano
 *+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
+*+    Copyright (c) 2023, JCassiano
 *+
 *+--------------------------------------------------------------------
 *+
 
 
-// *******************
-// * GERA DOCUMENTA€ŽO
-// *******************
-//cCR  := chr(13)+chr(10) trocado por hb_osnewline()
-
 cARQ:=WIN_GETSAVEFILENAME(        , "Salvar Documentacao", HB_CWD(),"txt"   , "*.txt" , 1            ,               , "documentacao.txt")
 
+lPULAFEC  := MDG("Pular Arquivos Fechados")
+lPULACEP  := MDG("Pular Arquivos CEPS")
+lPULACNPJ := MDG("Pular Arquivos CNPJ/IE")
+lMESARQ   := MDG("Exibir Mensagem arquivo nao encontrado")
 
-//MDS("Digite o Nome do Arquivo")
-//@ 24,40 get cARQ pict "@S30"        
-//if !READCUR()
-//   retu .F.
-//endif
 
 cTIPO := "D"
 MDS("(D)ocumento (I)ni")
@@ -44,6 +27,8 @@ MDS("(D)ocumento (I)ni")
 if !READCUR()
    retu .F.
 endif
+
+
 aARQ   := {}
 aDES   := {}
 FILTRO := ""
@@ -54,7 +39,23 @@ endif
 set filter to &FILTRO
 dbgotop()
 while !eof()
-   if empty(arqANO) .AND. ARQUIVO <> "DICI"
+   lINCLUI:=.T.
+   iF ARQUIVO ="DICI"
+      lINCLUI:=.F. 
+   endif
+  
+   if (!empty(arqANO) .and. lPULAFEC) .or. ARQUIVO = "MANARQ" .or. ARQUIVO = "MANARQ1"
+      //Nao Inclui Na Lista Fechados
+      lINCLUI := .F.
+   ENDIF
+   if PADRAO = "A" .and. lPULACEP   //E cep e foi solicitado pular
+      lINCLUI := .F.
+   ENDIF
+   IF lPULACNPJ .AND. (AT("CNPJIE",ARQUIVO) > 0 .OR. AT("BAIXA",ARQUIVO) > 0)
+      lINCLUI := .F.
+   ENDIF
+
+   if lINCLUI
       aadd(aARQ,ARQUIVO)
       aadd(aDES,DESCRICAO)
    endif
@@ -87,18 +88,18 @@ for Y := 1 to nARQ
    mDESCRICAO := aDES[Y]
    MDS(mARQUIVO)
    if cTIPO = "D"
-      fwrite(nHANDLE,'Ö'+replicate('-',78)+'·'+HB_OSNEWLINE())
-      fwrite(nHANDLE,'Ý'+padc(alltrim(mARQUIVO)+".DBF",78)+'Ý'+HB_OSNEWLINE())
-      fwrite(nHANDLE,'Ý'+padc("Descricao: "+alltrim(mDESCRICAO),78)+'Ý'+HB_OSNEWLINE())
-      fwrite(nHANDLE,'Ó'+replicate('-',78)+'½'+HB_OSNEWLINE())
-      fwrite(nHANDLE,'Sum rio dos Campos:'+HB_OSNEWLINE())
+      fwrite(nHANDLE,"|"+replicate('-',78)+"|"+HB_OSNEWLINE())
+      fwrite(nHANDLE,'|'+padc(alltrim(mARQUIVO)+".DBF",78)+'|'+HB_OSNEWLINE())
+      fwrite(nHANDLE,'|'+padc("Descricao: "+alltrim(mDESCRICAO),78)+'|'+HB_OSNEWLINE())
+      fwrite(nHANDLE,"|"+replicate('-',78)+"|"+HB_OSNEWLINE())
+      fwrite(nHANDLE,'Sumario dos Campos:'+HB_OSNEWLINE())
       fwrite(nHANDLE,replicate('=',78)+HB_OSNEWLINE())
       fwrite(nHANDLE,''+HB_OSNEWLINE())
    else
       fwrite(nHANDLE,"["+alltrim(mARQUIVO)+".DBF]"+HB_OSNEWLINE())
    endif
    if mARQUIVO # HELPARQ
-      IF USEREDE(alltrim(mARQUIVO),1,0)
+      IF USEREDE(alltrim(mARQUIVO),1,0,,lMESARQ)   //Function USEREDE(cARQ,nMOD,nIND,cARE,lMES,nTIME)
          if cTIPO = "D"
             fwrite(nHANDLE,str(fcount(),5)+' Campos Definidos'+HB_OSNEWLINE())
          endif

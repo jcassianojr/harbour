@@ -1,36 +1,22 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Programa  : m_db.prg
-*+
-*+
+*+    Programa  : m_db.prg Indexar arquivos
 *+
 *+    Sistema   : MANAEXO
 *+
 *+    Linguagem : Harbour
 *+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
+*+    Copyright (c) 2023, Jcassiano
 *+
 *+--------------------------------------------------------------------
 *+
-
-
 
 
 function m_db
 
 para wFILTRO
 
-MDI(" Ý Indexar Arquivos ")
+MDI(" Indexar Arquivos ")
 
 //Variaveis de Trabalho
 lPULAFEC  := .F.
@@ -43,8 +29,10 @@ if valtype(wFILTRO) # "C"
    lPULAFEC  := MDG("Pular Arquivos Fechados")
    lPULACEP  := MDG("Pular Arquivos CEPS")
    lPULACNPJ := MDG("Pular Arquivos CNPJ/IE")
+   lMESARQ   := MDG("Exibir Mensagem arquivo nao encontrado")
    FILTRO    := RFILORD(zARQ,.F.)
 else
+   lMESARQ   :=.T.
    FILTRO := wFILTRO
 endif
 
@@ -104,7 +92,7 @@ for X := 1 to len(aARQ)
          endif
       next W
    endif
-   if USECHK(mDIR+cARQ,,.F.,aARQD[X,3],.T.,300)
+   if USECHK(mDIR+cARQ,,.F.,aARQD[X,3],.T.,300,lMESARQ)    // USECHK(cARQ,cIND,lSHA,cDRIVER,lNEW,nTIME,lMES)
       PACK
       nLASTREC := LASTREC()
       zei_fort(nLASTREC,,,0)

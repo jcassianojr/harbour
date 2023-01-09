@@ -85,7 +85,9 @@ if empty(cDRIVER)
 endif
 //Verifica a existencia do Arquivo
 if ! file(cARQDIR+cARQ+".DBF")
-   ALERTX("O Sistema nAo Encontrou o Arquivo "+cARQ)
+   IF lMES
+       ALERTX("O Sistema nAo Encontrou o Arquivo "+cARQ)
+   ENDIF    
    retuRN .F.
 endif
 //Carrega Indices
@@ -180,7 +182,10 @@ return .T.
 *+
 *+--------------------------------------------------------------------
 *+
-function USECHK(cARQ,cIND,lSHA,cDRIVER,lNEW,nTIME)
+function USECHK(cARQ,cIND,lSHA,cDRIVER,lNEW,nTIME,lMES)
+IF VALTYPE(lMES)<>"L"
+   lMES:=.T.
+ENDIF
 if valtype(cDRIVER) # "C" .or. empty(cDRIVER)
    cDRIVER := IF(cRDDEXT = "CDX","DBFCDX","DBFNTX")
 else
