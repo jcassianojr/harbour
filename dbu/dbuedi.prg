@@ -1,36 +1,24 @@
 *+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
 *+
-*+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUEDI.PRG
+*+    DBUEDI.PRG
 *+
 *+    Functions: Function EDITXT()
 *+
 *+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
 
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
 *+
-*+    Function EDITXT()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-func EDITXT
-if !lEDITXT
-   ALERTX( 'J  esta sendo editado um texto' )
-   retu
+function EDITXT
+LOCAL NOMEARQ
+if ! lEDITXT
+   ALERTX( 'Ja esta sendo editado um texto' )
+   return .f.
 endif
-@ 24, 00 clear
-priv DADO    := space( 80 )
-MDS( "Digite o nome do Arquivo" )
-@ 24, 40 get DADO pict "@S40"
-READDBU()
-DADO := alltrim( DADO )
-if ! HB_FILEEXISTS( DADO )
-   ALERTX( 'N„o Encontrei Este Arquivo' )
-   retu .F.
+nomearq := win_GetOpenFileName(, "Ler conteudo", HB_CWD(), "txt", "*.txt", 1 )
+if ! HB_FILEEXISTS( nomearq)
+   ALERTX( 'Nao Encontrei Este Arquivo' )
+   return .F.
 endif
 lEDITXT := .F.
-EDItarq( DADO )
+EDItarq( nomearq )
 lEDITXT := .T.
-retu
-
-
-
+return .t.

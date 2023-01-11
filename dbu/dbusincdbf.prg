@@ -6,13 +6,13 @@ function dBUsincdbf()
 aAMBIENTE:=SALVAA()
 nOLDTIPO=TIPODBF
 
-alert("escolha origem")
+alertX("escolha origem")
 tipodbfesc()
 nORITIPO:=TIPODBF
 cORIDRIVER:=RDDNOME(TIPODBF)
 cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
 
-alert("escolha destino")
+alertX("escolha destino")
 tipodbfesc()
 nDESTIPO:=TIPODBF
 cDESDRIVER:=RDDNOME(TIPODBF)
@@ -63,7 +63,7 @@ WHILE ! EOF()
    xBUSCA:=&CCHAVE.
    DBSELECTAR("DESTINO")
    dbgotop()
-   IF DBSEEK(xBUSCA)
+   IF .NOT. DBSEEK(xBUSCA)
       dbappend()
       REPLVARS( .T. , .T.)
    ELSE
@@ -80,7 +80,7 @@ DBCLOSEALL()
 	
 RDDNOME(nOLDTIPO) //retorna tipo anterior
 RESTAA(aAMBIENTE)
-alert("sincronizado")
+alertX("sincronizado")
 
 
 *************************
@@ -91,13 +91,13 @@ aAMBIENTE:=SALVAA()
 nOLDTIPO=TIPODBF
 cSORTED:=SPACE(60)
 
-alert("escolha origem")
+alertX("escolha origem")
 tipodbfesc()
 nORITIPO:=TIPODBF
 cORIDRIVER:=RDDNOME(TIPODBF)
 cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
 
-alert("escolha destino")
+alertX("escolha destino")
 tipodbfesc()
 nDESTIPO:=TIPODBF
 cDESDRIVER:=RDDNOME(TIPODBF)
@@ -127,7 +127,7 @@ __dbSort( cARQDES      , aCAMPOS,     ,       ,      ,        ,      ,cDESDRIVER
 
 RDDNOME(nOLDTIPO) //retorna tipo anterior
 RESTAA(aAMBIENTE)
-alert("sincronizado")
+alertX("sincronizado")
 
 
 *************************
@@ -136,7 +136,7 @@ function limparegdupdbf()
 aAMBIENTE:=SALVAA()
 nOLDTIPO=TIPODBF
 
-alert("escolha origem")
+alertX("escolha origem")
 tipodbfesc()
 nORITIPO:=TIPODBF
 cORIDRIVER:=RDDNOME(TIPODBF)
@@ -176,4 +176,4 @@ DBCLOSEALL()
 	
 RDDNOME(nOLDTIPO) //retorna tipo anterior
 RESTAA(aAMBIENTE)
-alert("chaves duplicadas removidas")
+alertX("chaves duplicadas removidas")

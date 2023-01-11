@@ -134,13 +134,13 @@ do case
 endcase
 /*
 TRY
-	ALERT("MEMO: "+hb_rddInfo( RDDI_MEMOEXT))
+	alertx("MEMO: "+hb_rddInfo( RDDI_MEMOEXT))
 END
 TRY
-	ALERT("INDEX BAG: "+hb_rddInfo( RDDI_ORDBAGEXT))
+	alertx("INDEX BAG: "+hb_rddInfo( RDDI_ORDBAGEXT))
 END	
 TRY
-  ALERT("INDEX SINGLE: "+hb_rddInfo( RDDI_ORDEREXT))
+  alertx("INDEX SINGLE: "+hb_rddInfo( RDDI_ORDEREXT))
 END  
 */
 zusovia:=USOVIA

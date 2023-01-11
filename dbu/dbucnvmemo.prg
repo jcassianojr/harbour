@@ -3,12 +3,12 @@ function convertmemo()
 
 aAMBIENTE:=SALVAA()
 nOLDTIPO=TIPODBF
-alert("escolha origem")
+alertx("escolha origem")
 tipodbfesc()
 nORITIPO:=TIPODBF
 cORIMEMO:=hb_rddInfo( RDDI_MEMOEXT)  //a extensao do origem memo do destino vem com ponto
 cORIDRIVER:=RDDNOME(TIPODBF)
-alert("escolha destino")
+alertx("escolha destino")
 tipodbfesc()
 nDESTIPO:=TIPODBF
 cDESMEMO:=hb_rddInfo( RDDI_MEMOEXT) //a extensao do rdiinfo memo do destino vem com ponto
