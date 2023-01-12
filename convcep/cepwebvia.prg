@@ -6,8 +6,7 @@ REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 
 FUNCTION Main()
-
-   LOCAL cCep, cBairro, cCidade, cEndereco, cUF, cID
+PRIVATE  cCep, cBairro, cCidade, cEndereco, cUF, cID
 
    Set( _SET_CODEPAGE, "PTISO" )
    SetMode( 25, 80 )
@@ -18,25 +17,17 @@ FUNCTION Main()
 	Set( _SET_DELETED, .t.)
 	Set( _SET_SOFTSEEK, .t.)
 	__SetCentury( .t. )
-Set( _SET_EPOCH, year( date() ) - 60 )
-Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+    Set( _SET_EPOCH, year( date() ) - 60 )
+    Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 
 
 nERRO:=0
-/*
-   CLS
-   
- cCep := "03676080"
-   ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
 
-   ? cCep
-   ? cBairro
-   ? cCidade
-   ? cEndereco
-   ? cUF
-   ? cId
-   Inkey(0)
-*/     
+
+if ! file("cepruaimp.dbf")
+   alert("Falta cepruaimp.dbf")
+   quit
+endif
      
      
 lRUAVAZIA:=MSGYESNO("Checar Ruas Em Branco")
@@ -54,7 +45,7 @@ ENDIF
 
 IF lGERACEPRUA
   nGRAVA:=FCREATE("cepruaimp.csv")
-  cLINHA:="cep,rua,bairro,cidade,uf"+HB_OSNEWLINE()
+  cLINHA:="cep,ibge,rua,complemento,bairro,cidade,uf"+HB_OSNEWLINE()
   FWRITE(nGRAVA,cLINHA)
 ENDIF  
   
@@ -73,7 +64,7 @@ For KK := 1 to LEN(mListaArq)
     cFILECEP:=lower(mListaArq[KK,1])
     cFILECEP:=strtran(cFILECEP,".dbf","")	
   
-    IF cFILECEP<>"cepbai" .AND. cFILECEP<>"cepRUA" .AND. cFILECEP<>"cidconv" .and. cFILECEP<>"cepruaimp"
+    IF cFILECEP<>"cepbai" .AND. cFILECEP<>"ceprua" .AND. cFILECEP<>"cidconv" .and. cFILECEP<>"cepruaimp"
        dbusearea( .T., "DBFCDX", cFILECEP,, .F. )
        ordlistadd( cFILECEP)
        @ 23,00 say cFILECEP
@@ -91,19 +82,27 @@ For KK := 1 to LEN(mListaArq)
   		  @ 24,00 say cFILECEP
   		  @ 24,10 SAY nTOTREC
   		  @ 24,20 SAY nRECUSO
-  	  
+    	  
   	      lTEMCEP:=.T. //marca true para nao apagar se consultra cep nao encontrar vira false
   		  cCEP:=field->cep
+   
+          IF lGERACEPTXT
+             FWRITE(nFILECEPS,cCEP+HB_OSNEWLINE())
+          ENDIF       
+          
   		  dbselectar("cepruaimp")
           dbgotop()
   		  if ! dbseek(cCEP) //Ja pesquisado
   		     
-  		  	 cBairro :=""
-  			 cCidade  :=""
-  		 	 cEndereco :=""
-  		 	 cUF :=""
-  			 cId :=""
-  		  
+  		  	 cBairro      :=""
+  			 cCidade      :=""
+  		 	 cEndereco    :=""
+  		 	 cUF          :=""
+  			 cId          :=""
+             cIBGE        :=""
+             cComplemento :=""
+             Clogradouro  :=""
+             
              
              if lCHECKAPICOR
                  //correio web primeria busca
@@ -117,21 +116,14 @@ For KK := 1 to LEN(mListaArq)
     				? cUF
     				? cId
     				  
-    				  cCEP:=STRTRAN(cCEP,"-","")	
-    				  cCIDADE:=STRTRAN(CCIDADE,'"',"")
+    				  cCIDADE   :=UPPER(STRTRAN(CCIDADE,'"',""))
+                      cENDERECO :=UPPER(cendereco)
+                      cBAIRRO   :=UPPER(cBairro)
+                      cUF       :=UPPER(cBairro)
+                      
+                      GRAVARUAIMP()
     				 
-    				  dbselectar("cepruaimp")
-    				  dbappend()
-    				  field->cep:=cCEP
-    				  field->rua:=UPPER(cendereco)
-                      field->bairro:=UPPER(cBairro)
-    				  field->uf:=UPPER(cUF)
-    				  field->cidade:=UPPER(cCIDADE)
-    				  
-                      IF lGERACEPRUA
-    			     	  cLINHA:=cCEP +","+CENDERECO+","+cBairro+","+CCIDADE +","+cUF+HB_OSNEWLINE()
-        				  FWRITE(nGRAVA,cLINHA)
-                      ENDIF    
+                      
     			  else
     				  ?
     				  ? 'nao localizado web correio'
@@ -155,7 +147,6 @@ For KK := 1 to LEN(mListaArq)
         		? '  CEP...:'+ cCEP
     		    ? 
     		    IF ! oCep == NIL
-    			  ?   
     			  ?
     			  ? '  CEP...:', oCep:cCEP
     			  ? '  IBGE..:', oCep:cIBGE
@@ -165,38 +156,16 @@ For KK := 1 to LEN(mListaArq)
     			  ? '  CIDADE:', oCep:cLocalidade
     			  ? '  UF....:', oCep:cUF
     			  
-    			  cCEP:=STRTRAN(oCep:cCEP,"-","")	
-    			  cCIDADE:=STRTRAN(oCep:cLocalidade,'"',"")
-    			  
+    			  cCIDADE      := UPPER(STRTRAN(oCep:cLocalidade,'"',""))
+                  cENDERECO    := UPPER(oCep:cLogradouro)
+                  cBAIRRO      := UPPER(oCep:cBairro)
+                  cComplemento := UPPER(oCep:cComplemento)
+                  cUF          := UPPER(oCep:cUF)
+                  cIBGE        := oCep:cIBGE
+                  
+                  GRAVARUAIMP()
     			 
-    			  dbselectar("cepruaimp")
-                  if ! dbseek(cCEP)
-    			     dbappend()
-                     field->cep:=cCEP
-                  endif
-                  if empty(field->codibge)  
-    			     field->codibge:=oCep:cIBGE 
-                  endif
-                  if empty(field->rua)   
-    			     field->rua:=UPPER(oCep:cLogradouro)
-                  endif
-                  if empty(field->obs)   
-    			     field->obs:=UPPER(oCep:cComplemento)
-                  endif
-                  if empty(field->bairro)   
-    			     field->bairro:=UPPER(oCep:cBairro)
-                  endif
-                  if empty(field->cidade)   
-    			    field->cidade:=UPPER(cCIDADE)
-                  endif
-                  if empty(field->uf)  
-    			     field->uf:=UPPER(oCep:cUF)
-                  endif
-    			 
-                  IF lGERACEPRUA
-    			     cLINHA:=cCEP+","+oCep:cIBGE+","+oCep:cLogradouro+","+oCep:cComplemento+","+oCep:cBairro+","+CCIDADE+","+oCep:cUF+HB_OSNEWLINE()
-    			     FWRITE(nGRAVA,cLINHA)
-                  ENDIF   
+                   
     		  else
     			  ?
     			  ? 'nao localizado viacep'
@@ -238,7 +207,37 @@ dbselectar("cepruaimp")
 delete all for empty(rua).and.empty(bairro)
 pack
 dbcloseall()
-   
+
+
+FUNCTION GRAVARUAIMP()
+dbselectar("cepruaimp")
+if ! dbseek(cCEP)
+   dbappend()
+   field->cep:=cCEP
+endif
+if empty(field->codibge)  
+  field->codibge:=cIBGE 
+endif
+if empty(field->rua)   
+   field->rua:=cENDERECO
+endif
+if empty(field->obs)   
+   field->obs:=cComplemento
+endif
+if empty(field->bairro)   
+  field->bairro:=cBairro
+endif
+if empty(field->cidade)   
+   field->cidade:=cCIDADE
+endif
+if empty(field->uf)  
+   field->uf:=cUF
+endif
+IF lGERACEPRUA
+    cLINHA:=cCEP+","+cIBGE+","+cENDERECO+","+cComplemento+","+cBairro+","+cCIDADE+","+cUF+HB_OSNEWLINE()
+    FWRITE(nGRAVA,cLINHA)
+ENDIF
+RETURN .T.  
    
 
 STATIC FUNCTION ConsultaCep( cCep, cBairro, cCidade, cEndereco, cUF, cId )

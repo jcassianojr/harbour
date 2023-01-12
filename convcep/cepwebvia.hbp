@@ -13,6 +13,8 @@ c:\develop\harbour\sefazclass\source\ze_sefazxmlclass.prg
 c:\develop\harbour\sefazclass\source\ze_sefazcapicom.prg
 c:\develop\harbour\sefazclass\source\ze_digitodoc.prg
 
+#C:\develop\harbour\objmgw\error.prg
+
 hbtip.hbc
 xhb.hbc
 gtwvg.hbc
