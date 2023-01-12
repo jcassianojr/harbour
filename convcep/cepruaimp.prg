@@ -226,7 +226,7 @@ while ! eof()
            cepruaerr->obs:=cepruaimp->obs
            cepruaerr->RUA:=cepruaimp->RUA
            cepruaerr->Bairro:=cepruaimp->bairro
-           cepruaerr->ibge:=cepruaimp->igbe 
+           cepruaerr->codibge:=cepruaimp->codibge 
            cepruaerr->uf:=cepruaimp->uf
            cepruaerr->cidade:=cepruaimp->cidade
         endif 
