@@ -19,6 +19,16 @@ Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 
 
+if ! file("cepruaimp.dbf")
+   alert("Falta cepruaimp.dbf")
+   quit
+endif
+
+if ! file("cepruaerr.dbf")
+   alert("Falta cepruaerr.dbf")
+   quit
+endif
+
 use cepruaerr new exclusive
 zap
 
