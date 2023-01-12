@@ -86,9 +86,7 @@ For KK := 1 to LEN(mListaArq)
   	      lTEMCEP:=.T. //marca true para nao apagar se consultra cep nao encontrar vira false
   		  cCEP:=field->cep
    
-          IF lGERACEPTXT
-             FWRITE(nFILECEPS,cCEP+HB_OSNEWLINE())
-          ENDIF       
+       
           
   		  dbselectar("cepruaimp")
           dbgotop()
@@ -103,84 +101,53 @@ For KK := 1 to LEN(mListaArq)
              cComplemento :=""
              Clogradouro  :=""
              
+             lTEMCEP:=.F.
              
-             if lCHECKAPICOR
-                 //correio web primeria busca
-    		     lTEMCEP:=ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
-    			 
+             if lCHECKAPICOR //correio web primeria busca
+                ?
+    		    ? '  CEPAPI:'+ cCEP
+                ?
+    		     ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
     			 IF ! empty(cEndereco+cBairro)
-    			  	? cCep
-    				? cBairro
-    				? cCidade
-    				? cEndereco
-    				? cUF
-    				? cId
-    				  
-    				  cCIDADE   :=UPPER(STRTRAN(CCIDADE,'"',""))
-                      cENDERECO :=UPPER(cendereco)
-                      cBAIRRO   :=UPPER(cBairro)
-                      cUF       :=UPPER(cBairro)
-                      
-                      GRAVARUAIMP()
-    				 
-                      
-    			  else
-    				  ?
-    				  ? 'nao localizado web correio'
-    				  ?
-    				  dbselectar("cepruaimp") //grava para nao buscr online novamente
-                    if ! dbseek(cCEP)
-      				  dbappend()
-      				  field->cep:=cCEP
-                        if ! empty(cCIDADE) .AND. ! EMPTY(cUF)
-                           field->cidade:=UPPER(cCIDADE)
-                           field->uf:=UPPER(cUF)
-                        endif
-                   endif   
-    		     endif
+    				cCIDADE   :=UPPER(STRTRAN(CCIDADE,'"',""))
+                    cENDERECO :=UPPER(cendereco)
+                    cBAIRRO   :=UPPER(cBairro)
+                    cUF       :=UPPER(cBairro)
+                    GRAVARUAIMP()
+                    lTEMCEP:=.T.
+    			 else
+                    GRAVARUANAO('nao localizado web correio')
+                 endif   
              endif  
            
-            if lCHECKAPICEP
-                //via cep web segunda busca
+             if lCHECKAPICEP //via cep web segunda busca
+                ?
+    		    ? '  CEPCOR:'+ cCEP  
+                ?        
            		oCep := cepWeb( cCEP )
-         		?
-        		? '  CEP...:'+ cCEP
-    		    ? 
     		    IF ! oCep == NIL
-    			  ?
-    			  ? '  CEP...:', oCep:cCEP
-    			  ? '  IBGE..:', oCep:cIBGE
-    			  ? '  LOGRAD:', oCep:cLogradouro
-    			  ? '  COMPLE:', oCep:cComplemento
-    			  ? '  BAIRRO:', oCep:cBairro
-    			  ? '  CIDADE:', oCep:cLocalidade
-    			  ? '  UF....:', oCep:cUF
-    			  
     			  cCIDADE      := UPPER(STRTRAN(oCep:cLocalidade,'"',""))
                   cENDERECO    := UPPER(oCep:cLogradouro)
                   cBAIRRO      := UPPER(oCep:cBairro)
                   cComplemento := UPPER(oCep:cComplemento)
                   cUF          := UPPER(oCep:cUF)
                   cIBGE        := oCep:cIBGE
-                  
                   GRAVARUAIMP()
-    			 
-                   
-    		  else
-    			  ?
-    			  ? 'nao localizado viacep'
-    			  ?
-    			  dbselectar("cepruaimp") //grava para nao buscr online novamente
-                  if ! dbseek(cCEP)
-        			 dbappend()
-        			 field->cep:=cCEP
-                      if ! empty(cCIDADE) .AND. ! EMPTY(cUF)
-                         field->cidade:=UPPER(cCIDADE)
-                         field->uf:=UPPER(cUF)
-                    endif
-                  endif   
-    		   endif	 
-            endif      
+                  lTEMCEP:=.T.
+    		    else
+                  GRAVARUANAO('nao localizado viacep')
+                ENDIF
+             endif 
+             
+             IF lGERACEPTXT .AND. lTEMCEP .AND. ! empty(cEndereco+cBairro)
+                FWRITE(nFILECEPS,cCEP+HB_OSNEWLINE())
+             ENDIF  
+             
+             
+             IF lGERACEPRUA .AND. lTEMCEP  .AND. ! empty(cEndereco+cBairro)
+                cLINHA:=cCEP+","+cIBGE+","+cENDERECO+","+cComplemento+","+cBairro+","+cCIDADE+","+cUF+HB_OSNEWLINE()
+                FWRITE(nGRAVA,cLINHA)
+             ENDIF          
                   
                   
   	      endif
@@ -208,6 +175,20 @@ delete all for empty(rua).and.empty(bairro)
 pack
 dbcloseall()
 
+FUNCTION GRAVARUANAO(cMENSAGEM)
+?
+? cMENSAGEM
+?
+dbselectar("cepruaimp") //grava para nao buscr online novamente
+if ! dbseek(cCEP)
+    dbappend()
+    field->cep:=cCEP
+    if ! empty(cCIDADE) .AND. ! EMPTY(cUF)
+        field->cidade:=cCIDADE
+        field->uf:=cUF
+    endif
+endif  
+RETURN .T.
 
 FUNCTION GRAVARUAIMP()
 dbselectar("cepruaimp")
@@ -233,10 +214,7 @@ endif
 if empty(field->uf)  
    field->uf:=cUF
 endif
-IF lGERACEPRUA
-    cLINHA:=cCEP+","+cIBGE+","+cENDERECO+","+cComplemento+","+cBairro+","+cCIDADE+","+cUF+HB_OSNEWLINE()
-    FWRITE(nGRAVA,cLINHA)
-ENDIF
+
 RETURN .T.  
    
 
