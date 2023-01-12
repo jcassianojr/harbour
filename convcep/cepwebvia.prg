@@ -43,10 +43,21 @@ lRUAVAZIA:=MSGYESNO("Checar Ruas Em Branco")
 lBAIRROVAZIO:=MSGYESNO("Checar Bairro em Branco")
 lNOMECURTO:=MSGYESNO("Checar Ruas com nomes menores que 5 letras")   
 lAPAGANAO:=MSGYESNO("Apaga Nao encontrado")
-   
-nGRAVA:=FCREATE("cepruaimp.csv")
-cLINHA:="cep,rua,bairro,cidade,uf"+HB_OSNEWLINE()
-FWRITE(nGRAVA,cLINHA)
+lCHECKAPICEP:=MSGYESNO("Usar apicep")
+lCHECKAPICOR:=MSGYESNO("Usar apicor")
+lGERACEPTXT:=MSGYESNO("Gerar ceps.txt")
+lGERACEPRUA:=MSGYESNO("Gerar cepruaimp.csv ")
+
+IF lGERACEPTXT
+   nFILECEPS:=FCREATE("ceps.txt")
+ENDIF
+
+IF lGERACEPRUA
+  nGRAVA:=FCREATE("cepruaimp.csv")
+  cLINHA:="cep,rua,bairro,cidade,uf"+HB_OSNEWLINE()
+  FWRITE(nGRAVA,cLINHA)
+ENDIF  
+  
    
 use cepruaimp new exclusive
 
@@ -93,110 +104,114 @@ For KK := 1 to LEN(mListaArq)
   		 	 cUF :=""
   			 cId :=""
   		  
-             altd()
-             //correio web primeria busca
-  		     lTEMCEP:=ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
-  			 
-  			 IF ! empty(cEndereco+cBairro)
-  			  	? cCep
-  				? cBairro
-  				? cCidade
-  				? cEndereco
-  				? cUF
-  				? cId
-  				  
-  				  cCEP:=STRTRAN(cCEP,"-","")	
-  				  cCIDADE:=STRTRAN(CCIDADE,'"',"")
-  				 
-  				  dbselectar("cepruaimp")
-  				  dbappend()
-  				  field->cep:=cCEP
-  				  field->rua:=UPPER(cendereco)
-                  field->bairro:=UPPER(cBairro)
-  				  field->uf:=UPPER(cUF)
-  				  field->cidade:=UPPER(cCIDADE)
-  				  
-  				  cLINHA:=cCEP +","+CENDERECO+","+cBairro+","+CCIDADE +","+cUF+HB_OSNEWLINE()
-  						 
-  				  FWRITE(nGRAVA,cLINHA)
-  			  else
-  				  ?
-  				  ? 'nao localizado web correio'
-  				  ?
-  				  dbselectar("cepruaimp") //grava para nao buscr online novamente
-                  if ! dbseek(cCEP)
+             
+             if lCHECKAPICOR
+                 //correio web primeria busca
+    		     lTEMCEP:=ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
+    			 
+    			 IF ! empty(cEndereco+cBairro)
+    			  	? cCep
+    				? cBairro
+    				? cCidade
+    				? cEndereco
+    				? cUF
+    				? cId
+    				  
+    				  cCEP:=STRTRAN(cCEP,"-","")	
+    				  cCIDADE:=STRTRAN(CCIDADE,'"',"")
+    				 
+    				  dbselectar("cepruaimp")
     				  dbappend()
     				  field->cep:=cCEP
-                      if ! empty(cCIDADE) .AND. ! EMPTY(cUF)
-                         field->cidade:=UPPER(cCIDADE)
-                         field->uf:=UPPER(cUF)
-                      endif
-                 endif   
-  		     endif
-               
-               
+    				  field->rua:=UPPER(cendereco)
+                      field->bairro:=UPPER(cBairro)
+    				  field->uf:=UPPER(cUF)
+    				  field->cidade:=UPPER(cCIDADE)
+    				  
+                      IF lGERACEPRUA
+    			     	  cLINHA:=cCEP +","+CENDERECO+","+cBairro+","+CCIDADE +","+cUF+HB_OSNEWLINE()
+        				  FWRITE(nGRAVA,cLINHA)
+                      ENDIF    
+    			  else
+    				  ?
+    				  ? 'nao localizado web correio'
+    				  ?
+    				  dbselectar("cepruaimp") //grava para nao buscr online novamente
+                    if ! dbseek(cCEP)
+      				  dbappend()
+      				  field->cep:=cCEP
+                        if ! empty(cCIDADE) .AND. ! EMPTY(cUF)
+                           field->cidade:=UPPER(cCIDADE)
+                           field->uf:=UPPER(cUF)
+                        endif
+                   endif   
+    		     endif
+             endif  
            
-            //via cep web segunda busca
-       		oCep := cepWeb( cCEP )
-     		?
-    		? '  CEP...:'+ cCEP
-		    ? 
-		    IF ! oCep == NIL
-			  ?   
-			  ?
-			  ? '  CEP...:', oCep:cCEP
-			  ? '  IBGE..:', oCep:cIBGE
-			  ? '  LOGRAD:', oCep:cLogradouro
-			  ? '  COMPLE:', oCep:cComplemento
-			  ? '  BAIRRO:', oCep:cBairro
-			  ? '  CIDADE:', oCep:cLocalidade
-			  ? '  UF....:', oCep:cUF
-			  
-			  cCEP:=STRTRAN(oCep:cCEP,"-","")	
-			  cCIDADE:=STRTRAN(oCep:cLocalidade,'"',"")
-			  
-			 
-			  dbselectar("cepruaimp")
-              if ! dbseek(cCEP)
-			     dbappend()
-                 field->cep:=cCEP
-              endif
-              if empty(field->codibge)  
-			     field->codibge:=oCep:cIBGE 
-              endif
-              if empty(field->rua)   
-			     field->rua:=UPPER(oCep:cLogradouro)
-              endif
-              if empty(field->obs)   
-			     field->obs:=UPPER(oCep:cComplemento)
-              endif
-              if empty(field->bairro)   
-			     field->bairro:=UPPER(oCep:cBairro)
-              endif
-              if empty(field->cidade)   
-			    field->cidade:=UPPER(cCIDADE)
-              endif
-              if empty(field->uf)  
-			     field->uf:=UPPER(oCep:cUF)
-              endif
-			 
-			  cLINHA:=cCEP+","+oCep:cIBGE+","+oCep:cLogradouro+","+oCep:cComplemento+","+oCep:cBairro+","+CCIDADE+","+oCep:cUF+HB_OSNEWLINE()
-			  FWRITE(nGRAVA,cLINHA)
-		  else
-			  ?
-			  ? 'nao localizado viacep'
-			  ?
-				  dbselectar("cepruaimp") //grava para nao buscr online novamente
+            if lCHECKAPICEP
+                //via cep web segunda busca
+           		oCep := cepWeb( cCEP )
+         		?
+        		? '  CEP...:'+ cCEP
+    		    ? 
+    		    IF ! oCep == NIL
+    			  ?   
+    			  ?
+    			  ? '  CEP...:', oCep:cCEP
+    			  ? '  IBGE..:', oCep:cIBGE
+    			  ? '  LOGRAD:', oCep:cLogradouro
+    			  ? '  COMPLE:', oCep:cComplemento
+    			  ? '  BAIRRO:', oCep:cBairro
+    			  ? '  CIDADE:', oCep:cLocalidade
+    			  ? '  UF....:', oCep:cUF
+    			  
+    			  cCEP:=STRTRAN(oCep:cCEP,"-","")	
+    			  cCIDADE:=STRTRAN(oCep:cLocalidade,'"',"")
+    			  
+    			 
+    			  dbselectar("cepruaimp")
                   if ! dbseek(cCEP)
-    				  dbappend()
-    				  field->cep:=cCEP
+    			     dbappend()
+                     field->cep:=cCEP
+                  endif
+                  if empty(field->codibge)  
+    			     field->codibge:=oCep:cIBGE 
+                  endif
+                  if empty(field->rua)   
+    			     field->rua:=UPPER(oCep:cLogradouro)
+                  endif
+                  if empty(field->obs)   
+    			     field->obs:=UPPER(oCep:cComplemento)
+                  endif
+                  if empty(field->bairro)   
+    			     field->bairro:=UPPER(oCep:cBairro)
+                  endif
+                  if empty(field->cidade)   
+    			    field->cidade:=UPPER(cCIDADE)
+                  endif
+                  if empty(field->uf)  
+    			     field->uf:=UPPER(oCep:cUF)
+                  endif
+    			 
+                  IF lGERACEPRUA
+    			     cLINHA:=cCEP+","+oCep:cIBGE+","+oCep:cLogradouro+","+oCep:cComplemento+","+oCep:cBairro+","+CCIDADE+","+oCep:cUF+HB_OSNEWLINE()
+    			     FWRITE(nGRAVA,cLINHA)
+                  ENDIF   
+    		  else
+    			  ?
+    			  ? 'nao localizado viacep'
+    			  ?
+    			  dbselectar("cepruaimp") //grava para nao buscr online novamente
+                  if ! dbseek(cCEP)
+        			 dbappend()
+        			 field->cep:=cCEP
                       if ! empty(cCIDADE) .AND. ! EMPTY(cUF)
                          field->cidade:=UPPER(cCIDADE)
                          field->uf:=UPPER(cUF)
-                      endif
-                 endif   
-		  endif	 
-              
+                    endif
+                  endif   
+    		   endif	 
+            endif      
                   
                   
   	      endif
@@ -210,7 +225,15 @@ For KK := 1 to LEN(mListaArq)
        dbclosearea()
     endif   
 NEXT KK   
-FCLOSE(nGRAVA)
+
+IF lGERACEPRUA
+    FCLOSE(nGRAVA)
+ENDIF    
+
+IF lGERACEPTXT
+   FCLOSE(nFILECEPS)
+ENDIF
+
 dbselectar("cepruaimp")
 delete all for empty(rua).and.empty(bairro)
 pack
