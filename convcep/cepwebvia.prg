@@ -24,6 +24,7 @@ PRIVATE  cCep, cBairro, cCidade, cEndereco, cUF, cID
 nERRO:=0
 
 
+
 if ! file("cepruaimp.dbf")
    alert("Falta cepruaimp.dbf")
    quit
@@ -36,6 +37,7 @@ lNOMECURTO:=MSGYESNO("Checar Ruas com nomes menores que 5 letras")
 lAPAGANAO:=MSGYESNO("Apaga Nao encontrado")
 lCHECKAPICEP:=MSGYESNO("Usar apicep")
 lCHECKAPICOR:=MSGYESNO("Usar apicor")
+lCHECKREPVIR:=MSGYESNO("Usar RepVirtual")
 lGERACEPTXT:=MSGYESNO("Gerar ceps.txt")
 lGERACEPRUA:=MSGYESNO("Gerar cepruaimp.csv ")
 
@@ -100,6 +102,7 @@ For KK := 1 to LEN(mListaArq)
              cIBGE        :=""
              cComplemento :=""
              Clogradouro  :=""
+             cTIPORUA     :=""
              
              lTEMCEP:=.F.
              
@@ -109,10 +112,6 @@ For KK := 1 to LEN(mListaArq)
                 ?
     		     ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
     			 IF ! empty(cEndereco+cBairro)
-    				cCIDADE   :=UPPER(STRTRAN(CCIDADE,'"',""))
-                    cENDERECO :=UPPER(cendereco)
-                    cBAIRRO   :=UPPER(cBairro)
-                    cUF       :=UPPER(cBairro)
                     GRAVARUAIMP()
                     lTEMCEP:=.T.
     			 else
@@ -126,11 +125,11 @@ For KK := 1 to LEN(mListaArq)
                 ?        
            		oCep := cepWeb( cCEP )
     		    IF ! oCep == NIL
-    			  cCIDADE      := UPPER(STRTRAN(oCep:cLocalidade,'"',""))
-                  cENDERECO    := UPPER(oCep:cLogradouro)
-                  cBAIRRO      := UPPER(oCep:cBairro)
-                  cComplemento := UPPER(oCep:cComplemento)
-                  cUF          := UPPER(oCep:cUF)
+    			  cCIDADE      := oCep:cLocalidade
+                  cENDERECO    := oCep:cLogradouro
+                  cBAIRRO      := oCep:cBairro
+                  cComplemento := oCep:cComplemento
+                  cUF          := oCep:cUF
                   cIBGE        := oCep:cIBGE
                   GRAVARUAIMP()
                   lTEMCEP:=.T.
@@ -139,13 +138,23 @@ For KK := 1 to LEN(mListaArq)
                 ENDIF
              endif 
              
+             if lCHECKREPVIR
+                 CepRepublica(cCEP)
+                 IF ! empty(cEndereco+cBairro)
+                    GRAVARUAIMP()
+                    lTEMCEP:=.T.
+    			 else
+                    GRAVARUANAO('nao localizado rep Virtual')
+                 endif   
+             ENDIF
+             
              IF lGERACEPTXT .AND. lTEMCEP .AND. ! empty(cEndereco+cBairro)
                 FWRITE(nFILECEPS,cCEP+HB_OSNEWLINE())
              ENDIF  
              
              
              IF lGERACEPRUA .AND. lTEMCEP  .AND. ! empty(cEndereco+cBairro)
-                cLINHA:=cCEP+","+cIBGE+","+cENDERECO+","+cComplemento+","+cBairro+","+cCIDADE+","+cUF+HB_OSNEWLINE()
+                cLINHA:=cCEP+","+cIBGE+","+cENDERECO+","+cComplemento+","+cBairro+","+cCIDADE+","+LEFT(cUF,2)+HB_OSNEWLINE()
                 FWRITE(nGRAVA,cLINHA)
              ENDIF          
                   
@@ -196,26 +205,56 @@ if ! dbseek(cCEP)
    dbappend()
    field->cep:=cCEP
 endif
-if empty(field->codibge)  
+if empty(field->codibge)  .AND. ! EMPTY(cIBGE)
   field->codibge:=cIBGE 
 endif
-if empty(field->rua)   
+if empty(field->rua)   .AND. ! EMPTY(cENDERECO)
    field->rua:=cENDERECO
 endif
-if empty(field->obs)   
+if empty(field->obs)   .AND. ! EMPTY(cComplemento)
    field->obs:=cComplemento
 endif
-if empty(field->bairro)   
+if empty(field->bairro)   .AND. ! EMPTY(cBairro)
   field->bairro:=cBairro
 endif
-if empty(field->cidade)   
+if empty(field->cidade)   .AND. ! EMPTY(cCIDADE)
    field->cidade:=cCIDADE
 endif
-if empty(field->uf)  
+if empty(field->uf)  .AND. ! EMPTY(cUF)
    field->uf:=cUF
 endif
-
+if empty(field->tipo)  .AND. ! EMPTY(cTIPORUA)
+   field->tipo:=cTIPORUA
+endif
 RETURN .T.  
+   
+PROCEDURE CepRepublica(xCep)
+   LOCAL oHttp, cXML
+   LOCAL xRes, xResTxt, xUf, xCidade, xTipo, xEnde, xBairro, xRetorno := {}
+
+   xCep := strtran(xCep,"-")
+   oHttp:= TIpClientHttp():new( "http://cep.republicavirtual.com.br/web_cep.php?cep="+xCep+"&formato=xml" )
+   IF ! oHttp:open()
+	  Return .F.
+   ENDIF
+   inkey(.5)
+   
+   cXML := oHttp:readAll()
+   oHttp:close()
+   
+   cXML := XmlTransform( cXML)
+   
+   IF Empty(cXML)
+	  Return .F.
+   ENDIF
+      cBairro   := XmlNode( cXml, "bairro" )
+      cCidade   := XmlNode( cXml, "cidade" )
+      cEndereco := XmlNode( cXml, "logradouro" )
+      cUF       := XmlNode( cXml, "uf" )
+      cTIPO     := XmlNode( cXml, "tipo_logradouro" )
+  
+RETURN .T.  
+
    
 
 STATIC FUNCTION ConsultaCep( cCep, cBairro, cCidade, cEndereco, cUF, cId )
@@ -260,34 +299,12 @@ FUNCTION AppVersaoExe(); RETURN ""
 FUNCTION AppUserName(); RETURN ""
 
 
-FUNCTION MsgYesNo( cText )
-
-   LOCAL lValue
-
-   lValue := wapi_MessageBox( wvgSetAppWindow():hWnd, cText, "Confirmacao", WIN_MB_YESNO + WIN_MB_ICONQUESTION + WIN_MB_DEFBUTTON2 )  == 6 //6=WIN_IDYES
-
-   RETURN lValue
-
 
 /*******************************************************************************
- *  This is the function and the class that it uses to work
+ *
  *  The engine of this is the contrib 'hbtip'
  *
  *  It uses the free service: ViaCEP (http://viacep.com.br)
- *  Visit the site to learn more
- * 
- *  Special thanks to Leandro and Franco for offering the free service!
- * 
- *  Thanks to Eric for the idea!
- *
- *
- *  Copyright (c) 2015 - Mario Wan Stadnik (Hazael)
- *  wanstadnik(at)gmail.com
- *
- *  Free to the public domain
- *
- *  
- *  To build:  HBMK2 Test_ViaCEP hbtip.hbc -gtwvt
  *
  */
 FUNCTION cepWeb( cCEP)
@@ -325,7 +342,6 @@ METHOD New( cCEP )
    oHttp := TIPClientHTTP():new( "http://viacep.com.br/ws/" + cCEP + "/piped/" )
 
    IF ! oHttp:open()
-     // alert('open erro')
      ? 'open erro'
       nERRO++
 	  RETURN NIL
@@ -333,7 +349,7 @@ METHOD New( cCEP )
 
    cHtml := oHttp:readAll()
    oHttp:close()
-	//cHtml := HB_UTF8TOSTR( cHtml ) 
+   
 	if empty(cHtml)
 	   RETURN NIL
 	endif

@@ -107,8 +107,8 @@ while ! eof()
    //ENDIF
    cUF      :=cepruaimp->UF
    cUFLOOP  :=cepruaimp->UF
-   cCIDLOOP :=cepruaimp->CIDADE
-   cCIDADE  :=TRATANOME(CIDADE)   
+   cCIDLOOP :=cepruaimp->CIDADE   //nome usado para o loop usar sem nenhum tratamento
+   cCIDADE  :=UPPER(TRATANOME(cepruaimp->CIDADE))   
    //01/02/2021 07:27 a cidade esta junto com o estado separado pela barra Ex: SAO PAULO/SP
    if empty(cUF) .and. at("/",cCIDADE)>0
       nPOS:=at("/",cCIDADE)
@@ -142,32 +142,30 @@ while ! eof()
       cUF:=coduf(cCODIBGE,"UF")
    ENDIF
    
-   eBUSCA   :=cUF+TRATANOME(cCIDADE)
    ncodibge:=0 //sequencia sempre zero pois agora e o ibge como sequencia
    eLOCALBAI:=0
    lACHEI:=.F.
    @ 24,00 say  cUF+ cCIDADE + STR(RECNO()) + "/" + STR(nLASTREC)   
    if ! empty(cUF) .AND. ! EMPTY(cCIDADE)
-       cCODIBGE:=BUSCAIBGE(cUF,cCIDADE)
-       ncodibge:=VAL(cCODIBGE)
+       cCIDBUSCA:=TRATANOME(cCIDADE)
+       cCODIBGE:=BUSCAIBGE(cUF,cCIDBUSCA)   //1a tentativa com o nome  tratanome
        if ! empty(cCODIBGE)
+          ncodibge:=VAL(cCODIBGE)
+          cCIDADE:=cCIDBUSCA
           lACHEI:=.T.
        ENDIF
    
-	   if ncodibge=0 .AND. AT("(",cCIDLOOP)>0  //cidades com nome parentes
-		  eBUSCA   :=cUF+TRATACIDADE(cCIDLOOP,cUF)
-		  dbselectar("MD10")
-		  dbsetorder(1)
-		  dbgotop()
-		  if dbseek(eBUSCA)
-			cCODIBGE:=alltrim(MD10->CODIBGE)
-	 		IF VAL(MD10->CODIBGE)>0
-				ncodibge:=VAL(MD10->CODIBGE)
-			ENDIF
-			 lACHEI:=.T.
-		  endif      
-	   endif
-   endif	   
+	   if ncodibge=0 .AND. AT("(",cCIDLOOP)>0 
+          cCIDBUSCA:=TRATACIDADE(cUF,cCIDADE)
+          cCODIBGE:=BUSCAIBGE(cUF,cCIDBUSCA) //2a. tentativa //cidades com nome parentes tratacidade
+          if ! empty(cCODIBGE)
+             ncodibge:=VAL(cCODIBGE)
+             cCIDADE:=cCIDBUSCA
+             lACHEI:=.T.
+          ENDIF
+       endif       
+   endif
+   	   
    if ncodibge=0 .AND. ! EMPTY(cCODIBGE)
      dbselectar("MD10")
      dbsetorder(3)
@@ -457,44 +455,16 @@ dbcloseall()
 FCLOSE(nUSO)
 
 
-/*
-function tratanome(cNOME,lANSI,lACEN)
-LOCAL npOS
-IF VALTYPE(lANSI)<>"L"
-   lANSI:=.F.
-ENDIF
-IF VALTYPE(lACEN)<>"L"
-   lACEN:=.T.
-ENDIF
-cNOME:=ALLTRIM(cNOME)
-npOS:=AT("(",cNOME)
-IF npOS>0   
-   cNOME:=SUBSTR(cNOME,1,nPOS-1)
-   cNOME:=ALLTRIM(cNOME)
-ENDIF
-IF lACEN
-   cNOME     := TIRACE(cNOME)
-ENDIF
-IF lANSI
-   cNOME     :=win_ANSIToOEM(cNOME) 
-ENDIF
-cNOME:=STRTRAN(cNOME ,"&39;"," ")
-cNOME:=STRTRAN(cNOME ,"-"   ," ")
-cNOME:=strtran(cNOME ,"'"   ," ") //Ex Pau d´alho
-cNOME:=STRTRAN(cNOME ,'"'   ," ") //Ex Pay d"alho
-RETURN cNOME
-*/
-
-function tratacidade(cNOME,cUF) //algumas vem com nome no parentes distrito(cidade)
+function tratacidade(cUF,cNOME) //algumas vem com nome no parentes distrito(cidade)
 cDISTRITO:=""
+cNOME:=tratanome(cNOME)
 npOS:=AT("(",cNOME)
 IF npOS>0   
-   cDISTRITO:=tratanome(SUBSTR(cNOME,1,nPOS-1))
+   cDISTRITO:=SUBSTR(cNOME,1,nPOS-1)
    cNOME:=SUBSTR(cNOME,nPOS+1)
    cNOME:=ALLTRIM(cNOME)
 ENDIF
 cNOME:=STRTRAN(cNOME,")","")
-cNOME:=tratanome(cNOME)
 dbselectar("cidconv")
 dbgotop()
 if ! dbseek(cUF+cDISTRITO)
@@ -505,44 +475,6 @@ if ! dbseek(cUF+cDISTRITO)
    cidconv->CIDDES:=cNOME
 endif
 RETURN cNOME
-
-
-/*
-function coduf(cBUSCA,cTIPO) //ibge
-local nPos:=0
-local cRETU:="??"
-LOCAL aUF,aIBGE
-
-aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
-            "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
-            "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO" ,"EX","XX"}
-
-aIBGE:= { "12", "27", "13", "16", "29", "23", "53", "32", "52", ;
-          "21", "31", "50", "51", "15", "25", "26", "22", "41", ;
-          "33", "24", "11", "14", "43", "42", "28", "35", "17" ,"54","54"}
-
-
-IF VALTYPE(cTIPO)<>"C"
-   cTIPO:="UF"
-ENDIF
-//@ 23,00 SAY cBUSCA
-//inkey(0)
-IF cTIPO="UF" // codigo->Sigla uf
-   IF LEN(cBUSCA)>2 //codigo ibge 7 digitos 2 primeiros estados
-      cBUSCA:=SUBSTR(cBUSCA,1,2)
-   ENDIF
-   nPos:=ascan( aIBGE, cBUSCA )
-   if nPos>0
-      cRETU:=aUF[nPos] // retorna o codigo do Estado
-   endif
-ELSE    //sigla uf->codigo
-   nPos:=ascan( aUF, cBUSCA )
-   if nPos>0
-      cRETU:=aIBGE[nPos] // retorna o codigo numerico do estado
-   endif
-ENDIF
-Return cRETU
-*/
 
 function idbairro
 dbselectar("cepbai")
