@@ -47,11 +47,11 @@ lCHECKAPICOR:=MSGYESNO("Usar apicor")
 lCHECKREPVIR:=MSGYESNO("Usar RepVirtual")
 lCHECKAPICEP:=MSGYESNO("Usar apicep")
 lCHECKAPIAWE:=MSGYESNO("Usar apiAWE")
-lGERACEPTXT:=MSGYESNO("Gerar ceps.txt")
+lGERACEPTXT:=MSGYESNO("Gerar ceps.csv")
 lGERACEPRUA:=MSGYESNO("Gerar cepruaimp.csv ")
 
 IF lGERACEPTXT
-   nFILECEPS:=FCREATE("ceps.txt")
+   nFILECEPS:=FCREATE("ceps.csv")
 ENDIF
 
 IF lGERACEPRUA
@@ -107,11 +107,13 @@ For KK := 1 to LEN(mListaArq)
   			 cCidade      :=""
   		 	 cEndereco    :=""
   		 	 cUF          :=""
-  			 cId          :=""
              cIBGE        :=""
              cComplemento :=""
-             Clogradouro  :=""
              cTIPORUA     :=""
+             cDDD         :=""
+             cLATITUDE    :=""
+             cLONGITUDE   :=""
+             cHEMISFERIO  :=""
              
              lTEMCEP:=.F.
              
@@ -291,7 +293,7 @@ PROCEDURE CepRepublica(xCep)
       cCidade   := XmlNode( cXml, "cidade" )
       cEndereco := XmlNode( cXml, "logradouro" )
       cUF       := XmlNode( cXml, "uf" )
-      cTIPO     := XmlNode( cXml, "tipo_logradouro" )
+      cTIPORUA  := XmlNode( cXml, "tipo_logradouro" )
   
 RETURN .T.  
 
@@ -386,15 +388,17 @@ cURL:="https://cep.awesomeapi.com.br/json/"+cCEP
    cCIDADE      := SUBSTR( cXMl , AT( 'city":'         , cXML) +  7 )
    cBairro      := SUBSTR( cXMl , AT( 'district":'     , cXML) + 11 ) 
    cENDERECO    := SUBSTR( cXMl , AT( 'address_name":' , cXML) + 15 )
-   cTIPO_RUA    := SUBSTR( cXMl , AT( 'address_type":' , cXML) + 15 )
+   cTIPORUA     := SUBSTR( cXMl , AT( 'address_type":' , cXML) + 15 )
    cIBGE        := SUBSTR( cXMl , AT( 'city_ibge":'    , cXML) + 12 )
+   cDDD         := SUBSTR( cXMl , AT( 'ddd":'          , cXML) +  6 )
    
     CUF          := SUBSTR( cUF       ,1, AT( '"'   , cUF)       -1 )
     CCIDADE      := SUBSTR( cCIDADE   ,1, AT( '"'   , cCIDADE)   -1 )
     CBAIRRO      := SUBSTR( cBAIRRO   ,1, AT( '"'   , cBAIRRO)   -1 )
     CENDERECO    := SUBSTR( cENDERECO ,1, AT( '"'   , cENDERECO) -1 )
-    cTIPO_RUA    := SUBSTR( cTIPO_RUA ,1, AT( '"'   , cTIPO_RUA) -1 )
-    cIBGE        := SUBSTR( cIBGE     ,1, AT( '"'   , cIBGE)     -1 )    
+    cTIPORUA     := SUBSTR( cTIPORUA ,1,  AT( '"'   , cTIPORUA)  -1 )
+    cIBGE        := SUBSTR( cIBGE     ,1, AT( '"'   , cIBGE)     -1 )  
+    cDDD         := SUBSTR( cDDD      ,1, AT( '"'   , cDDD)      -1 )       
 
  //  hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
 return .t.
@@ -472,9 +476,6 @@ METHOD New( cCEP )
    cIBGE        := SUBSTR( aHtml[7], AT( ':', aHtml[7] ) + 1 )
    cDDD         := SUBSTR( aHtml[9], AT( ':', aHtml[9] ) + 1 )
    
-   
-   
-
    ::cCEP         := cCEP
    ::cLogradouro  := cLogradouro
    ::cComplemento := cComplemento
