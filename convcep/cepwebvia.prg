@@ -113,7 +113,6 @@ For KK := 1 to LEN(mListaArq)
              cDDD         :=""
              cLATITUDE    :=""
              cLONGITUDE   :=""
-             cHEMISFERIO  :=""
              
              lTEMCEP:=.F.
              
@@ -268,6 +267,16 @@ endif
 if empty(field->tipo)  .AND. ! EMPTY(cTIPORUA)
    field->tipo:=cTIPORUA
 endif
+
+if empty(field->DDD)  .AND. ! EMPTY(cDDD)
+   field->DDD:=cDDD
+endif
+if empty(field->LATITUDE)  .AND. ! EMPTY(cLATITUDE)
+   field->LATITUDE:=cLATITUDE
+endif
+if empty(field->LONGITUDE)  .AND. ! EMPTY(cLONGITUDE)
+   field->LONGITUDE:=cLONGITUDE
+endif
 RETURN .T.  
    
 PROCEDURE CepRepublica(xCep)
@@ -350,15 +359,23 @@ cURL:="https://cdn.apicep.com/file/apicep/"+formatacep(cCEP)+".json"
 	cXMl := oPg:ResponseBody
     //{"code":"06233-030","state":"SP","city":"Osasco","district":"Piratininga","address":"Rua Paula Rodrigues","status":200,"ok":true,"statusText":"ok"}
     cXMl := XmlTransform( cXMl)
-   CUF          := SUBSTR( cXMl , AT( 'state":'   , cXML) + 8 )
-   cCIDADE      := SUBSTR( cXMl , AT( 'city":'    , cXML) + 7 )
-   cBairro      := SUBSTR( cXMl , AT( 'district":', cXML) + 11 ) 
-   cENDERECO    := SUBSTR( cXMl , AT( 'address":' , cXML) + 10 )
-   
+    
+    
+    CUF          := pegnodojason(cXMl,'state":')
+    cCIDADE      := pegnodojason(cXMl,'city":' )
+    cBairro      := pegnodojason(cXMl,'district":')
+    cENDERECO    := pegnodojason(cXMl,'address":')
+
+    /*
+    CUF          := SUBSTR( cXMl , AT( 'state":'   , cXML) + 8 )
+    cCIDADE      := SUBSTR( cXMl , AT( 'city":'    , cXML) + 7 )
+    cBairro      := SUBSTR( cXMl , AT( 'district":', cXML) + 11 ) 
+    cENDERECO    := SUBSTR( cXMl , AT( 'address":' , cXML) + 10 )
     CUF          := SUBSTR( cUF       ,1, AT( '"'   , cUF)       -1 )
     CCIDADE      := SUBSTR( cCIDADE   ,1, AT( '"'   , cCIDADE)   -1 )
     CBAIRRO      := SUBSTR( cBAIRRO   ,1, AT( '"'   , cBAIRRO)   -1 )
     CENDERECO    := SUBSTR( cENDERECO ,1, AT( '"'   , cENDERECO) -1 )
+    */
     
   //  hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
 return .t.
@@ -375,7 +392,6 @@ cURL:="https://cep.awesomeapi.com.br/json/"+cCEP
 	cXMl := oPg:ResponseBody
     cXMl := XmlTransform( cXMl)
     
-    
     IF AT("not_found",cXML)>0 .OR. AT("nao foi encontrado",cXML)>0 
        RETURN .F.
     ENDIF
@@ -383,26 +399,44 @@ cURL:="https://cep.awesomeapi.com.br/json/"+cCEP
 // {"cep":"05424020","address_type":"Rua","address_name":"Professor Carlos Reis","address":"Rua Professor Carlos Reis","state":"SP",
 // "district":"Pinheiros","lat":"-23.57021","lng":"-46.69685","city":"São Paulo","city_ibge":"3550308","ddd":"11"}
 // disponiveis ddd latitude longitude
-//                                    123456789012345             
-   CUF          := SUBSTR( cXMl , AT( 'state":'        , cXML) +  8 )
-   cCIDADE      := SUBSTR( cXMl , AT( 'city":'         , cXML) +  7 )
-   cBairro      := SUBSTR( cXMl , AT( 'district":'     , cXML) + 11 ) 
-   cENDERECO    := SUBSTR( cXMl , AT( 'address_name":' , cXML) + 15 )
-   cTIPORUA     := SUBSTR( cXMl , AT( 'address_type":' , cXML) + 15 )
-   cIBGE        := SUBSTR( cXMl , AT( 'city_ibge":'    , cXML) + 12 )
-   cDDD         := SUBSTR( cXMl , AT( 'ddd":'          , cXML) +  6 )
-   
+//                                    123456789012345   
+
+
+    CUF          := pegnodojason(cXML,'state":')
+    cCIDADE      := pegnodojason(cXML,'city":' )
+    cBairro      := pegnodojason(cXML,'district":')
+    cENDERECO    := pegnodojason(cXML,'address_name":')
+    cTIPORUA     := pegnodojason(cXML,'address_type":')
+    cIBGE        := pegnodojason(cXML,'city_ibge":')
+    cDDD         := pegnodojason(cXML,'ddd":')
+    cLATITUDE    := pegnodojason(cXML,'lat":')
+    cLONGITUDE   := pegnodojason(cXML,'lng":')
+     
+     /*     
+    CUF          := SUBSTR( cXMl , AT( 'state":'        , cXML) +  8 )
+    cCIDADE      := SUBSTR( cXMl , AT( 'city":'         , cXML) +  7 )
+    cBairro      := SUBSTR( cXMl , AT( 'district":'     , cXML) + 11 ) 
+    cENDERECO    := SUBSTR( cXMl , AT( 'address_name":' , cXML) + 15 )
+    cTIPORUA     := SUBSTR( cXMl , AT( 'address_type":' , cXML) + 15 )
+    cIBGE        := SUBSTR( cXMl , AT( 'city_ibge":'    , cXML) + 12 )
+    cDDD         := SUBSTR( cXMl , AT( 'ddd":'          , cXML) +  6 )
     CUF          := SUBSTR( cUF       ,1, AT( '"'   , cUF)       -1 )
     CCIDADE      := SUBSTR( cCIDADE   ,1, AT( '"'   , cCIDADE)   -1 )
     CBAIRRO      := SUBSTR( cBAIRRO   ,1, AT( '"'   , cBAIRRO)   -1 )
     CENDERECO    := SUBSTR( cENDERECO ,1, AT( '"'   , cENDERECO) -1 )
     cTIPORUA     := SUBSTR( cTIPORUA ,1,  AT( '"'   , cTIPORUA)  -1 )
     cIBGE        := SUBSTR( cIBGE     ,1, AT( '"'   , cIBGE)     -1 )  
-    cDDD         := SUBSTR( cDDD      ,1, AT( '"'   , cDDD)      -1 )       
+    cDDD         := SUBSTR( cDDD      ,1, AT( '"'   , cDDD)      -1 )    
+    */   
 
  //  hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
 return .t.
-   
+
+function pegnodojason(cTEXTO,cNODO)
+cTEXTO        := SUBSTR( cTEXTO , AT(cNODO, cTEXTO) +  LEN(cNODO)+1 )
+CTEXTO        := SUBSTR( cTEXTO ,1, AT( '"'   , cTEXTO)  -1 )
+//ALERT(cTEXTO)
+RETURN cTEXTO
 
 
 /*******************************************************************************
