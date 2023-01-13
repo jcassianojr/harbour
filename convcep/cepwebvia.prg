@@ -2,6 +2,14 @@
 http://www.pctoledo.com.br/forum/viewtopic.php?f=39&t=17470&start=75#p118783
 */
 
+
+/*  Msxml2.XMLHTTP.6.0 Msxml2.XMLHTTP.3.0
+1. Microsoft XML, v 3.0.
+2. Microsoft XML, v 4.0 (if you have installed MSXML 4.0 separately).
+3. Microsoft XML, v 5.0 (if you have installed Office 2003 – 2007 which provides MSXML 5.0 for Microsoft Office Applications).
+4. Microsoft XML, v 6.0 for latest versions of MS Office.
+*/
+
 REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 
@@ -10,7 +18,7 @@ PRIVATE  cCep, cBairro, cCidade, cEndereco, cUF, cID
 
    Set( _SET_CODEPAGE, "PTISO" )
    SetMode( 25, 80 )
-   CLS
+   CLS    //necessario as vezes trava apos a mudanca para 25,80
    HB_IDLESTATE()
    rddsetdefault( "DBFCDX" )
 	Set( _SET_OPTIMIZE, .t.)
@@ -21,9 +29,8 @@ PRIVATE  cCep, cBairro, cCidade, cEndereco, cUF, cID
     Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 
 
+
 nERRO:=0
-
-
 
 if ! file("cepruaimp.dbf")
    alert("Falta cepruaimp.dbf")
@@ -35,9 +42,11 @@ lRUAVAZIA:=MSGYESNO("Checar Ruas Em Branco")
 lBAIRROVAZIO:=MSGYESNO("Checar Bairro em Branco")
 lNOMECURTO:=MSGYESNO("Checar Ruas com nomes menores que 5 letras")   
 lAPAGANAO:=MSGYESNO("Apaga Nao encontrado")
-lCHECKAPICEP:=MSGYESNO("Usar apicep")
+lCHECKVIACEP:=MSGYESNO("Usar viacep")
 lCHECKAPICOR:=MSGYESNO("Usar apicor")
 lCHECKREPVIR:=MSGYESNO("Usar RepVirtual")
+lCHECKAPICEP:=MSGYESNO("Usar apicep")
+lCHECKAPIAWE:=MSGYESNO("Usar apiAWE")
 lGERACEPTXT:=MSGYESNO("Gerar ceps.txt")
 lGERACEPRUA:=MSGYESNO("Gerar cepruaimp.csv ")
 
@@ -119,7 +128,7 @@ For KK := 1 to LEN(mListaArq)
                  endif   
              endif  
            
-             if lCHECKAPICEP //via cep web segunda busca
+             if lCHECKVIACEP //via cep web segunda busca
                 ?
     		    ? '  CEPCOR:'+ cCEP  
                 ?        
@@ -145,6 +154,26 @@ For KK := 1 to LEN(mListaArq)
                     lTEMCEP:=.T.
     			 else
                     GRAVARUANAO('nao localizado rep Virtual')
+                 endif   
+             ENDIF
+             
+             IF lCHECKAPICEP
+                 CepAPICEP(cCEP)
+                 IF ! empty(cEndereco+cBairro)
+                    GRAVARUAIMP()
+                    lTEMCEP:=.T.
+    			 else
+                    GRAVARUANAO('nao localizado apicep')
+                 endif   
+             ENDIF
+             
+             IF lCHECKAPIAWE
+                 CepAPIAWE(cCEP)
+                 IF ! empty(cEndereco+cBairro)
+                    GRAVARUAIMP()
+                    lTEMCEP:=.T.
+    			 else
+                    GRAVARUANAO('nao localizado apiAWE')
                  endif   
              ENDIF
              
@@ -183,6 +212,17 @@ dbselectar("cepruaimp")
 delete all for empty(rua).and.empty(bairro)
 pack
 dbcloseall()
+
+*+
+FUNCTION FormataCEP(eCEP)
+IF VALTYPE(eCEP)="N"
+   eCEP:=STRZERO(eCEP,8)
+ENDIF
+eCEP=ALLTRIM(eCEP)
+IF AT("-",eCEP)=0 .AND. LEN(eCEP)=8
+   eCEP:=LEFT(eCEP,5)+"-"+RIGHT(eCEP,3)
+ENDIF
+RETURN eCEP
 
 FUNCTION GRAVARUANAO(cMENSAGEM)
 ?
@@ -298,6 +338,67 @@ STATIC FUNCTION SoapEnvelope( cCEP )
 FUNCTION AppVersaoExe(); RETURN ""
 FUNCTION AppUserName(); RETURN ""
 
+
+function CEPapicEp(cCEP)
+//https://cdn.apicep.com/file/apicep/06233-030.json //api necessita traco usado formatacep abaico
+cURL:="https://cdn.apicep.com/file/apicep/"+formatacep(cCEP)+".json"
+	oPg  := CreateObject("Msxml2.XMLHTTP.6.0")  //oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
+	oPg:Open("GET",cUrl,.F.)
+	oPg:Send()
+	cXMl := oPg:ResponseBody
+    //{"code":"06233-030","state":"SP","city":"Osasco","district":"Piratininga","address":"Rua Paula Rodrigues","status":200,"ok":true,"statusText":"ok"}
+    cXMl := XmlTransform( cXMl)
+   CUF          := SUBSTR( cXMl , AT( 'state":'   , cXML) + 8 )
+   cCIDADE      := SUBSTR( cXMl , AT( 'city":'    , cXML) + 7 )
+   cBairro      := SUBSTR( cXMl , AT( 'district":', cXML) + 11 ) 
+   cENDERECO    := SUBSTR( cXMl , AT( 'address":' , cXML) + 10 )
+   
+    CUF          := SUBSTR( cUF       ,1, AT( '"'   , cUF)       -1 )
+    CCIDADE      := SUBSTR( cCIDADE   ,1, AT( '"'   , cCIDADE)   -1 )
+    CBAIRRO      := SUBSTR( cBAIRRO   ,1, AT( '"'   , cBAIRRO)   -1 )
+    CENDERECO    := SUBSTR( cENDERECO ,1, AT( '"'   , cENDERECO) -1 )
+    
+  //  hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
+return .t.
+
+function cepapiawe(cCEP)
+//https://cep.awesomeapi.com.br/json/05424020
+//https://cep.awesomeapi.com.br/xml/05424020
+//https://cep.awesomeapi.com.br/05424020
+
+cURL:="https://cep.awesomeapi.com.br/json/"+cCEP
+	oPg  := CreateObject("Msxml2.XMLHTTP.6.0")  //oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
+	oPg:Open("GET",cUrl,.F.)
+	oPg:Send()
+	cXMl := oPg:ResponseBody
+    cXMl := XmlTransform( cXMl)
+    
+    
+    IF AT("not_found",cXML)>0 .OR. AT("nao foi encontrado",cXML)>0 
+       RETURN .F.
+    ENDIF
+   
+// {"cep":"05424020","address_type":"Rua","address_name":"Professor Carlos Reis","address":"Rua Professor Carlos Reis","state":"SP",
+// "district":"Pinheiros","lat":"-23.57021","lng":"-46.69685","city":"São Paulo","city_ibge":"3550308","ddd":"11"}
+// disponiveis ddd latitude longitude
+//                                    123456789012345             
+   CUF          := SUBSTR( cXMl , AT( 'state":'        , cXML) +  8 )
+   cCIDADE      := SUBSTR( cXMl , AT( 'city":'         , cXML) +  7 )
+   cBairro      := SUBSTR( cXMl , AT( 'district":'     , cXML) + 11 ) 
+   cENDERECO    := SUBSTR( cXMl , AT( 'address_name":' , cXML) + 15 )
+   cTIPO_RUA    := SUBSTR( cXMl , AT( 'address_type":' , cXML) + 15 )
+   cIBGE        := SUBSTR( cXMl , AT( 'city_ibge":'    , cXML) + 12 )
+   
+    CUF          := SUBSTR( cUF       ,1, AT( '"'   , cUF)       -1 )
+    CCIDADE      := SUBSTR( cCIDADE   ,1, AT( '"'   , cCIDADE)   -1 )
+    CBAIRRO      := SUBSTR( cBAIRRO   ,1, AT( '"'   , cBAIRRO)   -1 )
+    CENDERECO    := SUBSTR( cENDERECO ,1, AT( '"'   , cENDERECO) -1 )
+    cTIPO_RUA    := SUBSTR( cTIPO_RUA ,1, AT( '"'   , cTIPO_RUA) -1 )
+    cIBGE        := SUBSTR( cIBGE     ,1, AT( '"'   , cIBGE)     -1 )    
+
+ //  hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
+return .t.
+   
 
 
 /*******************************************************************************

@@ -241,13 +241,18 @@ while ! eof()
          cCEP:=ALLTRIM(TIRAOUT(CEP))
 		 cRUA:=TRATANOME(cepruaimp->RUA)
 		 cBAIRRO:=TRATANOME(cepruaimp->BAIRRO)
-		 
 		 cBAIRRO:=strtran( alltrim( cBAIRRO ), "'", " " )
-		cBAIRRO:=strtran( alltrim( cBAIRRO ), '"', " " )		 
-		 
-		 
+		 cBAIRRO:=strtran( alltrim( cBAIRRO ), '"', " " )		 
 		 cTIPO  :=ALLTRIM(cepruaimp->TIPO) //rua avenida .....
 		 cOBS  :=ALLTRIM(cepruaimp->OBS)
+         
+         IF cRUA="ull,"  //alguns web service trazem null
+            cRUA:=""
+         ENDIF
+         
+         IF cBAIRRO="ull,"  //alguns web service trazem null
+            cBAIRRO:=""
+         ENDIF
 		 
          dbselectar(cARQRUA)
          dbgotop()
@@ -263,6 +268,8 @@ while ! eof()
 		 if len(alltrim(field->rua))<5 .and.  LEN(ALLTRIM(cRUA))>5 //ruas que iram A B 1 UM ... e passaram a ter nome
 		    field->rua:=cRUA
 		 endif	
+         
+         
          if empty(field->tipo) 
             field->tipo:=cTIPO
          endif		 	
