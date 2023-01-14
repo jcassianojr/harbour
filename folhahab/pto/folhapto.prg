@@ -118,6 +118,11 @@ INFOR( "FIRMA", "NRCLIEN", "FIRMA" ,.T.)
 INFOR("FOPTONTX","DBF+NTX+STR(SEQ,3)","FOPTONTX",.T.)
 INFOR("FOPTOCOM","STR(ANO,4)+STR(MES,2)+STR(EMPRESA,8)","FOPTOCOM",.T.)
 
+
+//ALERTX(DECODEVAL({218,206,224,190,230,226,230}))
+//ALERTX(DECODEVAL({164,162,160,158,224,198,226,230}))
+
+
 ZDATA := date()
 IF VALTYPE(ZUSER)#"C"
    ZUSER := space( 10 )
@@ -148,8 +153,13 @@ ENDIF
 
 MDS("Senha")
 if empty(cSENHA)
-   cSENHA := PEGAPASS(24,10,8,,"*",.T.)
+   cSENHA := PEGAPASS(24,10,8,,"*",.F.)
+    // PEGAPASS( PW_ROW, PW_COL, PW_LEN, PW_COR, ECHO_CHAR, p_upcase, p_echochar )
 endif
+
+
+
+//ALERTX(cSENHA)
 
 IF ZUSER = "ADMLOG" .Or. ZUSER = "ADMINISTRADOR" .Or. ZUSER = "ADMIN" 
    cUSUARIO := "SUPERVISOR"
@@ -168,7 +178,8 @@ ENDIF
 
 
 //23/12/2022 checagem hash ou senha
-cCHAVE :=StrToHex(hb_SHA256(ALLTRIM(UPPER(zuser))+alltrim(UPPER(cSENHA)), .t.))
+cCHAVE :=StrToHex(hb_SHA256(ALLTRIM(UPPER(zuser))+alltrim(cSENHA), .t.))
+
 //alertX(CCHAVE)
 
 if cCHAVE = OBTER("MUSER",,ENCODE(ZUSER),"CHAVEH") .OR. ;

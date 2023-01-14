@@ -29,6 +29,26 @@ if ! file("cepruaerr.dbf")
    quit
 endif
 
+if ! file("MD10.dbf") .OR. ! file("MD10.CDX")
+   alert("Falta MD10.dbf ou md10.cdx")
+   quit
+endif
+
+if ! file("cidconv.dbf") .OR. ! file("cidconv.CDX")
+   alert("Falta cidconv.dbf ou cidconv.cdx")
+   quit
+endif
+
+if ! file("cepbai.dbf") .OR. ! file("cepbai.CDX")
+   alert("Falta cepbai.dbf ou cepbai.cdx")
+   quit
+endif
+
+if ! file("cepbailx.dbf") .OR. ! file("cepbailx.CDX")
+   alert("Falta cepbailx.dbf ou cepbailx.cdx")
+   quit
+endif
+
 use cepruaerr new exclusive
 zap
 
@@ -39,12 +59,10 @@ if file("logradouro.dbf")
    append from logradouro
 endif
 
-
 cARQUIVO:="MD10"
 dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
 ordlistadd( cARQUIVO)
 dbsetorder(1) //
-
 
 cARQUIVO:="CIDCONV"
 dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
@@ -54,7 +72,6 @@ dbsetorder(1) //
 cARQUIVO:="CEPBAILX"
 dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
 ordlistadd( cARQUIVO)
-
 
 cARQUIVO:="CEPBAI"
 dbusearea( .T., "DBFCDX", cARQUIVO,, .T. )
@@ -188,12 +205,13 @@ while ! eof()
       ncodibge:=9999999 //tratado abaixo pois ibge 7 digitos cepnrua 6
    endif
    lCEPRUA:=.F.
+   lCEPGEO:=.F.
    
     IF ncodibge>0//agora sempre ibge
-	   cARQRUA := "C" + cCODIBGE
+	   cARQRUA := "c" + cCODIBGE
        ncodibge:=val(cCODIBGE)
 	   if ! file( cARQRUA + ".dbf" ) 
-   	      fileCOPY("CEPRUA.DBF",cARQRUA+".DBF")
+   	      fileCOPY("CEPRUA.DBF",cARQRUA+".dbf")
 		  dbusearea( .T., "DBFCDX", cARQRUA,, .T. )
 	      index on RUA tag &cARQRUA.1 
           index on CEP tag &cARQRUA.2 
@@ -210,6 +228,25 @@ while ! eof()
 		  dbusearea( .T., "DBFCDX", cARQRUA,, .T. )
 		  ordlistadd( cARQRUA)
 		  dbsetorder(2) //      cep
+	   ENDIF
+      //dados adcionais de 
+       cARQGEO := "g" + cCODIBGE
+	   if ! file( cARQGEO + ".dbf" ) 
+   	      fileCOPY("CEPGEO.DBF",cARQGEO+".dbf")
+		  dbusearea( .T., "DBFCDX", cARQGEO,, .T. )
+          index on CEP tag &cARQGEO.1
+          dbclosearea()	   
+	   endif
+	   if ! file( cARQGEO + ".cdx" )    	      
+		  dbusearea( .T., "DBFCDX", cARQGEO,, .T. )
+          index on CEP tag &cARQGEO.1
+          dbclosearea()	   
+	   endif	   
+	   if file( cARQGEO + ".dbf" ) .and. file( cARQGEO + ".cdx" )
+		  lCEPGEO:=.T.
+		  dbusearea( .T., "DBFCDX", cARQGEO,, .T. )
+		  ordlistadd( cARQGEO)
+		  dbsetorder(1) //      cep
 	   ENDIF
 	ENDIF   
    
@@ -254,6 +291,29 @@ while ! eof()
             cBAIRRO:=""
          ENDIF
 		 
+         IF lCEPGEO .AND. (! EMPTY(cepruaimp->DDD) .OR. ! EMPTY(cepruaimp->LATITUDE) .OR. ! EMPTY(cepruaimp->LONGITUDE))
+            dbselectar(cARQGEO)
+            dbgotop()
+            IF ! dbseek(cCEP)            
+                dbappend()
+                FIELD->CEP:=cCEP            
+             ELSE
+                dbrlock()
+             ENDIF
+             if empty(field->DDD)  .AND. ! EMPTY(cepruaimp->DDD)
+                field->DDD:=cepruaimp->DDD 
+             endif
+              if empty(field->LATITUDE)  .AND. ! EMPTY(cepruaimp->LATITUDE)
+                field->LATITUDE:=cepruaimp->LATITUDE 
+             endif
+             
+             if empty(field->LONGITUDE)  .AND. ! EMPTY(cepruaimp->LONGITUDE)
+                field->LONGITUDE:=cepruaimp->LONGITUDE
+             endif
+             
+             dbunlock()
+         ENDIF
+         
          dbselectar(cARQRUA)
          dbgotop()
          IF ! dbseek(cCEP)            
@@ -456,6 +516,11 @@ while ! eof()
       dbselectar(cARQRUA)
       dbclosearea()
    ENDIF
+   if lCEPGEO
+      dbselectar(cARQGEO)
+      dbclosearea()
+   ENDIF
+   
    dbselectar("cepruaimp") //skip no loop acima linhas acima
 enddo
 dbcloseall()

@@ -209,7 +209,7 @@ c:\develop\harbour\objmgw\disk71.PRG
 c:\develop\harbour\objmgw\disk72.PRG
 c:\develop\harbour\objmgw\flib04hab.PRG
 c:\develop\harbour\objmgw\flib08.PRG
-c:\develop\harbour\objmgw\f_decode.PRG
+#c:\develop\harbour\objmgw\f_decode.PRG
 c:\develop\harbour\objmgw\f_encode.PRG
 c:\develop\harbour\objmgw\f_freadl.PRG
 c:\develop\harbour\objmgw\f_ismemo.PRG

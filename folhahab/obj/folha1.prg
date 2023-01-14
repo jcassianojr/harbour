@@ -148,7 +148,8 @@ ZUSER:=UPPER(ZUSER)
 
 MDS("Senha")
 if empty(cSENHA)
-   cSENHA := PEGAPASS(24,10,8,,"*",.T.)
+   cSENHA := PEGAPASS(24,10,8,,"*",.F.)
+    // PEGAPASS( PW_ROW, PW_COL, PW_LEN, PW_COR, ECHO_CHAR, p_upcase, p_echochar )
 endif
 
 IF ZUSER = "ADMLOG" .Or. ZUSER = "ADMINISTRADOR" .Or. ZUSER = "ADMIN" 
@@ -167,7 +168,7 @@ IF ZUSER<>"SUPERVISOR"
 ENDIF
 
 //23/12/2022 checagem hash ou senha
-cCHAVE :=StrToHex(hb_SHA256(ALLTRIM(UPPER(zuser))+alltrim(UPPER(cSENHA)), .t.))
+cCHAVE :=StrToHex(hb_SHA256(ALLTRIM(UPPER(zuser))+alltrim(cSENHA), .t.))
 //alertX(CCHAVE)
 
 if cCHAVE = OBTER("MUSER",,ENCODE(ZUSER),"CHAVEH") .OR. ;

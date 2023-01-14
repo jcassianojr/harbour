@@ -109,7 +109,7 @@ FOPTO_4L.prg
 FOPTO_4M.prg
 FOPTO_4N.prg
 FOPTO_4O.prg
-FOPTO_4P.prg
+FOPTO_4P.prg -b
 FOPTO_4Q.prg
 FOPTO_4R.prg
 FOPTO_4S.prg
@@ -133,7 +133,7 @@ c:\develop\harbour\objmgw\disk70.prg
 c:\develop\harbour\objmgw\disk71.prg
 c:\develop\harbour\objmgw\disk72.prg
 c:\develop\harbour\objmgw\error.prg
-c:\develop\harbour\objmgw\f_decode.prg
+#c:\develop\harbour\objmgw\f_decode.prg
 c:\develop\harbour\objmgw\f_encode.prg
 c:\develop\harbour\objmgw\f_freadl.prg
 c:\develop\harbour\objmgw\f_ismemo.prg

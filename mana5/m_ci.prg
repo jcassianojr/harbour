@@ -200,7 +200,7 @@ if lOPEN
 	while ! eof()
 	    netreclock()
 		cUSUARIO:=DECODE(FIELD->USUARIO)
-		ENCODEPOS(cUSUARIO,0,.t.)
+		ENCODEPOS(cUSUARIO,0,.t.)       //senha comeca na 0+1 postel1
 		cSENHA:=DECODE(FIELD->SENHA)
 		ENCODEPOS(cSENHA,10,.t.)       //senha comeca na 10+1 postel11
         IF ! EMPTY(cUSUARIO) .AND. ! EMPTY(cSENHA)

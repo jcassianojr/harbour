@@ -88,7 +88,7 @@ C:\develop\harbour\objmgw\disk70
 C:\develop\harbour\objmgw\disk71
 C:\develop\harbour\objmgw\disk72
 C:\develop\harbour\objmgw\error.prg
-C:\develop\harbour\objmgw\f_decode
+#C:\develop\harbour\objmgw\f_decode
 C:\develop\harbour\objmgw\f_encode
 C:\develop\harbour\objmgw\f_freadl
 C:\develop\harbour\objmgw\f_ismemo

@@ -61,7 +61,7 @@ c:\develop\harbour\objmgw\disk71
 c:\develop\harbour\objmgw\disk72
 c:\develop\harbour\objmgw\flib04hab
 c:\develop\harbour\objmgw\flib08
-c:\develop\harbour\objmgw\f_decode
+#c:\develop\harbour\objmgw\f_decode
 c:\develop\harbour\objmgw\f_encode
 c:\develop\harbour\objmgw\f_freadl
 c:\develop\harbour\objmgw\f_ismemo

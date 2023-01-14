@@ -269,7 +269,7 @@ C:\develop\harbour\objmgw\disk70.prg
 C:\develop\harbour\objmgw\disk71.prg
 C:\develop\harbour\objmgw\disk72.prg
 C:\develop\harbour\objmgw\error.prg
-C:\develop\harbour\objmgw\f_decode.prg
+#C:\develop\harbour\objmgw\f_decode.prg
 C:\develop\harbour\objmgw\f_encode.prg
 C:\develop\harbour\objmgw\f_freadl.prg
 C:\develop\harbour\objmgw\f_ismemo.prg

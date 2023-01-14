@@ -75,7 +75,7 @@ For KK := 1 to LEN(mListaArq)
     cFILECEP:=lower(mListaArq[KK,1])
     cFILECEP:=strtran(cFILECEP,".dbf","")	
   
-    IF cFILECEP<>"cepbai" .AND. cFILECEP<>"ceprua" .AND. cFILECEP<>"cidconv" .and. cFILECEP<>"cepruaimp"
+    IF cFILECEP<>"cepbai" .AND. cFILECEP<>"ceprua" .AND. cFILECEP<>"cidconv" .and. cFILECEP<>"cepruaimp" .and. cFILECEP<>"cepgeo"
        dbusearea( .T., "DBFCDX", cFILECEP,, .F. )
        ordlistadd( cFILECEP)
        @ 23,00 say cFILECEP
