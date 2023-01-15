@@ -107,7 +107,7 @@ mVALIDADE := XENCODE(strtran(dtoc(mVALIDADE),'/',''))
 mCHAVE    := mUSUARIO
 return .T.
 
-
+/* agora unificad f_encode
 *+--------------------------------------------------------------------
 *+
 *+    Function XDECODE()
@@ -136,6 +136,7 @@ function XDECDAT(cVAR)
 cVAR := XDECODE(cVAR)
 cVAR := ctod(left(cVAR,2)+'/'+substr(cVAR,3,2)+'/'+right(cVAR,2))
 return cVAR
+*/
 
 *+--------------------------------------------------------------------
 *+

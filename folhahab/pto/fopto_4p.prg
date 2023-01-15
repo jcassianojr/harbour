@@ -74,7 +74,7 @@ mVALIDADE := XDECDAT( mVALIDADE )
 @  4,  1 get mUSUARIO
 @  4, 12 get mVALIDADE
 @  4, 23 get mEQUIVALE
-@  6,  1 get mSENHA    valid CheckPass(mSENHA,.t.)
+@  6,  1 get mSENHA    valid ALLTRUE(CheckPass(mSENHA,.t.)) // //remover alltrue apos complemento harbour,vo,vb,xsharp permitir minusculas numeros e acentos
 @  6, 12 get mARQFON   PICT "9999999"
 @  6, 20 get mFOLHANO PICT "9999999"
 //@  8, 10 get mEMAIL_USU
@@ -83,6 +83,7 @@ mVALIDADE := XDECDAT( mVALIDADE )
 //@ 10, 10 get mEMAIL_POR
 //@ 10, 15 get mEMAIL_SER
 READCUR()
+
 
 //cria antes do encode
 aVALOR:=ENCODEVAL(mUSUARIO)
@@ -96,6 +97,10 @@ mPOSTEL07:=aVALOR[7]
 mPOSTEL08:=aVALOR[8]
 mPOSTEL09:=aVALOR[9]
 mPOSTEL10:=aVALOR[10]
+
+
+ALERTX(DECODEVAL(aVALOR))
+
 aVALOR:=ENCODEVAL(mSENHA)
 mPOSTEL11:=aVALOR[1]
 mPOSTEL12:=aVALOR[2]
@@ -105,15 +110,24 @@ mPOSTEL15:=aVALOR[5]
 mPOSTEL16:=aVALOR[6]
 mPOSTEL17:=aVALOR[7]
 mPOSTEL18:=aVALOR[8]
+
+
+ALERTX(DECODEVAL(aVALOR))
+
+
+
 IF ! EMPTY(mUSUARIO ) .AND. ! EMPTY(mSENHA )
     mCHAVEH:=StrToHex(hb_SHA256(upper(ALLTRIM( mUSUARIO ))+alltrim( mSENHA ), .t. ))
   //  mSENHA :=""  //apagar apos complemento harbour,vo,vb,xsharp permitir minusculas numeros e acentos
 ENDIF
 mUSUARIO  := XENCODE( mUSUARIO )
 mEQUIVALE := XENCODE( mEQUIVALE )
-mSENHA    := XENCODE( mSENHA )
+ALTD()
+mSENHA    := XENCODE( mSENHA ,.F. )   //sem upper
 mVALIDADE := XENCODE( strtran( dtoc( mVALIDADE ), '/', '' ) )
 mCHAVE    := mUSUARIO
+
+ALERT(DECODE(mSENHA))
 return .T.
 
 
@@ -151,21 +165,21 @@ IF lMAIS .AND. lMINUS .AND. lDIG .AND. lSYMBOL
    RETURN .T.
 ELSE
   if ! lMAIS .AND. lMES
-     alertx(" Sem maisculas")
+     alertx(" Sem uma maiuscula")
    ENDIF
    if ! lMinus  .AND. lMES
-     alertx(" Sem minusclas")
+     alertx(" Sem uma minuscula")
    ENDIF 
     if ! lDIG  .AND. lMES
-     alertx(" Sem numeros")
+     alertx(" Sem um numero")
    ENDIF 
     if ! lSYMBOL  .AND. lMES
-     alertx(" Sem simbulos")
+     alertx(" Sem um simbulo -+_!@#$%^&*., ?")
    ENDIF
 ENDIF
 RETURN .F.
 
-
+/*
 FUNCTION ENCODEVAL (in_string)
 LOCAL counter , next_char , aCHAVE
 aCHAVE := array( 10 )
@@ -176,6 +190,7 @@ endif
 FOR counter = 1 TO LEN(in_string)
     next_char = SUBSTR(in_string, counter * -1, 1)
     nCHAR:= (ASC(next_char) + 30) * 2
+    aCHAVE[counter]:=nchar
 NEXT
 RETURN aCHAVE
 
@@ -192,5 +207,6 @@ FOR counter = 1 to len(aVALOR)
     ENDIF
 NEXT
 RETURN in_string
+*/
 
 *+ EOF: FOPTO_4P.PRG
