@@ -506,6 +506,7 @@ IF lDOCDAD
        
 	   IF tDOC=8
 		  hRecord := { => }
+          cTEXTO:=""    //zerando estava gerando acumlando os campos anteriores
 	   endif	  
 	   
        FOR X=1 TO nFIELDS
