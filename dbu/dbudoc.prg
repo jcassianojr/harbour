@@ -575,7 +575,8 @@ IF lDOCDAD
              CASE tDOC = 7 .AND. cSUBTIPO="ISO"
                   cTEXTO+="</"+cCAMPO+">" + cLIN
 			 case Tdoc= 8
-                  hb_HSet(hRecord, FieldName(x), Ctexto )//FieldGet(nField)) // for each record, hrecord holds a hash of column name: column value			 				  
+                  hb_HSet(hRecord, FieldName(x), Ctexto )//FieldGet(nField)) // for each record, hrecord holds a hash of column name: column value		
+                  cTEXTO:=""	 				  
             OTHERWISE
                   IF X<>nFIELDS  //O Ultimo campo nao recebe delimitador
                      Ctexto+=Zdelimite
