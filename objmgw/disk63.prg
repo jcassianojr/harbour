@@ -87,4 +87,55 @@ setcolor( OLD_COLOR )
 
 return f_str
 
+
+
+function CheckPass(Ctexto,lMES)
+LOCAL nI,lMAIS,lMINUS,lDIG,lSYMBOL
+lMAIS   := .F.
+lMINUS  := .F.
+lDIG    := .F.
+lSYMBOL := .F.
+IF VALTYPE(lMES)#"L"
+    lMES:=.T.
+ENDIF
+IF lEN(aLLTRIM(cTEXTO))<8
+   IF lMES
+      ALERTX("Minimo 8 Caracteres")
+   ENDIF
+   RETURN .F.
+ENDIF
+
+FOR nI = 1 TO LEN(cTexto)
+	IF SUBStr ( cTEXTO, nI, 1 ) $ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+       lMAIS :=.T.
+    ENDIF
+  	IF SUBStr ( cTEXTO, nI, 1 ) $ 'abcdefghijklmnopqrstuvwxyz'
+       lMINUS :=.T.
+    ENDIF
+    IF SUBStr ( cTEXTO, nI, 1 ) $ '0123456789'
+       lDIG :=.T.
+    ENDIF
+    IF SUBStr ( cTEXTO, nI, 1 ) $ '-+_!@#$%^&*., ?'
+       lSYMBOL :=.T.
+    ENDIF  
+NEXT
+IF lMAIS .AND. lMINUS .AND. lDIG .AND. lSYMBOL
+   RETURN .T.
+ELSE
+  if ! lMAIS .AND. lMES
+     alertx(" Sem uma maiuscula")
+   ENDIF
+   if ! lMinus  .AND. lMES
+     alertx(" Sem uma minuscula")
+   ENDIF 
+    if ! lDIG  .AND. lMES
+     alertx(" Sem um numero")
+   ENDIF 
+    if ! lSYMBOL  .AND. lMES
+     alertx(" Sem um simbulo -+_!@#$%^&*., ?")
+   ENDIF
+ENDIF
+RETURN .F.
+
+
 *+ EOF: DISK63.PRG

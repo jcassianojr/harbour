@@ -112,7 +112,7 @@ mPOSTEL17:=aVALOR[7]
 mPOSTEL18:=aVALOR[8]
 
 
-ALERTX(DECODEVAL(aVALOR))
+//ALERTX(DECODEVAL(aVALOR))
 
 
 
@@ -122,15 +122,15 @@ IF ! EMPTY(mUSUARIO ) .AND. ! EMPTY(mSENHA )
 ENDIF
 mUSUARIO  := XENCODE( mUSUARIO )
 mEQUIVALE := XENCODE( mEQUIVALE )
-ALTD()
+//ALTD()
 mSENHA    := XENCODE( mSENHA ,.F. )   //sem upper
 mVALIDADE := XENCODE( strtran( dtoc( mVALIDADE ), '/', '' ) )
 mCHAVE    := mUSUARIO
 
-ALERT(DECODE(mSENHA))
+//ALERT(DECODE(mSENHA))
 return .T.
 
-
+/* inluido disk63 junto com pegapass
 function CheckPass(Ctexto,lMES)
 LOCAL nI,lMAIS,lMINUS,lDIG,lSYMBOL
 lMAIS   := .F.
@@ -178,8 +178,9 @@ ELSE
    ENDIF
 ENDIF
 RETURN .F.
+*/
 
-/*
+/*inluidos no f_encod
 FUNCTION ENCODEVAL (in_string)
 LOCAL counter , next_char , aCHAVE
 aCHAVE := array( 10 )

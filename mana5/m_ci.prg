@@ -26,7 +26,7 @@ if nTIPO = 1
       mSENHA := PEGAPASS(24,20,8,,"*",.T.)
       MDS("Digite Novamente")
       mSENH2 := PEGAPASS(24,20,8,,"*",.T.)
-      if mSENHA = mSENH2 .and. !empty(mSENHA) .and. len(alltrim(mSENHA)) >= 8
+      if mSENHA = mSENH2 .and. !empty(mSENHA) .and. len(alltrim(mSENHA)) >= 8 .and. alltrue(CheckPass(Msenha,.t.))
          exit
       else
          ALERTX("Senhas Diferentes, em Branco, Menos de 8 Caracter")
@@ -153,7 +153,7 @@ IF in_string != NIL
     FOR counter = 1 TO in_len
          next_char = SUBSTR(in_string, counter * -1, 1)
          nCHAR:=0
-         IF next_char == '.'.OR. next_char == '_' .OR.     ISDIGIT(next_char) .OR. ISALPHA(next_char)   
+         IF SDIGIT(next_char) .OR. ISALPHA(next_char) .OR.  next_char $ '-+_!@#$%^&*., ?' //next_char == '.'.OR. next_char == '_' .OR.     ISDIGIT(next_char) .OR. ISALPHA(next_char)   
              nCHAR:= (ASC(next_char) + ADJVAL) * 2
              out_string := out_string +    CHR(nCHAR)
          ENDIF
@@ -224,15 +224,15 @@ if lOPEN
 		NEXT X
 
         IF nARQ=1 //so processa muser do mana5
-    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMWRPT)
+    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMWRPT)   //vb wrpt.usuario
             IF ! EMPTY(cCHAVEV)
                FIELD->CHAVEWW:=cCHAVEV
             ENDIF
-    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMCONT)
+    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMCONT)  //vb controle.usuario
             IF ! EMPTY(cCHAVEV)
                FIELD->CHAVEWC:=cCHAVEV
             ENDIF
-    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMSYSU)
+    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMSYSU)  //vb usersys.usuario
              IF ! EMPTY(cCHAVEV)
                FIELD->CHAVEWS:=cCHAVEV
             ENDIF           

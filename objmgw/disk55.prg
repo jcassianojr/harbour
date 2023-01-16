@@ -270,6 +270,33 @@ IF VALTYPE(cDIG)#"C"
    cDIG:="4"
 ENDIF
 cSEP:=ALLTRIM(cSEP) //espaco vira vazio
+
+IF cFOR="ACESSS"  //inicia e fecha com # abaixo
+   cRETU:="#"
+   cCEP := "/"
+   cDIG:="4"
+   cFOR:="YMD"
+ENDIF
+
+IF cFOR="CRYSTAL"  
+   cCEP := ","
+   cDIG:="4"
+   cFOR:="YMD"
+ENDIF
+
+IF cFOR="MYSQL"  .OR. cFOR="MYSQL/" 
+   cCEP := "/"
+   cDIG:="4"
+   cFOR:="YMD"
+ENDIF
+
+IF cFOR="MYSQL-" 
+   cCEP := "-"
+   cDIG:="4"
+   cFOR:="YMD"
+ENDIF
+
+
 IF cSEP = "2" // Ano 2 digitos passado na quarta posicao DMY2
    cSEP:=""
    cANO:= right( cANO, 2 )
@@ -278,6 +305,14 @@ IF cSEP = "4" // Ano 4 digitos passado na quarta posicao DMY4
    cSEP:=""
    cANO:= right( cANO, 4 )
 ENDIF
+
+
+/*
+    Case "SQLSERVER"
+        DataToLit = "CONVERT(datetime, '" & Format(DateValue(dDATA), "yyyy-mm-dd") & "', 102)"
+
+*/
+
 DO CASE
   CASE cFOR="MYS"
         cRETU:=StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) 
@@ -317,6 +352,11 @@ DO CASE
    OTHERWISE //DMY
         cRETU:=cDIA+cSEP+cMES+cSEP+cANO
 END CASE
+
+IF cFOR="ACESSS"  //inicia e fecha com # abaixo
+   cRETU+="#"
+ENDIF
+
 RETURN cRETU
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
