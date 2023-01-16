@@ -219,7 +219,7 @@ return cVAR
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-function data2str(dData,cFOR,cSEP,cDIG)
+function data2str(dData,cFOR,cSEP,cDIG,cINI,cFIM)
 local cDIA := cMES := cANO := cRETU := ""
 IF VALTYPE(dDATA)<>"D" .AND. VALTYPE(dDATA)<>"T"
    cDIA := "00"
@@ -271,31 +271,107 @@ IF VALTYPE(cDIG)#"C"
 ENDIF
 cSEP:=ALLTRIM(cSEP) //espaco vira vazio
 
-IF cFOR="ACESSS"  //inicia e fecha com # abaixo
-   cRETU:="#"
-   cCEP := "/"
+IF VALTYPE(cINI)#"C"
+   cINI:=""
+ENDIF
+
+IF VALTYPE(cINI)#"C"
+  cFIM:=""
+ENDIF
+
+IF cFOR="NDL"  // ''yyyymmdd
    cDIG:="4"
    cFOR:="YMD"
 ENDIF
 
-IF cFOR="CRYSTAL"  
+IF cFOR="NDC"  // 'yymmdd
+   cDIG:="2"
+   cFOR:="YMD"
+ENDIF
+
+IF cFOR="ASPAS"  // "'" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "'"
+   cINI:="'"
+   cCEP :="/"
+   cDIG:="4"
+   cFOR:="YMD"
+   cFIM:="'"
+ENDIF
+
+IF cFOR="ACESSS"  //"#" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "#"
+   cINI:="#"
+   cCEP := "/"
+   cDIG:="4"
+   cFOR:="YMD"
+   cFIM:="#"
+ENDIF
+
+IF cFOR="CRYSTAL"  .OR. cFOR="DATE(,"  //"DATE(" & Year(dDATA) & "," & Month(dDATA) & "," & Day(dDATA) & ")"
+   cINI:="DATE("
+   cFIM:=")" 
    cCEP := ","
    cDIG:="4"
    cFOR:="YMD"
 ENDIF
 
-IF cFOR="MYSQL"  .OR. cFOR="MYSQL/" 
+IF cFOR="DATESERIAL"  // DateSerial(1969, 2, 12)    ' Return a date.
+   cINI:="DATESERIAL("
+   cFIM:=")" 
+   cCEP := ","
+   cDIG:="4"
+   cFOR:="YMD"
+ENDIF
+
+IF cFOR="CRYSTALX"  .OR. cFOR="CDATE(," //"CDATE(" & Year(dDATA) & "," & Month(dDATA) & "," & Day(dDATA) & ")"
+   cINI:="CDATE("
+   cFIM:=")"
+   cCEP := ","
+   cDIG:="4"
+   cFOR:="YMD"
+ENDIF
+
+IF cFOR="MYSQL"  .OR. cFOR="MYSQL/" //"'" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "'"
+   cINI := "'"
+   cFIM := "'"
    cCEP := "/"
    cDIG:="4"
    cFOR:="YMD"
 ENDIF
 
-IF cFOR="MYSQL-" 
+IF cFOR="MYSQL-"  //"'" & Year(dDATA) & "-" & Month(dDATA) & "-" & Day(dDATA) & "'"
+   cINI := "'"
+   cFIM := "'"
    cCEP := "-"
    cDIG:="4"
    cFOR:="YMD"
 ENDIF
-
+IF cFOR="ORACLE" .OR. cFOR="TO_DATE" //to_date('" + Format(dDATA, "dd/mm/yyyy") + "','DD/MM/YYYY')
+   cINI:="to_date('"
+   cFIM:="','DD/MM/YYYY')"
+   cCEP := "/"
+   cDIG:="4"
+   cFOR:="DMY"
+ENDIF
+IF cFOR="SQL" .OR. cFOR="103" //convert(datetime, '" + DTOC(dDATA)+ "', 103)"
+   cINI:="convert(datetime, ''"
+   cFIM:="', 103)"
+   cCEP := "/"
+   cDIG:="4"
+   cFOR:="DMY"
+ENDIF
+IF cFOR="SQL" .OR. cFOR="103" //convert(datetime, '" + DTOC(dDATA)+ "', 103)"    //date
+   cINI:="convert(datetime, ''"
+   cFIM:="', 103)"
+   cCEP := "/"
+   cDIG:="4"
+   cFOR:="DMY"
+ENDIF
+IF cFOR="SQLSERVER" .OR. cFOR="102" //CONVERT(datetime, '" + Format(DateValue(dDATA), "yyyy-mm-dd") + "', 102)     //datetime
+   cINI:="convert(datetime, ''"
+   cFIM:="', 102)"
+   cCEP := "-"
+   cDIG:="4"
+   cFOR:="DMY"
+ENDIF
 
 IF cSEP = "2" // Ano 2 digitos passado na quarta posicao DMY2
    cSEP:=""
@@ -307,54 +383,53 @@ IF cSEP = "4" // Ano 4 digitos passado na quarta posicao DMY4
 ENDIF
 
 
-/*
-    Case "SQLSERVER"
-        DataToLit = "CONVERT(datetime, '" & Format(DateValue(dDATA), "yyyy-mm-dd") & "', 102)"
-
-*/
+IF ! EMPTY(cINI)
+   cRETU:=cINI
+ENDIF
 
 DO CASE
   CASE cFOR="MYS"
         cRETU:=StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) 
         IF cRETU == "0000-00-00"
            cRETU := "NULL"
+           cFIM  :=  ""
         ENDIF 
     CASE cFOR="DHZ"
-        cRETU:=StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) + " 00:00:00"     
-   CASE cFOR="SQL"
-        cRETU:="convert(datetime, '" + DTOC(dDATA)+ "', 103)"
+        cRETU+=StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) + " 00:00:00"     
+ //  CASE cFOR="SQL" acima
+ //       cRETU:="convert(datetime, '" + DTOC(dDATA)+ "', 103)"
    CASE cFOR="DMY"
-        cRETU:=cDIA+cSEP+cMES+cSEP+cANO
+        cRETU+=cDIA+cSEP+cMES+cSEP+cANO
    CASE cFOR="YMD"
-        cRETU:=cANO+cSEP+cMES+cSEP+cDIA
+        cRETU+=cANO+cSEP+cMES+cSEP+cDIA
    CASE cFOR="MDY"
-        cRETU:=cMES+cSEP+cDIA+cSEP+cANO
+        cRETU+=cMES+cSEP+cDIA+cSEP+cANO
    CASE cFOR="YDM"
-        cRETU:=cANO+cSEP+cDIA+cSEP+cMES
+        cRETU+=cANO+cSEP+cDIA+cSEP+cMES
    CASE cFOR="MY"        
-        cRETU:=cMES+cSEP+cANO
+        cRETU+=cMES+cSEP+cANO
    CASE cFOR="YM"        
-        cRETU:=cANO+cSEP+cMES
+        cRETU+=cANO+cSEP+cMES
    CASE cFOR="YD"        
-        cRETU:=cANO+cSEP+cDIA
+        cRETU+=cANO+cSEP+cDIA
    CASE cFOR="DY"        
-        cRETU:=cDIA+cSEP+cANO        
+        cRETU+=cDIA+cSEP+cANO        
    CASE cFOR="DM"
-        cRETU:=cDIA+cSEP+cMES
+        cRETU+=cDIA+cSEP+cMES
    CASE cFOR="MD"
-        cRETU:=cMES+cSEP+cDIA        
+        cRETU+=cMES+cSEP+cDIA        
    CASE cFOR="Y"        
-        cRETU:=cANO
+        cRETU+=cANO
    CASE cFOR="M"
-        cRETU:=cMES
+        cRETU+=cMES
    CASE cFOR="D"
-        cRETU:=cDIA        
+        cRETU+=cDIA        
    OTHERWISE //DMY
-        cRETU:=cDIA+cSEP+cMES+cSEP+cANO
+        cRETU+=cDIA+cSEP+cMES+cSEP+cANO
 END CASE
 
-IF cFOR="ACESSS"  //inicia e fecha com # abaixo
-   cRETU+="#"
+IF ! EMPTY(cFIM)  //inicia e fecha com # abaixo
+   cRETU+=cFIM
 ENDIF
 
 RETURN cRETU
