@@ -233,6 +233,7 @@ if nTIPSPO = 2 .or. nTIPSPO = 3 .or. nTIPSPO = 4
 endif
 if (nTIPSPO > 5 .and. nTIPSPO < 11) .OR. nTIPSPO=17  //TXT OEM TXT ANSI HTML RTF PDF ZEBRA_17
    //cARQSPO := "c:\temp\nome000" + space( 20 )
+   //cARQUIVO=WIN_GETSAVEFILENAME(        , "Exportar", HB_CWD(),"txt"   , "*.txt" , 1            ,               , cARQUIVO)
    cARQSPO :=STRTRAN(TMPFILE( "TXT" ),".TXT","")+SPACE(30) //"c:\temp\nome000" + space( 20 )
    MDS( "Digite o Nome do Arquivo " )
    @ 24, 30 get cARQSPO     valid ! empty(cARQSPO)
