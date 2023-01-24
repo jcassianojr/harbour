@@ -52,6 +52,10 @@ endif
 use cepruaerr new exclusive
 zap
 
+
+IF FILE("cepruaimp.cdx")  //apaga o indice caso algum importador use outra chave para o index primario
+   ferase("cepruaimp.cdx")
+endif
 use cepruaimp new exclusive
 index on UF+CIDADE+CEP tag ufcidade
 nLASTREC:=LASTREC()
@@ -92,7 +96,7 @@ dbgotop()
 lPROCESSA:=empty(cepruaimp->UF) .and. at("/",CEPRUAIMP->CIDADE)>0 //checa o primeiro registro pra evitar loop descnecesario
 IF lPROCESSA
 	while ! eof()   
-	   @ 24,00 say str(recno()) + CEPRUAIMP->CIDADE 
+	   @ 24,00 say str(recno(),10) +"/" + str(nLASTREC,10) + " - " + CEPRUAIMP->CIDADE 
 	   cCIDADE:=CEPRUAIMP->CIDADE
 	   if empty(cepruaimp->UF) .and. at("/",cCIDADE)>0
 	      IF at("  - DISTRITO",cCIDADE)>0 .AND. at("(",cCIDADE)>0 //NOSSA SENHORA DO REMEDIO (SALESOPOLIS)/SP  - DISTRITO
@@ -105,7 +109,6 @@ IF lPROCESSA
 			 cCIDADE:=SUBSTR(cCIDADE,nPOS+1)
 			 cCIDADE:=STRTRAN(cCIDADE,")","")
 		  endif
-		  
 		  nPOS:=at("/",cCIDADE)
 		  cepruaimp->UF:=LEFT(SUBSTR(cCIDADE,nPOS+1),2)
 		  CEPRUAIMP->CIDADE:=SUBSTR(cCIDADE,1,nPOS-1)
@@ -113,6 +116,44 @@ IF lPROCESSA
        dbskip()	   
 	enddo
 endif	
+
+//alguns importadores tranzem somente o ibge gravando a cidade para usar o cidlooop
+dbselectar("cepruaimp")
+dbgotop()
+while ! eof()
+  cCODIBGE:=CEPRUAIMP->CODIBGE
+  @ 24,00 say str(recno(),10) +"/" + str(nLASTREC,10) + " - " + cCODIBGE
+  IF EMPTY(cepruaimp->UF) .AND. EMPTY(CEPRUAIMP->CIDADE)
+     dbselectar("MD10")
+     dbsetorder(3)
+	 dbgotop()
+	 if dbseek(cCODIBGE)
+        cepruaimp->UF     :=MD10->UF
+	    CEPRUAIMP->CIDADE :=MD10->NOME
+	 ENDIF   
+  endif
+  dbselectar("cepruaimp")
+  dbskip()
+enddo
+
+dbselectar("MD10") //retorna ordem 1 pois a 3 foi usada acima
+dbsetorder(1) 
+cCODIBGE:=""  //zera a variavel do loop acima
+
+////algumas vem com nome no parentes distrito(cidade)
+dbselectar("cepruaimp")
+dbgotop()
+while ! eof()
+  cCIDADE:=CEPRUAIMP->CIDADE
+  @ 24,00 say str(recno(),10) +"/" + str(nLASTREC,10) + " - " + cCIDADE
+  IF AT("(",cCIDADE)>0
+     CEPRUAIMP->CIDADE:=TRATACIDADE(CEPRUAIMP->uf,cCIDADE)
+  ENDIF
+  dbselectar("cepruaimp")
+  dbskip()
+enddo
+cCidade:=""  //zera a variavel do loop acima
+
 
 dbselectar("cepruaimp")
 dbsetorder(1)
@@ -162,7 +203,7 @@ while ! eof()
    ncodibge:=0 //sequencia sempre zero pois agora e o ibge como sequencia
    eLOCALBAI:=0
    lACHEI:=.F.
-   @ 24,00 say  cUF+ cCIDADE + STR(RECNO()) + "/" + STR(nLASTREC)   
+   @ 24,00 say  cUF+ PADR(cCIDADE,30) + STR(RECNO(),10) + "/" + STR(nLASTREC,10)   
    if ! empty(cUF) .AND. ! EMPTY(cCIDADE)
        cCIDBUSCA:=TRATANOME(cCIDADE)
        cCODIBGE:=BUSCAIBGE(cUF,cCIDBUSCA)   //1a tentativa com o nome  tratanome
@@ -183,7 +224,7 @@ while ! eof()
        endif       
    endif
    	   
-   if ncodibge=0 .AND. ! EMPTY(cCODIBGE)
+   if ncodibge=0 .AND. ! EMPTY(cCODIBGE) .and. ! empty(cCIDLOOP) //no comeca tras a cidade pelo codigo ibge //aqui e necessario ibge e nome da cidade para o cidloop while abaixo
      dbselectar("MD10")
      dbsetorder(3)
 	 dbgotop()
@@ -193,8 +234,8 @@ while ! eof()
 		ENDIF
 		IF EMPTY(cUF) .OR. EMPTY(cCIDADE)
            cUF      :=MD10->UF
-		   cCIDADE  :=MD10->CIDADE
-           //cCIDLOOP :=MD10->NOME // se cidloop manter da base para nao entrar em loop no  while abaico
+		   cCIDADE  :=MD10->NOME
+           //cCIDLOOP :=MD10->NOME // se cidloop manter da base para nao entrar em loop no  while abaixo
 		ENDIF
 		lACHEI:=.T.
 	 ENDIF   
@@ -273,7 +314,7 @@ while ! eof()
  
    dbselectar("cepruaimp")
    while cUFLOOP=cepruaimp->UF .AND. cCIDLOOP=ALLTRIM(cepruaimp->CIDADE) .AND. ! EOF()
-      @ 24,00 say  cUF+ cCIDADE + CEP + STR(RECNO()) + "/" + STR(nLASTREC)
+      @ 24,00 say  cUF+ PADR(cCIDADE,30) + CEP + STR(RECNO(),10) + "/" + STR(nLASTREC,10)
       IF lCEPRUA   //grava ou skip abaixo uf/cidade         
          cCEP:=ALLTRIM(TIRAOUT(CEP))
 		 cRUA:=TRATANOME(cepruaimp->RUA)
@@ -554,7 +595,7 @@ dbsetorder(1)
 dbgotop()
 while dbseek(nLASTBAIRRO)
 	 nLASTBAIRRO++
-	 @ 24,00 say "bairro"+str(nlastbairro)
+	 @ 24,00 say "bairro: "+str(nlastbairro)
 enddo	 
 dbsetorder(2) // antes 4 localcep ibge + nome agora so o nome index 2
 return 

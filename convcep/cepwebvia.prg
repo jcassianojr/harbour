@@ -60,6 +60,10 @@ IF lGERACEPRUA
   FWRITE(nGRAVA,cLINHA)
 ENDIF  
   
+
+IF FILE("cepruaimp.cdx")  //apaga o indice caso algum importador use outra chave para o index primario
+   ferase("cepruaimp.cdx")
+endif  
    
 use cepruaimp new exclusive
 
@@ -75,7 +79,7 @@ For KK := 1 to LEN(mListaArq)
     cFILECEP:=lower(mListaArq[KK,1])
     cFILECEP:=strtran(cFILECEP,".dbf","")	
   
-    IF cFILECEP<>"cepbai" .AND. cFILECEP<>"ceprua" .AND. cFILECEP<>"cidconv" .and. cFILECEP<>"cepruaimp" .and. cFILECEP<>"cepgeo"
+    IF cFILECEP<>"cepbai" .AND. cFILECEP<>"ceprua" .AND. cFILECEP<>"cidconv" .and. cFILECEP<>"cepruaimp" .and. cFILECEP<>"cepgeo" .and. cFILECEP<>"ce_f"
        dbusearea( .T., "DBFCDX", cFILECEP,, .F. )
        ordlistadd( cFILECEP)
        @ 23,00 say cFILECEP
@@ -117,7 +121,6 @@ For KK := 1 to LEN(mListaArq)
              lTEMCEP:=.F.
              
              if lCHECKAPICOR //correio web primeria busca
-                ?
     		    ? '  CEPAPI:'+ cCEP
                 ?
     		     ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
@@ -130,9 +133,8 @@ For KK := 1 to LEN(mListaArq)
              endif  
            
              if lCHECKVIACEP //via cep web segunda busca
-                ?
     		    ? '  CEPCOR:'+ cCEP  
-                ?        
+                ?
            		oCep := cepWeb( cCEP )
     		    IF ! oCep == NIL
     			  cCIDADE      := oCep:cLocalidade
@@ -149,6 +151,8 @@ For KK := 1 to LEN(mListaArq)
              endif 
              
              if lCHECKREPVIR
+                ? '  CEPREP:'+ cCEP
+                ?
                  CepRepublica(cCEP)
                  IF ! empty(cEndereco+cBairro)
                     GRAVARUAIMP()
@@ -159,6 +163,8 @@ For KK := 1 to LEN(mListaArq)
              ENDIF
              
              IF lCHECKAPICEP
+                 ? '  APICEP:'+ cCEP
+                ?
                  CepAPICEP(cCEP)
                  IF ! empty(cEndereco+cBairro)
                     GRAVARUAIMP()
@@ -169,6 +175,8 @@ For KK := 1 to LEN(mListaArq)
              ENDIF
              
              IF lCHECKAPIAWE
+                 ? '  APIAWE:'+ cCEP
+                 ?
                  CepAPIAWE(cCEP)
                  IF ! empty(cEndereco+cBairro)
                     GRAVARUAIMP()
@@ -226,7 +234,6 @@ ENDIF
 RETURN eCEP
 
 FUNCTION GRAVARUANAO(cMENSAGEM)
-?
 ? cMENSAGEM
 ?
 dbselectar("cepruaimp") //grava para nao buscr online novamente
@@ -241,6 +248,12 @@ endif
 RETURN .T.
 
 FUNCTION GRAVARUAIMP()
+IF cENDERECO="ull,"  //alguns web service trazem null
+   cENDERECO:=""
+ENDIF
+IF cBAIRRO="ull,"  //alguns web service trazem null
+   cBAIRRO:=""
+ENDIF
 dbselectar("cepruaimp")
 if ! dbseek(cCEP)
    dbappend()
@@ -325,7 +338,7 @@ STATIC FUNCTION ConsultaCep( cCep, cBairro, cCidade, cEndereco, cUF, cId )
       cUF       := XmlNode( :cXmlRetorno, "uf" )
       cID       := XmlNode( :cXmlRetorno, "id" )
    ENDWITH
-   ? oSefaz:cXmlRetorno
+  // ? oSefaz:cXmlRetorno
 
    RETURN AT("CEP NAO ENCONTRADO",oSefaz:cXmlRetorno)=0
    //RETURN NIL
@@ -475,6 +488,7 @@ METHOD New( cCEP )
 
    IF nERRO>10
       ? 'Open erro >10'
+      ?
       RETURN NIL
    ENDIF
 
@@ -482,6 +496,7 @@ METHOD New( cCEP )
 
    IF ! oHttp:open()
      ? 'open erro'
+     ? 
       nERRO++
 	  RETURN NIL
    ENDIF

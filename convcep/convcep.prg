@@ -576,6 +576,11 @@ IF MsgYesNo("Ajustar tipos de rua")
             IF nPOS>0 .and. nPOS>3
 			   FIELD->RUA:=SUBSTR(FIELD->RUA,1,nPOS-1)
             ENDIF
+            
+            nPOS:=AT(LOWER("ull,"),FIELD->RUA)
+            IF nPOS>0
+			   FIELD->RUA:=""
+            ENDIF
 			
 			//28/01/2021 11:08 checa se e um tipo valido se nao e limpa
 			 IF ! empty(field->tipo)
