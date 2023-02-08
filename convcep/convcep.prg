@@ -193,7 +193,15 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. lCE_F .or. MsgYesNo( 
            endif   
            if ! empty(mFIMCEP)   .AND. VAL(md10->FIMCEP)=0
                md10->FIMCEP := mFIMCEP
-           endif 
+           endif  
+           if ! emptY(mINICEP) .and. ! empty(mFIMCEP) 
+              IF VAL(mINICEP)=VAL(md10->INICEP) .and. VAL(md10->INICEP)=VAL(md10->FIMCEP)
+                 IF VAL(mFIMCEP)>VAL(md10->FIMCEP)
+                    md10->FIMCEP := mFIMCEP
+                    fwrite( nUSO, "CODIBGE: "+MCodiBGE + " " + MUF + " " + MNOME + "Faixa:= "+ mINICEP + "-"+ mFIMCEP +HB_OSNEWLINE() )
+                 ENDIF
+              ENDIF
+           endif
            if ! empty(mNOMTEL)   .AND. VAL(md10->NOMTEL)=0
                md10->NOMTEL := mNOMTEL
            endif
@@ -214,7 +222,7 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. lCE_F .or. MsgYesNo( 
            endif 
            dbunlock()
         ELSE
-           fwrite( nUSO, "CODIBGE: "+MCodiBGE + " " + MUF + " " + MNOME + +HB_OSNEWLINE() )
+           fwrite( nUSO, "CODIBGE: "+MCodiBGE + " " + MUF + " " + MNOME +HB_OSNEWLINE() )
         ENDIF          
         dbselectar("md10imp")
         dbskip()  
