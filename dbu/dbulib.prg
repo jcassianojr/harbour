@@ -27,10 +27,11 @@ retuRN ( .T. )
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-function MDT(cMSG)   
-stat_msg(cMSG ) 
-inkey( 1 )
-stat_msg(space(80)) 
+function MDT(cMSG)  
+hb_Alert(cMSG, , , 2 ) 
+//stat_msg(cMSG ) 
+//inkey( 1 )
+//stat_msg(space(80)) 
 retuRN .t. 
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн

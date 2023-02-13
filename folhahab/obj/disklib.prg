@@ -183,11 +183,12 @@ return  .T.
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-function MDT            //EXIBE MENSAGEM POR UM TEMPO
-para MS
-MDS( padc( MS, 80 ) )
-inkey( 1 )
-MD()
+function MDT(cMSG)            //EXIBE MENSAGEM POR UM TEMPO
+hb_Alert(cMSG, , , 2 ) 
+//para MS
+//MDS( padc( MS, 80 ) )
+//inkey( 1 )
+//MD()
 return  .t. 
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||

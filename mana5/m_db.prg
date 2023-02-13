@@ -131,21 +131,16 @@ dbcloseall()
 *+--------------------------------------------------------------------
 *+
 *+
-*+
 *+    Function MDT()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func MDT(ms)  //EXIBE MENSAGEM POR UM TEMPO
-
-@ 24,00 say padc(MS,80)         
-inkey(1)
-@ 24,00 clea
-retu (.t.)
+function MDT(ms)  //EXIBE MENSAGEM POR UM TEMPO
+hb_Alert(cMSG, , , 2 ) 
+//@ 24,00 say padc(MS,80)         
+//inkey(1)
+//@ 24,00 clea
+return .t.
 
 
 *+--------------------------------------------------------------------
@@ -160,9 +155,8 @@ retu (.t.)
 *+
 *+
 *+
-func MD   //TELA PARA AS MENSAGENS
-
+function MD   //TELA PARA AS MENSAGENS
 @ 24,00
-retu (.T.)
+return .T.
 
 
