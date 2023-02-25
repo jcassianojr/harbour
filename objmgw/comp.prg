@@ -215,8 +215,15 @@ IF EMPTY(cEMAIL)
    ZNERRO:=1
    ZERRO:="Email Nao Preenchido"
 ENDIF
-    //lReturn := ( cAddress LIKE cRegEx ) .or. empty(cAddress)
-    lRETURN:=HB_REGEXLIKE( cRegEx, cEMail ) .or. empty(cEMAIL)
+
+//lReturn := ( cAddress LIKE cRegEx ) .or. empty(cAddress)
+IF HB_REGEXLIKE( cRegEx, cEMail ) .or. empty(cEMAIL)
+   lReturn := .T.
+ELSE
+   ZNERRO:=7
+   ZERRO:="erro na nomenclatura geralmente teste@teste.com "
+   lReturn := .f.	
+ENDIF
 
 if at("@",cEMAIL)=0    
    ZNERRO:=2
@@ -245,9 +252,9 @@ FOR X=1 TO LEN(aCHAR)
    endif   
 NEXT     
 
-if at(".",right(cEMAIL,4))=0    
+if at(".",right(cEMAIL,4))=0  .and. at(".",right(cEMAIL,3))=0   // .com .ti dominius com 3 ou 2 digitos
    ZNERRO:=6
-   ZERRO:="tem que ter ponto . nos 4 ultimos digitos"
+   ZERRO:="tem que ter ponto . nos 3 ou 4 ultimos digitos"
    lReturn := .f.
 endif
     
