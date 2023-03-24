@@ -2,6 +2,8 @@
 -gui 
 -lng=pt_BR
 #-manifest=folhalis.Manifest  comentado erro compilacao 32 bits
+-vcshead=vcshead.ch
+-tshead=tshead.ch
 
 hbct.hbc
 hbwin.hbc

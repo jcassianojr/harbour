@@ -1,6 +1,8 @@
 -gtwvg
 -gui 
 -lng=pt_BR
+-vcshead=vcshead.ch
+-tshead=tshead.ch
 #-manifest=recursos.Manifest  comentado erro compilacao 32 bits
 
 hbct.hbc

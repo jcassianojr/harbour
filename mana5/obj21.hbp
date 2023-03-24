@@ -1,6 +1,8 @@
 -incpath=c:\devprg\hb32\extras\rddado\
 
 -lng=pt_BR
+-vcshead=vcshead.ch
+-tshead=tshead.ch
 #-manifest=mana5.Manifest  comentado erro compilacao 32 bits
 
 hbwin.hbc

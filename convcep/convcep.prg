@@ -8,6 +8,8 @@
 * arquivos do correio na maioria tem header e footer por isso
 * e deletado o primeiro e ultima na importacaoCE
 #INCLUDE "INKEY.CH"
+#include "tshead.ch"
+
 
 REQUEST HB_CODEPAGE_PTISO
 REQUEST HB_LANG_PT

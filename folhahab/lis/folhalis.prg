@@ -17,6 +17,8 @@ REQUEST HB_GT_WVG_DEFAULT
 
 #INCLUDE "INKEY.CH"
 #INCLUDE "HBGTINFO.CH"
+#include "tshead.ch"
+
 
 
 function main

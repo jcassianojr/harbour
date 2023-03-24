@@ -13,6 +13,8 @@ REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 
 #INCLUDE "INKEY.CH"
+#include "tshead.ch"
+
 
 function main
 PARA ZUSER,cSENHA

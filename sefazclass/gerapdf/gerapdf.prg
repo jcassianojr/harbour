@@ -3,6 +3,8 @@ REQUEST HB_CODEPAGE_PTISO
 #include "inkey.ch"
 #include "set.ch"
 #include "hbgtinfo.ch"
+#include "tshead.ch"
+
 
 FUNCTION Main( cXmlDocumento, cLogoFile, cXmlAuxiliar )
 

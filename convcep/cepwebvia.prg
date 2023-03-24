@@ -10,6 +10,8 @@ http://www.pctoledo.com.br/forum/viewtopic.php?f=39&t=17470&start=75#p118783
 4. Microsoft XML, v 6.0 for latest versions of MS Office.
 */
 
+#include "tshead.ch"
+
 REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 

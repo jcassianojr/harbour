@@ -19,6 +19,8 @@ REQUEST HB_LANG_PT
 REQUEST DBFCDX
 
 #INCLUDE "INKEY.CH"
+#include "tshead.ch"
+
 
 function main
 PARA ZUSER,cSENHA
