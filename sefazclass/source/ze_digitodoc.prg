@@ -5,6 +5,14 @@ José Quintas
 2017.11.27 - Validação PIS
 */
 
+FUNCTION IsCnpj( cValue )
+
+   RETURN Len( SoNumeros( cValue ) ) == 14
+
+FUNCTION IsCpf( cValue )
+
+   RETURN Len( SoNumeros( cValue ) ) == 11
+
 STATIC FUNCTION ValidCnpj( cCnpj )
 
    LOCAL cNumero, lOk, cPicture := "@R 99.999.999/9999-99"
@@ -165,17 +173,16 @@ FUNCTION ValidCnhImpresso( cNumero )
 
 FUNCTION ValidGTIN( cCodigo )
 
-   LOCAL lOk := .T., nSoma := 0, nCont, nMultiplicador
+   LOCAL lOk := .T., nSoma := 0, cChar, nMultiplicador
 
    IF Val( cCodigo ) == 0
       cCodigo := Pad( "SEM GTIN", 14 )
    ELSE
       cCodigo := SoNumeros( cCodigo )
-      cCodigo := Padl( cCodigo, 14, "0" )
       nMultiplicador = 3
       nSoma := 0
-      FOR nCont = 1 To 13
-         nSoma += ( Val( Substr( cCodigo, nCont, 1 ) ) * nMultiplicador )
+      FOR EACH cChar IN Left( cCodigo, Len( cCodigo ) - 1 ) DESCEND
+         nSoma += ( Val( cChar ) * nMultiplicador )
          nMultiplicador := iif( nMultiplicador == 1, 3, 1 )
       NEXT
       nSoma := nSoma - ( Int( nSoma / 10 ) * 10 )
