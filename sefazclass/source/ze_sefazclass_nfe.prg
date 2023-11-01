@@ -25,8 +25,8 @@ CREATE CLASS SefazClass_nfe
    METHOD NFeDownload( cCnpj, cChave, cCertificado, cAmbiente ) INLINE ::NfeDistribuicaoDfe( cCnpj, "", "", cChave, ::UFCodigo( Left( cChave, 2 ) ), cCertificado, cAmbiente )
 
    //METHOD NFeConsultaDest( cCnpj, cUltNsu, cIndNFe, cIndEmi, cUf, cCertificado, cAmbiente )
-   METHOD NFeConsultaProtocolo( cChave, cCertificado, cAmbiente )
-   METHOD NFeConsultaRecibo( cRecibo, cUF, cCertificado, cAmbiente )
+   METHOD NFeProtocolo( cChave, cCertificado, cAmbiente )
+   METHOD NFeRetEnvio( cRecibo, cUF, cCertificado, cAmbiente )
    METHOD NFeDistribuicaoDFe( cCnpj, cUltNSU, cNSU, cChave, cUF, cCertificado, cAmbiente )
    METHOD NFeEvento( cChave, nSequencia, cTipoEvento, cXml, cCertificado, cAmbiente )
    METHOD NFeEventoAutor( cChave, cCnpj, cOrgaoAutor, ctpAutor, cverAplic, cAutorCnpj, ctpAutorizacao, cCertificado, cAmbiente )
@@ -37,9 +37,9 @@ CREATE CLASS SefazClass_nfe
    METHOD NFeGeraAutorizado( cXmlAssinado, cXmlProtocolo )
    METHOD NFeGeraEventoAutorizado( cXmlAssinado, cXmlProtocolo )
    METHOD NFeInutiliza( cAno, cCnpj, cMod, cSerie, cNumIni, cNumFim, cJustificativa, cUF, cCertificado, cAmbiente )
-   METHOD NFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente, cIndSinc )
-   METHOD NFeStatusServico( cUF, cCertificado, cAmbiente )
-   METHOD NFeStatusServicoSVC( cUF, cCertificado, cAmbiente, lSVCAN )
+   METHOD NFeEnvio( cXml, cUF, cCertificado, cAmbiente, cIndSinc )
+   METHOD NFeStatus( cUF, cCertificado, cAmbiente )
+   METHOD NFeStatusSVC( cUF, cCertificado, cAmbiente, lSVCAN )
    METHOD NFeContingencia( cXml, cUF, cCertificado, cAmbiente )
    METHOD NFeConsultaGTIN( cGTIN, cCertificado )
    METHOD NFeAddCancelamento( cXmlAssinado, cXmlCancelamento )
@@ -56,11 +56,9 @@ METHOD NFeConsultaCadastro( cCnpj, cUF, cCertificado, cAmbiente ) CLASS SefazCla
    ::aSoapUrlList := WS_NFE_CONSULTACADASTRO
    ::Setup( cUF, cCertificado, cAmbiente )
    IF ::cUF $ "AM,BA,MG,PE"
-      ::cSoapAction  := "CadConsultaCadastro2"
-      ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro2"
+      ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro2/CadConsultaCadastro2"
    ELSE
-      ::cSoapAction := "consultaCadastro"
-      ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4"
+      ::cSoapAction := "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/consultaCadastro"
    ENDIF
 
    ::cXmlEnvio    := [<ConsCad versao="2.00" ] + WS_XMLNS_NFE + [>]
@@ -80,8 +78,7 @@ METHOD NFeConsultaGTIN( cGTIN, cCertificado ) CLASS SefazClass_nfe
    ::aSoapUrlList := WS_NFE_CONSULTAGTIN
    ::cVersao      := "1.00"
    ::Setup( ::cUF, cCertificado )
-   ::cSoapAction := "ccgConsGTIN"
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/ccgConsGtin"
+   ::cSoapAction := "http://www.portalfiscal.inf.br/nfe/wsdl/ccgConsGtin/ccgConsGTIN"
 
    ::cXmlEnvio := [<consGTIN versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">]
    ::cXmlEnvio += [<GTIN>] + AllTrim( cGTIN ) + [</GTIN>]
@@ -90,7 +87,7 @@ METHOD NFeConsultaGTIN( cGTIN, cCertificado ) CLASS SefazClass_nfe
 
    RETURN ::cXmlRetorno
 
-METHOD NFeConsultaProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass_nfe
+METHOD NFeProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass_nfe
 
    hb_Default( @::cVersao, WS_NFE_DEFAULT )
    ::cProjeto := WS_PROJETO_NFE
@@ -100,14 +97,12 @@ METHOD NFeConsultaProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass_
    DO CASE
    CASE ::cUF $ "AC,AL,AP,DF,ES,MS,PB,PE,PI,RJ,RN,RO,RR,SC,SE,TO" // TODOS que usam SVRS
       IF ::cUF == "MS" .AND. DfeModFis( cChave ) == "65"
-         ::cSoapAction := "NfeConsultaProtocolo"
+         ::cSoapAction := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4/NfeConsultaProtocolo"
       ELSE
-         ::cSoapAction := "nfeConsultaNF"
+         ::cSoapAction := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4/nfeConsultaNF"
       ENDIF
-      ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4"
    OTHERWISE
-      ::cSoapAction := "nfeConsultaNF"
-      ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NfeConsultaProtocolo4"
+      ::cSoapAction := "http://www.portalfiscal.inf.br/nfe/wsdl/NfeConsultaProtocolo4/nfeConsultaNF"
    ENDCASE
    ::cXmlEnvio    := [<consSitNFe versao="] + ::cVersao + [" ] + WS_XMLNS_NFE + [>]
    ::cXmlEnvio    +=    XmlTag( "tpAmb", ::cAmbiente )
@@ -139,8 +134,7 @@ METHOD NFeDistribuicaoDFe( cCnpj, cUltNSU, cNSU, cChave, cUF, cCertificado, cAmb
 
    ::aSoapUrlList := WS_NFE_DISTRIBUICAO
    ::Setup( "AN", cCertificado, cAmbiente )
-   ::cSoapAction  := "nfeDistDFeInteresse"
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe/nfeDistDFeInteresse"
    ::cXmlEnvio    := [<distDFeInt ] + WS_XMLNS_NFE + [ versao="1.01">]
    ::cXmlEnvio    +=    XmlTag( "tpAmb", ::cAmbiente )
    IF ! Empty( cUF )
@@ -176,11 +170,10 @@ METHOD NFeEvento( cChave, nSequencia, cTipoEvento, cXml, cCertificado, cAmbiente
    ::cNFCe := iif( DfeModFis( cChave ) == "65", "S", "N" )
    ::aSoapUrlList := WS_NFE_EVENTO
    IF ::cUF $ "MS"
-      ::cSoapAction  := "RecepcaoEvento"
+      ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/RecepcaoEvento"
    ELSE
-      ::cSoapAction  := "nfeRecepcaoEvento"
+      ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEvento"
    ENDIF
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4"
    ::Setup( cChave, cCertificado, cAmbiente )
    ::cXmlDocumento := [<evento versao="1.00" ] + WS_XMLNS_NFE + [>]
    ::cXmlDocumento +=    [<infEvento Id="ID] + cTipoEvento + cChave + StrZero( nSequencia, 2 ) + [">]
@@ -217,8 +210,7 @@ METHOD NFeEventoAutor( cChave, cCnpj, cOrgaoAutor, ctpAutor, cverAplic, cAutorCn
    ::cNFCe := iif( DfeModFis( cChave ) == "65", "S", "N" )
    ::aSoapUrlList := WS_NFE_EVENTO
    ::cUF          := "AN"
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4"
-   ::cSoapAction  := "nfeRecepcaoEventoNF"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEventoNF"
    ::Setup( "AN", cCertificado, cAmbiente )
 
    cDescEvento := "Ator interessado na NF-e"
@@ -327,8 +319,7 @@ METHOD NFeEventoManifestacao( cChave, cCnpj, cCodigoEvento, xJust, cCertificado,
    ::cNFCe := iif( DfeModFis( cChave ) == "65", "S", "N" )
    ::aSoapUrlList := WS_NFE_EVENTO
    ::cUF          := "AN"
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4"
-   ::cSoapAction  := "nfeRecepcaoEventoNF"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEventoNF"
    ::Setup( "AN", cCertificado, cAmbiente )
 
    DO CASE
@@ -377,11 +368,10 @@ METHOD NFeInutiliza( cAno, cCnpj, cMod, cSerie, cNumIni, cNumFim, cJustificativa
    ::aSoapUrlList := WS_NFE_INUTILIZA
    ::Setup( cUF, cCertificado, cAmbiente )
    IF ::cUF == "MS"
-      ::cSoapAction := "NfeInutilizacao"
+      ::cSoapAction := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeInutilizacao4/NfeInutilizacao"
    ELSE
-      ::cSoapAction := "nfeInutilizacaoNF"
+      ::cSoapAction := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeInutilizacao4/nfeInutilizacaoNF"
    ENDIF
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeInutilizacao4"
 
    ::cXmlDocumento := [<inutNFe versao="] + ::cVersao + [" ] + WS_XMLNS_NFE + [>]
    ::cXmlDocumento +=    [<infInut Id="ID] + ::UFCodigo( ::cUF ) + Right( cAno, 2 ) + cCnpj + cMod + StrZero( Val( cSerie ), 3 )
@@ -434,7 +424,7 @@ METHOD NFeContingencia( cXml, cUF, cCertificado, cAmbiente ) CLASS SefazClass_nf
 
    RETURN ::cXmlDocumento
 
-METHOD NFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente, cIndSinc ) CLASS SefazClass_nfe
+METHOD NFeEnvio( cXml, cUF, cCertificado, cAmbiente, cIndSinc ) CLASS SefazClass_nfe
 
    LOCAL oDoc, cChave
 
@@ -444,12 +434,8 @@ METHOD NFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente, cIndSinc ) CLASS
 
    ::aSoapUrlList := WS_NFE_AUTORIZACAO
    ::Setup( cUF, cCertificado, cAmbiente )
-   ::cSoapAction  := "nfeAutorizacaoLote"
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote"
 
-   IF Empty( cLote )
-      cLote := "1"
-   ENDIF
    IF cXml != NIL
       ::cXmlDocumento := cXml
    ENDIF
@@ -462,7 +448,7 @@ METHOD NFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente, cIndSinc ) CLASS
 
    ::cXmlEnvio    := [<enviNFe versao="] + ::cVersao + [" ] + WS_XMLNS_NFE + [>]
    // FOR EACH cXmlNota IN aXmlNotas
-   ::cXmlEnvio    += XmlTag( "idLote", cLote )
+   ::cXmlEnvio    += XmlTag( "idLote", "1" )
    ::cXmlEnvio    += XmlTag( "indSinc", cIndSinc )
    ::cXmlEnvio    += ::cXmlDocumento
    // NEXT
@@ -475,12 +461,12 @@ METHOD NFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente, cIndSinc ) CLASS
       ::cMotivo    := XmlNode( ::cXmlRecibo, "xMotivo" )
       IF ! Empty( ::cRecibo )
          Inkey( ::nTempoEspera )
-         ::NfeConsultaRecibo()
+         ::NfeRetEnvio()
          IF hb_ASCan( { "104", "105" }, ::cStatus,,, .T. ) != 0
             oDoc   := XmlToDoc( ::cXmlDocumento, .F. )
             cChave := oDoc:cChave
             Inkey( ::nTempoEspera )
-            ::NfeConsultaProtocolo( cChave, ::cUF, ::cCertificado, ::cAmbiente )
+            ::NfeProtocolo( cChave, ::cUF, ::cCertificado, ::cAmbiente )
             IF ! Empty( XmlNode( ::cXmlRetorno, "infProt" ) )
                ::cXmlProtocolo := ::cXmlRetorno
             ENDIF
@@ -506,7 +492,7 @@ METHOD NFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente, cIndSinc ) CLASS
 
    RETURN ::cXmlRetorno
 
-METHOD NFeConsultaRecibo( cRecibo, cUF, cCertificado, cAmbiente ) CLASS SefazClass_nfe
+METHOD NFeRetEnvio( cRecibo, cUF, cCertificado, cAmbiente ) CLASS SefazClass_nfe
 
    hb_Default( @::cVersao, WS_NFE_DEFAULT )
    ::cProjeto := WS_PROJETO_NFE
@@ -516,8 +502,7 @@ METHOD NFeConsultaRecibo( cRecibo, cUF, cCertificado, cAmbiente ) CLASS SefazCla
 
    ::aSoapUrlList := WS_NFE_RETAUTORIZACAO
    ::Setup( cUF, cCertificado, cAmbiente )
-   ::cSoapAction  := "nfeRetAutorizacaoLote"
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote"
 
    ::cXmlEnvio     := [<consReciNFe versao="] + ::cVersao + [" ] + WS_XMLNS_NFE + [>]
    ::cXmlEnvio     +=    XmlTag( "tpAmb", ::cAmbiente )
@@ -535,18 +520,17 @@ METHOD NFeConsultaRecibo( cRecibo, cUF, cCertificado, cAmbiente ) CLASS SefazCla
 
    RETURN ::cXmlRetorno
 
-METHOD NFeStatusServico( cUF, cCertificado, cAmbiente ) CLASS SefazClass_nfe
+METHOD NFeStatus( cUF, cCertificado, cAmbiente ) CLASS SefazClass_nfe
 
    hb_Default( @::cVersao, WS_NFE_DEFAULT )
    ::cProjeto := WS_PROJETO_NFE
    ::aSoapUrlList := WS_NFE_STATUSSERVICO
    ::Setup( cUF, cCertificado, cAmbiente )
    IF ::cUF $ 'MS' .AND. ::cNFCE == "S" //a MS status NFC e NFE é diferente o cSoapAction, tive que controlar
-      ::cSoapAction  := "NfeStatusServico"
+      ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/NfeStatusServico"
    ELSE
-      ::cSoapAction  := "nfeStatusServicoNF"
+      ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF"
    ENDIF
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4"
 
    ::cXmlEnvio    := [<consStatServ versao="] + ::cVersao + [" ] + WS_XMLNS_NFE + [>]
    ::cXmlEnvio    +=    XmlTag( "tpAmb", ::cAmbiente )
@@ -558,7 +542,7 @@ METHOD NFeStatusServico( cUF, cCertificado, cAmbiente ) CLASS SefazClass_nfe
 
    RETURN ::cXmlRetorno
 
-METHOD NFeStatusServicoSVC( cUF, cCertificado, cAmbiente, lSVCAN ) CLASS SefazClass_nfe
+METHOD NFeStatusSVC( cUF, cCertificado, cAmbiente, lSVCAN ) CLASS SefazClass_nfe
 
    LOCAL cVersao
 
@@ -569,8 +553,7 @@ METHOD NFeStatusServicoSVC( cUF, cCertificado, cAmbiente, lSVCAN ) CLASS SefazCl
 
    ::aSoapUrlList := WS_NFE_STATUSSERVICO
    ::Setup( cUF, cCertificado, cAmbiente )
-   ::cSoapAction  := "NfeStatusServico"
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/NfeStatusServico"
 
    IF lSVCAN
       ::cSoapURL  := ::SoapUrlNFe( ::aSoapUrlList, "SVCAN", cVersao )

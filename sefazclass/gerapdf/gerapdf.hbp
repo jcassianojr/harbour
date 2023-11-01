@@ -19,7 +19,10 @@ c:\develop\harbour\sefazclass\source\ze_sefazassina.prg
 c:\develop\harbour\sefazclass\source\ze_sefazxmlclass.prg
 c:\develop\harbour\sefazclass\source\ze_sefazcapicom.prg
 c:\develop\harbour\sefazclass\source\ze_digitodoc.prg
-
+c:\develop\harbour\sefazclass\source\ze_sefazclass_bpe
+c:\develop\harbour\sefazclass\source\ze_sefazclass_cte
+c:\develop\harbour\sefazclass\source\ze_sefazclass_mdfe
+c:\develop\harbour\sefazclass\source\ze_sefazclass_nfe
 hbwin.hbc
 hbzebra.hbc
 hbhpdf.hbc

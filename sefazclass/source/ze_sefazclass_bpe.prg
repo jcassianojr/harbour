@@ -8,20 +8,19 @@ ZE_SEFAZCLASS_BPE - Rotinas pra BPE
 
 CREATE CLASS SefazClass_BPE
 
-   METHOD BPeConsultaProtocolo( cChave, cCertificado, cAmbiente )
-   METHOD BPeStatusServico( cUF, cCertificado, cAmbiente )
+   METHOD BPeProtocolo( cChave, cCertificado, cAmbiente )
+   METHOD BPeStatus( cUF, cCertificado, cAmbiente )
    METHOD SoapUrlBpe( aSoapList, cUF, cVersao )
 
    ENDCLASS
 
-METHOD BPeConsultaProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass_BPE
+METHOD BPeProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass_BPE
 
    hb_Default( @::cVersao, WS_BPE_DEFAULT )
    ::cProjeto := WS_PROJETO_BPE
    ::aSoapUrlList := WS_BPE_CONSULTAPROTOCOLO
    ::Setup( cChave, cCertificado, cAmbiente )
-   ::cSoapAction  := "BpeConsulta"
-   ::cSoapService := "http://www.portalfiscal.inf.br/bpe/wsdl/BPeConsulta/bpeConsultaBP"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/bpe/wsdl/BPeConsulta/bpeConsultaBP/BpeConsulta"
 
    ::cXmlEnvio := [<consSitBPe> versao="] + ::cVersao + [" ] + WS_XMLNS_BPE + [>]
    ::cXmlEnvio +=   XmlTag( "tpAmb", ::cAmbiente )
@@ -29,7 +28,7 @@ METHOD BPeConsultaProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass_
    ::cXmlEnvio +=   XmlTag( "chBPe", cChave )
    ::cXmlEnvio += [</conssitBPe>]
    IF DfeModFis( cChave ) != "63"
-      ::cXmlRetorno := [<erro text="*ERRO* BpeConsultaProtocolo() Chave não se refere a BPE" />]
+      ::cXmlRetorno := [<erro text="*ERRO* BpeProtocolo() Chave não se refere a BPE" />]
    ELSE
       ::XmlSoapPost()
    ENDIF
@@ -40,14 +39,13 @@ METHOD BPeConsultaProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass_
 
    RETURN ::cXmlRetorno
 
-METHOD BPeStatusServico( cUF, cCertificado, cAmbiente ) CLASS SefazClass_BPE
+METHOD BPeStatus( cUF, cCertificado, cAmbiente ) CLASS SefazClass_BPE
 
    hb_Default( @::cVersao, WS_BPE_DEFAULT )
    ::cProjeto := WS_PROJETO_BPE
    ::aSoapUrlList := WS_BPE_STATUSSERVICO
    ::Setup( cUF, cCertificado, cAmbiente )
-   ::cSoapAction  := "BpeStatusServicoBP"
-   ::cSoapService := "http://www.portalfiscal.inf.br/bpe/wsdl/BPeStatusServico"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/bpe/wsdl/BPeStatusServico/BpeStatusServicoBP"
 
    ::cXmlEnvio := [<consStatServBPe versao="] + ::cVersao + [" ] + WS_XMLNS_BPE + [>]
    ::cXmlEnvio +=    XmlTag( "tpAmb", ::cAmbiente )
@@ -67,4 +65,3 @@ METHOD SoapUrlBpe( aSoapList, cUF, cVersao ) CLASS SefazClass_bpe
    ENDIF
 
    RETURN cUrl
-

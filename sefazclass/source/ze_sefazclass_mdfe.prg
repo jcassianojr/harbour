@@ -15,8 +15,8 @@ ZE_SEFAZCLASS_MDFE - Rotinas pra MDFe
 CREATE CLASS SefazClass_MDFE
 
    METHOD MDFeConsNaoEnc( CUF, cCNPJ , cCertificado, cAmbiente )
-   METHOD MDFeConsultaProtocolo( cChave, cCertificado, cAmbiente )
-   METHOD MDFeConsultaRecibo( cRecibo, cUF, cCertificado, cAmbiente )
+   METHOD MDFeProtocolo( cChave, cCertificado, cAmbiente )
+   METHOD MDFeRetEnvio( cRecibo, cUF, cCertificado, cAmbiente )
    METHOD MDFeDistribuicaoDFe( cCnpj, cUltNSU, cNSU, cUF, cCertificado, cAmbiente )
    METHOD MDFeEvento( cChave, nSequencia, cTipoEvento, cXml, cCertificado, cAmbiente )
    METHOD MDFeEventoCancela( cChave, nSequencia, nProt, xJust, cCertificado, cAmbiente )
@@ -25,9 +25,9 @@ CREATE CLASS SefazClass_MDFE
    METHOD MDFeEventoPagamento( cChave, nSequencia, cXmlPagamento, cCertificado, cAmbiente )
    METHOD MDFeGeraAutorizado( cXmlAssinado, cXmlProtocolo )
    METHOD MDFeGeraEventoAutorizado( cXmlAssinado, cXmlProtocolo )
-   METHOD MDFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente )
+   METHOD MDFeEnvio( cXml, cUF, cCertificado, cAmbiente )
    //METHOD MDFeRecepcaoSinc( cXml, cUF, cCertificado, cAmbiente )
-   METHOD MDFeStatusServico( cUF, cCertificado, cAmbiente )
+   METHOD MDFeStatus( cUF, cCertificado, cAmbiente )
    METHOD SoapUrlMdfe( aSoapList, cUF, cVersao )
 
    ENDCLASS
@@ -36,8 +36,7 @@ METHOD MDFeConsNaoEnc( cUF, cCNPJ , cCertificado, cAmbiente ) CLASS SefazClass_M
 
    hb_Default( @::cVersao, WS_MDFE_DEFAULT )
    ::cProjeto := WS_PROJETO_MDFE
-   ::cSoapAction  := "mdfeConsNaoEnc"
-   ::cSoapService := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeConsNaoEnc"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeConsNaoEnc/mdfeConsNaoEnc"
    ::aSoapUrlList := WS_MDFE_CONSULTANAOENCERRADOS
    ::Setup( cUF, cCertificado, cAmbiente )
 
@@ -54,14 +53,13 @@ METHOD MDFeConsNaoEnc( cUF, cCNPJ , cCertificado, cAmbiente ) CLASS SefazClass_M
 
    RETURN ::cXmlRetorno
 
-METHOD MDFeConsultaProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass_MDFE
+METHOD MDFeProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass_MDFE
 
    hb_Default( @::cVersao, WS_MDFE_DEFAULT )
    ::cProjeto := WS_PROJETO_MDFE
    ::aSoapUrlList := WS_MDFE_CONSULTAPROTOCOLO
    ::Setup( cChave, cCertificado, cAmbiente )
-   ::cSoapAction  := "mdfeConsultaMDF"
-   ::cSoapService := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeConsulta"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeConsulta/mdfeConsultaMDF"
 
    ::cXmlEnvio := [<consSitMDFe versao="] + ::cVersao + [" ] + WS_XMLNS_MDFE + [>]
    ::cXmlEnvio +=    XmlTag( "tpAmb", ::cAmbiente )
@@ -69,7 +67,7 @@ METHOD MDFeConsultaProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass
    ::cXmlEnvio +=    XmlTag( "chMDFe", cChave )
    ::cXmlEnvio += [</consSitMDFe>]
    IF DfeModFis( cChave ) != "58"
-      ::cXmlRetorno := [<erro text="*ERRO* MDFEConsultaProtocolo() Chave não se refere a MDFE" />]
+      ::cXmlRetorno := [<erro text="*ERRO* MDFEProtocolo() Chave não se refere a MDFE" />]
    ELSE
       ::XmlSoapPost()
       ::cXmlProtocolo := ::cXmlRetorno
@@ -81,7 +79,7 @@ METHOD MDFeConsultaProtocolo( cChave, cCertificado, cAmbiente ) CLASS SefazClass
 
    RETURN ::cXmlRetorno
 
-METHOD MDFeConsultaRecibo( cRecibo, cUF, cCertificado, cAmbiente ) CLASS SefazClass_MDFE
+METHOD MDFeRetEnvio( cRecibo, cUF, cCertificado, cAmbiente ) CLASS SefazClass_MDFE
 
    hb_Default( @::cVersao, WS_MDFE_DEFAULT )
    ::cProjeto := WS_PROJETO_MDFE
@@ -90,8 +88,7 @@ METHOD MDFeConsultaRecibo( cRecibo, cUF, cCertificado, cAmbiente ) CLASS SefazCl
    ENDIF
    ::aSoapUrlList := WS_MDFE_RETAUTORIZACAO
    ::Setup( cUF, cCertificado, cAmbiente )
-   ::cSoapAction  := "mdfeRetRecepcao"
-   ::cSoapService := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeRetRecepcao"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeRetRecepcao/mdfeRetRecepcao"
 
    ::cXmlEnvio := [<consReciMDFe versao="] + ::cVersao + [" ] + WS_XMLNS_MDFE + [>]
    ::cXmlEnvio +=    XmlTag( "tpAmb", ::cAmbiente )
@@ -122,8 +119,7 @@ METHOD MDFeDistribuicaoDFe( cCnpj, cUltNSU, cNSU, cUF, cCertificado, cAmbiente )
 
    ::aSoapUrlList := WS_MDFE_DISTRIBUICAO
    ::Setup( cUF, cCertificado, cAmbiente )
-   ::cSoapAction  := "mdfeDistDFeInteresse" // verificar na comunicação
-   ::cSoapService := "http://www.portalfiscal.inf.br/nfe/wsdl/MDFeDistribuicaoDFe"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/MDFeDistribuicaoDFe/mdfeDistDFeInteresse" // verificar na comunicação
 
    ::cXmlEnvio    := [<distDFeInt versao="] + ::cVersao + [" ] + WS_XMLNS_MDFE + [>]
    ::cXmlEnvio    +=    XmlTag( "tpAmb", ::cAmbiente )
@@ -155,8 +151,7 @@ METHOD MDFeEvento( cChave, nSequencia, cTipoEvento, cXml, cCertificado, cAmbient
    ::cProjeto := WS_PROJETO_MDFE
 
    ::aSoapUrlList := WS_MDFE_EVENTO
-   ::cSoapAction  := "mdfeRecepcaoEvento"
-   ::cSoapService := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeRecepcaoEvento"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeRecepcaoEvento/mdfeRecepcaoEvento"
    ::Setup( cChave, cCertificado, cAmbiente )
 
    ::cXmlDocumento := [<eventoMDFe versao="] + ::cVersao + [" ] + WS_XMLNS_MDFE + [>]
@@ -303,17 +298,15 @@ METHOD MDFeGeraEventoAutorizado( cXmlAssinado, cXmlProtocolo ) CLASS SefazClass_
 
    RETURN NIL
 
-METHOD MDFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente ) CLASS SefazClass_MDFE
+METHOD MDFeEnvio( cXml, cUF, cCertificado, cAmbiente ) CLASS SefazClass_MDFE
 
    LOCAL oDoc, cBlocoXml, aList, nPos, cURLConsulta := "http:"
 
    hb_Default( @::cVersao, WS_MDFE_DEFAULT )
-   hb_Default( @cLote, "1" )
    ::cProjeto := WS_PROJETO_MDFE
    ::aSoapUrlList := WS_MDFE_AUTORIZACAO
    ::Setup( cUF, cCertificado, cAmbiente )
-   ::cSoapAction  := "MDFeRecepcao"
-   ::cSoapService := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeRecepcao"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeRecepcao/MDFeRecepcao"
 
    IF cXml != NIL
       ::cXmlDocumento := cXml
@@ -338,7 +331,7 @@ METHOD MDFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente ) CLASS SefazCla
       ::cXmlDocumento := StrTran( ::cXmlDocumento, "</infMDFe>", "</infMDFe>" + cBlocoXml )
    ENDIF
    ::cXmlEnvio  := [<enviMDFe versao="] + ::cVersao + [" ] + WS_XMLNS_MDFE + [>]
-   ::cXmlEnvio  +=    XmlTag( "idLote", cLote )
+   ::cXmlEnvio  +=    XmlTag( "idLote", "1" )
    ::cXmlEnvio  +=    ::cXmlDocumento
    ::cXmlEnvio  += [</enviMDFe>]
    ::XmlSoapPost()
@@ -350,7 +343,7 @@ METHOD MDFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente ) CLASS SefazCla
    ENDIF
    IF ! Empty( ::cRecibo ) .AND. ::cStatus != "999"
       Inkey( ::nTempoEspera )
-      ::MDFeConsultaRecibo()
+      ::MDFeRetEnvio()
       ::MDFeGeraAutorizado( ::cXmlDocumento, ::cXmlProtocolo )
    ENDIF
 
@@ -363,7 +356,6 @@ METHOD MDFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente ) CLASS SefazCla
 //   ::aSoapUrlList := WS_MDFE_RECEPCAOSINC
 //   ::Setup( cUF, cCertificado, cAmbiente )
 //   ::cSoapAction := ""
-//   ::cSoapService := ""
 //
 //   IF cXml != NIL
 //      ::cXmlDocumento := cXml
@@ -381,14 +373,13 @@ METHOD MDFeLoteEnvia( cXml, cLote, cUF, cCertificado, cAmbiente ) CLASS SefazCla
 
 //   RETURN ::cXmlRetorno
 
-METHOD MDFeStatusServico( cUF, cCertificado, cAmbiente ) CLASS SefazClass_MDFE
+METHOD MDFeStatus( cUF, cCertificado, cAmbiente ) CLASS SefazClass_MDFE
 
    hb_Default( @::cVersao, WS_MDFE_DEFAULT )
    ::cProjeto := WS_PROJETO_MDFE
    ::aSoapUrlList := WS_MDFE_STATUSSERVICO
    ::Setup( cUF, cCertificado, cAmbiente )
-   ::cSoapAction  := "mdfeStatusServicoMDF"
-   ::cSoapService := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeStatusServico"
+   ::cSoapAction  := "http://www.portalfiscal.inf.br/mdfe/wsdl/MDFeStatusServico/mdfeStatusServicoMDF"
 
    ::cXmlEnvio := [<consStatServMDFe versao="] + ::cVersao + [" ] + WS_XMLNS_MDFE + [>]
    ::cXmlEnvio +=    XmlTag( "tpAmb", ::cAmbiente )
@@ -410,4 +401,3 @@ METHOD SoapUrlMdfe( aSoapList, cUF, cVersao ) CLASS Sefazclass_mdfe
    HB_SYMBOL_UNUSED( cUF )
 
    RETURN cUrl
-
