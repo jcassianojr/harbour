@@ -293,15 +293,6 @@ METHOD GeraPDF( cFilePDF ) CLASS hbNFeDaNFe
       ::oPDFFontBold := HPDF_GetFont( ::oPdf, "Courier-Bold", "CP1252" )
    ENDIF
 
-#ifdef __XHARBOUR__
-   IF ! File( "fontes\Code128bWinLarge.afm" ) .OR. ! File( "fontes\Code128bWinLarge.pfb" )
-      ::cRetorno := "Arquivos fontes\Code128bWinLarge, nao encontrados...!"
-      RETURN .F.
-   ENDIF
-   ::cFonteCode128  := HPDF_LoadType1FontFromFile( ::oPdf, "fontes\Code128bWinLarge.afm", "fontes\Code128bWinLarge.pfb" )   // Code 128
-   ::cFonteCode128F := HPDF_GetFont( ::oPdf, ::cFonteCode128, "WinAnsiEncoding" )
-#endif
-
    ::nFolha := 1
    ::NovaPagina()
 
@@ -477,16 +468,7 @@ METHOD QuadroNotaFiscal() CLASS hbNFeDaNFe
 
    // codigo barras
    ::DrawBox( 370, ::nLinhaPdf - 35, 220, 35, ::nLarguraBox )
-#ifdef __XHARBOUR__
-   // Modificado por Anderson Camilo em 04/04/2012
-   // oCode128 := HPDF_LoadType1FontFromFile(::oPdf, 'fontes\Code128bWin.afm', 'fontes\Code128bWin.pfb')
-   // oCode128F := HPDF_GetFont( ::oPdf, oCode128, "FontSpecific" )
-   // ::DrawTexto( 380, ::nLinhaPdf - 8, 585, NIL, "{"+::cChave+"~", HPDF_TALIGN_CENTER, NIL, oCode128F, 8 )
-   // ::DrawTexto( 380, ::nLinhaPdf - 18.2, 585, NIL, "{"+::cChave+"~", HPDF_TALIGN_CENTER, NIL, oCode128F, 8 )
-   ::DrawTexto( 380, ::nLinhaPdf - 2, 585, NIL, ::xHarbourCode128c( ::cChave ), HPDF_TALIGN_CENTER, NIL, ::cFonteCode128F, 15 )
-#else
    ::DrawBarcode128( ::cChave, 385, ::nLinhaPdf - 32, 0.7, 30 )
-#endif
 
    // chave de acesso
    ::DrawBox( 370, ::nLinhaPdf - 55, 220, 55, ::nLarguraBox )
@@ -678,7 +660,10 @@ METHOD QuadroDuplicatas() CLASS hbNFeDaNFe
             nColuna := 1
          ENDIF
          IF ( nPos := hb_AScan( aList, { | e | e[ 1 ] == cNumero } ) ) != 0
-            ::DrawTexto( 6 + ( ( ( nTamForm ) / 3 ) * ( nColuna - 1 ) ), ::nLinhaPdf - 1, 122 + ( ( ( nTamForm ) / 3 ) * ( nColuna - 1 ) ), NIL, aList[ nPos, 2 ], HPDF_TALIGN_LEFT, ::oPDFFontNormal, 8 )
+            ::DrawTexto( 6 + ( ( ( nTamForm ) / 3 ) * ( nColuna - 1 ) ), ::nLinhaPdf - 1, ;
+            122 + ( ( ( nTamForm ) / 3 ) * ( nColuna - 1 ) ), NIL, ;
+            iif( cNumero == "99", XmlNode( cTPag, "xPag" ), aList[ nPos, 2 ] ), ;
+            HPDF_TALIGN_LEFT, ::oPDFFontNormal, 8 )
          ENDIF
          ::DrawTexto( 130 + ( ( ( nTamForm ) / 3 ) * ( nColuna - 1 ) ), ::nLinhaPdf - 1, 195 + ( ( ( nTamForm ) / 3 ) * ( nColuna - 1 ) ), NIL, cValor, HPDF_TALIGN_RIGHT, ::oPDFFontNormal, 8 )
          nColuna++
@@ -1082,7 +1067,7 @@ METHOD DefineColunasProdutos() CLASS hbNFeDaNFe
    ::aLayout[ LAYOUT_EAN,       LAYOUT_CONTEUDO ]  := { || ::aItem[ "cEAN" ] }
    ::aLayout[ LAYOUT_CST,       LAYOUT_TITULO1 ]   := "CST"
    ::aLayout[ LAYOUT_CST,       LAYOUT_TITULO2 ]   := "CSOSN"
-   ::aLayout[ LAYOUT_CST,       LAYOUT_CONTEUDO ]  := { || ::aItemICMS[ "orig" ] + iif( ::aEmit[ "CRT" ] == "1", ::aItemICMS[ "CSOSN" ], ::aItemICMS[ "CST" ] ) }
+   ::aLayout[ LAYOUT_CST,       LAYOUT_CONTEUDO ]  := { || ::aItemICMS[ "orig" ] + ::aItemICMS[ "CSOSN" ] + ::aItemICMS[ "CST" ] }
    ::aLayout[ LAYOUT_CFOP,      LAYOUT_TITULO1 ]   := "CFOP"
    ::aLayout[ LAYOUT_CFOP,      LAYOUT_CONTEUDO ]  := { || ::aItem[ "CFOP" ] }
    ::aLayout[ LAYOUT_UNIDADE,   LAYOUT_TITULO1 ]   := "UNID"

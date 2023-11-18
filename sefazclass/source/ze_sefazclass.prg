@@ -2,34 +2,36 @@
 /*
 ZE_SEFAZCLASS - Rotinas pra comunicação com SEFAZ
 José Quintas
-
-2019.07 - Início de desativação 3.10
-2019.09 - TODO: cMsg e xMsg no retorno da Fazenda com avisos da Sefaz
 */
 
 #include "hbclass.ch"
 #include "sefazclass.ch"
-#include "hb2xhb.ch"
 
-#ifdef __XHARBOUR__
-#define ALL_PARAMETERS P1, P2, P3, P4, P5, P6, P7, P8, P9, P10
-#else
-#define ALL_PARAMETERS ...
-#endif
+CREATE CLASS SefazClass
 
-FUNCTION SefazClassValidaXml( cXml, cXsd )
-
-   LOCAL oSefaz := SefazClass():New()
-
-   RETURN oSefaz:ValidaXml( cXml, cXsd )
-
-FUNCTION SefazClassTipoXml( cXml )
-
-   LOCAL oSefaz := SefazClass():New()
-
-   RETURN oSefaz:TipoXml( cXml )
-
-CREATE CLASS SefazClass INHERIT Sefazclass_BPE, SefazClass_CTE, SefazClass_MDFE, SefazClass_NFE
+   /* compatibilidade */
+   METHOD cIndSinc( cValue )                SETGET
+   METHOD cFusoHorario                      SETGET
+   METHOD CTeConsultaProtocolo( ... )       INLINE ::CTeProtocolo( ... )
+   METHOD CTeConsultaRecibo( ... )          INLINE ::CTeRetEnvio( ... )
+   METHOD CTeLoteEnvia( cXml, cLote, ... )  INLINE (cLote),::CTeEnvio( cXml, ... )
+   METHOD CTeStatusServico( ... )           INLINE ::CTeStatus( ... )
+   METHOD NFeLoteEnvia( cXml, cLote, ... )  INLINE (cLote), ::NFeEnvio( cXml, ... )
+   METHOD NFeConsultaRecibo( ... )          INLINE ::NFeRetEnvio( ... )
+   METHOD NFeConsultaProtocolo( ... )       INLINE ::NFeProtocolo( ... )
+   METHOD NFeStatusServico( ... )           INLINE ::NFeStatus( ... )
+   METHOD NFeConsultaCadastro( ... )        INLINE ::NFeCadastro( ... )
+   METHOD NFeConsultaGTIN( ... )            INLINE ::NFeGTIN( ... )
+   METHOD NFeDistribuicaoDFe( ... )         INLINE ::NFeDistribuicao( ... )
+   METHOD NFeConsultaDest( ... )            INLINE ::NfeDestinadas( ... )
+   METHOD MDFeLoteEnvia( cXml, cLote, ...)  INLINE (cLote), ::MDFeEnvio( cXml, ... )
+   METHOD MDFeConsultaRecibo( ... )         INLINE ::MDFeRetEnvio( ... )
+   METHOD MDFeConsultaProtocolo( ... )      INLINE ::MDFeProtocolo( ... )
+   METHOD MDFeStatusServico( ... )          INLINE ::MDFeStatus( ... )
+   METHOD MDFeConsNaoEnc( ... )             INLINE ::MDFeEmAberto( ... )
+   METHOD MDFeDistribuicaoDFe( ...)         INLINE ::MDFeDistribuicao( ... )
+   METHOD MDFeEventoInclusaoCondutor( ... ) INLINE ::MDFeCondutor( ... )
+   METHOD NFeStatusServicoSVC( ... )        INLINE ::NFeStatusSVC( ... )
 
    /* configuração */
    VAR    cProjeto        INIT NIL
@@ -39,7 +41,7 @@ CREATE CLASS SefazClass INHERIT Sefazclass_BPE, SefazClass_CTE, SefazClass_MDFE,
    VAR    cCertificado    INIT ""                      // CN (NOME) do certificado
    /* contingência e sinc/assinc */
    VAR    cScan           INIT "N"                     // Indicar SCAN/SVAN/SVRS testes iniciais
-   VAR    cIndSinc        INIT WS_RETORNA_RECIBO       // Poucas UFs opção de protocolo
+   VAR    lSincrono       INIT .F.                     // Poucas UFs opção de protocolo
    /* pra NFCe */
    VAR    cIdToken        INIT ""                      // Para NFCe obrigatorio identificador do CSC Código de Segurança do Contribuinte
    VAR    cCSC            INIT ""                      // Para NFCe obrigatorio CSC Código de Segurança do Contribuinte
@@ -47,7 +49,6 @@ CREATE CLASS SefazClass INHERIT Sefazclass_BPE, SefazClass_CTE, SefazClass_MDFE,
    VAR    cVersaoQrCode   INIT "2.00"                  // Versao do QRCode
    VAR    nTempoEspera    INIT 10                      // intervalo entre envia lote e consulta recibo
    VAR    nSoapTimeOut    INIT 15000                  // Limite de espera por resposta em segundos * 1000
-   VAR    lEmitenteCPF    INIT .F.                     // Para o caso de CPF ao invés de CNPJ
    VAR    ValidFromDate   INIT ""                      // Validade do certificado
    VAR    ValidToDate     INIT ""                      // Validade do certificado
    VAR    cUFTimeZone     INIT ""                      // Para TimeZone diferente da UF de comunicação
@@ -68,11 +69,63 @@ CREATE CLASS SefazClass INHERIT Sefazclass_BPE, SefazClass_CTE, SefazClass_MDFE,
    VAR    cRecibo         INIT ""                      // Número do recibo
    VAR    cMotivo         INIT ""                      // Motivo constante no Recibo
    /* uso interno */
-VAR    cSoapAction     INIT ""                      // webservice Action
+   VAR    cSoapAction     INIT ""                      // webservice Action
    VAR    cSoapURL        INIT ""                      // webservice Endereço
    VAR    cXmlNameSpace   INIT "xmlns="
    VAR    cNFCE           INIT "N"                     // Porque NFCE tem endereços diferentes
    VAR    aSoapUrlList    INIT {}
+
+   METHOD NFeDownload( cCnpj, cChave, cCertificado, cAmbiente ) ;
+      INLINE ::NfeDistribuicao( cCnpj, "", "", cChave, ::UFCodigo( Left( cChave, 2 ) ), cCertificado, cAmbiente )
+   METHOD BPeProtocolo( ... )             INLINE ze_sefaz_BPeProtocolo( Self, ... )
+   METHOD BPeStatus( ... )                INLINE ze_sefaz_BPeStatus( Self, ... )
+   METHOD CTeAddCancelamento( ... )       INLINE ze_sefaz_CTeAddCancelamento( Self, ... )
+   METHOD CTeEnvio( ... )                 INLINE ze_sefaz_CTeEnvio( Self, ... )
+   METHOD CTeEvento( ... )                INLINE ze_sefaz_CTeEvento( Self, ... )
+   METHOD CTeEventoCancela( ... )         INLINE ze_sefaz_CTeEventoCancela( Self, ... )
+   METHOD CTeEventoCancEntrega( ... )     INLINE ze_sefaz_CTeEventoCancEntrega( Self, ... )
+   METHOD CTeEventoCarta( ... )           INLINE ze_sefaz_CTeEventoCarta( Self, ... )
+   METHOD CTeEventoDesacordo( ... )       INLINE ze_sefaz_CTeEventoDesacordo( Self, ... )
+   METHOD CTeEventoEntrega( ... )         INLINE ze_sefaz_CTeEventoEntrega( Self, ... )
+   METHOD CTeGeraAutorizado( ... )        INLINE ze_sefaz_CTeGeraAutorizado( Self, ... )
+   METHOD CTeGeraEventoAutorizado( ... )  INLINE ze_sefaz_CTeGeraEventoAutorizado( Self, ... )
+   METHOD CTeInutiliza( ... )             INLINE ze_sefaz_CTeInutiliza( Self, ... )
+   METHOD CTeProtocolo( ... )             INLINE ze_sefaz_CTeProtocolo( Self, ... )
+   METHOD CTeRetEnvio( ... )              INLINE ze_sefaz_CTeRetEnvio( Self, ... )
+   METHOD CTeStatus( ... )                INLINE ze_sefaz_CTeStatus( Self, ... )
+   METHOD MDFeDistribuicao( ... )         INLINE ze_sefaz_MDFeDistribuicao( Self, ... )
+   METHOD MDFeEnvio( ... )                INLINE ze_sefaz_MDFeEnvio( Self, ... )
+   METHOD MDFeEmAberto( ... )             INLINE ze_sefaz_MDFeEmAberto( Self, ... )
+   METHOD MDFeEvento( ... )               INLINE ze_sefaz_MDFeEvento( Self, ... )
+   METHOD MDFeEventoCancela( ... )        INLINE ze_sefaz_MDFeEventoCancela( Self, ... )
+   METHOD MDFeEventoCondutor( ... )       INLINE ze_sefaz_MDFeEventoCondutor( Self, ... )
+   METHOD MDFeEventoEncerramento( ... )   INLINE ze_sefaz_MDFeEventoEncerramento( Self, ... )
+   METHOD MDFeEventoPagamento( ... )      INLINE ze_sefaz_MDFeEventoPagamento( Self, ... )
+   METHOD MDFeGeraAutorizado( ... )       INLINE ze_sefaz_MDFeGeraAutorizado( Self, ... )
+   METHOD MDFeGeraEventoAutorizado( ... ) INLINE ze_sefaz_MDFeGeraEventoAutorizado( Self, ... )
+   METHOD MDFeProtocolo( ... )            INLINE ze_sefaz_MDFeProtocolo( Self, ... )
+   METHOD MDFeRetEnvio( ... )             INLINE ze_sefaz_MDFeRetEnvio( Self, ... )
+   METHOD MDFeStatus( ... )               INLINE ze_sefaz_MDFeStatus( Self, ... )
+   METHOD NFeAddCancelamento( ... )       INLINE ze_sefaz_NFeAddCancelamento( Self, ... )
+   METHOD NFeCadastro( ... )              INLINE ze_sefaz_NFeCadastro( Self, ... )
+   METHOD NFeContingencia( ... )          INLINE ze_sefaz_NFeContingencia( Self, ... )
+   METHOD NFeDestinadas( ... )            INLINE ze_sefaz_NfeDestinadas( Self, ... )
+   METHOD NFeDistribuicao( ... )          INLINE ze_sefaz_NFeDistribuicao( Self, ... )
+   METHOD NFeEnvio( ... )                 INLINE ze_sefaz_NfeEnvio( Self, ... )
+   METHOD NFeEvento( ... )                INLINE ze_sefaz_NFeEvento( Self, ... )
+   METHOD NFeEventoAutor( ... )           INLINE ze_sefaz_NFeEventoAutor( Self, ... )
+   METHOD NFeEventoCancela( ... )         INLINE ze_sefaz_NFeEventoCancela( Self, ... )
+   METHOD NFeEventoCancelaSubstituicao( ... ) INLINE ze_sefaz_NFeEventoCancelaSubstituicao( Self, ... )
+   METHOD NFeEventoCarta( ... )           INLINE ze_sefaz_NFeEventoCarta( Self, ... )
+   METHOD NFeEventoManifestacao( ... )    INLINE ze_sefaz_NFeEventoManifestacao( Self, ... )
+   METHOD NFeGeraAutorizado( ... )        INLINE ze_sefaz_NFeGeraAutorizado( Self, ... )
+   METHOD NFeGeraEventoAutorizado( ... )  INLINE ze_sefaz_NFeGeraEventoAutorizado( Self, ... )
+   METHOD NFeGTIN( ... )                  INLINE ze_sefaz_NFeGTIN( Self, ... )
+   METHOD NFeInutiliza( ... )             INLINE ze_sefaz_NFeInutiliza( Self, ... )
+   METHOD NFeProtocolo( ... )             INLINE ze_sefaz_NfeProtocolo( Self, ... )
+   METHOD NFeRetEnvio( ... )              INLINE ze_sefaz_NFeRetEnvio( Self, ... )
+   METHOD NFeStatus( ... )                INLINE ze_sefaz_NFeStatus( Self, ... )
+   METHOD NFeStatusSVC( ... )             INLINE ze_sefaz_NFeStatusSVC( Self, ... )
 
    /* Uso interno */
    METHOD XmlSoapPost()
@@ -87,7 +140,33 @@ VAR    cSoapAction     INIT ""                      // webservice Action
    METHOD ValidaXml( cXml, cFileXsd, cIgnoreList )    INLINE ::cXmlRetorno := DomDocValidaXml( cXml, cFileXsd, cIgnoreList )
    METHOD Setup( cUF, cCertificado, cAmbiente )
 
+   METHOD SoapUrlBpe( aSoapList, cUF, cVersao )
+   METHOD SoapUrlCte( aSoapList, cUF, cVersao )
+   METHOD SoapUrlMdfe( aSoapList, cUF, cVersao )
+   METHOD SoapUrlNfe( aSoapList, cUF, cVersao )
+   METHOD SoapUrlNFCe( aSoapList, cUf, cVersao )
+
    ENDCLASS
+
+METHOD cIndSinc( cValue ) CLASS SefazClass
+
+   IF cValue != Nil
+      IF ValType( cValue ) == "C" .AND. cValue == "1"
+         ::lSincrono := .T.
+      ELSE
+         ::lSincrono := .F.
+      ENDIF
+   ENDIF
+
+   RETURN iif( ::lSincrono, "1", "0" )
+
+METHOD cFusoHorario( cValue ) CLASS SefazClass
+
+   IF cValue != Nil
+      ::cUserTimeZone := cValue
+   ENDIF
+
+   RETURN ::cUserTimeZone
 
 METHOD AssinaXml() CLASS SefazClass
 
@@ -207,22 +286,32 @@ METHOD XmlSoapPost() CLASS SefazClass
       ::cXmlSoap +=       [</] + ::cProjeto + [DadosMsg>]
       ::cXmlSoap +=    [</nfeDistDFeInteresse>]
       ::cXmlSoap += [</soap12:Body>]
-   ELSEIF ::cProjeto == WS_PROJETO_CTE .AND. ::cVersao == "4.00"
+   ELSEIF ::cProjeto == WS_PROJETO_MDFE .OR. ( ::cProjeto == WS_PROJETO_CTE .AND. ::cVersao == "4.00" )
       ::cXmlSoap += [<soap12:Body>]
       ::cXmlSoap +=    [<] + ::cProjeto + [DadosMsg xmlns="] + cSoapService + [">]
-      ::cXmlSoap +=       ::cXmlEnvio
+      IF ::lSincrono
+         ::cXmlSoap += hb_base64Encode( hb_gzCompress( ::cXmlEnvio ) )
+      ELSE
+         ::cXmlSoap +=       ::cXmlEnvio
+      ENDIF
       ::cXmlSoap +=    [</] + ::cProjeto + [DadosMsg>]
       ::cXmlSoap += [</soap12:Body>]
    ELSE
-      ::cXmlSoap += [<soap12:Header>]
-      ::cXmlSoap +=    [<] + ::cProjeto + [CabecMsg xmlns="] + cSoapService + [">]
-      ::cXmlSoap +=       [<cUF>] + ::UFCodigo( ::cUF ) + [</cUF>]
-      ::cXmlSoap +=       [<versaoDados>] + cSoapVersion + [</versaoDados>]
-      ::cXmlSoap +=    [</] + ::cProjeto + [CabecMsg>]
-      ::cXmlSoap += [</soap12:Header>]
+      IF ! "NFERECEPCAOEVENTO" $ Upper( ::cSoapAction )
+         ::cXmlSoap += [<soap12:Header>]
+         ::cXmlSoap +=    [<] + ::cProjeto + [CabecMsg xmlns="] + cSoapService + [">]
+         ::cXmlSoap +=       [<cUF>] + ::UFCodigo( ::cUF ) + [</cUF>]
+         ::cXmlSoap +=       [<versaoDados>] + cSoapVersion + [</versaoDados>]
+         ::cXmlSoap +=    [</] + ::cProjeto + [CabecMsg>]
+         ::cXmlSoap += [</soap12:Header>]
+      ENDIF
       ::cXmlSoap += [<soap12:Body>]
       ::cXmlSoap +=    [<] + ::cProjeto + [DadosMsg xmlns="] + cSoapService + [">]
-      ::cXmlSoap +=       ::cXmlEnvio
+      IF ::lSincrono .AND. ( ::cProjeto == WS_PROJETO_CTE .OR. ::cProjeto == WS_PROJETO_MDFE )
+         ::cXmlSoap += hb_base64Encode( hb_gzCompress( ::cXmlEnvio ) )
+      ELSE
+         ::cXmlSoap += ::cXmlEnvio
+      ENDIF
       ::cXmlSoap +=    [</] + ::cProjeto + [DadosMsg>]
       ::cXmlSoap += [</soap12:Body>]
    ENDIF
@@ -233,45 +322,73 @@ METHOD XmlSoapPost() CLASS SefazClass
 
 METHOD MicrosoftXmlSoapPost() CLASS SefazClass
 
-   LOCAL oServer, nCont, cRetorno
+   LOCAL oServer, nCont, cRetorno, lOk
    LOCAL cSoapAction
 
    cSoapAction := ::cSoapAction
+   lOk := .F.
    BEGIN SEQUENCE WITH __BreakBlock()
-      ::cXmlRetorno := [<erro text="*ERRO* Erro: Criando objeto MSXML2.ServerXMLHTTP" />]
       oServer := win_OleCreateObject( "MSXML2.ServerXMLHTTP.6.0" )
-      ::cXmlRetorno := [erro text="*ERRO* Erro: No uso do objeto MSXML2.ServerXmlHTTP.6.0" />]
-      IF ::cCertificado != NIL
-         oServer:setOption( 3, "CURRENT_USER\MY\" + ::cCertificado )
-      ENDIF
-      ::cXmlRetorno := [erro text="*ERRO* Erro: Na conexão com webservice ] + ::cSoapURL + [" />]
-      //setTimeouts( long resolveTimeout, long connectTimeout, long sendTimeout, long receiveTimeout )
-      oServer:SetTimeOuts( ::nSoapTimeOut, ::nSoapTimeOut, ::nSoapTimeOut, ::nSoapTimeOut )
-      oServer:Open( "POST", ::cSoapURL, .F. )
-      IF ! Empty( ::cProxyUrl )
-         oServer:SetProxy( 2, ::cProxyUrl )
-         IF ! Empty( ::ProxyUser ) .OR. ! Empty( ::cProxyPassword )
-            oServer:SetProxyCredentials( ::ProxyUser, ::ProxyPassword )
-         ENDIF
-      ENDIF
-      IF cSoapAction != NIL .AND. ! Empty( cSoapAction )
-         oServer:SetRequestHeader( "SOAPAction", cSoapAction )
-      ENDIF
-      oServer:SetRequestHeader( "Content-Type", "application/soap+xml; charset=utf-8" )
-      oServer:Send( ::cXmlSoap )
-      oServer:WaitForResponse( ::nSoapTimeOut )
-      cRetorno := oServer:ResponseBody()
-      IF ValType( cRetorno ) == "C"
-         ::cXmlRetorno := cRetorno
-      ELSEIF cRetorno == NIL
-         ::cXmlRetorno := "Sem retorno do webservice"
-      ELSEIF ValType( cRetorno ) == "A" // xharbour e harbour antigo???
-         ::cXmlRetorno := ""
-         FOR nCont = 1 TO Len( cRetorno )
-            ::cXmlRetorno += Chr( cRetorno[ nCont ] )
-         NEXT
-      ENDIF
+      lOk := .T.
    ENDSEQUENCE
+   IF ! lOk
+      ::cXmlRetorno := "<xml>*ERRO* Erro: No uso do objeto MSXML2.ServerXmlHTTP.6.0</xml>"
+      RETURN Nil
+   ENDIF
+   IF ::cCertificado != NIL
+      oServer:setOption( 3, "CURRENT_USER\MY\" + ::cCertificado )
+   ENDIF
+   oServer:SetTimeOuts( ::nSoapTimeOut, ::nSoapTimeOut, ::nSoapTimeOut, ::nSoapTimeOut )
+   lOk := .F.
+   BEGIN SEQUENCE WITH __BreakBlock()
+      oServer:Open( "POST", ::cSoapURL, .F. )
+      lOk := .T.
+   ENDSEQUENCE
+   IF ! lOk
+      ::cXmlRetorno := "<xml>*ERRO* Erro: No Open() do endereço " + ::cSoapURL + "</xml>"
+      RETURN Nil
+   ENDIF
+   IF ! Empty( ::cProxyUrl )
+      oServer:SetProxy( 2, ::cProxyUrl )
+      IF ! Empty( ::ProxyUser ) .OR. ! Empty( ::cProxyPassword )
+         oServer:SetProxyCredentials( ::ProxyUser, ::ProxyPassword )
+      ENDIF
+   ENDIF
+   IF cSoapAction != NIL .AND. ! Empty( cSoapAction )
+      oServer:SetRequestHeader( "SOAPAction", cSoapAction )
+   ENDIF
+   IF ::lSincrono .AND. ( ::cProjeto  == WS_PROJETO_CTE .OR. ::cProjeto == WS_PROJETO_MDFE )
+      oServer:SetRequestHeader( "Accept-Encoding", "gzip,deflate" )
+      oServer:SetRequestHeader( "Content-Encoding", "gzip" )
+   ENDIF
+   oServer:SetRequestHeader( "Content-Type", "application/soap+xml; charset=utf-8" )
+   oServer:SetRequestHeader( "content-Length", Ltrim( Str( Len( ::cXmlSoap ) ) ) )
+   lOk := .F.
+   BEGIN SEQUENCE WITH __BreakBlock()
+      oServer:Send( ::cXmlSoap )
+      lOk := .T.
+   ENDSEQUENCE
+   IF ! lOk
+      ::cXmlRetorno := "<xml>*ERRO* Erro: No Send() para " + ::cSoapURL + "</xml>"
+      RETURN Nil
+   ENDIF
+   cRetorno := oServer:ResponseXML:XML
+   IF Empty( cRetorno )
+      cRetorno := oServer:ResponseBody
+      IF Empty( cRetorno )
+         cRetorno := oServer:ResponseText
+      ENDIF
+   ENDIF
+   IF ValType( cRetorno ) == "C"
+      ::cXmlRetorno := cRetorno
+   ELSEIF cRetorno == NIL
+      ::cXmlRetorno := "Sem retorno do webservice"
+   ELSEIF ValType( cRetorno ) == "A" // xharbour e harbour antigo???
+      ::cXmlRetorno := ""
+      FOR nCont = 1 TO Len( cRetorno )
+         ::cXmlRetorno += Chr( cRetorno[ nCont ] )
+      NEXT
+   ENDIF
    DO CASE
    CASE ! Empty( XmlNode( ::cXmlRetorno, "soap:Body" ) )
       ::cXmlRetorno := XmlNode( ::cXmlRetorno, "soap:Body" )
@@ -282,14 +399,93 @@ METHOD MicrosoftXmlSoapPost() CLASS SefazClass
    CASE "not have permission to view" $ ::cXmlRetorno
       ::cStatus     := "999"
       ::cMotivo     := "problemas com Sefaz e/ou certificado"
-      // ::CertificadoInfo()
-      ::cXmlRetorno := [<erro xml="] + "*ERRO*" + ::cMotivo + [" />]
+      ::cXmlRetorno := "<xml>*ERRO* Erro: Sefaz e/ou certificado</xml>"
    OTHERWISE
       // teste usando procname(2)
-      ::cXmlRetorno := [<erro text="*ERRO* Erro SOAP: ] + ProcName(2) + [ XML retorno não contém soapenv:Body" />] + ::cXmlRetorno
+      ::cXmlRetorno := "<xml>*ERRO* Erro de retorno " + ProcName(2) + ;
+         " body não identificado " + ::cXmlRetorno + "</xml>"
    ENDCASE
 
    RETURN NIL
+
+METHOD SoapUrlBpe( aSoapList, cUF, cVersao ) CLASS SefazClass
+
+   LOCAL nPos, cUrl
+
+   nPos := hb_AScan( aSoapList, { | e | cUF == e[ 1 ] .AND. cVersao == e[ 2 ] } )
+   IF nPos != 0
+      cUrl := aSoapList[ nPos, 3 ]
+   ENDIF
+
+   RETURN cUrl
+
+METHOD SoapUrlNfe( aSoapList, cUF, cVersao ) CLASS Sefazclass
+
+   LOCAL nPos, cUrl
+
+   nPos := hb_AScan( aSoapList, { | e | ( cUF == e[ 1 ] .OR. e[ 1 ] == "**" ) .AND. cVersao == e[ 2 ] } )
+   IF nPos != 0
+      cUrl := aSoapList[ nPos, 3 ]
+   ENDIF
+   DO CASE
+   CASE ! Empty( cUrl )
+   CASE cUf $ "AC,AL,AP,DF,ES,PB,RJ,RN,RO,RR,SC,SE,TO"
+      cURL := ::SoapURLNFe( aSoapList, "SVRS", cVersao )
+   CASE cUf $ "MA,PA,PI"
+      cURL := ::SoapUrlNFe( aSoapList, "SVAN", cVersao )
+   ENDCASE
+
+   RETURN cUrl
+
+METHOD SoapUrlNFCe( aSoapList, cUf, cVersao ) CLASS Sefazclass
+
+   LOCAL cUrl, nPos
+
+   IF cUF $ "AC,ES,RO,RR"
+      cUrl := ::SoapUrlNFCe( aSoapList, "SVRS", cVersao  )
+   ELSE
+      nPos := hb_AScan( aSoapList, { | e | cUF == e[ 1 ] .AND. cVersao + "C" == e[ 2 ] } )
+      IF nPos != 0
+         cUrl := aSoapList[ nPos, 3 ]
+      ENDIF
+   ENDIF
+   IF Empty( cUrl )
+      cUrl := ::SoapUrlNFe( aSoapList, cUF, cVersao )
+   ENDIF
+
+   RETURN cUrl
+
+METHOD SoapUrlCte( aSoapList, cUF, cVersao ) CLASS Sefazclass
+
+   LOCAL nPos, cUrl
+
+   hb_Default( @::cVersao, WS_CTE_DEFAULT )
+   hb_Default( @::cProjeto, WS_PROJETO_CTE )
+   nPos := hb_AScan( aSoapList, { | e | cUF == e[ 1 ] .AND. cVersao == e[ 2 ] } )
+   IF nPos != 0
+      cUrl := aSoapList[ nPos, 3 ]
+   ENDIF
+   IF Empty( cUrl )
+      IF cUF $ "AP,PE,RR"
+         cUrl := ::SoapUrlCTe( aSoapList, "SVSP", cVersao )
+      ELSEIF cUF $ "AC,AL,AM,BA,CE,DF,ES,GO,MA,PA,PB,PI,RJ,RN,RO,RS,SC,SE,TO"
+         cUrl := ::SoapUrlCTe( aSoapList, "SVRS", cVersao )
+      ENDIF
+   ENDIF
+
+   RETURN cUrl
+
+METHOD SoapUrlMdfe( aSoapList, cUF, cVersao ) CLASS Sefazclass
+
+   LOCAL cUrl, nPos
+
+   nPos := hb_AScan( aSoapList, { | e | cVersao == e[ 2 ] } )
+   IF nPos != 0
+      cUrl := aSoapList[ nPos, 3 ]
+   ENDIF
+   HB_SYMBOL_UNUSED( cUF )
+
+   RETURN cUrl
 
 STATIC FUNCTION UFCodigo( cSigla )
 
@@ -564,3 +760,16 @@ STATIC FUNCTION ProcFecha( cTag, aTagsAbre, cTxt )
    ENDIF
 
    RETURN .T.
+
+FUNCTION SefazClassValidaXml( cXml, cXsd )
+
+   LOCAL oSefaz := SefazClass():New()
+
+   RETURN oSefaz:ValidaXml( cXml, cXsd )
+
+FUNCTION SefazClassTipoXml( cXml )
+
+   LOCAL oSefaz := SefazClass():New()
+
+   RETURN oSefaz:TipoXml( cXml )
+
