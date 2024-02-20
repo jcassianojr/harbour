@@ -1,26 +1,22 @@
 #include "sefazclass.ch"
 
-FUNCTION ze_Sefaz_NFeEnvio( Self, cXml, cUF, cCertificado, cAmbiente, lSincrono )
+FUNCTION ze_Sefaz_NFeEnvio( Self, cXml, cUF, cCertificado, cAmbiente, lEnvioSinc, lEnvioZip )
 
    LOCAL oDoc, cChave
 
    hb_Default( @::cVersao, WS_NFE_DEFAULT )
-   IF lSincrono != Nil
-      IF ValType( lSincrono ) == "L"
-         ::lSincrono := lSincrono
-      ELSEIF ValType( lSIncrono ) == "C"
-         ::lSincrono := ( lSincrono == "1" )
-      ENDIF
-   ENDIF
+   hb_Default( @lEnvioZip, .F. )
    ::cProjeto := WS_PROJETO_NFE
-
-   ::aSoapUrlList := WS_NFE_AUTORIZACAO
-   ::Setup( cUF, cCertificado, cAmbiente )
-   IF ::lSincrono
-      // reservado pra implementacao futura em gzip
-      ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote"
-   ELSE
-      ::cSoapAction  := "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote"
+   IF lEnvioSinc != Nil
+      ::lEnvioSinc := lEnvioSinc
+   ENDIF
+   IF lEnvioZip != Nil
+      ::lEnvioZip := lEnvioZip
+   ENDIF
+   ::aSoapUrlList := SoapList()
+   ::Setup( cUF, cCertificado, cAmbiente, @lEnvioSinc )
+   IF ::lEnvioZip
+      ::cSoapAction += "Zip"
    ENDIF
 
    IF cXml != NIL
@@ -29,41 +25,32 @@ FUNCTION ze_Sefaz_NFeEnvio( Self, cXml, cUF, cCertificado, cAmbiente, lSincrono 
    IF ::AssinaXml() != "OK"
       RETURN ::cXmlRetorno
    ENDIF
-   IF ::cNFCe == "S"
+   IF ::lConsumidor
       GeraQRCode( @::cXmlDocumento, ::cIdToken, ::cCSC, ::cVersao, ::cVersaoQrCode )
    ENDIF
 
-   ::cXmlEnvio    := [<enviNFe versao="] + ::cVersao + [" ] + WS_XMLNS_NFE + [>]
-   // FOR EACH cXmlNota IN aXmlNotas
-   ::cXmlEnvio    += XmlTag( "idLote", "1" )
-   ::cXmlEnvio    += XmlTag( "indSinc",iif( ::lSincrono, "1", "0" ) )
-   ::cXmlEnvio    += ::cXmlDocumento
-   // NEXT
-   ::cXmlEnvio    += [</enviNFe>]
+   ::cXmlEnvio := [<enviNFe versao="] + ::cVersao + [" ] + WS_XMLNS_NFE + [>]
+   ::cXmlEnvio += XmlTag( "idLote", "1" )
+   ::cXmlEnvio += XmlTag( "indSinc", iif( ::lEnvioSinc, "1", "0" ) )
+   ::cXmlEnvio += ::cXmlDocumento
+   ::cXmlEnvio += [</enviNFe>]
    ::XmlSoapPost()
-   IF ! ::lSincrono
-      ::cXmlRecibo := ::cXmlRetorno
-      ::cRecibo    := XmlNode( ::cXmlRecibo, "nRec" )
-      ::cStatus    := Pad( XmlNode( ::cXmlRecibo, "cStat" ), 3 )
-      ::cMotivo    := XmlNode( ::cXmlRecibo, "xMotivo" )
-      IF ! Empty( ::cRecibo )
-         Inkey( ::nTempoEspera )
-         ::NfeRetEnvio()
-         IF hb_ASCan( { "104", "105" }, ::cStatus,,, .T. ) != 0
-            oDoc   := XmlToDoc( ::cXmlDocumento, .F. )
-            cChave := oDoc:cChave
-            Inkey( ::nTempoEspera )
-            ::NfeProtocolo( cChave, ::cUF, ::cCertificado, ::cAmbiente )
-            IF ! Empty( XmlNode( ::cXmlRetorno, "infProt" ) )
-               ::cXmlProtocolo := ::cXmlRetorno
-            ENDIF
-         ENDIF
-         ::NfeGeraAutorizado( ::cXmlDocumento, ::cXmlProtocolo )
-      ENDIF
-   ELSE
-      ::cXmlRecibo    := ::cXmlRetorno
+   ::cXmlRecibo := ::cXmlRetorno
+   ::cRecibo    := XmlNode( ::cXmlRecibo, "nRec" )
+   ::cStatus    := Pad( XmlNode( ::cXmlRecibo, "cStat" ), 3 )
+   ::cMotivo    := XmlNode( ::cXmlRecibo, "xMotivo" )
+   IF ! "infProt" $ ::cXmlRetorno .AND. Val( ::cRecibo ) != 0
+      Inkey( ::nTempoEspera )
+      ::NfeRetEnvio()
+   ENDIF
+   IF ! "infProt" $ ::cXmlRetorno .AND. hb_ASCan( { "103", "104", "105" }, ::cStatus,,, .T. ) != 0
+      oDoc   := XmlToDoc( ::cXmlDocumento, .F. )
+      cChave := oDoc:cChave
+      Inkey( ::nTempoEspera )
+      ::NfeProtocolo( cChave, ::cUF, ::cCertificado, ::cAmbiente )
+   ENDIF
+   IF ! Empty( XmlNode( ::cXmlRetorno, "infProt" ) )
       ::cXmlProtocolo := ::cXmlRetorno
-      ::cRecibo       := ""
       ::NfeGeraAutorizado( ::cXmlDocumento, ::cXmlProtocolo )
    ENDIF
 
@@ -90,8 +77,8 @@ STATIC FUNCTION GeraQRCode( cXmlAssinado, cIdToken, cCSC, cVersao, cVersaoQrCode
    // 1¦ Parte ( Endereco da Consulta - Fonte: http://nfce.encat.org/desenvolvedor/qrcode/ )
    nPos       := hb_AScan( aUrlList, { | e | e[ 1 ] == cUF .AND. ;
       ( e[ 2 ] == cVersao + iif( cAmbiente == WS_AMBIENTE_HOMOLOGACAO, "H", "P" ) .OR. ;
-      e[ 2 ] == "4.00"  + iif( cAmbiente == WS_AMBIENTE_HOMOLOGACAO, "H", "P" ) ) } )
-   QRCode_Url := iif( nPos == 0, "", aUrlList[ nPos, 3 ] )
+      e[ 2 ] == cVersaoQRCode  + iif( cAmbiente == WS_AMBIENTE_HOMOLOGACAO, "H", "P" ) ) } )
+   QRCode_Url := iif( nPos == 0, "", aUrlList[ nPos, 3 ] ) + "?"
 
    // 2¦ Parte (Parametros)
    QRCODE_chNFe    := AllTrim( Substr( XmlElement( cInfNFe, "Id" ), 4 ) )
@@ -178,13 +165,11 @@ STATIC FUNCTION GeraQRCode( cXmlAssinado, cIdToken, cCSC, cVersao, cVersaoQrCode
       cXmlAssinado += [<] + "infNFeSupl"+[>]
       cXmlAssinado += [<] + "qrCode"+[>] + QRCODE_cTag + [</] + "qrCode" + [>]
 
-      IF cVersao == "4.00"
-         aUrlList := WS_NFE_CHAVE
-         nPos     := hb_AScan( aUrlList, { | e | e[ 1 ] == cUF .AND. ;
-            e[ 2 ] == cVersaoQrCode + iif( cAmbiente == WS_AMBIENTE_HOMOLOGACAO, "H", "P" ) } )
-         QRCode_UrlChave := iif( nPos == 0, "", aUrlList[ nPos, 3 ] )
-         cXmlAssinado += XmlTag( "urlChave", QRCode_UrlChave )
-      ENDIF
+      aUrlList := WS_NFE_CHAVE
+      nPos     := hb_AScan( aUrlList, { | e | e[ 1 ] == cUF .AND. ;
+         e[ 2 ] == cVersaoQrCode + iif( cAmbiente == WS_AMBIENTE_HOMOLOGACAO, "H", "P" ) } )
+      QRCode_UrlChave := iif( nPos == 0, "", aUrlList[ nPos, 3 ] + "?" )
+      cXmlAssinado += XmlTag( "urlChave", QRCode_UrlChave )
 
       cXmlAssinado += [</] + "infNFeSupl"+[>]
       cXmlAssinado += cSignature
@@ -204,8 +189,63 @@ FUNCTION ze_sefaz_NFeContingencia( Self, cXml, cUF, cCertificado, cAmbiente )
    ::cAmbiente     := iif( cAmbiente == NIL, ::cAmbiente, cAmbiente )
    ::cXmlDocumento := iif( cXml == NIL, ::cXmlDocumento, cXml )
    ::AssinaXml()
-   IF ::cNFCe == "S"
+   IF ::lConsumidor
       GeraQRCode( @::cXmlDocumento, ::cIdToken, ::cCSC, ::cVersao, ::cVersaoQrCode )
    ENDIF
 
    RETURN ::cXmlDocumento
+
+STATIC FUNCTION SoapList()
+
+RETURN { ;
+   ;
+   { "AM",    "4.00H", "https://homnfe.sefaz.am.gov.br/services2/services/NfeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "BA",    "4.00H", "https://hnfe.sefaz.ba.gov.br/webservices/NFeAutorizacao4/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "CE",    "4.00H", "https://nfeh.sefaz.ce.gov.br/nfe4/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "GO",    "4.00H", "https://homolog.sefaz.go.gov.br/nfe/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MG",    "4.00H", "https://hnfe.fazenda.mg.gov.br/nfe2/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MS",    "4.00H", "https://hom.nfe.sefaz.ms.gov.br/ws/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MT",    "4.00H", "https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "PE",    "4.00H", "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "PR",    "4.00H", "https://homologacao.nfe.sefa.pr.gov.br/nfe/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "RS",    "4.00H", "https://nfe-homologacao.sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SP",    "4.00H", "https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeautorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVAN",  "4.00H", "https://hom.sefazvirtual.fazenda.gov.br/NFeAutorizacao4/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVCAN", "4.00H", "https://hom.svc.fazenda.gov.br/NFeAutorizacao4/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVCRS", "4.00H", "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVRS",  "4.00H", "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   ;
+   { "AM",    "4.00HC", "https://homnfe.sefaz.am.gov.br/services2/services/NfeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "AM",    "4.00HC", "https://homnfce.sefaz.am.gov.br/nfce-services/services/NfeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "GO",    "4.00HC", "https://homolog.sefaz.go.gov.br/nfe/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MS",    "4.00HC", "https://hom.nfce.sefaz.ms.gov.br/ws/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MT",    "4.00HC", "https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "PR",    "4.00HC", "https://homologacao.nfce.sefa.pr.gov.br/nfce/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "RS",    "4.00HC", "https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SP",    "4.00HC", "https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVRS",  "4.00HC", "https://nfce-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   ;
+   { "AM",    "4.00P", "https://nfe.sefaz.am.gov.br/services2/services/NfeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "BA",    "4.00P", "https://nfe.sefaz.ba.gov.br/webservices/NFeAutorizacao4/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "GO",    "4.00P", "https://nfe.sefaz.go.gov.br/nfe/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MG",    "4.00P", "https://nfe.fazenda.mg.gov.br/nfe2/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MS",    "4.00P", "https://nfe.sefaz.ms.gov.br/ws/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MT",    "4.00P", "https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "PE",    "4.00P", "https://nfe.sefaz.pe.gov.br/nfe-service/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "PR",    "4.00P", "https://nfe.sefa.pr.gov.br/nfe/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "RS",    "4.00P", "https://nfe.sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SP",    "4.00P", "https://nfe.fazenda.sp.gov.br/ws/nfeautorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVAN",  "4.00P", "https://www.sefazvirtual.fazenda.gov.br/NFeAutorizacao4/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVCAN", "4.00P", "https://www.svc.fazenda.gov.br/NFeAutorizacao4/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVCRS", "4.00P", "https://nfe.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVRS",  "4.00P", "https://nfe.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   ;
+   { "AM",    "4.00PC", "https://nfce.sefaz.am.gov.br/nfce-services/services/NfeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "GO",    "4.00PC", "https://nfe.sefaz.go.gov.br/nfe/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MG",    "4.00PC", "https://nfce.fazenda.mg.gov.br/nfce/services/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MS",    "4.00PC", "https://nfce.sefaz.ms.gov.br/ws/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "MT",    "4.00PC", "https://nfce.sefaz.mt.gov.br/nfcews/services/NfeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "PR",    "4.00PC", "https://nfce.sefa.pr.gov.br/nfce/NFeAutorizacao4", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "RS",    "4.00PC", "https://nfce.sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SP",    "4.00PC", "https://nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" }, ;
+   { "SVRS",  "4.00PC", "https://nfce.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx", "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote" } }

@@ -4,9 +4,8 @@ FUNCTION ze_sefaz_CTeInutiliza( Self, cAno, cCnpj, cMod, cSerie, cNumIni, cNumFi
 
    hb_Default( @::cVersao, WS_CTE_DEFAULT )
    ::cProjeto := WS_PROJETO_CTE
-   ::aSoapUrlList := WS_CTE_INUTILIZA
+   ::aSoapUrlList := SoapList()
    ::Setup( cUF, cCertificado, cAmbiente )
-   ::cSoapAction  := "http://www.portalfiscal.inf.br/cte/wsdl/CteInutilizacao/cteInutilizacaoCT"
    cCnpj := SoNumeros( cCnpj )
 
    IF Len( cAno ) != 2
@@ -45,3 +44,15 @@ FUNCTION ze_sefaz_CTeInutiliza( Self, cAno, cCnpj, cMod, cSerie, cNumIni, cNumFi
 
    RETURN ::cXmlRetorno
 
+STATIC FUNCTION SoapList()
+
+RETURN { ;
+   ;
+   { "MG",      "3.00H", "https://hcte.fazenda.mg.gov.br/cte/services/CteInutilizacao", "http://www.portalfiscal.inf.br/cte/wsdl/CteInutilizacao/cteInutilizacaoCT" }, ;
+   { "MT",      "3.00H", "https://homologacao.sefaz.mt.gov.br/ctews/services/CteInutilizacao", "http://www.portalfiscal.inf.br/cte/wsdl/CteInutilizacao/cteInutilizacaoCT" }, ;
+   { "PR",      "3.00H", "https://homologacao.cte.fazenda.pr.gov.br/cte/CteInutilizacao", "http://www.portalfiscal.inf.br/cte/wsdl/CteInutilizacao/cteInutilizacaoCT" }, ;
+   { "RS/SVRS", "3.00H", "https://cte-homologacao.svrs.rs.gov.br/ws/cteinutilizacao/cteinutilizacao.asmx", "http://www.portalfiscal.inf.br/cte/wsdl/CteInutilizacao/cteInutilizacaoCT" }, ;
+   ;
+   { "MG",      "3.00P", "https://cte.fazenda.mg.gov.br/cte/services/CteInutilizacao", "http://www.portalfiscal.inf.br/cte/wsdl/CteInutilizacao/cteInutilizacaoCT" }, ;
+   { "PR",      "3.00P", "https://cte.fazenda.pr.gov.br/cte/CteInutilizacao", "http://www.portalfiscal.inf.br/cte/wsdl/CteInutilizacao/cteInutilizacaoCT" }, ;
+   { "RS/SVRS", "3.00P", "https://cte.svrs.rs.gov.br/ws/cteinutilizacao/cteinutilizacao.asmx", "http://www.portalfiscal.inf.br/cte/wsdl/CteInutilizacao/cteInutilizacaoCT" } }
