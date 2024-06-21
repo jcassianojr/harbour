@@ -1,4 +1,4 @@
--incpath=c:\develop\harbour\sefazclass\include\
+-incpath=d:\develop\harbour\sefazclass\include\
 
 #-manifest=cepwebvia.Manifest  comentado erro compilacao 32 bits
 -lng=pt_BR
@@ -7,17 +7,17 @@
 
 cepwebvia.prg 
 
-c:\develop\harbour\sefazclass\source\ze_miscfunc.prg
-c:\develop\harbour\sefazclass\source\ze_sefazclass.prg
-c:\develop\harbour\sefazclass\source\ze_xmlfunc.prg
-c:\develop\harbour\sefazclass\source\ze_sefazassina.prg
-c:\develop\harbour\sefazclass\source\ze_sefazxmlclass.prg
-c:\develop\harbour\sefazclass\source\ze_sefazcapicom.prg
-c:\develop\harbour\sefazclass\source\ze_digitodoc.prg
+# d:\develop\harbour\sefazclass\source\ze_miscfunc.prg
+# d:\develop\harbour\sefazclass\source\ze_sefazclass.prg
+d:\develop\harbour\sefazclass\source\ze_xmlfunc.prg
+# d:\develop\harbour\sefazclass\source\ze_sefazassina.prg
+# d:\develop\harbour\sefazclass\source\ze_sefazxmlclass.prg
+# d:\develop\harbour\sefazclass\source\ze_sefazcapicom.prg
+# d:\develop\harbour\sefazclass\source\ze_digitodoc.prg
 
-C:\develop\harbour\objmgw\error.prg
-C:\develop\harbour\objmgw\comp.prg
-C:\develop\harbour\objmgw\disk55.prg
+d:\develop\harbour\objmgw\error.prg
+d:\develop\harbour\objmgw\comp.prg
+d:\develop\harbour\objmgw\disk55.prg
 
 hbtip.hbc
 xhb.hbc

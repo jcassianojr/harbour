@@ -122,6 +122,7 @@ For KK := 1 to LEN(mListaArq)
              
              lTEMCEP:=.F.
              
+			 /*
              if lCHECKAPICOR //correio web primeria busca
     		    ? '  CEPAPI:'+ cCEP
                 ?
@@ -132,7 +133,8 @@ For KK := 1 to LEN(mListaArq)
     			 else
                     GRAVARUANAO('nao localizado web correio')
                  endif   
-             endif  
+             endif 
+             */			 
            
              if lCHECKVIACEP //via cep web segunda busca
     		    ? '  CEPCOR:'+ cCEP  
@@ -321,8 +323,7 @@ PROCEDURE CepRepublica(xCep)
   
 RETURN .T.  
 
-   
-
+ /*  
 STATIC FUNCTION ConsultaCep( cCep, cBairro, cCidade, cEndereco, cUF, cId )
 
    LOCAL cUrlWs := [https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente]
@@ -360,6 +361,7 @@ STATIC FUNCTION SoapEnvelope( cCEP )
    cxMLSoap += [</soapenv:Envelope>]
 
    RETURN cxMLSoap
+*/
 
 FUNCTION AppVersaoExe(); RETURN ""
 FUNCTION AppUserName(); RETURN ""
