@@ -274,7 +274,16 @@ RETURN lOk
 
 
 function CheckCNHCat(cCNHCAT)
-LOCAL aCAT:={'A','B','C','D','E','AB','AC','AD','AE'}
+/*
+CATEGORIA	TIPOS DE VEÍCULOS	EXEMPLOS
+ACC	Ciclomotores de duas até três rodas, com velocidade máxima até 50km/h. 	Bicicleta motorizada e cinquentinha.
+A	Condutor de veículo motorizado de duas ou três rodas.	Motos, motoneta e triciclo.
+B	Veículos de carga leve até 3.500kg ou oito lugares para passageiros.	Carro, picape, van e SUV.
+C	Veículos entre 3.500kg e 6.000kg de peso total.	Caminhão, caminhonete e van de carga.
+D	Veículos com mais de oito lugares para passageiros.	Ônibus, micro-ônibus e van de passageiros.
+E	Todos os veículos das outras categorias, combinações de veículos, tratores e veículos com mais de 6.000kg.	Automóvel tracionando, trailer, caminhão tracionando, duas carretas (treminhão) e ônibus articulado.
+*/
+LOCAL aCAT:={'A','B','C','D','E','AB','AC','AD','AE','ACC'}
 znerro:=0
 zerro :=''
 cCNHCAT:=ALLTRIM(cCNHCAT)
