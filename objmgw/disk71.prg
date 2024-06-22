@@ -22,6 +22,7 @@
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 *+    Function formataRG(cRG,cTIPO)
+*+    cTIPO RH RNI RNE CNI CPF
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -31,20 +32,45 @@ local cRETU
 local nPOS
 local cDAC
 cDAC = ""
+nPOS = 0
+cRETU = ""
+//So formata se o valor for caracter
+IF VALTYPE(Valor) <> "C" 
+   return VALOR
+ENDIF
+
 IF VALTYPE(cTIPO)="C"
-   IF cTIPO="RNE" .OR.  cTIPO="RIC"  .OR.  cTIPO="CPF"
+   //RNE E RIC sem formatacao
+   IF cTIPO="RNE" .OR.  cTIPO="RIC"  
       return VALOR
    ENDIF
+   //CPF E CNI formatacao CPF
+  IF cTIPO="CPF" .OR.  cTIPO="CNI"  
+      return formatacpf(valor)  
+   ENDIF   
 ENDIF
-If At("ISENT",valor) >0  .OR. At("RNE",valor) >0 .OR. At("RIC",valor) .OR. At("CPF",valor)>0 //registro nacional estrangeiro
+
+//Tipo escrito no valor
+//ISENT RNE RIC sem formatacao
+If At("ISENT",upper(valor)) >0  .OR. At("RNE",upper(valor)) >0 .OR. At("RIC",upper(valor)) >0  //registro nacional estrangeiro isentos(incricao estadual no campo)
    return VALOR
-End If
-IF VAL(valor)=0
+EndIf
+
+//CPF E CNI formatacao CPF
+IF At("CPF",upper(valor))>0  .OR. At("CNI",upper(valor))>0 
+   return formatacpf(valor)         
+ENDIF
+
+//sem valor nao formata
+IF VAL(tiraout(valor))=0
    return valor
 ENDIf
-IF VALCPF(VALOR,.F.)
-   return valor        
+
+//sem tipo mas se validar CPF formata como CPF
+IF VALCPF(VALOR,.F.) 
+   return formatacpf(valor)        
 ENDIF
+//gerando o DAC verificador as vezes e prenchido o Rg SEM o dac
 valor := alltrim(valor)
 valor := upper(valor)
 nPOS = at( "-",Valor)
@@ -69,26 +95,28 @@ valor := StrTran(valor,"x","")  //x-X
 valor := StrTran(valor,"X","")  //X-X
 valor := tiraout(Valor)
 valor := alltrim(valor)
+//formata conforme a quantidade de digitos sem o dac
 DO CASE           
    CASE LEN(VALOR)=8
         Valor := alltrim(str(val(SUBSTR(Valor,1,8)),8))
-        cretu := Trim(substr(Valor, 1, 2) + "." + substr(Valor, 3, 3) + "." + substr(Valor, 6))
+        cRETU := Trim(substr(Valor, 1, 2) + "." + substr(Valor, 3, 3) + "." + substr(Valor, 6))
    CASE LEN(VALOR)=7
         Valor := alltrim(str(val(SUBSTR(Valor,1,8)),7))
-        cretu := Trim(substr(Valor, 1, 1) + "." + substr(Valor, 2, 3) + "." + substr(Valor, 5))
+        cRETU := Trim(substr(Valor, 1, 1) + "." + substr(Valor, 2, 3) + "." + substr(Valor, 5))
    otherwise
         cRETU := VALOR
 ENDCASE
+//inclui o DAC
 If ! EMPTY(cDAC)
-   cretu = cretu + "-" + cDAC
+   cRETU = cRETU + "-" + cDAC
 End If
-If Left(cretu, 1) = "0"
-   cretu = substr(cretu, 2)
+If Left(cRETU , 1) = "0"
+   cRETU = substr(cRETU , 2)
 End If
-If Left(cretu, 1) = "."
-   cretu = substr(cretu, 2)
+If Left(cRETU , 1) = "."
+   cRETU = substr(cRETU , 2)
 End If
-retu cretu
+return cRETU
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -120,7 +148,7 @@ IF VALTYPE(cTIPO)="C"  .AND. At("ISENT",valor) >0
 ENDIF 
 IF Len(Valor) = 0
    znerro:=7
-   zerro:="RG/RNE/RIC/CPF em branco"
+   zerro:="RG/RNE/RIC/CPF/CNI em branco"
 ENDIF
 IF (VALTYPE(cTIPO)="C" .AND. cTIPO="RNE" ).OR. At("RNE",valor) >0 
    return .t.
@@ -129,19 +157,20 @@ IF At("CPF",valor) >0
    cTIPO:="CPF"
    valor:=strtran(valor,'CPF','')
 ENDIF
+//Valida do CPF
 IF Valcpf( VALOR ,.F.)
-   IF VALTYPE(cTIPO)<>"C" .OR. (VALTYPE(cTIPO)="C" .AND. cTIPO<>"CPF" )
+   IF VALTYPE(cTIPO)<>"C" .OR. (VALTYPE(cTIPO)="C" .AND. (cTIPO<>"CPF" .OR. cTIPO<>"CNI" ))
       IF LMES
-         ALERTX("Preencha o tipo como CPF")
-      ENDIF  
+         ALERTX("Preencha o tipo como CPF ou CNI")
+      ENDIF 
+      return .t. 	  
    ENDIF
 ENDIF  
 IF At("RIC",valor) >0
    cTIPO:="RIC"
    valor:=strtran(valor,'RIC','')
 ENDIF
-Valor:= StrTran(Valor,".","")  //tiraout tambem tira o traco(-) nao pode ser usada aqui
-
+Valor:= StrTran(Valor,".","")  //tiraout tambem tira o traco(-)usado no DAC nao pode ser usada aqui
 
 //IF LEN(valor)=11 AS Vezes o RG e digitado errado com 11 digitos somente 11 digitos nao garante que e RIC //Agora valida cpf que tambem e 11
 //   cTIPO:="RIC" 
@@ -149,6 +178,7 @@ Valor:= StrTran(Valor,".","")  //tiraout tambem tira o traco(-) nao pode ser usa
 IF VALTYPE(cTIPO)<>'C'
    cTIPO:="RG"
 ENDIF
+
 for X := 0 to 9
    P1:=TIRAOUT(valor)
    if p1 = repl( str( X, 1 ), 11 )
@@ -174,6 +204,7 @@ IF Len(AllTrim(Valor)) >9  .AND. (cTIPO='RG' .OR. EMPTY(cTIPO)) .AND. (Empty(CUF
    zerro:="RG com Mais de 9 Digitos"
    znerro:=8
 END IF 
+
 IF cTIPO='RIC'
    IF Len(AllTrim(Valor)) <>11 
       zerro:="RIC nao tem 11 Digitos"
@@ -493,6 +524,6 @@ do case
    otherwise
       cep2uf="EX"
 endcase
-RETU cep2uf
+RETURN cep2uf
 
 
