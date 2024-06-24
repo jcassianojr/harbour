@@ -2,16 +2,14 @@
 *+
 *+   Module => DISK59.PRG
 *+
-*+
-*+             FUNCTION valcnpj(cCNPJ,lMES,cUF) //Chama VALCGC( cCNPJ, xTIPO ,lMES,cUF)
-*+             FUNCTION VALCGC( cCNPJ, xTIPO ,lMES,cUF)
-*+             FUNCTION Valcpf( xCPF ,lMES)
-*+             FUNCTION Mod11( campo, posdv, pesomax )
+*+             function VALCGC( xgcg, xTIPO ,lMES,cUF)
+*+             function Valcpf( xcpf ,lMES)
+*+             function Mod11( campo, posdv, pesomax )
 *+             FUNCTION formatacpf(xCPF)
 *+             FUNCTION formatacnpj(xCNPJ)
 *+             FUNCTION CNPJCPFPICT(oGet,v_Tipo,nROW,nCOL)  
 *+             FUNCTION CNPJCPFVAL(cCGC,cPESSOA,cESTADO)
-*+             FUNCTION VALCEI(wk_cei,lMES) 
+*+             function VALCEI(wk_cei,lMES) 
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
@@ -19,20 +17,11 @@
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    FUNCTION valcnpj(cCNPJ,lMES) //Chama vaccgc
+*+    Function VALCGC()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
- FUNCTION valcnpj(cCNPJ , lMES , cUF)
- return VALCGC( cCNPJ , "" , lMES , cUF)
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    FUNCTION VALCGC()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-FUNCTION VALCGC( cCNPJ, xTIPO ,lMES, cUF)
+function VALCGC( xgcg, xTIPO ,lMES,cUF)
 local x
 ZNERRO:=0
 ZERRO:=""
@@ -46,12 +35,10 @@ ENDIF
 if valtype( xTIPO ) <> "C"
    xTIPO := "X"
 endif
-if valtype(cCNPJ)='N'
-   cCNPJ:=alltrim(str(cCNPJ))
+if valtype(xgcg)='N'
+   xgcg:=alltrim(str(xgcg))
 endif
-
-//valor cnpj sem traco e pontos
-P1 := alltrim( TIRAOUT( cCNPJ ) )
+P1 := alltrim( TIRAOUT( xGCG ) )
 
 if val( p1 ) = 0
    ZNERRO:=1
@@ -63,7 +50,7 @@ if len( p1 ) <> 14
    ZERRO:="CNPJ Invalido - nao tem 14 Digitos"
 endif
 for X := 0 to 9
-   if p1 = repl ( str( X, 1 ), 14 )
+   if p1 = repl( str( X, 1 ), 14 )
       ZNERRO:=3
       ZERRO:="CNPJ Invalido - Sequencia Repetitiva de " + str( X, 1 ) 
    endif
@@ -82,7 +69,7 @@ if substr(p1,9,4)="9999"    //depois da barra /9999
    ZNERRO:=6
    ZERRO:="CNPJ Generico /9999-"
 endif
-IF VALTYPE(cUF)="C" .AND. ! EMPTY(cUF)
+IF VALTYPE(cUF)="C"
    aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
             "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
             "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO" ,"EX","XX"}
@@ -92,13 +79,7 @@ IF VALTYPE(cUF)="C" .AND. ! EMPTY(cUF)
    ENDIF   
 ENDIF
 
-IF ZNERRO=0 
-   if ! CNPJ_Novo(P1)
-       ZNERRO:=10
-       ZERRO:="CNPJ Invalido"
-   endif
-   //funcao nova validar nova versao com caracteres
-   /*
+IF ZNERRO=0
   if Mod11( P1, 13, 9 )
      if Mod11( P1, 14, 9 )
         return .T.
@@ -110,7 +91,6 @@ IF ZNERRO=0
      ZNERRO:=9
      ZERRO:="Cheque 13o. Digito - 1 Verificador"
   endif
-  */
 endif  
 IF ZNERRO>0 
    if lMES   
@@ -122,7 +102,7 @@ return .T.
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    FUNCTION Valcpf()
+*+    Function Valcpf()
 *+    CPF no 000.000.008-00
 *+1. Tocantins, Mato Grosso do Sul, Goias e Distrito Federal;
 *+2. Roraima,Amapa, Amazonas, Acre, Rondonia e Para;
@@ -137,7 +117,7 @@ return .T.
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-FUNCTION Valcpf( xCPF ,lMES)
+function Valcpf( xcpf ,lMES)
 local X,cDIGEST
 ZNERRO:=0
 ZERRO:=""
@@ -152,25 +132,25 @@ ENDIF
 p1 := alltrim( tiraout( xCPF ) )
 
 //00001008268143 programa do governo com 3 zeros a frente e comprimento 14
-if len(p1)=14 .and. substr(p1,1,3)="000"
+if len(p1)=14.and.substr(p1,1,3)="000"
    p1=substr(p1,4)
 endif
 
 
 if val( p1 ) = 0
    ZNERRO:=1
-   ZERRO:="CPF/CNI Em Branco"  
+   ZERRO:="CPF Em Branco"  
 endif
 
 if len( p1 ) <> 11
    ZNERRO:=2
-   ZERRO:="CPF/CNI nao tem 11 digitos"  
+   ZERRO:="Cpf nao tem 11 digitos"  
 endif
 
 for X := 0 to 9
    if p1 = repl( str( X, 1 ), 11 )
       ZNERRO:=3
-      ZERRO:="CPF/CNI Invalido - Sequencia Repetitiva de " + str( X, 1 )
+      ZERRO:="CPF Invalido - Sequencia Repetitiva de " + str( X, 1 )
    endif
 next X
 
@@ -180,11 +160,11 @@ if znerro=0
          return .t.
       else
          ZNERRO:=4
-         ZERRO:="CPF/CNI - Invalido Cheque 11o. Digito - 2 Verificador"
+         ZERRO:="CPF - Invalido Cheque 11o. Digito - 2 Verificador"
       endif
    else
       ZNERRO:=5
-      ZERRO:="CPF/CNI - Invalido Cheque 10o. Digito - 1 Verificador"      
+      ZERRO:="CPF - Invalido Cheque 10o. Digito - 1 Verificador"      
    endif
 endif
 //Estado Emissor
@@ -220,79 +200,13 @@ ENDIF
 
 return .T.
 
- FUNCTION CNPJ_Novo(pCNPJ) //, plMsg )
-   
-    Local lResult := .t.
-    local soma := 0
-    local dv := ""
-    local digito := 0
-    local num := 0
-    Local wCGC := iif(ValType(pCNPJ)="U", "", pCNPJ)
-    local i := 0
-    local j := 0
-    local Validos := "0123456789" //Incia so numeros mas se for a versao nova muda para alfa+numeros
-
- //   DEFAULT plMsg := .t.
-
-    wCGC := StrTran(wCGC, ".", "")   
-    wCGC := StrTran(wCGC, "-", "")   
-    wCGC := StrTran(wCGC, "/", "")
-    if Empty(wCGC)
-        lResult := .f. //.t.
-    else
-        if len(wCGC) < 14
-            lResult := .f.
-        else
-          for i = 1 to 12
-             if substr(wCGC, i, 1) $ "ABCDEFGHIJKLMNOPQRSTUWYXZ"
-                Validos := "0123456789ABCDEFGHIJKLMNOPQRSTUWYXZ"
-                exit   
-             endif
-          next
-            dv := ""
-            num := 5
-            for j = 1 to 2
-                soma := 0
-                for i = 1 to 12
-                    soma += (asc(substr(wCGC, i, 1)) - 48) * num
-                    num--
-                    if num == 1
-                        num := 9
-                    endif
-                next
-                if j == 2
-                    soma+=( 2 * val(dv))
-                endif
-                digito = soma - (int(soma / 11) * 11)
-                if digito == 0 .or. digito == 1
-                    dv := dv + "0"
-                else
-                    dv := dv + str(11 - digito, 1)
-                endif
-                num := 6
-            next
-            if dv <> substr(wCGC, 13, 2)
-                lResult := .f.
-            endif
-        endif
-		/*
-        if !lResult
-           if plMsg
-               Msg_OK("CNPJ Incorreto ou Digito Invalido..." + " [" + dv + "]" )
-           endif
-       endif
-	   */
-    endif
-
-    return lResult
-
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    FUNCTION Mod11()
+*+    Function Mod11()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-FUNCTION Mod11( campo, posdv, pesomax )
+function Mod11( campo, posdv, pesomax )
 
 dv   := 0
 peso := 1
@@ -317,7 +231,7 @@ retu .T.
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    FUNCTION formatacfp()
+*+    Function formatacfp()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -325,16 +239,16 @@ FUNCTION formatacpf(xCPF)
 if valtype(xCPF)='N'
    xCPF:=alltrim(str(xCPF))
 endif
-xCPF:=AllTrim(TIRAOUT(xCPF))
+XCPF:=AllTrim(TIRAOUT(xCPF))
 IF VAL(xCPF)=0 .OR. LEN(xCPF)<>11
    return xCPF
 ENDIf
-xCPF:=StrZero(Val(xCPF),11)
+xCPF:=StrZero(Val(XCPF),11)
 RETUrn Transform(xCPF,"@R 999.999.999-99")
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    FUNCTION formatacnpj()
+*+    Function formatacnpj()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -351,7 +265,7 @@ RETU Transform(xCNPJ,"@R 99.999.999/9999-99")
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    FUNCTION CNPJCPFPICT()
+*+    Function CNPJCPFPICT()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -371,7 +285,7 @@ return .T.
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    FUNCTION cnpjcpfval()
+*+    Function cnpjcpfval()
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -387,13 +301,15 @@ DO CASE
 ENDCASE
 RETURN lRETU
 
+
+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    FUNCTION VALCEI(wk_cei,LMES)        //mascara="  .   .     /  " 
+*+    Function VALCEI(wk_cei,LMES)        //mascara="  .   .     /  " 
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-FUNCTION VALCEI(wk_cei,Lmes)        //mascara="  .   .     /  "
+function VALCEI(wk_cei,Lmes)        //mascara="  .   .     /  "
 PRIVATE nTot, cAux, i
 if lastkey()=K_UP.OR.LASTKEY()=K_DOWN  && retorna caso seta para cima ou baixo
    return .t.
