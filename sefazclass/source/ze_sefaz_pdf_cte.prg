@@ -94,6 +94,7 @@ CREATE CLASS hbnfeDacte INHERIT hbNFeDaGeral
    VAR aItemCOFINS
    VAR aItemCOFINSST
    VAR aItemISSQN
+   VAR aObsDanfe    INIT {}
 
    VAR cFonteNFe      INIT "Times"
    VAR cFonteCode128            // Inserido por Anderson Camilo em 04/04/2012
@@ -114,6 +115,7 @@ CREATE CLASS hbnfeDacte INHERIT hbNFeDaGeral
    VAR nFolhas       INIT 1
    VAR nFolha        INIT 1
    VAR nNfeImpressas INIT 0
+   VAR nObsImpressas INIT 0
    VAR aPageList     INIT {}
    VAR aPageRow      INIT { 0, 0, 0 }
 
@@ -153,6 +155,7 @@ METHOD ToPDF( cXmlCTE, cFilePDF, cXmlCancel ) CLASS hbnfeDaCte
 METHOD BuscaDadosXML() CLASS hbnfeDaCte
 
    LOCAL cIde, cCompl, cEmit, cDest, cToma, cPrest, cImp, cinfCTeNorm, cRodo, cExped, cReceb, oElement
+   LOCAL cDoc, cDocAnt, aTeste, cEntrega := ""
 
    ::cXml := XmlToString( ::cXml )
    cIde   := XmlNode( ::cXml, "ide" )
@@ -198,14 +201,25 @@ METHOD BuscaDadosXML() CLASS hbnfeDaCte
          XmlNode( oElement, "vICMS" ), ;
          XmlNode( oElement, "vBCST" ), ;
          XmlNode( oElement, "vST" ), ;
-         XmlNOde( oElement, "vProd" ), ;
+         XmlNode( oElement, "vProd" ), ;
          XmlNode( oElement, "vNF" ), ;
          XmlNode( oElement, "nCFOP" ), ;
          XmlNode( oElement, "nPeso" ), ;
          XmlNode( oElement, "PIN" ) }
    NEXT
 
+/* trecho adicionado 2024.05.24 */
+   cDocAnt := XmlNode( ::cXml, "docAnt" )
+   ateste  := MultipleNodeToArray( XmlNode( cDocAnt, "idDocAnt" ), "idDocAntEle" )
+
    ::ainfNFe := MultipleNodeToArray( XmlNode( ::cXml, "infDoc" ), "infNFe" )
+
+   FOR EACH cDoc IN ateste
+       cDoc := strtran( cDoc, 'chCTe', 'chave' )
+       aadd( ::ainfNFe, cDoc )
+   NEXT
+/* fim do trecho adicionado */
+
    FOR EACH oElement IN ::ainfNFe
       oElement := { XmlNode( oElement, "chave" ), XmlNode( oElement, "PIN" ) }
    NEXT
@@ -276,6 +290,7 @@ METHOD BuscaDadosXML() CLASS hbnfeDaCte
    ::aInfCarga := XmlToHash( XmlNode( cinfCteNorm, "infCarga" ), { "vCarga", "proPred", "xOutCat" } )
 
    ::aInfQ := MultipleNodeToArray( XmlNode( cinfCteNorm, "infCarga" ), "infQ" )
+
    FOR EACH oElement IN ::aInfQ
       oElement := { XmlNode( oElement, "cUnid" ), XmlNode( oElement, "tpMed" ), XmlNode( oElement, "qCarga" ) }
    NEXT
@@ -312,6 +327,39 @@ METHOD BuscaDadosXML() CLASS hbnfeDaCte
    CASE ::aIde[ 'toma' ] = '3' ; ::aToma := ::aDest
    ENDCASE
 
+   /* montagem do texto de observação geral */
+
+   AAdd( ::aObsDanfe, ::aCompl[ "xObs" ] )
+   AAdd( ::aObsDanfe, ::cAdFisco )
+   IF ! Empty( ::alocEnt[ 'xNome' ] )
+      cEntrega := 'Local de Entrega : '
+      IF ! Empty( ::alocEnt[ "CNPJ" ] )
+         cEntrega += 'CNPJ/CPF:' + ::alocEnt[ "CNPJ" ]
+      ENDIF
+      IF ! Empty( ::alocEnt[ "xNome" ] )
+         cEntrega += ' - ' + ::alocEnt[ "xNome" ]
+      ENDIF
+      IF ! Empty( ::alocEnt[ "xLgr" ] )
+         cEntrega += ' - ' + ::alocEnt[ "xLgr" ]
+      ENDIF
+      IF ! Empty( ::alocEnt[ "nro" ] )
+         cEntrega += ',' + ::alocEnt[ "nro" ]
+      ENDIF
+      IF ! Empty( ::alocEnt[ "xCpl" ] )
+         cEntrega += ::alocEnt[ "xCpl" ]
+      ENDIF
+      IF ! Empty( ::alocEnt[ "xBairro" ] )
+         cEntrega += ::alocEnt[ "xBairro" ]
+      ENDIF
+      IF ! Empty( ::alocEnt[ "xMun" ] )
+         cEntrega += ::alocEnt[ "xMun" ]
+      ENDIF
+      IF ! Empty( ::alocEnt[ "UF" ] )
+         cEntrega += ::alocEnt[ "UF" ]
+      ENDIF
+      AAdd( ::aObsDanfe, cEntrega )
+   ENDIF
+
    RETURN Nil
 
 METHOD GeraPDF( cFilePDF ) CLASS hbnfeDaCte
@@ -330,7 +378,7 @@ METHOD GeraPDF( cFilePDF ) CLASS hbnfeDaCte
    DO WHILE .T.
       ::NovaPagina()
       ::GeraFolha()
-      IF ! Len( ::aInfNFe ) > ::nNfeImpressas
+      IF ::nNfeImpressas >= Len( ::aInfNFe ) .AND. ::nObsImpressas >= Len( ::aObsDanfe )
          EXIT
       ENDIF
       ::nFolha  += 1
@@ -351,10 +399,28 @@ METHOD GeraPDF( cFilePDF ) CLASS hbnfeDaCte
 
 METHOD NovaPagina() CLASS hbnfeDaCte
 
+   LOCAL aTemp, cMemo, nCont
    ::oPdfPage := HPDF_AddPage( ::oPdf )
    AAdd( ::aPageList, ::oPDFPage )
 
    HPDF_Page_SetSize( ::oPdfPage, HPDF_PAGE_SIZE_A4, HPDF_PAGE_PORTRAIT )
+
+   IF ::nFolha == 1
+      /* ATENÇÃO: Mesmo fonte que imprime aObsDanfe */
+      /* Só dá pra formatar com página criada, por isso aqui */
+      HPDF_Page_SetFontAndSize( ::oPDFPage, ::oPDFFontNormal, 8 )
+      aTemp := ::aObsDanfe
+      ::aObsDanfe := {}
+      FOR EACH cMemo IN aTemp
+         cMemo := ::FormataMemo( cMemo, 550 )
+         FOR nCont = 1 TO MLCount( cMemo, 10000, nCont )
+            AAdd( ::aObsDanfe, MemoLine( cMemo, 10000, nCont ) )
+         NEXT
+      NEXT
+
+   /* fim teste formatar */
+
+   ENDIF
 
    ::nLinhaPdf := HPDF_Page_GetHeight( ::oPDFPage ) - 3     // Margem Superior
 
@@ -381,8 +447,7 @@ METHOD GeraFolha() CLASS hbnfeDaCte
    LOCAL aResp      := { 'Remetente', 'Expedidor', 'Recebedor', 'Destinatário', 'Emitente do CT-e', 'Tomador de Serviço' }
    LOCAL aTipoCar   := { 'não aplicável', 'Aberta', 'Fechada/Baú', 'Granelera', 'Porta Container', 'Sider' }
    LOCAL cOutros    := ''
-   LOCAL cEntrega   := ''
-   LOCAL aObserv    := {}
+   //LOCAL aObserv    := {}
    LOCAL cMensa
    LOCAL nLinha, nLinhaRef
    LOCAL nBase      := ''
@@ -393,6 +458,7 @@ METHOD GeraFolha() CLASS hbnfeDaCte
    LOCAL DASH_MODE3 := { 8, 7, 2, 7 }
    LOCAL nCont, oElement, cTexto, nPos
    LOCAL aList, cUrlConsulta := "http"
+   LOCAL nContObs := 0
 
    // box do logotipo e dados do emitente
    ::DrawBox( 003, ::nLinhaPdf - 119, 245, 119, ::nLarguraBox )
@@ -640,11 +706,11 @@ METHOD GeraFolha() CLASS hbnfeDaCte
       ::DrawTexto( 473, ::nLinhaPdf - 358, 580, Nil, Transform( Val( ::aInfCarga[ "vCarga" ] ), '@E 9,999,999.99' ), HPDF_TALIGN_RIGHT, ::oPDFFontBold, 12 )
 
       // Box das Quantidades
-      cTexto := iif( ! Len( ::aInfQ ) > 0, "", AllTrim( Transform( Val( ::aInfQ[ 1, 3 ] ), '@E 999,999.999' ) ) + '/' + aUnid[ Val( ::aInfQ[ 1, 1 ] ) + 1 ] + '/' + ::aInfQ[ 1, 2 ] )
+      cTexto := iif( ! Len( ::aInfQ ) > 0, "", AllTrim( Transform( Val( ::aInfQ[ 1, 3 ] ), '@E 999,999.999' ) ) + ' ' + aUnid[ Val( ::aInfQ[ 1, 1 ] ) + 1 ] + ' ' + ::aInfQ[ 1, 2 ] )
       ::DrawBoxTituloTexto( 003, ::nLinhaPdf - 373, 090, 025, "QT./UN./Medida", cTexto, HPDF_TALIGN_LEFT, ::oPDFFontBold, 7 )
-      cTexto := iif( ! Len( ::aInfQ ) > 1, "", AllTrim( Transform( Val( ::aInfQ[ 2, 3 ] ), '@E 999,999.999' ) ) + '/' + aUnid[ Val( ::aInfQ[ 2, 1 ] ) + 1 ] + '/' + ::aInfQ[ 2, 2 ] )
+      cTexto := iif( ! Len( ::aInfQ ) > 1, "", AllTrim( Transform( Val( ::aInfQ[ 2, 3 ] ), '@E 999,999.999' ) ) + ' ' + aUnid[ Val( ::aInfQ[ 2, 1 ] ) + 1 ] + ' ' + ::aInfQ[ 2, 2 ] )
       ::DrawBoxTituloTexto( 093, ::nLinhaPdf - 373, 090, 025, "QT./UN./Medida", cTexto, HPDF_TALIGN_LEFT, ::oPDFFontBold, 7 )
-      cTexto := iif( ! Len( ::aInfQ ) > 2, "", AllTrim( Transform( Val( ::aInfQ[ 3, 3 ] ), '@E 999,999.999' ) ) + '/' + aUnid[ Val( ::aInfQ[ 3, 1 ] ) + 1 ] + '/' + ::aInfQ[ 3, 2 ] )
+      cTexto := iif( ! Len( ::aInfQ ) > 2, "", AllTrim( Transform( Val( ::aInfQ[ 3, 3 ] ), '@E 999,999.999' ) ) + ' ' + aUnid[ Val( ::aInfQ[ 3, 1 ] ) + 1 ] + ' ' + ::aInfQ[ 3, 2 ] )
       ::DrawBoxTituloTexto( 183, ::nLinhaPdf - 373, 090, 025, "QT./UN./Medida", cTexto, HPDF_TALIGN_LEFT, ::oPDFFontBold, 7 )
 
       // Box da Seguradora
@@ -793,13 +859,13 @@ METHOD GeraFolha() CLASS hbnfeDaCte
       nLinha := nLinhaRef + 10
       FOR nCont = ::nNfeImpressas + 1 TO Len( ::aInfNFe ) STEP 2
          IF ! Empty( ::aInfNFe[ nCont, 1 ] )
-            ::DrawTexto( 005, ::nLinhaPdf - nLinha, 353, Nil, "NF-E", HPDF_TALIGN_LEFT, ::oPDFFontNormal, 8 )
+            ::DrawTexto( 005, ::nLinhaPdf - nLinha, 353, Nil, DfeModFisDescricao( ::aInfNfe[ nCont, 1 ] ), HPDF_TALIGN_LEFT, ::oPDFFontNormal, 8 )
             ::DrawTexto( 050, ::nLinhaPdf - nLinha, 240, Nil, ::aInfNFe[ nCont, 1 ], HPDF_TALIGN_LEFT, ::oPDFFontBold, 8 )
             ::DrawTexto( 240, ::nLinhaPdf - nLinha, 295, Nil, Substr( ::aInfNFe[ nCont, 1 ], 23, 3 ) + '/' + Substr( ::aInfNFe[ nCont, 1 ], 26, 9 ), HPDF_TALIGN_LEFT, ::oPDFFontBold, 8 )
             ::nNfeImpressas += 1
          ENDIF
          IF nCont + 1 <= Len( ::aInfNFe )
-            ::DrawTexto( 300, ::nLinhaPdf - nLinha, 353, Nil, "NF-E", HPDF_TALIGN_LEFT, ::oPDFFontNormal, 8 )
+            ::DrawTexto( 300, ::nLinhaPdf - nLinha, 353, Nil, DfeModFisDescricao( ::aInfNfe[ nCont + 1, 1 ] ), HPDF_TALIGN_LEFT, ::oPDFFontNormal, 8 )
             ::DrawTexto( 345, ::nLinhaPdf - nLinha, 535, Nil, ::aInfNFe[ nCont + 1, 1 ], HPDF_TALIGN_LEFT, ::oPDFFontBold, 8 )
             ::DrawTexto( 535, ::nLinhaPdf - nLinha, 590, Nil, Substr( ::aInfNFe[ nCont + 1, 1 ], 23, 3 ) + '/' + Substr( ::aInfNFe[ nCont + 1, 1 ], 26, 9 ), HPDF_TALIGN_LEFT, ::oPDFFontBold, 8 )
             ::nNfeImpressas += 1
@@ -809,6 +875,7 @@ METHOD GeraFolha() CLASS hbnfeDaCte
             EXIT
          ENDIF
       NEXT
+      nLinhaRef := nLinha
    ENDIF
 
    IF Len( ::aInfNF ) > 0
@@ -868,48 +935,30 @@ METHOD GeraFolha() CLASS hbnfeDaCte
       ' para a integração entre os Portais das Secretarias de Fazendas dos Estados e os sistemas de' + ;
       ' informações das empresas emissoras de Conhecimento de Transporte eletrônico - CT-e.')
       */
-      IF ! Empty( ::aCompl[ "xObs" ] )
-         AAdd( aObserv, ::aCompl[ "xObs" ] )
+   ENDIF
+
+   // ATENÇÃO: mesmo fonte no formatamemo() mais acima
+      IF ::nFolha == 1
+         nLinha := 638
+      ELSEIF ::nFolha != 1 .AND. Len( ::aObsDanfe ) > ::nObsImpressas
+         nLinha := nLinhaRef
+         nLinha += 10
+         ::DrawTexto( 005, ::nLinhaPdf - nLinha, 590, Nil, "CONTINUAÇÃO DE INFORMAÇÕES COMPLEMENTARES", HPDF_TALIGN_LEFT, ::oPDFFontBold, 8 )
+         nLinha += 10
       ENDIF
-      IF ! Empty( ::cAdFisco )
-         AAdd( aObserv, ::cAdFisco )
-      ENDIF
-      IF ! Empty( ::alocEnt[ 'xNome' ] )
-         cEntrega := 'Local de Entrega : '
-         IF ! Empty( ::alocEnt[ "CNPJ" ] )
-            cEntrega += 'CNPJ/CPF:' + ::alocEnt[ "CNPJ" ]
-         ENDIF
-         IF ! Empty( ::alocEnt[ "xNome" ] )
-            cEntrega += ' - ' + ::alocEnt[ "xNome" ]
-         ENDIF
-         IF ! Empty( ::alocEnt[ "xLgr" ] )
-            cEntrega += ' - ' + ::alocEnt[ "xLgr" ]
-         ENDIF
-         IF ! Empty( ::alocEnt[ "nro" ] )
-            cEntrega += ',' + ::alocEnt[ "nro" ]
-         ENDIF
-         IF ! Empty( ::alocEnt[ "xCpl" ] )
-            cEntrega += ::alocEnt[ "xCpl" ]
-         ENDIF
-         IF ! Empty( ::alocEnt[ "xBairro" ] )
-            cEntrega += ::alocEnt[ "xBairro" ]
-         ENDIF
-         IF ! Empty( ::alocEnt[ "xMun" ] )
-            cEntrega += ::alocEnt[ "xMun" ]
-         ENDIF
-         IF ! Empty( ::alocEnt[ "UF" ] )
-            cEntrega += ::alocEnt[ "UF" ]
-         ENDIF
-         AAdd( aObserv, cEntrega )
-      ENDIF
-      nLinha := 638
-      FOR EACH oElement IN aObserv
-         DO WHILE Len( oElement ) > 0
-            ::DrawTexto( 005, ::nLinhaPdf - nLinha, 590, Nil, Pad( oElement, 120 ), HPDF_TALIGN_LEFT, ::oPDFFontBold, 8 )
-            oElement := Substr( oElement, 121 )
+      FOR EACH oElement IN ::aObsDanfe
+         IF oElement:__EnumIndex > ::nObsImpressas
+            ::DrawTexto( 005, ::nLinhaPdf - nLinha, 590, Nil, oElement, HPDF_TALIGN_LEFT, ::oPDFFontBold, 8 )
+            nContObs += 1
+            IF nContObs > iif( ::nFolha == 1, 2, 55 )
+               EXIT
+            ENDIF
             nLinha += 10
-         ENDDO
+         ENDIF
       NEXT
+      ::nObsImpressas += nContObs
+   //ENDIF
+   IF ::nFolha == 1
       /*
       IF ! Empty( ::vTotTrib )
       ::DrawTexto( 005 , ::nLinhaPdf-675 , 590, Nil, 'Valor aproximado total de tributos federais, estaduais e municipais conf. Disposto na Lei nº 12741/12 : R$ '+Alltrim(Transform( Val(::vTotTrib) , '@E 999,999.99' )) , HPDF_TALIGN_LEFT , ::oPDFFontBold, 8 )
@@ -1044,3 +1093,18 @@ METHOD GeraFolha() CLASS hbnfeDaCte
    ENDIF
 
    RETURN Nil
+
+STATIC FUNCTION DfeModFisDescricao( cChave )
+
+   LOCAL cTipoDoc, cTipo
+
+   cTipo := DfeModFis( cChave )
+   DO CASE
+   CASE cTipo == '55' ; cTipoDoc := "NF-E"
+   CASE cTipo == '65' ; cTipoDoc := "NFC-E"
+   CASE cTipo == '57' ; cTipoDoc := "CT-E"
+   CASE cTipo == '58' ; cTipoDoc := "MDF-E"
+   OTHERWISE ;          cTipoDoc := "NF"
+   ENDCASE
+
+   RETURN cTipoDoc

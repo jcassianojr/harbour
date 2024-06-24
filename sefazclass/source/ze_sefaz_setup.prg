@@ -19,8 +19,8 @@ FUNCTION ze_sefaz_Setup( Self, cUF, cCertificado, cAmbiente, lEnvioSinc )
    ENDIF
 
    DO CASE
-   CASE cUF == NIL
-   CASE Len( SoNumeros( cUF ) ) != 0
+   CASE cUF == NIL .OR. Empty( cUF )
+   CASE Len( SoNumero( cUF ) ) != 0
       ::cUF := ::UFSigla( Left( cUF, 2 ) )
    OTHERWISE
       ::cUF := cUF
@@ -150,7 +150,7 @@ STATIC FUNCTION SoapUrlNFCe( aList, cUf, cVersao, cSoapAction )
          cSoapAction := aList[ nPos, 4 ]
       ENDIF
    ELSE
-      IF cUF $ "AC,ES,RO,RR"
+      IF cUF $ "AC,AL,AP,BA,DF,ES,MA,PB,PE,PI,RJ,RN,RO,RR,SE,TO"
          cUrl := SoapUrlNFCe( aList, "SVRS", cVersao, @cSoapAction  )
       ENDIF
    ENDIF

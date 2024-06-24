@@ -32,7 +32,7 @@
 *+    Logic2Str(lValor,cFORMATO)   convert logical to text
 *+    aconvertend() matriz com os tipos de endereco rua avenida...
 *+    MinutoToHora( horas )
-*+    Sonumero(cInString,lPONTO,lVIRGULA)
+*+    SonumeroX(cInString,lPONTO,lVIRGULA)
 *+
 *+  added new .prg functions to mange date and timestamp values:
 *+      HB_DATETIME() -> <tTimeStamp>
@@ -151,12 +151,12 @@ return ret_string
 
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 *+
-*+    Function Sonumero(cInString,lPONTO,lVIRGULA)
+*+    Function SonumeroX(cInString,lPONTO,lVIRGULA)
 *+
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 *+
 
-FUNCTION Sonumero(cInString,lPONTO,lVIRGULA)
+FUNCTION SonumeroX(cInString,lPONTO,lVIRGULA)
 local nIter,cThisLetter
 local nLenString := LEN(cInString)
 local cOutValue := ''

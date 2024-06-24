@@ -43,11 +43,11 @@ FUNCTION ze_Sefaz_NFeEnvio( Self, cXml, cUF, cCertificado, cAmbiente, lEnvioSinc
       Inkey( ::nTempoEspera )
       ::NfeRetEnvio()
    ENDIF
-   IF ! "infProt" $ ::cXmlRetorno .AND. hb_ASCan( { "103", "104", "105" }, ::cStatus,,, .T. ) != 0
+   IF ! "infProt" $ ::cXmlRetorno .AND. hb_ASCan( { "103", "104", "105" }, { | e | e == ::cStatus } ) != 0
       oDoc   := XmlToDoc( ::cXmlDocumento, .F. )
       cChave := oDoc:cChave
       Inkey( ::nTempoEspera )
-      ::NfeProtocolo( cChave, ::cUF, ::cCertificado, ::cAmbiente )
+      ::NfeProtocolo( cChave, ::cCertificado, ::cAmbiente )
    ENDIF
    IF ! Empty( XmlNode( ::cXmlRetorno, "infProt" ) )
       ::cXmlProtocolo := ::cXmlRetorno
@@ -82,7 +82,7 @@ STATIC FUNCTION GeraQRCode( cXmlAssinado, cIdToken, cCSC, cVersao, cVersaoQrCode
 
    // 2¦ Parte (Parametros)
    QRCODE_chNFe    := AllTrim( Substr( XmlElement( cInfNFe, "Id" ), 4 ) )
-   QRCODE_nVersao  := SoNumeros( cVersaoQRCode )
+   QRCODE_nVersao  := SoNumero( cVersaoQRCode )
    QRCODE_tpAmb    := cAmbiente
    QRCODE_cDest    := XmlNode( XmlNode( cInfNFe, "dest" ), "CPF" )
    IF Empty( QRCODE_cDest )
@@ -168,7 +168,7 @@ STATIC FUNCTION GeraQRCode( cXmlAssinado, cIdToken, cCSC, cVersao, cVersaoQrCode
       aUrlList := WS_NFE_CHAVE
       nPos     := hb_AScan( aUrlList, { | e | e[ 1 ] == cUF .AND. ;
          e[ 2 ] == cVersaoQrCode + iif( cAmbiente == WS_AMBIENTE_HOMOLOGACAO, "H", "P" ) } )
-      QRCode_UrlChave := iif( nPos == 0, "", aUrlList[ nPos, 3 ] + "?" )
+      QRCode_UrlChave := iif( nPos == 0, "", aUrlList[ nPos, 3 ] )
       cXmlAssinado += XmlTag( "urlChave", QRCode_UrlChave )
 
       cXmlAssinado += [</] + "infNFeSupl"+[>]
