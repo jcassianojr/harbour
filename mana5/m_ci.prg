@@ -153,7 +153,7 @@ IF in_string != NIL
     FOR counter = 1 TO in_len
          next_char = SUBSTR(in_string, counter * -1, 1)
          nCHAR:=0
-         IF SDIGIT(next_char) .OR. ISALPHA(next_char) .OR.  next_char $ '-+_!@#$%^&*., ?' //next_char == '.'.OR. next_char == '_' .OR.     ISDIGIT(next_char) .OR. ISALPHA(next_char)   
+         IF iSDIGIT(next_char) .OR. ISALPHA(next_char) .OR.  next_char $ '-+_!@#$%^&*., ?' //next_char == '.'.OR. next_char == '_' .OR.     ISDIGIT(next_char) .OR. ISALPHA(next_char)   
              nCHAR:= (ASC(next_char) + ADJVAL) * 2
              out_string := out_string +    CHR(nCHAR)
          ENDIF

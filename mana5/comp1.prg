@@ -18,7 +18,8 @@
 *+
 *+--------------------------------------------------------------------
 *+
-
+FUNCTION Sonumero(cInString,lPONTO,lVIRGULA)
+RETURN SonumeroX(cInString,lPONTO,lVIRGULA)
 
 *+--------------------------------------------------------------------
 *+
