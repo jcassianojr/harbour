@@ -34,6 +34,8 @@
 *+
 FUNCTION VALCGC( cCNPJ, xTIPO ,lMES, cUF)
 local x
+local nCHAR
+local P1
 ZNERRO:=0
 ZERRO:=""
 
@@ -74,6 +76,29 @@ next X
       //ZERRO:="CNPJ Invalido - Nao e Matriz"
    //endif
 //endif
+// CNPJ-Numeric (current): NN.NNN.NNN/NNNN-NN
+//CNPJ-Alphanumeric (new): SS.SSS.SSS/SSSS-NN       
+//                         12 345 678 9012 34
+for X := 1 to 12
+   nCHAR := SUBSTR(P1,X,1)
+   if ISALPHA(nCHAR) .OR. ISDIGIT(nCHAR)
+   else 
+      ZNERRO:=11
+      ZERRO:="CNPJ Invalido - digito Posicao " + str( X, 1 ) 
+   endif
+next X
+
+for X := 13 to 14
+  nCHAR := SUBSTR(P1,X,1)
+   if ISDIGIT(nCHAR)
+   else 
+      ZNERRO:=12
+      ZERRO:="CNPJ Invalido - digito nao numerico Posicao " + str( X, 1 ) 
+   endif
+next X
+
+
+
 if Left(p1, 7) = "9999999" //     inicio 999999             
    ZNERRO:=5
    ZERRO:="CNPJ Generico 9999999"
