@@ -5,7 +5,7 @@
 -vcshead=vcshead.ch
 -tshead=tshead.ch
 
-cepwebvia.prg 
+cepwebvia.prg -b
 
 # d:\develop\harbour\sefazclass\source\ze_miscfunc.prg
 # d:\develop\harbour\sefazclass\source\ze_sefazclass.prg

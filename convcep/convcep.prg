@@ -278,8 +278,8 @@ IF MsgYesNo("Ajustar tipos de rua")
    dbclosearea()
    mArquivo := 'C*.dbf'
    mListaArq := Directory(mArquivo,"D")
-   nFIM:=LEN(mListaArq)   
-   For i := 1 to nfim
+   nFIMARQ:=LEN(mListaArq)   
+   For i := 1 to nfimARQ
       cFILECEP:=lower(mListaArq[i,1])
       cFILECEP:=strtran(cFILECEP,".dbf","")
       @ 24,00 SAY SPACE(80)
@@ -302,7 +302,7 @@ IF MsgYesNo("Ajustar tipos de rua")
 			zei_fort( nLASTREC,,,0) //zera pois e exibito novamente
 		 ENDIF	
          dbsetorder(0) //deixa sem ordencao pois o nome sofre replace e um dos indices
-         @ 23,00 SAY cFILECEP+" "+str(i)+"/"+str(nfim)
+         @ 23,00 SAY cFILECEP+" "+str(i)+"/"+str(nfimARQ)
          dbgotop()
          while ! eof()      
             //@ 24,09 SAY RECNO() PICT "99999"

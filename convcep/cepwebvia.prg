@@ -60,7 +60,7 @@ if ! file("cepruaimp.dbf")
    alert("Falta cepruaimp.dbf")
    quit
 endif
-     
+
      
 lRUAVAZIA:=MSGYESNO("Checar Ruas Em Branco")
 lBAIRROVAZIO:=MSGYESNO("Checar Bairro em Branco")
@@ -102,10 +102,14 @@ dbRecall() //retorna os que nao achou na busca anterior pois uf cidade estao em 
 index on CEP tag cep
 
 
+OpenCepjason()     
+
+
+
 mArquivo := 'C*.dbf'
 mListaArq := Directory(mArquivo)
-nFIM:=LEN(mListaArq)   
-For KK := 1 to LEN(mListaArq)
+nFIMARQ:=LEN(mListaArq)   
+For KK := 1 to nFIMARQ //LEN(mListaArq)
     cFILECEP:=lower(mListaArq[KK,1])
     cFILECEP:=strtran(cFILECEP,".dbf","")	
   
@@ -765,3 +769,66 @@ cURL:="https://brasilapi.com.br/api/cep/v2/"+cCEP
     
   
 return .t.
+
+function OpenCepjason()
+/*
+// https://opencep.com/v1/15050305
+ 
+{
+  "cep": "15050-305",
+  "logradouro": "Rua Josina Teixeira de Carvalho",
+  "complemento": "",
+  "bairro": "Vila Anchieta",
+  "localidade": "São José do Rio Preto",
+  "uf": "SP",
+  "ibge": "3549805"
+}
+*/
+
+local kk
+kk:=1   
+   
+mArquivo := '*.json'
+mListaArq := Directory(mArquivo,"D")
+nFIMARQ:=LEN(mListaArq)   
+
+For kk = 1 to nFIMARQ
+     cFILECEP:=lower(mListaArq[kk,1])
+     cXMl:=memoread(cFILECEP)
+    cXMl := XmlTransform( cXMl)
+
+    ? '  opencep:'+ cFILECEP
+    ?
+    
+  	cBairro      :=""
+  	cCidade      :=""
+  	cEndereco    :=""
+  	cUF          :=""
+    cIBGE        :=""
+    cComplemento :=""
+    cTIPORUA     :=""
+    cDDD         :=""
+    cLATITUDE    :=""
+    cLONGITUDE   :=""
+  
+    
+    //aqui e necesssario espaco depois dos dois ponto `: `
+    cCEP        := tirAOUT(pegnodojason(cXMl,'"cep": '))
+    CUF          := pegnodojason(cXMl,'"uf": ')
+    cCIDADE      := pegnodojason(cXMl,'"localidade": ' )
+    cBairro      := pegnodojason(cXMl,'bairro": ')
+    cENDERECO    := pegnodojason(cXMl,'"logradouro": ')
+    cIBGE        :=  pegnodojason(cXMl,'"ibge": ')
+    cComplemento :=  pegnodojason(cXMl,'"complemento": ')
+
+//   alert(Cuf)
+//   alert(Ccidade)
+//   alert(Cendereco)
+   
+   GRAVARUAIMP()
+   
+   ferase(cFILECEP)
+next kk
+return .t.
+
+
