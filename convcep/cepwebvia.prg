@@ -10,6 +10,14 @@ http://www.pctoledo.com.br/forum/viewtopic.php?f=39&t=17470&start=75#p118783
 4. Microsoft XML, v 6.0 for latest versions of MS Office.
 */
 
+//https://brasilaberto.com/blog/posts/5-melhores-apis-de-cep-2023
+//
+// https://api.brasilaberto.com/v1/zipcode/01001000
+//*** https://viacep.com.br/ws/01001000/json/
+// https://opencep.com/v1/15050305
+// https://brasilapi.com.br/api/cep/v2/01001000
+//*** https://cdn.apicep.com/file/apicep/06233-030.json
+
 #include "tshead.ch"
 
 REQUEST HB_CODEPAGE_PTISO
@@ -34,6 +42,20 @@ PRIVATE  cCep, cBairro, cCidade, cEndereco, cUF, cID
 
 nERRO:=0
 
+//altd()
+//CEPBrasilApi('16045970')
+//CEPOpenCep('16045970')
+//CEPBrasilAberto('16045970')
+
+
+//CEPBrasilApi('16012145')
+//CEPOpenCep('16012145')
+//CEPBrasilAberto('16012145')
+//16045970
+//16012145
+
+//quit
+
 if ! file("cepruaimp.dbf")
    alert("Falta cepruaimp.dbf")
    quit
@@ -44,13 +66,19 @@ lRUAVAZIA:=MSGYESNO("Checar Ruas Em Branco")
 lBAIRROVAZIO:=MSGYESNO("Checar Bairro em Branco")
 lNOMECURTO:=MSGYESNO("Checar Ruas com nomes menores que 5 letras")   
 lAPAGANAO:=MSGYESNO("Apaga Nao encontrado")
-lCHECKVIACEP:=MSGYESNO("Usar viacep")
-lCHECKAPICOR:=MSGYESNO("Usar apicor")
-lCHECKREPVIR:=MSGYESNO("Usar RepVirtual")
-lCHECKAPICEP:=MSGYESNO("Usar apicep")
-lCHECKAPIAWE:=MSGYESNO("Usar apiAWE")
+
+lCHECKVIACEP  :=MSGYESNO("Usar viacep")
+lCHECKAPICOR  :=MSGYESNO("Usar apicor")
+lCHECKREPVIR  :=MSGYESNO("Usar RepVirtual")
+lCHECKAPICEP  :=MSGYESNO("Usar apicep")
+lCHECKAPIAWE  :=MSGYESNO("Usar apiAWE")
+lBrasilAberto :=MSGYESNO("Usar BrasilAberto")
+lopencep      :=MSGYESNO("Usar opencep")
+lBrasilAPI    :=MSGYESNO("Usar BrasilAPI")
+
 lGERACEPTXT:=MSGYESNO("Gerar ceps.csv")
 lGERACEPRUA:=MSGYESNO("Gerar cepruaimp.csv ")
+
 
 IF lGERACEPTXT
    nFILECEPS:=FCREATE("ceps.csv")
@@ -189,6 +217,43 @@ For KK := 1 to LEN(mListaArq)
                     GRAVARUANAO('nao localizado apiAWE')
                  endif   
              ENDIF
+             
+             IF LBrasilAberto
+                 ? '  BrasilAberto:'+ cCEP
+                 ?
+                 CEPBrasilAberto(cCEP)
+                 IF ! empty(cEndereco+cBairro)
+                    GRAVARUAIMP()
+                    lTEMCEP:=.T.
+    			 else
+                    GRAVARUANAO('nao localizado BrasilAberto')
+                 endif   
+             ENDIF
+             
+             IF Lopencep
+                 ? '  opencep:'+ cCEP
+                 ?
+                 CEPopencep(cCEP)
+                 IF ! empty(cEndereco+cBairro)
+                    GRAVARUAIMP()
+                    lTEMCEP:=.T.
+    			 else
+                    GRAVARUANAO('nao localizado opencep')
+                 endif   
+             ENDIF
+             
+             IF LBrasilAPI
+                 ? '  BrasilAPI:'+ cCEP
+                 ?
+                 CEPBrasilAPI(cCEP)
+                 IF ! empty(cEndereco+cBairro)
+                    GRAVARUAIMP()
+                    lTEMCEP:=.T.
+    			 else
+                    GRAVARUANAO('nao localizado BrasilAPI')
+                 endif   
+             ENDIF
+                  
              
              IF lGERACEPTXT .AND. lTEMCEP .AND. ! empty(cEndereco+cBairro)
                 FWRITE(nFILECEPS,cCEP+HB_OSNEWLINE())
@@ -540,4 +605,163 @@ METHOD New( cCEP )
    
 RETURN Self
   
+  function CEPBrasilAberto(cCEP)
+/*
+// https://api.brasilaberto.com/v1/zipcode/01001000
+ 
+{
+  "meta": {
+    "currentPage": 1,
+    "itemsPerPage": 1,
+    "totalOfItems": 1,
+    "totalOfPages": 1
+  },
+  "result": {
+    "street": "Praça da Sé",
+    "complement": "lado ímpar",
+    "district": "Sé",
+    "districtId": 1,
+    "city": "São Paulo",
+    "cityId": 1,
+    "ibgeId": 3550308,
+    "state": "São Paulo",
+    "stateShortname": "SP",
+    "zipcode": "01001000"
+  }
+}
+*/
+cURL:="https://api.brasilaberto.com/v1/zipcode/"+cCEP
+	oPg  := CreateObject("Msxml2.XMLHTTP.6.0")  
+	oPg:Open("GET",cUrl,.F.)
+	oPg:Send()
+	cXMl := oPg:ResponseBody
   
+    cXMl := XmlTransform( cXMl)
+    
+    if at('error',cXML)>0
+       return
+    endif
+    
+    
+    CUF          := pegnodojason(cXMl,'stateShortname":')
+    cCIDADE      := pegnodojason(cXMl,'city":' )
+    cBairro      := pegnodojason(cXMl,'district":')
+    cENDERECO    := pegnodojason(cXMl,'street":')
+    cIBGE        :=  pegnodojason(cXMl,'ibgeId":')
+    cComplemento :=  pegnodojason(cXMl,'complement":')
+    
+ //    alert(Cuf)
+ //   alert(Ccidade)
+ //   alert(Cendereco)
+//
+//    "cityId": 1,
+ //   "ibgeId": 3550308,
+//cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
+// hb_memowrit("c"+cCEP+"_01_.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
+return .t.
+
+
+function CEPOpenCep(cCEP)
+/*
+// https://opencep.com/v1/15050305
+ 
+{
+  "cep": "15050-305",
+  "logradouro": "Rua Josina Teixeira de Carvalho",
+  "complemento": "",
+  "bairro": "Vila Anchieta",
+  "localidade": "São José do Rio Preto",
+  "uf": "SP",
+  "ibge": "3549805"
+}
+*/
+cURL:="https://opencep.com/v1/"+cCEP
+	oPg  := CreateObject("Msxml2.XMLHTTP.6.0")  
+	oPg:Open("GET",cUrl,.F.)
+	oPg:Send()
+	cXMl := oPg:ResponseBody
+  
+    cXMl := XmlTransform( cXMl)
+    
+    if at('error',cXML)>0
+       return
+    endif
+    
+   // altd()
+    //aqui e necesssario espaco depois dos dois ponto `: `
+    CUF          := pegnodojason(cXMl,'"uf": ')
+    cCIDADE      := pegnodojason(cXMl,'"localidade": ' )
+    cBairro      := pegnodojason(cXMl,'bairro": ')
+    cENDERECO    := pegnodojason(cXMl,'"logradouro": ')
+    cIBGE        :=  pegnodojason(cXMl,'"ibge": ')
+    cComplemento :=  pegnodojason(cXMl,'"complemento": ')
+
+ //   alert(Cuf)
+ //   alert(Ccidade)
+ //   alert(Cendereco)
+//cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
+    
+//hb_memowrit("c"+cCEP+"_02.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
+
+return .t.
+
+
+function CEPBrasilApi(cCEP)
+/*
+// https://brasilapi.com.br/api/cep/v2/01001000
+ 
+{
+  "cep": "01001000",
+  "state": "SP",
+  "city": "São Paulo",
+  "neighborhood": "Sé",
+  "street": "Praça da Sé - lado ímpar",
+  "service": "correios-alt",
+  "location": {
+    "type": "Point",
+    "coordinates": {
+      
+    }
+  }
+}
+*/
+cURL:="https://brasilapi.com.br/api/cep/v2/"+cCEP
+	oPg  := CreateObject("Msxml2.XMLHTTP.6.0")  
+	oPg:Open("GET",cUrl,.F.)
+	oPg:Send()
+	cXMl := oPg:ResponseBody
+  
+    cXMl := XmlTransform( cXMl)
+    
+    if at('error',cXML)>0
+       return
+    endif
+    
+ //   altd()
+    CUF          := pegnodojason(cXMl,'state":')
+    cCIDADE      := pegnodojason(cXMl,'"city":' )
+    cBairro      := pegnodojason(cXMl,'neighborhood":')
+    cENDERECO    := pegnodojason(cXMl,'street":')
+  
+  //   alert(Cuf)
+  //  alert(Ccidade)
+  //  alert(Cendereco)
+  //cLATITUDE    :=""
+  //   cLONGITUDE   :=""
+  
+    if at('latitude":',cXML)>0 .AND. at('longitude":',cXML)>0 
+       cLATITUDE    :=pegnodojason(cXMl,'latitude":')
+       cLONGITUDE   :=pegnodojason(cXMl,'longitude":')
+    ENDIF
+
+
+//
+//     cLONGITUDE   :=""
+ // alert(Clatitude)
+//  alert(Clongitude)
+//cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
+    
+// hb_memowrit("c"+cCEP+"_03.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
+    
+  
+return .t.
