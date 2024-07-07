@@ -1,0 +1,82 @@
+--->cFILE:=win_GetOpenFileName(, "Arquivos", "", "txt", "*.txt", 1 )
+--->cFILE:=win_GetOpenFileName(, "Arquivos", HB _CWD(), "txt", "*.txt", 1 )
+
+win_GetOpenFileName( Flags, cTitle, InitDir, cDefExt,acFilter, nFilterIndex, nBufferSize, cDefName)
+
+
+
+Cfile:=WIN_GETSAVEFILENAME( , "Salvar txt como", "c:\temp\","txt", "*.txt" , 1,, "nome01.txt")
+ARQUIVO:=WIN_GETSAVEFILENAME(        , "Salvar Gerencial", HB_CWD(),"txt"   , "*.txt" , 1            ,               , "gerencial.txt")
+cFILE := win_GetSaveFileName( Flags, cTitle            , cInitDir, cDefExt, acFilter, @nFilterIndex, /*nBufferSize*/, cDefName )
+
+
+HB_CWD() 
+
+caRQ:=PEGCAMINI("MD10")+"MD10"
+
+
+FUNCTION PEGCAMINI(cARQ,cCAM)
+   cCAM:=ProfileString( "FOLHA.INI", cARQ+ ".DBF", "CAMINHO", ZDIRE )
+   
+   
+
+ProfileString( cINIFile, cSection, cKey, cDefault )
+
+hb_fNameSplit( copio,,@cFILETMP,@cEXTTMP)
+hb_FNameSplit( cFileName, @cDir, @cName, @cExt )
+cFileName := hb_FNameMerge( cDir, Lower( cName ), Lower( cExt ) )
+
+
+
+hWnd:     Handle to parent window
+cPath:    (optional) if OFN_ALLOWMULTISELECT the path is stored
+cTitle:   Window Title
+aFilter:  Array of Files Types i.e. { { "Databases", "*.dbf" }, { "Harbour", "*.prg" } }
+nFlags:   OFN_* values default to OFN_EXPLORER
+cInitDir: Initial directory
+cDefExt:  Default Extension i.e. "DBF"
+nIndex:   Index position of types
+cDefName: DEFAULT file name
+
+Returns:  If OFN_ALLOWMULTISELECT ?  Array of files selected : FileName.
+*/
+
+==========================================================================================
+cFILE:=win_GetOpenFileName(, "Arquivos", "", "txt", "*.txt", 1 )
+
+/* win_GetOpenFileName( [[@]<nFlags>], [<cTitle>], [<cInitDir>], [<cDefExt>], ;
+ *                      [<acFilter>], [[@]<nFilterIndex>], [<nBufferSize>], [<cDefName>] )
+ *    --> <cFilePath> | <cPath> + e"\0" + <cFile1> [ + e"\0" + <cFileN> ] | ""
+ */
+//  __defaultNIL( @cPath, "" )
+//   __defaultNIL( @nFlags, OFN_EXPLORER + OFN_NOCHANGEDIR )
+
+--->cFILE:=win_GetOpenFileName(, "Arquivos", "", "txt", "*.txt", 1 )
+
+===============================================================================
+
+/* win_GetSaveFileName( [[@]<nFlags>], [<cTitle>], [<cInitDir>], [<cDefExt>], ;
+ *                      [<acFilter>], [[@]<nFilterIndex>], [<nBufferSize>], [<cDefName>] )
+ *    --> <cFilePath> | <cPath> + e"\0" + <cFile1> [ + e"\0" + <cFileN> ] | ""
+ */
+
+cFILE := win_GetSaveFileName( @nFlags, cTitle, cInitDir, cDefExt, acFilter, @nFilterIndex, /*nBufferSize*/, cDefName )
+
+   WIN_GETOPENFILENAME() and WIN_GETSAVEFILENAME() functions:
+         WIN_GETOPENFILENAME( [[@]<nFlags>], [<cTitle>], [<cInitDir>],
+                              [<cDefExt>], [<acFilter>], [[@]<nFilterIndex>],
+                              [<nBufferSize>], [<cDefName>] )
+            -> <cFilePath> |
+               <cPath> + e"\0" + <cFile1> [ + e"\0" + <cFileN> ] |
+               ""
+         WIN_GETSAVEFILENAME( [[@]<nFlags>], [<cTitle>], [<cInitDir>],
+                              [<cDefExt>], [<acFilter>], [[@]<nFilterIndex>],
+                              [<nBufferSize>], [<cDefName>] )
+            -> <cFilePath> |
+               <cPath> + e"\0" + <cFile1> [ + e"\0" + <cFileN> ] |
+               ""
+			   
+			   
+			   *****************************so retorna o nome nao cria o arquivo***********************
+--->			   Cfile:=WIN_GETSAVEFILENAME( , "Salvar txt como", "c:\temp\","txt", "*,txt" , 1,, "nome01.txt")
+			   

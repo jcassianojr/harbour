@@ -1,0 +1,1 @@
+hbpp %1.prg -ustd.ch
