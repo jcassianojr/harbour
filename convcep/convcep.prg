@@ -33,8 +33,7 @@ Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 SetCursor(.t.)
 
-            
-            
+          
 aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
             "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
             "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO" ,"EX","XX"}
@@ -129,16 +128,35 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. lCE_F .or. MsgYesNo( 
         mNOME     := tratanome( mNOME,.T.,.T. )     
         mDDD      := md10imp->DDD
         mCODIBGE  := md10imp->CODIBGE        
+
+        mCODTSE   := md10imp->CODTSE     
+        mCODBACEN := md10imp->CODBACEN       
+        mCODIRRF  := md10imp->CODIRRF
+        
         mINICEP   := md10imp->INICEP
         mFIMCEP   := md10imp->FIMCEP    
-        mAREA     := md10imp->AREA
         
+        mAREA     := md10imp->AREA
         mNOMTEL     := md10imp->NOMTEL
         mCODTEL     := md10imp->CODTEL
+        
         mlatitude   := md10imp->latitude
         mlongitude  := md10imp->longitude
         mhemisferio := md10imp->hemisferio
         
+        mCENTROI:=  md10imp->CENTROI //"POINT(-46.3739271518483 -23.5609457306696)"
+        IF ! EMPTY(mCENTROI)
+            mCENTROI:=STRTRAN(mCENTROI,"POINT","")
+            mCENTROI:=STRTRAN(mCENTROI,"(","")
+            mCENTROI:=STRTRAN(mCENTROI,")","")
+
+            nPOSGEO:=AT(" ",mCENTROI)   
+            IF nPOSGEO>0
+               mLATITUDE  := SUBSTR(mCENTROI,nPOSGEO+1)  //23
+               mLONGITUDE := SUBSTR(mCENTROI,1,nPOSGEO-1) //46
+            ENDIF
+        ENDIF
+
         
         
         IF ! EMPTY(mUF) .AND. aSCAN(aIBGE,mUF)>0 //A uf esta com codigo e nao com a sigla
@@ -189,7 +207,17 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. lCE_F .or. MsgYesNo( 
            endif   
            if ! empty(mCODIBGE)   .AND. EMPTY(md10->CODIBGE)           
                md10->CODIBGE := mCODIBGE
-           endif             
+           endif 
+                      
+           if ! empty(mCODIRRF)   .AND. EMPTY(md10->CODIRRF)           
+               md10->CODIRRF := mCODIRRF
+           endif  
+           if ! empty(mCODTSE)   .AND. EMPTY(md10->CODTSE)           
+               md10->CODTSE := mCODTSE
+           endif              
+           if ! empty(mCODBACEN)   .AND. EMPTY(md10->CODBACEN)           
+               md10->CODBACEN := mCODBACEN
+           endif                        
            if ! empty(mINICEP)   .AND. VAL(md10->INICEP)=0
                md10->INICEP := mINICEP
            endif   
