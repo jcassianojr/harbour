@@ -199,93 +199,100 @@ endif
 cRETU:=valor
 Valor:= alltrim(tiraout(Valor))
 cMASK = ""
-If Valor = "ISENTO"
-   retu cRETU
-EndIf
+
+//sem inscricao
+if left( upper( cInscricao), 5 ) = "ISENT" .OR. (at("NAO",upper(cInscricao))>0 .AND. at("CONTRIB",upper(cInscricao))>0 )
+   return cRETU    //isento isenta //nao contribuinte     
+endif
+
+//pessoa fisica
 If cPESSOA = "F"
-   retu cRETU
+   retuRN cRETU
 EndIf
+
+//nao prenchida em branco
 If Len(Valor) = 0
-   retu cRETU
+   return cRETU
 EndIf
 //| no lugar do ponto depois sofre strtran
 
 do Case
     Case cUF="AC" //13 dig
-         cMASK = "00|000|000/00000" //"@R 99.999.999/999-99" 
+         cMASK = "@R 00|000|000/00000" //"@R 99.999.999/999-99" 
     Case cUF="AL" //9 digitos
-         cMASK = "000000000"   //"@R 999999999"  
+         cMASK = "@R 000000000"   //"@R 999999999"  
     Case cUF="AM" //9 dig
-         cMASK = "00|000|0000" //"@R 99.999.999-9"
+         cMASK = "@R 00|000|0000" //"@R 99.999.999-9"
     Case cUF="AP" //9 dig
-         cMASK = "000000000"  //"@R 999999999" 
+         cMASK = "@R 000000000"  //"@R 999999999" 
     Case cUF="BA" //8 digitos
          IF len(VALOR)=8 //antiga
-            cMASK = "00000000"  //"@R 999.999-99" 
+            cMASK = "@R 00000000"  //"@R 999.999-99" 
          ENDIF
          IF len(VALOR)=9 //nova
-            cMASK = "000|000|000" 
+            cMASK = "@R 000|000|000" 
          ENDIF         
+         
     Case cUF="DF" //13 digitos
-		  cMASK =  "00|000000|00000"         //"@R 99.999999.999-99"
+		  cMASK =  "@R 00|000000|00000"         //"@R 99.999999.999-99"
     Case cUF="MA"   //9 digitos
-         cMASK = "000000000" //"@R 999999999"
+         cMASK = "@R 000000000" //"@R 999999999"
     Case cUF="MG" //13 digitos
-         cMASK = "000000000|00|00"  //"@R 999.999.999/9999"
+         cMASK = "@R 000000000|00|00"  //"@R 999.999.999/9999"
     Case cUF="MT" //11 digitos
-         cMASK = "00000000000"  //"@R 9999999999-9"
+         cMASK = "@R 00000000000"  //"@R 9999999999-9"
     Case cUF="PA" //9 digitos
-         cMASK = "00|0000000" //"@R 99-999999-9"
+         cMASK = "@R 00|0000000" //"@R 99-999999-9"
     Case cUF="PB" //9 digitos
-         cMASK = "00|000|0000"  //"@R 99-999999-9"
+         cMASK = "@R 00|000|0000"  //"@R 99-999999-9"
     Case cUF="PE" //9 nova ou 14 antiga
          IF Len(valor)>9
-            cMASK = "00|0|000|00000000"  //14 antiga
+            cMASK = "@R 00|0|000|00000000"  //14 antiga
          ELSE
-            cMASK ="000000000"  //9 nova "@R 9999999-99"
+            cMASK ="@R 000000000"  //9 nova "@R 9999999-99"
          ENDIF
     Case cUF="PI" //9 digitos
-         cMASK = "00|000|0000" //"@R 99.999.999-9"
+         cMASK = "@R 00|000|0000" //"@R 99.999.999-9"
     Case cUF="RN" //9 digitos  ou 10 digitos
          if len(VALOR)>9
-            cMASK = "00|0|000|0000"
+            cMASK = "@R 00|0|000|0000"
          else
-            cMASK = "00|000|0000" //"@R 99.999.999-9" 
+            cMASK = "@R 00|000|0000" //"@R 99.999.999-9" 
          endif
     Case cUF="RO"
          if len(VALOR)=9
-            cMASK = "000|000000"  //antiga  9 digitos
+            cMASK = "@R 000|000000"  //antiga  9 digitos
          else 
-            cMASK = "00000000000000"   //nova 14 digitos
+            cMASK = "@R 00000000000000"   //nova 14 digitos
          endif   
     Case cUF="RR" //9 digitos
-         cMASK = "00|0000000" //"@R 99.999.999-9"
+         cMASK = "@R 00|0000000" //"@R 99.999.999-9"
     Case cUF="SC" //9 digitos
-         cMASK = "000|000|000" //"@R 999.999.999"
+         cMASK = "@R 000|000|000" //"@R 999.999.999"
     Case cUF="SP" //12 digitos
-          cMASK = "000|000|000|000"   //"@R 999.999.999.999"
+          cMASK = "@R 000|000|000|000"   //"@R 999.999.999.999"
     Case cUF="TO" //9 11 digitos
           If len(valor)=11
-             cMASK = "00|00|0000000"  //"@R 99.99.999999-9" 
+             cMASK = "@R 00|00|0000000"  //"@R 99.99.999999-9" 
           else
-             cMASK = "00|000|0000"  
+             cMASK = "@R 00|000|0000"  
           endif
     Case cUF="CE" //9 digitos
-         cMASK = "00|0000000"  //"@R 99.999999-9"
+         cMASK = "@R 00|0000000"  //"@R 99.999999-9"
     Case cUF="ES" //9 digitos
-         cMASK = "000|000|000"  //"@R 999.999.99-9"
+         cMASK = "@R 000|000|000"  //"@R 999.999.99-9"
     Case cUF="GO"  //9 digitos
-         cMASK = "00|000|0000"  //"@R 99.999.999-9"
+         cMASK = "@R 00|000|0000"  //"@R 99.999.999-9"
     Case cUF="MS" //9 digitos         
-         cMASK = "00|000|0000"  //"@R 99.999.999-9"
+         cMASK = "@R 00|000|0000"  //"@R 99.999.999-9"
     Case cUF="PR" //10 digitos
-         cMASK = "000|0000000"  //"@R 999.99999-99"
+         cMASK = "@R 000|0000000"  //"@R 999.99999-99"
     Case cUF="RJ"  //8 digitos
-         cMASK = "00|000|000"   //"@R 99.999.99-9"
+         cMASK = "@R 00|000|000"   //"@R 99.999.99-9"
     Case cUF="RS" //10 digitos
-         cMASK = "000/0000000" //"@R 999/9999999"
+         cMASK = "@R 000/0000000" //"@R 999/9999999"
     Case cUF="SE" //9 digitos  
-         cMASK = "00|000|0000" //"@R 99.999.999-9" 
+         cMASK = "@R 00|000|0000" //"@R 99.999.999-9" 
 Endcase
 If Len(cMASK) > 0
    cRETU = transform(valor, cMASK)
