@@ -364,6 +364,10 @@ RETUrn Transform(xCPF,"@R 999.999.999-99")
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 FUNCTION formatacnpj(xCNPJ)
+//@ 01,10 GET CGC1 PICTURE "99.999.999/9999-99" so numeros
+///@ 02,10 GET CGC2  PICTURE "NN.NNN.NNN/NNNN-99" numeros e letras
+//@ 03,10 GET CGC3  PICTURE "@! NN.NNN.NNN/NNNN-99" numero e letras comente maisculas
+
 if valtype(xCNPJ)='N'
    xCNPJ:=alltrim(str(xCNPJ))
 endif
@@ -372,7 +376,7 @@ IF VAL(xCNPJ)=0 .OR. LEN(xCNPJ)<>14
    return xCNPJ
 ENDIf
 xCNPJ:=StrZero(Val(xCNPJ),14)
-RETU Transform(xCNPJ,"@R 99.999.999/9999-99")
+RETURN Transform(xCNPJ,"@R! NN.NNN.NNN/NNNN-99")   // ! Para converter maisculas ou usar upper("@R NN.NNN.NNN/NNNN-99")
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -380,11 +384,15 @@ RETU Transform(xCNPJ,"@R 99.999.999/9999-99")
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-FUNCTION CNPJCPFPICT(oGet,v_Tipo,nROW,nCOL)     // ,NLEN
+FUNCTION CNPJCPFPICT(oGet,v_Tipo,nROW,nCOL)    
+//@ 01,10 GET CGC1 PICTURE "99.999.999/9999-99" so numeros
+///@ 02,10 GET CGC2  PICTURE "NN.NNN.NNN/NNNN-99" numeros e letras
+//@ 03,10 GET CGC3  PICTURE "@! NN.NNN.NNN/NNNN-99" numero e letras comente maisculas
+
 @ nROW,nCOL SAY SPACE(18)
 DO CASE 
   CASE v_Tipo = "J" 
-       oGet:picture :="99.999.999/9999-99"
+       oGet:picture := "@! NN.NNN.NNN/NNNN-99" //"99.999.999/9999-99"
   CASE v_Tipo = "F"
       oGet:picture :="999.999.999-99"                      
   otherwise  //CEI //CNO

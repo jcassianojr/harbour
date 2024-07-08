@@ -12,7 +12,6 @@
 *+     chkufcep(cCEP,cUF,lMES)
 *+     cep2uf(cepuso)
 *+     Formatacep(eCEP)
-*+     FormataIE(Valor,cUF,cPESSOA)
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
@@ -351,9 +350,11 @@ Function formataTel(cNUMERO)
 cNUMERO:=AllTrim(cNUMERO)
 cNUMERO:=StrTran(cNUMERO," ","")
 
-IF SubStr(cNUMERO, 1, 4) = "0300" .Or. SubStr(cNUMERO, 1, 4) = "0800" .OR. SubStr(cNUMERO,1,2)="55".OR. SubStr(cNUMERO,1,1)="+"
+IF SubStr(cNUMERO, 1, 4) = "0300" .Or. SubStr(cNUMERO, 1, 4) = "0800" .Or. SubStr(cNUMERO, 1, 4) = "0900" ;
+   SubStr(cNUMERO, 1, 4) = "0500" ;
+   .OR. SubStr(cNUMERO,1,2)="55".OR. SubStr(cNUMERO,1,1)="+"
    //Internacional e atendimentos
-   RETU cNUMERO
+   RETURN cNUMERO
 ENDIF
 If SUBSTR(cNUMERO, 1, 1) = "(" .And. SUBSTR(cNUMERO, 4, 1) = ")"  //(99)12345678
    cNUMERO := SUBSTR(cNUMERO, 1, 4) + fortel2(SUBSTR(cNUMERO, 5))

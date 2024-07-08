@@ -150,7 +150,8 @@ for i := 1 to len(aGET)
             @ nLININI,nCOLINI get &cDIZ. valid CHECKCC(cDIZ2)        
          endif
       case cTIP = "1"
- //      @ nLININI,nCOLINI GET mCGC PICT (v_pic) WHEN { |oGet| CNPJCPFPICT(oGet,mPESSOA,nLININI,nCOLINI) }  VALID CNPJCPFVAL(mCGC,mPESSOA)
+         @ nLININI,nCOLINI GET &cDIZ. PICT (v_pic) WHEN { |oGet| CNPJCPFPICT(oGet,mPESSOA,nLININI,nCOLINI) }  VALID CNPJCPFVAL(&cDIZ.,mPESSOA)
+         /*
          do case
             case mPESSOA = "J"
                @ nLININI,nCOLINI get &cDIZ. valid VALCGC(&cDIZ.) pict "99.999.999/9999-99"       
@@ -161,6 +162,7 @@ for i := 1 to len(aGET)
             otherwise
                @ nLININI,nCOLINI get &cDIZ.         
          endcase
+         */
       case cTIP = "S"   //Say Simples
          if empty(cESTILO)  //Sem ou Com Picture
             @ nLININI,nCOLINI say &cDIZ.         
@@ -209,5 +211,5 @@ for i := 1 to len(aGET)
    endcase
 next i
 READCUR()
-retu .T.
+return .T.
 
