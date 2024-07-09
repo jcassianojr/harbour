@@ -129,7 +129,7 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. lCE_F .or. MsgYesNo( 
         mDDD      := md10imp->DDD
         mCODIBGE  := md10imp->CODIBGE        
 
-        mCODTSE   := md10imp->CODTSE     
+    //    mCODTSE   := md10imp->CODTSE     mesmo codigo codirrf
         mCODBACEN := md10imp->CODBACEN       
         mCODIRRF  := md10imp->CODIRRF
         
@@ -212,9 +212,9 @@ if (file("md10imp.dbf") .and. (lpgcn .or. Lmunicipios .or. lCE_F .or. MsgYesNo( 
            if ! empty(mCODIRRF)   .AND. EMPTY(md10->CODIRRF)           
                md10->CODIRRF := mCODIRRF
            endif  
-           if ! empty(mCODTSE)   .AND. EMPTY(md10->CODTSE)           
-               md10->CODTSE := mCODTSE
-           endif              
+     //      if ! empty(mCODTSE)   .AND. EMPTY(md10->CODTSE)       mesmo codigo codirrf     
+     //          md10->CODTSE := mCODTSE
+      //     endif              
            if ! empty(mCODBACEN)   .AND. EMPTY(md10->CODBACEN)           
                md10->CODBACEN := mCODBACEN
            endif                        
@@ -798,6 +798,13 @@ IF MsgYesNo("Contar Cidades")
       WHILE cUF=UF.AND.! EOF() //todos agora na MD1O sao M com codigo ibge 
              nQTDECID++
           @ 24,00 SAY UF+" "+NOME
+          /* rodado apenas para ajuste 
+          IF LEN(ALLTRIM(MD10->CODIRRF))=4 .AND. LEN(ALLTRIM(MD10->CODTSE))=5
+             netreclock()
+             MD10->CODIRRF:=MD10->CODTSE
+             DBUNLOCK()
+          ENDIF
+          */
           DBSKIP()
       ENDDO
       DBSELECTAR("MD05")
@@ -809,7 +816,45 @@ IF MsgYesNo("Contar Cidades")
    ENDDO
    DBCLOSEALL()
 ENDIF
+IF MsgYesNo("Atualizar cidirrf")
+   @ 24, 00 say padr( "atualizando cidirrf" )
+   NETUSE("MD10")
+   NETUSE("CIDIRRF")
+   DBSELECTAR("MD10")
+   DBGOTOP()
+   WHILE ! EOF()
+      cCODCID:=LEFT(MD10->CODIRRF,4)
+      cCODIRRF:=MD10->CODIRRF
+      cCODIBGE:=MD10->CODIBGE
+      cNOMECID:=MD10->NOME
+      DBSELECTAR("CIDIRRF")
+      DBGOTOP()
+      IF DBSEEK(cCODCID)
+         netrecapp()
+         CIDIRRF->CODCID:=cCODCID
+      ELSE
+         netreclock()
+      ENDIF
+      IF EMPTY(CIDIRRF->CODIRRF)
+         CIDIRRF->CODIRRF:=cCODIRRF
+      ENDIF
+      IF EMPTY(CIDIRRF->CODIBGE)
+         CIDIRRF->CODIBGE:=cCODIBGE
+      ENDIF
+      IF EMPTY(CIDIRRF->NOMECID)
+         CIDIRRF->NOMECID:=cNOMECID
+      ENDIF      
+      dbunlock()
+      DBSELECTAR("MD10")
+      DBSKIP()
+   ENDDO
+   DBCLOSEALL()
+ENDIF
 return nil
+
+return nil
+
+
 
 
 /*

@@ -351,8 +351,7 @@ cNUMERO:=AllTrim(cNUMERO)
 cNUMERO:=StrTran(cNUMERO," ","")
 
 IF SubStr(cNUMERO, 1, 4) = "0300" .Or. SubStr(cNUMERO, 1, 4) = "0800" .Or. SubStr(cNUMERO, 1, 4) = "0900" ;
-   SubStr(cNUMERO, 1, 4) = "0500" ;
-   .OR. SubStr(cNUMERO,1,2)="55".OR. SubStr(cNUMERO,1,1)="+"
+                                  .OR. SubStr(cNUMERO, 1, 4) = "0500" .OR. SubStr(cNUMERO, 1, 2) = "55" .OR. SubStr(cNUMERO,1,1)="+"
    //Internacional e atendimentos
    RETURN cNUMERO
 ENDIF
