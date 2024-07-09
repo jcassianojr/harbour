@@ -829,7 +829,7 @@ IF MsgYesNo("Atualizar cidirrf")
       cNOMECID:=MD10->NOME
       DBSELECTAR("CIDIRRF")
       DBGOTOP()
-      IF DBSEEK(cCODCID)
+      IF ! DBSEEK(cCODCID)
          netrecapp()
          CIDIRRF->CODCID:=cCODCID
       ELSE
