@@ -1,3 +1,4 @@
+
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 *+
 *+    Source Module => d:\TROUXE\CONVCEP.PRG
@@ -850,9 +851,43 @@ IF MsgYesNo("Atualizar cidirrf")
    ENDDO
    DBCLOSEALL()
 ENDIF
-return nil
+IF MsgYesNo("Atualizar prcid")
+   @ 24, 00 say padr( "atualizando prcid" )
+   NETUSE("MD10")
+   NETUSE("prcid")
+   DBSETORDER(2)
+   DBSELECTAR("MD10")
+   DBGOTOP()
+   WHILE ! EOF()
+       IF MD10->UF="PR"
+          cCODIRRF:=MD10->CODIRRF
+          cCODIBGE:=MD10->CODIBGE
+          cNOMECID:=alltrim(MD10->NOME)
+          DBSELECTAR("prcid")
+          DBGOTOP()
+          IF ! DBSEEK(cNOMECID)
+             netrecapp()
+             prcid->MUNICIPIO:=cNOMECID
+          ELSE
+             netreclock()
+          ENDIF
+          IF EMPTY(prcid->CODIRRF)
+             prcid->CODIRRF:=cCODIRRF
+          ENDIF
+          IF EMPTY(prcid->CODIBGE)
+             prcid->CODIBGE:=cCODIBGE
+          ENDIF
+          dbunlock()
+      ENDIF   
+      DBSELECTAR("MD10")
+      DBSKIP()
+   ENDDO
+   DBCLOSEALL()
+ENDIF
 
 return nil
+
+
 
 
 
