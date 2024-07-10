@@ -333,47 +333,86 @@ RETU cPEGREF
 *+
 Function formataTel(cNUMERO)
 /*
+ +formata nacional brasil +55 -> ddi+ (DDD)telefone 
+ +55 (99)1234-5678
+ 
+ remove 0 do ddd 
+ (099)12345678	->(99)1234-5678
+ 099 12345678	->(99)1234-5678
+ 099-12345678	->(99)1234-5678
+ 099.12345678	->(99)1234-5678
+ 091,12345678	->(99)1234-5678
+ 
+ ddd em parentes
  99-12435678	->(99)1234-5678
  99,12345678	->(99)1234-5678
- 99-12345678	->(99)1234-5678
- (099)12345678	->(99)1234-5678
+ 99.12345678	->(99)1234-5678
  99 12345678	->(99)1234-5678
- 099 12345678	->(99)1234-5678
- (99)12345678	->(99)1234-5678
- (99)1234567	->(99)123-4567
+ 
+ espaco virgula e ponto para traco
+ 1234 5678 1234-5678
+ 1234,5678 1234-5678
+ 1234.5678 1234-5678
+ 
+ formata para 11 10 9 8 7 digitos
  12345678901    ->(99)91234-5678  //celular  11 digitos
  1234567890     ->(99)1234-5678   //telefone 10 digitos
  123456789      ->91234-5678      //celular sem ddd   9 digitos
  12345678       ->1234-5678       //telefone sem ddd  8 digitos
  1234567        ->123-4567        //telefone antigos  7 digitos  999-9999  
+ 
 */
+LOCAL lDDIBR
+lDDIBR:=.F.
+
 cNUMERO:=AllTrim(cNUMERO)
-cNUMERO:=StrTran(cNUMERO," ","")
 
 IF SubStr(cNUMERO, 1, 4) = "0300" .Or. SubStr(cNUMERO, 1, 4) = "0800" .Or. SubStr(cNUMERO, 1, 4) = "0900" ;
-                                  .OR. SubStr(cNUMERO, 1, 4) = "0500" .OR. SubStr(cNUMERO, 1, 2) = "55" .OR. SubStr(cNUMERO,1,1)="+"
-   //Internacional e atendimentos
+                                  .OR. SubStr(cNUMERO, 1, 4) = "0500" .OR. SubStr(cNUMERO, 1, 4) = "0303"
+   //atendimentos fixos nacionais
+   //0800 atendimento cliente sem cobranca
+   //0300 cobranca empresas de credito
+   //0303 telemarketing
+   //0900  atendimento cliente com cobranca 
+   //0500 governamental
    RETURN cNUMERO
 ENDIF
+
+IF  SubStr(cNUMERO,1,1)="+" // "+1 "  "+11 " "+111 " "+1("  "+11(" "+111(" DDD 1 A 3 digitos espacos ou ( parentes do ddd
+    IF SubStr(cNUMERO,1,3)<>"+55" //se nao for do brasil retorna sem formatacao
+       RETURN cNUMERO
+    ENDIF
+    lDDIBR:=.T.
+    cNUMERO:=ALLTRIM(SUBSTR(cNUMERO,4)) //usa trim caso depois do +55 seja espaco "+55 "  formata so o numero ddi sera reincluido no final
+ENDIF
+cNUMERO:=StrTran(cNUMERO," ","")
+
+
 If SUBSTR(cNUMERO, 1, 1) = "(" .And. SUBSTR(cNUMERO, 4, 1) = ")"  //(99)12345678
    cNUMERO := SUBSTR(cNUMERO, 1, 4) + fortel2(SUBSTR(cNUMERO, 5))
 End If
-If SUBSTR(cNUMERO, 3, 1) = "-"  //99-12345678
+If SUBSTR(cNUMERO, 3, 1) = "-"  //99-12345678 traco apos o ddd
    cNUMERO := "(" + SUBSTR(cNUMERO, 1, 2) + ")" + fortel2(SUBSTR(cNUMERO, 4))
 End If
-If SUBSTR(cNUMERO, 3, 1) = ","  //99,12345678
+If SUBSTR(cNUMERO, 3, 1) = ","  //99,12345678 virgula apos o ddd
    cNUMERO := "(" + SUBSTR(cNUMERO, 1, 2) + ")" + fortel2(SUBSTR(cNUMERO, 4))
 End If
-If SUBSTR(cNUMERO, 3, 1) = " "  //99 12345678
+If SUBSTR(cNUMERO, 3, 1) = "."  //99.12345678 ponto apos o ddd
    cNUMERO := "(" + SUBSTR(cNUMERO, 1, 2) + ")" + fortel2(SUBSTR(cNUMERO, 4))
 End If
-If SUBSTR(cNUMERO, 4, 1) = "-" .And. SUBSTR(cNUMERO, 1, 1) = "0"  //099-12345678
+If SUBSTR(cNUMERO, 3, 1) = " "  //99 12345678 spaco apos o ddd
+   cNUMERO := "(" + SUBSTR(cNUMERO, 1, 2) + ")" + fortel2(SUBSTR(cNUMERO, 4))
+End If
+If SUBSTR(cNUMERO, 4, 1) = "-" .And. SUBSTR(cNUMERO, 1, 1) = "0"  //099-12345678 ddd nao tem 0 na frente 0 
    cNUMERO := "(" + SUBSTR(cNUMERO, 2, 2) + ")" + fortel2(SUBSTR(cNUMERO, 5))
 End If
 If SUBSTR(cNUMERO, 4, 1) = " " .And. SUBSTR(cNUMERO, 1, 1) = "0"  //099 12345678
    cNUMERO := "(" + SUBSTR(cNUMERO, 2, 2) + ")" + fortel2(SUBSTR(cNUMERO, 5))
 End If
-If SUBSTR(cNUMERO, 4, 1) = "-" .And. SUBSTR(cNUMERO, 1, 1) = "0"  //99-12345678
+If SUBSTR(cNUMERO, 4, 1) = "-" .And. SUBSTR(cNUMERO, 1, 1) = "0"  //099-12345678
+   cNUMERO := "(" + SUBSTR(cNUMERO, 2, 2) + ")" + fortel2(SUBSTR(cNUMERO, 5))
+End If
+If SUBSTR(cNUMERO, 4, 1) = "." .And. SUBSTR(cNUMERO, 1, 1) = "0"  //099.12345678
    cNUMERO := "(" + SUBSTR(cNUMERO, 2, 2) + ")" + fortel2(SUBSTR(cNUMERO, 5))
 End If
 If SUBSTR(cNUMERO, 1, 1) = "(" .And. SUBSTR(cNUMERO, 2, 1) = "0" .And. SUBSTR(cNUMERO, 5, 1) = ")" //(099)12345678
@@ -388,8 +427,11 @@ if at("(",cNUMERO)=0 .AND. at("-",cNUMERO)=0       //somente numeros
       CASE len(cNUMERO)=9 .OR.  len(cNUMERO)=8 .OR. len(cNUMERO)=7
           cNUMERO:=ForTel2(cNUMERO)     
    endCASE
-endif          
-retu cNUMERO
+endif  
+IF lDDIBR
+   cNUMERO:="+55 "+cNUMERO
+ENDIF        
+return cNUMERO
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -398,7 +440,7 @@ retu cNUMERO
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 Function ForTel2(cNUMERO)
-cNUMERO = alltrim(tiraout(cNUMERO)) //nao checa mais o traco pois tem tiraout
+cNUMERO = alltrim(tiraout(cNUMERO)) //nao checa mais o traco, ponto, ponto virgula pois foi usado tiraout
 If Len(cNUMERO) = 9 // .And. SUBSTR(cNUMERO, 6, 1)='-'    //912345678 91234-5678 Novo celular 9 
   cNUMERO = SUBSTR(cNUMERO, 1, 5) + "-" + SUBSTR(cNUMERO, 6)
 End If
@@ -408,7 +450,7 @@ End If
 If Len(cNUMERO) = 7               //123-4567 1234567 //Algums localidades antigas 7 digitos
    cNUMERO = SUBSTR(cNUMERO, 1, 3) + "-" + SUBSTR(cNUMERO, 4)
 End If
-retu cNUMERO
+return cNUMERO
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
