@@ -84,10 +84,11 @@ ENDIF
 
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 *+
-*+    FUNCTION FDELIM (cARQ, line_len) verifica se o delimitador e chr(13)chr(10) dos ou chr(10) linux
+*+    FUNCTION FDELIM (cARQ, line_len , cPADRAO) 
+*+ verifica se o delimitador e chr(13)chr(10) dos ou chr(10) linux
 *+
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
-FUNCTION FDELIM (cARQ, line_len)
+FUNCTION FDELIM (cARQ, line_len,cPADRAO)
 LOCAL buffer, line_end, num_bytes,nhandle,cRETU
 IF VALTYPE(line_len) <> 'N'
     line_len = 1024
@@ -96,31 +97,52 @@ cRETU:=""
 buffer = SPACE(line_len)
 nHANDLE:=FOPEN(cARQ)
 num_bytes = FREAD(nhandle, @buffer, line_len)
+IF EMPTY(ALLTRIM(BUFFER)) //tenta com freadstr se o buffer vier vazio
+   buffer := freadstr(nhandle,line_len)
+ENDIF
 FCLOSE(NHANDLE)
-line_end = AT(CHR(13)+CHR(10), buffer)
+
+//Dos
+line_end = AT(CHR(13)+CHR(10), buffer) //0D0A
 IF line_end > 0
-   cRETU:=CHR(13)+CHR(10) //dos
-  // alert("dos")
+   cRETU:=CHR(13)+CHR(10) 
    return cRETU
 endif
-line_end = AT(CHR(10), buffer)
+
+//Linux
+line_end = AT(CHR(10), buffer) //0A
 IF line_end > 0
-   cRETU:=CHR(10)  //linux
-  // alert("linux")
+   cRETU:=CHR(10)  
    return cRETU
 endif
-IF EMPTY(cRETU)
-  line_end = AT(CHR(255)+CHR(254), buffer)
-  IF line_end > 0
-     cRETU:=CHR(255)+ CHR(254) //unicode
-  endif
-ENDIF
-IF EMPTY(cRETU)
-  line_end = AT(CHR(239)+CHR(187)+CHR(191), buffer)
-  IF line_end > 0
-     cRETU:=CHR(239)+ CHR(187)+CHR(191) //utf-8
-  endif
-ENDIF
+
+//So 13 0D
+line_end = AT(CHR(13), buffer) //0D
+IF line_end > 0
+   cRETU:=CHR(13)  
+   return cRETU
+endif
+
+
+//unicode
+line_end = AT(CHR(255)+CHR(254), buffer)
+IF line_end > 0
+    cRETU:=CHR(255)+ CHR(254) 
+    return cRETU
+endif
+
+//utf-8
+line_end = AT(CHR(239)+CHR(187)+CHR(191), buffer)
+IF line_end > 0
+   cRETU:=CHR(239)+ CHR(187)+CHR(191) 
+   return cRETU
+endif
+
+//atribui o padrao
+if empty(cRETU) .AND. Valtype(cPADRAO)="C"
+   cRETU := cPADRAO
+endif
+  
 RETURN cRETU
 
 
