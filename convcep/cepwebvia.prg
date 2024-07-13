@@ -42,25 +42,10 @@ PRIVATE  cCep, cBairro, cCidade, cEndereco, cUF, cID
 
 nERRO:=0
 
-//altd()
-//CEPBrasilApi('16045970')
-//CEPOpenCep('16045970')
-//CEPBrasilAberto('16045970')
-
-
-//CEPBrasilApi('16012145')
-//CEPOpenCep('16012145')
-//CEPBrasilAberto('16012145')
-//16045970
-//16012145
-
-//quit
-
 if ! file("cepruaimp.dbf")
    alert("Falta cepruaimp.dbf")
    quit
 endif
-
      
 lRUAVAZIA:=MSGYESNO("Checar Ruas Em Branco")
 lBAIRROVAZIO:=MSGYESNO("Checar Bairro em Branco")
@@ -68,7 +53,7 @@ lNOMECURTO:=MSGYESNO("Checar Ruas com nomes menores que 5 letras")
 lAPAGANAO:=MSGYESNO("Apaga Nao encontrado")
 
 lCHECKVIACEP  :=MSGYESNO("Usar viacep")
-lCHECKAPICOR  :=MSGYESNO("Usar apicor")
+//lCHECKAPICOR  :=MSGYESNO("Usar apicor")
 lCHECKREPVIR  :=MSGYESNO("Usar RepVirtual")
 lCHECKAPICEP  :=MSGYESNO("Usar apicep")
 lCHECKAPIAWE  :=MSGYESNO("Usar apiAWE")
