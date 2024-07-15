@@ -36,6 +36,7 @@ FUNCTION VALCGC( cCNPJ, xTIPO ,lMES, cUF)
 local x
 local nCHAR
 local P1
+local aUF
 ZNERRO:=0
 ZERRO:=""
 
@@ -409,14 +410,17 @@ return .T.
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 FUNCTION CNPJCPFVAL(cCGC,cPESSOA,cESTADO)
+LOCAL lRETU
 lRETU:=.T.
 DO CASE
-   CASE cPESSOA='J'
+   CASE cPESSOA='J'  //CNPJF
         lRETU:=VALCGC(cCGC,,,cESTADO)
    CASE cPESSOA="F" // CPF CAEPF
         lRETU:=VALCPF(cCGC)
    cASE cPESSOA="C" // CEI CNO
         lRETU:=VALCEI(cCGC)
+   OTHERWISE // um dos tres e valido pessoa em branco
+        lRETU := VALCGC(cCGC,,,cESTADO) .OR. VALCPF(cCGC) .OR. VALCEI(cCGC)
 ENDCASE
 RETURN lRETU
 
