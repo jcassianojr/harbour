@@ -104,7 +104,7 @@ if Left(p1, 7) = "9999999" //     inicio 999999
    ZNERRO:=5
    ZERRO:="CNPJ Generico 9999999"
 endif
-if substr(p1,9,4)="9999"    //depois da barra /9999
+if substr(p1,9,4)="9999"    //depois da barra 9999
    ZNERRO:=6
    ZERRO:="CNPJ Generico /9999-"
 endif
