@@ -176,6 +176,62 @@ endcase
 zusovia:=USOVIA
 layout()
 RETURN USOVIA
+
+*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+
+*+    Function pegparexp parametross para exportacao de dados
+*+
+*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+
+function pegparexp
+local aAMBIENTE
+aAMBIENTE:=SALVAA()
+zEXPOREXT:=PADR(zEXPOREXT,4)
+
+HB_dispbox( 10, 10, 21, 60, B_DOUBLE+" ")
+       
+@ 11,12  say "Delimitador ,;|#~ 9=(TAB)"
+@ 12,12 say "Extensao DLM,CVS,UNL,XLS,XML,SQL,JSON" 
+@ 13,12 say "Separador Decimal ,. "
+@ 14,12 say "Digitos Ano 2/4"
+@ 15,12 say "Separador Data /-( )"
+@ 16,12 say "Sep Reg "+chr(34)+chr(39)+"( ) "
+@ 17,12 say "(D)ia(M)es(A)no DMA AMD MDA SQL MYS DHZ"
+@ 18,12 say "Logico= TRUE .T. ON YES SIM 1 T Y S"
+@ 19,12 say "Converter (N)ao oemto(A)nsi ansito(O)em"  
+
+@ 11,53 get zDELIMITE PICT "!"     VALID zDELIMITE $ ",;|#~9"       
+@ 12,53 get zEXPOREXT PICT "!!!!"  VALID zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
+@ 13,53 get zDECSIM                VALID zDECSIM $ ",."       
+@ 14,53 get zANOTAM   PICT "9"     VALID zANOTAM $ "24"
+@ 15,53 get zANOSEP                VALID zANOSEP $ "/- "
+@ 16,53 get zregSEP                VALID zregsEP $ chr(34)+chr(39)+" "
+@ 17,53 get zANOFOR   PICT "!!!"   VALID zANOFOR="DMA" .OR. zANOFOR="AMD" .OR. zANOFOR="MDA" .OR. zANOFOR="SQL" .OR. zANOFOR="MYS" .OR. zANOFOR="DHZ"
+@ 18,53 get zSEPLOGIC              valid zSEPLOGIC="TRUE" .OR. zSEPLOGIC=".T. " .OR. zSEPLOGIC="YES " .OR. zSEPLOGIC="ON  " .OR. zSEPLOGIC="SIM " .OR. zSEPLOGIC="1   " .OR. zSEPLOGIC="T   " .OR. zSEPLOGIC="Y   " .OR. zSEPLOGIC="S   "
+@ 19,53 get zCNVCHAR  PICT "!"     VALID zCNVCHAR $ "NAO"  
+readcur() 
+
+zEXPOREXT=ALLTRIM(ZEXPOREXT)
+IF zEXPOREXT="XLS".AND.zDELIMITE<>"9"
+  error_msg( "XLS requer requerer 9=(TAB)" )
+  zDELIMITE="9"
+ENDIF
+IF zDELIMITE="9"
+  zDELIMITE=CHR(9)
+ENDIF
+IF zEXPOREXT="SQL"
+  zDELIMITE:=","
+ENDIF
+IF zEXPOREXT="JSON"
+  zDELIMITE:=""
+ENDIF
+
+
+// criar_m[5]:=ZEXPOREXT agora usa geradoc 0 que pergunta o tipo  de exportacao
+// util_m[7]:=ZEXPOREXT agora usa multidocs 0 que pegunta o tipo de exportacao
+RESTAA(aAMBIENTE)
+layout()
+return 
       
 //esta aqui pois as vezes e usada em replaces
 FUNCTION formatacpf(xCPF)
