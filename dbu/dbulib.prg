@@ -82,6 +82,45 @@ RESTAA(aAMBIENTE)
 layout()
 return TIPODBF
 
+
+
+/*
+rddregister hb_rddRegister
+rdd    super       fonte        memo
+
+-dbf
+HSCDX  DBFCDX/HSCDX      hscdx.prg
+RLCDX  DBFCDX/RLCDX     RLCDX.prg
+VFPCDX DBFCDX/DBFFPT/VFPCDX     vpfcdx.prg   DB_MEMO_FPT DB_DBF_VFP
+
+- 1-DBFNTX DBF/DBFFPT/DBFNTX         dbfntx1.c
+- 2-DBFCDX DBF/DBFFPT/HB_CDXRDD      dbfcdx1.c
+- 3-ADSCDX
+- 4-ADSNTX
+- 5-ADSVFP
+- 6-ADSADT
+- 7-DBTCDX DBFCDX/DBFFPT/DBTCDX      dbtcdx.prg   DB_MEMO_DBT
+- 8-SMTCDX DBFCDX/DBFFPT/SMTCDX      SMTCDX.PRG   DB_MEMO_SMT
+- 9-FPTCDX DBFCDX/DBFFPT/FPTCDX      ftpcdx.prg   DB_MEMO_FPT 
+-10-SIXCDX
+-11-DBFNSX DBF/DBFFPT/DBFNSX         dbfnsx1.c
+-12-DBFBLOB DBF/DBFFPT/DBFBLOB       dbffpt1
+
+
+-nondbf
+FCOMMA             fcomma.prg
+ARRAYRDD           arrayrdd.prg
+LOGRDD             logrdd.prg
+SDF                sdf1.prg
+DELIM              delim1.prg
+
+-sql
+ADORDD
+
+-ssd
+
+
+*/
 FUNCTION RDDNOME(nTIPO)
 LOCAL USOVIA
 do case
