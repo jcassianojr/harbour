@@ -10,6 +10,7 @@ hbwin.hbc
 hbtip.hbc
 xhb.hbc
 rddads.hbc
+#rddmisc.hbc
 
 DBU.PRG  
 dbucnvmemo.prg 

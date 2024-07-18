@@ -30,14 +30,12 @@ ENDIF
  
 MDT("Fazendo copia de reserva: "+"old_"+cARQDES)
 filecopy(cARQDES ,trocaext(cARQDES,"_old.dbf"))
-
 	 
 MDT("abrindo arquivo de origen: "+cARQORI)
 USE (cARQORI) ALIAS ORIGEM SHARED NEW VIA  (cORIDRIVER) 
 
 MDT("abrindo arquivo de destino: "+cARQDES)
 USE (cARQDES) ALIAS DESTINO EXCLUSIVE NEW VIA (cDESDRIVER) 
-
 
 MDT("Importando registros para: "+cARQDES)
 DBSELECTAR("ORIGEM")
@@ -52,7 +50,6 @@ IF lAPAGA
 ENDIF
 dbsetorder(1)
 cCHAVE:=INDEXKEY()
-//alert(ccHAVE)
 
 DBSELECTAR("ORIGEM")
 nLASTREC := lastrec()
@@ -103,7 +100,6 @@ nDESTIPO:=TIPODBF
 cDESDRIVER:=RDDNOME(TIPODBF)
 cARQDES:=trocaext(cARQORI,"_sorted.dbf")
 
-
 @ MAXROW(),0 SAY "Campos (,)"
 @ MAXROW(),COL()+1 GET cSORTED
 READ
@@ -122,7 +118,6 @@ USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER)
 mdt("Ordenando por: "+cSORTED)
 //__dbSort( cToFileName, aFields, bFor, bWhile, nNext, nRecord, lRest, cRDD     , nConnection, cCodePage )
 __dbSort( cARQDES      , aCAMPOS,     ,       ,      ,        ,      ,cDESDRIVER,            ,           )
-
 
 
 RDDNOME(nOLDTIPO) //retorna tipo anterior

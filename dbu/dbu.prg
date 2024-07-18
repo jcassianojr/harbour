@@ -33,12 +33,16 @@ REQUEST FPTCDX  // 8 SMTCDX DBF CDX MEMO=SMT
 REQUEST SMTCDX  // 9 FPTCDX DBF CDX MEMO=FPT
 REQUEST SIXCDX  //10 SIXCDX DBF CDX           SIXCDX SISNTX SISNSX SuccessWare Index Driver (SIx Driver) replaces the default NTX/DBT index and memo driver with an NSX/SMT  single-file index https://www.apollodb.com/sixrdd.asp
 REQUEST DBFNSX  //11 DBFNSX DBF NSX
-REQUEST DBFBLOB //12 It operates on memo files only (.dbv) without tables (.dbf)
+REQUEST DBFBLOB //12 It operates on memo files only (.dbv) without tables (.dbf)r
+REQUEST HSCDX   //13-HSCDX  DBFCDX/HSCDX 
+REQUEST RLCDX   //-14-RLCDX  DBFCDX/RLCDX 
+REQUEST VFPCDX  //-15-VFPCDX DBFCDX/DBFFPT/VFPCDX
+
+
 //Microsoft FoxPro create an IDX index file similar ntx
 //REQUEST DBFNDX nao tem mais a rdd removido tipos dbulib.prg A dBASE III standard index file (.NDX)
 //REQUEST DBFMDX nao tem mais a rdd removido tipos dbulib.prg dBASE IV  mdx index files can contain up to 47 individual index files in a single mdx file
-//Possiveis inclusao
-//VFPCDX
+
 
 FUNCTION MAIN()
 
