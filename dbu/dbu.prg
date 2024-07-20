@@ -3,7 +3,6 @@
 *+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBU.PRG
 *+
 *+    Functions: Function HELP()
-*+               Function LAYOUT()
 *+               Function DBUDIRl()
 *+               Function DBUREDE()
 *+               Function READDBU()
@@ -38,22 +37,10 @@ REQUEST HSCDX   //13-HSCDX  DBFCDX/HSCDX
 REQUEST RLCDX   //-14-RLCDX  DBFCDX/RLCDX 
 REQUEST VFPCDX  //-15-VFPCDX DBFCDX/DBFFPT/VFPCDX
 
-//erro funcao ao compilar implementar futuramente
-//ANNOUNCE BMDBF
-//ANNOUNCE BMDBFCDX
-//ANNOUNCE BMDBFNTX
-//ANNOUNCE BMDBFNSX
+REQUEST BMDBFCDX  //-16 BMDBFCDX DBFCDX
+REQUEST BMDBFNSX //-17 BMDBFNSX DBFNSX
+REQUEST BMDBFNTX //-18 BMDBFNTX DBFNTX
 
-//REQUEST BMDBF
-//REQUEST BMDBFCDX
-//REQUEST BMDBFNTX
-//REQUEST BMDBFNSX
-
-//REQUEST  _BMDBF
-//erro tambem so requeste
-//REQUEST BMDBFCDX  //-16 BMDBFCDX DBFCDX
-//REQUEST BMDBFNTX //-17 BMDBFNTX DBFNTX
-//REQUEST BMDBFNSX //-18 BMDBFNSX DBFNSX
 
 //Microsoft FoxPro create an IDX index file similar ntx
 //REQUEST DBFNDX nao tem mais a rdd removido tipos dbulib.prg A dBASE III standard index file (.NDX)
@@ -62,7 +49,7 @@ REQUEST VFPCDX  //-15-VFPCDX DBFCDX/DBFFPT/VFPCDX
 
 FUNCTION MAIN()
 
-rddSetDefault( "BMDBFCDX" ) 
+//rddSetDefault( "BMDBFCDX" ) 
 
 netregosok()
 
@@ -505,7 +492,7 @@ setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
 util_m := { "Rem Reg Dup", "Calculadora", "Ver TXT", "Editar TXT",;
-            "Exportar","Sort DBF","sem uso","sem uso","sem uso","sem uso","FixarTodos","ZeraTodos",;
+            "Exportar","Sort DBF","sem uso","sem uso","sem uso","Converter","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
@@ -592,8 +579,9 @@ do while .T.
            //multidocs(1,"*.dbf")
            //FAZERDBF( {|| dbf2xml() }, .F. ,,,"*.dbf")  //xmla
       case M->func_sel = 10
-         alertx("funcao nao disponivel")
-           //multidocs(7)  //xml
+           if rsvp( "Converter  entre formatos" ) = "S" 
+		       converttipo() 
+          ENDIF
       case M->func_sel = 11
            if rsvp( "Fixar Todos ? (S/N)" ) = "S"
                FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
@@ -903,26 +891,6 @@ restscreen( 00, 00, 24, 79, HEL_SCR )
 setpos( POP_ROW, POP_COL )
 retu .T.
 
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-*+
-*+    Function LAYOUT()
-*+
-*+    Called from ( dbu.prg      )   4 -
-*+                ( dbuview.prg  )   1 - function draw_view()
-*+
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-*+
-function LAYOUT()
-clear
-for n := 2 to len( func_title )
-   @  0, ( 9 * n ) - 18 say padc( "F"+STR(N,1) , 8 )
-   @  1, ( 9 * n ) - 18 say padc( func_title[ n ], 9 )
-next
-@  2,  0 say replicate( "-", 80 )
-@ MAXROW()-2,  0 say "DBdbf("+zUSOVIA+") Memo("+hb_rddInfo( RDDI_MEMOEXT)+") Index("+hb_rddInfo( RDDI_ORDBAGEXT)+") Exportar Para("+ZEXPOREXT+") Delimitador("+ZDELIMITE+")" 
-@ MAXROW()-1,  0 say "Sepador Decimal("+ZDECSIM+") Oem Ansi("+ZCNVCHAR+") Separador Registro("+Zregsep+")"+" Ano("+ZANOFOR+ZANOSEP+ZANOTAM +") Logico("+zSEPLOGIC+")"
-
-return .T.
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+

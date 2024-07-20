@@ -10,6 +10,27 @@
 #include "TRY.ch"
 
 
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+    Function LAYOUT() Informacoes do Driver em uso
+*+
+*+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+function LAYOUT()
+LOCAL n
+clear
+for n := 2 to len( func_title )
+   @  0, ( 9 * n ) - 18 say padc( "F"+STR(N,1) , 8 )
+   @  1, ( 9 * n ) - 18 say padc( func_title[ n ], 9 )
+next
+@  2,  0 say replicate( "-", 80 )
+@ MAXROW()-3,  0 say "RDD("+zUSOVIA+") Extensao("+hb_rddInfo( RDDI_TABLEEXT)+") Memo("+hb_rddInfo( RDDI_MEMOEXT)+") Index("+hb_rddInfo( RDDI_ORDBAGEXT)+")"
+@ MAXROW()-2,  0 say  "Exportar Para("+ZEXPOREXT+") Delimitador("+ZDELIMITE+")" 
+@ MAXROW()-1,  0 say "Sepador Decimal("+ZDECSIM+") Oem Ansi("+ZCNVCHAR+") Separador Registro("+Zregsep+")"+" Ano("+ZANOFOR+ZANOSEP+ZANOTAM +") Logico("+zSEPLOGIC+")"
+
+return .T.
+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 *+    Function MD() limpa a linha de mensagens
@@ -71,12 +92,10 @@ OPCAO( 15, 24, "DBFB&LOB          DBV     ", 76 ) //L 12 DBFBLOB DBF/DBFFPT/DBFB
 OPCAO( 16, 24, "&HSCDX    HS  CDX FPT     ", 72 ) //H 13 HSCDX  DBFCDX/HSCDX
 OPCAO( 17, 24, "&RLCDX    RL  CDX FPT     ", 82 ) //R 14 RLCDX  DBFCDX/RLCDX
 OPCAO( 18, 24, "&VFPCDX   VFP CDX FPT     ", 86 ) //V 15 VFPCDX DBFCDX/DBFFPT/VFPCDX 
+OPCAO( 19, 24, "B&MDBFCDX     CXD FPT     ", 77 ) //M 16 BMDBFCDX DBFCDX 
+OPCAO( 20, 24, "BMDBFNSX      NSX FPT     ", 49 ) //1 17 BMDBFNSX DBFNSX
+OPCAO( 21, 24, "BMDBFNTX      NTX FPT     ", 50 ) //2 18 BMDBFNTX DBFNTX
 
-/* erro falta funcao implementacao futura
-OPCAO( 19, 24, "B&MDBFCDX VFP CXD FPT     ", 48 ) //M 16 BMDBFCDX DBFCDX 
-OPCAO( 20, 24, "BMDBFNTX  VFP NTX FPT     ", 49 ) //1 17 BMDBFNTX DBFNTX
-OPCAO( 21, 24, "BMDBFCDX  VFP NSX FPT     ", 50 ) //2 18 BMDBFNSX DBFNSX
-*/
 
 KEY := menu( 2, 0 )
 if KEY > 0
@@ -175,19 +194,15 @@ do case
 	case nTIPODBF = 15
 	  USOVIA := "VFPCDX"  
 	  rddSetDefault( "VFPCDX" )    
-      
-      /* erro falta funcao implementacao futura
    	case nTIPODBF = 16
 	  USOVIA := "BMDBFCDX"  
-	  rddSetDefault( "BMDBFCDX" )   
+	  rddSetDefault( "BMDBFCDX" )  
     case nTIPODBF = 17
-	  USOVIA := "BMDBFNTX"  
-	  rddSetDefault( "BMDBFNTX" )    
-    case nTIPODBF = 18
 	  USOVIA := "BMDBFNSX"  
 	  rddSetDefault( "BMDBFNSX" )  
-      */
-      
+    case nTIPODBF = 18
+	  USOVIA := "BMDBFNTX"  
+	  rddSetDefault( "BMDBFNTX" )    
 	otherwise
 	   USOVIA := "DBFCDX"
 	   rddsetdefault( "DBFCDX" )

@@ -29,6 +29,10 @@ dbuver.prg
 dbuview.prg
 dbuXLS.prg
 dbusincdbf.prg
+bmdbfcdx2.prg
+bmdbfnsx2.prg
+bmdbfnTX2.prg
+
 
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  
