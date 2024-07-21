@@ -1,5 +1,6 @@
 #include "ads.ch"
 #include "dbinfo.ch"
+#include "try.ch"
 
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -33,6 +34,9 @@ IF LEN(aARQMEMOS)=0
    RETURN .F.
 ENDIF
 
+
+
+
 FOR XY:=1 TO LEN(aARQMEMOS)
 
      cARQORIMEMO   := lower(aARQMEMOS[XY,1])
@@ -48,11 +52,19 @@ FOR XY:=1 TO LEN(aARQMEMOS)
       USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA  (cORIDRIVER) //"DBFNTX" 	via driver antigo
 
     MDT("copiando estrutura")
-    COPY STRUCTURE TO (cNEWDBF)              //criando a estrutura usa o rdddefauld destino ultimo atribuido
+    try
+      COPY STRUCTURE TO (cNEWDBF)              //criando a estrutura usa o rdddefauld destino ultimo atribuido
+    catch oERROR
+       alertx("Erro Criando nova strutura")
+       RESTAA(aAMBIENTE)
+       TIPODBF:=nOLDTIPO
+       RDDNOME(nOLDTIPO) //retorna tipo anterior
+       RETURN .F. 
+    end  
     IF file(cNEWDBF+".DBF") .AND. file(cNEWDBF+cDESMEMO) // ".FPT" a extensao do rdiinfo memo do destino
-       MDT("copia efetuada:"+cNEWDBF+".DBF"+" "+cNEWDBF+cDESMEMO)
+         MDT("copia efetuada:"+cNEWDBF+".DBF"+" "+cNEWDBF+cDESMEMO)
     ENDIF
-
+    
     USE (cNEWDBF) ALIAS aliasnovo EXCLUSIVE NEW VIA (cDESDRIVER)  //abre a copia usa o rdddefauld destino ultimo atribuido
 
     MDT("Importando registros para: "+cNEWDBF)
@@ -102,6 +114,8 @@ IF LEN(aARQDBF)=0
    RETURN .F.
 ENDIF
 
+lSTRUEXT:=MDG("STRU EXTEND(S) DBCREATE(N)")
+
 FOR XY:=1 TO LEN(aARQDBF)
 
      cARQNOME    := lower(aARQDBF[XY,1])
@@ -120,15 +134,33 @@ FOR XY:=1 TO LEN(aARQDBF)
      MDT("abrindo arquivo antigo: "+cOLDDBF)
       USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA  (cORIDRIVER) //	via driver antigo utiliza aliasantigo mas o driver defaiult e o destino
 
+    
     MDT("copiando estrutura")
-    COPY STRUCTURE TO (cNEWDBF)              //criando a estrutura usa o rdddefauld destino ultimo atribuido
+    IF lSTRUEXT
+        try
+          COPY STRUCTURE TO (cNEWDBF)              //criando a estrutura usa o rdddefauld destino ultimo atribuido
+        catch oERROR
+           alertx("Erro Criando nova strutura")
+           RESTAA(aAMBIENTE)
+           TIPODBF:=nOLDTIPO
+           RDDNOME(nOLDTIPO) //retorna tipo anterior
+           RETURN .F. 
+        end  
+    ELSE
+        aESTRUTURA:=dbStruct() //cria matriz com a estrura 
+        dbcreate(cNEWDBF,aESTRUTURA,cDESDRIVER,.F.)
+       // dbCreate( <cFile>, <aStruct>, [<cRDD>], [<lKeepOpen>]]
+       dbclosearea()
+    ENDIF    
+    //dbclosearea()
+    
     IF file(cNEWDBF+cDESEXT)                   
        MDT("copia efetuada:"+cNEWDBF+cDESEXT)
 
         USE (cNEWDBF) ALIAS aliasnovo EXCLUSIVE NEW VIA (cDESDRIVER)  //abre a copia usa o rdddefauld destino ultimo atribuido utiliza aliasnovo
 
         MDT("Importando registros para: "+cNEWDBF)
-        SELE ALIASNOVO
+      //  SELE ALIASNOVO
         
         nLASTREC:=NetRegCount(cOLDDBF)
         zei_fort( nLASTREC,,,0)
