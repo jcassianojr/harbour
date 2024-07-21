@@ -153,12 +153,17 @@ RETURN cRETU
 *+
 *+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 
-FUNCTION SplitCommaAspas(cLINHA)
+FUNCTION SplitCommaAspas(cLINHA,cSEPCAMPOS)
 LOCAL aRETU,cVALOR,nPOS
 //CLINHA:='"33600823";"0001";"07";"1";"SALGADOS DA ERIDIANA";"08";"20190722";"01";"";"";"20190513";"5620104";"1096100,1093702";"RUA";"EMILIO VASCONCELOS";"288";"";"CENTRO";"39790000";"MG";"4011";"33";"88333829";"";"";"";"";"adelano.deptofiscal@gmail.com";"";"'
+IF VALTYPE(cSEPCAMPOS)<>"C"
+   cSEPCAMPOS := '";"'
+ELSE
+   cSEPCAMPOS := '"'+cSEPCAMPOS+'"'
+ENDIF
 aRETU:={}
-while at('";"',cLINHA)>0
-    nPOS:=at('";"',cLINHA)
+while at(cSEPCAMPOS,cLINHA)>0   //  '";"'
+    nPOS:=at(cSEPCAMPOS,cLINHA)  // '";"'
     IF LEFT(cLINHA,1)='"' //as vezes o primeiro campo nao e "33600823"; e sim 33600823";
        cVALOR:=SUBSTR(cLINHA,2,nPOS-2)
     ELSE
