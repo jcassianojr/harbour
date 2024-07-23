@@ -17,6 +17,22 @@
 *:*****************************************************************************
 
 #INCLUDE "BOX.CH"
+
+/*
+g_oMenuBar := WvgSetAppWindow():menuBar()
+
+oMenu12 := WvgMenu():new( g_oMenuBar, , .t. ):create()
+oMenu12:caption := "Recursos"
+
+oMenu12:AddItem( "1 - alert1 "  , {|| alert("1") } )          //execModulos("0.1")
+oMenu12:AddItem( "2 - alert2 "  , {|| alert("2") } )         
+
+g_oMenuBar:addItem( { oMenu12, "Recursos" } )
+
+
+//return (oMenu12)
+*/
+
 PUBLIC DADO
 DXDIA=DATE()
 Set( _SET_MESSAGE, 6 , .T. )

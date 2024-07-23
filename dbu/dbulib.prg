@@ -222,10 +222,15 @@ local aAMBIENTE
 aAMBIENTE:=SALVAA()
 zEXPOREXT:=PADR(zEXPOREXT,4)
 
-HB_dispbox( 10, 10, 21, 60, B_DOUBLE+" ")
-       
-@ 11,12  say "Delimitador ,;|#~ 9=(TAB)"
-@ 12,12 say "Extensao DLM,CVS,UNL,XLS,XML,SQL,JSON" 
+HB_dispbox( 03, 10, 22, 60, B_DOUBLE+" ")
+  @ 03,12 say "TXT SDF DML    fornecer delimitador"
+  @ 04,12 SAY "SSV Semi Colon (;) Ponto e Virgula"
+  @ 05,12 say "CSV Colon      (,) Virgula"
+  @ 06,12 say "UNL PDF        (|) Pipe"
+  @ 07,12 say "XLS XML SQL JSON"
+
+
+@ 12,12 say "Delimitador ,;|#~ 9=(TAB)"
 @ 13,12 say "Separador Decimal ,. "
 @ 14,12 say "Digitos Ano 2/4"
 @ 15,12 say "Separador Data /-( )"
@@ -234,8 +239,8 @@ HB_dispbox( 10, 10, 21, 60, B_DOUBLE+" ")
 @ 18,12 say "Logico= TRUE .T. ON YES SIM 1 T Y S"
 @ 19,12 say "Converter (N)ao oemto(A)nsi ansito(O)em"  
 
-@ 11,53 get zDELIMITE PICT "!"     VALID zDELIMITE $ ",;|#~9"       
-@ 12,53 get zEXPOREXT PICT "!!!!"  VALID zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
+@ 11,53 get zEXPOREXT PICT "!!!!"  VALID checkextEXP()
+@ 12,53 get zDELIMITE PICT "!"     VALID zDELIMITE $ " ,;|#~9"
 @ 13,53 get zDECSIM                VALID zDECSIM $ ",."       
 @ 14,53 get zANOTAM   PICT "9"     VALID zANOTAM $ "24"
 @ 15,53 get zANOSEP                VALID zANOSEP $ "/- "
@@ -246,7 +251,7 @@ HB_dispbox( 10, 10, 21, 60, B_DOUBLE+" ")
 readcur() 
 
 zEXPOREXT=ALLTRIM(ZEXPOREXT)
-IF zEXPOREXT="XLS".AND.zDELIMITE<>"9"
+IF zEXPOREXT="XLS" .AND. zDELIMITE<>"9"
   error_msg( "XLS requer requerer 9=(TAB)" )
   zDELIMITE="9"
 ENDIF
@@ -259,13 +264,36 @@ ENDIF
 IF zEXPOREXT="JSON"
   zDELIMITE:=""
 ENDIF
-
-
-// criar_m[5]:=ZEXPOREXT agora usa geradoc 0 que pergunta o tipo  de exportacao
-// util_m[7]:=ZEXPOREXT agora usa multidocs 0 que pegunta o tipo de exportacao
 RESTAA(aAMBIENTE)
 layout()
 return 
+
+function checkextEXP()  //",;|#~9" zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
+LOCAL lRETU
+zDELIMITE:=" "
+lRETU := .T.
+DO CASE
+   CASE zEXPOREXT="TXT" 
+   CASE zEXPOREXT="SDF" 
+   CASE zEXPOREXT="DLM"
+   CASE zEXPOREXT="SSV"
+        zDELIMITE:=";" 
+   CASE zEXPOREXT="CSV"
+        zDELIMITE:=","
+   CASE zEXPOREXT="UNL" .OR. zEXPOREXT="PDF"
+        zDELIMITE:="|"
+   CASE zEXPOREXT="XLS"
+        zDELIMITE:="9"
+   CASE zEXPOREXT="XML"
+   CASE zEXPOREXT="SQL"
+        zDELIMITE:=","
+   CASE zEXPOREXT="JSON"
+   OTHERWISE
+       lRETU := .F.
+ENDCASE
+RETURN lRETU
+
+
       
 //esta aqui pois as vezes e usada em replaces
 FUNCTION formatacpf(xCPF)
