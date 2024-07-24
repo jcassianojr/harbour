@@ -158,22 +158,20 @@ function selectdb
    local nDot := 0
    local lRETU := .F.
    
-   cFileName:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite Files", "*.sqlite", 1 )
+/* win_GetOpenFileName( [[@]<nFlags>], [<cTitle>], [<cInitDir>], [<cDefExt>], ;
+ *                      [<acFilter>], [[@]<nFilterIndex>], [<nBufferSize>], [<cDefName>] )
+ *    --> <cFilePath> | <cPath> + e"\0" + <cFile1> [ + e"\0" + <cFileN> ] | ""
+ *    { { "Databases", "*.dbf" }, { "Harbour", "*.prg" } }
+*/
+   
+   cFileName:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite Files", ;
+    { { 'SQLite Files', '*.sqlite*' },{ 'SQLite db db3  Files', '*.DB*' } , { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
    
   // cFileName := GetFile ( { { 'SQLite Files', '*.sqlite' }, { 'All Files', '*.*' } }, 'Select an Existing SQLite File' )
    if len( alltrim( cFileName ) ) > 0
       cDBName := tiraext(cFileName)
       
-      /*
-      nSlash := rat( '\', cDBName )
-      if nSlash > 0
-         cDBName := substr( cDBName, nSlash + 1 )
-      endif
-      nDot := at( '.', cDBName )
-      if nDot > 0
-         cDBName := substr( cDBName, 1, nDot - 1 )
-      endif
-      */
+
       
       oDB := Connect2DB( cFileName, .f. )
       if oDB == Nil
@@ -210,7 +208,12 @@ function createadb
    local nSlash := 0
    local nDot := 0
    
-    cFileName:=win_GetSaveFileName(, "SQLite Files",HB_CWD(), "SQLite Files", "*.sqlite", 1 )
+  //  cFileName:=win_GetSaveFileName(, "SQLite Files",HB_CWD(), "SQLite Files", "*.sqlite", 1 )
+    
+     cFileName:=win_GetSAVEFileName(, "SQLite Files",HB_CWD(), "SQLite Files", ;
+    { { 'SQLite Files', '*.sqlite*' },{ 'SQLite db db3  Files', '*.DB*' } , { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
+   
+    
    //cFileName := PutFile ( { { 'SQLite Files', '*.sqlite' }, { 'All Files', '*.*' } }, 'Create a SQLite File' )
    if len( alltrim( cFileName ) ) == 0
       msgstop( 'File name can not be empty!', 'DBF2SQLite Exporter' )
@@ -339,7 +342,7 @@ function export2dbf(ODB1,cNEWTABLE)
        //  sql.progress1.value := 0
         // sql.progress1.visible := .f.
         // sql.status1.visible := .f.
-         ALERTX("Successfully exported")   
+         ? "Successfully exported"+ cNEWTABLE 
          close all
       //   sql.newtablename.value := ''
          cNewTable := ''
