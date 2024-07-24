@@ -11,6 +11,7 @@ hbtip.hbc
 xhb.hbc
 rddads.hbc
 rddbm.hbc
+hbsqlit3.hbc
 
 
 DBU.PRG  
@@ -32,6 +33,7 @@ dbusincdbf.prg
 bmdbfcdx2.prg
 bmdbfnsx2.prg
 bmdbfnTX2.prg
+sql2dbf.prg
 
 
 d:\develop\harbour\objmgw\netdbf.prg

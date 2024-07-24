@@ -1,12 +1,9 @@
-#include <dbstruct.ch>
+#include "dbstruct.ch"
+#INCLUDE "BOX.CH"
 
 #require "hbsqlit3"
-//#include <hbsqlit3.ch>
 
-///REQUEST hbsqlit3
-
-Function Main
-
+Function sqlitemenu()
 public oDB := nil
 public oDB1 := nil
 private cTableName := ''
@@ -14,40 +11,61 @@ private cNewTable := ''
 private lOpened := .f.
 
 
-//createadb()
-IF selectdb()
- /*
- sqlite3_exec( odb, "CREATE TABLE t1( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER )")
- sqlite3_exec( odb, ;
-         "BEGIN TRANSACTION;" + ;
-         "INSERT INTO t1( name, age ) VALUES( 'Bob', 52 );" + ;
-         "INSERT INTO t1( name, age ) VALUES( 'Fred', 40 );" + ;
-         "INSERT INTO t1( name, age ) VALUES( 'Sasha', 25 );" + ;
-         "INSERT INTO t1( name, age ) VALUES( 'Ivet', 28 );" + ;
-         "COMMIT;" )
-   */  
-   exportadbf(odb)    
-endif
+aAMBIENTE:=SALVAA()
 
-//sqlitepack(odb)
+WHILE .T.
+    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+    OPCAO(  4, 24, "&Criar base sqllite        ", 67 ) //c 67
+    OPCAO(  5, 24, "&VACUUM (PACK)             ", 86 ) //V 86
+    OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73
+    OPCAO(  7, 24, "&Exportar para DBFS        ", 69 ) //E 69
+    KEY := menu( 2, 0 )
+    DO CASE
+       CASE KEY=1
+            createadb()
+       CASE KEY=2
+             IF selectdb()
+               sqlitepack(odb)
+            endif      
+       CASE KEY=3
+              IF selectdb()
+                nOLDTIPO:=TIPODBF
+                alertX("escolha origem")
+                tipodbfesc()
+                nORITIPO:=TIPODBF
+                cORIDRIVER:=RDDNOME(TIPODBF)
+                cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
+                IF FILE (cARQORI)
+                   export2sql(odb,cARQORI)
+                   RDDNOME(nOLDTIPO) //retorna tipo anterior
+                ENDIF   
+            endif     
+       CASE KEY=4
+            IF selectdb()
+               exportadbf(odb)  
+            endif       
+       OTHERWISE
+            RETURN
+    ENDCASE
+ENDDO
+
+RESTAA(aAMBIENTE)
+layout()
+return NIL
+
 
 
 function exportadbf(db)
- aTable := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
- altd()
-         if len( aTable ) == 0
-            msgstop( 'No Tables in the DB', 'DBF<-->SQLite Exporter' )
-            return nil
-         endif
-        // alertx(atable)
-        //altd()
-         for i := 1 to len( aTable )
-            //sql.tables.additem( aTable[ i, 1 ] ) 
-            ? aTable[ i, 1 ]
-            Export2dbf(DB,aTable[ i, 1 ])
-            sqlite3_sleep( 3000 )
-         next i
-         //sql.tables.value := 1
+aTable := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
+ if len( aTable ) == 0
+    msgstop( 'No Tables in the DB', 'DBF<-->SQLite Exporter' )
+    return nil
+ endif
+ for i := 1 to len( aTable )
+    MDT( aTable[ i, 1 ])
+    Export2dbf(DB,aTable[ i, 1 ])
+ next i
+ return nil
 
 
 function C2SQL(Value)
@@ -145,7 +163,7 @@ return tablearr
 function sqlitepack(db)
 IF ! Empty( db )
       IF sqlite3_exec( db, "VACUUM" ) == SQLITE_OK
-        // ? "PACK - Done"
+        MDT("VACUUM PACK - Done")
          //sqlite3_sleep( 3000 )
       ENDIF
 ENDIF
@@ -158,33 +176,21 @@ function selectdb
    local nDot := 0
    local lRETU := .F.
    
-/* win_GetOpenFileName( [[@]<nFlags>], [<cTitle>], [<cInitDir>], [<cDefExt>], ;
- *                      [<acFilter>], [[@]<nFilterIndex>], [<nBufferSize>], [<cDefName>] )
- *    --> <cFilePath> | <cPath> + e"\0" + <cFile1> [ + e"\0" + <cFileN> ] | ""
- *    { { "Databases", "*.dbf" }, { "Harbour", "*.prg" } }
-*/
    
-   cFileName:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite Files", ;
-    { { 'SQLite Files', '*.sqlite*' },{ 'SQLite db db3  Files', '*.DB*' } , { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
+   cFileName:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
+    { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
+      { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
+      { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
    
-  // cFileName := GetFile ( { { 'SQLite Files', '*.sqlite' }, { 'All Files', '*.*' } }, 'Select an Existing SQLite File' )
    if len( alltrim( cFileName ) ) > 0
       cDBName := tiraext(cFileName)
-      
-
-      
       oDB := Connect2DB( cFileName, .f. )
       if oDB == Nil
          msgstop( 'Not a valid SQLite file.', 'SQLite File Selection' )
-//         sql.connection.value := "DB Not Connected"
- //        sql.connection.fontcolor := { 255, 0, 0 }
-         return nil
+         return .f.
       else 
           lRETU:=.T.
-          ? sqlite3_libversion_number()
-          sqlite3_sleep( 1000 )
- //        sql.connection.value := alltrim( cDBName ) + " is Connected!"
- //        sql.connection.fontcolor := { 0, 98, 0 }
+          MDT(" is Connected! Version: "+cFILENAME) //+ valtostr(sqlite3_libversion_number())
       endif
    else
       msgstop( 'You have to select a SQLite File!', 'SQLite File Selection' )
@@ -208,13 +214,13 @@ function createadb
    local nSlash := 0
    local nDot := 0
    
-  //  cFileName:=win_GetSaveFileName(, "SQLite Files",HB_CWD(), "SQLite Files", "*.sqlite", 1 )
-    
-     cFileName:=win_GetSAVEFileName(, "SQLite Files",HB_CWD(), "SQLite Files", ;
-    { { 'SQLite Files', '*.sqlite*' },{ 'SQLite db db3  Files', '*.DB*' } , { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
+   
+   cFileName:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
+    { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
+      { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
+      { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
    
     
-   //cFileName := PutFile ( { { 'SQLite Files', '*.sqlite' }, { 'All Files', '*.*' } }, 'Create a SQLite File' )
    if len( alltrim( cFileName ) ) == 0
       msgstop( 'File name can not be empty!', 'DBF2SQLite Exporter' )
       return nil
@@ -227,25 +233,12 @@ function createadb
       return
    endif
    cDBName := tiraext(cFileName)
-   /*
-   nSlash := rat( '\', cDBName )
-   if nSlash > 0
-      cDBName := substr( cDBName, nSlash + 1 )
-   endif
-   nDot := at( '.', cDBName )
-   if nDot > 0
-      cDBName := substr( cDBName, 1, nDot - 1 )
-   endif
-   */
    oDB := Connect2DB( cFileName, .t. )
    if oDB == Nil
       msgstop( 'Not a valid SQLite file.', 'SQLite File Selection' )
-  //    sql.connection.value := "DB Not Connected"
-  //    sql.connection.fontcolor := { 255, 0, 0 }
       return nil
    else
- //     sql.connection.value := cDBName + " is Connected!"
- //     sql.connection.fontcolor := { 0, 98, 0 }
+       mdt(cDBName + " is Connected!")
    endif
 return nil
 
@@ -261,14 +254,13 @@ function export2dbf(ODB1,cNEWTABLE)
    local nFieldDec := ''
    local nLength := 0
    local aRecord := {}
-   local nTotalRows := 0
    local i, j
    if len( alltrim( cNewTable ) ) == 0
       msgstop( 'You have to select a DBF to export', 'DBF<-->SQLite Exporter' )
       return nil
    endif
-   if len(cNEWTABLE)>0 //**sql.tables.value > 0
-      cSQLTable := cNEWTABLE //"t1" //**sql.tables.item( sql.tables.value )
+   if len(cNEWTABLE)>0 
+      cSQLTable := cNEWTABLE 
       aTable := sqltablestru( oDB1, 'PRAGMA table_info( ' + c2sql( cSQLTable ) + ')' )
       if len( aTable ) == 0
          msgstop( 'This is an empty table!' ) 
@@ -315,36 +307,29 @@ function export2dbf(ODB1,cNEWTABLE)
          aadd( aStruct, { cFieldName, cFieldType, nFieldLength, nFieldDec } )
       next i
       if len( aStruct ) > 0
-         dbcreate( cNewTable+"_exp", aStruct )
+         //cNEWARQ:=cNEWTABLE+"_exp"
+         dbcreate( cNewTable, aStruct )
          use &cNewTable
          if .not. used()
             msgstop( 'DBF File Creation error!', 'DBF<-->SQLite Exporter' )
             return nil
          endif
          aTable := sqltablestru( oDB1, 'select * from ' + c2sql( cSQLTable ) )
-      //   sql.progress1.value := 0
-      //   sql.progress1.visible := .t.
-      //   sql.status1.value := ""
-      //   sql.status1.visible := .t.
-         nTotalRows := len( aTable )
-         for i := 1 to nTotalRows
-      //      sql.progress1.value := i / nTotalRows * 100
-       //     sql.status1.value := alltrim( str( i ) ) + " of " + alltrim( str( nTotalRows ) ) + " Records processed."
-            append blank
+         nLASTREC:= len( aTable )
+         zei_fort( nLASTREC,,,0)
+         for i := 1 to nLASTREC
+             zei_fort(nLASTREC,,,1)
+            netrecapp() //append blank
             aRecord := aTable[ i ]
             for j := 1 to len( aRecord )
                cFieldName := Left( aStruct[ j, 1 ], 10 )
                replace &cFieldName with aRecord[ j ]
             next j
          next i
-         commit
-       //  sql.status1.value := ""
-       //  sql.progress1.value := 0
-        // sql.progress1.visible := .f.
-        // sql.status1.visible := .f.
-         ? "Successfully exported"+ cNEWTABLE 
-         close all
-      //   sql.newtablename.value := ''
+         dbcommit()
+         dbunlock()
+         mdt( "Successfully exported"+ cNEWTABLE )
+         dbcloseall() //close all
          cNewTable := ''
       endif
    else
@@ -353,3 +338,122 @@ function export2dbf(ODB1,cNEWTABLE)
    endif
 return nil
 
+function miscsql(dbo1,qstr)
+if empty(dbo1)
+   msgstop("Database Connection Error!")
+   return .f.
+endif
+sqlite3_exec(dbo1,qstr)
+if sqlite3_errcode(dbo1) > 0 // error
+   msgstop(sqlite3_errmsg(dbo1)+" Query is : "+qstr)
+   return .f.
+endif
+return .t.
+
+Function export2sql(odb,cDBFFILE)
+   local aStruct := {}, i, mFldNm, mFldtype, mFldLen, mFldDec, mSql
+   local totrec, nrec
+   
+   if oDB == nil
+      msgstop( "No Connection to SQLite DB! Try to create a new SQLite DB or select an existing SQLite DB", 'DBF->SQLite Exporter' )
+      return nil
+   endif
+      
+    IF .NOT. FILE(cDBFFILE)  
+        return nil
+    ENDIF
+      
+      
+    cTablename := TIRAEXT(cDBFFILE)
+//    use &cTablename.
+ 
+    USE (cARQORI) ALIAS ORIGEM SHARED NEW VIA  (cORIDRIVER) 
+ //  USE (cDBFFILE)  SHARED NEW //VIA  (cORIDRIVER)       
+
+   aStruct = DbStruct()
+
+   mSql := "CREATE TABLE IF NOT EXISTS "+cTablename+" ("
+
+   for i := 1 to len(aStruct)
+      mFldNm := aStruct[i, DBS_NAME]
+      mFldType := aStruct[i, DBS_TYPE]
+      mFldLen := aStruct[i, DBS_LEN]
+      mFldDec := aStruct[i, DBS_DEC]
+
+      if i > 1
+         mSql += ", "
+      endif
+      mSql += alltrim(mFldnm)+" "
+
+      do case
+      case mFldType = "C"
+         mSql += "CHAR("+LTRIM(STR(mFldLen))+")"
+      case mFldType = "D"
+         mSql += "DATE"
+      case mFldType = "T"
+         mSql += "DATETIME"
+      case mFldType = "N"
+         if mFldDec > 0
+            mSql += "FLOAT"
+         else
+            mSql += "INTEGER"
+         endif
+      case mFldType = "F"
+         mSql += "FLOAT"
+      case mFldType = "I"
+         mSql += "INTEGER"
+      case mFldType = "B"
+         mSql += "DOUBLE"
+      case mFldType = "Y"
+         mSql += "FLOAT"
+      case mFldType = "L"
+         mSql += "BOOL"
+      case mFldType = "M"
+         mSql += "TEXT"
+      case mFldType = "G"
+         mSql += "BLOB"
+      otherwise
+         alertx("Invalid Field Type: "+mFldType)
+         return nil
+      endcase
+   next
+
+   mSql += ")"
+
+
+   if !miscsql( oDB, mSql )
+      alertx( 'Table Creation Error!', 'DBF2SQLite' )
+      return nil
+   endif
+
+
+   nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
+   zei_fort( nLASTREC,,,0)
+   DBGOTOP()
+   if !miscsql( oDB, 'begin transaction' )
+      return nil
+   endif
+   do while !eof()
+      zei_fort(nLASTREC,,,1)
+
+      mSql := "INSERT INTO "+cTablename+" VALUES "
+      msql := msql + "("
+      for i := 1 to len(aStruct)
+         mFldNm := aStruct[i, DBS_NAME]
+         if i > 1
+            mSql += ", "
+         endif
+         mSql += c2sql(&mFldNm)
+      next
+      mSql += ")"
+      if .not. miscsql( oDB, mSql)
+      	 alertx("Problem in Query: "+mSql)
+         return nil
+      endif
+      dbskip()
+   enddo
+   if !miscsql( oDB, 'end transaction' )
+      return nil
+   endif
+   dbcloseall()
+return nil

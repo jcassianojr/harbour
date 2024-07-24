@@ -49,7 +49,6 @@ REQUEST BMDBFNTX //-18 BMDBFNTX DBFNTX
 
 FUNCTION MAIN()
 
-//rddSetDefault( "BMDBFCDX" ) 
 
 netregosok()
 
@@ -492,7 +491,7 @@ setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
 util_m := { "Rem Reg Dup", "Calculadora", "Ver TXT", "Editar TXT",;
-            "Exportar","Sort DBF","sem uso","sem uso","sem uso","Converter","FixarTodos","ZeraTodos",;
+            "Exportar","Sort DBF","sem uso","sem uso","SQLITE","Converter","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
@@ -569,15 +568,10 @@ do while .T.
           sortdbf()
       case M->func_sel = 7
          alertx("funcao nao disponivel")
-         //pegparexp()
-         //multidocs(5)  //dlm
       case M->func_sel = 8
          alertx("funcao nao disponivel")
-         //multidocs(6)  //sdf
       case M->func_sel = 9
-         alertx("funcao nao disponivel")
-           //multidocs(1,"*.dbf")
-           //FAZERDBF( {|| dbf2xml() }, .F. ,,,"*.dbf")  //xmla
+        sqlitemenu()
       case M->func_sel = 10
            if rsvp( "Converter  entre formatos" ) = "S" 
 		       converttipo() 
