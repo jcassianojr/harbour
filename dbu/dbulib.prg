@@ -224,10 +224,11 @@ zEXPOREXT:=PADR(zEXPOREXT,4)
 
 HB_dispbox( 03, 10, 22, 60, B_DOUBLE+" ")
   @ 03,12 say "TXT SDF DML    fornecer delimitador"
-  @ 04,12 SAY "SSV Semi Colon (;) Ponto e Virgula"
-  @ 05,12 say "CSV Colon      (,) Virgula"
-  @ 06,12 say "UNL PDF        (|) Pipe"
-  @ 07,12 say "XLS XML SQL JSON"
+  @ 04,12 SAY "SSV Semi Colon (;) Ponto e Virgula "
+  @ 05,12 say "CSV Colon      (,) Virgula         "
+  @ 06,12 say "UNL PSV        (|) Pipe            "
+  @ 07,12 say "TSV            TAB                 "
+  @ 08,12 say "XLS XML SQL JSON                   "
 
 
 @ 12,12 say "Delimitador ,;|#~ 9=(TAB)"
@@ -280,9 +281,9 @@ DO CASE
         zDELIMITE:=";" 
    CASE zEXPOREXT="CSV"
         zDELIMITE:=","
-   CASE zEXPOREXT="UNL" .OR. zEXPOREXT="PDF"
+   CASE zEXPOREXT="UNL" .OR. zEXPOREXT="PSV"
         zDELIMITE:="|"
-   CASE zEXPOREXT="XLS"
+   CASE zEXPOREXT="TSV" .OR. zEXPOREXT="XLS"
         zDELIMITE:="9"
    CASE zEXPOREXT="XML"
    CASE zEXPOREXT="SQL"
