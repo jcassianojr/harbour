@@ -1,6 +1,6 @@
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Module => DISK72.PRG
+*+    Module => DISK72.PRG hb_filenamesplit
 *+
 *+    Functions: Function FILENAMES(GRUPO ,cCASE)
 *+               Function TIRAEXT(cFile, opcional cEXT) ''so troca se passar cext senao so tira a extensao
@@ -11,7 +11,7 @@
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function FILENAMES()
+*+    Function FILENAMES() hb_filenamesplit
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -37,7 +37,7 @@ retu RET_ARRAY
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function TIRAEXT(cFile, cEXT)
+*+    Function TIRAEXT(cFile, cEXT) hb_filenamesplit
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -56,6 +56,7 @@ FUNCTION TIRAEXT( cFile, cEXT )             //Arquivo teste.txt ->teste se cext=
 *+
 *+    Function TROCAEXT ''compatibilizar chamada com chamada trocaext ja em alguns programa evitando trocar o nome da funcao e evitar que nao exista
 *+
+* hb_filenamesplit
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 FUNCTION TROCAEXT(cFile, cEXT)
@@ -64,7 +65,7 @@ RETURN TIRAEXT( cFile, cEXT )
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function DELETAARQ()
+*+    Function DELETAARQ() hb_filenamesplit
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
