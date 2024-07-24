@@ -135,10 +135,7 @@ Set( _SET_SOFTSEEK, .t.)
 __SetCentury( .t. )
 Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
-
 Set( _SET_SCOREBOARD, .f. )
-
-
 
 clear
 
@@ -491,7 +488,7 @@ setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
 util_m := { "Rem Reg Dup", "Calculadora", "Ver TXT", "Editar TXT",;
-            "Exportar","Sort DBF","sem uso","sem uso","SQLITE","Converter","FixarTodos","ZeraTodos",;
+            "Exportar","Sort DBF","sem uso","MDB","SQLITE","Converter","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
@@ -569,7 +566,7 @@ do while .T.
       case M->func_sel = 7
          alertx("funcao nao disponivel")
       case M->func_sel = 8
-         alertx("funcao nao disponivel")
+         mdbmenu()
       case M->func_sel = 9
         sqlitemenu()
       case M->func_sel = 10

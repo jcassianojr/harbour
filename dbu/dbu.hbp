@@ -12,7 +12,7 @@ xhb.hbc
 rddads.hbc
 rddbm.hbc
 hbsqlit3.hbc
-
+rddado.hbc
 
 DBU.PRG  
 dbucnvmemo.prg 
@@ -34,6 +34,7 @@ bmdbfcdx2.prg
 bmdbfnsx2.prg
 bmdbfnTX2.prg
 sql2dbf.prg
+mdb2dbf.prg
 
 
 d:\develop\harbour\objmgw\netdbf.prg
