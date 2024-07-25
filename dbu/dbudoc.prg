@@ -143,22 +143,6 @@ ENDIF
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 *   
-Function pegtipodoc()
-LOCAL tDOC
-tDOC:=0
-  aAMBIENTE:=SALVAA()
-  HB_dispbox( 6, 22, 21, 55, B_DOUBLE+" ")
-  OPCAO(  8, 24, "XML&A ", 65 ) //A 1
-  OPCAO(  9, 24, "&TAM  ", 74 ) //T 3
-  OPCAO( 10, 24, "TE&C  ", 67 ) //C 2
-  OPCAO( 11, 24, "&DBE  ", 68 ) //D 4
-  OPCAO( 12, 24, "DL&M  ", 77 ) //M 5
-  OPCAO( 13, 24, "&SDF  ", 83 ) //S 6
-  OPCAO( 14, 24, "&XML  ", 88 ) //X 7
-  OPCAO( 15, 24, "&JSON ", 74 ) //J 8
-  tdoc := menu( 2, 0 )
-  RESTAA(aAMBIENTE)
-return tDOC
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
@@ -292,7 +276,8 @@ do case
 	   cARQGRV += ".TEC"
 	case tDOC = 4
 	   cARQGRV += ".DBE"
-	case tDOC = 5  .OR. zEXPOREXT="SQL"
+	case tDOC = 5  .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="SSV" .OR. zEXPOREXT="CSV" ;
+                   .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="TSV" .OR. zEXPOREXT="PSV"
 	   cARQGRV += "."+ZEXPOREXT
 	case tDOC = 6
 	   cARQGRV += ".SDF"

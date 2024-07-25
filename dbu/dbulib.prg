@@ -213,6 +213,54 @@ RETURN USOVIA
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
+*+    Function pegTIPDOC escolher tipo para exportacao de dados
+*+
+*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+
+Function pegtipodoc()
+LOCAL tDOC
+LOCAL aAMBIENTE
+
+tDOC:=0
+aAMBIENTE:=SALVAA()
+
+  HB_dispbox( 6, 12, 21, 60, B_DOUBLE+" ")
+  OPCAO(  8, 14, "XML&A                               ", 65 ) //A 1
+  OPCAO(  9, 14, "&TAM  STRU+TAM                      ", 74 ) //T 3
+  OPCAO( 10, 14, "TE&C  STRU                          ", 67 ) //C 2
+  OPCAO( 11, 14, "&DBE  STRU DDL                      ", 68 ) //D 4
+  OPCAO( 12, 14, "DL&M  DELIM                         ", 77 ) //M 5
+  OPCAO( 13, 14, "&SDF                                ", 83 ) //S 6
+  OPCAO( 14, 14, "&XML                                ", 88 ) //X 7
+  OPCAO( 15, 14, "&JSON                               ", 74 ) //J 8
+  OPCAO( 16, 14, "SSV Semi Colon (;) &Ponto e Virgula ", 80 ) //P  9
+  OPCAO( 17, 14, "CS&V Colon      (,) Virgula         ", 86 ) //V1 0
+  OPCAO( 18, 14, "&UNL PSV        (|) Pipe            ", 85 ) //U 11
+  OPCAO( 19, 14, "TSV            TA&B                 ", 66 ) //B 12
+  OPCAO( 20, 14, "S&QL   insert into                  ", 81 ) //Q 13
+  tdoc := menu( 2, 0 )
+  RESTAA(aAMBIENTE)
+  DO CASE
+     CASE tDOC=9
+          zEXPOREXT="SSV"
+     CASE tDOC=10
+          zEXPOREXT="CSV"
+     CASE tDOC=11
+          zEXPOREXT="UNL"
+     CASE tDOC=12
+          zEXPOREXT="TSV"
+     CASE tDOC=13
+          zEXPOREXT="SQL"
+  ENDCASE
+  IF tDOC>=9 .AND. tDOC<=13
+     checkextEXP() //pega o delimitador zDELIMITE:
+     tDOC =5       //retorna para o tipo 5 DML a geracao SSV CSV UNL PSV TSV SQL usam as funcoes da DML
+  ENDIF
+  
+return tDOC
+
+*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+
 *+    Function pegparexp parametross para exportacao de dados
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -295,7 +343,24 @@ ENDCASE
 RETURN lRETU
 
 
-      
+FUNCTION COPYTO(cDESTINO)
+nLASTREC:=LASTREC()
+zei_fort( nLASTREC,,,0)
+DO CASE
+   CASE zREGSEP=chr(34) .OR. zREGSEP=chr(39) //delimitador + aspas duplas aspas (") (')
+        COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1) DELIMITED  WITH ( { zDELIMITE, zREGSE } )        
+   CASE zEXPOREXT="SDF" 
+        COPY to &cDESTINO. while zei_fort(nLASTREC,,,1)  SDF
+   CASE zEXPOREXT="DLM" .OR. zEXPOREXT="CSV"
+        COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED
+   CASE zEXPOREXT="UNL" .OR. zEXPOREXT="PSV"
+        COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH PIPE
+   CASE zEXPOREXT="TSV" 
+        COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH TAB
+   OTHERWISE //SSV  zdelimite= ; e outro delimitador
+       COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1)  DELIMITED   WITH WITH &zDELIMITE
+ENDCASE   
+
 //esta aqui pois as vezes e usada em replaces
 FUNCTION formatacpf(xCPF)
 XCPF:=AllTrim(TIRAOUT(xCPF))
