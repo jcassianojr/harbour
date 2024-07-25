@@ -1,8 +1,8 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+н*******************************************************************
 *+
 *+    Source Module => DBULIB.PRG
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 
 #INCLUDE "BOX.CH"
 #include "ads.ch"
@@ -31,42 +31,42 @@ next
 
 return .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 *+    Function MD() limpa a linha de mensagens
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 function MD             
 @ maxrow(), 00
-retuRN ( .T. )
+retuRN  .T. 
 
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 *+    Function MDT() exibe uma mensagem por um temp
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 function MDT(cMSG)  
 hb_Alert(cMSG, , , 2 ) 
 retuRN .t. 
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 *+    Function XEXT() retorna a extensao do aquivo indice
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 function  XEXT
 return hb_rddInfo( RDDI_ORDBAGEXT)
 
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 *+    Function tipodbfesc escolhe o tipo de dbf indice e memo
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 FUNCtion tipodbfesc
 //TipoDBF,USOVIA e varivel public
@@ -129,11 +129,11 @@ ADORDD
 
 */
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 *+    Function RDDNOME(nTIPO) configura o tipo de dbf indice e memo
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 FUNCTION RDDNOME(nTIPODBF)
 LOCAL USOVIA
@@ -211,11 +211,11 @@ zusovia:=USOVIA
 layout()
 RETURN USOVIA
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 *+    Function pegTIPDOC escolher tipo para exportacao de dados
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 Function pegtipodoc()
 LOCAL tDOC
@@ -259,11 +259,11 @@ aAMBIENTE:=SALVAA()
   
 return tDOC
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 *+    Function pegparexp parametross para exportacao de dados
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+********************************************************************
 *+
 function pegparexp
 local aAMBIENTE
@@ -315,8 +315,14 @@ IF zEXPOREXT="JSON"
 ENDIF
 RESTAA(aAMBIENTE)
 layout()
-return 
+return nil
 
+*+********************************************************************
+*+
+*+    Function checkexp configura o delimitador conforme o tipo de exportacao
+*+
+*+********************************************************************
+*+
 function checkextEXP()  //",;|#~9" zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
 LOCAL lRETU
 zDELIMITE:=" "
@@ -343,12 +349,20 @@ ENDCASE
 RETURN lRETU
 
 
+*+********************************************************************
+*+
+*+    Function copy to conforme o zEXPORTEXT e ZDELIMITE
+*+
+*+********************************************************************
+*+
 FUNCTION COPYTO(cDESTINO)
 nLASTREC:=LASTREC()
 zei_fort( nLASTREC,,,0)
 DO CASE
    CASE zREGSEP=chr(34) .OR. zREGSEP=chr(39) //delimitador + aspas duplas aspas (") (')
-        COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1) DELIMITED  WITH ( { zDELIMITE, zREGSE } )        
+        COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1) DELIMITED  WITH ( { zDELIMITE, zREGSE } )  
+  CASE zEXPOREXT="DBF" 
+        COPY to &cDESTINO. while zei_fort(nLASTREC,,,1)              
    CASE zEXPOREXT="SDF" 
         COPY to &cDESTINO. while zei_fort(nLASTREC,,,1)  SDF
    CASE zEXPOREXT="DLM" .OR. zEXPOREXT="CSV"
@@ -360,8 +374,42 @@ DO CASE
    OTHERWISE //SSV  zdelimite= ; e outro delimitador
        COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1)  DELIMITED   WITH WITH &zDELIMITE
 ENDCASE   
+RETURN NIL
 
-//esta aqui pois as vezes e usada em replaces
+*+********************************************************************
+*+
+*+    Function append from conforme o zEXPORTEXT e ZDELIMITE
+*+
+*+********************************************************************
+*+
+FUNCTION APPENDFROM(cDESTINO)
+nLASTREC:=LASTREC()
+zei_fort( nLASTREC,,,0)
+DO CASE
+   CASE zREGSEP=chr(34) .OR. zREGSEP=chr(39) //delimitador + aspas duplas aspas (") (')
+        APPEND FROM &cDESTINO.  while zei_fort(nLASTREC,,,1) DELIMITED  WITH ( { zDELIMITE, zREGSE } )  
+  CASE zEXPOREXT="DBF" 
+        APPEND FROM &cDESTINO. while zei_fort(nLASTREC,,,1)              
+   CASE zEXPOREXT="SDF" 
+        APPEND FROM  &cDESTINO. while zei_fort(nLASTREC,,,1)  SDF
+   CASE zEXPOREXT="DLM" .OR. zEXPOREXT="CSV"
+        APPEND FROM  &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED
+   CASE zEXPOREXT="UNL" .OR. zEXPOREXT="PSV"
+        APPEND FROM  &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH PIPE
+   CASE zEXPOREXT="TSV" 
+        APPEND FROM  &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH TAB
+   OTHERWISE //SSV  zdelimite= ; e outro delimitador
+       APPEND FROM  &cDESTINO.  while zei_fort(nLASTREC,,,1)  DELIMITED   WITH WITH &zDELIMITE
+ENDCASE   
+RETURN NIL
+
+*+********************************************************************
+*+
+*+    Function formatacpf(xCPF)
+*+    esta aqui pois as vezes e usada em replaces
+*+
+*+********************************************************************
+*+
 FUNCTION formatacpf(xCPF)
 XCPF:=AllTrim(TIRAOUT(xCPF))
 IF VAL(xCPF)=0 .OR. LEN(xCPF)<>11
