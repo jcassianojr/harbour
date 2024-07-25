@@ -75,7 +75,7 @@ LOCAL KEY
 
 //KEY= TIPODBF //posiciona pela escolha anterior 
 aAMBIENTE:=SALVAA()
-HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+HB_dispbox( 03, 10, 22, 60, B_DOUBLE+" ")
 @ 03,24 SAY     "DRIVER   ARQ IND MEMO"
 OPCAO(  4, 24, "DBF&NTX   DBF NTX DBT     ", 78 ) //N 1 DBFNTX DBF/DBFFPT/DBFNTX
 OPCAO(  5, 24, "DBF&CDX   DBF CDX FPT     ", 67 ) //C 2 DBFCDX DBF/DBFFPT/HB_CDXRDD 
@@ -224,7 +224,7 @@ LOCAL aAMBIENTE
 tDOC:=0
 aAMBIENTE:=SALVAA()
 
-  HB_dispbox( 6, 12, 21, 60, B_DOUBLE+" ")
+  HB_dispbox( 03, 10, 22, 60, B_DOUBLE+" ")
   OPCAO(  8, 14, "XML&A                               ", 65 ) //A 1
   OPCAO(  9, 14, "&TAM  STRU+TAM                      ", 74 ) //T 3
   OPCAO( 10, 14, "TE&C  STRU                          ", 67 ) //C 2
@@ -280,20 +280,20 @@ HB_dispbox( 03, 10, 22, 60, B_DOUBLE+" ")
 
 
 @ 12,12 say "Delimitador ,;|#~ 9=(TAB)"
-@ 13,12 say "Separador Decimal ,. "
-@ 14,12 say "Digitos Ano 2/4"
-@ 15,12 say "Separador Data /-( )"
-@ 16,12 say "Sep Reg "+chr(34)+chr(39)+"( ) "
+@ 13,12 say "Sep Reg "+chr(34)+chr(39)+"( ) "
+@ 14,12 say "Separador Decimal ,. "
+@ 15,12 say "Digitos Ano 2/4"
+@ 16,12 say "Separador Data /-( )"
 @ 17,12 say "(D)ia(M)es(A)no DMA AMD MDA SQL MYS DHZ"
 @ 18,12 say "Logico= TRUE .T. ON YES SIM 1 T Y S"
 @ 19,12 say "Converter (N)ao oemto(A)nsi ansito(O)em"  
 
 @ 11,53 get zEXPOREXT PICT "!!!!"  VALID checkextEXP()
 @ 12,53 get zDELIMITE PICT "!"     VALID zDELIMITE $ " ,;|#~9"
-@ 13,53 get zDECSIM                VALID zDECSIM $ ",."       
-@ 14,53 get zANOTAM   PICT "9"     VALID zANOTAM $ "24"
-@ 15,53 get zANOSEP                VALID zANOSEP $ "/- "
-@ 16,53 get zregSEP                VALID zregsEP $ chr(34)+chr(39)+" "
+@ 13,53 get zregSEP                VALID zregsEP $ chr(34)+chr(39)+" "
+@ 14,53 get zDECSIM                VALID zDECSIM $ ",."       
+@ 15,53 get zANOTAM   PICT "9"     VALID zANOTAM $ "24"
+@ 16,53 get zANOSEP                VALID zANOSEP $ "/- "
 @ 17,53 get zANOFOR   PICT "!!!"   VALID zANOFOR="DMA" .OR. zANOFOR="AMD" .OR. zANOFOR="MDA" .OR. zANOFOR="SQL" .OR. zANOFOR="MYS" .OR. zANOFOR="DHZ"
 @ 18,53 get zSEPLOGIC              valid zSEPLOGIC="TRUE" .OR. zSEPLOGIC=".T. " .OR. zSEPLOGIC="YES " .OR. zSEPLOGIC="ON  " .OR. zSEPLOGIC="SIM " .OR. zSEPLOGIC="1   " .OR. zSEPLOGIC="T   " .OR. zSEPLOGIC="Y   " .OR. zSEPLOGIC="S   "
 @ 19,53 get zCNVCHAR  PICT "!"     VALID zCNVCHAR $ "NAO"  
@@ -326,6 +326,7 @@ return nil
 function checkextEXP()  //",;|#~9" zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
 LOCAL lRETU
 zDELIMITE:=" "
+zregSEP  :=" "
 lRETU := .T.
 DO CASE
    CASE zEXPOREXT="TXT" 
@@ -348,6 +349,37 @@ DO CASE
 ENDCASE
 RETURN lRETU
 
+
+*************************
+function copiardbfpara()
+LOCAL aAMBIENTE
+LOCAL nOLDTIPO
+LOCAL nORITIPO
+LOCAL cORIDRIVER
+LOCAL cARQORI
+
+aAMBIENTE:=SALVAA()
+nOLDTIPO=TIPODBF
+
+alertX("escolha origem")
+tipodbfesc()
+nORITIPO:=TIPODBF
+cORIDRIVER:=RDDNOME(TIPODBF)
+cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
+
+pegtipodoc()
+pegparexp()
+
+cDESTINO:=TROCAEXT(cARQORI,zEXPOREXT)
+
+MDT("abrindo arquivo de origem: "+cARQORI)
+USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER) 
+COPYTO(cDESTINO)
+dbcloseall()
+
+RESTAA(aAMBIENTE)
+TIPODBF:=nOLDTIPO
+RDDNOME(nOLDTIPO) //retorna tipo anterio
 
 *+********************************************************************
 *+

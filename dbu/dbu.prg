@@ -487,7 +487,7 @@ setar_b[ 5 ] = "sysfunc = 0"
 setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
-util_m := { "Rem Reg Dup", "Calculadora", "Ver TXT", "Editar TXT",;
+util_m := { "Rem Reg Dup", "CopiarComo", "Ver TXT", "Editar TXT",;
             "Exportar","Sort DBF","sem uso","MDB","SQLITE","Converter","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
@@ -554,7 +554,7 @@ do while .T.
              limparegdupdbf()
          ENDIF
       case M->func_sel = 2
-         hb_run("calc") 
+          copiardbfpara()
       case M->func_sel = 3
          VERTXT()
       case M->func_sel = 4

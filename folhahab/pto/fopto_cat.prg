@@ -8,9 +8,11 @@ CABE2( 'FOPTO_cat -  Sincronizar Catraca ' )
 
 nUSO:=FCREATE("catraca.sql")
 
-cCONN:=ProfileString( "FOLHA.INI", "MPOINT", "SQL", "" )
+cCONN:=ProfileString( "FOLHA.INI", "MPOINT", "SQL", "" ) //sqlserver
+
 //cConn:="Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=DMPACESSO_V100;Data Source=TI_EUDORA\SQLEXPRESS"
 //Provider=SQLNCLI.1;Password=itaesbra;Persist Security Info=True;User ID=sa;Initial Catalog=DMPAcesso_V100;Data Source=dimeptarif\SQLEXPRESS
+
 if ! netuse(pes)
    retu
 endif

@@ -49,9 +49,7 @@ else
       PADRAX(0, ,0,{"MUSER"},"Usuario Equivalencia","' '+XDECODE(mUSUARIO)+' '+XDECODE(mEQUIVALE)","MCI001","MCI001",,,;
        ,"MCIINS","MCI",{|| MCIIGU()},,{|| MCIANT()},{|| MCIINS()})
 	   
-//	   para wPAX,wpPAX,wcPAX,aWARQ,PAXCAB,PAXDIZ,bPAXTEL,bPAXGET,bPAXEN2,bDELSEC,;
-//         bPOSREP,bPAXINS,PAXCOR,bPOSIGU,bPAXTEC,bANTREP,bPOSINS,bPOSEDI,eFILTRO
-
+        loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
 	   
 	   IF MDG("Gerar postela chave para Muser mana5")
 	      gerapostela(1)
@@ -107,36 +105,6 @@ mVALIDADE := XENCODE(strtran(dtoc(mVALIDADE),'/',''))
 mCHAVE    := mUSUARIO
 return .T.
 
-/* agora unificad f_encode
-*+--------------------------------------------------------------------
-*+
-*+    Function XDECODE()
-*+
-*+--------------------------------------------------------------------
-*+
-function XDECODE(cVAR)
-return if(empty(cVAR),cVAR,DECODE(cVAR))
-
-*+--------------------------------------------------------------------
-*+
-*+    Function XENCODE()
-*+
-*+--------------------------------------------------------------------
-*+
-function XENCODE(cVAR)
-return if(empty(cVAR),cVAR,ENCODE(cVAR))
-
-*+--------------------------------------------------------------------
-*+
-*+    Function XDECDAT()
-*+
-*+--------------------------------------------------------------------
-*+
-function XDECDAT(cVAR)
-cVAR := XDECODE(cVAR)
-cVAR := ctod(left(cVAR,2)+'/'+substr(cVAR,3,2)+'/'+right(cVAR,2))
-return cVAR
-*/
 
 *+--------------------------------------------------------------------
 *+
@@ -187,10 +155,7 @@ IF nARQ=1
 ENDIF
 IF nARQ=2
    cARQMUSER:=ProfileString( "MANA5.INI", "PATH", "MUSERFOLHA", HB_CWD())+"MUSER"
- //  ALERT(cARQMUSER)
    lOPEN:=USECHK(cARQMUSER,,.T.)
-   //USECHK(cARQ,cIND,lSHA,cDRIVER,lNEW,nTIME)
-//   ALERT(cARQMUSER)
 ENDIF
 
 
@@ -288,11 +253,13 @@ return .t.
 
 function gravaposTELA(cUSUARIO,cPOSTELAa,cPOSTELAB,cCHAVEH,cCAMBASE)
 LOCAL cCHAVEV
-//cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
-//     "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=P:\NOVELL\ITAESBRA\PECAS\FMP04CPF.MDB;Mode=Share Deny None" //32 bits ole odbc
 cCHAVEV:=""
 
-cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bits ole  odbc
+if loledb
+   cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
+else
+   cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
+endif
         
 try
    oConn:=WIN_OLECreateObject( "ADODB.Connection" )

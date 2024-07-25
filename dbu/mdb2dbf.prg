@@ -7,6 +7,8 @@
 
 REQUEST ADORDD
 
+//Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
+// USE ( hb_DirBase() + "test.mdb" ) VIA "ADORDD" TABLE "Table1"
 
 Function mdbmenu()
 aAMBIENTE:=SALVAA()
@@ -16,7 +18,7 @@ WHILE .T.
     OPCAO(  4, 24, "&Criar arquivo mdb         ", 67 ) //c 67
     OPCAO(  5, 24, "                           ", 86 ) //V 86
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73
-    OPCAO(  7, 24, "&Exportar para DBFS        ", 69 ) //E 69
+    OPCAO(  7, 24, "&Exportar Tabelas          ", 69 ) //E 69
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -25,6 +27,7 @@ WHILE .T.
        CASE KEY=3
             MDBIMPDBF()
        CASE KEY=4
+            MDBEXP()
        OTHERWISE
             RETURN NIL
     ENDCASE
@@ -33,6 +36,35 @@ ENDDO
 RESTAA(aAMBIENTE)
 layout()
 return nil
+
+function MDBEXP()
+LOCAL cTABELA:=SPACE(60)
+LOCAL cCAMMDB   :=SPACE(100)
+cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+md()
+@ maxrow(),0 SAY "TABELA"
+@ maxrow(),10 get cTABELA
+READ
+
+cTABELA:=ALLTRIM(cTABELA)
+
+pegtipodoc()
+pegparexp()
+
+hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
+cDESTINO:=cCAMMDB+cTABELA+"."+zEXPOREXT
+MDT(cDESTINO)
+
+MDT("abrindo arquivo de origem: "+cMDBARQ)
+USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
+ nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
+    zei_fort( nLASTREC,,,0)
+ 
+COPYTO(cDESTINO)
+dbcloseall()
+return nil
+
+
 
 function mdbcria()
 cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )

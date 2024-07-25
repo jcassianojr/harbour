@@ -11,7 +11,7 @@
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function FILENAMES() hb_filenamesplit
+*+    Function FILENAMES() hb_FNameSplit(cPATHFILENAME_EXT , @cCAMINHO, cARQUIVO, cEXTENSAO )
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -37,7 +37,7 @@ retu RET_ARRAY
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function TIRAEXT(cFile, cEXT) hb_filenamesplit
+*+    Function TIRAEXT(cFile, cEXT) hb_FNameSplit(cPATHFILENAME_EXT , @cCAMINHO, cARQUIVO, cEXTENSAO )
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
@@ -56,7 +56,7 @@ FUNCTION TIRAEXT( cFile, cEXT )             //Arquivo teste.txt ->teste se cext=
 *+
 *+    Function TROCAEXT ''compatibilizar chamada com chamada trocaext ja em alguns programa evitando trocar o nome da funcao e evitar que nao exista
 *+
-* hb_filenamesplit
+* hb_FNameSplit(cPATHFILENAME_EXT , @cCAMINHO, cARQUIVO, cEXTENSAO )
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
 FUNCTION TROCAEXT(cFile, cEXT)
@@ -65,7 +65,7 @@ RETURN TIRAEXT( cFile, cEXT )
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-*+    Function DELETAARQ() hb_filenamesplit
+*+    Function DELETAARQ() hb_FNameSplit(cPATHFILENAME_EXT , @cCAMINHO, cARQUIVO, cEXTENSAO )
 *+
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
