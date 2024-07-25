@@ -19,7 +19,7 @@ WHILE .T.
     OPCAO(  5, 24, "&VACUUM (PACK)             ", 86 ) //V 86
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73
     OPCAO(  7, 24, "&Exportar para DBFS        ", 69 ) //E 69
-    KEY := menu( 2, 0 )
+    KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
             createadb()
