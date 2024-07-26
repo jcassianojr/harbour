@@ -55,7 +55,7 @@ READ
 
 cTABELA:=ALLTRIM(cTABELA)
 
-pegtipodoc()
+pegtipodoc(.T.) // .t. Inclui dbf
 pegparexp()
 
 hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
@@ -79,10 +79,25 @@ return nil
 
 
 function mdbcria()
+local cCONCREATE
 cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
 //necessario uma tabela para criar
 Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
+
+cCONCREATE:=cARQORI+";table1"
+IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
+   cCONCREATE:=cARQORI+";table1;ACEOLEDB"
+endif
+
+/*
  dbCreate( cARQORI+";table1", { ;
+      { "FIRST",   "C", 10, 0 }, ;
+      { "LAST",    "C", 10, 0 }, ;
+      { "AGE",     "N",  8, 0 }, ;
+      { "MYDATE",  "D",  8, 0 } }, "ADORDD" )
+*/
+
+ dbCreate( cCONCREATE, { ;
       { "FIRST",   "C", 10, 0 }, ;
       { "LAST",    "C", 10, 0 }, ;
       { "AGE",     "N",  8, 0 }, ;
@@ -90,9 +105,10 @@ Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )      
 
 FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
+    local cCONCREATE
     use &cDBFARQ.
     aSTRU:=DBSTRUCT() 
-    nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
+    nLASTREC:=reccount() 
     zei_fort( nLASTREC,,,0)
     cNOMETABELA:=ALIAS()
     dbclosearea()
@@ -100,7 +116,13 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     
     Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
     
-    dbCreate( cMDBARQ+";"+cNOMETABELA, aSTRU,"ADORDD" )
+    cCONCREATE:=cMDBARQ+";"+cNOMETABELA
+    IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
+        cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
+    endif
+    
+    dbCreate( cCONCREATE, aSTRU,"ADORDD" )
+    //dbCreate( cMDBARQ+";"+cNOMETABELA, aSTRU,"ADORDD" )
     
     if loledb
        USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA

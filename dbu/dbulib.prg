@@ -217,9 +217,12 @@ RETURN USOVIA
 *+
 *+********************************************************************
 *+
-Function pegtipodoc()
+Function pegtipodoc(lincdbf)
 LOCAL tDOC
 LOCAL aAMBIENTE
+if valtype(lincdbf)<>"L"
+   lincdbf:=.F.
+ENDIF
 
 tDOC:=0
 aAMBIENTE:=SALVAA()
@@ -238,6 +241,9 @@ aAMBIENTE:=SALVAA()
   OPCAO( 18, 14, "&UNL PSV        (|) Pipe            ", 85 ) //U 11
   OPCAO( 19, 14, "TSV            TA&B                 ", 66 ) //B 12
   OPCAO( 20, 14, "S&QL   insert into                  ", 81 ) //Q 13
+  IF lincdbf
+      OPCAO( 21, 14, "DB&F                                ", 70 ) //F 70
+  ENDIF
   tdoc := menu( 2, 0 )
   RESTAA(aAMBIENTE)
   DO CASE
@@ -251,6 +257,8 @@ aAMBIENTE:=SALVAA()
           zEXPOREXT="TSV"
      CASE tDOC=13
           zEXPOREXT="SQL"
+     CASE tDOC=14
+          zEXPOREXT="DBF"          
   ENDCASE
   IF tDOC>=9 .AND. tDOC<=13
      checkextEXP() //pega o delimitador zDELIMITE:
@@ -330,6 +338,7 @@ zregSEP  :=" "
 lRETU := .T.
 DO CASE
    CASE zEXPOREXT="TXT" 
+   CASE zEXPOREXT="DBF" 
    CASE zEXPOREXT="SDF" 
    CASE zEXPOREXT="DLM"
    CASE zEXPOREXT="SSV"
