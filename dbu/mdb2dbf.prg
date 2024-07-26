@@ -47,6 +47,8 @@ return nil
 function MDBEXP()
 LOCAL cTABELA:=SPACE(60)
 LOCAL cCAMMDB   :=SPACE(100)
+LOCAL lCOPIANAT
+local Ldoc
 cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
 md()
 @ maxrow(),0 SAY "TABELA"
@@ -55,12 +57,23 @@ READ
 
 cTABELA:=ALLTRIM(cTABELA)
 
-pegtipodoc(.T.) // .t. Inclui dbf
+LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
+
+tDOC:=pegtipodoc(lCOPIANAT) // .t. Inclui dbf se for nativa
 pegparexp()
 
 hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
 cDESTINO:=cCAMMDB+cTABELA+"."+zEXPOREXT
 MDT(cDESTINO)
+
+
+lDOCCAB  :=.F.
+lDOCDAD  :=.F.
+lDOCRECNO:=.F.
+cSUBTIPO :=" "
+IF .NOT.  lCOPIANAT
+   PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+ENDIF
 
 MDT("abrindo arquivo de origem: "+cMDBARQ)
 if loledb
@@ -71,7 +84,11 @@ endif
    
 nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
 zei_fort( nLASTREC,,,0)
-COPYTO(cDESTINO)
+IF lCOPIANAT
+   COPYTO(cDESTINO)
+ELSE
+   multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
+ENDIF   
 
 dbcloseall()
 return nil

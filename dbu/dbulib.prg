@@ -354,6 +354,9 @@ zregSEP  :=" "
 lRETU := .T.
 DO CASE
    CASE zEXPOREXT="TXT" 
+   CASE zEXPOREXT="TEC"
+   CASE zEXPOREXT="DBE"
+   CASE zEXPOREXT="TAM"
    CASE zEXPOREXT="DBF" 
    CASE zEXPOREXT="SDF" 
    CASE zEXPOREXT="DLM"
@@ -404,7 +407,6 @@ IF MDG("Copia Nativa(SIM) Interna(NAO)")
    COPYTO(cDESTINO)
    dbcloseall()
 ELSE
-   altd()
    multidocs(nTIPDOC,cARQORI)
 ENDIF   
 

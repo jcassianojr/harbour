@@ -23,7 +23,7 @@ dbuedi.prg
 dbuedit.prg
 dbuger.prg
 dbuindx.prg
-dbulib.prg -b
+dbulib.prg 
 dbustru.prg
 dbuutil.prg
 dbuver.prg
@@ -34,7 +34,7 @@ bmdbfcdx2.prg
 bmdbfnsx2.prg
 bmdbfnTX2.prg
 sql2dbf.prg
-mdb2dbf.prg
+mdb2dbf.prg 
 
 
 d:\develop\harbour\objmgw\netdbf.prg

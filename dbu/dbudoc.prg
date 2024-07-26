@@ -176,9 +176,11 @@ stat_msg( "Documentacao Gerada" )
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-funcTION multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO)
+funcTION multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,cARQDIC)
 aESTRU  := dbstruct()
-cARQDIC:=TIRAEXT(memvar->ARQUIVO) 
+IF VALTYPE(cARQDIC)<>"C" //memvar->ARQUIVO public do dbu melhorar posteriormente para sempre pegar paramentro cARQDIC
+   cARQDIC:=TIRAEXT(memvar->ARQUIVO) 
+ENDIF   
 aVAL:=ARRAY(LEN(aESTRU))
 AFILL(aVAL,0)
 nFIELDS:=LEN(aESTRU)
@@ -215,7 +217,7 @@ if nARQ > 0
            EVAL(bPRE)
       ENDIF
       IF Valtype(bUSO)="B"
-          if file( ARQUIVO )
+          if file( cCAMMASK+ARQUIVO )
             MDS("Arquivo: "+cCAMMASK+ARQUIVO)
             DBUREDE( cCAMMASK+ARQUIVO,, lSHARE )
             nLASTREC:=LASTREC()
