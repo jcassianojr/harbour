@@ -10,19 +10,29 @@ REQUEST ADORDD
 //Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
 // USE ( hb_DirBase() + "test.mdb" ) VIA "ADORDD" TABLE "Table1"
 
-Function mdbmenu()
+Function mdbmenu(cTIPOSQL)
 aAMBIENTE:=SALVAA()
+IF VALTYPE(cTIPOSQL)<>"C"
+   cTIPOSQL="MDB"
+ENDIF
 
-loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
+loledb=.T.
+IF cTIPOSQL="MDB"
+   loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
+ENDIF   
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-    IF loledb
-       @ 03,24 SAY "oledb(32b)"
-    Else
-       @ 03,24 SAY "accdb(64b)"
-    endif
-    OPCAO(  4, 24, "&Criar arquivo mdb         ", 67 ) //c 67
+    IF cTIPOSQL="MDB"
+        IF loledb
+           @ 03,24 SAY "oledb(32b)"
+        Else
+           @ 03,24 SAY "accdb(64b)"
+        endif
+    ELSE
+        @ 03,24 SAY cTIPOSQL
+    ENDIF    
+    OPCAO(  4, 24, "&Criar arquivo             ", 67 ) //c 67
     OPCAO(  5, 24, "                           ", 86 ) //V 86
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73
     OPCAO(  7, 24, "&Exportar Tabelas          ", 69 ) //E 69
@@ -76,11 +86,13 @@ IF .NOT.  lCOPIANAT
 ENDIF
 
 MDT("abrindo arquivo de origem: "+cMDBARQ)
-if loledb
-   USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
-else
-   USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
-endif 
+IF cTIPOSQL="MDB"
+    if loledb
+       USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
+    else
+       USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
+    endif 
+ENDIF
    
 nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
 zei_fort( nLASTREC,,,0)
@@ -97,15 +109,17 @@ return nil
 
 function mdbcria()
 local cCONCREATE
-cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
-//necessario uma tabela para criar
-Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
+cCONCREATE:=""
+IF cTIPOSQL="MDB"
+    cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+    //necessario uma tabela para criar
+    Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
 
-cCONCREATE:=cARQORI+";table1"
-IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
-   cCONCREATE:=cARQORI+";table1;ACEOLEDB"
-endif
-
+    cCONCREATE:=cARQORI+";table1"
+    IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
+       cCONCREATE:=cARQORI+";table1;ACEOLEDB"
+    endif
+ENDIF
 /*
  dbCreate( cARQORI+";table1", { ;
       { "FIRST",   "C", 10, 0 }, ;
@@ -119,8 +133,11 @@ endif
       { "LAST",    "C", 10, 0 }, ;
       { "AGE",     "N",  8, 0 }, ;
       { "MYDATE",  "D",  8, 0 } }, "ADORDD" )
-Set( _SET_DATEFORMAT, "dd/mm/yyyy" )      
-
+IF cTIPOSQL="MDB"      
+   Set( _SET_DATEFORMAT, "dd/mm/yyyy" )   
+ENDIF
+RETURN NIL
+   
 FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     local cCONCREATE
     use &cDBFARQ.
@@ -134,24 +151,33 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
     
     cCONCREATE:=cMDBARQ+";"+cNOMETABELA
-    IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
-        cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
-    endif
+    IF cTIPOSQL="MDB"
+        IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
+            cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
+        endif
+    ENDIF
     
     dbCreate( cCONCREATE, aSTRU,"ADORDD" )
     //dbCreate( cMDBARQ+";"+cNOMETABELA, aSTRU,"ADORDD" )
     
-    if loledb
-       USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA
-    else
-       USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA ACEOLEDB
-    endif   
+    IF cTIPOSQL="MDB"
+        if loledb
+           USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA
+        else
+           USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA ACEOLEDB
+        endif  
+    endif 
+         
     append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
     dbcloseall()
     Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 
 FUNCTION MDBIMPDBF()
-cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+LOCAL cMDBARQ
+cMDBARQ:=""
+IF cTIPOSQL="MDB"
+   cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+ENDIF   
 nOLDTIPO:=TIPODBF
 alertX("escolha origem")
 tipodbfesc()
