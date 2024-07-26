@@ -13,8 +13,15 @@ REQUEST ADORDD
 Function mdbmenu()
 aAMBIENTE:=SALVAA()
 
+loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
+
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+    IF loledb
+       @ 03,24 SAY "oledb(32b)"
+    Else
+       @ 03,24 SAY "accdb(64b)"
+    endif
     OPCAO(  4, 24, "&Criar arquivo mdb         ", 67 ) //c 67
     OPCAO(  5, 24, "                           ", 86 ) //V 86
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73
@@ -56,11 +63,16 @@ cDESTINO:=cCAMMDB+cTABELA+"."+zEXPOREXT
 MDT(cDESTINO)
 
 MDT("abrindo arquivo de origem: "+cMDBARQ)
-USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
- nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
-    zei_fort( nLASTREC,,,0)
- 
+if loledb
+   USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
+else
+   USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
+endif 
+   
+nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
+zei_fort( nLASTREC,,,0)
 COPYTO(cDESTINO)
+
 dbcloseall()
 return nil
 
@@ -84,13 +96,17 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     zei_fort( nLASTREC,,,0)
     cNOMETABELA:=ALIAS()
     dbclosearea()
-    ALERTX(cNOMETABELA)
+    MDT(cNOMETABELA)
     
     Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
     
     dbCreate( cMDBARQ+";"+cNOMETABELA, aSTRU,"ADORDD" )
     
-    USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA
+    if loledb
+       USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA
+    else
+       USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA ACEOLEDB
+    endif   
     append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
     dbcloseall()
     Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
