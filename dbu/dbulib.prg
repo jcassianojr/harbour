@@ -242,11 +242,27 @@ aAMBIENTE:=SALVAA()
   OPCAO( 19, 14, "TSV            TA&B                 ", 66 ) //B 12
   OPCAO( 20, 14, "S&QL   insert into                  ", 81 ) //Q 13
   IF lincdbf
-      OPCAO( 21, 14, "DB&F                                ", 70 ) //F 70
+      OPCAO( 21, 14, "DB&F                                ", 70 ) //F 14 70
   ENDIF
   tdoc := menu( 2, 0 )
   RESTAA(aAMBIENTE)
   DO CASE
+     CASE tDOC=1
+          zEXPOREXT="XML"
+     CASE tDOC=2
+          zEXPOREXT="TAM"
+     CASE tDOC=3
+          zEXPOREXT="TEC"
+     CASE tDOC=4
+          zEXPOREXT="DBE"
+     CASE tDOC=5
+          zEXPOREXT="DLM"
+     CASE tDOC=6
+          zEXPOREXT="SDF"
+     CASE tDOC=7
+          zEXPOREXT="XML"
+     CASE tDOC=8
+          zEXPOREXT="JSON"
      CASE tDOC=9
           zEXPOREXT="SSV"
      CASE tDOC=10
@@ -366,6 +382,7 @@ LOCAL nOLDTIPO
 LOCAL nORITIPO
 LOCAL cORIDRIVER
 LOCAL cARQORI
+LOCAL nTIPDOC
 
 aAMBIENTE:=SALVAA()
 nOLDTIPO=TIPODBF
@@ -376,15 +393,20 @@ nORITIPO:=TIPODBF
 cORIDRIVER:=RDDNOME(TIPODBF)
 cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
 
-pegtipodoc()
+nTIPDOC:=   pegtipodoc()
 pegparexp()
 
-cDESTINO:=TROCAEXT(cARQORI,zEXPOREXT)
 
-MDT("abrindo arquivo de origem: "+cARQORI)
-USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER) 
-COPYTO(cDESTINO)
-dbcloseall()
+IF MDG("Copia Nativa(SIM) Interna(NAO)")
+   cDESTINO:=TROCAEXT(cARQORI,zEXPOREXT)
+   MDT("abrindo arquivo de origem: "+cARQORI)
+   USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER) 
+   COPYTO(cDESTINO)
+   dbcloseall()
+ELSE
+   altd()
+   multidocs(nTIPDOC,cARQORI)
+ENDIF   
 
 RESTAA(aAMBIENTE)
 TIPODBF:=nOLDTIPO

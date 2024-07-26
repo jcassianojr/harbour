@@ -138,14 +138,6 @@ ENDIF
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-*+    Function pegtipodoc()
-*+
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-*+
-*   
-
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-*+
 *+    Function multidocs()
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -203,9 +195,17 @@ GRAVADOC( tdoc,cARQDIC, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 function FAZERDBF( bUSO, lSHARE ,bPRE,bPOS,cMASK)
+LOCAL cCAMMASK  :=SPACE(100)
+
 IF VALTYPE(cMASK)#"C"
     cMASK:="*.DBF"
 ENDIF
+
+IF AT("\",cMASK)>0  //o mascara tem caminho
+   hb_FNameSplit(cMASK , @cCAMMASK, NIL, NIL )
+ENDIF
+cCAMMASK:=ALLTRIM(cCAMMASK)   
+
 MATDBF := FILENAMES( cMASK )
 nARQ   := len( MATDBF )
 if nARQ > 0
@@ -216,8 +216,8 @@ if nARQ > 0
       ENDIF
       IF Valtype(bUSO)="B"
           if file( ARQUIVO )
-            MDS("Arquivo: "+ARQUIVO)
-            DBUREDE( ARQUIVO,, lSHARE )
+            MDS("Arquivo: "+cCAMMASK+ARQUIVO)
+            DBUREDE( cCAMMASK+ARQUIVO,, lSHARE )
             nLASTREC:=LASTREC()
             zei_fort( nLASTREC,,,0)
             eval( bUSO,, {|| zei_fort(nLASTREC,,,1)} )

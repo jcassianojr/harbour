@@ -23,7 +23,7 @@ dbuedi.prg
 dbuedit.prg
 dbuger.prg
 dbuindx.prg
-dbulib.prg
+dbulib.prg -b
 dbustru.prg
 dbuutil.prg
 dbuver.prg
