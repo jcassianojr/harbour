@@ -566,9 +566,13 @@ do while .T.
       case M->func_sel = 7
          alertx("funcao nao disponivel")
       case M->func_sel = 8
-         mdbmenu()
+           mdbmenu("MDB")
       case M->func_sel = 9
-        sqlitemenu()
+          if mdg("Nativo (SIM) ADORDD-ODBC (NAO")
+             sqlitemenu()
+          else
+             mdbmenu("SQLITE")
+          endif   
       case M->func_sel = 10
            if rsvp( "Converter  entre formatos" ) = "S" 
 		       converttipo() 

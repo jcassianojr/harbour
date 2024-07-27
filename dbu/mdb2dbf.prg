@@ -7,14 +7,11 @@
 
 REQUEST ADORDD
 
-//Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
-// USE ( hb_DirBase() + "test.mdb" ) VIA "ADORDD" TABLE "Table1"
 
-Function mdbmenu(cTIPOSQL)
+Function mdbmenu(cUSOSQL)
+cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes avaixo
+
 aAMBIENTE:=SALVAA()
-IF VALTYPE(cTIPOSQL)<>"C"
-   cTIPOSQL="MDB"
-ENDIF
 
 loledb=.T.
 IF cTIPOSQL="MDB"
@@ -59,7 +56,15 @@ LOCAL cTABELA:=SPACE(60)
 LOCAL cCAMMDB   :=SPACE(100)
 LOCAL lCOPIANAT
 local Ldoc
-cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+DO CASE
+   CASE cTIPOSQL="MDB"
+        cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+    CASE cTIPOSQL="SQLITE"
+        cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
+      { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
+        { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
+        { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )    
+ENDCASE        
 md()
 @ maxrow(),0 SAY "TABELA"
 @ maxrow(),10 get cTABELA
@@ -86,13 +91,16 @@ IF .NOT.  lCOPIANAT
 ENDIF
 
 MDT("abrindo arquivo de origem: "+cMDBARQ)
-IF cTIPOSQL="MDB"
-    if loledb
-       USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
-    else
-       USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
-    endif 
-ENDIF
+DO CASE
+    CASE cTIPOSQL="MDB"
+        if loledb
+           USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
+        else
+           USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
+        endif 
+    CASE cTIPOSQL="SQLITE"  
+         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQLITE
+ENDCASE
    
 nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
 zei_fort( nLASTREC,,,0)
@@ -110,16 +118,23 @@ return nil
 function mdbcria()
 local cCONCREATE
 cCONCREATE:=""
-IF cTIPOSQL="MDB"
-    cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
-    //necessario uma tabela para criar
-    Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
+DO CASE
+   CASE cTIPOSQL="MDB"
+        cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+        //necessario uma tabela para criar
+        Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
 
-    cCONCREATE:=cARQORI+";table1"
-    IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
-       cCONCREATE:=cARQORI+";table1;ACEOLEDB"
-    endif
-ENDIF
+        cCONCREATE:=cARQORI+";table1"
+        IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
+           cCONCREATE:=cARQORI+";table1;ACEOLEDB"
+        endif
+   CASE cTIPOSQL="SQLITE" 
+        cARQORI:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
+        { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
+          { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
+          { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
+        cCONCREATE:=cARQORI+";table1;SQLITE"
+ENDCASE
 /*
  dbCreate( cARQORI+";table1", { ;
       { "FIRST",   "C", 10, 0 }, ;
@@ -151,22 +166,27 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
     
     cCONCREATE:=cMDBARQ+";"+cNOMETABELA
-    IF cTIPOSQL="MDB"
-        IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
-            cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
-        endif
-    ENDIF
+    DO CASE
+       CASE cTIPOSQL="MDB"
+            IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
+                cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
+            endif
+       CASE cTIPOSQL="SQLITE"  
+            cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";SQLITE"
+    ENDCASE
     
     dbCreate( cCONCREATE, aSTRU,"ADORDD" )
-    //dbCreate( cMDBARQ+";"+cNOMETABELA, aSTRU,"ADORDD" )
     
-    IF cTIPOSQL="MDB"
-        if loledb
-           USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA
-        else
-           USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA ACEOLEDB
-        endif  
-    endif 
+    do case
+       case cTIPOSQL="MDB"
+            if loledb
+               USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA
+            else
+               USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA ACEOLEDB
+            endif  
+       case cTIPOSQL="SQLITE"    
+            USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA SQLITE
+    endcase
          
     append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
     dbcloseall()
@@ -175,9 +195,15 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
 FUNCTION MDBIMPDBF()
 LOCAL cMDBARQ
 cMDBARQ:=""
-IF cTIPOSQL="MDB"
-   cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
-ENDIF   
+DO CASE
+   CASE cTIPOSQL="MDB"
+        cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+   CASE cTIPOSQL="SQLITE"     
+        cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
+        { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
+          { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
+          { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
+ENDCASE   
 nOLDTIPO:=TIPODBF
 alertX("escolha origem")
 tipodbfesc()
