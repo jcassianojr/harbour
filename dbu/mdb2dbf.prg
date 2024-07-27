@@ -10,6 +10,7 @@ REQUEST ADORDD
 
 Function mdbmenu(cUSOSQL)
 cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes avaixo
+public oDB := nil
 
 aAMBIENTE:=SALVAA()
 
@@ -60,15 +61,24 @@ DO CASE
    CASE cTIPOSQL="MDB"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
     CASE cTIPOSQL="SQLITE"
-        cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
-      { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
-        { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
-        { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )    
+        //Abaixo com sqltables usando nativa depois implementar com rddado
+ //       cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
+ //     { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
+  //      { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
+  //      { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )    
 ENDCASE        
-md()
-@ maxrow(),0 SAY "TABELA"
-@ maxrow(),10 get cTABELA
-READ
+
+DO CASE
+   CASE cTIPOSQL="SQLITE"
+         IF selectdb()
+           cTABELA:=SqliteTables(odb)
+        endif  
+   OTHERWISE
+        md()
+        @ maxrow(),0 SAY "TABELA"
+        @ maxrow(),10 get cTABELA
+        READ
+ENDCASE
 
 cTABELA:=ALLTRIM(cTABELA)
 

@@ -15,10 +15,12 @@ aAMBIENTE:=SALVAA()
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-    OPCAO(  4, 24, "&Criar base sqllite        ", 67 ) //c 67
-    OPCAO(  5, 24, "&VACUUM (PACK)             ", 86 ) //V 86
-    OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73
-    OPCAO(  7, 24, "&Exportar para DBFS        ", 69 ) //E 69
+    OPCAO(  4, 24, "&Criar base sqllite        ", 67 ) //c 
+    OPCAO(  5, 24, "&VACUUM (PACK)             ", 86 ) //V 
+    OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
+    OPCAO(  7, 24, "&Exportar para DBFS        ", 69 ) //E 
+    OPCAO(  8, 24, "&Show Tables               ", 83 ) //S
+    
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -44,6 +46,10 @@ WHILE .T.
             IF selectdb()
                exportadbf(odb)  
             endif       
+       CASE KEY=5
+             IF selectdb()
+               SqliteTables(odb)
+            endif                 
        OTHERWISE
             RETURN
     ENDCASE
@@ -56,15 +62,23 @@ return NIL
 
 
 function exportadbf(db)
-aTable := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
- if len( aTable ) == 0
-    msgstop( 'No Tables in the DB', 'DBF<-->SQLite Exporter' )
-    return nil
- endif
- for i := 1 to len( aTable )
-    MDT( aTable[ i, 1 ])
-    Export2dbf(DB,aTable[ i, 1 ])
- next i
+LOCAL cTABELAEXP
+IF MDG("Todas(SIM) Escolher Nao")
+    aTable := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
+     if len( aTable ) == 0
+        msgstop( 'No Tables in the DB', 'DBF<-->SQLite Exporter' )
+        return nil
+     endif
+     for i := 1 to len( aTable )
+        MDT( aTable[ i, 1 ])
+        Export2dbf(DB,aTable[ i, 1 ])
+     next i
+ else
+    cTABELAEXP:=SQLITETABLES(DB)
+    IF ! EMPTY(cTABELAEXP)
+       Export2dbf(DB,cTABELAEXP)
+    ENDIF
+ endif    
  return nil
 
 
@@ -190,13 +204,46 @@ function selectdb
          return .f.
       else 
           lRETU:=.T.
-          MDT(" is Connected! Version: "+cFILENAME) //+ valtostr(sqlite3_libversion_number())
+      //    MDT(" is Connected! Version: "+cFILENAME) //+ valtostr(sqlite3_libversion_number())
+          
+          mdt(cFILENAME+ "Version library = " + sqlite3_libversion()  + ;
+         "number version library = " + LTRIM(STR( sqlite3_libversion_number() )) )
+
       endif
    else
       msgstop( 'You have to select a SQLite File!', 'SQLite File Selection' )
       return lRETU
    endif   
 return lRETU
+
+
+ FUNCTION SqliteTables(DB)
+*---------------------------------------------------------------------------
+* Shows all tables inside the database
+*---------------------------------------------------------------------------
+ LOCAL aResult, nChoices,I,aRETU
+ LOCAL aAMBIENTE
+ nChoices:=0
+ aAMBIENTE:=SALVAA()
+ aRESULT:={}
+
+  * Show all tables inside database
+  aRETU := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
+  
+  for i := 1 to len( aRETU )
+        AADD(aRESULT,aRETU[ i, 1 ])
+next i
+  
+ // altd()
+
+  IF LEN(aResult)>0
+     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+     nChoices := ACHOICE( 4,23,21,54, aResult)
+  ENDIF   
+
+RESTAA(aAMBIENTE)
+
+RETURN( IIF( nChoices > 0, aResult[ nChoices ], "") )
 
 
 FUNCTION connect2db(dbname,lCreate)
