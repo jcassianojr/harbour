@@ -7,6 +7,16 @@
 
 REQUEST ADORDD
 
+/*
+select MSysObjects.name
+from MSysObjects
+where
+   MSysObjects.type In (1,4,6)
+   and MSysObjects.name not like '~*'   
+   and MSysObjects.name not like 'MSys%'
+order by MSysObjects.name
+*/
+
 
 Function mdbmenu(cUSOSQL)
 cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes avaixo
