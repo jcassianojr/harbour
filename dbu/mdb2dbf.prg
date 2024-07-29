@@ -1,5 +1,6 @@
 #include "dbstruct.ch"
 #INCLUDE "BOX.CH"
+#INCLUDE "TRY.CH"
 
 #require "rddado"
 
@@ -67,6 +68,12 @@ LOCAL cTABELA:=SPACE(60)
 LOCAL cCAMMDB   :=SPACE(100)
 LOCAL lCOPIANAT
 local Ldoc
+LOCAL aTABELAS
+LOCAL nCHOICES
+
+
+nCHOICES:=0
+aTABELAS:={}
 DO CASE
    CASE cTIPOSQL="MDB"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
@@ -83,15 +90,26 @@ DO CASE
          IF selectdb()
            cTABELA:=SqliteTables(odb)
         endif  
-   OTHERWISE
-        md()
-        @ maxrow(),0 SAY "TABELA"
-        @ maxrow(),10 get cTABELA
-        READ
+    CASE cTIPOSQL="MDB"    
+        aTABELAS:=MDBTABLES(cMDBARQ,lUSEOLE )
+        IF LEN(aResult)>0
+           HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+          nChoices := ACHOICE( 4,23,21,54, aResult)
+        ENDIF   
+        cTABELA:=IIF( nChoices > 0, aTABELAS[ nChoices ], "")
 ENDCASE
 
 cTABELA:=ALLTRIM(cTABELA)
-
+IF EMPTY(cTABELA)
+    md()
+    @ maxrow(),0 SAY "TABELA"
+    @ maxrow(),10 get cTABELA
+    READ
+ENDIF
+cTABELA:=ALLTRIM(cTABELA)
+IF EMPTY(cTABELA)
+   RETURN NIL
+ENDIF
 LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
 
 tDOC:=pegtipodoc(lCOPIANAT) // .t. Inclui dbf se for nativa
@@ -234,4 +252,67 @@ IF FILE (cARQORI)
    DBF2MDB(cMDBARQ,cARQORI)
    RDDNOME(nOLDTIPO) //retorna tipo anterior
 ENDIF   
-               
+        
+        
+FUNCTION MDBTABLES(cDataBase,lUSEOLE )
+LOCAL aRETU
+aRETU:={}
+IF lUSEOLE
+   cCONN:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase //+";User Id=admin;Password=;"
+ELSE
+   cCONN:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source=" + cDataBase//+";User Id=admin;Password=;"
+ENDIF
+
+try
+   oConn:=WIN_OLECreateObject( "ADODB.Connection" )
+   with object oConn
+      :ConnectionString:=cConn
+      :Open()
+   END  
+catch oErr
+   //ShowADOError(oERR,oConn,cCOMANDO) 
+   return aRETU
+end
+//Dim dt As DataTable = olecon.GetSchema("tables")
+
+/*
+cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN" //PUBLIC a vezes e preciso conceder este acesso na ide 
+oComm:=WIN_OLECreateObject( "ADODB.Command" )
+
+TRY
+ with object oComm
+				  :CommandText:=cCOMANDO
+				  :CommandType:=adCmdText
+				  :ActiveConnection:=oConn
+                  :ExecuteNonQuery()
+				 // :Execute()
+			 end
+CATCH oERR
+  // ? "errr"
+  //    RETURN aRETU //continua pois pode executar sem dar retorno
+END                  
+*/
+
+oRS:= WIN_OLECreateObject('ADODB.RecordSet')
+oRS:CursorLocation := 3
+
+cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
+  + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
+   + " order by MSysObjects.name "
+
+      TRY
+        oRS:Open(cCOMANDO, oConN, adOpenDynamic, adLockOptimistic )
+      CATCH oERR
+        //ShowADOError(oERR,oConn,cCOMANDO) 
+        //hb_memowrit("erro.txt",cCOMANDO)
+        return  aRETU 
+      END
+
+while ! ors:eof
+     AADD(aRETU,ors:fields("name"):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna
+       ? ors:fields("name"):value            //ors:fields(0)
+         ors:movenext()
+    enddo
+oRs:Close()
+oConN:close()  
+RETURN aRETU       
