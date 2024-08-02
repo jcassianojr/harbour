@@ -91,12 +91,12 @@ DO CASE
            cTABELA:=SqliteTables(odb)
         endif  
     CASE cTIPOSQL="MDB"    
-        aTABELAS:=MDBTABLES(cMDBARQ,lUSEOLE )
+        aResult:=MDBTABLES(cMDBARQ,loledb )
         IF LEN(aResult)>0
            HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
           nChoices := ACHOICE( 4,23,21,54, aResult)
         ENDIF   
-        cTABELA:=IIF( nChoices > 0, aTABELAS[ nChoices ], "")
+        cTABELA:=IIF( nChoices > 0, aResult[ nChoices ], "")
 ENDCASE
 
 cTABELA:=ALLTRIM(cTABELA)
@@ -310,7 +310,7 @@ cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (
 
 while ! ors:eof
      AADD(aRETU,ors:fields("name"):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna
-       ? ors:fields("name"):value            //ors:fields(0)
+   //    ? ors:fields("name"):value            //ors:fields(0)
          ors:movenext()
     enddo
 oRs:Close()
