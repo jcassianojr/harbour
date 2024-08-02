@@ -221,6 +221,7 @@ return cVAR
 *+
 function data2str(dData,cFOR,cSEP,cDIG,cINI,cFIM)
 local cDIA := cMES := cANO := cRETU := ""
+local cFORINI
 IF VALTYPE(dDATA)<>"D" .AND. VALTYPE(dDATA)<>"T"
    cDIA := "00"
    cMES := "00"
@@ -233,6 +234,8 @@ ENDIF
 IF VALTYPE(cFOR)#"C"
    cFOR:="DMA"
 ENDIF
+cFOR=ALLTRIM(cFOR) //remove espacos para comparar corretamente
+cFORINI = cFOR //guarda o inicial se precisar correcoes como o mysql data em branco para null
 IF AT("AAAA",cFOR)>0
    cDIG:="4"
    cFOR:=STRTRAN(cFOR,"AAAA","Y")
@@ -329,6 +332,14 @@ IF cFOR="CRYSTALX"  .OR. cFOR="CDATE(," //"CDATE(" & Year(dDATA) & "," & Month(d
    cFOR:="YMD"
 ENDIF
 
+IF cFOR="MYSQL-" .OR. cFOR="SQLITE" //"'" & Year(dDATA) & "-" & Month(dDATA) & "-" & Day(dDATA) & "'"  YYYY-MM-DD
+   cINI := "'"
+   cFIM := "'"
+   cCEP := "-"
+   cDIG:="4"
+   cFOR:="YMD"
+ENDIF
+
 IF cFOR="MYSQL"  .OR. cFOR="MYSQL/" //"'" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "'"
    cINI := "'"
    cFIM := "'"
@@ -337,13 +348,6 @@ IF cFOR="MYSQL"  .OR. cFOR="MYSQL/" //"'" & Year(dDATA) & "/" & Month(dDATA) & "
    cFOR:="YMD"
 ENDIF
 
-IF cFOR="MYSQL-"  //"'" & Year(dDATA) & "-" & Month(dDATA) & "-" & Day(dDATA) & "'"
-   cINI := "'"
-   cFIM := "'"
-   cCEP := "-"
-   cDIG:="4"
-   cFOR:="YMD"
-ENDIF
 IF cFOR="ORACLE" .OR. cFOR="TO_DATE" //to_date('" + Format(dDATA, "dd/mm/yyyy") + "','DD/MM/YYYY')
    cINI:="to_date('"
    cFIM:="','DD/MM/YYYY')"
@@ -351,20 +355,15 @@ IF cFOR="ORACLE" .OR. cFOR="TO_DATE" //to_date('" + Format(dDATA, "dd/mm/yyyy") 
    cDIG:="4"
    cFOR:="DMY"
 ENDIF
-IF cFOR="SQL" .OR. cFOR="103" //convert(datetime, '" + DTOC(dDATA)+ "', 103)"
+
+IF cFOR="MSSQL" .OR. cFOR="SQL" .OR. cFOR="103" //convert(datetime, '" + DTOC(dDATA)+ "', 103)"
    cINI:="convert(datetime, ''"
    cFIM:="', 103)"
    cCEP := "/"
    cDIG:="4"
    cFOR:="DMY"
 ENDIF
-IF cFOR="SQL" .OR. cFOR="103" //convert(datetime, '" + DTOC(dDATA)+ "', 103)"    //date
-   cINI:="convert(datetime, ''"
-   cFIM:="', 103)"
-   cCEP := "/"
-   cDIG:="4"
-   cFOR:="DMY"
-ENDIF
+
 IF cFOR="SQLSERVER" .OR. cFOR="102" //CONVERT(datetime, '" + Format(DateValue(dDATA), "yyyy-mm-dd") + "', 102)     //datetime
    cINI:="convert(datetime, ''"
    cFIM:="', 102)"
@@ -427,6 +426,14 @@ DO CASE
    OTHERWISE //DMY
         cRETU+=cDIA+cSEP+cMES+cSEP+cANO
 END CASE
+
+
+IF cFORINI="MYSQL"  .OR. cFORINI="MYSQL/" .OR. cFORINI="MYSQL-"
+    IF  StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) == "0000-00-00"
+        cRETU := "NULL"
+        cFIM  :=  ""
+    ENDIF 
+ENDIF
 
 IF ! EMPTY(cFIM)  //inicia e fecha com # abaixo
    cRETU+=cFIM

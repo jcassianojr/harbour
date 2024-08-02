@@ -514,7 +514,10 @@ IF lDOCDAD
               nVAL:=STRTRAN(nVAL,CHR(13)+CHR(10)," ")
           ENDIF
           DO CASE
-              CASE aESTRU[X][2]="C".OR.aESTRU[X][2]="M"
+              //
+              // String ou memo
+              //
+              CASE aESTRU[X][2]="C" .OR. aESTRU[X][2]="M" 
                    nVAL:=ALLTRIM(STRVAL(nVAL))
                    DO CASE
                       CASE zCNVCHAR="O"
@@ -522,9 +525,6 @@ IF lDOCDAD
                       CASE zCNVCHAR="A"
                           nVAL:=win_oemtoansi(nVAL) //hb_oemtoansi(nVAL)
                    ENDCASE
-                   //IF tDOC = 7 //xml
-                   //   cTEXTO+=str2html(nVAL)
-                   //ELSE
                       DO CASE
                          CASE tDOC = 7 //xml
                               cTEXTO+=str2html(nVAL)
@@ -535,15 +535,23 @@ IF lDOCDAD
                          OTHERWISE
                              cTEXTO+=nVAL
                       ENDCASE
-                   //endif
+              //
+              // Data
+              //                 
               CASE aESTRU[X][2]="D"
                    IF EMPTY(nVAL)
                       cTEXTO+=""
                    ELSE                      
                       cTEXTO+=DATA2STR(nVAL,ZANOFOR,ZANOSEP,ZANOTAM)
-                   ENDIF   
+                   ENDIF
+              //
+              // Data
+              //                           
               CASE aESTRU[X][2]="L"
-                   cTEXTO+=logic2str(nval,0,0,zSEPLOGIC) // Strval( xdado, nLEN, nDEC, cSEPDEC ) IF(nVAL,"1","0")
+                   cTEXTO+=logic2str(nval,0,0,zSEPLOGIC)
+              //
+              // Numerico
+              //     
               CASE aESTRU[X][2]="N"
                    cTEXTO+=ALLTRIM(STRVAL(nVAL,aESTRU[X][3],aESTRU[X][4],ZDECSIM))
           ENDCASE
