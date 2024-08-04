@@ -246,7 +246,10 @@ while ! eof()
       IF PAD='A'
          cCAM:=ZDIRN
       ENDIF
-      IF PAD="S".OR.PAD="I".OR.PAD="A"
+      IF PAD='E' //Tabelas esocial
+         cCAM:=  HB_CWD() + "esocial_tab\"
+      ENDIF
+      IF PAD="S" .OR. PAD="I" .OR. PAD="A" .OR. PAD="E"
           USODBF := cCAM + USODBF
           USONTX := cCAM + USODBF  
       ENDIF
