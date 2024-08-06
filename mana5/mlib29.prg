@@ -187,7 +187,7 @@ IF VALTYPE(lMES)<>"L"
    lMES:=.T.
 ENDIF
 if valtype(cDRIVER) # "C" .or. empty(cDRIVER)
-   cDRIVER := IF(cRDDEXT = "CDX","DBFCDX","DBFNTX")
+   cDRIVER := IF(cRDDEXT = "CDX" .OR. EMPTY(CRDDEXT),"DBFCDX","DBFNTX")
 else
    cDRIVER := ALLTRIm(cDRIVER)
 endif
@@ -198,7 +198,11 @@ if valtype(nTIME) # "N"
    nTIME := - 1
 ENDIF
 if ! file(cARQ+".DBF")
-   ALERTX("Falta Arquivo: "+Carq)
+   IF lMES
+      ALERTX("Falta Arquivo: "+Carq)
+   ELSE
+      MDT("Falta Arquivo: "+Carq)
+   ENDIF   
    return .F.
 endif
 while .t.

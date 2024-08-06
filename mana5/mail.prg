@@ -41,7 +41,7 @@ INITVARS()
 CLRVARS()
 DBCLOSEAREA()
 IF !cRETU
-   ALERTX("Sem Novas Correspondencias")
+   MDT("Sem Novas Correspondencias")
    RETU .F.
 ENDIF
 WHILE .T.

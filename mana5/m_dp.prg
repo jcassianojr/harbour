@@ -31,12 +31,15 @@ endif
 
 aARQ   := {}
 aDES   := {}
+aCAM   := {}
 FILTRO := ""
 FILTRO := RFILORD(zARQ,.F.)
 if !USEREDE(zARQ,1,1)
    retu .T.
 endif
 set filter to &FILTRO
+nLASTREC:=LASTREC()
+zei_fort( nLASTREC,,,0)
 dbgotop()
 while !eof()
    lINCLUI:=.T.
@@ -58,8 +61,10 @@ while !eof()
    if lINCLUI
       aadd(aARQ,ARQUIVO)
       aadd(aDES,DESCRICAO)
+      aadd(aCAM,LOCALARQ(PADRAO,CAMINHO))
    endif
    dbskip()
+   zei_fort(nLASTREC,,,1)
 enddo
 dbcloseall()
 
@@ -68,10 +73,27 @@ if !USEREDE(HELPARQ,1,1)
    retu .T.
 endif
 
-if !USEREDE("DICI",1,1)
+if !USEREDE("DICI",0,1)
    dbcloseall()
    retu .T.
 endif
+if lPULACEP
+   delete all for UPPER(left(tabela,2))="C0"
+   delete all for UPPER(left(tabela,2))="C1"
+   delete all for UPPER(left(tabela,2))="C2"
+   delete all for UPPER(left(tabela,2))="C3"
+   delete all for UPPER(left(tabela,2))="C4"
+   delete all for UPPER(left(tabela,2))="C5"
+   delete all for UPPER(left(tabela,2))="G0"
+   delete all for UPPER(left(tabela,2))="G1"
+   delete all for UPPER(left(tabela,2))="G2"
+   delete all for UPPER(left(tabela,2))="G3"
+   delete all for UPPER(left(tabela,2))="G4"
+   delete all for UPPER(left(tabela,2))="G5"   
+endif
+IF lPULACNPJ
+   delete all for UPPER(left(tabela,4))="CNPJ"
+ENDIF
 
 nHANDLE := fcreate(alltrim(cARQ))
 if ferror() # 0
@@ -79,10 +101,12 @@ if ferror() # 0
    retu
 endif
 nARQ  := len(aARQ)
-xGRAF := 0
-xPOS  := 1
-GRAF  := nARQ
-MARCAR()
+//xGRAF := 0
+//xPOS  := 1
+//GRAF  := nARQ
+//MARCAR()
+nLASTREC:= nARQ
+zei_fort( nLASTREC,,,0)
 for Y := 1 to nARQ
    mARQUIVO   := aARQ[Y]
    mDESCRICAO := aDES[Y]
@@ -97,9 +121,11 @@ for Y := 1 to nARQ
       fwrite(nHANDLE,''+HB_OSNEWLINE())
    else
       fwrite(nHANDLE,"["+alltrim(mARQUIVO)+".DBF]"+HB_OSNEWLINE())
+      fwrite(nHANDLE,"CAMINHO="+ALLTRIM(aCAM[Y])+HB_OSNEWLINE())
+      fwrite(nHANDLE,"DRIVER=DBFCDX"+HB_OSNEWLINE())
    endif
    if mARQUIVO # HELPARQ
-      IF USEREDE(alltrim(mARQUIVO),1,0,,lMESARQ)   //Function USEREDE(cARQ,nMOD,nIND,cARE,lMES,nTIME)
+      IF USEREDE(alltrim(mARQUIVO),1,0,,lMESARQ)   
          if cTIPO = "D"
             fwrite(nHANDLE,str(fcount(),5)+' Campos Definidos'+HB_OSNEWLINE())
          endif
@@ -168,16 +194,19 @@ for Y := 1 to nARQ
    FIM := len(aIND)
    if cTIPO = "D"
       fwrite(nHANDLE,+HB_OSNEWLINE())
-      fwrite(nHANDLE,"Sum rio dos Indices"+HB_OSNEWLINE())
+      fwrite(nHANDLE,"Sumario dos Indices"+HB_OSNEWLINE())
       fwrite(nHANDLE,replicate('=',78)+HB_OSNEWLINE())
       fwrite(nHANDLE,HB_OSNEWLINE())
       fwrite(nHANDLE,str(FIM,4)+' Indices Definidos:'+HB_OSNEWLINE())
       fwrite(nHANDLE,HB_OSNEWLINE())
       fwrite(nHANDLE,'Nome       Descricao'+HB_OSNEWLINE())
-      fwrite(nHANDLE,'           Express„o Chave'+HB_OSNEWLINE())
+      fwrite(nHANDLE,'           Expressao Chave'+HB_OSNEWLINE())
       fwrite(nHANDLE,replicate('=',78)+HB_OSNEWLINE())
    else
       fwrite(nHANDLE,"NUMMAINTAINED="+str(FIM,1)+HB_OSNEWLINE())
+   endif
+   if cTIPO = "I"
+       fwrite(nHANDLE,"MAINTAIN0="+ALLTRIM(mARQUIVO)+".CDX"+HB_OSNEWLINE())
    endif
    for I := 1 to FIM
       if cTIPO = "D"
@@ -185,34 +214,28 @@ for Y := 1 to nARQ
          fwrite(nHANDLE,"           "+aCHA[I]+HB_OSNEWLINE())
          fwrite(nHANDLE,"----------"+HB_OSNEWLINE())
       else
-         fwrite(nHANDLE,"MAINTAIN"+str(I - 1,1)+"="+alltrim(aIND[I])+".NTX"+HB_OSNEWLINE())
-         fwrite(nHANDLE,"INDEX"+str(I - 1,1)+"="+alltrim(aCHA[I])+HB_OSNEWLINE())
+         fwrite(nHANDLE,"TAG"   + str(I - 1,1) + "=" + alltrim(aIND[I]) + HB_OSNEWLINE())
+         fwrite(nHANDLE,"INDEX" + str(I - 1,1) + "=" + alltrim(aCHA[I]) + HB_OSNEWLINE())
       endif
    next
    if cTIPO = "I"
       fwrite(nHANDLE,HB_OSNEWLINE())
    endif
-   xGRAF ++
+   zei_fort(nLASTREC,,,1)
+   //xGRAF ++
 next Y
 dbcloseall()
 fclose(nHANDLE)
+fixar("DICI")
 
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function TIPOCAMPO()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-func TIPOCAMPO(cTIP)
-
-
+function TIPOCAMPO(cTIP)
 local cTIPO
 do case
    case cTIP = "C"
@@ -228,5 +251,5 @@ do case
    otherwise
       cTIPO := "????????"
 endcase
-retu cTIPO
+return cTIPO
 

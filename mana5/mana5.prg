@@ -292,7 +292,7 @@ IF ZUSER = "SUPERVISOR" .AND. ZUSER = "SOFTEC"
 ENDIF
 IF XDECODE(OBTER("MUSER",ENCODE(ZUSER),"EQUIVALE")) = "SUPERVIS"
    IF cDEBUG = "NAO"
-      ALERTX("Acesso Equivalente Supervisor")
+      MDT("Acesso Equivalente Supervisor")
    ENDIF
    ZSUPER := .T.
 ENDIF

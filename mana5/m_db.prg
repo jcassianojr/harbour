@@ -40,6 +40,8 @@ if !useCHK(ZDIRC+"MANARQ",ZDIRC+"MANARQ",.T.)
    dbcloseall()
    retu .F.
 endif
+nLASTREC:=LASTREC()
+zei_fort( nLASTREC,,,0)
 set filter to &FILTRO
 dbgotop()
 while !eof()
@@ -57,16 +59,21 @@ while !eof()
    ENDIF
    IF lINCLUI
       aadd(aARQ,alltrim(ARQUIVO))
-      aadd(aARQD,{PADRAO,alltrim(CAMINHO),if(empty(DRIVER),"DBFNTX",DRIVER)})
+      aadd(aARQD,{PADRAO,alltrim(CAMINHO),if(empty(DRIVER),"DBFCDX",DRIVER)})
    endif
    dbskip()
+   zei_fort(nLASTREC,,,1)
 enddo
 dbclosearea()
+
+//LOCALARQ(PADRAO,CAMINHO)
 
 if !useCHK(ZDIRC+"MANARQ1",ZDIRC+"MANARQ1",.T.)
    dbcloseall()
    retu .F.
 endif
+nLASTREC:=len(aARQ)
+zei_fort( nLASTREC,,,0)
 for X := 1 to len(aARQ)
    cARQ := aARQ[X]
    @ 24,00 say padr(cARQ,8)         
@@ -123,37 +130,56 @@ for X := 1 to len(aARQ)
       dbclosearea()
    endif
    dbselectar("MANARQ1")
+   zei_fort(nLASTREC,,,1)
 next X
+
+if !useCHK(ZDIRC+"MANARQ",ZDIRC+"MANARQ",.T.)
+   dbcloseall()
+   retu .F.
+endif
+dbselectar("MANARQ1")
+nLASTREC:=LASTREC()
+zei_fort( nLASTREC,,,0)
+dbgotop()
+while ! eof()
+    lTEM:=.T.
+    cARQUIVO:=ALLTRIm(ARQUIVO)
+    dbselectar("manarq")
+    dbgotop()
+    if ! dbseek(cARQUIVO)
+       ltem:= .f.
+    endif
+    dbselectar("MANARQ1")
+    while cARQUIVO =ALLTRIm(ARQUIVO) .AND. ! EOF()
+        if ! ltem
+           netrecdel()
+        endif
+        dbskip()
+        zei_fort(nLASTREC,,,1)
+    enddo
+enddo
+
 dbcloseall()
+FIXAR("MANARQ1")
 
 
 
 *+--------------------------------------------------------------------
-*+
 *+
 *+    Function MDT()
 *+
 *+--------------------------------------------------------------------
 *+
-function MDT(ms)  //EXIBE MENSAGEM POR UM TEMPO
-hb_Alert(cMSG, , , 2 ) 
-//@ 24,00 say padc(MS,80)         
-//inkey(1)
-//@ 24,00 clea
+function MDT(cMSG)  //EXIBE MENSAGEM POR UM TEMPO
+hb_Alert(cMSG, , , 1 ) 
 return .t.
 
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function MD()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 function MD   //TELA PARA AS MENSAGENS
 @ 24,00
