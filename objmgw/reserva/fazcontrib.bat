@@ -91,7 +91,6 @@ rem minigui
 hbmk2 hbaes\hbaes
 hbmk2 hbcab\hbcab
 hbmk2 hbgdip\hbgdip
-hbmk2 libxlw\libxlw
 hbmk2 hbzeegrid\hbzeegrid
 hbmk2 sevenzip\sevenzip
 
