@@ -1,39 +1,15 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : mand.prg
-*+
-*+
-*+
 *+    Sistema   : MANAEXO
-*+
 *+    Linguagem : Harbour
-*+
 *+    Autor     : Jorge Cassiano
-*+
 *+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
 *+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
 
-// :*****************************************************************************
-// :
-// :       MAND.PRG: Menu de Servi‡os
-// :      Linguagem: Clipper 5.x
-// :        Sistema: MANA5
-// :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 05/04/94     11:11
-// :
-// :     Documentado 05/13/94 em 14:48                DISK!  vers„o 5.01
-// :*****************************************************************************
 STATIC KEY := 1
 aMENU := ARRAY(33)
 aMESS := ARRAY(33)
@@ -52,7 +28,7 @@ IF USEREDE("MANOPT",1,1)
    DBCLOSEAREA()
 ENDIF
 WHILE .T.
-   MDI(" Ý Menu de configura‡”es")
+   MDI(" Menu de configuracoes")
    SETCOLOR(ZCOR008)
    FOR X := 1 TO 11
       OPCAO(X * 2+2,1," &"+LTRIM(aMENU[X]),ASC(LEFT(ALLTRIM(aMENU[X]),1)),aMESS[X])
@@ -71,7 +47,8 @@ WHILE .T.
    ENDIF
    DO CASE
       CASE KEY = 1 
-         M_DA(0)
+          ALERT("Opcao nao disponivel")
+//         M_DA(0)
       CASE KEY = 2 
          M_DB(0)
       CASE KEY = 3 
@@ -88,6 +65,8 @@ WHILE .T.
       CASE KEY = 8 
          PADRAO(0,1,0,"MCOPIA","Nome   Descricao","' '+mNOME+' '+mDESCRICAO ","MDH")
       CASE KEY = 9
+         ALERT("Opcao nao disponivel")
+         /*
          COROLD  := SETCOLOR(COR("MDI001"))
          COMANDO := SPAC(80)
          MDS('Qual o comando desejado:')
@@ -102,8 +81,10 @@ WHILE .T.
 			RESTAA(aSALVO)
          ENDIF
          SETCOLOR(COROLD)
-         
+         */
       CASE KEY = 10
+         ALERT("Opcao nao disponivel")
+        /*
 	     aSALVO:=SALVAA()
          SETCOLOR(COR("MDJ002"))
          CLS
@@ -114,16 +95,21 @@ WHILE .T.
          MDT('Digite exit para retornar ao programa')
 		 hb_run( GetEnv( "COMSPEC" ))
 		 RESTAA(ASALVO)
+         */
       CASE KEY = 11 
-         M_DK()
+         ALERT("Opcao nao disponivel")
+          M_DK()
       CASE KEY = 12 
-         M_DL(0)
+         ALERT("Opcao nao disponivel")
+         //M_DL(0)
       CASE KEY = 13 
          M_DM()
-      CASE KEY = 14 
-         M_DN(0)
-      CASE KEY = 15 
-         M_DO(0)
+      CASE KEY = 14
+          ALERT("Opcao nao disponivel")
+        // M_DN(0)
+      CASE KEY = 15
+         ALERT("Opcao nao disponivel") 
+         //M_DO(0)
       CASE KEY = 16 
          M_DP(0)
       CASE KEY = 17 
@@ -165,4 +151,5 @@ WHILE .T.
          EXIT
    ENDCASE
 ENDDO
+RETURN NIL
 // : FIM: MAND.PRG

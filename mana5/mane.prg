@@ -1,60 +1,17 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Programa  : mane.prg
-*+
-*+
-*+
+*+    Programa  : mane.prg Manual
 *+    Sistema   : MANAEXO
-*+
 *+    Linguagem : Harbour
-*+
 *+    Autor     : Jorge Cassiano
-*+
 *+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
 *+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
 
-// :*****************************************************************************
-// :
-// :       MANE.PRG: Manual
-// :      Linguagem: Clipper 5.x
-// :        Sistema: MANA5
-// :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 05/04/94     11:46
-// :
-// :  Procs & Fncts: MANE()
-// :               : MANUALT()
-// :               : MANRETA()
-// :               : FMANUAL()
-// :               : MANRETM()
-// :
-// :          Chama: COR()     (fun‡„o em MLIB.PRG)
-// :               : MANUALT() (fun‡„o em MANE.PRG)
-// :               : USEREDE() (fun‡„o em MLIB.PRG)
-// :               : MARCAR()  (fun‡„o em MLIB.PRG)
-// :               : MARCAR1() (fun‡„o em MLIB.PRG)
-// :               : MANRETA() (fun‡„o em MANE.PRG, chamado  no Achoice())
-// :               : FMANUAL() (fun‡„o em MANE.PRG)
-// :
-// :     Documentado 05/13/94 em 14:48                DISK!  vers„o 5.01
-// :*****************************************************************************
-
-
-
 //Teclas Operacionais
 #INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
-//#INCLUDE "teclas.CH"
 
 //Inicializando o Help
 HELPDBF := "MANE"
@@ -109,31 +66,16 @@ WHILE .T.
          LOOP
    ENDCASE
 ENDDO
-RETU
+RETURN NIL
 
-// !*************************************************************************
-// !
-// !    Chamado por: MANE.PRG
-// !
-// !          Chama: MANRETM()  (fun‡„o em MANE.PRG, chamado  no MemoEdit())
-// !               : MANUALT()  (fun‡„o em MANE.PRG)
-// !               : MANCRIMP() (fun‡„o em MANE.PRG)
-// !
-// !*****************************************************************************
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function fMANUAL()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNC fMANUAL(OPRMAN5,POSMAN5)
+FUNCtion fMANUAL(OPRMAN5,POSMAN5)
 
 NOBREAK()
 mARQUIVO := MAN52[POSMAN5]
@@ -156,39 +98,21 @@ IF OPRMAN5 = 2
    IMPARQ(DIRMAN+mARQUIVO)
 ENDIF
 MDS("Enter=Exibe Ctrl+Enter=Busca ALT+F10=Imprime")
-RETU .T.
+RETURN .T.
 
-// !*****************************************************************************
-// !
-// !         Fun‡„o: MANUALT() Tela de Exibi‡„o
-// !
-// !    Chamado por: MANE.PRG
-// !               : FMANUAL()          (fun‡„o    em MANE.PRG)
-// !
-// !          Chama: CLSBOX()           (fun‡„o    em ?)
-// !               : CLSCOR()           (fun‡„o    em ?)
-// !
-// !*****************************************************************************
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function MANUALT()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-FUNC MANUALT
-
+FUNCTION MANUALT
 SETCOLOR(MANE01)
 CLSBOX(00,00,00,79)
 @ 00,00 SAY "<<MANUAL> v5.3B "         
 MDS("Enter=Exibe Ctrl+Enter=Busca ALT+F10=Imprime")
 CLSCOR()
-RETU .T.
+RETURN  .T.
 
 // : FIM: MANE.PRG
