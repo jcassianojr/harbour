@@ -78,13 +78,20 @@ hbmk2 sddodbc\sddodbc
 hbmk2 sddpg\sddpg
 hbmk2 sddsqlt3\sddsqlt3
 hbmk2 xhb\xhb
+rem extras
+hbmk2 rddado\rddado
+hbmk2 hbxlsxml\hbxlsxml
 rem vszakats
 hbmk2 hbamqp\hbamqp
 hbmk2 hbcrypto\hbcrypto
 hbmk2 hbicu\hbicu
 hbmk2 hbmac\hbmac
 hbmk2 hbyaml\hbyaml
-cd ..
-cd extras
-hbmk2 rddado\rddado
-hbmk2 hbxlsxml\hbxlsxml
+rem minigui
+hbmk2 hbaes\hbaes
+hbmk2 hbcab\hbcab
+hbmk2 hbgdip\hbgdip
+hbmk2 libxlw\libxlw
+hbmk2 hbzeegrid\hbzeegrid
+hbmk2 sevenzip\sevenzip
+
