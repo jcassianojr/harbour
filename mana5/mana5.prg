@@ -98,7 +98,7 @@ SetKey( K_F3, {|| NOTEP() } )
 SetKey( K_F4, {|| AGEN() } )
 SetKey( K_F5, {|| TECLAS() } )
 SetKey( K_F10, {|| MUDADATA() } )
-SetKey( K_F8, {|| hb_run("calc") } )
+//SetKey( K_F8, {|| hb_run("calc") } )
 
 //Inicializa o Mouse Clipper 5.3c
 set(_SET_EVENTMASK,HB_INKEY_ALL )

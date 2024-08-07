@@ -11,10 +11,12 @@
 *:****************************************************************************
 
 
+recuapo2() //CHAMA Dutilitario de dara
+/*
 WHILE .T.
    cabe3("  Arquivos, Utilitarios, Telememo, Agenda, Bloco de Anotacoes     ",20)
    OPCAO( 09,23 , " &A Gerenciador de arquivos         " ,65, "  Gerenciador de arquivos  ")
-   OPCAO( 10,23 , " &B Utilitarios diversos            " ,66, "  Calculo de datas, outros  ")
+   OPCAO( 10,23 , " &B Utilitarios datas                " ,66, "  Calculo de datas, outros  ")
    OPCAO( 11,23 , " &C Telememo (Agenda de Telefones)  " ,67, "  Cadastro de telefones  ")
    OPCAO( 12,23 , " &D Agenda                          " ,68, "  Cadastro da agenda  ")
    OPCAO( 13,23 , " &E Bloco de Anotacoes.             " ,69, "  Cadastro de Anotacoes  ")
@@ -72,4 +74,6 @@ WHILE .T.
 	       RETURN
    ENDCASE
 ENDDO
+*/
+
 *: FIM: RECUAPO.PRG

@@ -63,7 +63,7 @@ SetKey( K_F2, {|| TELE() } )
 SetKey( K_F3, {|| NOTEP() } )
 SetKey( K_F4, {|| AGEN() } )
 SetKey( K_F5, {|| TECLAS() } )
-SetKey( K_F8, {|| hb_run("calc") } )
+//SetKey( K_F8, {|| hb_run("calc") } )
 SetKey( K_F10, {|| MUDADATA() } )
 
 deletaarq("TEMP*.*")

@@ -25,6 +25,7 @@ WHILE .T.
    MDS(HB_CWD())
    OPCAO( 09,23 , " &A Indexar os arquivos             " ,65, "  Organiza os arquivos de trabalho   ")
    OPCAO( 10,23 , " &B Alterar Configuracao Indexacao  " ,66, "  Altera configuracao de organizacao ")
+   /*
    OPCAO( 11,23 , " &C Alterar Estrutura de Arquivos   " ,67, "  Altera estrutura de um arquivo  ")
    OPCAO( 12,23 , " &D Mudar diretorio de Trabalho     " ,68, "  Muda o Diretorio de trabalho  ")
    OPCAO( 13,23 , " &E Faz uma Copia de Reserva        " ,69, "  Copia um Grupo de Arquivos para disquetes  ")
@@ -32,18 +33,20 @@ WHILE .T.
    OPCAO( 15,23 , " &G Formatar um disquete            " ,71, "  Esta opcao formata um disqueta  ")
    OPCAO( 16,23 , " &H Mudar Data Operacional          " ,72, "  Esta opcao altera a Data de Trabalho ")
    OPCAO( 17,23 , " &I Escolher Impressora             " ,73, "  Ver Lista de Impressoras ")
+   */
    OP:=MENU(,6)
    DO CASE
    CASE OP=1 ; FOY2(0,"RECURNTX")
    CASE OP=2 ; FOY2(1,"RECURNTX")
+   /*
    CASE OP=3
-      CABE2('Alterando estrutura de Arquivo')
-      @ 08,00 CLEA
-      FILTRO='*.DBF       '
-      MDS('Grupo de Arquivos')
-      @ 24,40 GET FILTRO
-      READCUR()
-      RECUARQ1(2)
+        CABE2('Alterando estrutura de Arquivo')
+        @ 08,00 CLEA
+        FILTRO='*.DBF       '
+      M DS('Grupo de Arquivos')
+        @ 24,40 GET FILTRO
+       READCUR()
+       RECUARQ1(2)
    CASE OP=4 ; RECUDIR()
    CASE OP=5 ; RECUSER5(1)
    CASE OP=6 ; RECUSER6()
@@ -57,8 +60,10 @@ WHILE .T.
       READCUR()
    case OP=9
       imphp()
-   OTHERWISE ; RETU
+      */
+   OTHERWISE ; RETUrn nil
    ENDCASE
 ENDDO
+return nil
 
 *: FIM: RECUSER.PRG

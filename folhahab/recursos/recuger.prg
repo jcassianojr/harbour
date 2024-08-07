@@ -24,13 +24,14 @@ WHILE .T.
    CABE3("  Etiquetas, Cartas, Dbf editor, Formul rios                      ",15)
    OPCAO( 09,23 , " &A Gerador de Etiquetas           " ,65, "  Etiquetas simples e configuradas.   ")
    OPCAO( 10,23 , " &B Editor  de Cartas              " ,66, "  Cria, Altera, Imprime Cartas.       ")
-   OPCAO( 11,23 , " &C DBF Editor                     " ,67, "  Gera relat¢rio sobre arquivo DBF.   ")
+//   OPCAO( 11,23 , " &C DBF Editor                     " ,67, "  Gera relat¢rio sobre arquivo DBF.   ")
    OP:=MENU(,6)
    SETCOLOR("W/N")
    DO CASE
    CASE OP=1 ; RECUGER1()
    CASE OP=2 ; RECUGER2()
    CASE OP=3
+      /*
       TAMANHO="132"
       GRUPO='*.DBF       '
       @ 21,0 CLEAR
@@ -40,7 +41,8 @@ WHILE .T.
       READCUR()
       GRUPO=ALLTRIM(GRUPO)
       RECUGER3(TAMANHO,GRUPO)
-   OTHERWISE ; RETU
+      */
+   OTHERWISE ; RETURN NIL
    ENDCASE
 ENDDO
 *: FIM: RECUGER.PRG
