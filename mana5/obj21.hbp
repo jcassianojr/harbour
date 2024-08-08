@@ -11,8 +11,9 @@ xhb.hbc
 hbhpdf.hbc
 hbmisc.hbc
 gtwvg.hbc
+hbsqlit3.hbc
  
-MANA5.prg
+MANA5.prg 
 MLIB.prg
 MAIL.prg
 MMENU.prg
@@ -58,7 +59,7 @@ MLIB34.prg
 MLIB35.prg
 MLIB36.prg
 MLIB37.prg
-MLIB38.prg
+MLIB38.prg 
 MLIB39.prg
 MLIB40.prg 
 MLIB41.prg

@@ -115,7 +115,7 @@ endif
 
 //  Variavel Para Copy/Cut/Paste no READCUR()
 READVAR := ""
-//  Zera a Variavel Erro Inicial
+//  Zera a Variavel help Inicial
 HELPARQ := ""
 //  Zera Variaveis de Trabalho
 ZDDD    := ""
@@ -252,8 +252,14 @@ else
 endif
 
 //Verifica Arquivo de Log
-ZARQERR := "ER"+strzero(day(ZDATA),2)+strzero(month(ZDATA),2)+substr(strzero(year(ZDATA),4),3,2)
-CHECKARQ("MANERR",ZARQERR,,,ZDIRP+"LOG\",year(ZDATA),month(ZDATA))
+ZARQERRO :="" //apenas cria a gravalog ira tratar ZARQERR ZTIPERR
+zTIPERRO :=""
+
+
+gravalog("acessou","abr","menup")
+
+//ZARQERR := "ER"+strzero(day(ZDATA),2)+strzero(month(ZDATA),2)+substr(strzero(year(ZDATA),4),3,2)
+//CHECKARQ("MANERR",ZARQERR,,,ZDIRP+"LOG\",year(ZDATA),month(ZDATA))
 
 //Chama o Menu Principal
 clear
