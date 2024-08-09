@@ -49,7 +49,7 @@ else
       PADRAX(0, ,0,{"MUSER"},"Usuario Equivalencia","' '+XDECODE(mUSUARIO)+' '+XDECODE(mEQUIVALE)","MCI001","MCI001",,,;
        ,"MCIINS","MCI",{|| MCIIGU()},,{|| MCIANT()},{|| MCIINS()})
 	   
-        loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
+   //    loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
 	   
 	   IF MDG("Gerar postela chave para Muser mana5")
 	      gerapostela(1)
@@ -148,6 +148,12 @@ LOCAL cCHAVEV
 cCAMWRPT:=ProfileString( "MANA5.INI", "PATH", "WRPT", HB_CWD())
 cCAMCONT:=ProfileString( "MANA5.INI", "PATH", "CONTROLE", HB_CWD())
 cCAMSYSU:=ProfileString( "MANA5.INI", "PATH", "SYSUSER", HB_CWD())
+
+if nARQ=1
+  if at(".MDB",UPPER(cCAMWRPT))>0 .OR. at(".MDB",UPPER(cCAMCONT))>0  at(".MDB",UPPER(cCAMSYSU))>0 
+     loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
+  endif   
+endif
 
 lOPEN:=.F.
 IF nARQ=1
@@ -253,12 +259,24 @@ return .t.
 
 function gravaposTELA(cUSUARIO,cPOSTELAa,cPOSTELAB,cCHAVEH,cCAMBASE)
 LOCAL cCHAVEV
+LOCAL cConn
 cCHAVEV:=""
+cConn  :=""
 
-if loledb
-   cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
-else
-   cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
+if at(".MDB",upper(cCAMBASE))>0
+    if loledb
+       cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
+    else
+       cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
+    endif
+ENDIF
+
+if at(".SQLITE",upper(cCAMBASE))>0
+   cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
+ENDIF
+
+IF EMPTY(cConn)
+   return .f.
 endif
         
 try
