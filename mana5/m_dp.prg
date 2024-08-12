@@ -212,10 +212,12 @@ for Y := 1 to nARQ
       if cTIPO = "D"
          fwrite(nHANDLE,padr(aIND[I],10)+" "+padr(aIN1[I],50)+HB_OSNEWLINE())
          fwrite(nHANDLE,"           "+aCHA[I]+HB_OSNEWLINE())
+         fwrite(nHANDLE,"           "+MDPCHAVEI(aCHA[I])+HB_OSNEWLINE())
          fwrite(nHANDLE,"----------"+HB_OSNEWLINE())
       else
          fwrite(nHANDLE,"TAG"   + str(I - 1,1) + "=" + alltrim(aIND[I]) + HB_OSNEWLINE())
          fwrite(nHANDLE,"INDEX" + str(I - 1,1) + "=" + alltrim(aCHA[I]) + HB_OSNEWLINE())
+         fwrite(nHANDLE,"INDEXFIELDS" + str(I - 1,1) + "=" + MDPCHAVEI(alltrim(aCHA[I])) + HB_OSNEWLINE())
       endif
    next
    if cTIPO = "I"
@@ -253,3 +255,36 @@ do case
 endcase
 return cTIPO
 
+
+FUNCTION MDPCHAVEI(cICHAVE)  //Cria string campo1,campo2,... para create index em sql
+LOCAL nPOS
+LOCAL cCHAVE
+LOCAL cTMPCHV
+LOCAL aICampos
+LOCAL I
+cCHAVE:=""
+aicampos:=hb_atokens(cICHAVE,"+")
+FOR I=1 TO LEN(aICampos)
+    cTMPCHV:=aICampos[I]
+    nPOS:=AT("(",cTMPCHV)
+    IF nPOS>=0
+       cTMPCHV:=SUBSTR(cTMPCHV,nPOS+1)
+    ENDIF
+    nPOS:=AT("(",cTMPCHV)
+    IF nPOS>0
+       cTMPCHV:=SUBSTR(cTMPCHV,nPOS+1)
+    ENDIF
+    nPOS:=AT(")",cTMPCHV)
+    IF nPOS>0
+       cTMPCHV:=SUBSTR(cTMPCHV,1,nPOS-1)
+    ENDIF
+    nPOS:=AT(",",cTMPCHV)
+    IF nPOS>0
+       cTMPCHV:=SUBSTR(cTMPCHV,1,nPOS-1)
+    ENDIF
+    cCHAVE+=cTMPCHV
+    IF I<>LEN(aICAMPOS)
+       cCHAVE+=","
+    ENDIF
+NEXT I
+return cCHAVE

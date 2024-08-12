@@ -175,7 +175,7 @@ M_DK.prg
 #M_DN.prg
 M_DM.prg
 #M_DO.prg
-M_DP.prg
+M_DP.prg -b
 M_DQ.prg
 M_DR.prg
 M_DRC.prg

@@ -114,7 +114,6 @@ cARQ  := strtran(cARQ," ","")
 cERRO := alltrim(STRVAL(cERRO))
 cERRO := strtran(cERRO," ","")
 
-altd()
 DO CASE
     CASE zTIPERRO="SQLITE"
         oDB := sqlite3_open( ZARQERRO, .f. )
