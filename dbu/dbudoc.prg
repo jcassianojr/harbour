@@ -404,33 +404,36 @@ if lDOCCAB
              cTEXTO += "<Chave>" +StrTran((IndexKey()), "+", "</Chave>"+CLIN+"<Chave>")+ "</Chave>" + cLIN
              cTEXTO += "</Indice>" + cLIN
              
-          case  zEXPOREXT="SQL"  
-                 aUSO:=DBSTRUCT()
-                //select case ZANOFOR="SQLITE" criar conforme o tipo sql difere datatypes
-                //
-                cTEXTO:="CREATE TABLE "+cARQ+HB_OSNEWLINE()
-                cTEXTO+=" ("
-                FOR K=1 TO LEN(aUSO)
-                    cTEXTO+=alltrim(aUSO[K][DBS_NAME])+" " //1
-                     DO CASE
-                         CASE aUSO[K][DBS_TYPE]="C"
-                              IF aUSO[K][DBS_LEN]=254
-                                cTEXTO+="VARCHAR (512)"
-                              ELSE
-                                cTEXTO+="VARCHAR ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+")"
-                              ENDIF  
-                         CASE aUSO[K][DBS_TYPE]="D"
-                              cTEXTO+="SMALLDATETIME"
-                         CASE aUSO[K][DBS_TYPE]="N"                           
-                               cTEXTO+="DECIMAL ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+","+ALLTRIM(STR(aUSO[K][DBS_DEC]))+")"                                
-                     ENDCASE
-                     IF K<>LEN(aUSO)
-                        cTEXTO+=" ,"+HB_OSNEWLINE() 
-                     ENDIF    
-               NEXT K
-              cTEXTO+=") ; "  + cLIN  
-              
-              
+               aUSO:=DBSTRUCT()
+              //select case ZANOFOR="SQLITE" criar conforme o tipo sql difere datatypes
+              //
+              DO CASE
+                 CASE ZANOFOR="SQLITE"
+                      cTEXTO:=SqliteCreateTable(cARQ,aUSO)
+                 OTHERWISE
+                        cTEXTO:="CREATE TABLE "+cARQ+HB_OSNEWLINE()
+                        cTEXTO+=" ("
+                        FOR K=1 TO LEN(aUSO)
+                            cTEXTO+=alltrim(aUSO[K][DBS_NAME])+" " //1
+                             DO CASE
+                                 CASE aUSO[K][DBS_TYPE]="C"
+                                      IF aUSO[K][DBS_LEN]=254
+                                        cTEXTO+="VARCHAR (512)"
+                                      ELSE
+                                        cTEXTO+="VARCHAR ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+")"
+                                      ENDIF  
+                                 CASE aUSO[K][DBS_TYPE]="D"
+                                      cTEXTO+="SMALLDATETIME"
+                                 CASE aUSO[K][DBS_TYPE]="N"                           
+                                       cTEXTO+="DECIMAL ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+","+ALLTRIM(STR(aUSO[K][DBS_DEC]))+")"                                
+                             ENDCASE
+                             IF K<>LEN(aUSO)
+                                cTEXTO+=" ,"+HB_OSNEWLINE() 
+                             ENDIF    
+                       NEXT K
+                      cTEXTO+=") ; "  + cLIN  
+               ENDCASE               
+                            
                nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
                FOR j = 1 TO  nIndexes
                   //CREATE INDEX idx_student_name ON Students (name); 
