@@ -1,5 +1,6 @@
 #include "dbstruct.ch"
 #INCLUDE "BOX.CH"
+#include "dbinfo.ch"
 
 #require "hbsqlit3"
 
@@ -301,6 +302,7 @@ function export2dbf(ODB1,cNEWTABLE)
    local nFieldDec := ''
    local nLength := 0
    local aRecord := {}
+   local cINDEXNAME := ""
    local i, j
    if len( alltrim( cNewTable ) ) == 0
       msgstop( 'You have to select a DBF to export', 'DBF<-->SQLite Exporter' )
@@ -398,8 +400,8 @@ endif
 return .t.
 
 Function export2sql(odb,cDBFFILE)
-   local aStruct := {}, i, mFldNm, mFldtype, mFldLen, mFldDec, mSql
-   local totrec, nrec
+   local aStruct := {}, i,j, mFldNm, mFldtype, mFldLen, mFldDec, mSql
+   local totrec, nrec,nIndexes
    
    if oDB == nil
       msgstop( "No Connection to SQLite DB! Try to create a new SQLite DB or select an existing SQLite DB", 'DBF->SQLite Exporter' )
@@ -466,12 +468,28 @@ Function export2sql(odb,cDBFFILE)
    next
 
    mSql += ")"
+   
+   
 
 
    if !miscsql( oDB, mSql )
       alertx( 'Table Creation Error!', 'DBF2SQLite' )
       return nil
    endif
+
+  
+   nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
+   FOR j = 1 TO  nIndexes
+      //CREATE INDEX idx_student_name ON Students (name); 
+      cINDEXNAME := dbORDERINFO( DBOI_NAME , ,  j )
+      cINDEXNAME := StrTran(cINDEXNAME, "-", "_"  )  //Tracos nao aceitos trocando por undescore
+       msql:="create index " + cINDEXNAME + " on " + cTablename + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) ;"
+       //DbOrderInfo( <nDefine> , <cIndexFile> , <nOrder_or_cIndexName> , <xNewSetting> ) -> xCurrentSetting
+       //AAdd( aNtxNames ,  dbORDERINFO( DBOI_NAME , ,  j )+" - "+dbORDERINFO( DBOI_EXPRESSION , ,  j ) )
+       if ! miscsql( oDB, mSql )
+          MemoWrit("sql"+StrZero( j, 2 , 0 ) +".txt",msql)
+       endif
+   NEXT j
 
 
    nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
@@ -504,3 +522,39 @@ Function export2sql(odb,cDBFFILE)
    endif
    dbcloseall()
 return nil
+
+
+
+
+FUNCTION MDPCHAVEI(cICHAVE)  //Cria string campo1,campo2,... para create index em sql
+LOCAL nPOS
+LOCAL cCHAVE
+LOCAL cTMPCHV
+LOCAL aICampos
+LOCAL I
+cCHAVE:=""
+aicampos:=hb_atokens(cICHAVE,"+")
+FOR I=1 TO LEN(aICampos)
+    cTMPCHV:=aICampos[I]
+    nPOS:=AT("(",cTMPCHV)
+    IF nPOS>=0
+       cTMPCHV:=SUBSTR(cTMPCHV,nPOS+1)
+    ENDIF
+    nPOS:=AT("(",cTMPCHV)
+    IF nPOS>0
+       cTMPCHV:=SUBSTR(cTMPCHV,nPOS+1)
+    ENDIF
+    nPOS:=AT(")",cTMPCHV)
+    IF nPOS>0
+       cTMPCHV:=SUBSTR(cTMPCHV,1,nPOS-1)
+    ENDIF
+    nPOS:=AT(",",cTMPCHV)
+    IF nPOS>0
+       cTMPCHV:=SUBSTR(cTMPCHV,1,nPOS-1)
+    ENDIF
+    cCHAVE+=cTMPCHV
+    IF I<>LEN(aICAMPOS)
+       cCHAVE+=","
+    ENDIF
+NEXT I
+return cCHAVE

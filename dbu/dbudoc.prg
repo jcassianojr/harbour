@@ -12,6 +12,8 @@
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 #INCLUDE "BOX.CH"
+#include "dbinfo.ch"
+#include "dbstruct.ch"
 
 FUNCTION PEGTIPO2VAL()
    nLASTREC:=LASTREC()
@@ -244,6 +246,8 @@ LOCAL cARQGRV:=cARQ
 local cLIN := hb_osnewline() //chr( 13 ) + chr( 10 )
 LOCAL cVAL
 LOCAL cCAMPO
+LOCAL J,nIndexes
+LOCAL cINDEXNAME
 
 IF tDOC=0
   tdoc := pegtipodoc()
@@ -401,28 +405,44 @@ if lDOCCAB
              cTEXTO += "</Indice>" + cLIN
              
           case  zEXPOREXT="SQL"  
+                 aUSO:=DBSTRUCT()
+                //select case ZANOFOR="SQLITE" criar conforme o tipo sql difere datatypes
+                //
                 cTEXTO:="CREATE TABLE "+cARQ+HB_OSNEWLINE()
                 cTEXTO+=" ("
-                aUSO:=DBSTRUCT()
                 FOR K=1 TO LEN(aUSO)
-                    cTEXTO+=alltrim(aUSO[K][1])+" "
+                    cTEXTO+=alltrim(aUSO[K][DBS_NAME])+" " //1
                      DO CASE
-                         CASE aUSO[K][2]="C"
-                              IF aUSO[K][3]=254
+                         CASE aUSO[K][DBS_TYPE]="C"
+                              IF aUSO[K][DBS_LEN]=254
                                 cTEXTO+="VARCHAR (512)"
                               ELSE
-                                cTEXTO+="VARCHAR ("+ALLTRIM(STR(aUSO[K][3]))+")"
+                                cTEXTO+="VARCHAR ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+")"
                               ENDIF  
-                         CASE aUSO[K][2]="D"
+                         CASE aUSO[K][DBS_TYPE]="D"
                               cTEXTO+="SMALLDATETIME"
-                         CASE aUSO[K][2]="N"                           
-                               cTEXTO+="DECIMAL ("+ALLTRIM(STR(aUSO[K][3]))+","+ALLTRIM(STR(aUSO[K][4]))+")"                                
+                         CASE aUSO[K][DBS_TYPE]="N"                           
+                               cTEXTO+="DECIMAL ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+","+ALLTRIM(STR(aUSO[K][DBS_DEC]))+")"                                
                      ENDCASE
                      IF K<>LEN(aUSO)
                         cTEXTO+=" ,"+HB_OSNEWLINE() 
                      ENDIF    
                NEXT K
-              cTEXTO+=") ; "  + cLIN           
+              cTEXTO+=") ; "  + cLIN  
+              
+              
+               nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
+               FOR j = 1 TO  nIndexes
+                  //CREATE INDEX idx_student_name ON Students (name); 
+                  cINDEXNAME := dbORDERINFO( DBOI_NAME , ,  j )
+                  cINDEXNAME := StrTran(cINDEXNAME, "-", "_"  )  //Tracos nao aceitos trocando por undescore
+                   cSQLINDEX:="create index " + cINDEXNAME + " on " + cARQ + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) ;"
+                   //DbOrderInfo( <nDefine> , <cIndexFile> , <nOrder_or_cIndexName> , <xNewSetting> ) -> xCurrentSetting
+                   //AAdd( aNtxNames ,  dbORDERINFO( DBOI_NAME , ,  j )+" - "+dbORDERINFO( DBOI_EXPRESSION , ,  j ) )
+                   cTEXTO+=cSQLINDEX+HB_OSNEWLINE() 
+               NEXT j
+                          
+                       
       endcase
    next x
 ENDIF   

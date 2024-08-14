@@ -306,11 +306,14 @@ HB_dispbox( 03, 10, 22, 60, B_DOUBLE+" ")
 @ 10,12 say "Delimitador ,;|#~ 9=(TAB)"
 @ 11,12 say "Sep Reg "+chr(34)+chr(39)+"( ) "
 @ 12,12 say "Separador Decimal ,. "
-@ 13,12 say "Digitos Ano 2/4"
-@ 14,12 say "Separador Data /-( )"
-@ 15,12 say "(D)ia(M)es(A)no DMA AMD MDA SQL MYS DHZ"
-@ 16,12 say "ASPAS ACESSS CRYSTAL DATE(, DATESERIAL"
-@ 17,12 say "MYSQL/ MYSQL- ORACLE TO_DATE MSSQL SQLITE"
+
+@ 13,12 say "(D)ia(M)es(A)no DMA AMD MDA SQL MYS DHZ"
+@ 14,12 say "ASPAS ACESSS CRYSTAL DATE(, DATESERIAL"
+@ 15,12 say "MYSQL/ MYSQL- ORACLE TO_DATE MSSQL SQLITE"
+
+@ 16,12 say "Digitos Ano 2/4"
+@ 17,12 say "Separador Data /-( )"
+
 @ 18,12 say "Logico= TRUE .T. ON YES SIM 1 T Y S"
 @ 19,12 say "Converter (N)ao oemto(A)nsi ansito(O)em"  
 
@@ -318,9 +321,11 @@ HB_dispbox( 03, 10, 22, 60, B_DOUBLE+" ")
 @ 10,53 get zDELIMITE PICT "!"            VALID zDELIMITE $ " ,;|#~9"
 @ 11,53 get zregSEP                       VALID zregsEP $ chr(34)+chr(39)+" "
 @ 12,53 get zDECSIM                       VALID zDECSIM $ ",."       
-@ 13,53 get zANOTAM   PICT "9"            VALID zANOTAM $ "24"
-@ 14,53 get zANOSEP                       VALID zANOSEP $ "/- "
-@ 15,53 get zANOFOR   PICT "!!!!!!!!!!"   VALID checkanofor() 
+
+@ 13,53 get zANOFOR   PICT "!!!!!!!!!!"   VALID checkanofor() 
+@ 16,53 get zANOTAM   PICT "9"            VALID zANOTAM $ "24"
+@ 17,53 get zANOSEP                       VALID zANOSEP $ "/- "
+
 @ 18,53 get zSEPLOGIC                     valid zSEPLOGIC="TRUE" .OR. zSEPLOGIC=".T. " .OR. zSEPLOGIC="YES " .OR. zSEPLOGIC="ON  " .OR. zSEPLOGIC="SIM " .OR. zSEPLOGIC="1   " .OR. zSEPLOGIC="T   " .OR. zSEPLOGIC="Y   " .OR. zSEPLOGIC="S   "
 @ 19,53 get zCNVCHAR  PICT "!"            VALID zCNVCHAR $ "NAO"  
 readcur() 
@@ -363,6 +368,8 @@ ENDIF
 DO CASE
    CASE cANOFOR="SQLITE"
         zSEPLOGIC="1   "
+        zANOTAM:="4"
+        zANOSEP:="-"
 ENDCASE
 RETURN lRETU
 
