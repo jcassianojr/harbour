@@ -1,6 +1,7 @@
 #include "dbstruct.ch"
 #INCLUDE "BOX.CH"
 #INCLUDE "TRY.CH"
+#INCLUDE "DBINFO.CH"
 
 #require "rddado"
 
@@ -79,10 +80,6 @@ DO CASE
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
     CASE cTIPOSQL="SQLITE"
         //Abaixo com sqltables usando nativa depois implementar com rddado
- //       cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
- //     { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
-  //      { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
-  //      { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )    
 ENDCASE        
 
 DO CASE
@@ -193,12 +190,29 @@ RETURN NIL
    
 FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     local cCONCREATE
+    local aINDICES
+    LOCAL nINDICES
+    LOCAL cINDEXNAME
+    LOCAL J
+    local msql
+    
+    
+    aINDICES:={}
     use &cDBFARQ.
     aSTRU:=DBSTRUCT() 
     nLASTREC:=reccount() 
     zei_fort( nLASTREC,,,0)
     cNOMETABELA:=ALIAS()
+    
+     nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
+     FOR j = 1 TO  nIndexes
+        cINDEXNAME := dbORDERINFO( DBOI_NAME , ,  j )
+        cINDEXNAME := StrTran(cINDEXNAME, "-", "_"  )  //Tracos nao aceitos trocando por undescore
+         msql:="create index " + cINDEXNAME + " on " + cNometabela + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) ;"
+         aadd(Aindices,msql)
+     NEXT j
     dbclosearea()
+
     MDT(cNOMETABELA)
     
     Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
@@ -224,11 +238,19 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
             endif  
        case cTIPOSQL="SQLITE"    
             USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA SQLITE
-    endcase
+    endcase 
          
     append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
     dbcloseall()
+    
     Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+    
+  
+     for j=1 to nIndexes
+        Msql=Aindices[j]
+        executacmd(cMDBARQ,msql)
+     next j
+    
 
 FUNCTION MDBIMPDBF()
 LOCAL cMDBARQ
@@ -243,7 +265,7 @@ DO CASE
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
 ENDCASE   
 nOLDTIPO:=TIPODBF
-alertX("escolha origem")
+mdt("escolha origem")
 tipodbfesc()
 nORITIPO:=TIPODBF
 cORIDRIVER:=RDDNOME(TIPODBF)
@@ -316,3 +338,51 @@ while ! ors:eof
 oRs:Close()
 oConN:close()  
 RETURN aRETU       
+
+
+Function executacmd(cCAMBASE,cCOMANDO)
+LOCAL cCHAVEV
+LOCAL cConn
+cCHAVEV:=""
+cConn  :=""
+
+if at(".MDB",upper(cCAMBASE))>0
+    if loledb
+       cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
+    else
+       cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
+    endif
+ENDIF
+
+if at(".SQLITE",upper(cCAMBASE))>0
+   cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
+ENDIF
+
+IF EMPTY(cConn)
+   return .f.
+endif
+        
+try
+   oConn:=WIN_OLECreateObject( "ADODB.Connection" )
+   with object oConn
+      :ConnectionString:=cConn
+      :Open()
+   END  //end do with
+catch oErr
+  // ShowAdoError(oERR,oCoNn)   
+   return .f.
+end
+
+oComm:=WIN_OLECreateObject( "ADODB.Command" )
+  try
+      with object oComm
+          :CommandText:=cCOMANDO
+          :CommandType:=adCmdText
+          :ActiveConnection:=oConn
+          :Execute()
+      end
+  end
+
+oConn:Close()
+oConn:=NIL		
+RETURN .t.
