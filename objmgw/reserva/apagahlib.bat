@@ -1,98 +1,107 @@
-libace32.a
-libbz2.a
-libexpat.a
-libgtcgi.a
-libgtgui.a
-libgtpca.a
-libgtstd.a
-libgtwin.a
-libgtwvg.a
-libgtwvt.a
-libharbour-32.a
-libhbamf.a
-libhbblat.a
-libhbblink.a
-libhbbz2.a
-libhbbz2io.a
-libhbcomio.a
-libhbcomm.a
-libhbcommon.a
-libhbcpage.a
-libhbcplr.a
-libhbct.a
-libhbcurl.a
-libhbcurls.a
-libhbdebug.a
-libhbexpat.a
-libhbextern.a
-libhbfimage.a
-libhbformat.a
-libhbfoxpro.a
-libhbfship.a
-libhbgt.a
-libhbgzio.a
-libhbhpdf.a
-libhbhsx.a
-libhbhttpd.a
-libhblang.a
-libhblzf.a
-libhbmacro.a
-libhbmaindllh.a
-libhbmaindllp.a
-libhbmainstd.a
-libhbmainwin.a
-libhbmemio.a
-libhbmisc.a
-libhbmlzo.a
-libhbmxml.a
-libhbmzip.a
-libhbnetio.a
-libhbnf.a
-libhbnortl.a
-libhbnulrdd.a
-libhbodbc.a
-libhboslib.a
-libhbpcre.a
-libhbpipeio.a
-libhbpp.a
-libhbrdd.a
-libhbrtl.a
-libhbsix.a
-libhbsms.a
-libhbsqlit3.a
-libhbtcpio.a
-libhbtest.a
-libhbtinymt.a
-libhbtip.a
-libhbtpathy.a
-libhbuddall.a
-libhbusrrdd.a
-libhbvm.a
-libhbvmmt.a
-libhbwin.a
-libhbxdiff.a
-libhbxpp.a
-libhbzebra.a
-libhbziparc.a
-libhbzlib.a
-libjpeg.a
-liblibhpdf.a
-liblzf.a
-libminilzo.a
-libminizip.a
-libmxml.a
-libpng.a
-librddads.a
-librddbm.a
-librddcdx.a
-librddfpt.a
-librddnsx.a
-librddntx.a
-librddsql.a
-libsddodbc.a
-libsddsqlt3.a
-libsqlite3.a
-libtinymt.a
-libunicows.a
-libxdiff.a
-libxhb.a
+del libace32.a
+del libace64.a
+del libbz2.a
+del libexpat.a
+del libgtcgi.a
+del libgtgui.a
+del libgtpca.a
+del libgtstd.a
+del libgtwin.a
+del libgtwvg.a
+del libgtwvt.a
+del libharbour-32.a
+del libhbamf.a
+del libhbblat.a
+del libhbblink.a
+del libhbbz2.a
+del libhbbz2io.a
+del libhbcomio.a
+del libhbcomm.a
+del libhbcommon.a
+del libhbcpage.a
+del libhbcplr.a
+del libhbct.a
+del libhbcurl.a
+del libhbcurls.a
+del libhbdebug.a
+del libhbexpat.a
+del libhbextern.a
+del libhbfimage.a
+del libhbformat.a
+del libhbfoxpro.a
+del libhbfship.a
+del libhbgt.a
+del libhbgzio.a
+del libhbhpdf.a
+del libhbhsx.a
+del libhbhttpd.a
+del libhblang.a
+del libhblzf.a
+del libhbmacro.a
+del libhbmaindllh.a
+del libhbmaindllp.a
+del libhbmainstd.a
+del libhbmainwin.a
+del libhbmemio.a
+del libhbmisc.a
+del libhbmlzo.a
+del libhbmxml.a
+del libhbmzip.a
+del libhbnetio.a
+del libhbnf.a
+del libhbnortl.a
+del libhbnulrdd.a
+del libhbodbc.a
+del libhboslib.a
+del libhbpcre.a
+del libhbpipeio.a
+del libhbpp.a
+del libhbrdd.a
+del libhbrtl.a
+del libhbsix.a
+del libhbsms.a
+del libhbsqlit3.a
+del libhbtcpio.a
+del libhbtest.a
+del libhbtinymt.a
+del libhbtip.a
+del libhbtpathy.a
+del libhbuddall.a
+del libhbusrrdd.a
+del libhbvm.a
+del libhbvmmt.a
+del libhbwin.a
+del libhbxdiff.a
+del libhbxpp.a
+del libhbzebra.a
+del libhbziparc.a
+del libhbzlib.a
+del libjpeg.a
+del liblibhpdf.a
+del liblzf.a
+del libminilzo.a
+del libminizip.a
+del libmxml.a
+del libpng.a
+del librddads.a
+del librddbm.a
+del librddcdx.a
+del librddfpt.a
+del librddnsx.a
+del librddntx.a
+del librddsql.a
+del libsddodbc.a
+del libsddsqlt3.a
+del libsqlite3.a
+del libtinymt.a
+del libunicows.a
+del libxdiff.a
+del libxhb.a
+rem outras contribs
+del libhbsvg.a
+del libhbxlsxml.a
+del libhbyaml.a
+del librddado.a
+del librddmisc.a
+del libsqlrddpp.a
+

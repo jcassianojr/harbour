@@ -1,17 +1,14 @@
 @echo off
-rem
-rem chamar bat variaveis se necessario
-rem SET HB_ARCHITECTURE=win
-rem set HB_COMPILER=mingw
-rem set HB_PATH=c:\devprg\hb32mgw12
-rem SET HB_MINGW=c:\devprg\hb32mgw12\comp\mingw
-rem SET HB_WITH_ADS=c:\devprg\hb3rd\acesdk\
-rem SET INCLUDE_DIR=%HB_PATH%\include;%HB_MINGW%\include\
-rem SET LIB_DIR=%HB_PATH%\lib\win\mingw\;%HB_MINGW%\lib\
-rem set PATH=%HB_PATH%\bin\;%HB_MINGW%\bin\
-rem
-rem SET HB_WITH_ADS=c:\devprg\hb3rd\acesdk\
-rem SET HB_WITH_CURL=c:\devprg\hb3rd\curl\
+rem *mingw64\*.a
+SET HB_INSTALL_PREFIX=d:\harbour\
+SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk-x64\
+SET HB_WITH_CURL=d:\harbour\hb3rd\curl-x64\include\
+REM SET HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl-x64\
+REM SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2-x64\
+SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage-x64\
+SET HB_STATIC_CURL=yes
+SET HB_STATIC_OPENSSL=yes
+call hb64mgw12.bat
 cd contrib
 hbmk2 gtalleg\gtalleg
 hbmk2 gtqtc\gtqtc
@@ -93,4 +90,7 @@ hbmk2 hbcab\hbcab
 hbmk2 hbgdip\hbgdip
 hbmk2 hbzeegrid\hbzeegrid
 hbmk2 sevenzip\sevenzip
-
+hbmk2 hblibxlsxwriter\libxlw.hbp
+rem outros
+hbmk2 hbsvg\hbsvg.hbp
+hbmk2 sqlrddpp\sqlrddpp.hbp

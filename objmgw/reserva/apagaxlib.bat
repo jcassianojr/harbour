@@ -1,85 +1,85 @@
-libace32.a
-libbmdbfcdx.a
-libbmsixcdx.a
-libcodepage.a
-libcommon.a
-libcompiler.a
-libct.a
-libdbfcdx.a
-libdbffpt.a
-libdbfmdx.a
-libdbfnsx.a
-libdbfntx.a
-libdebug.a
-libdllmain.a
-libfilemem.a
-libfi_lib.a
-libgdlib.a
-libgtcgi.a
-libgtgui.a
-libgtpca.a
-libgtstd.a
-libgtwin.a
-libgtwvg.a
-libgtwvt.a
-libgtwvw.a
-libhbbtree.a
-libhbbz2.a
-libhbcab.a
-libhbcc.a
-libhbcgi.a
-libhbcomm.a
-libhbcurl.a
-libhbexpat.a
-libhbhpdf.a
-libhblzf.a
-libhbmlzo.a
-libhbmxml.a
-libhbmzip.a
-libhbodbc.a
-libhbsix.a
-libhbsqlit3.a
-libhbssl.a
-libhbtinymt.a
-libhbxdiff.a
-libhbzebra.a
-libhbzip.a
-libhsx.a
-libjpeg.a
-liblang.a
-liblibcrypto.a
-liblibcurl.a
-liblibharu.a
-liblibmisc.a
-liblibmysql.a
-liblibnf.a
-liblibssl.a
-libmacro.a
-libmysql.a
-libnulsys.a
-libpcrepos.a
-libpdflite.a
-libpng.a
-libpp.a
-librdd.a
-librddads.a
-librdds.a
-librddsql.a
-libredbfcdx.a
-libredbffpt.a
-librtl.a
-libsddmy.a
-libsddodbc.a
-libsddsqlt3.a
-libsevenzip.a
-libsixapi.a
-libsixcdx.a
-libtiff.a
-libtip.a
-libtipssl.a
-libuse_dll.a
-libusrrdd.a
-libvm.a
-libvmmt.a
-libxwt.a
-libzlib.a
+del libace32.a
+del libace64.a
+del libbmdbfcdx.a
+del libbmsixcdx.a
+del libcodepage.a
+del libcommon.a
+del libcompiler.a
+del libct.a
+del libdbfcdx.a
+del libdbffpt.a
+del libdbfmdx.a
+del libdbfnsx.a
+del libdbfntx.a
+del libdebug.a
+del libdllmain.a
+del libfilemem.a
+del libfilib.a
+del libgdlib.a
+del libgtcgi.a
+del libgtgui.a
+del libgtpca.a
+del libgtstd.a
+del libgtwin.a
+del libgtwvg.a
+del libgtwvt.a
+del libgtwvw.a
+del libhbbtree.a
+del libhbbz2.a
+del libhbcab.a
+del libhbcc.a
+del libhbcgi.a
+del libhbcomm.a
+del libhbcurl.a
+del libhbexpat.a
+del libhbhpdf.a
+del libhblzf.a
+del libhbmlzo.a
+del libhbmxml.a
+del libhbmzip.a
+del libhbodbc.a
+del libhbsix.a
+del libhbsqlit3.a
+del libhbssl.a
+del libhbtinymt.a
+del libhbxdiff.a
+del libhbzebra.a
+del libhbzip.a
+del libhsx.a
+del libjpeg.a
+del libang.a
+del liblibharu.a
+del liblibmisc.a
+del liblibnf.a
+del libacro.a
+del libmysql.a
+del libnulsys.a
+del libpcrepos.a
+del libpdflite.a
+del libpng.a
+del libpp.a
+del librdd.a
+del librddads.a
+del librdds.a
+del librddsql.a
+del libredbfcdx.a
+del libredbffpt.a
+del librtl.a
+del libsddmy.a
+del libsddodbc.a
+del libsddsqlt3.a
+del libsevenzip.a
+del libsixapi.a
+del libsixcdx.a
+del libtiff.a
+del libtip.a
+del libtipssl.a
+del libuse_dll.a
+del libusrrdd.a
+del libvm.a
+del libvmmt.a
+del libxwt.a
+del libzlib.a
+del libfi_lib.a
+del liblang.a
+del libmacro.a
