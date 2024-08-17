@@ -1,6 +1,7 @@
 @echo off
 rem  busca tc *mingw\*.a
 SET HB_INSTALL_PREFIX=d:\harbour\
+set HB_INSTALL_LIB=d:\harbour\lib\
 SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl\include\
 SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage\
@@ -9,6 +10,7 @@ set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\
 set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql\
 set HB_WITH_OCI=d:\harbour\hb3rd\oci\
 set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql\
+set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 call hb32mgw12
@@ -88,12 +90,16 @@ hbmk2 hbicu\hbicu
 hbmk2 hbmac\hbmac
 hbmk2 hbyaml\hbyaml
 rem minigui
-hbmk2 hbaes\hbaes
 hbmk2 hbcab\hbcab
-hbmk2 hbgdip\hbgdip
-hbmk2 hbzeegrid\hbzeegrid
 hbmk2 sevenzip\sevenzip
 hbmk2 hblibxlsxwriter\libxlw.hbp
 rem outros
 hbmk2 hbsvg\hbsvg.hbp
 hbmk2 sqlrddpp\sqlrddpp.hbp
+rem copiando ate checar os makes gravar local correto
+rem nao usar move para utilizar a criacao dinamica quando necessario
+copy d:\harbour\contrib\sqlrddpp\lib\win\mingw\libsqlrddpp.a d:\harbour\lib\win\mingw\
+copy d:\harbour\contrib\hbsvg\lib\win\mingw\libhbsvg.a       d:\harbour\lib\win\mingw\
+copy d:\harbour\contrib\hbxlsxml\lib\win\mingw\libhbxlsxml.a d:\harbour\lib\win\mingw\
+copy d:\harbour\contrib\rddado\lib\win\mingw\librddado.a     d:\harbour\lib\win\mingw\
+ 
