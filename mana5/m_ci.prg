@@ -151,7 +151,7 @@ cCAMSYSU:=ProfileString( "MANA5.INI", "PATH", "SYSUSER", HB_CWD())
 
 if nARQ=1
   if at(".MDB",UPPER(cCAMWRPT))>0 .OR. at(".MDB",UPPER(cCAMCONT))>0 .OR.  at(".MDB",UPPER(cCAMSYSU))>0 
-     loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
+     loledb:=hb_Version( HB_VERSION_BITWIDTH )<64 //mdg("User sim=oledb(32b) nao=accdb(64b)")
   endif   
 endif
 

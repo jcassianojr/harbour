@@ -14,6 +14,7 @@
 #include "ads.ch"
 #INCLUDE "HBGTINFO.CH"
 #include "tshead.ch"
+#INCLUDE "HBver.CH"
 
 
 REQUEST HB_LANG_PT
@@ -145,6 +146,8 @@ MVINFOConfTela("DBU")
 //Variaves Userededbu
 ZUSER := ""
 ZDIRE := HB_CWD()
+
+//mdt(str(hb_Version( HB_VERSION_BITWIDTH )))
 
 //Inicializa o Mouse 
 set( _SET_EVENTMASK, HB_INKEY_ALL )

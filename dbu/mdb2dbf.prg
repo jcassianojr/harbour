@@ -2,6 +2,7 @@
 #INCLUDE "BOX.CH"
 #INCLUDE "TRY.CH"
 #INCLUDE "DBINFO.CH"
+#INCLUDE "DBVER.CH"
 
 #require "rddado"
 
@@ -36,10 +37,10 @@ aAMBIENTE:=SALVAA()
 
 loledb=.T.
 IF cTIPOSQL="MDB"
-   loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<64  //mdg("User sim=oledb(32b) nao=accdb(64b)")
 ENDIF 
 IF cTIPOSQL="MYSQL"
-   loledb:=mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)")
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)")
 ENDIF 
   
 
