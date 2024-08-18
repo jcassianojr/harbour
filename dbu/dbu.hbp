@@ -5,11 +5,13 @@
 -tshead=tshead.ch
 #-manifest=dbu.Manifest  comentado erro compilacao 32 bits
 
+
 hbct.hbc
 hbwin.hbc
 hbtip.hbc
 xhb.hbc
 rddads.hbc
+#copiada pasta contrib rddbm para devprg nao precisou mais bmd*2.prg
 rddbm.hbc
 hbsqlit3.hbc
 rddado.hbc
@@ -30,9 +32,10 @@ dbuver.prg
 dbuview.prg
 dbuXLS.prg
 dbusincdbf.prg
-bmdbfcdx2.prg
-bmdbfnsx2.prg
-bmdbfnTX2.prg
+#copiada pasta contrib  rddbm para devprg nao precisou mais bmd*2.prg
+#bmdbfcdx2.prg
+#bmdbfnsx2.prg
+#bmdbfnTX2.prg
 sql2dbf.prg
 mdb2dbf.prg 
 

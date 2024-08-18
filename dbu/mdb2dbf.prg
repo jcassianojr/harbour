@@ -19,9 +19,17 @@ where
 order by MSysObjects.name
 */
 
+/*
+Driver={MySQL ODBC 8.0 ANSI Driver};Server=hostname;Database= dbdata;Option=3;  win32
+MySQL ODBC 9.0 ANSI Driver win64
+
+DRIVER={MariaDB ODBC 3.2 Driver};DATABASE=weird3;SERVER=localhost;UID=root;PASSWORD=root;PORT=3308;OPTION=2
+Driver={MariaDB ODBC 3.1 Driver};SERVER=mydatabase.mydomain.com;USER=odbc_user;PASSWORD=odbc_pw;DATABASE=odbc_test;PORT=3306;SSLCIPHER=DHE-RSA-AES256-GCM-SHA384";
+
+*/
 
 Function mdbmenu(cUSOSQL)
-cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes avaixo
+cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes aBaixo
 public oDB := nil
 
 aAMBIENTE:=SALVAA()
@@ -29,19 +37,31 @@ aAMBIENTE:=SALVAA()
 loledb=.T.
 IF cTIPOSQL="MDB"
    loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
-ENDIF   
+ENDIF 
+IF cTIPOSQL="MYSQL"
+   loledb:=mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)")
+ENDIF 
+  
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-    IF cTIPOSQL="MDB"
-        IF loledb
-           @ 03,24 SAY "oledb(32b)"
-        Else
-           @ 03,24 SAY "accdb(64b)"
-        endif
-    ELSE
-        @ 03,24 SAY cTIPOSQL
-    ENDIF    
+    DO CASE
+       CASE cTIPOSQL="MDB"
+            IF loledb
+               @ 03,24 SAY "oledb(32b)"
+            Else
+               @ 03,24 SAY "accdb(64b)"
+            endif
+       CASE cTIPOSQL="MYSQL"
+            IF loledb
+               @ 03,24 SAY "odbc 8(32b)"
+            Else
+               @ 03,24 SAY "odbc 9(64b)"
+            endif
+            
+        OTHERWISE
+            @ 03,24 SAY cTIPOSQL
+    ENDCASE  
     OPCAO(  4, 24, "&Criar arquivo             ", 67 ) //c 67
     OPCAO(  5, 24, "                           ", 86 ) //V 86
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73
@@ -80,6 +100,7 @@ DO CASE
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
     CASE cTIPOSQL="SQLITE"
         //Abaixo com sqltables usando nativa depois implementar com rddado
+    CASE cTIPOSQL="MYSQL"    
 ENDCASE        
 
 DO CASE
@@ -94,6 +115,7 @@ DO CASE
           nChoices := ACHOICE( 4,23,21,54, aResult)
         ENDIF   
         cTABELA:=IIF( nChoices > 0, aResult[ nChoices ], "")
+   CASE cTIPOSQL="MYSQL"     
 ENDCASE
 
 cTABELA:=ALLTRIM(cTABELA)
@@ -135,6 +157,10 @@ DO CASE
         endif 
     CASE cTIPOSQL="SQLITE"  
          USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQLITE
+    CASE cTIPOSQL="MYSQL"
+    
+    CASE cTIPOSQL="MARIADB"     
+    
 ENDCASE
    
 nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
@@ -169,6 +195,7 @@ DO CASE
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
         cCONCREATE:=cARQORI+";table1;SQLITE"
+   CASE cTIPOSQL="MYSQL"     
 ENDCASE
 /*
  dbCreate( cARQORI+";table1", { ;
@@ -225,6 +252,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
             endif
        CASE cTIPOSQL="SQLITE"  
             cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";SQLITE"
+       CASE cTIPOSQL="MYSQL"     
     ENDCASE
     
     dbCreate( cCONCREATE, aSTRU,"ADORDD" )
@@ -238,6 +266,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
             endif  
        case cTIPOSQL="SQLITE"    
             USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA SQLITE
+       case cTIPOSQL="MYSQL"     
     endcase 
          
     append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
@@ -263,6 +292,7 @@ DO CASE
         { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
+   CASE cTIPOSQL="MYSQL"       
 ENDCASE   
 nOLDTIPO:=TIPODBF
 mdt("escolha origem")
