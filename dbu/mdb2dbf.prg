@@ -170,6 +170,38 @@ function mdbcria()
 local cCONCREATE
 cCONCREATE:=""
 
+DO CASE
+   CASE cTIPOSQL="MDB"
+        cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+        //necessario uma tabela para criar
+        Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
+   CASE cTIPOSQL="SQLITE" 
+        cARQORI:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
+        { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
+          { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
+          { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
+   CASE cTIPOSQL="MYSQL"  
+   CASE cTIPOSQL="MYSQL64"  
+   CASE cTIPOSQL="MARIADB"  
+ENDCASE
+
+ cCONCREATE:=criaconcreate(cARQORI,'table1')
+
+ do case
+    
+    otherwise
+       dbCreate( cCONCREATE, { ;
+            { "FIRST",   "C", 10, 0 }, ;
+            { "LAST",    "C", 10, 0 }, ;
+            { "AGE",     "N",  8, 0 }, ;
+            { "MYDATE",  "D",  8, 0 } }, "ADORDD" )
+endcase            
+IF cTIPOSQL="MDB"      
+   Set( _SET_DATEFORMAT, "dd/mm/yyyy" )   
+ENDIF
+RETURN NIL
+
+
 /* sequencia dos parametros adordd
  LOCAL cDataBase  := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 1, ";" )
    LOCAL cTableName := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 2, ";" )
@@ -179,39 +211,29 @@ cCONCREATE:=""
    LOCAL cPassword  := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 6, ";" )
 */   
 
-DO CASE
-   CASE cTIPOSQL="MDB"
-        cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
-        //necessario uma tabela para criar
-        Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
+function criaconcreate(cMDBARQ,cNOMETABELA)
+LOCAL cCONCREATE
 
-        cCONCREATE:=cARQORI+";table1"
-        IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
-           cCONCREATE:=cARQORI+";table1;ACEOLEDB"
-        endif
-   CASE cTIPOSQL="SQLITE" 
-        cARQORI:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
-        { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
-          { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
-          { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
-        cCONCREATE:=cARQORI+";table1;SQLITE"
-   CASE cTIPOSQL="MYSQL"  
-       cCONCREATE:=cDATABASEX+";table1;MYSQL;"+cSERVERX+";"+CUSERX+";"+cPASSX
-   CASE cTIPOSQL="MYSQL64"  
-       cCONCREATE:=cDATABASEX+";table1;MYSQL64;"+cSERVERX+";"+CUSERX+";"+cPASSX
-   CASE cTIPOSQL="MARIADB"  
-       cCONCREATE:=cDATABASEX+";table1;MARIADB;"+cSERVERX+";"+CUSERX+";"+cPASSX
-ENDCASE
-
- dbCreate( cCONCREATE, { ;
-      { "FIRST",   "C", 10, 0 }, ;
-      { "LAST",    "C", 10, 0 }, ;
-      { "AGE",     "N",  8, 0 }, ;
-      { "MYDATE",  "D",  8, 0 } }, "ADORDD" )
-IF cTIPOSQL="MDB"      
-   Set( _SET_DATEFORMAT, "dd/mm/yyyy" )   
-ENDIF
-RETURN NIL
+   cCONCREATE:=cMDBARQ+";"+cNOMETABELA
+    DO CASE
+       CASE cTIPOSQL="MDB"
+            IF  loledb
+                cCONCREATE:=cMDBARQ+";"+cNOMETABELA
+            else
+                cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
+            endif
+       CASE cTIPOSQL="SQLITE"  
+            cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";SQLITE"
+       CASE cTIPOSQL="MYSQL"  
+           if loledb
+               cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL;"+cSERVERX+";"+CUSERX+";"+cPASSX
+            else    
+               cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL64;"+cSERVERX+";"+CUSERX+";"+cPASSX
+            endif   
+       CASE cTIPOSQL="MARIADB"  
+           cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MARIADB;"+cSERVERX+";"+CUSERX+";"+cPASSX
+    ENDCASE
+RETURN cCONCREATE 
    
 FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     local cCONCREATE
@@ -242,30 +264,26 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     
     Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
     
-    cCONCREATE:=cMDBARQ+";"+cNOMETABELA
-    DO CASE
-       CASE cTIPOSQL="MDB"
-            IF  loledb
-                cCONCREATE:=cMDBARQ+";"+cNOMETABELA
-            else
-                cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
-            endif
-       CASE cTIPOSQL="SQLITE"  
-            cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";SQLITE"
-       CASE cTIPOSQL="MYSQL"  
-           if loledb
-               cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL;"+cSERVERX+";"+CUSERX+";"+cPASSX
-            else    
-               cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL64;"+cSERVERX+";"+CUSERX+";"+cPASSX
-            endif   
-       CASE cTIPOSQL="MARIADB"  
-           cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MARIADB;"+cSERVERX+";"+CUSERX+";"+cPASSX
-    ENDCASE
+    cCONCREATE:=criaconcreate(cMDBARQ,cNOMETABELA)
     
-    dbCreate( cCONCREATE, aSTRU,"ADORDD" )
+    DO CASE
+       CASE "SQLITE"
+             //Abaixo com executacmd ja com estrutura ajustada pela funcao
+       OTHERWISE
+          dbCreate( cCONCREATE, aSTRU,"ADORDD" )
+    ENDCASE      
+    
     
     opencmdbarq()
-         
+   
+    DO CASE
+       CASE "SQLITE"
+             msql:= SqliteCreateTable(cTablename,aSTRU)
+             executacmd(cMDBARQ,msql)
+       OTHERWISE
+            //criado acima pela funcao
+    ENDCASE      
+    
     append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
 
     dbcloseall()
@@ -277,7 +295,8 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
         Msql=Aindices[j]
         executacmd(cMDBARQ,msql)
      next j
-    
+RETURN .T.    
+
 FUNCTION OPENTIPOARQ
 LOCAL cMDBARQ
 cMDBARQ:=""
