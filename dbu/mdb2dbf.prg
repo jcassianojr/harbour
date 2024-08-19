@@ -21,21 +21,9 @@ cSERVERX:="Localhost"+space(21)
 cDATABASEX:=space(30)
 cUSERX    :=SPACE(30)
 cPASSX    :=SPACE(30)
-IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB"
-   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-   @ 04,23 SAY "Server"
-   @ 06,23 SAY "Database"
-   @ 08,23 SAY "user"
-   @ 10,23 say "pass"
-   @ 05,23 get cSERVERX
-   @ 07,23 gET cDATABASEX
-   @ 09,23 get cuserx
-   @ 11,23 get cpassx
-   READ
-   cSERVERX:=ALLTRIM(cSERVERX)
-   cDATABASEX:=ALLTRIM(cDATABASEX)
-   cuserx:=alltrim(cuserx)
-   cpassx:=alltrim(cpassx)
+
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB" 
+   OPENTIPOARQ()
 ENDIF
 
 
@@ -97,23 +85,13 @@ LOCAL lCOPIANAT
 local Ldoc
 LOCAL aTABELAS
 LOCAL nCHOICES
-
+LOCAL cMDBARQ
 
 nCHOICES:=0
 aTABELAS:={}
 
-ALTD()
-DO CASE
-   CASE cTIPOSQL="MDB"
-        cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
-    CASE cTIPOSQL="SQLITE"
-        cMDBARQ:=win_GetopenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
-        { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
-          { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
-          { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
-    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB"    
-        cMDBARQ:= cDATABASEX
-ENDCASE        
+cMDBARQ:=OPENTIPOARQ()
+
 
 aResult:=MDBTABLES(cMDBARQ,loledb )
 IF LEN(aResult)>0
@@ -154,6 +132,18 @@ IF .NOT.  lCOPIANAT
 ENDIF
 
 MDT("abrindo arquivo de origem: "+cMDBARQ)
+opencmdbarq()
+nLASTREC:=   reccount() 
+zei_fort( nLASTREC,,,0)
+IF lCOPIANAT
+   COPYTO(cDESTINO)
+ELSE
+   multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
+ENDIF   
+dbcloseall()
+return nil
+
+function opencmdbarq()
 DO CASE
     CASE cTIPOSQL="MDB"
         if loledb
@@ -172,17 +162,7 @@ DO CASE
     CASE cTIPOSQL="MARIADB"     
         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MARIADB  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
 ENDCASE
-   
-nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
-zei_fort( nLASTREC,,,0)
-IF lCOPIANAT
-   COPYTO(cDESTINO)
-ELSE
-   multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
-ENDIF   
-
-dbcloseall()
-return nil
+return .t.
 
 
 
@@ -265,53 +245,40 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     cCONCREATE:=cMDBARQ+";"+cNOMETABELA
     DO CASE
        CASE cTIPOSQL="MDB"
-            IF .not. loledb //se nao for oledb e sim aceoledb inclui engine parse ; 3 parametro ADO_CREATE em adordd.prg
+            IF  loledb
+                cCONCREATE:=cMDBARQ+";"+cNOMETABELA
+            else
                 cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
             endif
        CASE cTIPOSQL="SQLITE"  
             cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";SQLITE"
        CASE cTIPOSQL="MYSQL"  
-           cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL;"+cSERVERX+";"+CUSERX+";"+cPASSX
-       CASE cTIPOSQL="MYSQL64"  
-           cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL64;"+cSERVERX+";"+CUSERX+";"+cPASSX
+           if loledb
+               cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL;"+cSERVERX+";"+CUSERX+";"+cPASSX
+            else    
+               cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL64;"+cSERVERX+";"+CUSERX+";"+cPASSX
+            endif   
        CASE cTIPOSQL="MARIADB"  
            cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MARIADB;"+cSERVERX+";"+CUSERX+";"+cPASSX
     ENDCASE
     
     dbCreate( cCONCREATE, aSTRU,"ADORDD" )
     
-    do case
-       case cTIPOSQL="MDB"
-            if loledb
-               USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA
-            else
-               USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA ACEOLEDB
-            endif  
-       case cTIPOSQL="SQLITE"    
-            USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA SQLITE
-       case cTIPOSQL="MYSQL"   
-            if loledb
-                USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MYSQL  FROM cSERVERX  USER  CUSERX PASSWORD CPASSX
-            else
-               USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MYSQL64  FROM cSERVERX  USER CUSERX PASSWORD CPASSX
-            endif    
-        CASE cTIPOSQL="MARIADB"     
-            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MARIADB  FROM cSERVERX  USER CUSERX PASSWORD CPASSX
-    endcase 
+    opencmdbarq()
          
     append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
+
     dbcloseall()
     
     Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
     
-  
+     //Cria do os indices append from nao faz  
      for j=1 to nIndexes
         Msql=Aindices[j]
         executacmd(cMDBARQ,msql)
      next j
     
-
-FUNCTION MDBIMPDBF()
+FUNCTION OPENTIPOARQ
 LOCAL cMDBARQ
 cMDBARQ:=""
 DO CASE
@@ -322,9 +289,31 @@ DO CASE
         { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
-   CASE cTIPOSQL="MYSQL"  .OR. cTIPOSQL="MARIADB"
-        cMDBARQ:=cDATABASEX     
+   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+          HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+         @ 04,23 SAY "Server"
+         @ 06,23 SAY "Database"
+         @ 08,23 SAY "user"
+         @ 10,23 say "pass"
+         @ 05,23 get cSERVERX
+         @ 07,23 gET cDATABASEX
+         @ 09,23 get cuserx
+         @ 11,23 get cpassx
+         READ
+         cSERVERX:=ALLTRIM(cSERVERX)
+         cDATABASEX:=ALLTRIM(cDATABASEX)
+         cuserx:=alltrim(cuserx)
+         cpassx:=alltrim(cpassx)
+         cMDBARQ:=cDATABASEX     
 ENDCASE   
+RETURN cARQMDB    
+    
+
+FUNCTION MDBIMPDBF()
+LOCAL cMDBARQ
+
+cMDBARQ:=OPENTIPOARQ()
+
 nOLDTIPO:=TIPODBF
 mdt("escolha origem")
 tipodbfesc()

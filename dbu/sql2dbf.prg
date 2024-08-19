@@ -421,59 +421,9 @@ Function export2sql(odb,cDBFFILE)
 
    aStruct = DbStruct()
    
-   mSQL:=SqliteCreateTable(cTablename,aStruct)
-
-  /*
-   criado funcao para usar tambem no dbudoc
-   mSql := "CREATE TABLE IF NOT EXISTS "+cTablename+" ("
-
-   for i := 1 to len(aStruct)
-      mFldNm := aStruct[i, DBS_NAME]
-      mFldType := aStruct[i, DBS_TYPE]
-      mFldLen := aStruct[i, DBS_LEN]
-      mFldDec := aStruct[i, DBS_DEC]
-
-      if i > 1
-         mSql += ", "
-      endif
-      mSql += alltrim(mFldnm)+" "
-
-      do case
-      case mFldType = "C"
-         mSql += "CHAR("+LTRIM(STR(mFldLen))+")"
-      case mFldType = "D"
-         mSql += "DATE"
-      case mFldType = "T"
-         mSql += "DATETIME"
-      case mFldType = "N"
-         if mFldDec > 0
-            mSql += "FLOAT"
-         else
-            mSql += "INTEGER"
-         endif
-      case mFldType = "F"
-         mSql += "FLOAT"
-      case mFldType = "I"
-         mSql += "INTEGER"
-      case mFldType = "B"
-         mSql += "DOUBLE"
-      case mFldType = "Y"
-         mSql += "FLOAT"
-      case mFldType = "L"
-         mSql += "BOOL"
-      case mFldType = "M"
-         mSql += "TEXT"
-      case mFldType = "G"
-         mSql += "BLOB"
-      otherwise
-         alertx("Invalid Field Type: "+mFldType)
-         return nil
-      endcase
-   next
-
-   mSql += ")"
-   */
+   //criado funcao para usar tambem no dbudoc
    
+   mSQL:=SqliteCreateTable(cTablename,aStruct)
 
 
    if !miscsql( oDB, mSql )
