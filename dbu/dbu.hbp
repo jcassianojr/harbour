@@ -37,7 +37,7 @@ dbusincdbf.prg
 #bmdbfnsx2.prg
 #bmdbfnTX2.prg
 sql2dbf.prg
-mdb2dbf.prg 
+mdb2dbf.prg -b
 
 
 d:\develop\harbour\objmgw\netdbf.prg
@@ -59,5 +59,6 @@ d:\develop\harbour\objmgw\f_makedb.prg
 d:\develop\harbour\objmgw\f_ismemo.prg       
 d:\develop\harbour\objmgw\mmousen.prg
 d:\develop\harbour\objmgw\mlib06.prg
-d:\develop\harbour\objmgw\error.prg
+#vendo com o novo hb_error
+#d:\develop\harbour\objmgw\error.prg
 d:\develop\harbour\objmgw\wvgini.prg

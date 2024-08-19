@@ -2,7 +2,7 @@
 #INCLUDE "BOX.CH"
 #INCLUDE "TRY.CH"
 #INCLUDE "DBINFO.CH"
-#INCLUDE "DBVER.CH"
+#INCLUDE "hbVER.CH"
 
 #require "rddado"
 
@@ -10,24 +10,6 @@
 
 REQUEST ADORDD
 
-/*
-select MSysObjects.name
-from MSysObjects
-where
-   MSysObjects.type In (1,4,6)
-   and MSysObjects.name not like '~*'   
-   and MSysObjects.name not like 'MSys%'
-order by MSysObjects.name
-*/
-
-/*
-Driver={MySQL ODBC 8.0 ANSI Driver};Server=hostname;Database= dbdata;Option=3;  win32
-MySQL ODBC 9.0 ANSI Driver win64
-
-DRIVER={MariaDB ODBC 3.2 Driver};DATABASE=weird3;SERVER=localhost;UID=root;PASSWORD=root;PORT=3308;OPTION=2
-Driver={MariaDB ODBC 3.1 Driver};SERVER=mydatabase.mydomain.com;USER=odbc_user;PASSWORD=odbc_pw;DATABASE=odbc_test;PORT=3306;SSLCIPHER=DHE-RSA-AES256-GCM-SHA384";
-
-*/
 
 Function mdbmenu(cUSOSQL)
 cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes aBaixo
@@ -35,12 +17,35 @@ public oDB := nil
 
 aAMBIENTE:=SALVAA()
 
+cSERVERX:="Localhost"+space(21)
+cDATABASEX:=space(30)
+cUSERX    :=SPACE(30)
+cPASSX    :=SPACE(30)
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB"
+   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+   @ 04,23 SAY "Server"
+   @ 06,23 SAY "Database"
+   @ 08,23 SAY "user"
+   @ 10,23 say "pass"
+   @ 05,23 get cSERVERX
+   @ 07,23 gET cDATABASEX
+   @ 09,23 get cuserx
+   @ 11,23 get cpassx
+   READ
+   cSERVERX:=ALLTRIM(cSERVERX)
+   cDATABASEX:=ALLTRIM(cDATABASEX)
+   cuserx:=alltrim(cuserx)
+   cpassx:=alltrim(cpassx)
+ENDIF
+
+
+
 loledb=.T.
 IF cTIPOSQL="MDB"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<64  //mdg("User sim=oledb(32b) nao=accdb(64b)")
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64  //mdg("User sim=oledb(32b) nao=accdb(64b)")
 ENDIF 
 IF cTIPOSQL="MYSQL"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)")
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)")
 ENDIF 
   
 
@@ -77,7 +82,7 @@ WHILE .T.
        CASE KEY=4
             MDBEXP()
        OTHERWISE
-            RETURN NIL
+            EXIT
     ENDCASE
 ENDDO
 
@@ -96,31 +101,31 @@ LOCAL nCHOICES
 
 nCHOICES:=0
 aTABELAS:={}
+
+ALTD()
 DO CASE
    CASE cTIPOSQL="MDB"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
     CASE cTIPOSQL="SQLITE"
-        //Abaixo com sqltables usando nativa depois implementar com rddado
-    CASE cTIPOSQL="MYSQL"    
+        cMDBARQ:=win_GetopenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
+        { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
+          { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
+          { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
+    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB"    
+        cMDBARQ:= cDATABASEX
 ENDCASE        
 
-DO CASE
-   CASE cTIPOSQL="SQLITE"
-         IF selectdb()
-           cTABELA:=SqliteTables(odb)
-        endif  
-    CASE cTIPOSQL="MDB"    
-        aResult:=MDBTABLES(cMDBARQ,loledb )
-        IF LEN(aResult)>0
-           HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-          nChoices := ACHOICE( 4,23,21,54, aResult)
-        ENDIF   
-        cTABELA:=IIF( nChoices > 0, aResult[ nChoices ], "")
-   CASE cTIPOSQL="MYSQL"     
-ENDCASE
+aResult:=MDBTABLES(cMDBARQ,loledb )
+IF LEN(aResult)>0
+   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+  nChoices := ACHOICE( 4,23,21,54, aResult)
+ENDIF   
+cTABELA:=IIF( nChoices > 0, aResult[ nChoices ], "")
+
 
 cTABELA:=ALLTRIM(cTABELA)
 IF EMPTY(cTABELA)
+    cTABELA:=SPACE(60)
     md()
     @ maxrow(),0 SAY "TABELA"
     @ maxrow(),10 get cTABELA
@@ -159,9 +164,13 @@ DO CASE
     CASE cTIPOSQL="SQLITE"  
          USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQLITE
     CASE cTIPOSQL="MYSQL"
-    
+        if loledb
+            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MYSQL    FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+        else
+            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MYSQL64  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+        endif    
     CASE cTIPOSQL="MARIADB"     
-    
+        USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MARIADB  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
 ENDCASE
    
 nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
@@ -180,6 +189,16 @@ return nil
 function mdbcria()
 local cCONCREATE
 cCONCREATE:=""
+
+/* sequencia dos parametros adordd
+ LOCAL cDataBase  := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 1, ";" )
+   LOCAL cTableName := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 2, ";" )
+   LOCAL cDbEngine  := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 3, ";" )
+   LOCAL cServer    := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 4, ";" )
+   LOCAL cUserName  := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 5, ";" )
+   LOCAL cPassword  := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 6, ";" )
+*/   
+
 DO CASE
    CASE cTIPOSQL="MDB"
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
@@ -196,15 +215,13 @@ DO CASE
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
         cCONCREATE:=cARQORI+";table1;SQLITE"
-   CASE cTIPOSQL="MYSQL"     
+   CASE cTIPOSQL="MYSQL"  
+       cCONCREATE:=cDATABASEX+";table1;MYSQL;"+cSERVERX+";"+CUSERX+";"+cPASSX
+   CASE cTIPOSQL="MYSQL64"  
+       cCONCREATE:=cDATABASEX+";table1;MYSQL64;"+cSERVERX+";"+CUSERX+";"+cPASSX
+   CASE cTIPOSQL="MARIADB"  
+       cCONCREATE:=cDATABASEX+";table1;MARIADB;"+cSERVERX+";"+CUSERX+";"+cPASSX
 ENDCASE
-/*
- dbCreate( cARQORI+";table1", { ;
-      { "FIRST",   "C", 10, 0 }, ;
-      { "LAST",    "C", 10, 0 }, ;
-      { "AGE",     "N",  8, 0 }, ;
-      { "MYDATE",  "D",  8, 0 } }, "ADORDD" )
-*/
 
  dbCreate( cCONCREATE, { ;
       { "FIRST",   "C", 10, 0 }, ;
@@ -253,7 +270,12 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
             endif
        CASE cTIPOSQL="SQLITE"  
             cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";SQLITE"
-       CASE cTIPOSQL="MYSQL"     
+       CASE cTIPOSQL="MYSQL"  
+           cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL;"+cSERVERX+";"+CUSERX+";"+cPASSX
+       CASE cTIPOSQL="MYSQL64"  
+           cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL64;"+cSERVERX+";"+CUSERX+";"+cPASSX
+       CASE cTIPOSQL="MARIADB"  
+           cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MARIADB;"+cSERVERX+";"+CUSERX+";"+cPASSX
     ENDCASE
     
     dbCreate( cCONCREATE, aSTRU,"ADORDD" )
@@ -267,7 +289,14 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
             endif  
        case cTIPOSQL="SQLITE"    
             USE ( cMDBARQ ) VIA "ADORDD" TABLE cNOMETABELA SQLITE
-       case cTIPOSQL="MYSQL"     
+       case cTIPOSQL="MYSQL"   
+            if loledb
+                USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MYSQL  FROM cSERVERX  USER  CUSERX PASSWORD CPASSX
+            else
+               USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MYSQL64  FROM cSERVERX  USER CUSERX PASSWORD CPASSX
+            endif    
+        CASE cTIPOSQL="MARIADB"     
+            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MARIADB  FROM cSERVERX  USER CUSERX PASSWORD CPASSX
     endcase 
          
     append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
@@ -293,7 +322,8 @@ DO CASE
         { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
-   CASE cTIPOSQL="MYSQL"       
+   CASE cTIPOSQL="MYSQL"  .OR. cTIPOSQL="MARIADB"
+        cMDBARQ:=cDATABASEX     
 ENDCASE   
 nOLDTIPO:=TIPODBF
 mdt("escolha origem")
@@ -309,12 +339,9 @@ ENDIF
         
 FUNCTION MDBTABLES(cDataBase,lUSEOLE )
 LOCAL aRETU
+local cCONN
 aRETU:={}
-IF lUSEOLE
-   cCONN:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase //+";User Id=admin;Password=;"
-ELSE
-   cCONN:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source=" + cDataBase//+";User Id=admin;Password=;"
-ENDIF
+cCONN:=GERACONN(cDATABASE)
 
 try
    oConn:=WIN_OLECreateObject( "ADODB.Connection" )
@@ -326,68 +353,74 @@ catch oErr
    //ShowADOError(oERR,oConn,cCOMANDO) 
    return aRETU
 end
-//Dim dt As DataTable = olecon.GetSchema("tables")
 
-/*
-cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN" //PUBLIC a vezes e preciso conceder este acesso na ide 
-oComm:=WIN_OLECreateObject( "ADODB.Command" )
-
-TRY
- with object oComm
-				  :CommandText:=cCOMANDO
-				  :CommandType:=adCmdText
-				  :ActiveConnection:=oConn
-                  :ExecuteNonQuery()
-				 // :Execute()
-			 end
-CATCH oERR
-  // ? "errr"
-  //    RETURN aRETU //continua pois pode executar sem dar retorno
-END                  
+/* a vezes e preciso conceder este acesso na ide para a consulta na retornar vazia
+cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN" //PUBLIC 
 */
 
 oRS:= WIN_OLECreateObject('ADODB.RecordSet')
 oRS:CursorLocation := 3
 
-cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
-  + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
-   + " order by MSysObjects.name "
+DO CASE
+   CASE cTIPOSQL="MDB" .or. at(".MDB",upper(cdatabase))>0
+        cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
+          + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
+           + " order by MSysObjects.name "
+   CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0         
+        cCOMANDO ="SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+        cCOMANDO = "SHOW TABLES"
+endcase   
 
       TRY
         oRS:Open(cCOMANDO, oConN, adOpenDynamic, adLockOptimistic )
       CATCH oERR
         //ShowADOError(oERR,oConn,cCOMANDO) 
-        //hb_memowrit("erro.txt",cCOMANDO)
         return  aRETU 
       END
 
 while ! ors:eof
-     AADD(aRETU,ors:fields("name"):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna
-   //    ? ors:fields("name"):value            //ors:fields(0)
-         ors:movenext()
-    enddo
+     AADD(aRETU,ors:fields(0):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
+    ors:movenext()
+enddo
+
 oRs:Close()
 oConN:close()  
 RETURN aRETU       
+
+FUNCTION geraconn(cCAMBASE)
+cConn  :=""
+DO CASE
+
+   CASE cTIPOSQL="MDB" .or. at(".MDB",upper(cCAMBASE))>0
+        if loledb
+           cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
+        else
+           cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
+        endif
+
+   CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cCAMBASE))>0
+        cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
+
+    CASE cTIPOSQL="MYSQL" 
+        if loledb
+           cConn:="Driver={MySQL ODBC 8.0 ANSI Driver};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //32 driver versao 8 
+        else
+           cConn:="Driver={MySQL ODBC 9.0 ANSI Driver};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //64 driver versao 9 
+        endif
+   case cTIPOSQL="MARIADB"   
+        cConn:="DRIVER={MariaDB ODBC 3.2 Driver};DATABASE="+cDATABASEX+";SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
+ENDCASE      
+RETURN cConn   
+
+
 
 
 Function executacmd(cCAMBASE,cCOMANDO)
 LOCAL cCHAVEV
 LOCAL cConn
 cCHAVEV:=""
-cConn  :=""
-
-if at(".MDB",upper(cCAMBASE))>0
-    if loledb
-       cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
-    else
-       cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
-    endif
-ENDIF
-
-if at(".SQLITE",upper(cCAMBASE))>0
-   cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
-ENDIF
+cConn  :=geraconn(cCAMBASE)
 
 IF EMPTY(cConn)
    return .f.

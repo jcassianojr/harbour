@@ -141,7 +141,7 @@ Set( _SET_SCOREBOARD, .f. )
 clear
 
 //hb_keyput(K_ALT_ENTER)
-MVINFOConfTela("DBU")
+MVINFOConfTela("DBU "+str(hb_Version( HB_VERSION_BITWIDTH )))
 
 //Variaves Userededbu
 ZUSER := ""
@@ -491,7 +491,7 @@ setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
 util_m := { "Rem Reg Dup", "CopiarComo", "Ver TXT", "Editar TXT",;
-            "Exportar","Sort DBF","sem uso","MDB","SQLITE","Converter","FixarTodos","ZeraTodos",;
+            "Exportar","Sort DBF","MYSQL","MDB","SQLITE","Converter","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
@@ -567,7 +567,7 @@ do while .T.
       case M->func_sel = 6
           sortdbf()
       case M->func_sel = 7
-         alertx("funcao nao disponivel")
+           mdbmenu("MYSQL")
       case M->func_sel = 8
            mdbmenu("MDB")
       case M->func_sel = 9
