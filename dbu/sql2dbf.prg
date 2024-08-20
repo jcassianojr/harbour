@@ -542,14 +542,14 @@ ENDIF
           //
           // Caracter
           //
-          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER") 
              mSql += "VARCHAR("+LTRIM(STR(mFldLen))+")"
           case mFldType = "C"
              mSql += "CHAR("+LTRIM(STR(mFldLen))+")"    
          //
          // date datetime
          //       
-         case (mFldType = "D" .OR. mFldType = "T") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+         case (mFldType = "D" .OR. mFldType = "T") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS".OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "DATETIME"
         case mFldType = "D"
              mSql += "DATE"   
@@ -562,6 +562,17 @@ ENDIF
          // com decimais
          // Numerico ->FLOAT DOUBLE NUMERIC
          //
+        case mFldType = "N" .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
+             if mFldDec > 0
+                mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
+             else
+                IF mFldLen<=9
+                    mSql += "INT"  //INTEGER("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+                ELSE
+                    mSql += "BIGINT"  //"bigint("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+                ENDIF    
+             endif  
+             
          case mFldType = "N"  .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
              if mFldDec > 0
                 mSql += "DOUBLE"
@@ -574,6 +585,7 @@ ENDIF
              else
                 mSql += "INTEGER"
              endif
+             
          case mFldType = "N" .AND. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB")
              if mFldDec > 0
                 mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
@@ -606,13 +618,15 @@ ENDIF
           //
           // logico boleano bit
           //   
-         case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+         case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "BIT"       
           case mFldType = "L"
              mSql += "BOOL"
           //
           // memo TEXT LONGTEXT
           //   
+          case mFldType = "M" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
+             mSql += "TEXT" 
           case mFldType = "M" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
              mSql += "LONGTEXT"
           case mFldType = "M"
@@ -620,6 +634,8 @@ ENDIF
           //
           // blob LONGBINARY
           //   
+           case mFldType = "G" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
+             mSql += "VARBINARY"  
            case mFldType = "G" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
              mSql += "LONGBINARY"        
           case mFldType = "G"
