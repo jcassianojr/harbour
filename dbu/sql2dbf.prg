@@ -519,9 +519,13 @@ LOCAL i
 if valtype(cTIPOSQL)<>"C"
    cTIPOSQL="SQLITE"
 ENDIF
-
-
-   mSql := "CREATE TABLE IF NOT EXISTS "+cTablename+" ("
+ 
+   msql:=""
+   IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+      mSql := "CREATE TABLE "+cTablename+" ("
+   ELSE
+       mSql := "CREATE TABLE IF NOT EXISTS "+cTablename+" ("
+   endif    
 
    for i := 1 to len(aStruct)
       mFldNm := aStruct[i, DBS_NAME]
@@ -628,5 +632,5 @@ ENDIF
              return ""
       endcase
    next
-   mSql += ");"
+   mSql += ")"
 return msql

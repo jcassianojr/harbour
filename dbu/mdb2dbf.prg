@@ -242,8 +242,10 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     LOCAL cINDEXNAME
     LOCAL J
     local msql
+    local lgravasql
     
     
+    lgravasql:=mdg("gravar sql")
     aINDICES:={}
     use &cDBFARQ.
     aSTRU:=DBSTRUCT() 
@@ -255,7 +257,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
      FOR j = 1 TO  nIndexes
         cINDEXNAME := dbORDERINFO( DBOI_NAME , ,  j )
         cINDEXNAME := StrTran(cINDEXNAME, "-", "_"  )  //Tracos nao aceitos trocando por undescore
-         msql:="create index " + cINDEXNAME + " on " + cNometabela + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) ;"
+         msql:="create index " + cINDEXNAME + " on " + cNometabela + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) "
          aadd(Aindices,msql)
      NEXT j
     dbclosearea()
@@ -267,38 +269,53 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     cCONCREATE:=criaconcreate(cMDBARQ,cNOMETABELA)
     
     DO CASE
-       CASE cTIPOSQL="SQLITE" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF" 
+       CASE cTIPOSQL="SQLITE" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"  ;
+            .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
              //Abaixo com executacmd ja com estrutura ajustada pela funcao
        OTHERWISE
           dbCreate( cCONCREATE, aSTRU,"ADORDD" )
     ENDCASE      
     
-    
-    opencmdbarq()
-   
+    msql:=""
     DO CASE
        CASE cTIPOSQL="SQLITE"
-             msql:= SqliteCreateTable(cTablename,aSTRU)
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"SQLITE")
              executacmd(cMDBARQ,msql)
        CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"
-             msql:= SqliteCreateTable(cTablename,aSTRU,"MYSQL")
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MYSQL")
              executacmd(cMDBARQ,msql)
-             
+       CASE  cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"    
+              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MDB")
+             executacmd(cMDBARQ,msql)
        OTHERWISE
             //criado acima pela funcao
     ENDCASE      
     
-    append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
+    IF lGRAVASQL.AND. .NOT. EMPTY(msql)
+       MEMOWRIT(cNOMETABELA+"_createtable_"+cTIPOSQL+".sql",Msql)
+    ENDIF
 
+    msqlindex:=""
+     //Cria do os indices append from nao faz  
+     for j=1 to nIndexes
+        Msql=Aindices[j]
+        msqlindex:= msqlindex+msql+hb_osnewline()
+        executacmd(cMDBARQ,msql)
+     next j
+     
+      IF lGRAVASQL.AND. .NOT. EMPTY(msqlindex)
+       MEMOWRIT(cNOMETABELA+"_createindex_"+cTIPOSQL+".sql",Msqlindex)
+    ENDIF
+
+    
+    cTABELA:=cNOMETABELA //publica usada o opencmdarq
+    opencmdbarq()
+    append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
     dbcloseall()
     
     Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
     
-     //Cria do os indices append from nao faz  
-     for j=1 to nIndexes
-        Msql=Aindices[j]
-        executacmd(cMDBARQ,msql)
-     next j
+     
 RETURN .T.    
 
 FUNCTION OPENTIPOARQ
@@ -329,11 +346,10 @@ DO CASE
          cpassx:=alltrim(cpassx)
          cMDBARQ:=cDATABASEX     
 ENDCASE   
-RETURN cARQMDB    
+RETURN cMDBARQ
     
 
 FUNCTION MDBIMPDBF()
-LOCAL cMDBARQ
 
 cMDBARQ:=OPENTIPOARQ()
 
