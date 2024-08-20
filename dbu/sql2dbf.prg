@@ -513,8 +513,13 @@ FOR I=1 TO LEN(aICampos)
 NEXT I
 return cCHAVE
 
-function SqliteCreateTable(cTablename,aStruct)
+function SqliteCreateTable(cTablename,aStruct,cTIPOSQL)
 LOCAL mSQL
+LOCAL i
+if valtype(cTIPOSQL)<>"C"
+   cTIPOSQL="SQLITE"
+ENDIF
+
 
    mSql := "CREATE TABLE IF NOT EXISTS "+cTablename+" ("
 
@@ -530,35 +535,98 @@ LOCAL mSQL
       mSql += alltrim(mFldnm)+" "
 
       do case
-      case mFldType = "C"
-         mSql += "CHAR("+LTRIM(STR(mFldLen))+")"
-      case mFldType = "D"
-         mSql += "DATE"
-      case mFldType = "T"
-         mSql += "DATETIME"
-      case mFldType = "N"
-         if mFldDec > 0
-            mSql += "FLOAT"
-         else
-            mSql += "INTEGER"
-         endif
-      case mFldType = "F"
-         mSql += "FLOAT"
-      case mFldType = "I"
-         mSql += "INTEGER"
-      case mFldType = "B"
-         mSql += "DOUBLE"
-      case mFldType = "Y"
-         mSql += "FLOAT"
-      case mFldType = "L"
-         mSql += "BOOL"
-      case mFldType = "M"
-         mSql += "TEXT"
-      case mFldType = "G"
-         mSql += "BLOB"
-      otherwise
-         alertx("Invalid Field Type: "+mFldType)
-         return nil
+          //
+          // Caracter
+          //
+          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+             mSql += "VARCHAR("+LTRIM(STR(mFldLen))+")"
+          case mFldType = "C"
+             mSql += "CHAR("+LTRIM(STR(mFldLen))+")"    
+         //
+         // date datetime
+         //       
+         case (mFldType = "D" .OR. mFldType = "T") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+             mSql += "DATETIME"
+        case mFldType = "D"
+             mSql += "DATE"   
+          case mFldType = "T"
+             mSql += "DATETIME"
+         //
+         // Inteiro
+         // numerico ->INTEGER LONG BIGINT
+         //
+         // com decimais
+         // Numerico ->FLOAT DOUBLE NUMERIC
+         //
+         case mFldType = "N"  .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+             if mFldDec > 0
+                mSql += "DOUBLE"
+             else
+                mSql += "LONG"
+             endif       
+          case mFldType = "N" .AND. cTIPOSQL="SQLITE"
+             if mFldDec > 0
+                mSql += "FLOAT"
+             else
+                mSql += "INTEGER"
+             endif
+         case mFldType = "N" .AND. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB")
+             if mFldDec > 0
+                mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
+             else
+                IF mFldLen<=9
+                    mSql += "INTEGER("+hb_ntos(mFldLen)+")"
+                ELSE
+                    mSql += "bigint("+hb_ntos(mFldLen)+")"
+                ENDIF    
+             endif  
+          //
+          // float DOUBLE
+          // 
+          case (mFldType = "F" .or. mFldType = "Y") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")     
+               mSql += "DOUBLE"
+          case (mFldType = "F" .or. mFldType = "Y")
+                mSql += "FLOAT"
+          //
+          //integer LONG
+          //   
+          case mFldType = "I" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")    
+             mSql += "LONG"
+          case mFldType = "I"
+             mSql += "INTEGER"
+         //
+         // double
+         //    
+          case mFldType = "B"
+             mSql += "DOUBLE"
+          //
+          // logico boleano bit
+          //   
+         case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+             mSql += "BIT"       
+          case mFldType = "L"
+             mSql += "BOOL"
+          //
+          // memo TEXT LONGTEXT
+          //   
+          case mFldType = "M" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+             mSql += "LONGTEXT"
+          case mFldType = "M"
+             mSql += "TEXT"
+          //
+          // blob LONGBINARY
+          //   
+           case mFldType = "G" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+             mSql += "LONGBINARY"        
+          case mFldType = "G"
+             mSql += "BLOB"
+          //
+          // invalido
+          //   
+          otherwise
+             alertx("Invalid Field Type: "+mFldType)
+             return ""
       endcase
    next
+   mSql += ");"
 return msql

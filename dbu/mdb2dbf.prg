@@ -267,7 +267,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     cCONCREATE:=criaconcreate(cMDBARQ,cNOMETABELA)
     
     DO CASE
-       CASE "SQLITE"
+       CASE cTIPOSQL="SQLITE" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF" 
              //Abaixo com executacmd ja com estrutura ajustada pela funcao
        OTHERWISE
           dbCreate( cCONCREATE, aSTRU,"ADORDD" )
@@ -277,9 +277,13 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     opencmdbarq()
    
     DO CASE
-       CASE "SQLITE"
+       CASE cTIPOSQL="SQLITE"
              msql:= SqliteCreateTable(cTablename,aSTRU)
              executacmd(cMDBARQ,msql)
+       CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"
+             msql:= SqliteCreateTable(cTablename,aSTRU,"MYSQL")
+             executacmd(cMDBARQ,msql)
+             
        OTHERWISE
             //criado acima pela funcao
     ENDCASE      
