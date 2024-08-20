@@ -309,10 +309,12 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
 
     
     cTABELA:=cNOMETABELA //publica usada o opencmdarq
-    opencmdbarq()
-    append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
-    dbcloseall()
-    
+    if nLASTREC>0 //nao importa se nao tiver registros
+      opencmdbarq()
+      append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
+      dbcloseall()
+    endif  
+      
     Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
     
      
