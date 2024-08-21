@@ -471,6 +471,22 @@ DO CASE
         else
            cConn:="DRIVER={MariaDB ODBC 3.2 Driver};DATABASE="+cDATABASEX+";SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
         endif   
+   case cTIPOSQL="PGSQL"   
+         //Driver={PostgreSQL ANSI};Server=IP address;Port=5432;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
+        IF loledb
+            if empty(cDATABASEX)
+                cConn:="DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+            else
+               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+            endif
+        else
+            if empty(cDATABASEX)
+                cConn:="DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+            else
+               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+            endif
+        
+        endif   
 ENDCASE      
 RETURN cConn   
 

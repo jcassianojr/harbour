@@ -101,6 +101,10 @@ d:\develop\harbour\objmgw\mmouseN
 d:\develop\harbour\objmgw\netdbf
 d:\develop\harbour\objmgw\pdf
 d:\develop\harbour\objmgw\profile
-d:\develop\harbour\objmgw\error.prg
+
+#vendo com o novo hb_error
+#d:\develop\harbour\objmgw\error.prg
+d:\develop\harbour\objmgw\xhberr_mode.prg
+
 d:\develop\harbour\objmgw\wvgini.prg
 

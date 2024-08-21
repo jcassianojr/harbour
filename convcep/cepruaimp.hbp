@@ -16,4 +16,6 @@ d:\develop\harbour\objmgw\comp.prg
 d:\develop\harbour\objmgw\disk53.prg
 d:\develop\harbour\objmgw\disk55.prg
 d:\develop\harbour\objmgw\f_freadl.prg
-d:\develop\harbour\objmgw\error.prg
+#vendo com o novo hb_error
+#d:\develop\harbour\objmgw\error.prg
+d:\develop\harbour\objmgw\xhberr_mode.prg

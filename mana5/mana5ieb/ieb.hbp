@@ -270,8 +270,11 @@ D:\develop\harbour\objmgw\disk66.prg
 D:\develop\harbour\objmgw\disk70.prg
 D:\develop\harbour\objmgw\disk71.prg
 D:\develop\harbour\objmgw\disk72.prg
-D:\develop\harbour\objmgw\error.prg
-#D:\develop\harbour\objmgw\f_decode.prg
+
+#vendo com o novo hb_error
+#d:\develop\harbour\objmgw\error.prg
+d:\develop\harbour\objmgw\xhberr_mode.prg
+
 D:\develop\harbour\objmgw\f_encode.prg
 D:\develop\harbour\objmgw\f_freadl.prg
 D:\develop\harbour\objmgw\f_ismemo.prg

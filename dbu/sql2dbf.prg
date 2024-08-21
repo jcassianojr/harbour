@@ -570,7 +570,9 @@ ENDIF
              mSql += "CHAR("+LTRIM(STR(mFldLen))+")"    
          //
          // date datetime
-         //       
+         //     
+         case mFldType = "D" .AND. cTIPOSQL="PGSQL"
+            mSql += "TIMESTAMP"
          case (mFldType = "D" .OR. mFldType = "T") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS".OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "DATETIME"
         case mFldType = "D"
@@ -584,7 +586,7 @@ ENDIF
          // com decimais
          // Numerico ->FLOAT DOUBLE NUMERIC
          //
-        case mFldType = "N" .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
+        case mFldType = "N" .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL")
              if mFldDec > 0
                 mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
              else
@@ -640,6 +642,8 @@ ENDIF
           //
           // logico boleano bit
           //   
+         case mFldType = "L" .AND. cTIPOSQL="PGSQL"
+            mSql += "BOOLEAN"
          case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "BIT"       
           case mFldType = "L"
@@ -647,7 +651,7 @@ ENDIF
           //
           // memo TEXT LONGTEXT
           //   
-          case mFldType = "M" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
+          case mFldType = "M" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL")
              mSql += "TEXT" 
           case mFldType = "M" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
              mSql += "LONGTEXT"
@@ -656,6 +660,8 @@ ENDIF
           //
           // blob LONGBINARY
           //   
+          case mFldType = "G" .AND. cTIPOSQL="PGSQL"
+            mSql += "BYTEA"
            case mFldType = "G" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "VARBINARY"  
            case mFldType = "G" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
