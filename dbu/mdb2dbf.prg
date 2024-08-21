@@ -56,9 +56,13 @@ WHILE .T.
         OTHERWISE
             @ 03,24 SAY cTIPOSQL
     ENDCASE  
-    OPCAO(  4, 24, "&Criar arquivo             ", 67 ) //c 67
+    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"
+       OPCAO(  4, 24, "&Criar database             ", 67 ) //c 67
+    else
+       OPCAO(  4, 24, "&Criar arquivo              ", 67 ) //c 67
+    endif   
     OPCAO(  5, 24, "                           ", 86 ) //V 86
-    OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73
+    OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73 
     OPCAO(  7, 24, "&Exportar Tabelas          ", 69 ) //E 69
     KEY := menu( 1, 0 )
     DO CASE
@@ -174,7 +178,6 @@ DO CASE
    CASE cTIPOSQL="MDB"
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
         //necessario uma tabela para criar
-        Set( _SET_DATEFORMAT, "yyyy-mm-dd" ) 
    CASE cTIPOSQL="SQLITE" 
         cARQORI:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
         { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
@@ -185,19 +188,39 @@ DO CASE
    CASE cTIPOSQL="MARIADB"  
 ENDCASE
 
- cCONCREATE:=criaconcreate(cARQORI,'table1')
 
- do case
-    
-    otherwise
-       dbCreate( cCONCREATE, { ;
-            { "FIRST",   "C", 10, 0 }, ;
-            { "LAST",    "C", 10, 0 }, ;
-            { "AGE",     "N",  8, 0 }, ;
-            { "MYDATE",  "D",  8, 0 } }, "ADORDD" )
-endcase            
-IF cTIPOSQL="MDB"      
-   Set( _SET_DATEFORMAT, "dd/mm/yyyy" )   
+
+ if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"
+    cARQORI:=OPENTIPOARQ()
+    cNEXDATABASEX:=SPACE(40)
+    @ 24,00 SAY "Novo database"
+    @ 24,20 GET cnewDATABASEX
+    READ
+    cnewDATABASEX:=alltrim(cnewDATABASEX)
+    IF .NOT. EMPTy(cnewDATABASEX)
+      cDATABASEX=""
+      executacmd(Carqori,"CREATE DATABASE IF NOT EXISTS "+Cnewdatabasex)
+      CDATABASEX:=CNEWDATABASEX
+    ENDIF  
+endif 
+
+   
+
+IF cTIPOSQL="MDB" .OR. cTIPOSQL="SQLITE"
+   Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
+   cCONCREATE:=criaconcreate(cARQORI,'table1')
+   do case
+      
+      otherwise
+         dbCreate( cCONCREATE, { ;
+              { "FIRST",   "C", 10, 0 }, ;
+              { "LAST",    "C", 10, 0 }, ;
+              { "AGE",     "N",  8, 0 }, ;
+              { "MYDATE",  "D",  8, 0 } }, "ADORDD" )
+  endcase            
+  IF cTIPOSQL="MDB"      
+     Set( _SET_DATEFORMAT, "dd/mm/yyyy" )   
+  ENDIF
 ENDIF
 RETURN NIL
 
@@ -295,18 +318,14 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
        MEMOWRIT(cNOMETABELA+"_createtable_"+cTIPOSQL+".sql",Msql)
     ENDIF
 
-    msqlindex:=""
-     //Cria do os indices append from nao faz  
-     for j=1 to nIndexes
-        Msql=Aindices[j]
-        msqlindex:= msqlindex+msql+hb_osnewline()
-        executacmd(cMDBARQ,msql)
-     next j
-     
-      IF lGRAVASQL.AND. .NOT. EMPTY(msqlindex)
-       MEMOWRIT(cNOMETABELA+"_createindex_"+cTIPOSQL+".sql",Msqlindex)
-    ENDIF
-
+    if len(aindices)>0
+        //Cria do os indices append from nao faz    
+        Executacmd(cMDBARQ,Aindices) //Executa comando unico ou array de comandos
+        
+        IF lGRAVASQL
+           MEMOWRIT(cNOMETABELA+"_createindex_"+cTIPOSQL+".sql",STRVAL(aINDICES))
+        endif
+    endif    
     
     cTABELA:=cNOMETABELA //publica usada o opencmdarq
     if nLASTREC>0 //nao importa se nao tiver registros
@@ -433,22 +452,49 @@ DO CASE
         cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
 
     CASE cTIPOSQL="MYSQL" 
-        if loledb
-           cConn:="Driver={MySQL ODBC 8.0 ANSI Driver};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //32 driver versao 8 
+        if empty(cDATABASEX)
+            if loledb
+               cConn:="Driver={MySQL ODBC 8.0 ANSI Driver};Server="+cSERVERX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //32 driver versao 8 
+            else
+               cConn:="Driver={MySQL ODBC 9.0 ANSI Driver};Server="+cSERVERX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //64 driver versao 9 
+            endif
         else
-           cConn:="Driver={MySQL ODBC 9.0 ANSI Driver};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //64 driver versao 9 
-        endif
+            if loledb
+               cConn:="Driver={MySQL ODBC 8.0 ANSI Driver};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //32 driver versao 8 
+            else
+               cConn:="Driver={MySQL ODBC 9.0 ANSI Driver};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //64 driver versao 9 
+            endif
+        endif    
    case cTIPOSQL="MARIADB"   
-        cConn:="DRIVER={MariaDB ODBC 3.2 Driver};DATABASE="+cDATABASEX+";SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
+        if empty(cDATABASEX)
+            cConn:="DRIVER={MariaDB ODBC 3.2 Driver};SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
+        else
+           cConn:="DRIVER={MariaDB ODBC 3.2 Driver};DATABASE="+cDATABASEX+";SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
+        endif   
 ENDCASE      
 RETURN cConn   
 
 
 
 
-Function executacmd(cCAMBASE,cCOMANDO)
+Function executacmd(cCAMBASE,eCOMANDO)
 LOCAL cCHAVEV
 LOCAL cConn
+LOCAL aCOMANDOS:={}
+LOCAL nFIM
+LOCAL cCOMANDO:=""
+local i
+
+altd()
+//Gera array para casos sejam mutilplos comando em uma matriz 
+//evitando abrir e fechar a conecao para comando em sequencia
+IF VALTYPE(eCOMANDO)="C"
+   AAdd(aCOMANDOS,eCOMANDO) 
+ELSE
+   aCOMANDOS:=eCOMANDO
+ENDIF
+nFIM:=LEN(aCOMANDOS)
+
 cCHAVEV:=""
 cConn  :=geraconn(cCAMBASE)
 
@@ -467,16 +513,26 @@ catch oErr
    return .f.
 end
 
-oComm:=WIN_OLECreateObject( "ADODB.Command" )
-  try
-      with object oComm
-          :CommandText:=cCOMANDO
-          :CommandType:=adCmdText
-          :ActiveConnection:=oConn
-          :Execute()
-      end
-  end
+try
+  oComm:=WIN_OLECreateObject( "ADODB.Command" )
+catch oErr
+  // ShowAdoError(oERR,oCoNn)   
+   return .f.
+end
 
+for i:=1 to nfim
+    cCOMANDO:=aCOMANDOS[I]
+    IF .NOT. EMPTY(cCOMANDO)
+      try
+          with object oComm
+              :CommandText:=cCOMANDO
+              :CommandType:=adCmdText
+              :ActiveConnection:=oConn
+              :Execute()
+          end
+      end
+    ENDIF  
+next i
 oConn:Close()
 oConn:=NIL		
 RETURN .t.
