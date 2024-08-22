@@ -249,7 +249,7 @@ local cCONCREATE
 cCONCREATE:=""
 
 DO CASE
-   CASE cTIPOSQL="MDB"
+   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
         //necessario uma tabela para criar
         
@@ -280,9 +280,13 @@ ENDCASE
     ENDIF  
 endif 
 
-   
 
-IF cTIPOSQL="MDB" .OR. cTIPOSQL="SQLITE"
+//criar opcao para access644 nao funciona com catalogo nem  com o adordd
+IF loledb .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" ) //32 Cria com catalog
+   CreateAccessDatabase( cARQORI)
+ENDIF  
+
+IF cTIPOSQL="SQLITE" .OR. ((cTIPOSQL="MDB" .OR. cTIPOSQL="SQLITE") .AND. .NOT. loledb) //cria com adorrdd 64 acess ou sqlite
    Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
    cCONCREATE:=criaconcreate(cARQORI,'table1')
    do case
@@ -783,3 +787,40 @@ next i
 oConn:Close()
 oConn:=NIL		
 RETURN .t.
+
+
+FUNCTION CreateAccessDatabase( cDatabase, cPassword, lEncrypt )
+
+   LOCAL oCatalog // AS ADOX.Catalog
+
+   IIF( cPassword == NIL, cPassword := "''", NIL )
+   IIF( lEncrypt == NIL, lEncrypt := .F., NIL )
+
+   oCatalog := CreateObject( "ADOX.Catalog" )
+   
+   
+   
+ //if loledb
+   oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" +;
+                      "Data Source=" + cDatabase + ";" +;
+                      "JET OLEDB:Engine Type=4;" )
+// else
+ 
+ //  oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.16;" +;
+ //                     "Data Source=" + cDatabase + ";" +;
+ //                     "JET OLEDB:Engine Type=4;" )
+//endif   
+
+/*
+   oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" +;
+                    "Data Source=" + cDatabase + ";" +;
+                    "JET OLEDB:Database Password=" + cPassWord + ";" +;
+                    "JET OLEDB:Engine Type=4;" +;
+                    "JET OLEDB:Encrypt Database=" + IIF(lEncrypt, "TRUE", "FALSE" ) )
+*/
+
+                    
+
+   oCatalog := NIL //NULL_OBJECT
+
+RETURN

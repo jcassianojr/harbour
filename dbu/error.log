@@ -1,0 +1,141 @@
+----------------------------- xHarbour Error Log ------------------------------
+
+Date...............: 22/08/2024
+Time...............: 13:35:08
+
+Application name...: D:\develop\harbour\dbu\dbu64.exe
+Workstation name...: DESKTOP-CAIAD50
+Available memory...: 5880400
+Current disk.......: D
+Current directory..: develop\harbour\dbu
+Free disk space....: 10967035904
+
+Operating system...: Windows 8 6.2
+xHarbour version...: Harbour 3.2.0dev (r2405310955)
+xHarbour built on..: Jun 18 2024 18:23:48
+C/C++ compiler.....: MinGW GNU C 12.2 (64-bit)
+Multi Threading....: NO
+VM Optimization....: 0
+
+Current Area ......:1
+
+-------------------------- Environmental Information --------------------------
+
+SET ALTERNATE......: OFF
+SET ALTFILE........: 
+SET AUTOPEN........: ON
+SET AUTORDER.......: 0
+SET AUTOSHARE......: 0
+SET BELL...........: OFF
+SET BLINK..........: .T.
+SET CANCEL.........: ON
+SET CENTURY........: ON
+SET COLOR..........: W+/B,N/W,B/N,N/N,N/W
+SET CONFIRM........: OFF
+SET CONSOLE........: ON
+SET COUNT..........: 0
+SET CURSOR.........: 1
+SET DATE FORMAT....: DD/MM/YYYY
+SET DBFLOCKSCHEME..: 0
+SET DEBUG..........: ON
+SET DECIMALS.......: 2
+SET DEFAULT........: 
+SET DEFEXTENSIONS..: ON
+SET DELETED........: ON
+SET DELIMCHARS.....: ::
+SET DELIMETERS.....: OFF
+SET DEVICE.........: SCREEN
+SET DIRCASE........: 0
+SET DIRSEPARATOR...: \
+SET EOL............: 13
+SET EPOCH..........: 1964
+SET ERRORLOG.......: ERROR.LOG,.F.
+SET ESCAPE.........: ON
+SET EVENTMASK......: 1279
+SET EXACT..........: OFF
+SET EXCLUSIVE......: ON
+SET EXIT...........: OFF
+SET EXTRA..........: OFF
+SET EXTRAFILE......: 
+SET FILECASE.......: 0
+SET FIXED..........: OFF
+SET FORCEOPT.......: OFF
+SET HARDCOMMIT.....: ON
+SET IDLEREPEAT.....: ON
+SET INSERT.........: OFF
+SET INTENSITY......: ON
+SET LANGUAGE.......: PT.DE850
+SET MARGIN.........: 0
+SET MBLOCKSIZE.....: 64
+SET MCENTER........: OFF
+SET MESSAGE........: 0
+SET MFILEEXT.......: 
+SET OPTIMIZE.......: ON
+SET PATH...........: D:\DEVELOP\HARBOUR\DBU\
+SET PRINTER........: OFF
+SET PRINTFILE......: LPT1
+SET SCOREBOARD.....: OFF
+SET SCROLLBREAK....: ON
+SET SOFTSEEK.......: ON
+SET STRICTREAD.....: OFF
+SET TRIMFILENAME...: .F.
+SET TYPEAHEAD......: 50
+SET UNIQUE.........: OFF
+SET VIDEOMODE......: 0
+SET WRAP...........: OFF
+
+---------------------------Detailed Work Area Items----------------------------
+
+
+-------------------- Internal Error Handling Information  ---------------------
+
+Subsystem Call ....: WINOLE
+System Code .......: 1007
+Default Status ....: .F.
+Description .......: Classe não registrada (0x80040154)
+Operation .........: CREATE
+Arguments .........:  [ 1] = Type: C Val: Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\temp\TSTE64.MDB;JET OLEDB:Engine Type=4;
+Involved File .....: Provider
+Dos Error Code ....: -2147352567
+                   : <Outros>
+
+ Trace Through:
+----------------
+(b)ERRORSYS           :      79 in Module: d:\develop\harbour\objmgw\xhberr_mode.prg
+CREATEACCESSDATABASE  :     804 in Module: mdb2dbf.prg
+MDBCRIA               :     284 in Module: mdb2dbf.prg
+MDBMENU               :      70 in Module: mdb2dbf.prg
+MAIN                  :     572 in Module: DBU.PRG
+
+
+############################## Video Screen Dump ##############################
+
++--------------------------------------------------------------------------------+
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|                      ?                                ?                        |
+|RDD(DBFCDX) Extensao(.?                                ?                        |
+|Exportar Para(DLM) Del??????????????????????????????????                        |
+|Sepador Decimal(.) Oem Ansi(N) Separador Registro( ) Ano(DMA       /2) Logico(1 |
+|Error WINOLE/1007  Classe não registrada (0x80040154): Provider Arguments: ( [ 1|
+|] = Type: C Val: Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\temp\TSTE64.MDB|
+|;JET OLEDB:Engine Type=4;) (DOS Error -2147352567)                              |
+|                                                                                |
+|Error at ...: TOLEAUTO:CREATE(0) in Module: ..\contrib\hbwin\oleauto.prg        |
+|Called from : CREATEACCESSDATABASE(804) in Module: mdb2dbf.prg                  |
+|Called from : MDBCRIA(284) in Module: mdb2dbf.prg                               |
+|Called from : MDBMENU(70) in Module: mdb2dbf.prg                                |
+|Called from : MAIN(572) in Module: DBU.PRG                                      |
++--------------------------------------------------------------------------------+
+
+
