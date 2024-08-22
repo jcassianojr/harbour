@@ -96,7 +96,7 @@ aTABELAS:={}
 cMDBARQ:=OPENTIPOARQ()
 
 
-aResult:=MDBTABLES(cMDBARQ,loledb )
+aResult:=MDBTABLES(cMDBARQ )
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
   nChoices := ACHOICE( 4,23,21,54, aResult)
@@ -117,9 +117,6 @@ IF EMPTY(cTABELA)
    RETURN NIL
 ENDIF
 
-hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
-cDESTINO:=cCAMMDB+cTABELA+"."+zEXPOREXT
-MDT(cDESTINO)
 
 
 LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
@@ -161,6 +158,11 @@ IF .NOT. lCOPIANAT
    PegcsUB(tDOC)  //pegar o subtipo conforme tipo
 ENDIF
 
+hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
+cDESTINO:=cCAMMDB+cTABELA+"."+zEXPOREXT
+MDT(cDESTINO)
+
+
 MDT("abrindo arquivo de origem: "+cMDBARQ)
 opencmdbarq()
 nLASTREC:=   reccount() 
@@ -172,8 +174,14 @@ ELSE
    multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
 ENDIF   
 dbcloseall()
+
 aSTRU:=sqltodbfstru(aSTRU)
 memowrit(ctabela+"_"+Ctiposql+"_stru.txt",strval(aSTRU))
+
+aSTRU:=MDBTABLES(cMDBARQ,cTABELA )
+memowrit(ctabela+"_"+Ctiposql+"_stru2.txt",strval(aSTRU))
+
+
 //DBCreate(<cDatabase>, <aStruct>, <cDriver> ) -> Nil
 
 return nil
@@ -185,7 +193,7 @@ local i
 //#define DBS_TYPE        2
 //#define DBS_LEN         3
 //#define DBS_DEC         4
-nFIM:=LEN(aSTRU)
+nFIM:=LEN(aStruct)
 for i:=1 to NFIM
     //mFldNm := aStruct[i, DBS_NAME]
     //  mFldType := aStruct[i, DBS_TYPE]
@@ -244,14 +252,16 @@ DO CASE
    CASE cTIPOSQL="MDB"
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
         //necessario uma tabela para criar
+        
    CASE cTIPOSQL="SQLITE" 
         cARQORI:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
         { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
-   CASE cTIPOSQL="MYSQL"  
-   CASE cTIPOSQL="MYSQL64"  
-   CASE cTIPOSQL="MARIADB"  
+          
+   CASE cTIPOSQL="MYSQL"  .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"
+      //con sql create database
+      
 ENDCASE
 
 
@@ -284,13 +294,13 @@ IF cTIPOSQL="MDB" .OR. cTIPOSQL="SQLITE"
               { "AGE",     "N",  8, 0 }, ;
               { "MYDATE",  "D",  8, 0 } }, "ADORDD" )
   endcase            
-  IF cTIPOSQL="MDB"      
      Set( _SET_DATEFORMAT, "dd/mm/yyyy" )   
-  ENDIF
 ENDIF
 RETURN NIL
 
 
+
+function criaconcreate(cMDBARQ,cNOMETABELA)
 /* sequencia dos parametros adordd
  LOCAL cDataBase  := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 1, ";" )
    LOCAL cTableName := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 2, ";" )
@@ -299,8 +309,6 @@ RETURN NIL
    LOCAL cUserName  := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 5, ";" )
    LOCAL cPassword  := hb_tokenGet( aOpenInfo[ UR_OI_NAME ], 6, ";" )
 */   
-
-function criaconcreate(cMDBARQ,cNOMETABELA)
 LOCAL cCONCREATE
 
    cCONCREATE:=cMDBARQ+";"+cNOMETABELA
@@ -456,9 +464,20 @@ IF FILE (cARQORI)
 ENDIF   
         
         
-FUNCTION MDBTABLES(cDataBase,lUSEOLE )
+FUNCTION MDBTABLES(cDataBase,cTABELA )
 LOCAL aRETU
 local cCONN
+LOCAL cCOMANDO
+LOCAL cTIPOINFO
+local cFieldName := ''
+local cFieldType := ''
+local nFieldLength := 0
+local nFieldDec := 0
+
+cTIPOINFO:="TABELA"
+IF VALTYPE(cTABELA)="C"
+   cTIPOINFO:="ESTRUTURA"
+ENDIF
 aRETU:={}
 cCONN:=GERACONN(cDATABASE)
 
@@ -480,16 +499,28 @@ cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN" //PUBLIC
 oRS:= WIN_OLECreateObject('ADODB.RecordSet')
 oRS:CursorLocation := 3
 
-DO CASE
-   CASE cTIPOSQL="MDB" .or. at(".MDB",upper(cdatabase))>0
-        cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
-          + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
-           + " order by MSysObjects.name "
-   CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0         
-        cCOMANDO ="SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
-   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
-        cCOMANDO = "SHOW TABLES"
-endcase   
+cCOMANDO:=""
+IF cTIPOINFO="TABELA"
+    DO CASE
+       CASE cTIPOSQL="MDB" .or. at(".MDB",upper(cdatabase))>0
+            cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
+              + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
+               + " order by MSysObjects.name "
+       CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0         
+            cCOMANDO ="SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+       CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+            cCOMANDO = "SHOW TABLES"
+    endcase   
+ENDIF
+IF cTIPOINFO="ESTRUTURA"
+    DO CASE
+       CASE cTIPOSQL="MDB" .or. at(".MDB",upper(cdatabase))>0
+       CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0   
+            cCOMANDO ="PRAGMA table_info( " +  cTABELA  + ")"   
+       CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+            cCOMANDO ="SHOW COLUMNS FROM "+cTABELA
+    endcase   
+ENDIF
 
       TRY
         oRS:Open(cCOMANDO, oConN, adOpenDynamic, adLockOptimistic )
@@ -499,13 +530,144 @@ endcase
       END
 
 while ! ors:eof
-     AADD(aRETU,ors:fields(0):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
+     IF cTIPOINFO="TABELA"
+        AADD(aRETU,ors:fields(0):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
+     ENDIF   
+     IF cTIPOINFO="ESTRUTURA"
+        cFieldName := ''
+        cFieldType := ''
+        nFieldLength := 0
+        nFieldDec := 0
+        
+        // eDEFAULT :=""
+        //inclusao valores default geracampo posicao 5 futuro correcao de nulls na importacao
+        //
+        DO CASE
+           CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0 
+               //table info colunas
+               //cid, name, type, "notnull", dflt_value, pk
+               // 1    2     3      4           5         6
+               // 0    1     2      3           4         5 ->posicao no recordset
+               cFieldName := upper(alltrim( ors:fields(1):value ))
+               cType      := upper( alltrim( ors:fields(2):value ) ) 
+               AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+           CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+               //table info colunas
+               // field, type, null, key, default,extra
+               // 1      2     3      4      5      6
+               // 0      1     2      3      4      5 ->posicao no recordset
+               cFieldName := upper(alltrim( ors:fields(0):value ))
+               cType      := upper( alltrim( ors:fields(1):value ) ) 
+               AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+                 
+               
+         ENDCASE   
+        
+     ENDIF   
     ors:movenext()
 enddo
-
 oRs:Close()
 oConN:close()  
-RETURN aRETU       
+RETURN aRETU 
+
+function geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)   
+local aRETU
+aRETU:={cFieldName,cFieldType,nFieldLength,nFieldDec}  
+do case
+
+    //
+    // numeric(l,d) decimal(l,d) o tamanho esta entre parentes
+    //
+    CASE AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. AT(",",cTYPE)>0 .AND. (AT("NUMERIC",UPPER(CTYPE))>0 .OR. AT("DECIMAL",UPPER(CTYPE))>0 )
+       cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1 )
+       cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(",",cTMPSIZE)-1 )
+       nLength := val(cTMPSIZE)
+       cTMPSIZE:=SUBSTR(cTYPE, AT(",",cTYPE) +1 )
+       cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
+       nFieldDec := val(cTMPSIZE)
+       cFieldType := 'N'
+
+
+    //
+    // int(n) tamanho esta entre parentes
+    //
+   case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0  .AND. AT(",",cTYPE)=0 .AND. AT("INT",UPPER(CTYPE))>0 
+       cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1) 
+       cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
+       nLength := VAL(cTMPSIZE)
+       cFieldType := 'N'
+       nFieldDec := 0
+   
+    //
+    // char(n) text(n) o tamanho esta entre parentes
+    //
+   case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. (AT("CHAR",UPPER(CTYPE))>0 .OR. AT("TEXT",UPPER(CTYPE))>0 )
+       cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1) 
+       cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
+       nLength := VAL(cTMPSIZE)
+       cFieldType := 'C'
+       nFieldDec := 0
+       
+    
+ case cType == "INTEGER" 
+    cFieldType := 'N'
+    nFieldLength := 8
+    nFieldDec := 0
+    
+ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE"
+    cFieldType := 'N'
+    nFieldLength := 14
+    nFieldDec := 5
+    
+    
+ case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE'
+    cFieldType := 'D'
+    nFieldLength := 8
+    nFieldDec := 0
+    
+    
+ case cType == "BOOL"
+    cFieldType := 'L'
+    nFieldLength := 1
+    nFieldDec := 0
+    
+   //
+    // TEXT SEM tamanho memo
+    //
+  case  AT("(",cTYPE)=0 .AND. AT(")",cTYPE)=0 .AND.  AT("TEXT",UPPER(CTYPE))>0
+       nFieldLength := 10
+       cFieldType := 'M'
+       nFieldDec := 0
+       
+       
+ otherwise
+    cFieldType := 'C'
+    nFieldDec := 0
+    nLength := 0
+    
+    //
+    // Implantar posteriormente especifico sqllite
+    //
+    //IF nLENGTH=0
+    //    aTable1 := sqltablestru( oDB1, 'select max( length( ' + cFieldName + ' ) ) from ' + c2sql( cSQLTable ) )
+    //    nLength := 0
+    //    if len( aTable1 ) > 0
+    //       nLength := val( alltrim( aTable1[ 1, 1 ] ) )
+    //    endif
+    //ENDIF    
+    do case
+      case nLength == 0
+         nFieldLength := 10
+      case nLength < 256
+         nFieldLength := nLength
+      otherwise
+         nFieldLength := 10
+         cFieldType := 'M'
+    endcase
+    
+endcase
+aRETU:={cFieldName,cFieldType,nFieldLength,nFieldDec} 
+return aRETU
 
 FUNCTION geraconn(cCAMBASE)
 cConn  :=""

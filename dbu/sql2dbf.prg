@@ -321,6 +321,10 @@ function export2dbf(ODB1,cNEWTABLE)
          // 1    2     3      4           5         6
          cType := upper( alltrim( aTable[ i, 3 ] ) ) 
          cFieldName := alltrim( aTable[ i, 2 ] )
+         nFieldLength := 0
+         nFieldDec := 0
+         //criando com funcao abaixo geracampodbf
+         /*
          do case
          case cType == "INTEGER" 
             cFieldType := 'N'
@@ -375,7 +379,9 @@ function export2dbf(ODB1,cNEWTABLE)
                  cFieldType := 'M'
             endcase
          endcase
-         aadd( aStruct, { cFieldName, cFieldType, nFieldLength, nFieldDec } )
+         */
+         aadd( aStruct,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+         //aadd( aStruct, { cFieldName, cFieldType, nFieldLength, nFieldDec } )
       next i
       if len( aStruct ) > 0
          //cNEWARQ:=cNEWTABLE+"_exp"
