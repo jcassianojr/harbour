@@ -83,13 +83,12 @@ layout()
 return nil
 
 function MDBEXP()
-LOCAL cTABELA:=SPACE(60)
 LOCAL cCAMMDB   :=SPACE(100)
 LOCAL lCOPIANAT
 local Ldoc
 LOCAL aTABELAS
 LOCAL nCHOICES
-LOCAL cMDBARQ
+LOCAL aSTRU
 
 nCHOICES:=0
 aTABELAS:={}
@@ -117,21 +116,48 @@ cTABELA:=ALLTRIM(cTABELA)
 IF EMPTY(cTABELA)
    RETURN NIL
 ENDIF
-LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
-
-tDOC:=pegtipodoc(lCOPIANAT) // .t. Inclui dbf se for nativa
-pegparexp()
 
 hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
 cDESTINO:=cCAMMDB+cTABELA+"."+zEXPOREXT
 MDT(cDESTINO)
 
 
+LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
+tDOC:=pegtipodoc(lCOPIANAT) // .t. Inclui dbf se for nativa
+if tDOC<>14 //dbf nao precisa adcional
+   pegparexp() 
+endif   
 lDOCCAB  :=.F.
 lDOCDAD  :=.F.
 lDOCRECNO:=.F.
 cSUBTIPO :=" "
-IF .NOT.  lCOPIANAT
+
+//
+// formatos nao disponiveis no copy to (nativa)
+//
+IF tDOC=1 //XML 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=2 //TAM 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=3 //TEC 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=4 //DBE 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=7 //XML
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=8 //JSON 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=13 //SQL
+   lCOPIANAT:=.F.
+ENDIF
+
+IF .NOT. lCOPIANAT
    PegcsUB(tDOC)  //pegar o subtipo conforme tipo
 ENDIF
 
@@ -139,13 +165,53 @@ MDT("abrindo arquivo de origem: "+cMDBARQ)
 opencmdbarq()
 nLASTREC:=   reccount() 
 zei_fort( nLASTREC,,,0)
+aSTRU:=dbstruct()
 IF lCOPIANAT
    COPYTO(cDESTINO)
 ELSE
    multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
 ENDIF   
 dbcloseall()
+aSTRU:=sqltodbfstru(aSTRU)
+memowrit(ctabela+"_"+Ctiposql+"_stru.txt",strval(aSTRU))
+//DBCreate(<cDatabase>, <aStruct>, <cDriver> ) -> Nil
+
 return nil
+
+function sqltodbfstru(aStruct)
+local nFIM 
+local i
+//#define DBS_NAME        1
+//#define DBS_TYPE        2
+//#define DBS_LEN         3
+//#define DBS_DEC         4
+nFIM:=LEN(aSTRU)
+for i:=1 to NFIM
+    //mFldNm := aStruct[i, DBS_NAME]
+    //  mFldType := aStruct[i, DBS_TYPE]
+    //  mFldLen := aStruct[i, DBS_LEN]
+    //  mFldDec := aStruct[i, DBS_DEC]
+    
+    // Casos datasting que nao retornam 8
+    IF aStruct[i, DBS_TYPE]="D" .AND. aStruct[i, DBS_LEN]<>8
+       aStruct[i, DBS_LEN]=8
+    ENDIF
+    
+    //Tipo integer 4 =numerico 8
+    IF aStruct[i, DBS_TYPE]="I" //integer
+       aStruct[i, DBS_TYPE]="N"
+       aStruct[i, DBS_LEN]=8
+    ENDIF 
+
+    //Tipo B
+    IF aStruct[i, DBS_TYPE]="B" 
+       aStruct[i, DBS_TYPE]="N"
+       aStruct[i, DBS_LEN]=15
+       aStruct[i, DBS_LEN]=4
+    ENDIF
+
+next i
+return aStruct
 
 function opencmdbarq()
 DO CASE
@@ -351,6 +417,10 @@ DO CASE
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+         cSERVERX:=PADR(cSERVERX,30," ")
+         cDATABASEX:=PADR(cDATABASEX,30," ")
+         cUSERX:=PADR(cUSERX,30," ")
+         cPASSX:=PADR(cPASSX,30," ")
           HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
          @ 04,23 SAY "Server"
          @ 06,23 SAY "Database"
@@ -501,7 +571,6 @@ LOCAL nFIM
 LOCAL cCOMANDO:=""
 local i
 
-altd()
 //Gera array para casos sejam mutilplos comando em uma matriz 
 //evitando abrir e fechar a conecao para comando em sequencia
 IF VALTYPE(eCOMANDO)="C"

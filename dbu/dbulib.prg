@@ -429,11 +429,43 @@ nORITIPO:=TIPODBF
 cORIDRIVER:=RDDNOME(TIPODBF)
 cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
 
-nTIPDOC:=   pegtipodoc()
+LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
+
+//nao mostrar tipo 14 dbf na escolha nao spbrepor na copia passando falso aqui
+nTIPDOC:=   pegtipodoc(.F.)
 pegparexp()
 
 
-IF MDG("Copia Nativa(SIM) Interna(NAO)")
+//
+// formatos nao disponiveis no copy to (nativa)
+//
+IF tDOC=1 //XML 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=2 //TAM 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=3 //TEC 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=4 //DBE 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=7 //XML
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=8 //JSON 
+   lCOPIANAT:=.F.
+ENDIF
+IF tDOC=13 //SQL
+   lCOPIANAT:=.F.
+ENDIF
+
+IF .NOT.  lCOPIANAT
+   PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+ENDIF
+
+IF LCOPIANAT
    cDESTINO:=TROCAEXT(cARQORI,zEXPOREXT)
    MDT("abrindo arquivo de origem: "+cARQORI)
    USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER) 
@@ -457,19 +489,46 @@ FUNCTION COPYTO(cDESTINO)
 nLASTREC:=LASTREC()
 zei_fort( nLASTREC,,,0)
 DO CASE
+   //
+   // DML CSV UNL PSV TSV
+   //
    CASE zREGSEP=chr(34) .OR. zREGSEP=chr(39) //delimitador + aspas duplas aspas (") (')
         COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1) DELIMITED  WITH ( { zDELIMITE, zREGSE } )  
+  
+   //
+   //tDOC=14
+   //
   CASE zEXPOREXT="DBF" 
-        COPY to &cDESTINO. while zei_fort(nLASTREC,,,1)              
-   CASE zEXPOREXT="SDF" 
+        COPY to &cDESTINO. while zei_fort(nLASTREC,,,1) 
+
+   //
+   //tDOC=6
+   //
+   CASE zEXPOREXT="SDF"                                                                            
         COPY to &cDESTINO. while zei_fort(nLASTREC,,,1)  SDF
+
+   //
+   //tDOC=10
+   //
    CASE zEXPOREXT="DLM" .OR. zEXPOREXT="CSV"
         COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED
+  
+   //
+   //tDOC=11
+   //
    CASE zEXPOREXT="UNL" .OR. zEXPOREXT="PSV"
         COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH PIPE
+   
+   //
+   // tDOC=12
+   //
    CASE zEXPOREXT="TSV" 
         COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH TAB
-   OTHERWISE //SSV  zdelimite= ; e outro delimitador
+    
+   //
+   // SSV  zdelimite= ; e outro delimitador tDOC=9
+   //
+   OTHERWISE 
        COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1)  DELIMITED   WITH WITH &zDELIMITE
 ENDCASE   
 RETURN NIL

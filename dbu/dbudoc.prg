@@ -15,6 +15,12 @@
 #include "dbinfo.ch"
 #include "dbstruct.ch"
 
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+    Function PEGTIPO2VAL()
+*+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
 FUNCTION PEGTIPO2VAL()
    nLASTREC:=LASTREC()
    zei_fort( nLASTREC,,,0)
@@ -491,7 +497,14 @@ if tDOC = 4
    cTEXTO += 'ENDFILE' + cLIN
 endif
 
+//verificas se a quantidade de registros
+nLASTREC:=0
 IF lDOCDAD
+   nLASTREC:=LASTREC()
+ENDIF
+//nao faz o loop se nao incluir dados ou nao tiver registro
+//alguns rdd sem registro nao trazem o eof() corretamente gerando loop infinito
+IF lDOCDAD .AND. nLASTREC>0
    nLASTREC:=LASTREC()
    zei_fort( nLASTREC,,,0)
    nXLS:=0
@@ -665,7 +678,7 @@ retu .T.
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-func TIPOC( cTIPO )
+function TIPOC( cTIPO )
 
 local cRETU := ""
 do case
@@ -682,7 +695,14 @@ case cTIPO = 'M'
 endcase
 retu cRETU
 
-func TIPOXML( cTIPO,nTAM,nDEC )
+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+    Function TIPOXML()
+*+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+function TIPOXML( cTIPO,nTAM,nDEC )
 
 local cRETU := ""
 do case
@@ -703,15 +723,32 @@ case cTIPO = 'M'
 endcase
 return cRETU
 
-
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+    Function DBUZAP()
+*+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
 function dbuzap()
 zap
 return .t.
 
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+    Function DBUPACK()
+*+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
 function dbupack()
 pack
 return .t.
 
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+    Function DBETODBF(cMASK,lLAY,lCRIA)
+*+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
 FUNCTION DBETODBF(cMASK,lLAY,lCRIA)
 IF VALTYPE(cMASK)#"C"
     cMASK:="*.DBF"
@@ -737,7 +774,7 @@ ENDIF
 IF lLAY
    LAYOUT()
 ENDIF
-RETU .T.
+RETURN .T.
 
 
 /*
