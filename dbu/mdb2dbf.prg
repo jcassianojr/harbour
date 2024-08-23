@@ -95,7 +95,6 @@ aTABELAS:={}
 
 cMDBARQ:=OPENTIPOARQ()
 
-
 aResult:=MDBTABLES(cMDBARQ )
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -477,6 +476,8 @@ local cFieldName := ''
 local cFieldType := ''
 local nFieldLength := 0
 local nFieldDec := 0
+local lopen
+Lopen:=.F.
 
 cTIPOINFO:="TABELA"
 IF VALTYPE(cTABELA)="C"
@@ -497,7 +498,7 @@ catch oErr
 end
 
 /* a vezes e preciso conceder este acesso na ide para a consulta na retornar vazia
-cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN" //PUBLIC 
+cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC" 
 */
 
 oRS:= WIN_OLECreateObject('ADODB.RecordSet')
@@ -506,7 +507,7 @@ oRS:CursorLocation := 3
 cCOMANDO:=""
 IF cTIPOINFO="TABELA"
     DO CASE
-       CASE cTIPOSQL="MDB" .or. at(".MDB",upper(cdatabase))>0
+       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS".or. at(".MDB",upper(cdatabase))>0
             cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
               + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
                + " order by MSysObjects.name "
@@ -528,49 +529,77 @@ ENDIF
 
       TRY
         oRS:Open(cCOMANDO, oConN, adOpenDynamic, adLockOptimistic )
+        lOPEN:=.T.
       CATCH oERR
+        lOPEN:=.F.
         //ShowADOError(oERR,oConn,cCOMANDO) 
+    //    return  aRETU 
+      END
+IF .NOT. lOPEN
+  IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. at(".MDB",upper(cdatabase))>0
+     //atribui direito de select porem as vezes e necessario fazer via ide 
+      EXECUTACMD(cdatabase,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
+  ENDIF
+ENDIF
+IF lOPEN
+    while ! ors:eof
+         IF cTIPOINFO="TABELA"
+            AADD(aRETU,ors:fields(0):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
+         ENDIF   
+         IF cTIPOINFO="ESTRUTURA"
+            cFieldName := ''
+            cFieldType := ''
+            nFieldLength := 0
+            nFieldDec := 0
+            
+            // eDEFAULT :=""
+            //inclusao valores default geracampo posicao 5 futuro correcao de nulls na importacao
+            //
+            DO CASE
+               CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0 
+                   //table info colunas
+                   //cid, name, type, "notnull", dflt_value, pk
+                   // 1    2     3      4           5         6
+                   // 0    1     2      3           4         5 ->posicao no recordset
+                   cFieldName := upper(alltrim( ors:fields(1):value ))
+                   cType      := upper( alltrim( ors:fields(2):value ) ) 
+                   AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+               CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+                   //table info colunas
+                   // field, type, null, key, default,extra
+                   // 1      2     3      4      5      6
+                   // 0      1     2      3      4      5 ->posicao no recordset
+                   cFieldName := upper(alltrim( ors:fields(0):value ))
+                   cType      := upper( alltrim( ors:fields(1):value ) ) 
+                   AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+                     
+                   
+             ENDCASE   
+            
+         ENDIF   
+        ors:movenext()
+    enddo
+    oRs:Close()
+ENDIF
+
+/*
+altd()
+IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS".or. at(".MDB",upper(cdatabase))>0
+   ocatalog:=win_oleCreateObject( "ADOX.Catalog" )
+   IF cTIPOINFO="TABELA" //.AND. LEN(aRETU)=0
+        TRY
+        ocatalog := oConn:OpenSchema( adSchemaColumns )
+      CATCH oERR
         return  aRETU 
       END
+      while ! ocatalog:eof()
+         Ors:movenext()
+      enddo
+      ocatalog:close()
+   ENDIF
+ENDIF
+*/
 
-while ! ors:eof
-     IF cTIPOINFO="TABELA"
-        AADD(aRETU,ors:fields(0):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
-     ENDIF   
-     IF cTIPOINFO="ESTRUTURA"
-        cFieldName := ''
-        cFieldType := ''
-        nFieldLength := 0
-        nFieldDec := 0
-        
-        // eDEFAULT :=""
-        //inclusao valores default geracampo posicao 5 futuro correcao de nulls na importacao
-        //
-        DO CASE
-           CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0 
-               //table info colunas
-               //cid, name, type, "notnull", dflt_value, pk
-               // 1    2     3      4           5         6
-               // 0    1     2      3           4         5 ->posicao no recordset
-               cFieldName := upper(alltrim( ors:fields(1):value ))
-               cType      := upper( alltrim( ors:fields(2):value ) ) 
-               AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-           CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
-               //table info colunas
-               // field, type, null, key, default,extra
-               // 1      2     3      4      5      6
-               // 0      1     2      3      4      5 ->posicao no recordset
-               cFieldName := upper(alltrim( ors:fields(0):value ))
-               cType      := upper( alltrim( ors:fields(1):value ) ) 
-               AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-                 
-               
-         ENDCASE   
-        
-     ENDIF   
-    ors:movenext()
-enddo
-oRs:Close()
 oConN:close()  
 RETURN aRETU 
 
