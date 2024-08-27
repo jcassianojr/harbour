@@ -323,64 +323,17 @@ function export2dbf(ODB1,cNEWTABLE)
          cFieldName := alltrim( aTable[ i, 2 ] )
          nFieldLength := 0
          nFieldDec := 0
-         //criando com funcao abaixo geracampodbf
-         /*
-         do case
-         case cType == "INTEGER" 
-            cFieldType := 'N'
-            nFieldLength := 8
-            nFieldDec := 0
-         case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE"
-            cFieldType := 'N'
-            nFieldLength := 14
-            nFieldDec := 5
-         case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE'
-            cFieldType := 'D'
-            nFieldLength := 8
-            nFieldDec := 0
-         case cType == "BOOL"
-            cFieldType := 'L'
-            nFieldLength := 1
-            nFieldDec := 0
-         otherwise
-            cFieldType := 'C'
-            nFieldDec := 0
-            nLength := 0
-            
-            //
-            // char(n) text(n) o tamanho esta entre parentes
-            //
-            IF AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. (AT("CHAR",UPPER(CTYPE))>0 .OR. AT("TEXT",UPPER(CTYPE))>0 )
-               cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1 , AT(")",cTYPE) -1)
-               nLength := VAL(cTMPSIZE)
-            ENDIF
-            
-            //
-            // TEXT SEM () Marca com 256 para tipo memo abaixo
-            //
-            IF nLength=0 .and. AT("(",cTYPE)=0 .AND. AT(")",cTYPE)=0 .AND.  AT("TEXT",UPPER(CTYPE))>0
-               nLength := 256
-            ENDIF
-            
-            IF nLENGTH=0
-                aTable1 := sqltablestru( oDB1, 'select max( length( ' + cFieldName + ' ) ) from ' + c2sql( cSQLTable ) )
-                nLength := 0
-                if len( aTable1 ) > 0
-                   nLength := val( alltrim( aTable1[ 1, 1 ] ) )
-                endif
-            ENDIF    
-            do case
-              case nLength == 0
-                 nFieldLength := 10
-              case nLength < 256
-                 nFieldLength := nLength
-              otherwise
-                 nFieldLength := 10
-                 cFieldType := 'M'
-            endcase
-         endcase
-         */
-         aadd( aStruct,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+        
+        aTMP:= geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)
+        
+        IF aTMP[DBS_LEN]=0
+            aTable1 := sqltablestru( oDB1, 'select max( length( ' + cFieldName + ' ) ) from ' + c2sql( cSQLTable ) )
+           if len( aTable1 ) > 0
+              aTMP[DBS_LEN] := val( alltrim( aTable1[ 1, 1 ] ) )
+           endif
+        ENDIF    
+
+         aadd( aStruct,aTMP)
          //aadd( aStruct, { cFieldName, cFieldType, nFieldLength, nFieldDec } )
       next i
       if len( aStruct ) > 0
@@ -399,7 +352,7 @@ function export2dbf(ODB1,cNEWTABLE)
             netrecapp() //append blank
             aRecord := aTable[ i ]
             for j := 1 to len( aRecord )
-               cFieldName := Left( aStruct[ j, 1 ], 10 )
+               cFieldName := Left( aStruct[ j, 1 ], 10 ) //dbf nome maximo dez caracteres
                replace &cFieldName with aRecord[ j ]
             next j
          next i

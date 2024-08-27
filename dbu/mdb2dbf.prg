@@ -188,6 +188,8 @@ return nil
 function sqltodbfstru(aStruct)
 local nFIM 
 local i
+LOCAL aTAM
+LOCAL nLENMAX
 //#define DBS_NAME        1
 //#define DBS_TYPE        2
 //#define DBS_LEN         3
@@ -199,6 +201,17 @@ for i:=1 to NFIM
     //  mFldLen := aStruct[i, DBS_LEN]
     //  mFldDec := aStruct[i, DBS_DEC]
     
+    
+    nLENMAX:=0
+    IF (aStruct[i, DBS_TYPE]="I" .or. aStruct[i, DBS_TYPE]="B") .and. aStruct[i, DBS_LEN]=0 .AND. cTIPOSQL="SQLITE" 
+       Ctmp:="select max( length( " + aStruct[i, DBS_NAME] + " ) ) from " + cTABELA
+       aTAM :=MDBTABLES(cMDBARQ,cTABELA , ctmp) 
+        if len( aTAM ) > 0
+           nLenMAX := aTAM[ 1 ]
+        endif
+    ENDIF
+
+    
     // Casos datasting que nao retornam 8
     IF aStruct[i, DBS_TYPE]="D" .AND. aStruct[i, DBS_LEN]<>8
        aStruct[i, DBS_LEN]=8
@@ -207,13 +220,21 @@ for i:=1 to NFIM
     //Tipo integer 4 =numerico 8
     IF aStruct[i, DBS_TYPE]="I" //integer
        aStruct[i, DBS_TYPE]="N"
-       aStruct[i, DBS_LEN]=8
+       IF nLENMAX>8
+          aStruct[i, DBS_LEN]=nLENMAX
+       ELSE
+          aStruct[i, DBS_LEN]=8
+       ENDIF   
     ENDIF 
 
     //Tipo B
     IF aStruct[i, DBS_TYPE]="B" 
        aStruct[i, DBS_TYPE]="N"
-       aStruct[i, DBS_LEN]=15
+       IF nLENMAX>15
+         aStruct[i, DBS_LEN]=nLENMAX+ 4 //acrecenta 4 decimais
+       ELSE
+          aStruct[i, DBS_LEN]=15
+       ENDIF   
        aStruct[i, DBS_LEN]=4
     ENDIF
 
@@ -467,7 +488,7 @@ IF FILE (cARQORI)
 ENDIF   
         
         
-FUNCTION MDBTABLES(cDataBase,cTABELA )
+FUNCTION MDBTABLES(cDataBase,cTABELA,cCAMPOSQL )
 LOCAL aRETU
 local cCONN
 LOCAL cCOMANDO
@@ -483,6 +504,10 @@ cTIPOINFO:="TABELA"
 IF VALTYPE(cTABELA)="C"
    cTIPOINFO:="ESTRUTURA"
 ENDIF
+IF VALTYPE(cCAMPOSQL)="C"
+   cTIPOINFO:="CCAMPOSQL"
+ENDIF
+
 aRETU:={}
 cCONN:=GERACONN(cDATABASE)
 
@@ -526,6 +551,9 @@ IF cTIPOINFO="ESTRUTURA"
             cCOMANDO ="SHOW COLUMNS FROM "+cTABELA
     endcase   
 ENDIF
+IF cTIPOINFO="CCAMPOSQL"
+   cCOMANDO:=cCAMPOSQL
+ENDIF
 
       TRY
         oRS:Open(cCOMANDO, oConN, adOpenDynamic, adLockOptimistic )
@@ -543,7 +571,7 @@ IF .NOT. lOPEN
 ENDIF
 IF lOPEN
     while ! ors:eof
-         IF cTIPOINFO="TABELA"
+         IF cTIPOINFO="TABELA" .OR. cTIPOINFO="CCAMPOSQL"
             AADD(aRETU,ors:fields(0):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
          ENDIF   
          IF cTIPOINFO="ESTRUTURA"
@@ -674,31 +702,14 @@ do case
        
        
  otherwise
-    cFieldType := 'C'
+    cFieldType := 'X'
     nFieldDec := 0
     nLength := 0
     
-    //
-    // Implantar posteriormente especifico sqllite
-    //
-    //IF nLENGTH=0
-    //    aTable1 := sqltablestru( oDB1, 'select max( length( ' + cFieldName + ' ) ) from ' + c2sql( cSQLTable ) )
-    //    nLength := 0
-    //    if len( aTable1 ) > 0
-    //       nLength := val( alltrim( aTable1[ 1, 1 ] ) )
-    //    endif
-    //ENDIF    
-    do case
-      case nLength == 0
-         nFieldLength := 10
-      case nLength < 256
-         nFieldLength := nLength
-      otherwise
-         nFieldLength := 10
-         cFieldType := 'M'
-    endcase
     
 endcase
+//Inclusao rotina pegar max quando campo tamanho for zero
+
 aRETU:={cFieldName,cFieldType,nFieldLength,nFieldDec} 
 return aRETU
 
