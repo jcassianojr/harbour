@@ -1,7 +1,7 @@
 @echo off
 rem *mingw64\*.a
 SET HB_INSTALL_PREFIX=d:\harbour\
-set HB_INSTALL_LIB=d:\harbour\lib\
+rem set HB_INSTALL_LIB=d:\harbour\lib\
 SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk-x64\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl-x64\include\
 REM SET HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl-x64\
@@ -12,7 +12,8 @@ SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 call hb64mgw12.bat
 cd contrib
-hbmk2 gtalleg\gtalleg
+REM Faltando a dependência
+REM hbmk2 gtalleg\gtalleg
 hbmk2 gtqtc\gtqtc
 hbmk2 gtwvg\gtwvg
 hbmk2 gtwvw\gtwvw
@@ -21,7 +22,8 @@ hbmk2 hbblat\hbblat
 hbmk2 hbblink\hbblink
 hbmk2 hbbz2\hbbz2
 hbmk2 hbbz2io\hbbz2io
-hbmk2 hbcairo\hbcairo
+REM Faltando a dependência
+REM hbmk2 hbcairo\hbcairo
 hbmk2 hbcomio\hbcomio
 hbmk2 hbcomm\hbcomm
 hbmk2 hbct\hbct
@@ -29,33 +31,39 @@ hbmk2 hbcups\hbcups
 hbmk2 hbcurl\hbcurl
 hbmk2 hbdoc\hbdoc
 hbmk2 hbexpat\hbexpat
-hbmk2 hbfbird\hbfbird
+REM Faltou a dependência
+REM hbmk2 hbfbird\hbfbird
 hbmk2 hbfimage\hbfimage
 hbmk2 hbformat\hbformat
 hbmk2 hbformat/utils/hbformat.hbp
 hbmk2 hbfoxpro\hbfoxpro
 hbmk2 hbfship\hbfship
-hbmk2 hbgd\hbgd
-hbmk2 hbgs\hbgs
+REM Faltando a dependência
+REM hbmk2 hbgd\hbgd
+REM Faltando a dependência
+REM hbmk2 hbgs\hbgs
 hbmk2 hbgt\hbgt
 hbmk2 hbgzio\hbgzio
 hbmk2 hbhpdf\hbhpdf
 hbmk2 hbhttpd\hbhttpd
 hbmk2 hblzf\hblzf
-hbmk2 hbmagic\hbmagic
+REM Faltando a dependência
+REM hbmk2 hbmagic\hbmagic
 hbmk2 hbmemio\hbmemio
 hbmk2 hbmisc\hbmisc
 hbmk2 hbmlzo\hbmlzo
 hbmk2 hbmxml\hbmxml
-hbmk2 hbmysql\hbmysql
+REM Faltou a dependência
+REM hbmk2 hbmysql\hbmysql
 hbmk2 hbmzip\hbmzip
 hbmk2 hbnetio\hbnetio
 hbmk2 hbnf\hbnf
 hbmk2 hbodbc\hbodbc
 hbmk2 hboslib\hboslib
-hbmk2 hbpgsql\hbpgsql
+REM Faltou a dependência
+REM hbmk2 hbpgsql\hbpgsql
 hbmk2 hbpipeio\hbpipeio
-hbmk2 hbtest\hbtest
+REM hbmk2 hbtest\hbtest
 hbmk2 hbtinymt\hbtinymt
 hbmk2 hbtip\hbtip
 hbmk2 hbtpathy\hbtpathy
@@ -70,32 +78,41 @@ hbmk2 rddads\rddads
 hbmk2 rddbm\rddbm
 hbmk2 rddmisc\rddmisc
 hbmk2 rddsql\rddsql
-hbmk2 sddfb\sddfb
-hbmk2 sddmy\sddmy
-hbmk2 sddoci\sddoci
+REM Faltou a dependência
+REM hbmk2 sddfb\sddfb
+REM Faltou a dependência
+REM hbmk2 sddmy\sddmy
+REM Faltando a dependência
+REM hbmk2 sddoci\sddoci
 hbmk2 sddodbc\sddodbc
-hbmk2 sddpg\sddpg
+REM Faltou a dependência
+REM hbmk2 sddpg\sddpg
 hbmk2 sddsqlt3\sddsqlt3
 hbmk2 xhb\xhb
 rem extras
 hbmk2 rddado\rddado
 hbmk2 hbxlsxml\hbxlsxml
 rem vszakats
-hbmk2 hbamqp\hbamqp
+rem hbmk2 hbamqp\hbamqp dependencia
 hbmk2 hbcrypto\hbcrypto
-hbmk2 hbicu\hbicu
+rem hbmk2 hbicu\hbicu dependencia
 hbmk2 hbmac\hbmac
 hbmk2 hbyaml\hbyaml
 rem minigui
 hbmk2 hbcab\hbcab
 hbmk2 sevenzip\sevenzip
-hbmk2 hblibxlsxwriter\libxlw.hbp
+hbmk2 libxlw\libxlw.hbp
 rem outros
 hbmk2 hbsvg\hbsvg.hbp
 hbmk2 sqlrddpp\sqlrddpp.hbp
 rem copiando ate checar os makes gravar local correto
 rem nao usar move para utilizar a criacao dinamica quando necessario
-copy d:\harbour\contrib\sqlrddpp\lib\win\mingw64\libsqlrddpp.a d:\harbour\lib\win\mingw64\
-copy d:\harbour\contrib\hbsvg\lib\win\mingw64\libhbsvg.a       d:\harbour\lib\win\mingw64\
-copy d:\harbour\contrib\hbxlsxml\lib\win\mingw64\libhbxlsxml.a d:\harbour\lib\win\mingw64\
-copy d:\harbour\contrib\rddado\lib\win\mingw64\librddado.a     d:\harbour\lib\win\mingw64\
+rem copy d:\harbour\contrib\sqlrddpp\lib\win\mingw64\libsqlrddpp.a d:\harbour\lib\win\mingw64\
+rem copy d:\harbour\contrib\hbsvg\lib\win\mingw64\libhbsvg.a       d:\harbour\lib\win\mingw64\
+rem copy d:\harbour\contrib\hbxlsxml\lib\win\mingw64\libhbxlsxml.a d:\harbour\lib\win\mingw64\
+rem copy d:\harbour\contrib\rddado\lib\win\mingw64\librddado.a     d:\harbour\lib\win\mingw64\
+rem copy d:\harbour\contrib\hbcab\lib\win\mingw64\libhbcab.a       d:\harbour\lib\win\mingw64\
+rem copy d:\harbour\contrib\hbcrypto\lib\win\mingw64\libhbcrypto.a d:\harbour\lib\win\mingw64\
+rem copy d:\harbour\contrib\hbyaml\lib\win\mingw64\libhbyaml.a     d:\harbour\lib\win\mingw64\
+rem copy d:\harbour\contrib\sevenzip\lib\win\mingw64\libsevenzip.a     d:\harbour\lib\win\mingw64\
+
