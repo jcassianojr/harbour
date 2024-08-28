@@ -244,12 +244,17 @@ MDS("")
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 *+    Function GRAVADOC()
+*     aVAL maior dos campos usado no tipo 2 TAM
+*     lDOCCAB inclui cabecario
+*     lDOCDAD inclui dados registros
+*     cSUBTIPO subtipo alguns formartos
+*     lDOCREcno inclui uma coluna adicional com o recno()(id)
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-funcTION GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
+function GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
 LOCAL cARQGRV:=cARQ
-local cLIN := hb_osnewline() //chr( 13 ) + chr( 10 )
+local cLIN := hb_osnewline() 
 LOCAL cVAL
 LOCAL cCAMPO
 LOCAL J,nIndexes
@@ -278,6 +283,11 @@ ENDIF
 IF zEXPOREXT="JSON" 
    tDOC := 8
 ENDIF
+if tDOC = 4 //dbe
+   lDOCDAD:=.F.
+   lDOCRECNO:=.F.
+   cSUBTIPO:=""
+endif
 
 
 do case
@@ -405,56 +415,68 @@ if lDOCCAB
              cTEXTO += "<Tamanho>" +LTrim(Str(aESTRU[X][3]))+ "</Tamanho>" + CLIN
              cTEXTO += "<Decimal>" +LTrim(Str(aESTRU[X][4]))+ "</Decimal>" + CLIN
              cTEXTO += "</Campo>" + CLIN
-
-             cTEXTO += "<Indice>" + cLIN
-             cTEXTO += "<Chave>" +StrTran((IndexKey()), "+", "</Chave>"+CLIN+"<Chave>")+ "</Chave>" + cLIN
-             cTEXTO += "</Indice>" + cLIN
-             
-               aUSO:=DBSTRUCT()
-              //select case ZANOFOR="SQLITE" criar conforme o tipo sql difere datatypes
-              //
-              DO CASE
-                 CASE ZANOFOR="SQLITE"
-                      cTEXTO:=SqliteCreateTable(cARQ,aUSO)
-                 OTHERWISE
-                        cTEXTO:="CREATE TABLE "+cARQ+HB_OSNEWLINE()
-                        cTEXTO+=" ("
-                        FOR K=1 TO LEN(aUSO)
-                            cTEXTO+=alltrim(aUSO[K][DBS_NAME])+" " //1
-                             DO CASE
-                                 CASE aUSO[K][DBS_TYPE]="C"
-                                      IF aUSO[K][DBS_LEN]=254
-                                        cTEXTO+="VARCHAR (512)"
-                                      ELSE
-                                        cTEXTO+="VARCHAR ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+")"
-                                      ENDIF  
-                                 CASE aUSO[K][DBS_TYPE]="D"
-                                      cTEXTO+="SMALLDATETIME"
-                                 CASE aUSO[K][DBS_TYPE]="N"                           
-                                       cTEXTO+="DECIMAL ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+","+ALLTRIM(STR(aUSO[K][DBS_DEC]))+")"                                
-                             ENDCASE
-                             IF K<>LEN(aUSO)
-                                cTEXTO+=" ,"+HB_OSNEWLINE() 
-                             ENDIF    
-                       NEXT K
-                      cTEXTO+=") ; "  + cLIN  
-               ENDCASE               
-                            
-               nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
-               FOR j = 1 TO  nIndexes
-                  //CREATE INDEX idx_student_name ON Students (name); 
-                  cINDEXNAME := dbORDERINFO( DBOI_NAME , ,  j )
-                  cINDEXNAME := StrTran(cINDEXNAME, "-", "_"  )  //Tracos nao aceitos trocando por undescore
-                   cSQLINDEX:="create index " + cINDEXNAME + " on " + cARQ + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) ;"
-                   //DbOrderInfo( <nDefine> , <cIndexFile> , <nOrder_or_cIndexName> , <xNewSetting> ) -> xCurrentSetting
-                   //AAdd( aNtxNames ,  dbORDERINFO( DBOI_NAME , ,  j )+" - "+dbORDERINFO( DBOI_EXPRESSION , ,  j ) )
-                   cTEXTO+=cSQLINDEX+HB_OSNEWLINE() 
-               NEXT j
-                          
-                       
       endcase
    next x
+   //Grava os indices
+   IF tDOC = 7 .AND. cSUBTIPO="ISO"
+       nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
+       FOR j = 1 TO  nIndexes
+             cTEXTO += "<Indice>" + cLIN
+             cTEXTO += "<Chave>" + MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + "</Chave>"+CLIN
+             cTEXTO += "</Indice>" + cLIN
+       NEXT j
+   ENDIF
+   
+   //cabecario sql  nao precisa loop nos fields 
+   IF tDOC = 7 .AND. cSUBTIPO<>"ISO"
+       aUSO:=aESTRU 
+       IF EMPTY(aESTRU)
+           aUSO:=DBSTRUCT()
+       ENDIF
+      //select case ZANOFOR="SQLITE" criar conforme o tipo sql difere datatypes
+      //
+      DO CASE
+         CASE ZANOFOR="SQLITE"
+              cTEXTO:=SqliteCreateTable(cARQ,aUSO,"SQLITE")
+          CASE  ZANOFOR="MYSQL" .OR. ZANOFOR="MYSQL64" .OR. ZANOFOR="MARIADB"
+             cTEXTO:=SqliteCreateTable(cNOMETABELA,aSTRU,"MYSQL")
+         CASE  ZANOFOR="MDB" .OR. ZANOFOR="ACCESS"    
+              cTEXTO:= SqliteCreateTable(cNOMETABELA,aSTRU,"MDB")      
+         OTHERWISE
+                cTEXTO:="CREATE TABLE "+cARQ+HB_OSNEWLINE()
+                cTEXTO+=" ("
+                FOR K=1 TO LEN(aUSO)
+                    cTEXTO+=alltrim(aUSO[K][DBS_NAME])+" " //1
+                     DO CASE
+                         CASE aUSO[K][DBS_TYPE]="C"
+                              IF aUSO[K][DBS_LEN]=254
+                                cTEXTO+="VARCHAR (512)"
+                              ELSE
+                                cTEXTO+="VARCHAR ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+")"
+                              ENDIF  
+                         CASE aUSO[K][DBS_TYPE]="D"
+                              cTEXTO+="SMALLDATETIME"
+                         CASE aUSO[K][DBS_TYPE]="N"                           
+                               cTEXTO+="DECIMAL ("+ALLTRIM(STR(aUSO[K][DBS_LEN]))+","+ALLTRIM(STR(aUSO[K][DBS_DEC]))+")"                                
+                     ENDCASE
+                     IF K<>LEN(aUSO)
+                        cTEXTO+=" ,"+HB_OSNEWLINE() 
+                     ENDIF    
+               NEXT K
+              cTEXTO+=") ; "  + cLIN  
+       ENDCASE               
+                    
+       nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
+       FOR j = 1 TO  nIndexes
+           cINDEXNAME := dbORDERINFO( DBOI_NAME , ,  j )
+           cINDEXNAME := StrTran(cINDEXNAME, "-", "_"  )  //Tracos nao aceitos trocando por undescore
+           cSQLINDEX:="create index " + cINDEXNAME + " on " + cARQ + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) ;"
+           cTEXTO+=cSQLINDEX+HB_OSNEWLINE() 
+       NEXT j
+   ENDIF
 ENDIF   
+
+
 If tDOC= 5 .AND. cSUBTIPO="TRH"
    cTEXTO += "</tr>" + cLIN
 ENDIF
@@ -475,7 +497,7 @@ if tDOC = 6
   cTEXTO += cLIN
 ENDIF
 
-If tDOC= 5 .AND. cSUBTIPO="TDB" //ja aberto em cima
+If tDOC= 5 .AND. cSUBTIPO="TDB" //ja aberto Acima
 ELSE
    nHANDLEDOC:=FCREATE( cARQGRV)
    IF LEN(cTEXTO)>0
@@ -494,6 +516,17 @@ if tDOC = 3  .OR. tDOC=2
 endif
 if tDOC = 4
    cTEXTO += 'ENDDEF' + cLIN
+    nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
+    IF nIndexes>0 
+       cTEXTO += 'DEFINDEX' + cLIN
+       FOR j = 1 TO  nIndexes
+           cTEXTO+=dbORDERINFO( DBOI_NAME , ,  j )
+           cTEXTO+= ' '
+           cTEXTO+=dbORDERINFO( DBOI_EXPRESSION , ,  j )
+           cTEXTO+=HB_OSNEWLINE() 
+       NEXT j
+       cTEXTO += 'ENDINDEX' + cLIN
+   ENDIF    
    cTEXTO += 'ENDFILE' + cLIN
 endif
 
@@ -670,7 +703,7 @@ If tDOC= 5 .AND. cSUBTIPO="TDB" //ja aberto em cima
 ELSE
    FCLOSE(nHANDLEDOC )
 ENDIF
-retu .T.
+return .T.
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+

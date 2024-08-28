@@ -457,7 +457,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
        CASE cTIPOSQL="SQLITE"
              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"SQLITE")
              executacmd(cMDBARQ,msql)
-       CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"
+       CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MYSQL")
              executacmd(cMDBARQ,msql)
        CASE  cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"    
