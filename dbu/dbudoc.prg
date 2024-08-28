@@ -520,9 +520,12 @@ if tDOC = 4
     IF nIndexes>0 
        cTEXTO += 'DEFINDEX' + cLIN
        FOR j = 1 TO  nIndexes
+           cTEXTO+= "   "
            cTEXTO+=dbORDERINFO( DBOI_NAME , ,  j )
-           cTEXTO+= ' '
+           cTEXTO+= " "
            cTEXTO+=dbORDERINFO( DBOI_EXPRESSION , ,  j )
+           cTEXTO+= " "
+           cTEXTO+=MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j ))
            cTEXTO+=HB_OSNEWLINE() 
        NEXT j
        cTEXTO += 'ENDINDEX' + cLIN
