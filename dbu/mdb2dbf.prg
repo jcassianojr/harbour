@@ -22,6 +22,13 @@ cDATABASEX:=space(30)
 cUSERX    :=SPACE(30)
 cPASSX    :=SPACE(30)
 
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
+   IF MDG("MARIADB (SIM) MYSQL(NAO)")
+      cTIPOSQL:="MARIADB" 
+   ENDIF
+ENDIF
+
+
 IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB" 
    OPENTIPOARQ()
 ENDIF
@@ -61,7 +68,7 @@ WHILE .T.
     else
        OPCAO(  4, 24, "&Criar arquivo              ", 67 ) //c 67
     endif   
-    OPCAO(  5, 24, "                           ", 86 ) //V 86
+    OPCAO(  5, 24, "Executar arquivo &SQL      ", 83 ) //S 83
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73 
     OPCAO(  7, 24, "&Exportar Tabelas          ", 69 ) //E 69
     KEY := menu( 1, 0 )
@@ -69,6 +76,7 @@ WHILE .T.
        CASE KEY=1
            mdbcria()
        CASE KEY=2
+            ExecArqSql()
        CASE KEY=3
             MDBIMPDBF()
        CASE KEY=4
@@ -82,10 +90,46 @@ RESTAA(aAMBIENTE)
 layout()
 return nil
 
+
+function ExecArqSql
+LOCAL cCOMANDO:=""
+LOCAL aCOMANDO:={}
+LOCAL cARQIMP:=""
+LOCAL nFILEUSO
+LOCAL cDELIM
+LOCAL cLINHA
+
+cARQIMP:=win_GetOPENFileName(, "Arquivos SQL",HB_CWD(), "Arquivos SQL", "*.SQL", 1 )
+cARQORI:=OPENTIPOARQ()
+
+IF FILE(cARQIMP)
+    nLASTREC:=FLINECOUNT(cARQIMP)
+    zei_fort( nLASTREC,,,0)
+    
+    cDELIM:=FDELIM (cARQIMP,1024) //acha o delimitador chr(13)+chr(10) dos ou chr(10) linux usado abaixo no freadline
+    nFILEuso:=FOPEN(cARQIMP) //abre o arquivo
+     WHILE .T.  
+        cLINHA:=FREADLINE (nFILEuso, 1024 ,.T. ,cDELIM) //FREADLINE (handle, line_len,lremchrexp,cDELI)
+        
+        AADD(aCOMANDO,cLINHA)
+        
+        IF cLINHA='__FINAL__' //freadline retorna __FINAL__   quando nao e mais linhas
+           EXIT
+        ENDIF
+        
+        zei_fort(nLASTREC,,,1)
+       
+     enddo
+     fclose(nFILEuso)   //fecha o arquivo
+    executacmd(cARQORI,aCOMANDO)
+endif
+return .t.
+
 function MDBEXP()
 LOCAL cCAMMDB   :=SPACE(100)
 LOCAL lCOPIANAT
 local Ldoc
+local Lgrvstruinfo
 LOCAL aTABELAS
 LOCAL nCHOICES
 LOCAL aSTRU
@@ -116,6 +160,7 @@ IF EMPTY(cTABELA)
    RETURN NIL
 ENDIF
 
+Lgrvstruinfo:=MDG("Gravar info das estruturas")
 
 
 LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
@@ -158,7 +203,7 @@ IF .NOT. lCOPIANAT
 ENDIF
 
 hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
-cDESTINO:=cCAMMDB+cTABELA+"."+zEXPOREXT
+cDESTINO:=cCAMMDB+cTABELA+"_"+Ctiposql+"."+zEXPOREXT
 MDT(cDESTINO)
 
 
@@ -174,12 +219,13 @@ ELSE
 ENDIF   
 dbcloseall()
 
-aSTRU:=sqltodbfstru(aSTRU)
-memowrit(ctabela+"_"+Ctiposql+"_stru.txt",strval(aSTRU))
+if lgrvstruinfo
+    aSTRU:=sqltodbfstru(aSTRU)
+    memowrit(ctabela+"_"+Ctiposql+"_stru.txt",strval(aSTRU))
 
-aSTRU:=MDBTABLES(cMDBARQ,cTABELA )
-memowrit(ctabela+"_"+Ctiposql+"_stru2.txt",strval(aSTRU))
-
+    aSTRU:=MDBTABLES(cMDBARQ,cTABELA )
+    memowrit(ctabela+"_"+Ctiposql+"_stru2.txt",strval(aSTRU))
+endif
 
 //DBCreate(<cDatabase>, <aStruct>, <cDriver> ) -> Nil
 
