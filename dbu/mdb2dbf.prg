@@ -220,11 +220,20 @@ ENDIF
 dbcloseall()
 
 if lgrvstruinfo
+    //tDOC = 4 gera dbe
+    //GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
+    //stru1 conforme os tipos dos campos
     aSTRU:=sqltodbfstru(aSTRU)
-    memowrit(ctabela+"_"+Ctiposql+"_stru.txt",strval(aSTRU))
-
+    memowrit(ctabela+"_"+Ctiposql+"_stru1.txt",strval(aSTRU))
+    if tdoc=14 //destino dbf tdoc=14  grava dbe
+       GRAVADOC( 4, ctabela+"_"+Ctiposql+"_1", aSTRU ,{},.t.,.f.,"",.f. )
+    endif
+    //stru2 pelo schema
     aSTRU:=MDBTABLES(cMDBARQ,cTABELA )
     memowrit(ctabela+"_"+Ctiposql+"_stru2.txt",strval(aSTRU))
+    if tdoc=14 //destino dbf tdoc=14 grava dbe
+       GRAVADOC( 4, ctabela+"_"+Ctiposql+"_2", aSTRU ,{},.t.,.f.,"",.f. )
+    endif
 endif
 
 //DBCreate(<cDatabase>, <aStruct>, <cDriver> ) -> Nil
