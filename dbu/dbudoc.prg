@@ -319,7 +319,7 @@ if nFIELDS = 0
    return .f.
 endif
 if tDOC = 4
-   cTEXTO += 'DBFDEF ' + cARQ + cLIN
+   cTEXTO += 'DBFDEF ' + UPPER(cARQ) + cLIN
 endif
 if tDOC = 3 .OR. tDOC=2
    cTEXTO += '+-----------------------------------------------------------------------------+' + cLIN
@@ -518,7 +518,7 @@ if tDOC = 4
    cTEXTO += 'ENDDEF' + cLIN
     nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
     IF nIndexes>0 
-       cTEXTO += 'DEFINDEX' + cLIN
+       cTEXTO += 'DEFINDEX ' + UPPER(cARQ) + cLIN
        FOR j = 1 TO  nIndexes
            cTEXTO+= "   "
            cTEXTO+=dbORDERINFO( DBOI_NAME , ,  j )
@@ -526,11 +526,24 @@ if tDOC = 4
            cTEXTO+=dbORDERINFO( DBOI_EXPRESSION , ,  j )
            cTEXTO+= " "
            cTEXTO+=MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j ))
-           cTEXTO+=HB_OSNEWLINE() 
+           cTEXTO+= clin
        NEXT j
        cTEXTO += 'ENDINDEX' + cLIN
    ENDIF    
    cTEXTO += 'ENDFILE' + cLIN
+   cTEXTO +=  cLIN
+   cTEXTO += "["+UPPER(alltrim(carq))+".DBF]"+clin
+   cTEXTO += "CAMINHO="+HB_CWD()+clin
+   cTEXTO += "DRIVER="+ RDDNAME() +clin
+   cTEXTO += "NUMMAINTAINED="+str(nIndexes,1) + cLIN
+   cTEXTO += "MAINTAIN0="+cARQ+".CDX" + cLIN
+   IF nIndexes>0
+      FOR j = 1 TO  nIndexes
+         cTEXTO += "TAG"   + str(j - 1,1) + "=" + dbORDERINFO( DBOI_NAME , ,  j ) + clin
+         cTEXTO += "INDEX" + str(j - 1,1) + "=" + dbORDERINFO( DBOI_EXPRESSION , ,  j ) + clin
+         cTEXTO += "INDEXFIELDS" + str(j - 1,1) + "=" + MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j ))+ clin
+      NEXT j   
+   endif 
 endif
 
 //verificas se a quantidade de registros

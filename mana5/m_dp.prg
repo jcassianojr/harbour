@@ -32,6 +32,7 @@ endif
 aARQ   := {}
 aDES   := {}
 aCAM   := {}
+aDRV   := {}
 FILTRO := ""
 FILTRO := RFILORD(zARQ,.F.)
 if !USEREDE(zARQ,1,1)
@@ -62,6 +63,7 @@ while !eof()
       aadd(aARQ,ARQUIVO)
       aadd(aDES,DESCRICAO)
       aadd(aCAM,LOCALARQ(PADRAO,CAMINHO))
+      aadd(aDRV,ALLTRIM(DRIVER))
    endif
    dbskip()
    zei_fort(nLASTREC,,,1)
@@ -122,7 +124,11 @@ for Y := 1 to nARQ
    else
       fwrite(nHANDLE,"["+alltrim(mARQUIVO)+".DBF]"+HB_OSNEWLINE())
       fwrite(nHANDLE,"CAMINHO="+ALLTRIM(aCAM[Y])+HB_OSNEWLINE())
-      fwrite(nHANDLE,"DRIVER=DBFCDX"+HB_OSNEWLINE())
+      IF EMPTY(aDRV[Y))
+         fwrite(nHANDLE,"DRIVER=DBFCDX"+HB_OSNEWLINE())
+      ELSE
+         fwrite(nHANDLE,"DRIVER="+aDRV[Y]+HB_OSNEWLINE())
+      ENDIF   
    endif
    if mARQUIVO # HELPARQ
       IF USEREDE(alltrim(mARQUIVO),1,0,,lMESARQ)   

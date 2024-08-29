@@ -211,6 +211,7 @@ zusovia:=USOVIA
 layout()
 RETURN USOVIA
 
+
 *+********************************************************************
 *+
 *+    Function pegTIPDOC escolher tipo para exportacao de dados
