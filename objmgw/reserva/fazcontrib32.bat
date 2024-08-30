@@ -2,15 +2,17 @@
 rem  busca tc *mingw\*.a
 SET HB_INSTALL_PREFIX=d:\harbour\
 rem set HB_INSTALL_LIB=d:\harbour\lib\ 
+SET HB_INSTALL_PREFIX=d:\harbour\
 SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl\include\
+set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\include\
 SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage\
-set HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl\
-set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\
-set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql\
-set HB_WITH_OCI=d:\harbour\hb3rd\oci\
-set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql\
 set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\
+set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql\include\
+set HB_WITH_OCI=d:\harbour\hb3rd\oci\include\
+set HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl\include\
+set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql\include\
+SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2\include\
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 call hb32mgw12
