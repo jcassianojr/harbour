@@ -5,9 +5,10 @@ rem set HB_INSTALL_LIB=d:\harbour\lib\
 SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk-x64\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl-x64\include\
 SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage-x64\
-rem set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\
+set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript-x64\bin\
 SET HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl-x64\include
 SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2-x64\include
+SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 call hb64mgw12.bat
@@ -27,7 +28,8 @@ REM hbmk2 hbcairo\hbcairo
 hbmk2 hbcomio\hbcomio
 hbmk2 hbcomm\hbcomm
 hbmk2 hbct\hbct
-hbmk2 hbcups\hbcups
+rem linux
+rem hbmk2 hbcups\hbcups
 hbmk2 hbcurl\hbcurl
 hbmk2 hbdoc\hbdoc
 hbmk2 hbexpat\hbexpat
@@ -40,8 +42,7 @@ hbmk2 hbfoxpro\hbfoxpro
 hbmk2 hbfship\hbfship
 REM Faltando a dependência
 REM hbmk2 hbgd\hbgd
-REM Faltando a dependência
-REM hbmk2 hbgs\hbgs
+hbmk2 hbgs\hbgs
 hbmk2 hbgt\hbgt
 hbmk2 hbgzio\hbgzio
 hbmk2 hbhpdf\hbhpdf
@@ -93,18 +94,24 @@ rem extras
 hbmk2 rddado\rddado
 hbmk2 hbxlsxml\hbxlsxml
 rem vszakats
-rem hbmk2 hbamqp\hbamqp dependencia
+hbmk2 hbamqp\hbamqp
 hbmk2 hbcrypto\hbcrypto
 rem hbmk2 hbicu\hbicu dependencia
-hbmk2 hbmac\hbmac
+rem lib para mac
+rem hbmk2 hbmac\hbmac
 hbmk2 hbyaml\hbyaml
+
 rem minigui
 hbmk2 hbcab\hbcab
 hbmk2 sevenzip\sevenzip
 hbmk2 libxlw\libxlw.hbp
+hbmk2 hbsms\hbsms
+hbmk2 hbxml\hbxml
+
 rem outros
 hbmk2 hbsvg\hbsvg.hbp
 hbmk2 sqlrddpp\sqlrddpp.hbp
+
 rem copiando ate checar os makes gravar local correto
 rem nao usar move para utilizar a criacao dinamica quando necessario
 rem copy d:\harbour\contrib\sqlrddpp\lib\win\mingw64\libsqlrddpp.a d:\harbour\lib\win\mingw64\

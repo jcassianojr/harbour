@@ -55,6 +55,8 @@ SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage-x64\
 rem set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\
 SET HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl-x64\include
 SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2-x64\include
+set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript-x64\bin\
+tem SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 
