@@ -5,6 +5,7 @@ rem set HB_INSTALL_LIB=d:\harbour\lib\
 SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk-x64\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl-x64\include\
 SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage-x64\
+set HB_WITH_GS=d:\harbour\hb3rd\gscript-X64\
 set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript-x64\bin\
 SET HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl-x64\include
 SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2-x64\include
@@ -68,7 +69,7 @@ REM hbmk2 hbtest\hbtest
 hbmk2 hbtinymt\hbtinymt
 hbmk2 hbtip\hbtip
 hbmk2 hbtpathy\hbtpathy
-hbmk2 hbunix\hbunix
+rem hbmk2 hbunix\hbunix
 hbmk2 hbwin\hbwin
 hbmk2 hbxdiff\hbxdiff
 hbmk2 hbxpp\hbxpp

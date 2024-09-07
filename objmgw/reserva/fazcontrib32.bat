@@ -7,6 +7,7 @@ SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl\include\
 set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\include\
 SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage\
+set HB_WITH_GS=d:\harbour\hb3rd\gscript\
 set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\\bin\
 set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql\include\
 set HB_WITH_OCI=d:\harbour\hb3rd\oci\include\

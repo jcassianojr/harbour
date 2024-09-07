@@ -2,8 +2,9 @@ rem HB_COMPILER=mingw o make ja pega o compilador
 SET HB_INSTALL_PREFIX=d:\harbour\
 SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl\include\
-set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\include\
+rem set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\include\
 SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage\
+set HB_WITH_GS=d:\harbour\hb3rd\gscript\
 set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\bin\
 set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql\include\
 set HB_WITH_OCI=d:\harbour\hb3rd\oci\include\
@@ -18,7 +19,7 @@ rem HB_BUILD_CONTRIB_DYN=no
 rem HB_BUILD_DYN=no
 rem HB_BUILD_SHARED=no
 rem HB_BUILD_STRIP=all
-rem HB_LANG=EN
+rem HB_LANG=EN 
 
 rem HB_WITH_BZIP2   hbbz2/hbbz2.hbp                  # uses: bz2 (locally hosted)
 rem HB_WITH_EXPAT   hbexpat/hbexpat.hbp              # uses: expat (locally hosted)
