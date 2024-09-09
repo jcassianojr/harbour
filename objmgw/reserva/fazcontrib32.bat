@@ -14,17 +14,18 @@ set HB_WITH_OCI=d:\harbour\hb3rd\oci\include\
 set HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl\include\
 set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql\include\
 SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2\include\
-SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
+SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\rabbitmq-c\
+set HB_WITH_CAIRO=d:\harbour\hb3rd\cairo\include\cairo\
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 call hb32mgw12
 cd contrib
 REM Faltando a dependência
 REM hbmk2 gtalleg\gtalleg
-hbmk2 gtqtc\gtqtc
+rem Faltando a dependência
+rem hbmk2 gtqtc\gtqtc
 hbmk2 gtwvg\gtwvg
 hbmk2 gtwvw\gtwvw
-
 hbmk2 hbamf\hbamf
 hbmk2 hbblat\hbblat
 hbmk2 hbblink\hbblink
@@ -35,12 +36,9 @@ REM hbmk2 hbcairo\hbcairo
 hbmk2 hbcomio\hbcomio
 hbmk2 hbcomm\hbcomm
 hbmk2 hbct\hbct
-rem linux
-rem hbmk2 hbcups\hbcups
 hbmk2 hbcurl\hbcurl
 hbmk2 hbdoc\hbdoc
 hbmk2 hbexpat\hbexpat
-REM Faltou a dependência firebird
 hbmk2 hbfbird\hbfbird
 hbmk2 hbfimage\hbfimage
 hbmk2 hbformat\hbformat
@@ -61,23 +59,18 @@ hbmk2 hbmemio\hbmemio
 hbmk2 hbmisc\hbmisc
 hbmk2 hbmlzo\hbmlzo
 hbmk2 hbmxml\hbmxml
-REM Faltou a dependência mysql
 hbmk2 hbmysql\hbmysql
 hbmk2 hbmzip\hbmzip
 hbmk2 hbnetio\hbnetio
 hbmk2 hbnf\hbnf
 hbmk2 hbodbc\hbodbc
 hbmk2 hboslib\hboslib
-REM Faltou a dependência pgsql
 hbmk2 hbpgsql\hbpgsql
+hbmk2 hbssl\hbssl
 hbmk2 hbpipeio\hbpipeio
-rem sem uso hbtest
-REM hbmk2 hbtest\hbtest
 hbmk2 hbtinymt\hbtinymt
 hbmk2 hbtip\hbtip
 hbmk2 hbtpathy\hbtpathy
-rem linux
-rem hbmk2 hbunix\hbunix
 hbmk2 hbwin\hbwin
 hbmk2 hbxdiff\hbxdiff
 hbmk2 hbxpp\hbxpp
@@ -88,14 +81,10 @@ hbmk2 rddads\rddads
 hbmk2 rddbm\rddbm
 hbmk2 rddmisc\rddmisc
 hbmk2 rddsql\rddsql
-REM Faltou a dependência firebird
 hbmk2 sddfb\sddfb
-REM Faltou a dependência mysql
 hbmk2 sddmy\sddmy
-REM Faltando a dependência oracle
-REM hbmk2 sddoci\sddoci
+hbmk2 sddoci\sddoci
 hbmk2 sddodbc\sddodbc
-REM Faltou a dependência pgsql
 hbmk2 sddpg\sddpg
 hbmk2 sddsqlt3\sddsqlt3
 hbmk2 xhb\hbmk2 

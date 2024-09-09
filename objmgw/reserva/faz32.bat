@@ -12,6 +12,7 @@ set HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl\include\
 set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql\include\
 SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2\include\
 SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
+set HB_WITH_CAIRO=d:\harbour\hb3rd\cairo\include\cairo\
 
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes

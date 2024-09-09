@@ -9,14 +9,16 @@ set HB_WITH_GS=d:\harbour\hb3rd\gscript-X64\
 set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript-x64\bin\
 SET HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl-x64\include
 SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2-x64\include
-SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
+set HB_WITH_CAIRO=d:\harbour\hb3rd\cairo-x64\include\cairo\
+rem SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 call hb64mgw12.bat
 cd contrib
 REM Faltando a dependência
 REM hbmk2 gtalleg\gtalleg
-hbmk2 gtqtc\gtqtc
+REM Faltando a dependência
+rem hbmk2 gtqtc\gtqtc
 hbmk2 gtwvg\gtwvg
 hbmk2 gtwvw\gtwvw
 hbmk2 hbamf\hbamf
@@ -66,6 +68,7 @@ REM Faltou a dependência
 REM hbmk2 hbpgsql\hbpgsql
 hbmk2 hbpipeio\hbpipeio
 REM hbmk2 hbtest\hbtest
+hbmk2 hbssl\hbssl
 hbmk2 hbtinymt\hbtinymt
 hbmk2 hbtip\hbtip
 hbmk2 hbtpathy\hbtpathy
