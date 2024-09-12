@@ -893,17 +893,25 @@ FUNCTION CreateAccessDatabase( cDatabase, cPassword, lEncrypt )
 
    oCatalog := CreateObject( "ADOX.Catalog" )
    
+    /* OLEDB:Engine Type=5
+   Unknown 0
+  Microsoft Jet 1.0            1
+  Microsoft Jet 1.1            2
+  Microsoft Jet 2.0            3
+  Microsoft Jet 3.x(97)        4
+  Microsoft Jet 4.x(2000)      5
+  */
    
    
  //if loledb
    oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" +;
                       "Data Source=" + cDatabase + ";" +;
-                      "JET OLEDB:Engine Type=4;" )
+                      "JET OLEDB:Engine Type=5;" )
 // else
  
  //  oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.16;" +;
  //                     "Data Source=" + cDatabase + ";" +;
- //                     "JET OLEDB:Engine Type=4;" )
+ //                     "JET OLEDB:Engine Type=5;" )
 //endif   
 
 /*
