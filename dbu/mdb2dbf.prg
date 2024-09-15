@@ -36,18 +36,28 @@ ENDIF
 
 
 loledb=.T.
-IF cTIPOSQL="MDB"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64  //mdg("User sim=oledb(32b) nao=accdb(64b)")
+IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64  //mdg("User sim=oledb jet (32b) nao=oledb accdb(64b)")
 ENDIF 
 IF cTIPOSQL="MYSQL"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)")
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
 ENDIF 
+ 
+ IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" 
+   IF .not. MDG("MDB/ACCESS (SIM) ACCDB(NAO)")
+      cTIPOSQL:="ACCDB" 
+   ENDIF
+ENDIF
+
   
+IF cTIPOSQL="ACCDB"
+   loledb:=.F. //Requer aceole.db 32 ou 64 instalado
+ENDIF
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
     DO CASE
-       CASE cTIPOSQL="MDB"
+       CASE cTIPOSQL="MDB" .OR.  cTIPOSQL="ACCESS" 
             IF loledb
                @ 03,24 SAY "oledb(32b)"
             Else
@@ -298,12 +308,14 @@ return aStruct
 
 function opencmdbarq()
 DO CASE
-    CASE cTIPOSQL="MDB"
+    CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
         if loledb
            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
         else
            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
         endif 
+    CASE cTIPOSQL="ACCDB"  
+         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
     CASE cTIPOSQL="SQLITE"  
          USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQLITE
     CASE cTIPOSQL="MYSQL"
@@ -327,7 +339,9 @@ DO CASE
    CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
         //necessario uma tabela para criar
-        
+   CASE cTIPOSQL="ACCDB" 
+        cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
+        //necessario uma tabela para criar
    CASE cTIPOSQL="SQLITE" 
         cARQORI:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
         { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
@@ -356,8 +370,7 @@ ENDCASE
 endif 
 
 
-//criar opcao para access644 nao funciona com catalogo nem  com o adordd
-IF loledb .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" ) //32 Cria com catalog
+IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" //Cria com catalog
    CreateAccessDatabase( cARQORI)
 ENDIF  
 
@@ -392,12 +405,14 @@ LOCAL cCONCREATE
 
    cCONCREATE:=cMDBARQ+";"+cNOMETABELA
     DO CASE
-       CASE cTIPOSQL="MDB"
+       CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
             IF  loledb
                 cCONCREATE:=cMDBARQ+";"+cNOMETABELA
             else
                 cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
             endif
+       CASE cTIPOSQL="ACCDB"   
+            cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
        CASE cTIPOSQL="SQLITE"  
             cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";SQLITE"
        CASE cTIPOSQL="MYSQL"  
@@ -446,7 +461,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     
     DO CASE
        CASE cTIPOSQL="SQLITE" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"  ;
-            .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+            .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB"
              //Abaixo com executacmd ja com estrutura ajustada pela funcao
        OTHERWISE
           dbCreate( cCONCREATE, aSTRU,"ADORDD" )
@@ -460,7 +475,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
        CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MYSQL")
              executacmd(cMDBARQ,msql)
-       CASE  cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"    
+       CASE  cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" 
               msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MDB")
              executacmd(cMDBARQ,msql)
        OTHERWISE
@@ -496,8 +511,10 @@ FUNCTION OPENTIPOARQ
 LOCAL cMDBARQ
 cMDBARQ:=""
 DO CASE
-   CASE cTIPOSQL="MDB"
+   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+   CASE cTIPOSQL="ACCDB" 
+        cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
    CASE cTIPOSQL="SQLITE"     
         cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
         { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
@@ -587,7 +604,7 @@ oRS:CursorLocation := 3
 cCOMANDO:=""
 IF cTIPOINFO="TABELA"
     DO CASE
-       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS".or. at(".MDB",upper(cdatabase))>0
+       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
             cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
               + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
                + " order by MSysObjects.name "
@@ -599,7 +616,8 @@ IF cTIPOINFO="TABELA"
 ENDIF
 IF cTIPOINFO="ESTRUTURA"
     DO CASE
-       CASE cTIPOSQL="MDB" .or. at(".MDB",upper(cdatabase))>0
+       //Implantar possivelmente com catalogx
+       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0   
             cCOMANDO ="PRAGMA table_info( " +  cTABELA  + ")"   
        CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
@@ -619,7 +637,7 @@ ENDIF
     //    return  aRETU 
       END
 IF .NOT. lOPEN
-  IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. at(".MDB",upper(cdatabase))>0
+  IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
      //atribui direito de select porem as vezes e necessario fazer via ide 
       EXECUTACMD(cdatabase,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
   ENDIF
@@ -772,13 +790,16 @@ FUNCTION geraconn(cCAMBASE)
 cConn  :=""
 DO CASE
 
-   CASE cTIPOSQL="MDB" .or. at(".MDB",upper(cCAMBASE))>0
+   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCDB" .or. at(".MDB",upper(cCAMBASE))>0
         if loledb
            cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
         else
-           cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
+           cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
         endif
-
+        
+    CASE cTIPOSQL="ACCDB" .or. at(".ACCDB",upper(cCAMBASE))>0    
+         cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+         
    CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cCAMBASE))>0
         cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
 
@@ -895,30 +916,36 @@ FUNCTION CreateAccessDatabase( cDatabase, cPassword, lEncrypt )
    
     /* OLEDB:Engine Type=5
    Unknown 0
-  Microsoft Jet 1.0            1
-  Microsoft Jet 1.1            2
-  Microsoft Jet 2.0            3
-  Microsoft Jet 3.x(97)        4
-  Microsoft Jet 4.x(2000)      5
+   Jet 1.0            1
+   Jet 1.1            2
+   Jet 2.0            3
+   Jet 3.x(97)        4
+   Jet 4.x(2000)      5
+   JetEngineType_Ace12 = 6
   */
    
    
- //if loledb
+ if loledb //32 bits mdb
    oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" +;
                       "Data Source=" + cDatabase + ";" +;
                       "JET OLEDB:Engine Type=5;" )
-// else
- 
- //  oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.16;" +;
- //                     "Data Source=" + cDatabase + ";" +;
- //                     "JET OLEDB:Engine Type=5;" )
-//endif   
+ else
+   if cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" //64 bits mdb
+     oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.12;" +;
+                        "Data Source=" + cDatabase + ";" +;
+                        "JET OLEDB:Engine Type=5;" )
+  else             //accdb  32 ou 64 bits    
+    oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.12;" +;
+                        "Data Source=" + cDatabase + ";" +;
+                        "JET OLEDB:Engine Type=6;" )
+  endif
+endif   
 
-/*
+/* exemplo pass e ou encripitado
    oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" +;
                     "Data Source=" + cDatabase + ";" +;
                     "JET OLEDB:Database Password=" + cPassWord + ";" +;
-                    "JET OLEDB:Engine Type=4;" +;
+                    "JET OLEDB:Engine Type=5;" +;
                     "JET OLEDB:Encrypt Database=" + IIF(lEncrypt, "TRUE", "FALSE" ) )
 */
 

@@ -124,7 +124,7 @@ for Y := 1 to nARQ
    else
       fwrite(nHANDLE,"["+alltrim(mARQUIVO)+".DBF]"+HB_OSNEWLINE())
       fwrite(nHANDLE,"CAMINHO="+ALLTRIM(aCAM[Y])+HB_OSNEWLINE())
-      IF EMPTY(aDRV[Y))
+      IF EMPTY(aDRV[Y])
          fwrite(nHANDLE,"DRIVER=DBFCDX"+HB_OSNEWLINE())
       ELSE
          fwrite(nHANDLE,"DRIVER="+aDRV[Y]+HB_OSNEWLINE())

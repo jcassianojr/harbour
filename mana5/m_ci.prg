@@ -151,7 +151,7 @@ cCAMSYSU:=ProfileString( "MANA5.INI", "PATH", "SYSUSER", HB_CWD())
 
 if nARQ=1
   if at(".MDB",UPPER(cCAMWRPT))>0 .OR. at(".MDB",UPPER(cCAMCONT))>0 .OR.  at(".MDB",UPPER(cCAMSYSU))>0 
-     loledb:=hb_Version( HB_VERSION_BITWIDTH )<64 //mdg("User sim=oledb(32b) nao=accdb(64b)")
+     loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=oledb(32b) nao=accdb(64b)")
   endif   
 endif
 
@@ -267,7 +267,7 @@ if at(".MDB",upper(cCAMBASE))>0
     if loledb
        cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
     else
-       cConn:="Provider=Microsoft.ACE.OLEDB.16.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
+       cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
     endif
 ENDIF
 

@@ -502,7 +502,7 @@ if valtype(cTIPOSQL)<>"C"
 ENDIF
  
    msql:=""
-   IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+   IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB"
       mSql := "CREATE TABLE "+cTablename+" ("
    ELSE
        mSql := "CREATE TABLE IF NOT EXISTS "+cTablename+" ("
@@ -523,7 +523,7 @@ ENDIF
           //
           // Caracter
           //
-          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER") 
+          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"  .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER") 
              mSql += "VARCHAR("+LTRIM(STR(mFldLen))+")"
           case mFldType = "C"
              mSql += "CHAR("+LTRIM(STR(mFldLen))+")"    
@@ -532,7 +532,7 @@ ENDIF
          //     
          case mFldType = "D" .AND. cTIPOSQL="PGSQL"
             mSql += "TIMESTAMP"
-         case (mFldType = "D" .OR. mFldType = "T") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS".OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
+         case (mFldType = "D" .OR. mFldType = "T") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "DATETIME"
         case mFldType = "D"
              mSql += "DATE"   
@@ -556,7 +556,7 @@ ENDIF
                 ENDIF    
              endif  
              
-         case mFldType = "N"  .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+         case mFldType = "N"  .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")
              if mFldDec > 0
                 mSql += "DOUBLE"
              else
@@ -582,14 +582,14 @@ ENDIF
           //
           // float DOUBLE
           // 
-          case (mFldType = "F" .or. mFldType = "Y") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")     
+          case (mFldType = "F" .or. mFldType = "Y") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")     
                mSql += "DOUBLE"
           case (mFldType = "F" .or. mFldType = "Y")
                 mSql += "FLOAT"
           //
           //integer LONG
           //   
-          case mFldType = "I" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")    
+          case mFldType = "I" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")    
              mSql += "LONG"
           case mFldType = "I"
              mSql += "INTEGER"
@@ -603,7 +603,7 @@ ENDIF
           //   
          case mFldType = "L" .AND. cTIPOSQL="PGSQL"
             mSql += "BOOLEAN"
-         case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
+         case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDDB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "BIT"       
           case mFldType = "L"
              mSql += "BOOL"
@@ -612,7 +612,7 @@ ENDIF
           //   
           case mFldType = "M" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL")
              mSql += "TEXT" 
-          case mFldType = "M" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+          case mFldType = "M" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")
              mSql += "LONGTEXT"
           case mFldType = "M"
              mSql += "TEXT"
@@ -623,7 +623,7 @@ ENDIF
             mSql += "BYTEA"
            case mFldType = "G" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "VARBINARY"  
-           case mFldType = "G" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS")
+           case mFldType = "G" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")
              mSql += "LONGBINARY"        
           case mFldType = "G"
              mSql += "BLOB"
