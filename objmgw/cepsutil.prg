@@ -96,7 +96,7 @@ ENDIF
 Return cRETU
 
 
-function tratanome(mNOME,lANSI,lACEN)
+function tratanome(mNOME,lANSI,lACEN,lRANG)
 LOCAL nPOS
 IF VALTYPE(lANSI)<>"L"
    lANSI:=.F.
@@ -104,6 +104,10 @@ ENDIF
 IF VALTYPE(lACEN)<>"L"
    lACEN:=.T.
 ENDIF
+IF VALTYPE(lRANG)<>"L"
+   lACEN:=.F.
+ENDIF
+
 mNOME     := strtran( alltrim( mNOME ), "'", " " )    //tirar como d'agua d'olho
 mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
 mNOME     := strtran( mNOME, "-", " " )               //tirar os tracos
@@ -122,5 +126,9 @@ mNOME     := ALLTRIM(UPPER(mNOME))
 nPOS:=AT("(",mNOME)
 IF nPOS>0
    mNOME:=SUBSTR(mNOME,1,nPOS-1)
+ENDIF
+IF lRANG //remove nao carateres numero e simbolos 
+   mNOME:=RANGEREPL(chr(0),chr(31),mNOME," ")
+   mNOME:=RANGEREPL(chr(127),chr(255),mNOME," ")
 ENDIF
 RETUrn mNOME

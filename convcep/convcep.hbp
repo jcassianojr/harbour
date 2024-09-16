@@ -10,7 +10,7 @@ xhb.hbc
 hbmisc.hbc
 gtwvg.hbc
  
-convcep.PRG   
+convcep.PRG   -b
 d:\develop\harbour\objmgw\cepsutil.prg
 d:\develop\harbour\objmgw\comp.prg
 d:\develop\harbour\objmgw\netdbf.prg

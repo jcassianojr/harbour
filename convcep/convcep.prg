@@ -18,6 +18,8 @@ REQUEST DBFCDX
 
 function main()
 
+
+
 MVINFOConfTela("convcep - atualizador de cep")
 
 netregosok()
@@ -33,6 +35,9 @@ __SetCentury( .t. )
 Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 SetCursor(.t.)
+
+JasonCountry()
+quit
 
           
 aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
@@ -576,9 +581,6 @@ IF MsgYesNo("Ajustar tipos de rua")
                   FIELD->TIPO:=aTIT[nPOSCOD]                  
                ENDIF
             ENDIF 
-			//IF ALLTRIM(FIELD->RUA)="RUA"
-			 //  ALTD()
-			//ENDIF
 			nPOS:=AT(" ", ALLTRIM(FIELD->RUA)) //checar se só o tipo esta na rua e exemplo rua="AVENIDA" deixando em rua em  branco para próxima importação ajustar 
             IF nPOS=0
                 Nposcod = ASCAN(aCOD,alLtrim(FIELD->RUA))
@@ -888,51 +890,85 @@ ENDIF
 return nil
 
 
+function JasonCountry()
 
+local kk
+kk:=1   
+ 
+netuse("PAISES")   
+dbsetorder(2) //ISO3166B BRA
+   
+mArquivo := '*.json'
+mListaArq := Directory(mArquivo,"D")
+nFIMARQ:=LEN(mListaArq)   
 
+For kk = 1 to nFIMARQ
+     cFILECEP:=lower(mListaArq[kk,1])
+     cXMl:=memoread(cFILECEP)
+     
+     
+    cPOPULACAO  :=pegnodojason(cXMl,'"population":')
+    cAREA       :=pegnodojason(cXMl,'"area":')
+    cREGION     :=pegnodojason(cXMl,'"region":')
+    cCONTINENT  :=pegnodojason(cXMl,'"subregion":')
+    cMOEDA      :=pegnodojason(cXMl,'"currencies":')
+    cISO3166A    :=pegnodojason(cXMl,'"alpha2":')
+    cISO3166B    :=pegnodojason(cXMl,'"alpha3":')
+    cddd        :=pegnodojason(cXMl,'"callingCodes":')
+    cNOME       :=TRATANOME(pegnodojason(cXMl,'"nativeName":'),.F.,.T.,.T.)
+    cnomeINT    :=TRATANOME(pegnodojason(cXMl,'"name":'),.F.,.T.,.T.)
+    ccapital    :=TRATANOME(pegnodojason(cXMl,'"capital":'),.F.,.T.,.T.)
+    cDOMINIO    :=pegnodojason(cXMl,'"tld":')
+    
+    dbselectar("paises")
+    dbgotop()
+    if ! dbseek(cISO3166B)
+       netrecapp()
+       field->ISO3166B:=cISO3166B
+       field->UF:="XX"
+    else
+       netreclock()   
+    endif
+    netgrvz("NOMEINT",cNOMEINT,.f.)
+    netgrvz("DDD",cDDD,.f.)
+    netgrvz("NOME",cNOME,.f.)
+    netgrvz("AREA",val(cAREA),.f.)
+    netgrvz("CONTINENT",cCONTINENT,.f.)
+    netgrvz("ISO3166A",cISO3166A,.f.)
+    netgrvz("capital",ccapital,.f.)
+    netgrvz("URLPAIS",cDOMINIO,.f.)
+    netgrvz("CONTREGIAO",cREGION,.f.)
+    netgrvz("MOEDA",cMOEDA,.f.)
+    
+    dbunlocK()
+    ferase(cFILECEP)
+next kk
+return .t.  
 
-
-/*
-function tratanome(mNOME,lANSI,lACEN)
-LOCAL nPOS
-IF VALTYPE(lANSI)<>"L"
-   lANSI:=.F.
+function pegnodojason(cTEXTO,cNODO) //difeRente pegnodojason webcep pois aqui o nodo pode ter listas entre []
+LOCAL nPOSNODO
+nPOSNODO:=AT(cNODO, cTEXTO)
+IF nPOSNODO>0
+  cTEXTO        := SUBSTR( cTEXTO , nPOSNODO +  LEN(cNODO) ) // LEN(cNODO)+1
+  DO CASE
+    CASE SUBSTR(cTEXTO,1,1)='"'
+       cTEXTO        := SUBSTR(cTEXTO,2) //"BRA"
+       CTEXTO        := SUBSTR( cTEXTO ,1, AT( '"'   , cTEXTO)  -1 )
+    CASE SUBSTR(cTEXTO,1,1)='['
+       cTEXTO        := SUBSTR(cTEXTO,3) //"[BRL]"
+       CTEXTO        := SUBSTR( cTEXTO ,1, AT( ']'   , cTEXTO)  -2 )
+    CASE SUBSTR(cTEXTO,1,1) $   '0123456789'
+       cTEXTO        := SUBSTR(cTEXTO ,1, AT(",",cTEXTO) -1)
+  ENDCASE
+ENDIF  
+nPOSNODO:=AT( '",',cTEXTO)
+IF nPOSNODO>0 //nodos com mais de um exemplo dominio pega o primeiro
+   cTEXTO:=SUBSTR(cTEXTO,1,nPOSNODO-1)
 ENDIF
-IF VALTYPE(lACEN)<>"L"
-   lACEN:=.T.
+IF AT("{",cTEXTO)>0 //zera nodos invalidos
+   cTEXTO:=""
 ENDIF
-mNOME     := strtran( alltrim( mNOME ), "'", " " )    //tirar como d'agua d'olho
-mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
-mNOME     := strtran( mNOME, "-", " " )               //tirar os tracos
-mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
-IF lACEN
-   mNOME     := TIRACE(mNOME)
-ENDIF
-mNOME     := strtran( mNOME, ".", " " )               //tirar os .
-mNOME     := strtran( mNOME, ",", " " )               //tirar os ,
-mNOME     := strtran( mNOME, "  ", " " )              //tirar os duplos espacos
-IF lANSI
-   mNOME     :=win_ANSIToOEM(mNOME) //HB_ansitooem(mNOME)
-ENDIF
-mNOME     := ALLTRIM(UPPER(mNOME))
-nPOS:=AT("(",mNOME)
-IF nPOS>0
-   mNOME:=SUBSTR(mNOME,1,nPOS-1)
-ENDIF
-RETUrn mNOME
-*/
-
-/*
-function pegcidconv(cUF,cNOME)
-cDBF:=ALIAS()
-dbselectar("cidconv")
-dbgotop()
-if dbseek(cUF+cNOME)
-   cNOME:=CIDDES
-ENDIF
-DBSELECTAR(cDBF)
-RETUrn cNOME
-*/
+RETURN cTEXTO
 
 function help
 retu .t.
