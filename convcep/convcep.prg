@@ -36,9 +36,9 @@ Set( _SET_EPOCH, year( date() ) - 60 )
 Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 SetCursor(.t.)
 
-JasonCountry()
-quit
-
+if mdg("Importar jason country")
+  JasonCountry()
+endif
           
 aUF    := { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", ;
             "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", ;
