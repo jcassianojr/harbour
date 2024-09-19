@@ -5,12 +5,15 @@ rem set HB_INSTALL_LIB=d:\harbour\lib\
 SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk-x64\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl-x64\include\
 SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage-x64\
-set HB_WITH_GS=d:\harbour\hb3rd\gscript-X64\
+set HB_WITH_GS=d:\harbour\hb3rd\gscript-x64\include\ghostscript\
 set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript-x64\bin\
 SET HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl-x64\include
 SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2-x64\include
 set HB_WITH_CAIRO=d:\harbour\hb3rd\cairo-x64\include\cairo\
-rem SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
+set HB_WITH_LIBMAGIC=d:\harbour\hb3rd\magic-x64\include\
+SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ-x64\include\
+set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird-x64\include\
+set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql-x64\include\
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 call hb64mgw12.bat
@@ -52,7 +55,7 @@ hbmk2 hbhpdf\hbhpdf
 hbmk2 hbhttpd\hbhttpd
 hbmk2 hblzf\hblzf
 REM Faltando a dependência
-REM hbmk2 hbmagic\hbmagic
+hbmk2 hbmagic\hbmagic
 hbmk2 hbmemio\hbmemio
 hbmk2 hbmisc\hbmisc
 hbmk2 hbmlzo\hbmlzo
