@@ -103,6 +103,12 @@ do case
       IF Empty( Value)
          cValue="''"
       ELSE
+         //troca caracteres ',() usados pelo sql language
+         cVALUE := STRTRAN(cVALUE,"'"," ")
+         cVALUE := STRTRAN(cVALUE,","," ")    
+         cVALUE := STRTRAN(cVALUE,"("," ") 
+         cVALUE := STRTRAN(cVALUE,")"," ")
+         cVALUE := ALLTRIM(cVALUE)
          cValue := "'" + value + "'"
       ENDIF
    case Valtype(Value) == "L"
