@@ -4,7 +4,7 @@
 -vcshead=vcshead.ch
 -tshead=tshead.ch
 #-manifest=dbu.Manifest  comentado erro compilacao 32 bits
-
+dbu.rc
 
 hbct.hbc
 hbwin.hbc
@@ -15,6 +15,8 @@ rddads.hbc
 rddbm.hbc
 hbsqlit3.hbc
 rddado.hbc
+
+
 
 DBU.PRG  
 dbucnvmemo.prg 
