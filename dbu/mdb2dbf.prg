@@ -23,13 +23,17 @@ cUSERX    :=SPACE(30)
 cPASSX    :=SPACE(30)
 
 IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
+   cUSERX:=PADR("root",30," ")
    IF MDG("MARIADB (SIM) MYSQL(NAO)")
       cTIPOSQL:="MARIADB" 
    ENDIF
 ENDIF
 
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
+   cUSERX:=PADR("postgres",30," ")
+ENDIF
 
-IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB" 
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
    OPENTIPOARQ()
 ENDIF
 
@@ -42,6 +46,10 @@ ENDIF
 IF cTIPOSQL="MYSQL"
    loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
 ENDIF 
+IF cTIPOSQL="PGSQL64"
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
+ENDIF 
+
  
  IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" 
    IF .not. MDG("MDB/ACCESS (SIM) ACCDB(NAO)")
@@ -73,7 +81,7 @@ WHILE .T.
         OTHERWISE
             @ 03,24 SAY cTIPOSQL
     ENDCASE  
-    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"
+    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
        OPCAO(  4, 24, "&Criar database             ", 67 ) //c 67
     else
        OPCAO(  4, 24, "&Criar arquivo              ", 67 ) //c 67
@@ -308,17 +316,17 @@ return aStruct
 
 function opencmdbarq()
 DO CASE
-    CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+    CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         if loledb
            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
         else
            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
         endif 
-    CASE cTIPOSQL="ACCDB"  
+    CASE cTIPOSQL="ACCDB"  .OR. cTIPOSQL="ACCDB64" 
          USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
     CASE cTIPOSQL="SQLITE"  
          USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQLITE
-    CASE cTIPOSQL="MYSQL"
+    CASE cTIPOSQL="MYSQL" .or. cTIPOSQL="MYSQL64"
         if loledb
             USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MYSQL    FROM cSERVERx  USER CUSERX PASSWORD CPASSX
         else
@@ -326,6 +334,12 @@ DO CASE
         endif    
     CASE cTIPOSQL="MARIADB"     
         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MARIADB  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+    CASE cTIPOSQL="PGSQL" .or. cTIPOSQL="PGSQL64"
+        if loledb
+            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA PGSQL    FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+        else
+            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA PGSQL64  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+        endif        
 ENDCASE
 return .t.
 
@@ -336,10 +350,10 @@ local cCONCREATE
 cCONCREATE:=""
 
 DO CASE
-   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
         //necessario uma tabela para criar
-   CASE cTIPOSQL="ACCDB" 
+   CASE cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
         //necessario uma tabela para criar
    CASE cTIPOSQL="SQLITE" 
@@ -348,14 +362,14 @@ DO CASE
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
           
-   CASE cTIPOSQL="MYSQL"  .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"
+   CASE cTIPOSQL="MYSQL"  .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
       //con sql create database
       
 ENDCASE
 
 
 
- if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"
+ if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
     cARQORI:=OPENTIPOARQ()
     cNEXDATABASEX:=SPACE(40)
     @ 24,00 SAY "Novo database"
@@ -370,7 +384,7 @@ ENDCASE
 endif 
 
 
-IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" //Cria com catalog
+IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB64"//Cria com catalog
    CreateAccessDatabase( cARQORI)
 ENDIF  
 
@@ -405,17 +419,17 @@ LOCAL cCONCREATE
 
    cCONCREATE:=cMDBARQ+";"+cNOMETABELA
     DO CASE
-       CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+       CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
             IF  loledb
                 cCONCREATE:=cMDBARQ+";"+cNOMETABELA
             else
                 cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
             endif
-       CASE cTIPOSQL="ACCDB"   
+       CASE cTIPOSQL="ACCDB"  .OR. cTIPOSQL="ACCDB64" 
             cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";ACEOLEDB"
        CASE cTIPOSQL="SQLITE"  
             cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";SQLITE"
-       CASE cTIPOSQL="MYSQL"  
+       CASE cTIPOSQL="MYSQL"  .OR. cTIPOSQL="MYSQL64"
            if loledb
                cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MYSQL;"+cSERVERX+";"+CUSERX+";"+cPASSX
             else    
@@ -423,6 +437,12 @@ LOCAL cCONCREATE
             endif   
        CASE cTIPOSQL="MARIADB"  
            cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";MARIADB;"+cSERVERX+";"+CUSERX+";"+cPASSX
+       CASE cTIPOSQL="PGSQL"  .OR. cTIPOSQL="PGSQL64"
+           if loledb
+               cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";PGSQL;"+cSERVERX+";"+CUSERX+";"+cPASSX
+            else    
+               cCONCREATE:=cMDBARQ+";"+cNOMETABELA+";PGSQL64;"+cSERVERX+";"+CUSERX+";"+cPASSX
+            endif            
     ENDCASE
 RETURN cCONCREATE 
    
@@ -461,7 +481,8 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     
     DO CASE
        CASE cTIPOSQL="SQLITE" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"  ;
-            .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB"
+            .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"  ;
+            .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
              //Abaixo com executacmd ja com estrutura ajustada pela funcao
        OTHERWISE
           dbCreate( cCONCREATE, aSTRU,"ADORDD" )
@@ -475,9 +496,15 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
        CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MYSQL")
              executacmd(cMDBARQ,msql)
-       CASE  cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" 
+          CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"PGSQL")
+             executacmd(cMDBARQ,msql)          
+       CASE  cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" 
               msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MDB")
              executacmd(cMDBARQ,msql)
+        CASE  cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"ACCDB")
+             executacmd(cMDBARQ,msql)         
        OTHERWISE
             //criado acima pela funcao
     ENDCASE      
@@ -510,17 +537,18 @@ RETURN .T.
 FUNCTION OPENTIPOARQ
 LOCAL cMDBARQ
 cMDBARQ:=""
+
 DO CASE
-   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" // .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
-   CASE cTIPOSQL="ACCDB" 
+   CASE cTIPOSQL="ACCDB"  //.OR. cTIPOSQL="ACCDB64"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
    CASE cTIPOSQL="SQLITE"     
         cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
         { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
-   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
          cSERVERX:=PADR(cSERVERX,30," ")
          cDATABASEX:=PADR(cDATABASEX,30," ")
          cUSERX:=PADR(cUSERX,30," ")
@@ -604,7 +632,9 @@ oRS:CursorLocation := 3
 cCOMANDO:=""
 IF cTIPOINFO="TABELA"
     DO CASE
-       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
+            .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
+            .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
             cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
               + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
                + " order by MSysObjects.name "
@@ -612,16 +642,22 @@ IF cTIPOINFO="TABELA"
             cCOMANDO ="SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
        CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
             cCOMANDO = "SHOW TABLES"
+       CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+           cCOMANDO ="???"   
     endcase   
 ENDIF
 IF cTIPOINFO="ESTRUTURA"
     DO CASE
        //Implantar possivelmente com catalogx
-       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
+             .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
+             .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0   
             cCOMANDO ="PRAGMA table_info( " +  cTABELA  + ")"   
        CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
             cCOMANDO ="SHOW COLUMNS FROM "+cTABELA
+       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+           cCOMANDO ="???"             
     endcase   
 ENDIF
 IF cTIPOINFO="CCAMPOSQL"
@@ -637,7 +673,9 @@ ENDIF
     //    return  aRETU 
       END
 IF .NOT. lOPEN
-  IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+  IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
+     .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
+      .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
      //atribui direito de select porem as vezes e necessario fazer via ide 
       EXECUTACMD(cdatabase,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
   ENDIF
@@ -673,7 +711,8 @@ IF lOPEN
                    cFieldName := upper(alltrim( ors:fields(0):value ))
                    cType      := upper( alltrim( ors:fields(1):value ) ) 
                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-                     
+               CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+                  /// ????                                 
                    
              ENDCASE   
             
@@ -790,20 +829,20 @@ FUNCTION geraconn(cCAMBASE)
 cConn  :=""
 DO CASE
 
-   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCDB" .or. at(".MDB",upper(cCAMBASE))>0
+   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64"  .or. at(".MDB",upper(cCAMBASE))>0
         if loledb
            cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
         else
            cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
         endif
         
-    CASE cTIPOSQL="ACCDB" .or. at(".ACCDB",upper(cCAMBASE))>0    
+    CASE cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" .or. at(".ACCDB",upper(cCAMBASE))>0    
          cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
          
    CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cCAMBASE))>0
         cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
 
-    CASE cTIPOSQL="MYSQL" 
+    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
         if empty(cDATABASEX)
             if loledb
                cConn:="Driver={MySQL ODBC 8.0 ANSI Driver};Server="+cSERVERX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //32 driver versao 8 
@@ -823,7 +862,7 @@ DO CASE
         else
            cConn:="DRIVER={MariaDB ODBC 3.2 Driver};DATABASE="+cDATABASEX+";SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
         endif   
-   case cTIPOSQL="PGSQL"   
+   case cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64"
          //Driver={PostgreSQL ANSI};Server=IP address;Port=5432;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
         IF loledb
             if empty(cDATABASEX)

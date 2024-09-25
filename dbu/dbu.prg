@@ -490,8 +490,8 @@ setar_b[ 5 ] = "sysfunc = 0"
 setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
-util_m := { "Rem Reg Dup", "CopiarComo", "Ver TXT", "Editar TXT",;
-            "Exportar","Sort DBF","MYSQL","MDB","SQLITE","Converter","FixarTodos","ZeraTodos",;
+util_m := { "Rem Reg Dup", "CopiarComo", "Ver TXT", "Sort DBF",;
+            "Exportar","POSTGRESQL","MYSQL","MDB","SQLITE","Converter","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
@@ -561,11 +561,11 @@ do while .T.
       case M->func_sel = 3
          VERTXT()
       case M->func_sel = 4
-         EDITXT()
+         sortdbf()
       case M->func_sel = 5
           multidocs(0) //passa 0 par a perguntar o formato
       case M->func_sel = 6
-          sortdbf()
+          mdbmenu("PGSQL")
       case M->func_sel = 7
            mdbmenu("MYSQL")
       case M->func_sel = 8

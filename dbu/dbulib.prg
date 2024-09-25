@@ -433,7 +433,7 @@ cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Orige
 LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
 
 //nao mostrar tipo 14 dbf na escolha nao spbrepor na copia passando falso aqui
-nTIPDOC:=   pegtipodoc(.F.)
+tDOC:=   pegtipodoc(.F.)
 pegparexp()
 
 
