@@ -4,7 +4,7 @@ SET HB_INSTALL_PREFIX=d:\harbour\
 rem set HB_INSTALL_LIB=d:\harbour\lib\
 SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk-x64\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl-x64\include\
-SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage-x64\
+SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage-x64\include\
 set HB_WITH_GS=d:\harbour\hb3rd\gscript-x64\include\ghostscript\
 set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript-x64\bin\
 SET HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl-x64\include
@@ -14,6 +14,7 @@ set HB_WITH_LIBMAGIC=d:\harbour\hb3rd\magic-x64\include\
 SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ-x64\include\
 set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird-x64\include\
 set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql-x64\include\
+SET HB_WITH_LIBHARU=d:\harbour\hb3rd\libharu-x64\include\
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 call hb64mgw12.bat

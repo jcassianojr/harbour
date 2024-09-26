@@ -813,7 +813,7 @@ do case
     nFieldLength := 8
     nFieldDec := 0
     
- case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE"
+ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == "FLOAT8"
     cFieldType := 'N'
     nFieldLength := 14
     nFieldDec := 5
