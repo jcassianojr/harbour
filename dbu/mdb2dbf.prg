@@ -242,13 +242,13 @@ if lgrvstruinfo
     //GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
     //stru1 conforme os tipos dos campos
     aSTRU:=sqltodbfstru(aSTRU)
-    memowrit(ctabela+"_"+Ctiposql+"_stru1.txt",strval(aSTRU))
+    HB_memowrit(ctabela+"_"+Ctiposql+"_stru1.txt",strval(aSTRU),.F.)
     if tdoc=14 //destino dbf tdoc=14  grava dbe
        GRAVADOC( 4, ctabela+"_"+Ctiposql+"_1", aSTRU ,{},.t.,.f.,"",.f. )
     endif
     //stru2 pelo schema
     aSTRU:=MDBTABLES(cMDBARQ,cTABELA )
-    memowrit(ctabela+"_"+Ctiposql+"_stru2.txt",strval(aSTRU))
+    HB_memowrit(ctabela+"_"+Ctiposql+"_stru2.txt",strval(aSTRU),.F.)
     if tdoc=14 //destino dbf tdoc=14 grava dbe
        GRAVADOC( 4, ctabela+"_"+Ctiposql+"_2", aSTRU ,{},.t.,.f.,"",.f. )
     endif
@@ -510,22 +510,33 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     ENDCASE      
     
     IF lGRAVASQL.AND. .NOT. EMPTY(msql)
-       MEMOWRIT(cNOMETABELA+"_createtable_"+cTIPOSQL+".sql",Msql)
+       HB_MEMOWRIT(cNOMETABELA+"_createtable_"+cTIPOSQL+".sql",Msql,.F.)
     ENDIF
 
     if len(aindices)>0
         //Cria do os indices append from nao faz    
         Executacmd(cMDBARQ,Aindices) //Executa comando unico ou array de comandos
-        
         IF lGRAVASQL
-           MEMOWRIT(cNOMETABELA+"_createindex_"+cTIPOSQL+".sql",STRVAL(aINDICES))
+           msql:=""
+           for ii=1 to len(aINDICES)
+               mSQL+=aINDICEs[II]+ " ; "+HB_OSNEWLINE()
+           next ii
+           HB_MEMOWRIT(cNOMETABELA+"_createindex_"+cTIPOSQL+".sql",mSQL,.f.)
         endif
     endif    
     
     cTABELA:=cNOMETABELA //publica usada o opencmdarq
     if nLASTREC>0 //nao importa se nao tiver registros
-      opencmdbarq()
-      append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
+      try
+        opencmdbarq()
+        try 
+          append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
+        catch oErR
+          MDT("Erro anexando dados")
+        end
+      catch oErR
+        MDT("Erro ao abrir nova tabela")  
+      end  
       dbcloseall()
     endif  
       
@@ -643,7 +654,7 @@ IF cTIPOINFO="TABELA"
        CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
             cCOMANDO = "SHOW TABLES"
        CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
-           cCOMANDO ="???"   
+           cCOMANDO ="SELECT tablename FROM pg_tables WHERE schemaname='public'"   
     endcase   
 ENDIF
 IF cTIPOINFO="ESTRUTURA"
@@ -657,7 +668,11 @@ IF cTIPOINFO="ESTRUTURA"
        CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
             cCOMANDO ="SHOW COLUMNS FROM "+cTABELA
        CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
-           cCOMANDO ="???"             
+           cCOMANDO ="SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
+           cCOMANDO +=" FROM   information_schema.columns "
+           cCOMANDO +=" WHERE   table_name = '"+cTABELA+"';"   
+           //udt_name melhor retorno mas tambem tras data_type caso necesario
+           //where table_schema='public'  tras todas as tabelas do usurio(public)
     endcase   
 ENDIF
 IF cTIPOINFO="CCAMPOSQL"
@@ -712,8 +727,14 @@ IF lOPEN
                    cType      := upper( alltrim( ors:fields(1):value ) ) 
                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
                CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
-                  /// ????                                 
-                   
+                   cFieldName := upper(alltrim( ors:fields(0):value )) //column_name
+                   cType      := upper( alltrim( ors:fields(1):value ) ) // data_type
+                   nFieldLength = ors:fields(2):value //tamanho string character_maximum_length
+                   if ors:fields(3):value>0 //tamannho numeric
+                      nFieldLength = ors:fields(3):value  //numeric_precision
+                      nFieldDec    = ors:fields(4):value  //numeric_precision_radix
+                   endif
+                   AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))                              
              ENDCASE   
             
          ENDIF   
@@ -771,8 +792,9 @@ do case
        cFieldType := 'N'
        nFieldDec := 0
    
+   
     //
-    // char(n) text(n) o tamanho esta entre parentes
+    // varchar(n) char(n) text(n) o tamanho esta entre parentes
     //
    case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. (AT("CHAR",UPPER(CTYPE))>0 .OR. AT("TEXT",UPPER(CTYPE))>0 )
        cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1) 
@@ -781,8 +803,12 @@ do case
        cFieldType := 'C'
        nFieldDec := 0
        
+  case  cType == "INT2"
+    cFieldType := 'N'
+    nFieldLength := 4
+    nFieldDec := 0     
     
- case cType == "INTEGER" 
+ case cType == "INTEGER" .OR. cType == "INT4"
     cFieldType := 'N'
     nFieldLength := 8
     nFieldDec := 0
@@ -793,13 +819,13 @@ do case
     nFieldDec := 5
     
     
- case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE'
+ case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE' .or. cType == 'TIMESTAMP'
     cFieldType := 'D'
     nFieldLength := 8
     nFieldDec := 0
     
     
- case cType == "BOOL"
+ case cType == "BOOL"  .or. cType == 'BOOLEAN' 
     cFieldType := 'L'
     nFieldLength := 1
     nFieldDec := 0
@@ -811,7 +837,24 @@ do case
        nFieldLength := 10
        cFieldType := 'M'
        nFieldDec := 0
-       
+    
+    //
+    // numeric sem ()
+    //
+  case  AT("(",cTYPE)=0 .AND. AT(")",cTYPE)=0 .AND.  AT("NUMERIC",UPPER(CTYPE))>0
+       cFieldType := 'N'
+       IF nFieldLength =0  //atribui 8 padrao integer caso nao foi passado
+          nFieldLength := 8
+          nFieldDec := 0   
+       ENDIF     
+  
+  //
+  // postgresql varchar bpchar CHARACTER
+  //
+  CASE cType == "VARCHAR" .OR. cType == "BPCHAR" .OR. AT("CHARACTER",UPPER(CTYPE))>0  
+       cFieldType := 'C'
+       nFieldDec := 0
+  
        
  otherwise
     cFieldType := 'X'
@@ -829,7 +872,7 @@ FUNCTION geraconn(cCAMBASE)
 cConn  :=""
 DO CASE
 
-   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64"  .or. at(".MDB",upper(cCAMBASE))>0
+   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .or. at(".MDB",upper(cCAMBASE))>0
         if loledb
            cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
         else
@@ -837,10 +880,10 @@ DO CASE
         endif
         
     CASE cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" .or. at(".ACCDB",upper(cCAMBASE))>0    
-         cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+         cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //driver 32 e 64 devem estar instalados
          
    CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cCAMBASE))>0
-        cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
+        cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";" //mesmo nome de driver para 32 e 64 ambos devem estar instaldos
 
     CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
         if empty(cDATABASEX)
@@ -856,28 +899,27 @@ DO CASE
                cConn:="Driver={MySQL ODBC 9.0 ANSI Driver};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+CUSERX+";Pwd="+cPASSX+";"  //64 driver versao 9 
             endif
         endif    
-   case cTIPOSQL="MARIADB"   
+   case cTIPOSQL="MARIADB"   //mesmo nome de driver para 32 e 64 ambos devem estar instaldos
         if empty(cDATABASEX)
             cConn:="DRIVER={MariaDB ODBC 3.2 Driver};SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
         else
            cConn:="DRIVER={MariaDB ODBC 3.2 Driver};DATABASE="+cDATABASEX+";SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
         endif   
    case cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64"
-         //Driver={PostgreSQL ANSI};Server=IP address;Port=5432;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
-        IF loledb
-            if empty(cDATABASEX)
-                cConn:="DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+        //Driver={PostgreSQL ANSI};Server=IP address;Port=5432;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
+        if empty(cDATABASEX)
+            if loledb
+               cConn:="DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //32 driver versao 
             else
-               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //64 driver versao x64
             endif
         else
-            if empty(cDATABASEX)
-                cConn:="DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+            if loledb
+               cConn:="DRIVER={PostgreSQL ANSI};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //32 driver versao 
             else
-               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX //64 driver versao 964
             endif
-        
-        endif   
+        endif    
 ENDCASE      
 RETURN cConn   
 

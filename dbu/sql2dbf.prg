@@ -147,7 +147,7 @@ IF ! Empty( stmt )
       do case
          case type1 == "INTEGER" .or. type1 == "REAL" .or. type1 == "FLOAT" .or. type1 == "DOUBLE"
             aadd(typesarr,"N")
-         case type1 == "DATE" .or. type1 == "DATETIME"
+         case type1 == "DATE" .or. type1 == "DATETIME" .or. type1 == "TIMESTAMP"
             aadd(typesarr,"D")
          case type1 == "BOOL"
             aadd(typesarr,"L")
@@ -529,14 +529,15 @@ ENDIF
           //
           // Caracter
           //
-          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"  .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER") 
+          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"  .OR. cTIPOSQL="ACCDB" ;
+               .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL")
              mSql += "VARCHAR("+LTRIM(STR(mFldLen))+")"
           case mFldType = "C"
              mSql += "CHAR("+LTRIM(STR(mFldLen))+")"    
          //
          // date datetime
          //     
-         case mFldType = "D" .AND. cTIPOSQL="PGSQL"
+         case (mFldType = "D" .OR. mFldType = "T" ).AND. cTIPOSQL="PGSQL"
             mSql += "TIMESTAMP"
          case (mFldType = "D" .OR. mFldType = "T") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "DATETIME"
@@ -556,9 +557,17 @@ ENDIF
                 mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
              else
                 IF mFldLen<=9
-                    mSql += "INT"  //INTEGER("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+                    DO CASE
+                       CASE cTIPOSQL="PGSQL"
+                            mSQL += "INTEGER"
+                       CASE ELSE
+                            mSql += "INT"  //INTEGER("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+                    ENDCASE        
                 ELSE
-                    mSql += "BIGINT"  //"bigint("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+                    DO CASE
+                       CASE ELSE
+                            mSql += "BIGINT"  //"bigint("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+                    ENdCASE            
                 ENDIF    
              endif  
              
