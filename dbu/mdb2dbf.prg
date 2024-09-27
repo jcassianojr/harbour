@@ -224,6 +224,10 @@ hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
 cDESTINO:=cCAMMDB+cTABELA+"_"+Ctiposql+"."+zEXPOREXT
 MDT(cDESTINO)
 
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" //Dupla aspas maiuscula
+   cTABELA:=CHR(34)+UPPER(cTABELA)+CHR(34)
+ENDIF
+
 
 MDT("abrindo arquivo de origem: "+cMDBARQ)
 opencmdbarq()
@@ -315,6 +319,8 @@ next i
 return aStruct
 
 function opencmdbarq()
+local lRETU
+lRETU:=.T.
 DO CASE
     CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         if loledb
@@ -336,12 +342,22 @@ DO CASE
         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MARIADB  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
     CASE cTIPOSQL="PGSQL" .or. cTIPOSQL="PGSQL64"
         if loledb
-            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA PGSQL    FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+            TRY
+              USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA PGSQL    FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+            catch oErR
+              MDT("Erro Abrindo")  
+              lRETU = .F.
+            END  
         else
-            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA PGSQL64  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+            TRY
+              USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA PGSQL64  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+            catch oErR
+              MDT("Erro Abrindo")  
+              lRETU = .F.  
+            END  
         endif        
 ENDCASE
-return .t.
+return lRETU
 
 
 

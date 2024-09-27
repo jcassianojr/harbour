@@ -494,43 +494,66 @@ DO CASE
    // DML CSV UNL PSV TSV
    //
    CASE zREGSEP=chr(34) .OR. zREGSEP=chr(39) //delimitador + aspas duplas aspas (") (')
-        COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1) DELIMITED  WITH ( { zDELIMITE, zREGSE } )  
-  
+        try
+            COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1) DELIMITED  WITH ( { zDELIMITE, zREGSE } ) 
+        catch oErR
+          MDT("Erro copiando dados") 
+        END
    //
    //tDOC=14
    //
   CASE zEXPOREXT="DBF" 
-        COPY to &cDESTINO. while zei_fort(nLASTREC,,,1) 
-
+        try
+            COPY to &cDESTINO. while zei_fort(nLASTREC,,,1) 
+        catch oErR
+          MDT("Erro copiando dados")    
+        END
    //
    //tDOC=6
    //
-   CASE zEXPOREXT="SDF"                                                                            
-        COPY to &cDESTINO. while zei_fort(nLASTREC,,,1)  SDF
-
+   CASE zEXPOREXT="SDF"   
+        try                                                                         
+            COPY to &cDESTINO. while zei_fort(nLASTREC,,,1)  SDF
+        catch oErR
+          MDT("Erro copiando dados") 
+        END
    //
    //tDOC=10
    //
    CASE zEXPOREXT="DLM" .OR. zEXPOREXT="CSV"
-        COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED
-  
+        TRY
+            COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED
+        catch oErR
+          MDT("Erro copiando dados") 
+            
+        END
    //
    //tDOC=11
    //
    CASE zEXPOREXT="UNL" .OR. zEXPOREXT="PSV"
-        COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH PIPE
-   
+        TRY
+            COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH PIPE
+        catch oErR
+          MDT("Erro copiando dados") 
+        END
    //
    // tDOC=12
    //
    CASE zEXPOREXT="TSV" 
-        COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH TAB
-    
+        TRY
+            COPY to &cDESTINO. whILE zei_fort(nLASTREC,,,1)  DELIMITED   WITH TAB
+        catch oErR
+          MDT("Erro copiando dados") 
+        END
    //
    // SSV  zdelimite= ; e outro delimitador tDOC=9
    //
-   OTHERWISE 
-       COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1)  DELIMITED   WITH WITH &zDELIMITE
+   OTHERWISE
+       TRY 
+           COPY to &cDESTINO.  while zei_fort(nLASTREC,,,1)  DELIMITED   WITH WITH &zDELIMITE
+        catch oErR
+          MDT("Erro copiando dados") 
+       END
 ENDCASE   
 RETURN NIL
 
