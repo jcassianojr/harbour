@@ -508,6 +508,9 @@ if valtype(cTIPOSQL)<>"C"
 ENDIF
  
    msql:=""
+   IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" //postgree e case sensitive deixando em maisuclav
+      cTABLENAME:=UPPER(cTABLENAME)
+   ENDIF
    IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB"
       mSql := "CREATE TABLE "+cTablename+" ("
    ELSE
@@ -523,6 +526,9 @@ ENDIF
       if i > 1
          mSql += ", "
       endif
+      IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" //postgreSQL e case sensitive deixando em maisuclas
+         mFldnm:=UPPER(mFldnm)
+      ENDIF
       mSql += alltrim(mFldnm)+" "
 
       do case

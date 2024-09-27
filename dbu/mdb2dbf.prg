@@ -655,6 +655,7 @@ IF cTIPOINFO="TABELA"
             cCOMANDO = "SHOW TABLES"
        CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
            cCOMANDO ="SELECT tablename FROM pg_tables WHERE schemaname='public'"   
+           //SELECT table_name  FROM information_schema.tables  WHERE table_type = 'BASE TABLE' AND table_schema='public'
     endcase   
 ENDIF
 IF cTIPOINFO="ESTRUTURA"
@@ -670,7 +671,8 @@ IF cTIPOINFO="ESTRUTURA"
        CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
            cCOMANDO ="SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
            cCOMANDO +=" FROM   information_schema.columns "
-           cCOMANDO +=" WHERE   table_name = '"+cTABELA+"';"   
+           cCOMANDO +=" WHERE   table_name = '"+UPPER(cTABELA)+"' ORDER BY ordinal_position ;" 
+           //nome tabela em maiusculo postgresql e case sensitive  
            //udt_name melhor retorno mas tambem tras data_type caso necesario
            //where table_schema='public'  tras todas as tabelas do usurio(public)
     endcase   
@@ -803,20 +805,36 @@ do case
        cFieldType := 'C'
        nFieldDec := 0
        
-  case  cType == "INT2"
+  case  cType == "INT2" .OR. cType == "SMALLINT"
     cFieldType := 'N'
     nFieldLength := 4
     nFieldDec := 0     
     
- case cType == "INTEGER" .OR. cType == "INT4"
+ case cType == "INTEGER" .OR. cType == "INT4" .OR. cType == "SERIAL"
     cFieldType := 'N'
     nFieldLength := 8
     nFieldDec := 0
     
- case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == "FLOAT8"
+  case cType == "BIGINT" .OR. cType == "INT8" .OR. cType == "BIGSERIAL"
+    cFieldType := 'N'
+    nFieldLength := 16
+    nFieldDec := 0   
+    
+    
+ case cType == "DOUBLE PRECISION" .or. cType == "FLOAT8"
+    cFieldType := 'N'
+    nFieldLength := 19
+    nFieldDec := 9
+    
+case cType == "MONEY" 
+    cFieldType := 'N'
+    nFieldLength := 12
+    nFieldDec := 2
+    
+case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == "FLOAT4"
     cFieldType := 'N'
     nFieldLength := 14
-    nFieldDec := 5
+    nFieldDec := 5    
     
     
  case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE' .or. cType == 'TIMESTAMP'
@@ -855,6 +873,15 @@ do case
        cFieldType := 'C'
        nFieldDec := 0
   
+  CASE cType == "NAME" 
+       cFieldType := 'C'
+       nFieldLength := 64
+       nFieldDec := 0
+   
+   CASE cType == "OID" 
+       cFieldType := 'N'
+       nFieldLength := 19
+       nFieldDec := 0    
        
  otherwise
     cFieldType := 'X'
