@@ -224,6 +224,8 @@ hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
 cDESTINO:=cCAMMDB+cTABELA+"_"+Ctiposql+"."+zEXPOREXT
 MDT(cDESTINO)
 
+
+cTABELAGRV:=cTABELA
 IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" //Dupla aspas maiuscula
    cTABELA:=CHR(34)+UPPER(cTABELA)+CHR(34)
 ENDIF
@@ -241,18 +243,20 @@ ELSE
 ENDIF   
 dbcloseall()
 
+
 if lgrvstruinfo
     //tDOC = 4 gera dbe
     //GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
     //stru1 conforme os tipos dos campos
     aSTRU:=sqltodbfstru(aSTRU)
-    HB_memowrit(ctabela+"_"+Ctiposql+"_stru1.txt",strval(aSTRU),.F.)
+    HB_memowrit(ctabelagrv+"_"+Ctiposql+"_stru1.txt",strval(aSTRU),.t.)
     if tdoc=14 //destino dbf tdoc=14  grava dbe
        GRAVADOC( 4, ctabela+"_"+Ctiposql+"_1", aSTRU ,{},.t.,.f.,"",.f. )
     endif
     //stru2 pelo schema
-    aSTRU:=MDBTABLES(cMDBARQ,cTABELA )
-    HB_memowrit(ctabela+"_"+Ctiposql+"_stru2.txt",strval(aSTRU),.F.)
+    altd()
+    aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv )
+    HB_memowrit(ctabelagrv+"_"+Ctiposql+"_stru2.txt",strval(aSTRU),.t.)
     if tdoc=14 //destino dbf tdoc=14 grava dbe
        GRAVADOC( 4, ctabela+"_"+Ctiposql+"_2", aSTRU ,{},.t.,.f.,"",.f. )
     endif
@@ -542,6 +546,10 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     endif    
     
     cTABELA:=cNOMETABELA //publica usada o opencmdarq
+    IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" //Dupla aspas maiuscula
+       cTABELA:=CHR(34)+UPPER(cTABELA)+CHR(34)
+    ENDIF
+    
     if nLASTREC>0 //nao importa se nao tiver registros
       try
         opencmdbarq()
@@ -747,10 +755,10 @@ IF lOPEN
                CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
                    cFieldName := upper(alltrim( ors:fields(0):value )) //column_name
                    cType      := upper( alltrim( ors:fields(1):value ) ) // data_type
-                   nFieldLength = ors:fields(2):value //tamanho string character_maximum_length
-                   if ors:fields(3):value>0 //tamannho numeric
-                      nFieldLength = ors:fields(3):value  //numeric_precision
-                      nFieldDec    = ors:fields(4):value  //numeric_precision_radix
+                   nFieldLength = fixnum(ors:fields(2):value) //tamanho string character_maximum_length
+                   if fixnum(ors:fields(3):value)>0//tamannho numeric
+                      nFieldLength = fixnum(ors:fields(3):value)  //numeric_precision
+                      nFieldDec    = fixnum(ors:fields(4):value)  //numeric_scale
                    endif
                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))                              
              ENDCASE   
