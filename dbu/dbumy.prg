@@ -1,108 +1,59 @@
 #require "hbmysql"
 
 #include "dbstruct.ch"
+#include "box.ch"
 
 
 function mysqlmenu()
  PRIV oServer, oQuery, oRow
  aAMBIENTE:=SALVAA()
  cTIPOSQL="MYSQL"
- cSERVERX:="Localhost"+space(21)
+ cSERVERX:="localhost"+space(21)
  cUSERX:=PADR("root",30," ")
  cDATABASEX:=space(30)
  cPASSX    :=SPACE(30)
- OPENTIPOARQ()
+ //OPENTIPOARQ()
  
- 
- RESTAA(aAMBIENTE)
-layout()
-return
-
-
-/*
-
-
-#require "hbmysql"
-
-#include "dbstruct.ch"
-
-PROCEDURE Main( cArg )
-
-   LOCAL oServer, oQuery2, oRow, aStru
-   LOCAL oQuery
-
-   Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
-
-   oServer := TMySQLServer():New( "localhost", "root", "" )
+ oServer := TMySQLServer():New( "localhost", "root", "admin")
    IF oServer:NetErr()
       Alert( oServer:Error() )
+      return .f.
    ENDIF
 
-   oServer:SelectDB( "ims" )
-#if 0
-   oQuery := oServer:Query( "SELECT * from maga limit 10" )
-   oRow := oQuery:GetRow()
-#endif
+ 
+aResult:=Oserver:ListDBs()
+IF LEN(aResult)>0
+   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+  nChoices := ACHOICE( 4,23,21,54, aResult)
+ENDIF   
+cDATABASEX:=IIF( nChoices > 0, aResult[ nChoices ], "")
 
-   dbUseArea( .T.,, cArg, "wn", .F. )
+Oserver:SelectDB( cDATABASEX )
+IF oServer:NetErr()
+    Alert( oServer:Error() )
+    return .f.
+ENDIF
 
-   IF ! oServer:DeleteTable( "test" )
-      Alert( oServer:Error() )
-   ENDIF
+oserver:destroy() 
+RESTAA(aAMBIENTE)
+layout()
+return .t.
 
-   aStru := dbStruct()
-   IF oServer:CreateTable( "test", aStru )
-      Alert( "test created successfully" )
-   ELSE
-      Alert( oServer:Error() )
-   ENDIF
-
-   oQuery := oServer:Query( "SELECT C111, C116, C134 from maga limit 10" )
-#if 0
-   oRow := oQuery:GetRow()
-#endif
-
-   oServer:Destroy()
-
-   DO WHILE ! wn->( Eof() )
-
-      oQuery2 := oServer:Query( "SELECT * from test where CODF='" + wn->CODF + "' and CODP='" + wn->CODP + "'" )
-
-      IF oQuery2:LastRec() > 0
-
-         ? "found "
-
-         oRow := oQuery2:GetRow()
-
-         oRow:FieldPut( oRow:FieldPos( "GIACENZA" ), oRow:FieldGet( oRow:FieldPos( "GIACENZA" ) ) + wn->GIACENZA )
-         oRow:FieldPut( oRow:FieldPos( "ACQGR" ), oRow:FieldGet( oRow:FieldPos( "ACQGR" ) ) + wn->ACQGR )
-         oRow:FieldPut( oRow:FieldPos( "ACQDI" ), oRow:FieldGet( oRow:FieldPos( "ACQDI" ) ) + wn->ACQDI )
-
-         IF ! oQuery2:Update( oRow )
-            Alert( oQuery2:Error() )
-         ENDIF
-      ELSE
-         ? wn->CODF + " " + wn->CODP
-
-         oRow := oQuery:GetBlankRow()
-
-         oRow:FieldPut( oRow:FieldPos( "CODF" ), wn->CODF )
-         oRow:FieldPut( oRow:FieldPos( "CODP" ), wn->CODP )
-         oRow:FieldPut( oRow:FieldPos( "GIACENZA" ), wn->GIACENZA )
-         oRow:FieldPut( oRow:FieldPos( "DATA" ), wn->DATA + 365 * 100 )
-         oRow:FieldPut( oRow:FieldPos( "ACQGR" ), wn->ACQGR )
-         oRow:FieldPut( oRow:FieldPos( "ACQDI" ), wn->ACQDI )
-
-         IF ! oQuery:Append( oRow )
-            Alert( oQuery:Error() )
-         ENDIF
-      ENDIF
-
-      wn->( dbSkip() )
-
-   ENDDO
-
-   wn->( dbCloseArea() )
-
-   RETURN
 /*
+aResult:=Oserver:ListTables()
+IF LEN(aResult)>0
+   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+  nChoices := ACHOICE( 4,23,21,54, aResult)
+ENDIF   
+cTABELA:=IIF( nChoices > 0, aResult[ nChoices ], "")
+cSTRU:=oSERVER:TableStruct( cTabela )
+hb_MemoWrit( cTABELA+"_STRU.TXT", cSTRU, .F. ) 
+
+*/
+
+
+//CreateTable( cTable, aStruct, cPrimaryKey, cUniqueKey, cAuto )
+//TableStruct( cTable )
+//CreateDatabase( cDataBase )
+//SelectDB( cDBName )
+//CreateIndex( cName, cTable, aFNames, lUnique )

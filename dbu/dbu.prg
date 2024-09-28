@@ -490,7 +490,7 @@ setar_b[ 5 ] = "sysfunc = 0"
 setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
-util_m := { "Rem Reg Dup", "CopiarComo", "Ver TXT", "Sort DBF",;
+util_m := { "Rem Reg Dup", "Semuso", "Ver TXT", "Sort DBF",;
             "Exportar","POSTGRESQL","MYSQL","MDB","SQLITE","Converter","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
@@ -557,17 +557,26 @@ do while .T.
              limparegdupdbf()
          ENDIF
       case M->func_sel = 2
-          copiardbfpara()
+          mdt("sem uso")
+          //copiardbfpara()
       case M->func_sel = 3
          VERTXT()
       case M->func_sel = 4
          sortdbf()
       case M->func_sel = 5
-          multidocs(0) //passa 0 par a perguntar o formato
+          IF MDG("Todos(SIM) Escolher (NAO)")
+              multidocs(0) //passa 0 par a perguntar o formato
+          ELSE    
+             copiardbfpara()
+          ENDIF  
       case M->func_sel = 6
           mdbmenu("PGSQL")
       case M->func_sel = 7
-           mdbmenu("MYSQL")
+           if mdg("Nativo (SIM) ADORDD-ODBC (NAO")
+              mysqlmenu()
+           else
+              mdbmenu("MYSQL")
+           endif   
       case M->func_sel = 8
            mdbmenu("MDB")
       case M->func_sel = 9

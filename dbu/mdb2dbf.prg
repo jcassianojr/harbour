@@ -17,7 +17,7 @@ public oDB := nil
 
 aAMBIENTE:=SALVAA()
 
-cSERVERX:="Localhost"+space(21)
+cSERVERX:="localhost"+space(21)
 cDATABASEX:=space(30)
 cUSERX    :=SPACE(30)
 cPASSX    :=SPACE(30)

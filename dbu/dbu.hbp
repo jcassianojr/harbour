@@ -40,7 +40,7 @@ dbusincdbf.prg
 #bmdbfnTX2.prg
 sql2dbf.prg
 mdb2dbf.prg -b
-dbumy.prg
+dbumy.prg  -b
 
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  
