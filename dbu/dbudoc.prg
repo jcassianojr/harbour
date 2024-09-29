@@ -376,6 +376,8 @@ if lDOCCAB
                                      str( aESTRU[ X, 3 ], 3 ) + ' ' + ;
                                      str( aESTRU[ X, 4 ], 2 ) + cLIN
           case tDOC = 5 .AND. cSUBTIPO<>"TRH" .AND. cSUBTIPO<>"TDB"  .AND. cSUBTIPO<>"SQL"
+             cCAMPO:=ALLTRIM(cCAMPO)
+             cCAMPO:=RANGEREPL(chr(0),chr(31),cCAMPO," ") //Remove caracteres de controle
              IF lDOCDAD
                 cTEXTO +=  alltrim(cCAMPO) + ZDELIMITE //clin no final
              ELSE
@@ -595,8 +597,8 @@ IF lDOCDAD .AND. nLASTREC>0
 
           @ 3,40 SAY alltrim(PADR(cCAMPO))
           nVAL:=FIELDGET(X)
-          IF aESTRU[X][2]="M"
-              nVAL:=STRTRAN(nVAL,CHR(13)+CHR(10)," ")
+          IF aESTRU[X][2]="M" .OR. aESTRU[X][2]="C"  
+              nVAL:=RANGEREPL(chr(0),chr(31),nVAL," ") //Remove caracteres de controle
           ENDIF
           DO CASE
               //

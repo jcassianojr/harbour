@@ -192,7 +192,7 @@ IF EMPTY(cTABELA)
    RETURN NIL
 ENDIF
 
-Lgrvstruinfo:=MDG("Gravar info das estruturas")
+//Lgrvstruinfo:=MDG("Gravar info das estruturas")
 
 
 LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
@@ -254,14 +254,33 @@ aSTRU:=dbstruct()
 //pois cria com tipos @ e M deixando o dbf com tipos incompativeis
 //criar opcao de criar o dbf tratado con mdbtables 
 //importar via pipe ou outro
-IF lCOPIANAT
-   COPYTO(cDESTINO)
+IF tDOC=14
+   IF MDG("Copia Direta")
+      COPYTO(cDESTINO)
+   ELSE
+      //aSTRU:=sqltodbfstru(aSTRU) estrutura pelo padrao adordd
+      //aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv ) pela info das colunas na base
+      aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv )
+      //GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
+      zEXPOREXT="UNL"
+      zDELIMITE:="|"
+      //tdoc=11 UNL Pipe mas ajustando zesporext zdelimite chama como 5
+      GRAVADOC( 5, ctabela+"_"+Ctiposql+"_pipe", aSTRU ,{},.t.,.T.,"",.f. )
+      DBCreate(ctabela+"_"+Ctiposql, aSTRU) 
+      DBUseArea( .T. ,  , ctabela+"_"+Ctiposql,  , .F. , .F. ) 
+      cARQIMPUNL:=ctabela+"_"+Ctiposql+"_pipe.unl"
+      APPEND FROM &cARQIMPUNL. DELIMITED  WITH PIPE
+      //APPENDFROM(ctabela+"_"+Ctiposql+"_pipe.unl")
+   ENDIF
 ELSE
-   multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
-ENDIF   
-
-
-
+  IF lCOPIANAT
+     COPYTO(cDESTINO)
+  ELSE
+     multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
+  ENDIF   
+ENDIF
+dbcloseall()
+/*
 if lgrvstruinfo
     //tDOC = 4 gera dbe
     //GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
@@ -276,6 +295,8 @@ if lgrvstruinfo
     endif
 endif
 dbcloseall()
+*/
+
 return nil
 
 function sqltodbfstru(aStruct)
