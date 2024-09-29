@@ -289,7 +289,6 @@ LOCAL nLENMAX
 //#define DBS_DEC         4
 nFIM:=LEN(aStruct)
 for i:=1 to NFIM
-    altd()
     //mFldNm := aStruct[i, DBS_NAME]
     //  mFldType := aStruct[i, DBS_TYPE]
     //  mFldLen := aStruct[i, DBS_LEN]
