@@ -13,47 +13,36 @@ function mysqlmenu()
  cUSERX:=PADR("root",30," ")
  cDATABASEX:=space(30)
  cPASSX    :=SPACE(30)
- //OPENTIPOARQ()
+ cTABELAX  :=SPACE(30)
+ OPENTIPOARQ()
  
- oServer := TMySQLServer():New( "localhost", "root", "admin")
+ oServer := TMySQLServer():New( cSERVERX, cUSERX, cPASSX) //
    IF oServer:NetErr()
       Alert( oServer:Error() )
       return .f.
    ENDIF
 
- 
-aResult:=Oserver:ListDBs()
-IF LEN(aResult)>0
-   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-  nChoices := ACHOICE( 4,23,21,54, aResult)
-ENDIF   
-cDATABASEX:=IIF( nChoices > 0, aResult[ nChoices ], "")
-
-Oserver:SelectDB( cDATABASEX )
-IF oServer:NetErr()
-    Alert( oServer:Error() )
-    return .f.
-ENDIF
+MYSELECTDB()
 
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
     @ 03,24 SAY cDATABASEX
-    OPCAO(  4, 24, "&Criar database            ", 67 ) //c 
-    OPCAO(  5, 24, "                           ", 86 ) //V 
+    OPCAO(  4, 24, "&Criar database            ", 67 ) //C
+    OPCAO(  5, 24, "&Database Selecionar       ", 68 ) //D
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
-    OPCAO(  7, 24, "                           ", 69 ) //E 
+    OPCAO(  7, 24, "&Tabelas                   ", 84 ) //T
     OPCAO(  8, 24, "                           ", 83 ) //S
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
             mysqlnewdatabase()
        CASE KEY=2
-            mdt("nao disponivel")
+            MYSELECTDB()
        CASE KEY=3
            dbf2mysql()
        CASE KEY=4
-            mdt("nao disponivel")
+            MYSELECTTABLE()
        CASE KEY=5
             mdt("nao disponivel")
        OTHERWISE
@@ -67,6 +56,30 @@ oserver:destroy()
 RESTAA(aAMBIENTE)
 layout()
 return .t.
+
+FUNCTION MYSELECTDB()
+aResult:=Oserver:ListDBs()
+IF LEN(aResult)>0
+   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+  nChoices := ACHOICE( 4,23,21,54, aResult)
+ENDIF   
+cDATABASEX:=IIF( nChoices > 0, aResult[ nChoices ], "")
+Oserver:SelectDB( cDATABASEX )
+IF oServer:NetErr()
+    Alert( oServer:Error() )
+    return .f.
+ENDIF
+RETURN .T.
+
+
+FUNCTION MYSELECTTABLE()
+aResult:=oServer:ListTables()
+IF LEN(aResult)>0
+   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+  nChoices := ACHOICE( 4,23,21,54, aResult)
+ENDIF   
+cTABELAX:=IIF( nChoices > 0, aResult[ nChoices ], "")
+RETURN .T.
 
 function mysqlnewdatabase()
 cNEwDATABASEX:=SPACE(40)
@@ -173,21 +186,4 @@ IF FILE (cARQORI)
 ENDIF   
 return .t.
 
-/*
-aResult:=Oserver:ListTables()
-IF LEN(aResult)>0
-   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-  nChoices := ACHOICE( 4,23,21,54, aResult)
-ENDIF   
-cTABELA:=IIF( nChoices > 0, aResult[ nChoices ], "")
-cSTRU:=oSERVER:TableStruct( cTabela )
-hb_MemoWrit( cTABELA+"_STRU.TXT", cSTRU, .F. ) 
 
-*/
-
-
-//CreateTable( cTable, aStruct, cPrimaryKey, cUniqueKey, cAuto )
-//TableStruct( cTable )
-//CreateDatabase( cDataBase )
-//SelectDB( cDBName )
-//CreateIndex( cName, cTable, aFNames, lUnique )

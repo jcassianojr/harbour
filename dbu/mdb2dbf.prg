@@ -21,6 +21,7 @@ cSERVERX:="localhost"+space(21)
 cDATABASEX:=space(30)
 cUSERX    :=SPACE(30)
 cPASSX    :=SPACE(30)
+cTABELAX  :=SPACE(30)
 
 IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
    cUSERX:=PADR("root",30," ")
@@ -33,34 +34,35 @@ IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
    cUSERX:=PADR("postgres",30," ")
 ENDIF
 
-IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
-   OPENTIPOARQ()
-ENDIF
-
-
+//
+// ajustes nomes de drivers para 32 e 64 bits
+//
 
 loledb=.T.
 IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
    loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64  //mdg("User sim=oledb jet (32b) nao=oledb accdb(64b)")
 ENDIF 
-IF cTIPOSQL="MYSQL"
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
    loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
 ENDIF 
-IF cTIPOSQL="PGSQL64"
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
    loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
 ENDIF 
-
- 
+//mariadb mesmo nome de driver para 32 e 64 bits
  IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" 
    IF .not. MDG("MDB/ACCESS (SIM) ACCDB(NAO)")
       cTIPOSQL:="ACCDB" 
    ENDIF
 ENDIF
-
-  
 IF cTIPOSQL="ACCDB"
-   loledb:=.F. //Requer aceole.db 32 ou 64 instalado
+   loledb:=.F. //Requer aceole.db 32 e ou 64 instalado
 ENDIF
+
+IF cTIPOSQL="MYSQL"  .or. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+   OPENTIPOARQ()
+   mdbdatabases()
+ENDIF
+
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -89,6 +91,8 @@ WHILE .T.
     OPCAO(  5, 24, "Executar arquivo &SQL      ", 83 ) //S 83
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73 
     OPCAO(  7, 24, "&Exportar Tabelas          ", 69 ) //E 69
+    OPCAO(  8, 24, "&Database Selecionar       ", 68 ) //D 68
+
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -99,6 +103,8 @@ WHILE .T.
             MDBIMPDBF()
        CASE KEY=4
             MDBEXP()
+       CASE KEY=5     
+            mdbdatabases()
        OTHERWISE
             EXIT
     ENDCASE
@@ -143,29 +149,37 @@ IF FILE(cARQIMP)
 endif
 return .t.
 
-function MDBEXP()
-LOCAL cCAMMDB   :=SPACE(100)
-LOCAL lCOPIANAT
-local Ldoc
-local Lgrvstruinfo
-LOCAL aTABELAS
-LOCAL nCHOICES
-LOCAL aSTRU
+function mdbdatabases()
+aResult:=MDBTABLES()
+IF LEN(aResult)>0
+   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+  nChoices := ACHOICE( 4,23,21,54, aResult)
+ENDIF   
+cDATABASEX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
+RETURN .T.
 
-nCHOICES:=0
-aTABELAS:={}
-
-cMDBARQ:=OPENTIPOARQ()
-
+function mdbtabela(cMDBARQ)
 aResult:=MDBTABLES(cMDBARQ )
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
   nChoices := ACHOICE( 4,23,21,54, aResult)
 ENDIF   
-cTABELA:=IIF( nChoices > 0, aResult[ nChoices ], "")
+cTABELAX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
+RETURN .T.
 
+function MDBEXP()
+LOCAL cCAMMDB   :=SPACE(100)
+LOCAL lCOPIANAT
+local Ldoc
+local Lgrvstruinfo
+LOCAL aSTRU
 
-cTABELA:=ALLTRIM(cTABELA)
+cMDBARQ:=OPENTIPOARQ()
+
+mdbtabela(cMDBARQ)
+
+cTABELA:=cTABELAX
+
 IF EMPTY(cTABELA)
     cTABELA:=SPACE(60)
     md()
@@ -241,7 +255,6 @@ IF lCOPIANAT
 ELSE
    multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
 ENDIF   
-dbcloseall()
 
 
 if lgrvstruinfo
@@ -249,21 +262,18 @@ if lgrvstruinfo
     //GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
     //stru1 conforme os tipos dos campos
     aSTRU:=sqltodbfstru(aSTRU)
-    HB_memowrit(ctabelagrv+"_"+Ctiposql+"_stru1.txt",strval(aSTRU),.t.)
+    //HB_memowrit(ctabelagrv+"_"+Ctiposql+"_.txt",strval(aSTRU),.t.)
     if tdoc=14 //destino dbf tdoc=14  grava dbe
        GRAVADOC( 4, ctabela+"_"+Ctiposql+"_1", aSTRU ,{},.t.,.f.,"",.f. )
     endif
     //stru2 pelo schema
-    altd()
     aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv )
-    HB_memowrit(ctabelagrv+"_"+Ctiposql+"_stru2.txt",strval(aSTRU),.t.)
+    //HB_memowrit(ctabelagrv+"_"+Ctiposql+"_stru2.txt",strval(aSTRU),.t.)
     if tdoc=14 //destino dbf tdoc=14 grava dbe
        GRAVADOC( 4, ctabela+"_"+Ctiposql+"_2", aSTRU ,{},.t.,.f.,"",.f. )
     endif
 endif
-
-//DBCreate(<cDatabase>, <aStruct>, <cDriver> ) -> Nil
-
+dbcloseall()
 return nil
 
 function sqltodbfstru(aStruct)
@@ -277,12 +287,11 @@ LOCAL nLENMAX
 //#define DBS_DEC         4
 nFIM:=LEN(aStruct)
 for i:=1 to NFIM
+    altd()
     //mFldNm := aStruct[i, DBS_NAME]
     //  mFldType := aStruct[i, DBS_TYPE]
     //  mFldLen := aStruct[i, DBS_LEN]
     //  mFldDec := aStruct[i, DBS_DEC]
-    
-    
     nLENMAX:=0
     IF (aStruct[i, DBS_TYPE]="I" .or. aStruct[i, DBS_TYPE]="B") .and. aStruct[i, DBS_LEN]=0 .AND. cTIPOSQL="SQLITE" 
        Ctmp:="select max( length( " + aStruct[i, DBS_NAME] + " ) ) from " + cTABELA
@@ -296,6 +305,14 @@ for i:=1 to NFIM
     // Casos datasting que nao retornam 8
     IF aStruct[i, DBS_TYPE]="D" .AND. aStruct[i, DBS_LEN]<>8
        aStruct[i, DBS_LEN]=8
+       aStruct[i, DBS_DEC]=0
+    ENDIF
+    
+    //DBS_TYPE="@" datetime no adordd possivel implancatacao string 16 por enquanto data
+    IF aStruct[i, DBS_TYPE]="@"
+       aStruct[i, DBS_TYPE]="D"
+       aStruct[i, DBS_LEN]=8
+       aStruct[i, DBS_DEC]=0
     ENDIF
     
     //Tipo integer 4 =numerico 8
@@ -388,7 +405,7 @@ DO CASE
 ENDCASE
 
 
-
+//cria com sql query create database
  if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
     cARQORI:=OPENTIPOARQ()
     cNEWDATABASEX:=SPACE(40)
@@ -403,12 +420,13 @@ ENDCASE
     ENDIF  
 endif 
 
-
+//cria com catalogx
 IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB64"//Cria com catalog
    CreateAccessDatabase( cARQORI)
 ENDIF  
 
-IF cTIPOSQL="SQLITE" .OR. ((cTIPOSQL="MDB" .OR. cTIPOSQL="SQLITE") .AND. .NOT. loledb) //cria com adorrdd 64 acess ou sqlite
+//cria com create da rddado 
+IF cTIPOSQL="SQLITE"  
    Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
    cCONCREATE:=criaconcreate(cARQORI,'table1')
    do case
@@ -585,7 +603,7 @@ DO CASE
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
          cSERVERX:=PADR(cSERVERX,30," ")
-         cDATABASEX:=PADR(cDATABASEX,30," ")
+        // cDATABASEX:=PADR(cDATABASEX,30," ") escolhido nao precisa digitar
          cUSERX:=PADR(cUSERX,30," ")
          cPASSX:=PADR(cPASSX,30," ")
           HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -594,12 +612,12 @@ DO CASE
          @ 08,23 SAY "user"
          @ 10,23 say "pass"
          @ 05,23 get cSERVERX
-         @ 07,23 gET cDATABASEX
+         //@ 07,23 gET cDATABASEX escolhido nao precisa digitar
          @ 09,23 get cuserx
          @ 11,23 get cpassx
          READ
          cSERVERX:=ALLTRIM(cSERVERX)
-         cDATABASEX:=ALLTRIM(cDATABASEX)
+         //cDATABASEX:=ALLTRIM(cDATABASEX) nao precisa digitar
          cuserx:=alltrim(cuserx)
          cpassx:=alltrim(cpassx)
          cMDBARQ:=cDATABASEX     
@@ -635,7 +653,12 @@ local nFieldDec := 0
 local lopen
 Lopen:=.F.
 
+
+
 cTIPOINFO:="TABELA"
+IF VALTYPE(cDATABASE)<>"C"
+   cTIPOINFO:="DATABASE"
+ENDIF
 IF VALTYPE(cTABELA)="C"
    cTIPOINFO:="ESTRUTURA"
 ENDIF
@@ -665,6 +688,14 @@ oRS:= WIN_OLECreateObject('ADODB.RecordSet')
 oRS:CursorLocation := 3
 
 cCOMANDO:=""
+IF cTIPOINFO="DATABASE"
+   DO CASE
+     CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+         cCOMANDO = "SHOW DATABASES"
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"  .OR. cTIPOSQL="MARIADB"
+         cCOMANDO = "SELECT datname FROM pg_database;"    
+   ENDCASE      
+ENDIF
 IF cTIPOINFO="TABELA"
     DO CASE
        CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
@@ -723,7 +754,7 @@ IF .NOT. lOPEN
 ENDIF
 IF lOPEN
     while ! ors:eof
-         IF cTIPOINFO="TABELA" .OR. cTIPOINFO="CCAMPOSQL"
+         IF cTIPOINFO="TABELA" .OR. cTIPOINFO="CCAMPOSQL" .OR. cTIPOINFO="DATABASE"
             AADD(aRETU,ors:fields(0):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
          ENDIF   
          IF cTIPOINFO="ESTRUTURA"
@@ -801,7 +832,7 @@ do case
     CASE AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. AT(",",cTYPE)>0 .AND. (AT("NUMERIC",UPPER(CTYPE))>0 .OR. AT("DECIMAL",UPPER(CTYPE))>0 )
        cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1 )
        cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(",",cTMPSIZE)-1 )
-       nLength := val(cTMPSIZE)
+       nFieldLength := val(cTMPSIZE)
        cTMPSIZE:=SUBSTR(cTYPE, AT(",",cTYPE) +1 )
        cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
        nFieldDec := val(cTMPSIZE)
@@ -809,12 +840,12 @@ do case
 
 
     //
-    // int(n) tamanho esta entre parentes
+    //  tyniint(n) int(n) tamanho esta entre parentes
     //
    case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0  .AND. AT(",",cTYPE)=0 .AND. AT("INT",UPPER(CTYPE))>0 
        cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1) 
        cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
-       nLength := VAL(cTMPSIZE)
+       nFieldLength:= VAL(cTMPSIZE)
        cFieldType := 'N'
        nFieldDec := 0
    
@@ -825,7 +856,7 @@ do case
    case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. (AT("CHAR",UPPER(CTYPE))>0 .OR. AT("TEXT",UPPER(CTYPE))>0 )
        cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1) 
        cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
-       nLength := VAL(cTMPSIZE)
+       nFieldLength := VAL(cTMPSIZE)
        cFieldType := 'C'
        nFieldDec := 0
        
@@ -872,6 +903,11 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
     nFieldLength := 1
     nFieldDec := 0
     
+    
+  CASE cType == "LONGTEXT"
+       cFieldType := 'C'
+       nFieldLength := 250
+       nFieldDec := 0
    //
     // TEXT SEM tamanho memo
     //
@@ -897,6 +933,7 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
        cFieldType := 'C'
        nFieldDec := 0
   
+  
   CASE cType == "NAME" 
        cFieldType := 'C'
        nFieldLength := 64
@@ -921,6 +958,9 @@ return aRETU
 
 FUNCTION geraconn(cCAMBASE)
 cConn  :=""
+IF VALTYPE(cCAMBASE)<>"C" //ser for database nao tem caminho usa cservex
+   cCAMBASE:="" //atribui vazio 
+ENDIF
 DO CASE
 
    CASE cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .or. at(".MDB",upper(cCAMBASE))>0
