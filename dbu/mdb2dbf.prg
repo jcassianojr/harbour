@@ -250,6 +250,10 @@ opencmdbarq()
 nLASTREC:=   reccount() 
 zei_fort( nLASTREC,,,0)
 aSTRU:=dbstruct()
+//ajustar adordd para melhor tratativa campos @ datatime m diferenciando logwchar memos
+//pois cria com tipos @ e M deixando o dbf com tipos incompativeis
+//criar opcao de criar o dbf tratado con mdbtables 
+//importar via pipe ou outro
 IF lCOPIANAT
    COPYTO(cDESTINO)
 ELSE
@@ -257,18 +261,16 @@ ELSE
 ENDIF   
 
 
+
 if lgrvstruinfo
     //tDOC = 4 gera dbe
     //GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
-    //stru1 conforme os tipos dos campos
     aSTRU:=sqltodbfstru(aSTRU)
-    //HB_memowrit(ctabelagrv+"_"+Ctiposql+"_.txt",strval(aSTRU),.t.)
     if tdoc=14 //destino dbf tdoc=14  grava dbe
        GRAVADOC( 4, ctabela+"_"+Ctiposql+"_1", aSTRU ,{},.t.,.f.,"",.f. )
     endif
     //stru2 pelo schema
     aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv )
-    //HB_memowrit(ctabelagrv+"_"+Ctiposql+"_stru2.txt",strval(aSTRU),.t.)
     if tdoc=14 //destino dbf tdoc=14 grava dbe
        GRAVADOC( 4, ctabela+"_"+Ctiposql+"_2", aSTRU ,{},.t.,.f.,"",.f. )
     endif
@@ -312,6 +314,13 @@ for i:=1 to NFIM
     IF aStruct[i, DBS_TYPE]="@"
        aStruct[i, DBS_TYPE]="D"
        aStruct[i, DBS_LEN]=8
+       aStruct[i, DBS_DEC]=0
+    ENDIF
+    
+    //DBS_TYPE="M"  mudando para char 250 ate melhor tratativa para longwchar e memos
+    IF aStruct[i, DBS_TYPE]="M"
+       aStruct[i, DBS_TYPE]="C"
+       aStruct[i, DBS_LEN]=250
        aStruct[i, DBS_DEC]=0
     ENDIF
     
@@ -571,6 +580,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     if nLASTREC>0 //nao importa se nao tiver registros
       try
         opencmdbarq()
+        //Criar opcao de append from insert into usando
         try 
           append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
         catch oErR
