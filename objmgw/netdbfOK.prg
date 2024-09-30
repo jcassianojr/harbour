@@ -368,13 +368,12 @@ elseif ld_cha = '-'
 endif
 IF lSAYREC
    IF valtype(nPOS)= "N"
-      @ maxrow(),40 SAY STR(nPOS,8)+"/"+STR(nLASTREC,8)
+      @ maxrow(),50 SAY STR(nPOS,8)+"/"+STR(nLASTREC,8)
    ELSE
-      @ maxrow(),40 SAY STR(RECNO(),8)+"/"+STR(nLASTREC,8)
+      @ maxrow(),50 SAY STR(RECNO(),8)+"/"+STR(nLASTREC,8)
    ENDIF
 ENDIF
-@ MAXROW(), 59+INT(cCOMPLETE/10) sAY  chr(93)+ld_cha
-@ maxrow(), 70 say  transform( cComplete, '999' )
+@ maxrow(), 70 say ld_cha + " " + transform( cComplete, '999.99' )
 return .t.
 
 

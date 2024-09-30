@@ -32,7 +32,7 @@ WHILE .T.
     OPCAO(  5, 24, "&Database Selecionar       ", 68 ) //D
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
     OPCAO(  7, 24, "&Tabelas                   ", 84 ) //T
-    OPCAO(  8, 24, "                           ", 83 ) //S
+    OPCAO(  8, 24, "&Exportar                  ", 69 ) //E
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -44,7 +44,7 @@ WHILE .T.
        CASE KEY=4
             MYSELECTTABLE()
        CASE KEY=5
-            mdt("nao disponivel")
+            mystrutodbf()
        OTHERWISE
             RETURN
     ENDCASE
@@ -108,6 +108,64 @@ cNEwDATABASEX:=SPACE(40)
     ENDIF  
 return .t.
 
+function mystrutodbf()
+local aRETU
+local i
+local nFIM
+local eVALOR
+aRETU:={}
+MYSELECTTABLE()
+oQuery := oServer:Query( "SHOW COLUMNS FROM "+cTABELAx )
+while .not. oQuery:eof()
+   cFieldName := ''
+   cFieldType := ''
+   nFieldLength := 0
+   nFieldDec := 0
+   oRow := oQuery:GetRow()
+   
+    //tmsql comeca com 1 padrao harbour
+    cFieldName := upper( alltrim( oRow:FieldGet(1) ) )
+    cType      := upper( alltrim( oRow:FieldGet(2) ) ) 
+    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+   
+   oQuery:skip()
+enddo   
+IF LEN(aRETU)=0
+   mdt("estrutura em branco")
+   return .f.
+endif
+
+DBCreate(ctabelaX+"_mysql", aRETU) 
+DBUseArea( .T. ,  , ctabelaX+"_mysql", , .F. , .F. ) 
+    //  cARQIMPUNL:=ctabela+"_"+Ctiposql+"_pipe.unl"
+    //  APPEND FROM &cARQIMPUNL. DELIMITED  WITH PIPE
+
+
+oQuery2  := oServer:Query( "SELECT * FROM "+cTABELAx )
+nFIM     := oQuery2:FCOUNT()
+nLASTREC := oQuery2:LastRec()
+zei_fort( nLASTREC,,,0)
+
+while .not. oQuery2:eof()
+   oRow := oQuery2:GetRow()
+   netrecapp()
+   FOR I = 1 TO nFIM
+       eVALOR:=oRow:FieldGet(I)
+       //datetime em modo texto
+       if valtype(eVALOR)="C" .AND. SUBSTR(eVALOR,5,1)="-" .AND. SUBSTR(eVALOR,8,1)="-"
+          eVALOR = substr(eVALOR, 6, 2) + "/" + substr(eVALOR, 9, 2) + "/" + substr(eVALOR, 1, 4)
+          eVALOR = CTOD(eVALOR)
+       ENDIF
+      if .not. empty(evalor)
+        fieldput(i,eVALOR) 
+      endif 
+   NEXT I
+   zei_fort(nLASTREC,,,1)
+   oQuery2:skip()
+enddo
+
+dbcloseall()
+return .T.
 
 function dbf2mysql()
 cTABLE:=SPACE(30)

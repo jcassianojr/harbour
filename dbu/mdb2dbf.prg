@@ -173,8 +173,12 @@ LOCAL lCOPIANAT
 local Ldoc
 local Lgrvstruinfo
 LOCAL aSTRU
+LOCAL nFIM
+LOCAL i
 
-cMDBARQ:=OPENTIPOARQ()
+//IF cTIPOSQL="SQLITE" .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB64"
+   cMDBARQ:=OPENTIPOARQ() //escolhe arquivo 
+//ENDIF  
 
 mdbtabela(cMDBARQ)
 
@@ -255,6 +259,37 @@ aSTRU:=dbstruct()
 //criar opcao de criar o dbf tratado con mdbtables 
 //importar via pipe ou outro
 IF tDOC=14
+   aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
+   cALIASADO:=ALIAS()
+   DBCreate(ctabela+"_"+Ctiposql, aSTRU) 
+   DBUseArea( .T. ,  , ctabela+"_"+Ctiposql,  , .F. , .F. ) 
+   cALIASDBF:=ALIAS()
+   nFIM:=FCOUNT()
+   dbselectar(cALIASADO)
+   dbgotop()
+   while ! eof()
+     aVALOR:={}
+     FOR I= 1 TO nFIM
+        AADD(aVALOR,FIELDGET(I))
+     NEXT I
+     dbselectar(cALIASDBF)
+     NETRECAPP()
+     FOR I= 1 TO nFIM
+         eVALOR:=aVALOR[I]
+         if valtype(eVALOR)="C" .AND. SUBSTR(eVALOR,5,1)="-" .AND. SUBSTR(eVALOR,8,1)="-"
+            eVALOR = substr(eVALOR, 6, 2) + "/" + substr(eVALOR, 9, 2) + "/" + substr(eVALOR, 1, 4)
+            eVALOR = CTOD(eVALOR)
+         ENDIF
+         IF ! EMPTY(eVALOR)
+            FIELDPUT(I,eVALOR)
+         ENDIF   
+     NEXT I
+     dbselectar(cALIASADO)
+     zei_fort(nLASTREC,,,1)
+     dbskip()
+   enddo
+
+/*
    IF MDG("Copia Direta")
       COPYTO(cDESTINO)
    ELSE
@@ -270,8 +305,9 @@ IF tDOC=14
       DBUseArea( .T. ,  , ctabela+"_"+Ctiposql,  , .F. , .F. ) 
       cARQIMPUNL:=ctabela+"_"+Ctiposql+"_pipe.unl"
       APPEND FROM &cARQIMPUNL. DELIMITED  WITH PIPE
-      //APPENDFROM(ctabela+"_"+Ctiposql+"_pipe.unl")
    ENDIF
+*/   
+
 ELSE
   IF lCOPIANAT
      COPYTO(cDESTINO)
@@ -280,23 +316,6 @@ ELSE
   ENDIF   
 ENDIF
 dbcloseall()
-/*
-if lgrvstruinfo
-    //tDOC = 4 gera dbe
-    //GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
-    aSTRU:=sqltodbfstru(aSTRU)
-    if tdoc=14 //destino dbf tdoc=14  grava dbe
-       GRAVADOC( 4, ctabela+"_"+Ctiposql+"_1", aSTRU ,{},.t.,.f.,"",.f. )
-    endif
-    //stru2 pelo schema
-    aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv )
-    if tdoc=14 //destino dbf tdoc=14 grava dbe
-       GRAVADOC( 4, ctabela+"_"+Ctiposql+"_2", aSTRU ,{},.t.,.f.,"",.f. )
-    endif
-endif
-dbcloseall()
-*/
-
 return nil
 
 function sqltodbfstru(aStruct)
@@ -443,9 +462,13 @@ ENDCASE
     READ
     cnewDATABASEX:=alltrim(cnewDATABASEX)
     IF .NOT. EMPTy(cnewDATABASEX)
-      cDATABASEX=""
-      executacmd(Carqori,"CREATE DATABASE IF NOT EXISTS "+Cnewdatabasex)
-      CDATABASEX:=CNEWDATABASEX
+       IF hb_AScan( MDBTABLES(), cnewDATABASEX,,, .T. ) > 0
+           MDT("Ja existe Database "+cnewDATABASEX)
+          return .f.
+       ENDIF   
+       cDATABASEX=""
+       executacmd(Carqori,"CREATE DATABASE IF NOT EXISTS "+Cnewdatabasex)
+       CDATABASEX:=CNEWDATABASEX
     ENDIF  
 endif 
 
@@ -622,9 +645,9 @@ LOCAL cMDBARQ
 cMDBARQ:=""
 
 DO CASE
-   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" // .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
+   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
-   CASE cTIPOSQL="ACCDB"  //.OR. cTIPOSQL="ACCDB64"
+   CASE cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
    CASE cTIPOSQL="SQLITE"     
         cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
@@ -638,7 +661,7 @@ DO CASE
          cPASSX:=PADR(cPASSX,30," ")
           HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
          @ 04,23 SAY "Server"
-         @ 06,23 SAY "Database"
+         //@ 06,23 SAY "Database"
          @ 08,23 SAY "user"
          @ 10,23 say "pass"
          @ 05,23 get cSERVERX
