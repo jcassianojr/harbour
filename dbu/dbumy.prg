@@ -156,6 +156,10 @@ while .not. oQuery2:eof()
           eVALOR = substr(eVALOR, 6, 2) + "/" + substr(eVALOR, 9, 2) + "/" + substr(eVALOR, 1, 4)
           eVALOR = CTOD(eVALOR)
        ENDIF
+       if valtype(eVALOR)="C"  .OR. valtype(eVALOR)="M"
+           eVALOR:=RANGEREPL(chr(0),chr(31),eVALOR," ") //Remove caracteres de controle
+           eVALOR:=TIRACE(eVALOR)
+        ENDIF 
       if .not. empty(evalor)
         fieldput(i,eVALOR) 
       endif 

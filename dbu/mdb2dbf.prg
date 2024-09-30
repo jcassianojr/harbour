@@ -156,7 +156,7 @@ IF LEN(aResult)>0
   nChoices := ACHOICE( 4,23,21,54, aResult)
 ENDIF   
 cDATABASEX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
-RETURN .T.
+RETURN aResult
 
 function mdbtabela(cMDBARQ)
 aResult:=MDBTABLES(cMDBARQ )
@@ -165,7 +165,7 @@ IF LEN(aResult)>0
   nChoices := ACHOICE( 4,23,21,54, aResult)
 ENDIF   
 cTABELAX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
-RETURN .T.
+RETURN aResult
 
 function MDBEXP()
 LOCAL cCAMMDB   :=SPACE(100)
@@ -280,6 +280,10 @@ IF tDOC=14
             eVALOR = substr(eVALOR, 6, 2) + "/" + substr(eVALOR, 9, 2) + "/" + substr(eVALOR, 1, 4)
             eVALOR = CTOD(eVALOR)
          ENDIF
+         if valtype(eVALOR)="C"  .OR. valtype(eVALOR)="M"
+           eVALOR:=RANGEREPL(chr(0),chr(31),eVALOR," ") //Remove caracteres de controle
+           eVALOR:=TIRACE(eVALOR)
+        ENDIF 
          IF ! EMPTY(eVALOR)
             FIELDPUT(I,eVALOR)
          ENDIF   
@@ -956,6 +960,11 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
     nFieldLength := 1
     nFieldDec := 0
     
+    
+  CASE cType == "TEXT" .AND. (cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64")
+       cFieldType := 'C'
+       nFieldLength := 250
+       nFieldDec := 0
     
   CASE cType == "LONGTEXT"
        cFieldType := 'C'

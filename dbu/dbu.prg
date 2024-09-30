@@ -570,7 +570,11 @@ do while .T.
              copiardbfpara()
           ENDIF  
       case M->func_sel = 6
-          mdbmenu("PGSQL")
+           if mdg("Nativo (SIM) ADORDD-ODBC (NAO")
+              pgsqlmenu()
+           else
+            mdbmenu("PGSQL")
+          endif
       case M->func_sel = 7
            if mdg("Nativo (SIM) ADORDD-ODBC (NAO")
               mysqlmenu()

@@ -16,6 +16,7 @@ rddbm.hbc
 hbsqlit3.hbc
 rddado.hbc
 hbmysql.hbc
+hbpgsql.hbc
 
 
 DBU.PRG  
@@ -39,8 +40,9 @@ dbusincdbf.prg
 #bmdbfnsx2.prg
 #bmdbfnTX2.prg
 sql2dbf.prg
-mdb2dbf.prg -b
-dbumy.prg  -b
+mdb2dbf.prg 
+dbumy.prg  
+dbupg.prg
 
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  
