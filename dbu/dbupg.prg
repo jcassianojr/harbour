@@ -126,7 +126,7 @@ PGSELECTTABLE()
 
   cCOMANDO ="SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
            cCOMANDO +=" FROM   information_schema.columns "
-           cCOMANDO +=" WHERE   table_name = '"+UPPER(cTABELAX)+"' ORDER BY ordinal_position ;" 
+           cCOMANDO +=" WHERE   table_name = '"+cTABELAX+"' ORDER BY ordinal_position ;" 
 
 oQuery := oServer:Query( cCOMANDO )
 while .not. oQuery:eof()
@@ -156,11 +156,15 @@ endif
 
 DBCreate(ctabelaX+"_pgsql", aRETU) 
 DBUseArea( .T. ,  , ctabelaX+"_pgsql", , .F. , .F. ) 
-    //  cARQIMPUNL:=ctabela+"_"+Ctiposql+"_pipe.unl"
-    //  APPEND FROM &cARQIMPUNL. DELIMITED  WITH PIPE
 
 
-oQuery2  := oServer:Query( "SELECT * FROM "+chr(34)+upper(cTABELAx)+chr(34))  //aspas duplas
+oQuery2  := oServer:Query( "SELECT * FROM "+chr(34)+cTABELAx+chr(34))  //aspas duplas tenta maiscula
+IF oServer:NetErr()
+    MDT( oServer:ErrorMSG())
+    RETURN .F.
+ENDIF
+
+
 nFIM     := oQuery2:FCOUNT()
 nLASTREC := oQuery2:LastRec()
 zei_fort( nLASTREC,,,0)
@@ -202,14 +206,14 @@ cORIDRIVER:=RDDNOME(TIPODBF)
 cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
 IF FILE (cARQORI)
    hb_FNameSplit(cARQORI ,nil,@cTable, NIL )
-   cTABLE:=UPPER(ALLTRIM(cTABLE)) //postgresql maiscula
+   cTABLE:=ALLTRIM(cTABLE) //postgresql maiscula upper testar depois cnecar classe se fixa para minusculas 
    dbUseArea( .T.,, cARQORI, "dbffile",, .T. )
    aDbfStruct := dbffile->( dbStruct() )
    nLASTREC:=   reccount() 
    zei_fort( nLASTREC,,,0)
-   for j=1 to len(aDbfStruct)
-      aDbfStruct[j,1]=upper(aDbfStruct[j,1])
-   next j
+  // for j=1 to len(aDbfStruct)
+  //    aDbfStruct[j,1]=upper(aDbfStruct[j,1])  //postgresql maiscula upper testar depois cnecar classe se fixa para minusculas 
+  // next j
 
       IF hb_AScan( oServer:ListTables(), cTable,,, .T. ) > 0
          IF MDG("Criar novamente "+cTABLE+" apagara todas informacoes")
@@ -239,11 +243,15 @@ IF FILE (cARQORI)
          oSERVER:execute( msql )
      NEXT j
 
-   // Initialize pgSQL table
-   oTable := oServer:Query( "SELECT * FROM "+chr(34) + cTable + chr(34) +" LIMIT 1" ) //dupla aspas
+   // Initialize pgSQL table necessario para getblankrow ter um registro para montar a strutura
+   oTable := oServer:Query( "SELECT * FROM "+chr(34) + lower(cTable) + chr(34) +" LIMIT 1" ) //dupla aspas tenta minuscula
    IF oTable:NetErr()
       Alert( oTable:ErrorMSG() )
-      return .f.
+      oTable := oServer:Query( "SELECT * FROM "+chr(34) + upper(cTable) + chr(34) +" LIMIT 1" ) //dupla aspas maiscula
+      IF oTable:NetErr()
+         Alert( oTable:ErrorMSG() )
+         RETURN .F.
+      ENDIF
    ENDIF
 
    DO WHILE ! dbffile->( Eof() ) 
