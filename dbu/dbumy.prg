@@ -32,8 +32,8 @@ WHILE .T.
     OPCAO(  5, 24, "&Database Selecionar       ", 68 ) //D
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
     OPCAO(  7, 24, "&Tabelas                   ", 84 ) //T
-    OPCAO(  8, 24, "&Exportar                  ", 69 ) //E
-    OPCAO(  9, 24, "&Apagar Tabelas            ", 65 ) //A 
+    OPCAO(  8, 24, "&Exportar  DBF             ", 69 ) //E
+    OPCAO(  9, 24, "&Apagar Tabela             ", 65 ) //A 
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1

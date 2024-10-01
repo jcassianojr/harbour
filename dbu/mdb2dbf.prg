@@ -90,7 +90,7 @@ WHILE .T.
     endif   
     OPCAO(  5, 24, "Executar arquivo &SQL      ", 83 ) //S 83
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73 
-    OPCAO(  7, 24, "&Exportar Tabelas          ", 69 ) //E 69
+    OPCAO(  7, 24, "&Exportar Tabela Formatos  ", 69 ) //E 69
     OPCAO(  8, 24, "&Database Selecionar       ", 68 ) //D 68
 
     KEY := menu( 1, 0 )
@@ -296,25 +296,6 @@ IF tDOC=14
      zei_fort(nLASTREC,,,1)
      dbskip()
    enddo
-
-/*
-   IF MDG("Copia Direta")
-      COPYTO(cDESTINO)
-   ELSE
-      //aSTRU:=sqltodbfstru(aSTRU) estrutura pelo padrao adordd
-      //aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv ) pela info das colunas na base
-      aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv )
-      //GRAVADOC( tdoc, cARQ, aESTRU ,aVAL,lDOCCAB,lDOCDAD,cSUBTIPO,lDOCRECNO )
-      zEXPOREXT="UNL"
-      zDELIMITE:="|"
-      //tdoc=11 UNL Pipe mas ajustando zesporext zdelimite chama como 5
-      GRAVADOC( 5, ctabela+"_"+Ctiposql+"_pipe", aSTRU ,{},.t.,.T.,"",.f. )
-      DBCreate(ctabela+"_"+Ctiposql, aSTRU) 
-      DBUseArea( .T. ,  , ctabela+"_"+Ctiposql,  , .F. , .F. ) 
-      cARQIMPUNL:=ctabela+"_"+Ctiposql+"_pipe.unl"
-      APPEND FROM &cARQIMPUNL. DELIMITED  WITH PIPE
-   ENDIF
-*/   
 
 ELSE
   IF lCOPIANAT

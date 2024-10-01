@@ -19,7 +19,7 @@ WHILE .T.
     OPCAO(  4, 24, "&Criar base sqllite        ", 67 ) //c 
     OPCAO(  5, 24, "&VACUUM (PACK)             ", 86 ) //V 
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
-    OPCAO(  7, 24, "&Exportar para DBFS        ", 69 ) //E 
+    OPCAO(  7, 24, "&Exportar  DBF             ", 69 ) //E 
     OPCAO(  8, 24, "&Show Tables               ", 83 ) //S
     
     KEY := menu( 1, 0 )
