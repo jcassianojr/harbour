@@ -3,7 +3,7 @@
 #include "dbstruct.ch"
 
 
-function pgsqlmenu()
+function mysqlmenu()
  mdt("implantacao")
 return .t.
 

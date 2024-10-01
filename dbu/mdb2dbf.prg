@@ -150,6 +150,8 @@ endif
 return .t.
 
 function mdbdatabases()
+local nChoices
+nChoices:=0
 aResult:=MDBTABLES()
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -159,6 +161,8 @@ cDATABASEX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
 RETURN aResult
 
 function mdbtabela(cMDBARQ)
+local nChoices
+nChoices:=0
 aResult:=MDBTABLES(cMDBARQ )
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")

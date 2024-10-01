@@ -207,6 +207,9 @@ IF FILE (cARQORI)
    aDbfStruct := dbffile->( dbStruct() )
    nLASTREC:=   reccount() 
    zei_fort( nLASTREC,,,0)
+   for j=1 to len(aDbfStruct)
+      aDbfStruct[j,1]=upper(aDbfStruct[j,1])
+   next j
 
       IF hb_AScan( oServer:ListTables(), cTable,,, .T. ) > 0
          IF MDG("Criar novamente "+cTABLE+" apagara todas informacoes")
