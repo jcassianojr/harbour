@@ -16,7 +16,7 @@ rddads.hbc
 rddbm.hbc
 hbsqlit3.hbc
 rddado.hbc
-#hbmysql.hbc
+hbmysql.hbc
 hbpgsql.hbc
 
 
