@@ -737,7 +737,7 @@ try
       :Open()
    END  
 catch oErr
-   //ShowADOError(oERR,oConn,cCOMANDO) 
+   ShowADOError(oERR,oConn,cConn) 
    return aRETU
 end
 
@@ -802,8 +802,7 @@ ENDIF
         lOPEN:=.T.
       CATCH oERR
         lOPEN:=.F.
-        //ShowADOError(oERR,oConn,cCOMANDO) 
-    //    return  aRETU 
+        ShowADOError(oERR,oConn,cCOMANDO) 
       END
 IF .NOT. lOPEN
   IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
@@ -1068,7 +1067,7 @@ DO CASE
             if loledb
                cConn:="DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //32 driver versao 
             else
-               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //64 driver versao x64
+               cConn:="DRIVER={PostgreSQL ANSI(x64)};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //64 driver versao x64
             endif
         else
             if loledb
@@ -1114,14 +1113,14 @@ try
       :Open()
    END  //end do with
 catch oErr
-  // ShowAdoError(oERR,oCoNn)   
+   ShowAdoError(oERR,oCoNn)   
    return .f.
 end
 
 try
   oComm:=WIN_OLECreateObject( "ADODB.Command" )
 catch oErr
-  // ShowAdoError(oERR,oCoNn)   
+    ShowAdoError(oERR,oCoNn)   
    return .f.
 end
 

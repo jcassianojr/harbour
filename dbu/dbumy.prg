@@ -33,6 +33,7 @@ WHILE .T.
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
     OPCAO(  7, 24, "&Tabelas                   ", 84 ) //T
     OPCAO(  8, 24, "&Exportar                  ", 69 ) //E
+    OPCAO(  9, 24, "&Apagar Tabelas            ", 65 ) //A 
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -45,6 +46,8 @@ WHILE .T.
             MYSELECTTABLE()
        CASE KEY=5
             mystrutodbf()
+       CASE KEY=6
+            MYDELTABLE()
        OTHERWISE
             RETURN
     ENDCASE
@@ -56,6 +59,22 @@ oserver:destroy()
 RESTAA(aAMBIENTE)
 layout()
 return .t.
+
+
+FUNCTION MYDELTABLE()
+MYSELECTTABLE()
+IF hb_AScan( oServer:ListTables(), cTABELAX,,, .T. ) > 0
+    IF MDG("Apagar "+cTABELAX+" apagara todas informacoes")
+      oServer:DeleteTable( cTABELAX )
+      IF oServer:NetErr()
+         MDT( oServer:ErrorMSG())
+         RETURN .F.
+      ENDIF
+    ELSE
+      RETURN .F.  
+    ENDIF
+ENDIF
+RETURN .T.    
 
 FUNCTION MYSELECTDB()
 aResult:=Oserver:ListDBs()

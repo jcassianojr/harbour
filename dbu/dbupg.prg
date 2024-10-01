@@ -17,25 +17,24 @@ function pgsqlmenu()
  cPASSX    :=SPACE(30)
  cTABELAX  :=SPACE(30)
  
- loledb=.T.
-IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
-ENDIF 
+ loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
  
  OPENTIPOARQ()
  
  //usar mdbdatabases fde mdb2dbf a classe precisa do database para iniciar tambem nao possuio methodo dblist como a do mysql
  mdbdatabases()
+ 
+if empty(cDATABASEX) 
+   @ 24,00 SAY "database"
+   @ 24,20 GET cDATABASEX
+   READ
+   @ 24,00 say space(80)
+   cDATABASEX:=alltrim(cDATABASEX)
+endif    
+  
  cPathx := "public"
  pgsetdatabase(.f.)
  
- // oServer := TPQServer():New( cserverx, cDatabasex, cUserx, cPassx, , cPathx )  
- //  IF oServer:NetErr()
-//      Alert( oServer:Error() )
-//      return .f.
-//   ENDIF
-
-
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -45,6 +44,7 @@ WHILE .T.
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
     OPCAO(  7, 24, "&Tabelas                   ", 84 ) //T
     OPCAO(  8, 24, "&Exportar                  ", 69 ) //E
+    OPCAO(  9, 24, "&Apagar Tabelas            ", 65 ) //A 
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -58,6 +58,8 @@ WHILE .T.
             PGSELECTTABLE()
        CASE KEY=5
             PGstrutodbf()
+       CASE KEY=6
+            PGDELTABLE()     
        OTHERWISE
             RETURN
     ENDCASE
@@ -71,6 +73,20 @@ layout()
 return .t.
 
 
+FUNCTION PGDELTABLE()
+PGSELECTTABLE()
+IF hb_AScan( oServer:ListTables(), cTABELAX,,, .T. ) > 0
+    IF MDG("Apagar "+cTABELAX+" apagara todas informacoes")
+      oServer:DeleteTable( cTABELAX )
+      IF oServer:NetErr()
+         MDT( oServer:ErrorMSG())
+         RETURN .F.
+      ENDIF
+    ELSE
+      RETURN .F.  
+    ENDIF
+ENDIF
+RETURN .T.      
 
 FUNCTION PGSELECTTABLE()
 aResult:=oServer:ListTables()

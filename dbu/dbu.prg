@@ -13,8 +13,9 @@
 #INCLUDE "BOX.CH"
 #include "ads.ch"
 #INCLUDE "HBGTINFO.CH"
-#include "tshead.ch"
-#INCLUDE "HBver.CH"
+#INCLUDE "hbVER.CH"
+//#include "tshead.ch"
+//#INCLUDE "HBver.CH"
 
 
 REQUEST HB_LANG_PT
