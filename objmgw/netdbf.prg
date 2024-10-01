@@ -373,8 +373,10 @@ IF lSAYREC
       @ maxrow(),40 SAY STR(RECNO(),8)+"/"+STR(nLASTREC,8)
    ENDIF
 ENDIF
-@ MAXROW(), 59+INT(cCOMPLETE/10) sAY  chr(93)+ld_cha
-@ maxrow(), 70 say  transform( cComplete, '999' )
+@ maxrow(), 58 say "["
+@ maxrow(), 70 SAY "]"
+@ MAXROW(), 59+INT(cCOMPLETE/10) sAY  "#"+ld_cha
+@ maxrow(), 71 say  transform( cComplete, '999' )
 return .t.
 
 
