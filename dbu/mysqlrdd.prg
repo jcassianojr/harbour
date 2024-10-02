@@ -73,11 +73,13 @@
 ANNOUNCE MYSQLRDD
 
 STATIC s_aConnections := {}
+STATIC oSERVER
+STATIC aSTRUCAMPOS
 
 FUNCTION DBMYSQLCONNECTION( cConnString )
 
    LOCAL aParams
-   LOCAL oServer
+//   LOCAL oServer
    LOCAL nConn
    LOCAL cHost
    LOCAL cDatabase
@@ -106,11 +108,14 @@ FUNCTION DBMYSQLCONNECTION( cConnString )
 
 RETURN nConn
 
+FUNCTION DBMYSTRU()
+RETURN aSTRUCAMPOS
+
 FUNCTION DBMYSQLCLEARCONNECTION( nConn )
 
-   LOCAL oServer
+  // LOCAL oServer
 
-   oServer := s_aConnections[ nConn ]
+ //  oServer := s_aConnections[ nConn ]
 
    oServer:Destroy()
 
@@ -144,12 +149,9 @@ RETURN SUCCESS
 
 STATIC FUNCTION MYSQL_OPEN( nWA, aOpenInfo )
    LOCAL aField, oError, lError, cError, nResult
-   LOCAL oServer, oQuery, aStruct, aFieldStruct
+   LOCAL  oQuery, aStruct, aFieldStruct
    LOCAL aWAData   := USRRDD_AREADATA( nWA )
-
-   if !empty( aOpenInfo[ UR_OI_CONNECT ] ) .and. aOpenInfo[ UR_OI_CONNECT ] <= len( s_aConnections )
-      oServer := s_aConnections[ aOpenInfo[ UR_OI_CONNECT ] ]
-   endif
+   LOCAL nFIELDSCOUNT, iFIELDNUM, eTIPODECODE
 
    if !empty( oServer )
       oServer:lAllCols := .F.
@@ -175,19 +177,87 @@ STATIC FUNCTION MYSQL_OPEN( nWA, aOpenInfo )
    ENDIF
 
    UR_SUPER_SETFIELDEXTENT( nWA, oQuery:nNumFields )
-   aStruct := oQuery:aFieldStruct //Struct()
+   
+   
 
+   /*
+    aStruct := oQuery:aFieldStruct //Struct()
    FOR EACH aFieldStruct IN aStruct
+   
+       //posicao dbs_name<>YSQL_FS_NAME e outras sao divergentes  usando oquery>field ja compativerl harbour
+       //o tipo e  numerico necessario conversao para tipo C N D M ...
 
        aField := ARRAY( UR_FI_SIZE )
-       aField[ UR_FI_NAME ]    := aFieldStruct[ DBS_NAME ]
-       aField[ UR_FI_TYPE ]    := aFieldStruct[ DBS_TYPE ]
+       aField[ UR_FI_NAME ]    := aFieldStruct[ DBS_NAME ]  //MYSQL_FS_NAME  FieldName( nNum )
+       aField[ UR_FI_TYPE ]    := aFieldStruct[ DBS_TYPE ]   //FieldType( nNum )  MYSQL_FS_TYPE
        aField[ UR_FI_TYPEEXT ] := 0
-       aField[ UR_FI_LEN ]     := aFieldStruct[ DBS_LEN ]
-       aField[ UR_FI_DEC ]     := aFieldStruct[ DBS_DEC ]
+       aField[ UR_FI_LEN ]     := aFieldStruct[ DBS_LEN ]   //MYSQL_FS_LENGTH FieldLen( nNum ) 
+       aField[ UR_FI_DEC ]     := aFieldStruct[ DBS_DEC ]   //MYSQL_FS_DECIMALS  FieldDec(nnum)
        UR_SUPER_ADDFIELD( nWA, aField )
 
    NEXT
+   */
+   
+   nFIELDSCOUNT := oQuery:nNumFields
+   aSTRUCAMPOS:={}
+   //usando oquery>field ja compativerl dbf fieldtype
+   //posicao difere uf_fi dbs_
+   /*
+   #define UR_FI_SIZE            5    
+   #define UR_FI_NAME            1      DBS_NAME
+   #define UR_FI_TYPE            2      DBS_TYPE 
+   #define UR_FI_TYPEEXT         3
+   #define UR_FI_LEN             4      DBS_LEN 
+   #define UR_FI_DEC             5      DBS_DEC 
+   #define DBS_NAME        1
+   #define DBS_TYPE        2
+   #define DBS_LEN         3
+   #define DBS_DEC         4
+   
+   
+#ifndef HB_FT_NONE
+#define HB_FT_NONE            0
+#define HB_FT_STRING          1      "C" 
+#define HB_FT_LOGICAL         2      "L" 
+#define HB_FT_DATE            3      "D" 
+#define HB_FT_LONG            4      "N" 
+#define HB_FT_FLOAT           5      "F" 
+#define HB_FT_INTEGER         6      "I" 
+#define HB_FT_DOUBLE          7      "B" 
+#define HB_FT_TIME            8      "T" 
+#define HB_FT_TIMESTAMP       9      "@" 
+#define HB_FT_MODTIME         10     "=" 
+#define HB_FT_ROWVER          11     "^" 
+#define HB_FT_AUTOINC         12     "+" 
+#define HB_FT_CURRENCY        13     "Y" 
+#define HB_FT_CURDOUBLE       14     "Z" 
+#define HB_FT_VARLENGTH       15     "Q" 
+#define HB_FT_MEMO            16     "M" 
+#define HB_FT_ANY             17     "V" 
+#define HB_FT_IMAGE           18     "P" 
+#define HB_FT_BLOB            19     "W" 
+#define HB_FT_OLE             20     "G" 
+#endif
+*/
+   
+   FOR iFIELDNUM:= 1 TO nFIELDSCOUNT
+       eTIPODECODE:=hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( oQUERY:FieldDec( iFIELDNUM )  > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+       //     aField[ UR_FI_TYPE ]    := hb_Decode( aFieldStruct[ DBS_TYPE ], "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+        //    aField[ UR_FI_TYPE ]    := hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+       if empty(eTIPODECODE)
+         eTIPODECODE:=FT_STRING
+       endif
+
+       aField := ARRAY( UR_FI_SIZE )
+       aField[ UR_FI_NAME  ]    := oQUERY:FieldName( iFIELDNUM )
+       aField[ UR_FI_TYPE ]    := eTIPODECODE //oQUERY:FieldType( iFIELDNUM )   
+       aField[ UR_FI_TYPEEXT ] := 0
+       aField[ UR_FI_LEN  ]     := oQUERY:FieldLen( iFIELDNUM )   
+       aField[ UR_FI_DEC  ]     := oQUERY:FieldDec( iFIELDNUM )   
+       UR_SUPER_ADDFIELD( nWA, aField )
+       AADD(aSTRUCAMPOS,{oQUERY:FieldName( iFIELDNUM ),oQUERY:FieldType( iFIELDNUM ),oQUERY:FieldLen( iFIELDNUM ),oQUERY:FieldDec( iFIELDNUM ),eTIPODECODE}) //grava tambem na static pegar via funcao DBMYSTRU()
+   NEXT iFIELDNUM
+   
 
    /* Call SUPER OPEN to finish allocating work area (f.e.: alias settings) */
    nResult := UR_SUPER_OPEN( nWA, aOpenInfo )

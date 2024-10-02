@@ -34,6 +34,7 @@ WHILE .T.
     OPCAO(  7, 24, "&Tabelas                   ", 84 ) //T
     OPCAO(  8, 24, "&Exportar  DBF             ", 69 ) //E
     OPCAO(  9, 24, "&Apagar Tabela             ", 65 ) //A 
+    OPCAO( 10, 24, "Exportar &Formatos         ", 70 ) //F
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -48,6 +49,8 @@ WHILE .T.
             mystrutodbf()
        CASE KEY=6
             MYDELTABLE()
+       CASE KEY=7
+            myexpformat()     
        OTHERWISE
             RETURN
     ENDCASE
@@ -127,13 +130,10 @@ cNEwDATABASEX:=SPACE(40)
     ENDIF  
 return .t.
 
-function mystrutodbf()
-local aRETU
-local i
-local nFIM
-local eVALOR
+function mystrudbf()
+LOCAL aRETU
 aRETU:={}
-MYSELECTTABLE()
+altd()
 oQuery := oServer:Query( "SHOW COLUMNS FROM "+cTABELAx )
 while .not. oQuery:eof()
    cFieldName := ''
@@ -149,6 +149,17 @@ while .not. oQuery:eof()
    
    oQuery:skip()
 enddo   
+oQUERY:DESTROY()
+return aRETU
+
+function mystrutodbf()
+local aRETU
+local i
+local nFIM
+local eVALOR
+aRETU:={}
+MYSELECTTABLE()
+aRETU:=mystrudbf()
 IF LEN(aRETU)=0
    mdt("estrutura em branco")
    return .f.
@@ -266,5 +277,6 @@ IF FILE (cARQORI)
    RDDNOME(nOLDTIPO) //retorna tipo anterior
 ENDIF   
 return .t.
+
 
 

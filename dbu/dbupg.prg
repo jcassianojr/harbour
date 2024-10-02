@@ -5,6 +5,8 @@
 #INCLUDE "DBINFO.CH"
 #INCLUDE "hbVER.CH"
 
+//request PGRDD
+
 
 
 function pgsqlmenu()
@@ -132,13 +134,9 @@ cNEwDATABASEX:=SPACE(40)
     ENDIF  
 return .t.
 
-function PGstrutodbf()
+function PGstrudbf()
 local aRETU
-local i
-local nFIM
-local eVALOR
 aRETU:={}
-PGSELECTTABLE()
 
   cCOMANDO ="SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
            cCOMANDO +=" FROM   information_schema.columns "
@@ -164,22 +162,26 @@ while .not. oQuery:eof()
     AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
    
    oQuery:skip()
-enddo   
-IF LEN(aRETU)=0
-   mdt("estrutura em branco")
-   return .f.
-endif
+enddo
+oquery:destroy()   
+return Aretu
+
+function PGstrutodbf()
+local aRETU
+local i
+local nFIM
+local eVALOR
+PGSELECTTABLE()
+aRETU:=PGstrudbf()
 
 DBCreate(ctabelaX+"_pgsql", aRETU) 
 DBUseArea( .T. ,  , ctabelaX+"_pgsql", , .F. , .F. ) 
-
 
 oQuery2  := oServer:Query( "SELECT * FROM "+chr(34)+cTABELAx+chr(34))  //aspas duplas tenta maiscula
 IF oServer:NetErr()
     MDT( oServer:ErrorMSG())
     RETURN .F.
 ENDIF
-
 
 nFIM     := oQuery2:FCOUNT()
 nLASTREC := oQuery2:LastRec()

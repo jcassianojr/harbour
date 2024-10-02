@@ -182,7 +182,7 @@ return .t.
 *+--------------------------------------------------------------------
 *+
 function MD   //TELA PARA AS MENSAGENS
-@ 24,00
+@ MAXROW(),00
 return .T.
 
 

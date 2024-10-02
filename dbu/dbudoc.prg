@@ -184,8 +184,11 @@ stat_msg( "Documentacao Gerada" )
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-funcTION multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,cARQDIC)
-aESTRU  := dbstruct()
+funcTION multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,cARQDIC,aESTRU)
+//Recebe aSTRU caso a base seja sql e tenha que sofrer transformacao
+IF VALTYPE(aESTRU)<>"A"
+  aESTRU  := dbstruct()
+endif
 IF VALTYPE(cARQDIC)<>"C" //memvar->ARQUIVO public do dbu melhorar posteriormente para sempre pegar paramentro cARQDIC
    cARQDIC:=TIRAEXT(memvar->ARQUIVO) 
 ENDIF   

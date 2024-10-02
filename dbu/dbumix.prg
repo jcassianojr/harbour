@@ -37,6 +37,8 @@ DO CASE
  //      nRETU:=rddInfo( RDDI_CONNECT, { "OCILIB", "ORCL", "scott", "tiger" } ) == 0
    CASE cTIPOMIX="ODBC"  //Cserver Conneccao
        Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
+       
+       cSERVER:=GERACO(
        //rddInfo( RDDI_CONNECT, { "ODBC", "DBQ=" + hb_DirBase() + "..\..\hbodbc\tests\test.mdb;Driver={Microsoft Access Driver (*.mdb)}" } ) == 0
        //RDDI_CONNECT, { "ODBC", "Server=localhost;Driver={MySQL ODBC 5.1 Driver};dsn=;User=test;database=test;" } 
        nRETU:=rddInfo( RDDI_CONNECT, { "ODBC", cSERVER } )==0
@@ -51,8 +53,4 @@ ENDIF
 //RddSetDefault(cOLDRDD)
 return .t.
 
-//
-//nConnection
-//   ? rddInfo( RDDI_EXECUTE, "DROP TABLE country" )
-// ? calias
-//fechar dbcloseall()
+

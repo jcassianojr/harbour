@@ -170,7 +170,7 @@ return .T.
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 function MD             //TELA PARA AS MENSAGENS
-@ 24, 00
+@ MAXROW(), 00
 return  .T. 
 
 
@@ -184,11 +184,7 @@ return  .T.
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 function MDT(cMSG)            //EXIBE MENSAGEM POR UM TEMPO
-hb_Alert(cMSG, , , 2 ) 
-//para MS
-//MDS( padc( MS, 80 ) )
-//inkey( 1 )
-//MD()
+hb_Alert(cMSG, , , 1 ) 
 return  .t. 
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -197,7 +193,7 @@ return  .t.
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-func MUDADATA
+funcTION MUDADATA
 
 MDS( 'Digite a Data Operacional' )
 @ 24, 30 say digadata( DXDIA, 3, 3, 2, "," )

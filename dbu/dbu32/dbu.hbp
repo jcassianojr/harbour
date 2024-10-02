@@ -36,7 +36,10 @@ d:\develop\harbour\dbu\dbusincdbf.prg
 d:\develop\harbour\dbu\sql2dbf.prg
 d:\develop\harbour\dbu\mdb2dbf.prg 
 d:\develop\harbour\dbu\dbumy.prg  
+d:\develop\harbour\dbu\dbumyexp.prg 
 d:\develop\harbour\dbu\dbupg.prg
+d:\develop\harbour\dbu\mysqlrdd.prg 
+#d:\develop\harbour\dbu\pgrdd.prg
 
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  

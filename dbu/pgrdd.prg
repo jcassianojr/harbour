@@ -73,11 +73,13 @@
 ANNOUNCE PGRDD
 
 STATIC s_aConnections := {}
+STATIC oSERVER
+STATIC aSTRUCAMPOS
 
 FUNCTION DBPGCONNECTION( cConnString )
 
    LOCAL aParams
-   LOCAL oServer
+ //  LOCAL oServer
    LOCAL nConn
 
    aParams := HB_ATOKENS( cConnString, ";" )
@@ -98,9 +100,9 @@ RETURN nConn
 
 FUNCTION DBPGCLEARCONNECTION( nConn )
 
-   LOCAL oServer
+//   LOCAL oServer
 
-   oServer := s_aConnections[ nConn ]
+  // oServer := s_aConnections[ nConn ]
 
    oServer:Close()
 
@@ -134,8 +136,10 @@ RETURN SUCCESS
 
 STATIC FUNCTION PG_OPEN( nWA, aOpenInfo )
    LOCAL aField, oError, lError, cError, nResult
-   LOCAL oServer, oQuery, aStruct, aFieldStruct
+   LOCAL oQuery, aStruct, aFieldStruct
    LOCAL aWAData   := USRRDD_AREADATA( nWA )
+//   LOCAL oSERVER
+   LOCAL nFIELDSCOUNT, iFIELDNUM, eTIPODECODE
 
    lError := .F.
 
@@ -168,6 +172,7 @@ STATIC FUNCTION PG_OPEN( nWA, aOpenInfo )
      
    UR_SUPER_SETFIELDEXTENT( nWA, oQuery:nFields )
 
+   /*
    aStruct := oQuery:Struct()
 
    FOR EACH aFieldStruct IN aStruct
@@ -181,6 +186,28 @@ STATIC FUNCTION PG_OPEN( nWA, aOpenInfo )
        UR_SUPER_ADDFIELD( nWA, aField )
 
    NEXT
+   */
+   
+    nFIELDSCOUNT := oQuery:nNumFields
+   aSTRUCAMPOS:={}
+
+   FOR iFIELDNUM:= 1 TO nFIELDSCOUNT
+       eTIPODECODE:=hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( oQUERY:FieldDec( iFIELDNUM )  > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+       //     aField[ UR_FI_TYPE ]    := hb_Decode( aFieldStruct[ DBS_TYPE ], "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+        //    aField[ UR_FI_TYPE ]    := hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+       if empty(eTIPODECODE)
+         eTIPODECODE:=FT_STRING
+       endif
+
+       aField := ARRAY( UR_FI_SIZE )
+       aField[ UR_FI_NAME  ]    := oQUERY:FieldName( iFIELDNUM )
+       aField[ UR_FI_TYPE ]    := eTIPODECODE //oQUERY:FieldType( iFIELDNUM )   
+       aField[ UR_FI_TYPEEXT ] := 0
+       aField[ UR_FI_LEN  ]     := oQUERY:FieldLen( iFIELDNUM )   
+       aField[ UR_FI_DEC  ]     := oQUERY:FieldDec( iFIELDNUM )   
+       UR_SUPER_ADDFIELD( nWA, aField )
+       AADD(aSTRUCAMPOS,{oQUERY:FieldName( iFIELDNUM ),oQUERY:FieldType( iFIELDNUM ),oQUERY:FieldLen( iFIELDNUM ),oQUERY:FieldDec( iFIELDNUM ),eTIPODECODE}) //grava tambem na static pegar via funcao DBMYSTRU()
+   NEXT iFIELDNUM
 
    /* Call SUPER OPEN to finish allocating work area (f.e.: alias settings) */
    nResult := UR_SUPER_OPEN( nWA, aOpenInfo )
