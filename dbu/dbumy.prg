@@ -8,7 +8,9 @@
 function mysqlmenu()
  PRIV oServer, oQuery, oRow
  aAMBIENTE:=SALVAA()
+ 
  cTIPOSQL="MYSQL"
+ 
  cSERVERX:="localhost"+space(21)
  cUSERX:=PADR("root",30," ")
  cDATABASEX:=space(30)

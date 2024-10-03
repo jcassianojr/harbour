@@ -10,19 +10,7 @@
 
 REQUEST ADORDD
 
-
-Function mdbmenu(cUSOSQL)
-cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes aBaixo
-public oDB := nil
-
-aAMBIENTE:=SALVAA()
-
-cSERVERX:="localhost"+space(21)
-cDATABASEX:=space(30)
-cUSERX    :=SPACE(30)
-cPASSX    :=SPACE(30)
-cTABELAX  :=SPACE(30)
-
+function pegcfgbanco()
 IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
    cUSERX:=PADR("root",30," ")
    IF MDG("MARIADB (SIM) MYSQL(NAO)")
@@ -33,11 +21,9 @@ ENDIF
 IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
    cUSERX:=PADR("postgres",30," ")
 ENDIF
-
 //
 // ajustes nomes de drivers para 32 e 64 bits
 //
-
 loledb=.T.
 IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
    loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64  //mdg("User sim=oledb jet (32b) nao=oledb accdb(64b)")
@@ -62,7 +48,23 @@ IF cTIPOSQL="MYSQL"  .or. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOS
    OPENTIPOARQ()
    mdbdatabases()
 ENDIF
+return .t.
 
+
+Function mdbmenu(cUSOSQL)
+cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes aBaixo
+public oDB := nil
+
+aAMBIENTE:=SALVAA()
+
+cSERVERX:="localhost"+space(21)
+cDATABASEX:=space(30)
+cUSERX    :=SPACE(30)
+cPASSX    :=SPACE(30)
+cTABELAX  :=SPACE(30)
+loledb=.T.
+
+pegcfgbanco()
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -636,13 +638,16 @@ cMDBARQ:=""
 DO CASE
    CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+        cDATABASEX:=cMDBARQ
    CASE cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
+        cDATABASEX:=cMDBARQ
    CASE cTIPOSQL="SQLITE"     
         cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
         { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
+        cDATABASEX:=cMDBARQ  
    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
          cSERVERX:=PADR(cSERVERX,30," ")
         // cDATABASEX:=PADR(cDATABASEX,30," ") escolhido nao precisa digitar

@@ -18,6 +18,13 @@ hbsqlit3.hbc
 rddado.hbc
 hbmysql.hbc
 hbpgsql.hbc
+#
+# sqlmix
+#
+sddodbc.hbc
+sddmy.hbc
+sddpg.hbc
+sddsqlt3.hbc
 
 
 d:\develop\harbour\dbu\DBU.PRG  
@@ -56,6 +63,8 @@ d:\develop\harbour\dbu\mysqlrdd.prg
 d:\develop\harbour\dbu\dbupg.prg
 d:\develop\harbour\dbu\dbupgexp
 d:\develop\harbour\dbu\pgrdd.prg
+#
+d:\develop\harbour\dbu\dbumix.prg
 #
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  

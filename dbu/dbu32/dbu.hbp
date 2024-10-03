@@ -10,12 +10,29 @@ hbct.hbc
 hbwin.hbc
 hbtip.hbc
 xhb.hbc
+#
+#ads
+#
 rddads.hbc
+#
+#dbf com dbm
+#
 rddbm.hbc
-hbsqlit3.hbc
+
 rddado.hbc
+#
+#nativas sqlite,libmysql,libpg
+#
+hbsqlit3.hbc
 hbmysql.hbc
 hbpgsql.hbc
+#
+# sqlmix
+#
+sddodbc.hbc
+sddmy.hbc
+sddpg.hbc
+sddsqlt3.hbc
 
 d:\develop\harbour\dbu\DBU.PRG  
 d:\develop\harbour\dbu\dbucnvmemo.prg 
@@ -54,6 +71,7 @@ d:\develop\harbour\dbu\dbupg.prg
 d:\develop\harbour\dbu\dbupgexp
 d:\develop\harbour\dbu\pgrdd.prg
 #
+d:\develop\harbour\dbu\dbumix.prg
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  
 d:\develop\harbour\objmgw\disk54.prg
@@ -76,3 +94,6 @@ d:\develop\harbour\objmgw\xhberr_mode.prg
 d:\develop\harbour\objmgw\wvgini.prg
 d:\develop\harbour\objmgw\adofix.prg
 d:\develop\harbour\objmgw\adoerror.prg
+
+
+

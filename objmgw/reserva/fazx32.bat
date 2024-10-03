@@ -16,15 +16,33 @@ REM SET HB_DEBUG=d
 REM SET HB_GUI=1
 REM SET HB_NO_BACKGROUND=1
 
-REM SET HB_DIR_POSTGRESQL=
-REM SET HB_DIR_OCILIB=
-REM SET HB_DIR_MYSQL=
+
+SET HB_INSTALL_PREFIX=d:\harbour\
+SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk\
+SET HB_WITH_CURL=d:\harbour\hb3rd\curl\include\
+#set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\include\
+SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage\include\
+set HB_WITH_GS=d:\harbour\hb3rd\gscript\include\ghostscript\
+set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\bin\
+set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql\include\
+set HB_WITH_OCI=d:\harbour\hb3rd\oci\include\
+set HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl\include\
+set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql\include\
+SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2\include\
+SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
+set HB_WITH_CAIRO=d:\harbour\hb3rd\cairo\include\cairo\
+SET HB_WITH_LIBHARU=d:\harbour\hb3rd\libharu\include\
+
+SET HB_DIR_POSTGRESQL=d:\harbour\hb3rd\pgsql\
+SET HB_DIR_OCILIB=d:\harbour\hb3rd\oci\
+SET HB_DIR_MYSQL=d:\harbour\hb3rd\mysql\
 REM SET HB_DIR_FIREBIRD=
-REM SET HB_DIR_CAIRO=
-REM SET HB_DIR_CURL=
-REM SET HB_DIR_OPENSSL=
-REM SET HB_DIR_MAGIC=
-REM SET HB_DIR_ADS=
+SET HB_DIR_CAIRO=d:\harbour\hb3rd\cairo\
+SET HB_DIR_CURL=d:\harbour\hb3rd\curl\
+SET HB_DIR_OPENSSL=d:\harbour\hb3rd\openssl\
+rem SET HB_DIR_MAGIC=
+SET HB_DIR_ADS=d:\harbour\hb3rd\acesdk\
+
 REM SET HB_ARCHITECTURE=w32
 IF "%CC_DIR%"    == "" SET CC_DIR=d:\devprg\hb32mgw12\comp\mingw
 IF "%SUB_DIR%"   == "" SET SUB_DIR=gc
