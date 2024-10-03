@@ -25,7 +25,7 @@ MDT("abrindo arquivo de origem: "+cTABELAX)
 
 //nConn := dbpgconnection( "<host>;<database>;<user>;<password>;<port>;<scheme>" )
 nConn := dbPGconnection( cSERVERX+";"+CdatabaseX+";"+CuserX+";"+CpassX+";5432;public" )
-dbUseArea( .T.,"PGRDD" , "SELECT * FROM "+cTABELAX, cTABELAX )
+dbUseArea( .T.,"PGRDD" , "SELECT * FROM "+CHR(34)+cTABELAX+CHR(34), cTABELAX )
 
 nLASTREC:=   lastrec() 
 zei_fort( nLASTREC,,,0)

@@ -80,6 +80,8 @@ ENDIF
 RETURN .T.    
 
 FUNCTION MYSELECTDB()
+LOCAL nCHOICES
+nCHOICES:=0
 aResult:=Oserver:ListDBs()
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -95,6 +97,8 @@ RETURN .T.
 
 
 FUNCTION MYSELECTTABLE()
+LOCAL nCHOICES
+nCHOICES:=0
 aResult:=oServer:ListTables()
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")

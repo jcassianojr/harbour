@@ -36,13 +36,27 @@ d:\develop\harbour\dbu\dbuver.prg
 d:\develop\harbour\dbu\dbuview.prg
 d:\develop\harbour\dbu\dbuXLS.prg
 d:\develop\harbour\dbu\dbusincdbf.prg
+#
+# sqlite compilado com fontes C nativo
+#
 d:\develop\harbour\dbu\sql2dbf.prg
+#
+# ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
+#
 d:\develop\harbour\dbu\mdb2dbf.prg 
-d:\develop\harbour\dbu\dbumy.prg 
-d:\develop\harbour\dbu\dbupg.prg 
-#d:\develop\harbour\dbu\mysqlrdd.prg
-#d:\develop\harbour\dbu\pgrdd.prg
-
+#
+# mysql libmysql
+#
+d:\develop\harbour\dbu\dbumy.prg  
+d:\develop\harbour\dbu\dbumyexp.prg 
+d:\develop\harbour\dbu\mysqlrdd.prg 
+#
+# postgresql libpg
+#
+d:\develop\harbour\dbu\dbupg.prg
+d:\develop\harbour\dbu\dbupgexp
+d:\develop\harbour\dbu\pgrdd.prg
+#
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  
 d:\develop\harbour\objmgw\disk54.prg

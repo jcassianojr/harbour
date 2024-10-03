@@ -47,6 +47,7 @@ WHILE .T.
     OPCAO(  7, 24, "&Tabelas                   ", 84 ) //T
     OPCAO(  8, 24, "&Exportar  DBF             ", 69 ) //E
     OPCAO(  9, 24, "&Apagar Tabela             ", 65 ) //A 
+    OPCAO( 10, 24, "Exportar &Formatos         ", 70 ) //F    
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -61,7 +62,9 @@ WHILE .T.
        CASE KEY=5
             PGstrutodbf()
        CASE KEY=6
-            PGDELTABLE()     
+            PGDELTABLE()  
+        CASE KEY=7
+            pgexpformat()                 
        OTHERWISE
             RETURN
     ENDCASE
@@ -91,6 +94,8 @@ ENDIF
 RETURN .T.      
 
 FUNCTION PGSELECTTABLE()
+LOCAL nCHOICES
+nCHOICES:=0
 aResult:=oServer:ListTables()
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -224,15 +229,11 @@ cORIDRIVER:=RDDNOME(TIPODBF)
 cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
 IF FILE (cARQORI)
    hb_FNameSplit(cARQORI ,nil,@cTable, NIL )
-   cTABLE:=ALLTRIM(cTABLE) //postgresql maiscula upper testar depois cnecar classe se fixa para minusculas 
+   cTABLE:=ALLTRIM(cTABLE) 
    dbUseArea( .T.,, cARQORI, "dbffile",, .T. )
    aDbfStruct := dbffile->( dbStruct() )
    nLASTREC:=   reccount() 
    zei_fort( nLASTREC,,,0)
-  // for j=1 to len(aDbfStruct)
-  //    aDbfStruct[j,1]=upper(aDbfStruct[j,1])  //postgresql maiscula upper testar depois cnecar classe se fixa para minusculas 
-  // next j
-
       IF hb_AScan( oServer:ListTables(), cTable,,, .T. ) > 0
          IF MDG("Criar novamente "+cTABLE+" apagara todas informacoes")
            oServer:DeleteTable( cTable )

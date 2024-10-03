@@ -188,7 +188,7 @@ STATIC FUNCTION PG_OPEN( nWA, aOpenInfo )
    NEXT
    */
    
-    nFIELDSCOUNT := oQuery:nNumFields
+    nFIELDSCOUNT := oQuery:FCOUNT() //oQuery:nNumFields oQuery:nFields
    aSTRUCAMPOS:={}
 
    FOR iFIELDNUM:= 1 TO nFIELDSCOUNT
