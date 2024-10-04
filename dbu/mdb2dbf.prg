@@ -34,13 +34,13 @@ ENDIF
 IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
    loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
 ENDIF 
+
+//
 //mariadb mesmo nome de driver para 32 e 64 bits
- IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" 
-   IF .not. MDG("MDB/ACCESS (SIM) ACCDB(NAO)")
-      cTIPOSQL:="ACCDB" 
-   ENDIF
-ENDIF
-IF cTIPOSQL="ACCDB"
+//
+
+
+IF cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
    loledb:=.F. //Requer aceole.db 32 e ou 64 instalado
 ENDIF
 
@@ -1007,23 +1007,39 @@ endcase
 aRETU:={cFieldName,cFieldType,nFieldLength,nFieldDec} 
 return aRETU
 
-FUNCTION geraconn(cCAMBASE)
+FUNCTION geraconn(cCAMBASE,lPROVIDER)
+LOCAL cCONN
 cConn  :=""
 IF VALTYPE(cCAMBASE)<>"C" //ser for database nao tem caminho usa cservex
    cCAMBASE:="" //atribui vazio 
 ENDIF
+IF vALTYPE(lPROVIDER)<>"L"
+   lPROVIDER:=.T.
+ENDIF
 DO CASE
 
    CASE cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .or. at(".MDB",upper(cCAMBASE))>0
-        if loledb
-           cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
+        if loledb //testando com driver no lugar do provider pois fixa o nome independente da versao do access sqlmix(usa driver) adordd(use provider)
+            IF lPROVIDER
+               cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
+            ELSE   
+               cCONN:="Driver={Microsoft Access Driver (*.mdb)};Dbq="+cDATABASEX+";Mode=Share Deny None"
+            ENDIF   
         else
-           cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
+            IF lPROVIDER
+               cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
+            ELSE   
+               cCONN:="Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq="+cDATABASEX+";Mode=Share Deny None" 
+            ENDIF   
         endif
         
     CASE cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" .or. at(".ACCDB",upper(cCAMBASE))>0    
-         cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //driver 32 e 64 devem estar instalados
-         
+        //testando com driver no lugar do provider pois fixa o nome independente da versao do access sqlmix(usa driver) adordd(use provider)
+        IF lPROVIDER
+           cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //driver 32 e 64 devem estar instalados
+        ELSE   
+           cCONN:="Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq="+cDATABASEX+";Mode=Share Deny None" 
+        ENDIF   
    CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cCAMBASE))>0
         cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";" //mesmo nome de driver para 32 e 64 ambos devem estar instaldos
 

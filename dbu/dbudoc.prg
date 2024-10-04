@@ -262,6 +262,10 @@ LOCAL cVAL
 LOCAL cCAMPO
 LOCAL J,nIndexes
 LOCAL cINDEXNAME
+local cFieldName := ''
+local cFieldType := ''
+local nFieldLength := 0
+local nFieldDec := 0
 
 IF tDOC=0
   tdoc := pegtipodoc()
@@ -600,15 +604,55 @@ IF lDOCDAD .AND. nLASTREC>0
 
           @ 3,40 SAY alltrim(PADR(cCAMPO))
           nVAL:=FIELDGET(X)
-          IF aESTRU[X][2]="M" .OR. aESTRU[X][2]="C"  
-              nVAL:=RANGEREPL(chr(0),chr(31),nVAL," ") //Remove caracteres de controle
+          
+          cFieldName   := aESTRU[X][1]
+          cFieldType   := aESTRU[X][2]
+          nFieldLength := aESTRU[X][3]
+          nFieldDec    := aESTRU[X][4]
+          
+          //HB_FT_CURDOUBLE       14      "Z" 
+          //HB_FT_CURRENCY       13      "Y"
+          //moeda e moeda dupla
+          IF cFieldType="Z" .OR. cFieldType="Y" 
+             cFieldType="N"
+             IF EMPTY(nFieldLength)
+                nFieldLength=12
+             ENDIF   
+             IF EMPTY(nFieldLength)
+                nFieldLength=2
+             ENDIF   
           ENDIF
+          
+          //HB_FT_DOUBLE        7      "B" 
+          IF cFieldType="B"
+             cFieldType="N"
+             IF EMPTY(nFieldLength)
+                nFieldLength=14
+             ENDIF   
+             IF EMPTY(nFieldLength)
+                nFieldLength=5
+             ENDIF   
+          ENDIF
+          
+          //Integer
+          IF cFieldType="I" 
+             cFieldType="N"
+             IF EMPTY(nFieldLength)
+                nFieldLength=8
+             ENDIF   
+             IF .NOT. EMPTY(nFieldLength)
+                nFieldLength=0
+             ENDIF   
+          ENDIF
+          
+          
           DO CASE
               //
               // String ou memo
               //
-              CASE aESTRU[X][2]="C" .OR. aESTRU[X][2]="M" 
+              CASE cFieldType="C" .OR. cFieldType="M" 
                    nVAL:=ALLTRIM(STRVAL(nVAL))
+                   nVAL:=RANGEREPL(chr(0),chr(31),nVAL," ") //Remove caracteres de controle
                    DO CASE
                       CASE zCNVCHAR="O"
                           nVAL:=win_ANSIToOEM(nVAL) //HB_ansitooem(nVAL)
@@ -628,22 +672,38 @@ IF lDOCDAD .AND. nLASTREC>0
               //
               // Data
               //                 
-              CASE aESTRU[X][2]="D"
+              CASE cFieldType="D"
                    IF EMPTY(nVAL)
                       cTEXTO+=""
                    ELSE                      
                       cTEXTO+=DATA2STR(nVAL,ZANOFOR,ZANOSEP,ZANOTAM)
+                   ENDIF   
+                      
+             CASE cFieldType="@"
+                   IF EMPTY(nVAL)
+                      cTEXTO+=""
+                   ELSE                      
+                      cTEXTO+=HB_TSTOSTR(nVAL)   //HB_TSTOSTR( <tTimeStamp> ) -> <cTimeStamp> // YYYY-MM-DD HH:MM:SS.fff
                    ENDIF
+
+             CASE cFieldType="T"
+                   IF EMPTY(nVAL)
+                      cTEXTO+=""
+                   ELSE                      
+                      cTEXTO+=HB_TSTOSTR(nVAL) 
+                   ENDIF
+                   
+                   
               //
-              // Data
+              // Logico
               //                           
-              CASE aESTRU[X][2]="L"
+              CASE cFieldType="L"
                    cTEXTO+=logic2str(nval,0,0,zSEPLOGIC)
               //
               // Numerico
               //     
-              CASE aESTRU[X][2]="N"
-                   cTEXTO+=ALLTRIM(STRVAL(nVAL,aESTRU[X][3],aESTRU[X][4],ZDECSIM))
+              CASE cFieldType="N"
+                   cTEXTO+=ALLTRIM(STRVAL(nVAL,nFieldLength,nFieldDec,ZDECSIM))
           ENDCASE
           DO CASE
              CASE tDOC = 7 .AND. cSUBTIPO="PCK"

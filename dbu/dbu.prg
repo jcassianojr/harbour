@@ -491,8 +491,8 @@ setar_b[ 5 ] = "sysfunc = 0"
 setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
-util_m := { "Rem Reg Dup", "Semuso", "Ver TXT", "Sort DBF",;
-            "Exportar","POSTGRESQL","MYSQL","MDB","SQLITE","Converter","FixarTodos","ZeraTodos",;
+util_m := { "Rem Reg Dup", "Exportar", "Sort DBF", "Sem USO",;
+            "SQLITE","POSTGRESQL","MYSQL","MDB ACCESS","ACCDB ACCESS","Converter","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
@@ -558,38 +558,26 @@ do while .T.
              limparegdupdbf()
          ENDIF
       case M->func_sel = 2
-          mdt("sem uso")
-          //copiardbfpara()
-      case M->func_sel = 3
-         VERTXT()
-      case M->func_sel = 4
-         sortdbf()
-      case M->func_sel = 5
           IF MDG("Todos(SIM) Escolher (NAO)")
               multidocs(0) //passa 0 par a perguntar o formato
           ELSE    
              copiardbfpara()
           ENDIF  
+
+      case M->func_sel = 3
+           sortdbf()
+      case M->func_sel = 4
+           
+      case M->func_sel = 5
+           MENUSQL("SQLITE")
       case M->func_sel = 6
-           if mdg("Nativo (SIM) ADORDD-ODBC (NAO")
-              pgsqlmenu()
-           else
-            mdbmenu("PGSQL")
-          endif
+           MENUSQL("PGSQL")
       case M->func_sel = 7
-           if mdg("Nativo (SIM) ADORDD-ODBC (NAO")
-              mysqlmenu()
-           else
-              mdbmenu("MYSQL")
-           endif   
+           MENUSQL("MYSQL")
       case M->func_sel = 8
-           mdbmenu("MDB")
+           MENUSQL("MDB")
       case M->func_sel = 9
-          if mdg("Nativo (SIM) ADORDD-ODBC (NAO")
-             sqlitemenu()
-          else
-             mdbmenu("SQLITE")
-          endif   
+          MENUSQL("ACCDB")
       case M->func_sel = 10
            if rsvp( "Converter  entre formatos" ) = "S" 
 		       converttipo() 

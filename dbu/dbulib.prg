@@ -49,7 +49,7 @@ retuRN  .T.
 *+********************************************************************
 *+
 function MDT(cMSG)  
-hb_Alert(cMSG, , , 2 ) 
+hb_Alert(cMSG, , , 1 ) 
 retuRN .t. 
 
 *+********************************************************************
@@ -60,6 +60,59 @@ retuRN .t.
 *+
 function  XEXT
 return hb_rddInfo( RDDI_ORDBAGEXT)
+
+
+FUNCTION MENUSQL(cTIPOSQL)
+LOCAL aAMBIENTE
+aAMBIENTE:=SALVAA()
+WHILE .T.
+    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+    @ 03,24 SAY cTIPOSQL
+    OPCAO(  4, 24, "&Nativo clientelib   ", 78 ) //N
+    OPCAO(  5, 24, "&ODBC RDD            ", 79 ) //D
+    OPCAO(  6, 24, "&RDD SQLMIX          ", 82 ) //I 
+    KEY := menu( 1, 0 )
+    DO CASE
+       CASE KEY=1 .AND. cTIPOSQL="PGSQL"
+           pgsqlmenu()
+       CASE KEY=1 .AND. cTIPOSQL="MYSQL"
+           mysqlmenu()
+       CASE KEY=1 .AND. cTIPOSQL="SQLITE"
+            sqlitemenu()
+       CASE KEY=1 .AND. cTIPOSQL="MDB"
+            MDT("Sem clientelib para mdb")
+       CASE KEY=1 .AND. cTIPOSQL="ACCDB"
+            MDT("Sem clientelib para mdb")     
+       //ADORDD ODBC     
+       CASE KEY=2 .AND. cTIPOSQL="PGSQL"
+            mdbmenu("PGSQL")
+       CASE KEY=2 .AND. cTIPOSQL="MYSQL"
+            mdbmenu("MYSQL")
+       CASE KEY=2 .AND. cTIPOSQL="SQLITE"
+            mdbmenu("SQLITE")
+        CASE KEY=2 .AND. cTIPOSQL="MDB"
+            mdbmenu("MDB")  
+        CASE KEY=2 .AND. cTIPOSQL="ACCDB"
+            mdbmenu("ACCDB")              
+       //SQLMIX RDD     
+       CASE KEY=3 .AND. cTIPOSQL="PGSQL"
+            mixmenu("")
+       CASE KEY=3 .AND. cTIPOSQL="MYSQL"
+            mixmenu("MYSQL")      
+       CASE KEY=3 .AND. cTIPOSQL="SQLITE"
+            mixmenu("SQLITE")
+       CASE KEY=3 .AND. cTIPOSQL="MDB"
+            mixmenu("MDB")       
+        CASE KEY=3 .AND. cTIPOSQL="ACCDB"
+            mixmenu("ACCDB")      
+       OTHERWISE
+            RETURN
+    ENDCASE
+ENDDO
+HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+RESTAA(aAMBIENTE)
+LAYOUT()
+return.t.
 
 
 *+********************************************************************

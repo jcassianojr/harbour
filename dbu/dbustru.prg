@@ -80,46 +80,46 @@ field_col[ 4 ] = 55
 
 
 
+//define HB_FT_NONE            0
+data_type[  1 ] = "Caracter "  //HB_FT_STRING           1      "C"  //
+data_type[  2 ] = "Numerico "  //HB_FT_LONG             4      "N"   //
+data_type[  3 ] = "Data     "  //HB_FT_DATE             3      "D"   //
+data_type[  4 ] = "Logico   "  //HB_FT_LOGICAL          2      "L"  //
+data_type[  5 ] = "Memoria  "  //HB_FT_MEMO            16      "M"  //
+data_type[  6 ] = "BLOB     "  //HB_FT_BLOB            19      "W" 
+data_type[  7 ] = "Image    "  //HB_FT_IMAGE           18      "P" 
+data_type[  8 ] = "OLE      "  //HB_FT_OLE             20      "G" 
+data_type[  9 ] = "VarLength"  //HB_FT_VARLENGTH       15      "Q" 
+data_type[ 10 ] = "Any      "  //HB_FT_ANY             17      "V"
+data_type[ 11 ] = "Float    "  //HB_FT_FLOAT            5      "F" 
+data_type[ 12 ] = "Double   "  //8 
+data_type[ 13 ] = "Double   "  //B  HB_FT_DOUBLE        7      "B" 
+data_type[ 14 ] = "CurDouble"  //HB_FT_CURDOUBLE       14      "Z"  //
+data_type[ 15 ] = "Currency "  //HB_FT_CURRENCY        13      "Y"   //
+data_type[ 16 ] = "Integer  "  //HB_FT_INTEGER  VV      6      "I" 
+data_type[ 17 ] = "Integer  "  //2 INT2
+data_type[ 18 ] = "Integer  "  //4  INT4
+data_type[ 19 ] = "Autoinc  "  //HB_FT_AUTOINC         12      "+" 
+data_type[ 20 ] = "Modtime  "  //HB_FT_MODTIME         10      "=" 
+data_type[ 21 ] = "Rowver   "  //HB_FT_ROWVER          11      "^"
+data_type[ 22 ] = "Timestamp"  //HB_FT_TIMESTAMP        9      "@" 
+data_type[ 23 ] = "Time/stmp"  //HB_FT_TIME             8      "T" 
 
-data_type[ 1 ] = "Caracter "
-data_type[ 2 ] = "Numerico "
-data_type[ 3 ] = "Data     "
-data_type[ 4 ] = "Logico   "
-data_type[ 5 ] = "Memoria  "
-data_type[6] = "BLOB     "
-data_type[7] = "Image    "
-data_type[8] = "OLE      "
-data_type[9] = "VarLength"
-data_type[10] = "Any      "
-data_type[11] = "Float    "
-data_type[12] = "Double   "
-data_type[13] = "Double   "
-data_type[14] = "Double   "
-data_type[15] = "Currency "
-data_type[16] = "Integer  "
-data_type[17] = "Integer  "
-data_type[18] = "Integer  "
-data_type[19] = "Autoinc  "
-data_type[20] = "Modtime  "
-data_type[21] = "Rowver   "
-data_type[22] = "Timestamp"
-data_type[23] = "Time/stmp"
 
-
-l_usr[1] = 3			&& character - variable len
-l_usr[2] = 4			&& numeric - variable len and dec
-l_usr[3] = 3			&& date - fixed len - 3, 4 or 8
-l_usr[4] = 2			&& logical - fixed len - 1
-l_usr[5] = 3			&& memo - fixed len - 10 or 4
+l_usr[1] = 3			&& C character - variable len
+l_usr[2] = 4			&& N numeric - variable len and dec
+l_usr[3] = 3			&& D Date - fixed len - 3, 4 or 8
+l_usr[4] = 2			&& L logical - fixed len - 1
+l_usr[5] = 3			&& M memo - fixed len - 10 or 4
 l_usr[6] = 3			&& "W" - fixed len - 10 or 4
 l_usr[7] = 3			&& "P" - fixed len - 10 or 4
 l_usr[8] = 3			&& "G" - fixed len - 10 or 4
 l_usr[9] = 3			&& "Q" - variable len
 l_usr[10] = 3			&& "V" len 4 or 6 or above dec 0
 l_usr[11] = 4			&& "F" like "N"
-l_usr[12] = 4			&& "8" len 8
-l_usr[13] = 4			&& "B" len 8
-l_usr[14] = 4			&& "Z" len 8
+l_usr[12] = 4			&& "8" len 8 
+l_usr[13] = 4			&& "B" len 8 
+l_usr[14] = 4			&& "Z" len 8 
 l_usr[15] = 2			&& "Y" len 8, dec 4
 l_usr[16] = 4			&& "I" len 1-4 or 8, default 4
 l_usr[17] = 2			&& "2" len 2 dec 0
