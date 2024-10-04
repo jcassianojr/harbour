@@ -491,14 +491,13 @@ setar_b[ 5 ] = "sysfunc = 0"
 setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
-util_m := { "Rem Reg Dup", "Exportar", "Sort DBF", "Sem USO",;
-            "SQLITE","POSTGRESQL","MYSQL","MDB ACCESS","ACCDB ACCESS","Converter","FixarTodos","ZeraTodos",;
+util_m := { "Rem Reg Dup", "Exportar", "Sort DBF", "POSTGRESQL",;
+            "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","Converter","FixarTodos","ZeraTodos",;
             "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
 FOR X=5 TO 16
      util_b[x]:="EMPTY(cur_dbf)"
 next x
-//util_m[7]:=ZEXPOREXT //agora usa multidocs 0 que pegunta o tipo de exportacao
 
 DECLARE dbf_list[ adir( "*.dbf" ) + 20 ]
 DECLARE ntx_list[ adir( "*" + XEXT() ) + 20 ]
@@ -567,11 +566,11 @@ do while .T.
       case M->func_sel = 3
            sortdbf()
       case M->func_sel = 4
-           
+           MENUSQL("PGSQL")
       case M->func_sel = 5
            MENUSQL("SQLITE")
       case M->func_sel = 6
-           MENUSQL("PGSQL")
+           MENUSQL("MARIADB")
       case M->func_sel = 7
            MENUSQL("MYSQL")
       case M->func_sel = 8
