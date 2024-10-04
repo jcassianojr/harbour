@@ -77,6 +77,8 @@ WHILE .T.
            pgsqlmenu()
        CASE KEY=1 .AND. cTIPOSQL="MYSQL"
            mysqlmenu()
+       CASE KEY=1 .AND. cTIPOSQL="MARIADB"
+            MDT("Sem clientelib para mdb")      
        CASE KEY=1 .AND. cTIPOSQL="SQLITE"
             sqlitemenu()
        CASE KEY=1 .AND. cTIPOSQL="MDB"
@@ -88,6 +90,8 @@ WHILE .T.
             mdbmenu("PGSQL")
        CASE KEY=2 .AND. cTIPOSQL="MYSQL"
             mdbmenu("MYSQL")
+       CASE KEY=2 .AND. cTIPOSQL="MARIADB"  
+            mdbmenu("MARIADB")  
        CASE KEY=2 .AND. cTIPOSQL="SQLITE"
             mdbmenu("SQLITE")
         CASE KEY=2 .AND. cTIPOSQL="MDB"
@@ -98,7 +102,9 @@ WHILE .T.
        CASE KEY=3 .AND. cTIPOSQL="PGSQL"
             mixmenu("")
        CASE KEY=3 .AND. cTIPOSQL="MYSQL"
-            mixmenu("MYSQL")      
+            mixmenu("MYSQL")    
+       CASE KEY=3 .AND. cTIPOSQL="MARIADB"
+            mixmenu("MYSQL")           
        CASE KEY=3 .AND. cTIPOSQL="SQLITE"
             mixmenu("SQLITE")
        CASE KEY=3 .AND. cTIPOSQL="MDB"

@@ -11,11 +11,8 @@
 REQUEST ADORDD
 
 function pegcfgbanco()
-IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
    cUSERX:=PADR("root",30," ")
-   IF MDG("MARIADB (SIM) MYSQL(NAO)")
-      cTIPOSQL:="MARIADB" 
-   ENDIF
 ENDIF
 
 IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
@@ -85,7 +82,7 @@ WHILE .T.
         OTHERWISE
             @ 03,24 SAY cTIPOSQL
     ENDCASE  
-    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
+    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
        OPCAO(  4, 24, "&Criar database             ", 67 ) //c 67
     else
        OPCAO(  4, 24, "&Criar arquivo              ", 67 ) //c 67
@@ -438,14 +435,14 @@ DO CASE
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )  
           
-   CASE cTIPOSQL="MYSQL"  .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+   CASE cTIPOSQL="MYSQL"  .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
       //con sql create database
       
 ENDCASE
 
 
 //cria com sql query create database
- if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+ if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
     cARQORI:=OPENTIPOARQ()
     cNEWDATABASEX:=SPACE(40)
     @ 24,00 SAY "Novo database"
@@ -561,7 +558,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     cCONCREATE:=criaconcreate(cMDBARQ,cNOMETABELA)
     
     DO CASE
-       CASE cTIPOSQL="SQLITE" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADBF"  ;
+       CASE cTIPOSQL="SQLITE" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"  ;
             .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"  ;
             .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
              //Abaixo com executacmd ja com estrutura ajustada pela funcao
