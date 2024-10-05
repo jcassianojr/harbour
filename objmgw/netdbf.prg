@@ -375,7 +375,7 @@ IF lSAYREC
 ENDIF
 @ maxrow(), 57 say "["
 @ maxrow(), 69 SAY "]"
-@ MAXROW(), 59+INT(cCOMPLETE/10) sAY  "#"+ld_cha
+@ MAXROW(), 58+INT(cCOMPLETE/10) sAY  "#"+ld_cha
 @ maxrow(), 71 say  transform( cComplete, '999' )
 return .t.
 

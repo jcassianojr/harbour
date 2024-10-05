@@ -9,6 +9,7 @@
 #include "error.ch"
 #include "simpleio.ch"
 #INCLUDE "BOX.CH"
+#include "dbstruct.ch"
 
 
 REQUEST SQLMIX
@@ -180,6 +181,25 @@ function miximpdbf()
     if len(aindices)>0
         mixexecutesql(Aindices) //Executa comando unico ou array de comandos
     endif    
+    
+    
+    DBGOTOP()
+    while !eof()
+      zei_fort(nLASTREC,,,1)
+      mSql := "INSERT INTO "+cTable+" VALUES "
+      msql := msql + "("
+      for i := 1 to len(aSTRU)
+         mFldNm := aSTRU[i, DBS_NAME]
+         if i > 1
+            mSql += ", "
+         endif
+         mSql += c2sql(&mFldNm)
+      next
+      mSql += ")"
+      mixexecutesql(msql)
+      dbskip()
+   enddo
+    
     dbclosearea()
 
 return .t.
