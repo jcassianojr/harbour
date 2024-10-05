@@ -329,6 +329,8 @@ for i:=1 to NFIM
         endif
     ENDIF
 
+    geracampodbf(
+    
     
     // Casos datasting que nao retornam 8
     IF aStruct[i, DBS_TYPE]="D" .AND. aStruct[i, DBS_LEN]<>8
@@ -338,21 +340,21 @@ for i:=1 to NFIM
     
     //DBS_TYPE="@" datetime no adordd possivel implancatacao string 16 por enquanto data
     IF aStruct[i, DBS_TYPE]="@"
-       aStruct[i, DBS_TYPE]="D"
+       aStruct[i, DBS_TYPE]:="D"
        aStruct[i, DBS_LEN]=8
        aStruct[i, DBS_DEC]=0
     ENDIF
     
     //DBS_TYPE="M"  mudando para char 250 ate melhor tratativa para longwchar e memos
     IF aStruct[i, DBS_TYPE]="M"
-       aStruct[i, DBS_TYPE]="C"
+       aStruct[i, DBS_TYPE]:="C"
        aStruct[i, DBS_LEN]=250
        aStruct[i, DBS_DEC]=0
     ENDIF
     
     //Tipo integer 4 =numerico 8
     IF aStruct[i, DBS_TYPE]="I" //integer
-       aStruct[i, DBS_TYPE]="N"
+       aStruct[i, DBS_TYPE]:="N"
        IF nLENMAX>8
           aStruct[i, DBS_LEN]=nLENMAX
        ELSE
@@ -360,9 +362,9 @@ for i:=1 to NFIM
        ENDIF   
     ENDIF 
 
-    //Tipo B
+    //Tipo B double
     IF aStruct[i, DBS_TYPE]="B" 
-       aStruct[i, DBS_TYPE]="N"
+       aStruct[i, DBS_TYPE]:="N"
        IF nLENMAX>15
          aStruct[i, DBS_LEN]=nLENMAX+ 4 //acrecenta 4 decimais
        ELSE
