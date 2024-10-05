@@ -42,7 +42,10 @@ for n := 2 to len( func_title )
    @  1, ( 9 * n ) - 18 say padc( func_title[ n ], 9 )
 next
 @  2,  0 say replicate( "-", 80 )
-@ MAXROW()-3,  0 say "RDD("+zUSOVIA+") Extensao("+hb_rddInfo( RDDI_TABLEEXT)+") Memo("+hb_rddInfo( RDDI_MEMOEXT)+") Index("+hb_rddInfo( RDDI_ORDBAGEXT)+")"
+//alguns rdd nao tem RDDI_TABLEEXT RDDI_MEMOEX RDDI_ORDBAGEXT
+TRY
+   @ MAXROW()-3,  0 say "RDD("+zUSOVIA+") Extensao("+hb_rddInfo( RDDI_TABLEEXT)+") Memo("+hb_rddInfo( RDDI_MEMOEXT)+") Index("+hb_rddInfo( RDDI_ORDBAGEXT)+")"
+END   
 @ MAXROW()-2,  0 say  "Exportar Para("+ZEXPOREXT+") Delimitador("+ZDELIMITE+")" 
 @ MAXROW()-1,  0 say "Sepador Decimal("+ZDECSIM+") Oem Ansi("+ZCNVCHAR+") Separador Registro("+Zregsep+")"+" Ano("+ZANOFOR+ZANOSEP+ZANOTAM +") Logico("+zSEPLOGIC+")"
 

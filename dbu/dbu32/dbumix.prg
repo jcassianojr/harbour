@@ -109,7 +109,7 @@ WHILE .T.
                mixexecutesql("DROP TABLE  "+cTABELAX) 
             ENDIF  
        CASE KEY=7
-            //exp formatos
+            mixexpformat()
        OTHERWISE
             RETURN
     ENDCASE
@@ -251,4 +251,43 @@ DO CASE
 ENDCASE
 RETURN
 
+function mixexpformat()
+mdbtabela(cdatabasex)
+LCOPIANAT:=.f. //MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado mysqlrddd
+tDOC:=pegtipodoc(lCOPIANAT) // .t. Inclui dbf se for nativa
+if tDOC<>14 //dbf nao precisa adcional 
+   pegparexp() 
+else
+   mdt("Use Opcao exportar dbf")
+   return .f.
+endif   
+lDOCCAB  :=.F.
+lDOCDAD  :=.F.
+lDOCRECNO:=.F.
+cSUBTIPO :=" "
+
+PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+
+cDESTINO:=cTABELAX+"_"+cTIPOSQL+"_rddmix."+zEXPOREXT
+MDT(cDESTINO)
+
+MDT("abrindo arquivo de origem: "+cTABELAX)
+
+
+dbUseArea( .T., , "SELECT * FROM "+cTABELAX, cTABELAX )
+
+
+nLASTREC:=   lastrec() 
+zei_fort( nLASTREC,,,0)
+
+aSTRU:=DBSTRUCT()
+
+
+  IF lCOPIANAT
+     COPYTO(cDESTINO)
+  ELSE
+     multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aSTRU)
+  ENDIF   
+
+dbcloseaREA()
 
