@@ -23,13 +23,13 @@ ENDIF
 //
 loledb=.T.
 IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64  //mdg("User sim=oledb jet (32b) nao=oledb accdb(64b)")
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64  //oledb jet (32b) oledb accdb(64b)")
 ENDIF 
 IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //odbc 8.0(32b) odbc 9.0(64b)") 
 ENDIF 
 IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)") 
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //odbc 8.0(32b) odbc 9.0(64b)") 
 ENDIF 
 
 //
@@ -165,7 +165,7 @@ nChoices:=0
 aResult:=MDBTABLES(cMDBARQ )
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-  nChoices := ACHOICE( 4,23,21,54, aResult)
+   nChoices := ACHOICE( 4,23,21,54, aResult)
 ENDIF   
 cTABELAX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
 RETURN aResult
@@ -199,7 +199,6 @@ IF EMPTY(cTABELA)
    RETURN NIL
 ENDIF
 
-//Lgrvstruinfo:=MDG("Gravar info das estruturas")
 
 
 LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")

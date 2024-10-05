@@ -10,6 +10,23 @@
 #include "TRY.ch"
 
 
+Function inputbox(eVAR,cTITULO)
+LOCAL aAMBIENTE
+IF VALTYPE(EVAR)="U"
+   eVAR:=SPACE(30)
+ENDIF
+IF VALTYPE(cTITULO)="U"
+   cTITULO:="Dados"
+ENDIF
+
+aAMBIENTE:=SALVAA()
+HB_dispbox( 2, 22, 7, 62, B_DOUBLE+" ")
+@ 04,24 SAY cTIPOSQL
+@ 05,24 GET eVAR
+READ
+RESTAA(aAMBIENTE)    
+RETURN eVAR
+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 *+    Function LAYOUT() Informacoes do Driver em uso
@@ -104,7 +121,7 @@ WHILE .T.
        CASE KEY=3 .AND. cTIPOSQL="MYSQL"
             mixmenu("MYSQL")    
        CASE KEY=3 .AND. cTIPOSQL="MARIADB"
-            mixmenu("MYSQL")           
+            mixmenu("MARIADB")           
        CASE KEY=3 .AND. cTIPOSQL="SQLITE"
             mixmenu("SQLITE")
        CASE KEY=3 .AND. cTIPOSQL="MDB"
