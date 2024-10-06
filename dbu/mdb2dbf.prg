@@ -310,69 +310,46 @@ local nFIM
 local i
 LOCAL aTAM
 LOCAL nLENMAX
-//#define DBS_NAME        1
-//#define DBS_TYPE        2
-//#define DBS_LEN         3
-//#define DBS_DEC         4
+LOCAL aRETU
 nFIM:=LEN(aStruct)
 for i:=1 to NFIM
-    //mFldNm := aStruct[i, DBS_NAME]
-    //  mFldType := aStruct[i, DBS_TYPE]
-    //  mFldLen := aStruct[i, DBS_LEN]
-    //  mFldDec := aStruct[i, DBS_DEC]
     nLENMAX:=0
     IF (aStruct[i, DBS_TYPE]="I" .or. aStruct[i, DBS_TYPE]="B") .and. aStruct[i, DBS_LEN]=0 .AND. cTIPOSQL="SQLITE" 
        Ctmp:="select max( length( " + aStruct[i, DBS_NAME] + " ) ) from " + cTABELA
-       aTAM :=MDBTABLES(cMDBARQ,cTABELA , ctmp) 
+        aTAM :=MDBTABLES(cMDBARQ,cTABELA , ctmp) 
         if len( aTAM ) > 0
            nLenMAX := aTAM[ 1 ]
         endif
-    ENDIF
+    
+        //Tipo integer 4 =numerico 8
+        IF aStruct[i, DBS_TYPE]="I" //integer
+           aStruct[i, DBS_TYPE]:="N"
+           IF nLENMAX>8
+              aStruct[i, DBS_LEN]=nLENMAX
+           ELSE
+              aStruct[i, DBS_LEN]=8
+           ENDIF   
+        ENDIF 
 
-    geracampodbf(
-    
-    
-    // Casos datasting que nao retornam 8
-    IF aStruct[i, DBS_TYPE]="D" .AND. aStruct[i, DBS_LEN]<>8
-       aStruct[i, DBS_LEN]=8
-       aStruct[i, DBS_DEC]=0
-    ENDIF
-    
-    //DBS_TYPE="@" datetime no adordd possivel implancatacao string 16 por enquanto data
-    IF aStruct[i, DBS_TYPE]="@"
-       aStruct[i, DBS_TYPE]:="D"
-       aStruct[i, DBS_LEN]=8
-       aStruct[i, DBS_DEC]=0
-    ENDIF
-    
-    //DBS_TYPE="M"  mudando para char 250 ate melhor tratativa para longwchar e memos
-    IF aStruct[i, DBS_TYPE]="M"
-       aStruct[i, DBS_TYPE]:="C"
-       aStruct[i, DBS_LEN]=250
-       aStruct[i, DBS_DEC]=0
-    ENDIF
-    
-    //Tipo integer 4 =numerico 8
-    IF aStruct[i, DBS_TYPE]="I" //integer
-       aStruct[i, DBS_TYPE]:="N"
-       IF nLENMAX>8
-          aStruct[i, DBS_LEN]=nLENMAX
-       ELSE
-          aStruct[i, DBS_LEN]=8
-       ENDIF   
-    ENDIF 
-
-    //Tipo B double
-    IF aStruct[i, DBS_TYPE]="B" 
-       aStruct[i, DBS_TYPE]:="N"
-       IF nLENMAX>15
-         aStruct[i, DBS_LEN]=nLENMAX+ 4 //acrecenta 4 decimais
-       ELSE
-          aStruct[i, DBS_LEN]=15
-       ENDIF   
-       aStruct[i, DBS_LEN]=4
-    ENDIF
-
+        //Tipo B double
+        IF aStruct[i, DBS_TYPE]="B" 
+           aStruct[i, DBS_TYPE]:="N"
+           IF nLENMAX>15
+             aStruct[i, DBS_LEN]=nLENMAX+ 4 //acrecenta 4 decimais
+           ELSE
+              aStruct[i, DBS_LEN]=15
+           ENDIF   
+           aStruct[i, DBS_LEN]=4
+        ENDIF
+     endif
+     
+     aRETU:=geracampodbf(aStruct[i, DBS_NAME],aStruct[i, DBS_TYPE],aStruct[i, DBS_LEN],aStruct[i, DBS_DEC])
+     
+     aStruct[i, DBS_NAME]:=aRETU[DBS_NAME]
+     aStruct[i, DBS_TYPE]:=aRETU[DBS_TYPE]
+     aStruct[i, DBS_LEN] :=aRETU[DBS_LEN]
+     aStruct[i, DBS_DEC] :=aRETU[DBS_DEC]
+     
 next i
 return aStruct
 
@@ -817,7 +794,7 @@ IF lOPEN
                    // 1    2     3      4           5         6
                    // 0    1     2      3           4         5 ->posicao no recordset
                    cFieldName := upper(alltrim( ors:fields(1):value ))
-                   cType      := upper( alltrim( ors:fields(2):value ) ) 
+                   cFieldType  := upper( alltrim( ors:fields(2):value ) ) 
                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
                CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
                    //table info colunas
@@ -825,11 +802,11 @@ IF lOPEN
                    // 1      2     3      4      5      6
                    // 0      1     2      3      4      5 ->posicao no recordset
                    cFieldName := upper(alltrim( ors:fields(0):value ))
-                   cType      := upper( alltrim( ors:fields(1):value ) ) 
+                   cFieldType  := upper( alltrim( ors:fields(1):value ) ) 
                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
                CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
                    cFieldName := upper(alltrim( ors:fields(0):value )) //column_name
-                   cType      := upper( alltrim( ors:fields(1):value ) ) // data_type
+                   cFieldType := upper( alltrim( ors:fields(1):value ) ) // data_type
                    nFieldLength = fixnum(ors:fields(2):value) //tamanho string character_maximum_length
                    if fixnum(ors:fields(3):value)>0//tamannho numeric
                       nFieldLength = fixnum(ors:fields(3):value)  //numeric_precision
@@ -867,7 +844,17 @@ RETURN aRETU
 
 function geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)   
 local aRETU
+local cSUBTIPO
 aRETU:={cFieldName,cFieldType,nFieldLength,nFieldDec}  
+
+cTYPE:=cFieldType
+cSUBTIPO:=""
+IF SUBSTR(cTYPE,2,1)=":"   //sqlimix manda tipo e subtipo exemplos N:i   C:CU  @:D
+   cFieldType:=SUBSTR(cTYPE,1,1)
+   cSUBTIPO  :=SUBSTR(cTYPE,3)
+   cTYPE     :=SUBSTR(cTYPE,1,1)
+ENDIF
+
 do case
 
     //
@@ -936,11 +923,15 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
     nFieldDec := 5    
     
     
- case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE' .or. cType == 'TIMESTAMP'
+ case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE' .or. cType == 'TIMESTAMP' .OR. cType == "D"
     cFieldType := 'D'
     nFieldLength := 8
     nFieldDec := 0
     
+case cType == "@" //Datetime opcao mudar como texto fututamente 
+    cFieldType := 'D'
+    nFieldLength := 8
+    nFieldDec := 0    
     
  case cType == "BOOL"  .or. cType == 'BOOLEAN' 
     cFieldType := 'L'
@@ -953,7 +944,7 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
        nFieldLength := 250
        nFieldDec := 0
     
-  CASE cType == "LONGTEXT"
+  CASE cType == "LONGTEXT" .OR. cType == "M"
        cFieldType := 'C'
        nFieldLength := 250
        nFieldDec := 0
@@ -987,6 +978,15 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
        cFieldType := 'C'
        nFieldLength := 64
        nFieldDec := 0
+       
+   CASE cType == "C" .AND.   nFieldLength>250 //alguns longchar vem comprimento 65535 estudando mudar para memo por enquanto C 250
+        nFieldLength := 250
+   
+   //
+   // Inteiro sub numerico troca para numerico
+   //
+   CASE cType == "I" .AND. cSUBTIPO=="N"
+       cFieldType := 'N'
    
    CASE cType == "OID" 
        cFieldType := 'N'
@@ -994,10 +994,7 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
        nFieldDec := 0    
        
  otherwise
-    cFieldType := 'X'
-    nFieldDec := 0
-    nLength := 0
-    
+       //mantem  os dados enviados 
     
 endcase
 //Inclusao rotina pegar max quando campo tamanho for zero

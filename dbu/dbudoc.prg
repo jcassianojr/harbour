@@ -659,6 +659,14 @@ IF lDOCDAD .AND. nLASTREC>0
                       CASE zCNVCHAR="A"
                           nVAL:=win_oemtoansi(nVAL) //hb_oemtoansi(nVAL)
                    ENDCASE
+                   
+                    //datetime em forma de string
+                    if  SUBSTR(nVAL,5,1)="-" .AND. SUBSTR(nVAL,8,1)="-"
+                       nVAL = substr(nVAL, 6, 2) + "/" + substr(nVAL, 9, 2) + "/" + substr(nVAL, 1, 4)
+                       nvAL = CTOD(nVAL)
+                       nVAL = DATA2STR(nVAL,ZANOFOR,ZANOSEP,ZANOTAM)
+                    ENDIF
+                   
                       DO CASE
                          CASE tDOC = 7 //xml
                               cTEXTO+=str2html(nVAL)

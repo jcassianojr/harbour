@@ -70,12 +70,6 @@ ENDIF
 cOLDRDD:=rddSetDefault( "SQLMIX" )
 OPENSQLMIX()
 
-//Usando mdtabela depois criar nativa sqlmix
-//dbUseArea( .T., , "SELECT * FROM "+cTABELAX, cTABELAX )
-//dbclosearea()
-
-
-
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
     @ 03,24 SAY cTIPOSQL+" "+cDATABASEX
@@ -98,12 +92,11 @@ WHILE .T.
        CASE KEY=4
             mdbtabela(cdatabasex)          
        CASE KEY=5
-            //exp tabelas
+            mixexpdbf()
        CASE KEY=6
             //mixexecutesql("CREATE TABLE country (CODE char(3), NAME char(50), RESIDENTS int(11))")
             //mixexecutesql("CREATE TABLE country2 (CODE char(3), NAME char(50), RESIDENTS int(11))")
             mdbtabela(cdatabasex)
-            //ALTD()
             IF MDG("Apagar Tabela"+cTABELAX)  
                OPENSQLMIX() 
                mixexecutesql("DROP TABLE  "+cTABELAX) 
@@ -121,6 +114,70 @@ RESTAA(aAMBIENTE)
 LAYOUT()
 RETURN .T.
 
+function mixexpdbf()
+LOCAL cDESTINO
+LOCAL aSTRU
+LOCAL aVALOR
+LOCAL I
+LOCAL nFIM
+LOCAL eVALOR
+
+mdbtabela(cdatabasex)
+
+cDESTINO:=cTABELAX+"_"+cTIPOSQL
+MDT(cDESTINO)
+
+
+MDT("abrindo arquivo de origem: "+cTABELAX)
+dbUseArea( .T., , "SELECT * FROM "+cTABELAX, "ORIGEM" )
+nLASTREC :=  lastrec() 
+nFIM     :=  FCOUNT()
+zei_fort( nLASTREC,,,0)
+aSTRU:=DBSTRUCT()
+aSTRU:=sqltodbfstru(aSTRU)
+
+
+DBCreate(cDESTINO, aSTRU, "DBFCDX" ) 
+DBUseArea( .T. , "DBFCDX" , cDESTINO, "DESTINO" , .T. , .F. ) 
+
+dbselectar("ORIGEM")
+while ! eof()
+      aVALOR:={}
+     FOR I= 1 TO nFIM
+        AADD(aVALOR,FIELDGET(I))
+     NEXT I
+    dbselectar("DESTINO")
+    netrecapp()
+
+     FOR I= 1 TO nFIM
+         eVALOR:=aVALOR[I]
+         if valtype(eVALOR)="C" .AND. SUBSTR(eVALOR,5,1)="-" .AND. SUBSTR(eVALOR,8,1)="-"
+            eVALOR = substr(eVALOR, 6, 2) + "/" + substr(eVALOR, 9, 2) + "/" + substr(eVALOR, 1, 4)
+            eVALOR = CTOD(eVALOR)
+         ENDIF
+         if valtype(eVALOR)="C"  .OR. valtype(eVALOR)="M"
+           eVALOR:=RANGEREPL(chr(0),chr(31),eVALOR," ") //Remove caracteres de controle
+           eVALOR:=TIRACE(eVALOR)
+        ENDIF 
+         IF ! EMPTY(eVALOR)
+            FIELDPUT(I,eVALOR)
+         ENDIF   
+     NEXT I
+
+    dbselectar("ORIGEM")
+    dbskip()
+enddo
+
+
+
+dbselectar("DESTINO")
+dbclosearea()
+dbselectar("ORIGEM")
+dbclosearea()
+
+
+return .t.
+
 function miximpdbf()
    local aINDICES
     LOCAL nINDICES
@@ -130,8 +187,6 @@ function miximpdbf()
     LOCAL cTABLE
     
     
-   // altd()
-   // rddInfo( RDDI_CONNECT)
     aINDICES:={}
 
     cTABLE:=SPACE(30)
@@ -144,7 +199,6 @@ function miximpdbf()
     cTABLE:=ALLTRIM(cTABLE)
     
     DBUseArea( .T. , cORIDRIVER , cARQORI, cTABLE , .T. , .T. ) 
-    //USE (cARQORI) ALIAS (cTABLE) NEW VIA  (cORIDRIVER) 
     aSTRU:=DBSTRUCT() 
     nLASTREC:=reccount() 
     zei_fort( nLASTREC,,,0)
@@ -157,9 +211,7 @@ function miximpdbf()
          msql:="create index " + cINDEXNAME + " on " + cTABLE + " ( " + cINDEXUSO + " ) "
          aadd(Aindices,msql)
      NEXT j
-   // dbclosearea()
 
-    altd()
     msql:=""
     DO CASE
        CASE cTIPOSQL="SQLITE"

@@ -58,7 +58,7 @@ d:\develop\harbour\dbu\sql2dbf.prg
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-d:\develop\harbour\dbu\mdb2dbf.prg 
+d:\develop\harbour\dbu\mdb2dbf.prg -b
 #
 # mysql libmysql
 #
@@ -72,8 +72,8 @@ d:\develop\harbour\dbu\dbupg.prg
 d:\develop\harbour\dbu\dbupgexp
 d:\develop\harbour\dbu\pgrdd.prg
 #
-#d:\develop\harbour\dbu\dbumix.prg
-dbumix.prg -b
+d:\develop\harbour\dbu\dbumix.prg
+#dbumix.prg -b
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  
 d:\develop\harbour\objmgw\disk54.prg
