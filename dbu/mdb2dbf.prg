@@ -884,6 +884,13 @@ do case
        cFieldType := 'C'
        nFieldDec := 0
        
+ 
+  case  cType ==  "TINYINT"
+    cFieldType := 'N'
+    nFieldLength := 2
+    nFieldDec := 0     
+ 
+ 
   case  cType == "INT2" .OR. cType == "SMALLINT"
     cFieldType := 'N'
     nFieldLength := 4
@@ -916,7 +923,8 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
     nFieldDec := 5    
     
     
- case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE' .or. cType == 'TIMESTAMP' .OR. cType == "D"
+ case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE' .or. cType == 'TIMESTAMP' ;
+                      .OR. cType == "D" .OR. cType == "TYPE_TIMESTAMP"  .or. cType ==  "TYPE_DATE" 
     cFieldType := 'D'
     nFieldLength := 8
     nFieldDec := 0
@@ -937,7 +945,7 @@ case cType == "@" //Datetime opcao mudar como texto fututamente
        nFieldLength := 250
        nFieldDec := 0
     
-  CASE cType == "LONGTEXT" .OR. cType == "M"
+  CASE cType == "LONGTEXT" .OR. cType == "M"  .OR. cType == "WLONGVARCHAR"
        cFieldType := 'C'
        nFieldLength := 250
        nFieldDec := 0
@@ -962,7 +970,7 @@ case cType == "@" //Datetime opcao mudar como texto fututamente
   //
   // postgresql varchar bpchar CHARACTER
   //
-  CASE cType == "VARCHAR" .OR. cType == "BPCHAR" .OR. AT("CHARACTER",UPPER(CTYPE))>0  
+  CASE cType == "VARCHAR" .OR. cType == "BPCHAR" .OR. AT("CHARACTER",UPPER(CTYPE))>0 .OR. cType == "WVARCHAR" .OR. cType == "WCHAR"
        cFieldType := 'C'
        nFieldDec := 0
   

@@ -89,8 +89,9 @@ WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
     @ 03,24 SAY cTIPOSQL
     OPCAO(  4, 24, "&Nativo clientelib   ", 78 ) //N
-    OPCAO(  5, 24, "&ODBC RDD            ", 79 ) //D
+    OPCAO(  5, 24, "&ADORDD ODBC         ", 65 ) //A
     OPCAO(  6, 24, "&RDD SQLMIX          ", 82 ) //I 
+    OPCAO(  7, 24, "&ODBC                ", 79 ) //D
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1 .AND. cTIPOSQL="PGSQL"
@@ -120,7 +121,7 @@ WHILE .T.
             mdbmenu("ACCDB")              
        //SQLMIX RDD     
        CASE KEY=3 .AND. cTIPOSQL="PGSQL"
-            mixmenu("")
+            mixmenu("PGSQL")
        CASE KEY=3 .AND. cTIPOSQL="MYSQL"
             mixmenu("MYSQL")    
        CASE KEY=3 .AND. cTIPOSQL="MARIADB"
@@ -130,7 +131,20 @@ WHILE .T.
        CASE KEY=3 .AND. cTIPOSQL="MDB"
             mixmenu("MDB")       
         CASE KEY=3 .AND. cTIPOSQL="ACCDB"
-            mixmenu("ACCDB")      
+            mixmenu("ACCDB")  
+        //ODBC
+        CASE KEY=4 .AND. cTIPOSQL="PGSQL"
+            ODBCmenu("PGSQL")
+       CASE KEY=4 .AND. cTIPOSQL="MYSQL"
+            ODBCmenu("MYSQL")    
+       CASE KEY=4 .AND. cTIPOSQL="MARIADB"
+            ODBCmenu("MARIADB")           
+       CASE KEY=4 .AND. cTIPOSQL="SQLITE"
+            ODBCmenu("SQLITE")
+       CASE KEY=4 .AND. cTIPOSQL="MDB"
+            ODBCmenu("MDB")       
+        CASE KEY=4 .AND. cTIPOSQL="ACCDB"
+            ODBCmenu("ACCDB")           
        OTHERWISE
             RETURN
     ENDCASE

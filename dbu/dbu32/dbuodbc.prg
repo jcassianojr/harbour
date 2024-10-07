@@ -5,6 +5,7 @@
 #INCLUDE "TRY.CH"
 #INCLUDE "DBINFO.CH"
 #INCLUDE "hbVER.CH"
+#INCLUDE "SQL.CH"
 
 
 Function odbcmenu(cUSOSQL)
@@ -133,7 +134,8 @@ function odbcimpdbf()
          mSql += c2sql(&mFldNm)
       next
       mSql += ")"
-      dsFunctions:ExecSQL(mSQL)
+      dsFunctions:SETSQL(mSQL)
+      dsFunctions:ExecSQL()
       dbskip()
    enddo
    dbclosearea()
@@ -145,21 +147,85 @@ LOCAL aSTRU
 LOCAL cCONN
 LOCAL i
 LOCAL nFIM
+LOCAL aVALOR
+
 mdbtabela(cdatabasex)
 cCONN=GERACONN(cDATABASEX,.F.)
 dsFunctions := TODBC():New( cCONN )
 dsFunctions:SetSQL( "SELECT * FROM "+cTABELAX)
 dsFunctions:Open()
+
+nLASTREC:=dsFunctions:LASTREC()
+zei_fort( nLASTREC,,,0)
+
 aSTRU:={}
-nFIM:=dsFunctions:Fields
+nFIM:=len(dsFunctions:Fields)
 FOR i := 1 TO nFIM
-    cFieldName   := dsFunctions:Fields[ i ]:FieldName
-    cFieldType   := dsFunctions:Fields[ i ]:DataType 
-    nFieldLength := dsFunctions:Fields[ i ]:DataSize
-    nFieldDec    := dsFunctions:Fields[ i ]:DataDecs
+    cFieldName   := dsFunctions:Fields[ i ][2]
+    cFieldType   := dsFunctions:Fields[ i ][3] 
+    nFieldLength := dsFunctions:Fields[ i ][4]
+    nFieldDec    := dsFunctions:Fields[ i ][5]
+    DO CASE
+       CASE cFIELDTYPE=SQL_CHAR
+            cFIELDTYPE="CHAR"
+       CASE cFIELDTYPE=SQL_NUMERIC
+            cFIELDTYPE="NUMERIC"
+       CASE cFIELDTYPE=SQL_DECIMAL
+            cFIELDTYPE="DECIMAL"
+       CASE cFIELDTYPE=SQL_INTEGER
+            cFIELDTYPE="INTEGER"
+       CASE cFIELDTYPE=SQL_SMALLINT
+            cFIELDTYPE="SMALLINT"
+       CASE cFIELDTYPE=SQL_FLOAT
+            cFIELDTYPE="FLOAT"
+       CASE cFIELDTYPE=SQL_REAL
+            cFIELDTYPE="REAL"
+       CASE cFIELDTYPE=SQL_DOUBLE 
+            cFIELDTYPE="DOUBLE"
+       CASE cFIELDTYPE= SQL_DATE
+            cFIELDTYPE="DATE"
+       CASE cFIELDTYPE= SQL_TIME
+            cFIELDTYPE="TIME"
+       CASE cFIELDTYPE= SQL_TIMESTAMP
+            cFIELDTYPE="TIMESTAMP"
+       CASE cFIELDTYPE= SQL_VARCHAR 
+            cFIELDTYPE="VARCHAR"
+       CASE cFIELDTYPE= SQL_TYPE_DATE
+            cFIELDTYPE="TYPE_DATE"                        
+       CASE cFIELDTYPE= SQL_TYPE_TIME
+            cFIELDTYPE="TYPE_TIME"
+       CASE cFIELDTYPE= SQL_TYPE_TIMESTAMP
+            cFIELDTYPE="TYPE_TIMESTAMP"                        
+       CASE cFIELDTYPE= SQL_LONGVARCHAR
+            cFIELDTYPE="LONGVARCHAR"
+       CASE cFIELDTYPE= SQL_BINARY
+            cFIELDTYPE="BINARY"                        
+       CASE cFIELDTYPE= SQL_VARBINARY 
+            cFIELDTYPE="VARBINARY"
+       CASE cFIELDTYPE= SQL_LONGVARBINARY
+            cFIELDTYPE="LONGVARBINARY"
+       CASE cFIELDTYPE= SQL_BIGINT
+            cFIELDTYPE="BIGINT"                        
+       CASE cFIELDTYPE= SQL_TINYINT
+            cFIELDTYPE="TINYINT"
+       CASE cFIELDTYPE= SQL_BIT
+            cFIELDTYPE="BIT"                        
+       CASE cFIELDTYPE= SQL_WCHAR
+            cFIELDTYPE="WCHAR"
+       CASE cFIELDTYPE= SQL_WVARCHAR
+            cFIELDTYPE="WVARCHAR"                        
+       CASE cFIELDTYPE= SQL_NVARCHAR
+            cFIELDTYPE="WVARCHAR"
+       CASE cFIELDTYPE= SQL_WLONGVARCHAR
+            cFIELDTYPE="WLONGVARCHAR"                        
+    ENDCASE
+    
     AADD(aSTRU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
 NEXT
 
+altd()
+
+avalor:={}
 cDESTINO:=cTABELAX+"_"+cTIPOSQL
 MDT(cDESTINO)
 DBCreate(cDESTINO, aSTRU, "DBFCDX" ) 
@@ -196,6 +262,7 @@ mdbtabela(cdatabasex)
 IF .NOT. MDG("Apagar Tabela"+cTABELAX)  
    return .f.
 ENDIF
+altd()
 odbcexecsql("DROP TABLE  "+cTABELAX) 
 return .t.
 
@@ -214,7 +281,8 @@ dsFunctions := TODBC():New( cCONN )
 nFIM:=LEN(aCOMANDOS)
 for i:=1 to nfim
     cCOMANDO:=aCOMANDOS[I]
-    dsFunctions:ExecSQL( cCOMANDO )
+    dsFunctions:SetSQL(cCOMANDO)
+    dsFunctions:ExecSQL()
 next i
 dsFunctions:Destroy()
 return .t.
