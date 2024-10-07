@@ -21,11 +21,12 @@ rddbm.hbc
 
 rddado.hbc
 #
-#nativas sqlite,libmysql,libpg
+#nativas sqlite,libmysql,libpg,odbc
 #
 hbsqlit3.hbc
 hbmysql.hbc
 hbpgsql.hbc
+hbodbc.hbc
 #
 # sqlmix
 #

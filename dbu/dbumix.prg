@@ -212,23 +212,8 @@ function miximpdbf()
          aadd(Aindices,msql)
      NEXT j
 
-    msql:=""
-    DO CASE
-       CASE cTIPOSQL="SQLITE"
-             msql:= SqliteCreateTable(cTABLE,aSTRU,"SQLITE")
-       CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
-             msql:= SqliteCreateTable(cTABLE,aSTRU,"MYSQL")
-      CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
-             msql:= SqliteCreateTable(cTABLE,aSTRU,"PGSQL")
-       CASE  cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" 
-              msql:= SqliteCreateTable(cTABLE,aSTRU,"MDB")
-        CASE  cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
-              msql:= SqliteCreateTable(cTABLE,aSTRU,"ACCDB")
-       OTHERWISE
-            RETURN .F.
-    ENDCASE   
+    msql:= SqliteCreateTable(cTABLE,aSTRU,cTIPOSQL)
     OPENSQLMIX()  
-  //  hb_memowrit("uso.txt",msql) 
     mixexecutesql(msql) 
     if len(aindices)>0
         mixexecutesql(Aindices) //Executa comando unico ou array de comandos
@@ -265,6 +250,7 @@ IF ! EMPTY(cnewDATABASEX)
        //fechar a connecao e trocar o database
        //CDATABASEX:=CNEWDATABASEX
    ENDIF
+   //SQLITE MDB ACCDB
 ENDIF
 
 
@@ -306,40 +292,20 @@ RETURN
 function mixexpformat()
 mdbtabela(cdatabasex)
 LCOPIANAT:=.f. //MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado mysqlrddd
-tDOC:=pegtipodoc(lCOPIANAT) // .t. Inclui dbf se for nativa
-if tDOC<>14 //dbf nao precisa adcional 
-   pegparexp() 
-else
-   mdt("Use Opcao exportar dbf")
-   return .f.
-endif   
+tDOC:=pegtipodoc() // .t. Inclui dbf se for nativa
+pegparexp() 
 lDOCCAB  :=.F.
 lDOCDAD  :=.F.
 lDOCRECNO:=.F.
 cSUBTIPO :=" "
-
 PegcsUB(tDOC)  //pegar o subtipo conforme tipo
-
 cDESTINO:=cTABELAX+"_"+cTIPOSQL+"_rddmix."+zEXPOREXT
 MDT(cDESTINO)
-
 MDT("abrindo arquivo de origem: "+cTABELAX)
-
-
 dbUseArea( .T., , "SELECT * FROM "+cTABELAX, cTABELAX )
-
-
 nLASTREC:=   lastrec() 
 zei_fort( nLASTREC,,,0)
-
 aSTRU:=DBSTRUCT()
-
-
-  IF lCOPIANAT
-     COPYTO(cDESTINO)
-  ELSE
-     multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aSTRU)
-  ENDIF   
-
+multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aSTRU)
 dbcloseaREA()
 

@@ -27,10 +27,7 @@ function pgsqlmenu()
  mdbdatabases()
  
 if empty(cDATABASEX) 
-   @ 24,00 SAY "database"
-   @ 24,20 GET cDATABASEX
-   READ
-   @ 24,00 say space(80)
+   cDATABASEX:=INPUTBOX(SPACE(30),"Database")
    cDATABASEX:=alltrim(cDATABASEX)
 endif    
   
@@ -117,11 +114,7 @@ return .t.
           
 
 function PGsqlnewdatabase()
-cNEwDATABASEX:=SPACE(40)
-    @ 24,00 SAY "Novo database"
-    @ 24,20 GET cnewDATABASEX
-    READ
-    @ 24,00 say space(80)
+    cnewDATABASEX:=INPUTBOX(SPACE(30),"Novo database")
     cnewDATABASEX:=alltrim(cnewDATABASEX)
     IF .NOT. EMPTy(cnewDATABASEX)
        IF hb_AScan( Oserver:ListDBs(), cnewDATABASEX,,, .T. ) > 0

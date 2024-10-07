@@ -188,11 +188,7 @@ mdbtabela(cMDBARQ)
 cTABELA:=cTABELAX
 
 IF EMPTY(cTABELA)
-    cTABELA:=SPACE(60)
-    md()
-    @ maxrow(),0 SAY "TABELA"
-    @ maxrow(),10 get cTABELA
-    READ
+   cTABELA:=INPUTBOX(SPACE(30),"Tabela")
 ENDIF
 cTABELA:=ALLTRIM(cTABELA)
 IF EMPTY(cTABELA)
@@ -422,10 +418,7 @@ ENDCASE
 //cria com sql query create database
  if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
     cARQORI:=OPENTIPOARQ()
-    cNEWDATABASEX:=SPACE(40)
-    @ 24,00 SAY "Novo database"
-    @ 24,20 GET cnewDATABASEX
-    READ
+    cnewDATABASEX:=INPUTBOX(SPACE(30),"Novo database")
     cnewDATABASEX:=alltrim(cnewDATABASEX)
     IF .NOT. EMPTy(cnewDATABASEX)
        IF hb_AScan( MDBTABLES(), cnewDATABASEX,,, .T. ) > 0

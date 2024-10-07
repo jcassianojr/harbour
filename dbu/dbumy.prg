@@ -110,12 +110,8 @@ cTABELAX:=IIF( nChoices > 0, aResult[ nChoices ], "")
 RETURN .T.
 
 function mysqlnewdatabase()
-cNEwDATABASEX:=SPACE(40)
-    @ 24,00 SAY "Novo database"
-    @ 24,20 GET cnewDATABASEX
-    READ
-    @ 24,00 say space(80)
-    cnewDATABASEX:=alltrim(cnewDATABASEX)
+   cnewDATABASEX:=INPUTBOX(SPACE(30),"Novo database")
+   cnewDATABASEX:=alltrim(cnewDATABASEX)
     IF .NOT. EMPTy(cnewDATABASEX)
        IF hb_AScan( Oserver:ListDBs(), cnewDATABASEX,,, .T. ) > 0
           MDT("Ja existe Database "+cnewDATABASEX)
@@ -203,7 +199,6 @@ while .not. oQuery2:eof()
    zei_fort(nLASTREC,,,1)
    oQuery2:skip()
 enddo
-
 dbcloseall()
 return .T.
 

@@ -18,6 +18,7 @@ hbsqlit3.hbc
 rddado.hbc
 hbmysql.hbc
 hbpgsql.hbc
+hbodbc.hbc
 #
 # sqlmix
 #
