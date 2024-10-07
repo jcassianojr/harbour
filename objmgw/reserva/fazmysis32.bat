@@ -1,23 +1,23 @@
 rem HB_COMPILER=mingw o make ja pega o compilador
 SET HB_INSTALL_PREFIX=d:\harbour\
-SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk\
-SET HB_WITH_CURL=d:\harbour\hb3rd\curl\include\
+rem SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk\
+rem SET HB_WITH_CURL=d:\harbour\hb3rd\curl\include\
 #set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\include\
-SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage\include\
-set HB_WITH_GS=d:\harbour\hb3rd\gscript\include\ghostscript\
-set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\bin\
-set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql\include\
-set HB_WITH_OCI=d:\harbour\hb3rd\oci\include\
-set HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl\include\
-set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql\include\
-SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2\include\
-SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
-set HB_WITH_CAIRO=d:\harbour\hb3rd\cairo\include\cairo\
-SET HB_WITH_LIBHARU=d:\harbour\hb3rd\libharu\include\
-SET HB_WITH_BLAT=d:\harbour\hb3rd\blat\
+rem SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage\include\
+rem set HB_WITH_GS=d:\harbour\hb3rd\gscript\include\ghostscript\
+rem set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\bin\
+rem set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql\include\
+rem set HB_WITH_OCI=d:\harbour\hb3rd\oci\include\
+rem set HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl\include\
+rem set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql\include\
+rem SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2\include\
+rem SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ\include\
+rem set HB_WITH_CAIRO=d:\harbour\hb3rd\cairo\include\cairo\
+rem SET HB_WITH_LIBHARU=d:\harbour\hb3rd\libharu\include\
+rem SET HB_WITH_BLAT=d:\harbour\hb3rd\blat\
 
-SET HB_STATIC_CURL=yes
-SET HB_STATIC_OPENSSL=yes
+rem SET HB_STATIC_CURL=yes
+rem SET HB_STATIC_OPENSSL=yes
 rem HB_BUILD_CONTRIB_DYN=no
 rem HB_BUILD_DYN=no
 rem HB_BUILD_SHARED=no
@@ -49,7 +49,7 @@ rem HB_WITH_XDIFF
 rem HB_WITH_LIBYAML
 
 rem set PATH=d:\harbour\comp\mingw\bin\;d:\harbour\BIN\;%PATH% call abaixo set os caminhos
-call hb32mgw12
+call hb32mysis
 win-make install
 REM deixando aqui como referencia win-make install e migw32-make sao equivalentes 
 REM mingw32-make install

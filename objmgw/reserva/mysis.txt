@@ -1,0 +1,59 @@
+Open the MSYS2 shell from the start menu
+    Run pacman -Sy pacman to update the package database
+    Reopen the shell, and run pacman -Syu to update the package database and core system packages
+    Reopen the shell, and run pacman -Su to update the rest
+    Install the compiler:
+        For a 32-bit target, run pacman -S mingw-w64-i686-toolchain
+        For a 64-bit target, run pacman -S mingw-w64-x86_64-toolchain
+    Select which package to install; the default is all
+    You may also need make. Run pacman -S make
+
+
+
+https://packages.msys2.org/packages/mingw-w64-i686-cairo
+https://packages.msys2.org/packages/mingw-w64-i686-curl
+https://packages.msys2.org/packages/mingw-w64-i686-ghostscript
+https://packages.msys2.org/packages/mingw-w64-i686-libharu
+https://packages.msys2.org/packages/mingw-w64-i686-libssh2
+https://packages.msys2.org/packages/mingw-w64-i686-openssl
+
+https://packages.msys2.org/packages/mingw-w64-x86_64-cairo
+https://packages.msys2.org/packages/mingw-w64-x86_64-curl
+https://packages.msys2.org/packages/mingw-w64-x86_64-firebird
+https://packages.msys2.org/packages/mingw-w64-x86_64-freeimage
+https://packages.msys2.org/packages/mingw-w64-x86_64-ghostscript
+https://packages.msys2.org/packages/mingw-w64-x86_64-imagemagick
+https://packages.msys2.org/packages/mingw-w64-x86_64-libharu
+https://packages.msys2.org/packages/mingw-w64-x86_64-libmariadbclient
+https://packages.msys2.org/packages/mingw-w64-x86_64-libssh2
+https://packages.msys2.org/packages/mingw-w64-x86_64-openssl
+https://packages.msys2.org/packages/mingw-w64-x86_64-postgresql
+https://packages.msys2.org/packages/mingw-w64-x86_64-rabbitmq-c
+
+pacman -Sy
+pacman -Syu
+pacman -Su
+pacman -S mingw-w64-i686-toolchain
+pacman -S mingw-w64-i686-cairo
+pacman -S mingw-w64-i686-curl
+pacman -S mingw-w64-i686-ghostscript
+pacman -S mingw-w64-i686-libharu
+pacman -S mingw-w64-i686-libssh2
+pacman -S mingw-w64-i686-openssl
+pacman -Suy
+
+pacman -Sy
+pacman -Syu
+pacman -Su
+pacman -S mingw-w64-x86_64-toolchain
+pacman -S mingw-w64-x86_64-cairo
+pacman -S mingw-w64-x86_64-firebird
+pacman -S mingw-w64-x86_64-freeimage
+pacman -S mingw-w64-x86_64-ghostscript
+pacman -S mingw-w64-x86_64-libharu
+pacman -S mingw-w64-x86_64-libmariadbclient
+pacman -S mingw-w64-x86_64-libssh2
+pacman -S mingw-w64-x86_64-openssl
+pacman -S mingw-w64-x86_64-postgresql
+pacman -S mingw-w64-x86_64-rabbitmq-c
+pacman -Suy
