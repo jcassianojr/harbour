@@ -492,8 +492,8 @@ setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
 util_m := { "Rem Reg Dup", "Exportar", "Sort DBF", "POSTGRESQL",;
-            "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","Converter","FixarTodos","ZeraTodos",;
-            "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs","Sem uso"}
+            "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","FixarTodos","ZeraTodos",;
+            "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs","Converter"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.,.T.}
 //FOR X=5 TO 16
 //     util_b[x]:="EMPTY(cur_dbf)"
@@ -578,9 +578,7 @@ do while .T.
       case M->func_sel = 9
           MENUSQL("ACCDB")
       case M->func_sel = 10
-           if rsvp( "Converter  entre formatos" ) = "S" 
-		       converttipo() 
-          ENDIF
+          MENUSQL("MSSQL")
       case M->func_sel = 11
            if rsvp( "Fixar Todos ? (S/N)" ) = "S"
                FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
@@ -616,7 +614,9 @@ do while .T.
 		     dBUsincdbf()
           ENDIF
       case M->func_sel = 17
-           mdt("sem uso")    
+          if rsvp( "Converter  entre formatos" ) = "S" 
+		       converttipo() 
+          ENDIF   
       endcase
       sysfunc := 0
    case M->sysfunc = 5
