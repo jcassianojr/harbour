@@ -638,6 +638,8 @@ IF cTIPOINFO="DATABASE"
          cCOMANDO = "SHOW DATABASES"
       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"  .OR. cTIPOSQL="MARIADB"
          cCOMANDO = "SELECT datname FROM pg_database;"    
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"  
+         cCOMANDO = "SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb') "
    ENDCASE      
 ENDIF
 IF cTIPOINFO="TABELA"
@@ -655,6 +657,8 @@ IF cTIPOINFO="TABELA"
        CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
            cCOMANDO ="SELECT tablename FROM pg_tables WHERE schemaname='public'"   
            //SELECT table_name  FROM information_schema.tables  WHERE table_type = 'BASE TABLE' AND table_schema='public'
+        CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"    
+           cCOMANDO ="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';"
     endcase   
 ENDIF
 IF cTIPOINFO="ESTRUTURA"
@@ -674,6 +678,8 @@ IF cTIPOINFO="ESTRUTURA"
            //nome tabela em maiusculo postgresql e case sensitive  
            //udt_name melhor retorno mas tambem tras data_type caso necesario
            //where table_schema='public'  tras todas as tabelas do usurio(public)
+       CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"     
+         cCOMANDO ="select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='" +  cTABELA  + "'" 
     endcase   
 ENDIF
 IF cTIPOINFO="CCAMPOSQL"
@@ -1003,6 +1009,12 @@ DO CASE
                cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX //64 driver versao 964
             endif
         endif    
+    CASE cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER"
+         if empty(cDATABASEX)
+            cCONN:="Driver={SQL Server};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+         else
+            cCONN:="Driver={SQL Server};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+         endif
 ENDCASE      
 RETURN cConn   
 

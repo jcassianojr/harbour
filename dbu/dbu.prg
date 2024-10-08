@@ -493,11 +493,11 @@ setar_b[ 7 ] = "sysfunc = 0"
 
 util_m := { "Rem Reg Dup", "Exportar", "Sort DBF", "POSTGRESQL",;
             "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","Converter","FixarTodos","ZeraTodos",;
-            "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs"}
-util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.}
-FOR X=5 TO 16
-     util_b[x]:="EMPTY(cur_dbf)"
-next x
+            "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs","Sem uso"}
+util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.,.T.}
+//FOR X=5 TO 16
+//     util_b[x]:="EMPTY(cur_dbf)"
+//next x
 
 DECLARE dbf_list[ adir( "*.dbf" ) + 20 ]
 DECLARE ntx_list[ adir( "*" + XEXT() ) + 20 ]
@@ -615,6 +615,8 @@ do while .T.
           if rsvp( "Sincronizar Tabelas" ) = "S" 
 		     dBUsincdbf()
           ENDIF
+      case M->func_sel = 17
+           mdt("sem uso")    
       endcase
       sysfunc := 0
    case M->sysfunc = 5
