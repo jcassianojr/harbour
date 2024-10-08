@@ -24,7 +24,7 @@ Function mixmenu(cUSOSQL)
 LOCAL aAMBIENTE
 cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes aBaixo
 
-eCONN     :=""
+nCONN     := 0
 aAMBIENTE:=SALVAA()
 cSERVERX:="localhost"+space(21)
 cDATABASEX:=space(30)
@@ -68,7 +68,7 @@ ENDIF
 //mdbtabela(cdatabasex)
 
 cOLDRDD:=rddSetDefault( "SQLMIX" )
-OPENSQLMIX()
+//OPENSQLMIX()
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -85,8 +85,9 @@ WHILE .T.
        CASE KEY=1
             OPENSQLMIX()
             mixcreatedatabase()
+            closemix()
        CASE KEY=2
-            //troca database
+            mdbdatabases()
        CASE KEY=3
             miximpdbf()
        CASE KEY=4
@@ -94,12 +95,11 @@ WHILE .T.
        CASE KEY=5
             mixexpdbf()
        CASE KEY=6
-            //mixexecutesql("CREATE TABLE country (CODE char(3), NAME char(50), RESIDENTS int(11))")
-            //mixexecutesql("CREATE TABLE country2 (CODE char(3), NAME char(50), RESIDENTS int(11))")
             mdbtabela(cdatabasex)
             IF MDG("Apagar Tabela"+cTABELAX)  
                OPENSQLMIX() 
                mixexecutesql("DROP TABLE  "+cTABELAX) 
+               closemix()
             ENDIF  
        CASE KEY=7
             mixexpformat()
@@ -238,7 +238,7 @@ function miximpdbf()
    enddo
     
     dbclosearea()
-
+    closemix()
 return .t.
 
 function mixcreatedatabase()
@@ -279,17 +279,22 @@ cCONN:=""
 rddSetDefault( "SQLMIX" )
 DO CASE
    CASE cTIPOMIX="MYSQL" .OR. cTIPOMIX="MYSQL64"
-        eCONN:=rddInfo( RDDI_CONNECT, { "MYSQL"     , cSERVERX, cUSERX, cPASSX, cDATABASEX} ) 
+        nCONN:=rddInfo( RDDI_CONNECT, { "MYSQL"     , cSERVERX, cUSERX, cPASSX, cDATABASEX} ) 
     CASE cTIPOMIX="PGSQL" .OR. cTIPOMIX="PGSQL64"
-        eCONN:=rddInfo( RDDI_CONNECT, { "POSTGRESQL", cSERVERX, cUSERX, cPASSX, cDATABASEX} )      
+        nCONN:=rddInfo( RDDI_CONNECT, { "POSTGRESQL", cSERVERX, cUSERX, cPASSX, cDATABASEX} )      
    CASE cTIPOMIX="SQLITE" 
-        eCONN:=rddInfo( RDDI_CONNECT, { "SQLITE3", cDATABASEX} )    
+        nCONN:=rddInfo( RDDI_CONNECT, { "SQLITE3", cDATABASEX} )    
    CASE cTIPOMIX="ODBC"  //Cserver Conneccao
        Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
        cCONN=GERACONN(cDATABASEX,.F.) //Sqlmix usa driver no lugar de provider(adooledb) geraconn(cCAMBASE,lPROVIDER)
-       eCONN:=rddInfo( RDDI_CONNECT, { "ODBC", cCONN } )
+       nCONN:=rddInfo( RDDI_CONNECT, { "ODBC", cCONN } )
 ENDCASE
 RETURN
+
+FUNCTION CLOSEMIX()
+IF .NOT. EMPTY(nconn)
+   RDDINFO(RDDI_DISCONNECT, nConn1)
+ENDIF
 
 function mixexpformat()
 mdbtabela(cdatabasex)

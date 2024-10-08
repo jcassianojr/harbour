@@ -20,8 +20,8 @@ WHILE .T.
     OPCAO(  5, 24, "&VACUUM (PACK)             ", 86 ) //V 
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
     OPCAO(  7, 24, "&Exportar  DBF             ", 69 ) //E 
-    OPCAO(  8, 24, "&Show Tables               ", 83 ) //S
-    
+    OPCAO(  8, 24, "&Tabelas                   ", 84 ) //T
+     OPCAO( 9, 24, "&Apagar Tabela             ", 65 ) //A    
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -50,7 +50,12 @@ WHILE .T.
        CASE KEY=5
              IF selectdb()
                SqliteTables(odb)
-            endif                 
+            endif
+       CASE KEY=6
+             IF selectdb()
+                SqliteTables(odb)
+                sqllitedeltable(odb)
+            endif
        OTHERWISE
             RETURN
     ENDCASE
@@ -60,6 +65,15 @@ RESTAA(aAMBIENTE)
 layout()
 return NIL
 
+
+function sqllitedeltable(db)
+IF .NOT. MDG("Apagar Tabela"+cTABELAX)  
+   return .f.
+ENDIF
+IF sqlite3_exec( db, "DROP TABLE  "+cTABELAX) == SQLITE_OK
+    MDT(Ctabelax+" Excluida" )
+ENDIF
+return .t.
 
 
 function exportadbf(db)
@@ -188,7 +202,7 @@ IF ! Empty( db )
          //sqlite3_sleep( 3000 )
       ENDIF
 ENDIF
-   
+return .t.   
 
 function selectdb
    local cFileName := ''
