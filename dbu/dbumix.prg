@@ -37,7 +37,7 @@ pegcfgbanco()
 cTIPOMIX:=cTIPOSQL
 
 //Mariadb nao tem nativo
-IF cTIPOSQL="MARIADB" 
+IF cTIPOSQL="MARIADB" .OR. cTIPOSQL="MSSQL" .OR. cTIPSQL="SQLSERVER"
    cTIPOMIX:="ODBC"
 ENDIF
 
@@ -245,7 +245,8 @@ function mixcreatedatabase()
 cnewDATABASEX:=INPUTBOX(SPACE(30),"Novo database")
 cnewDATABASEX:=alltrim(cnewDATABASEX)
 IF ! EMPTY(cnewDATABASEX)
-   if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+   if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" ;
+                       .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
        mixexecutesql("CREATE DATABASE IF NOT EXISTS "+Cnewdatabasex)
        //fechar a connecao e trocar o database
        //CDATABASEX:=CNEWDATABASEX

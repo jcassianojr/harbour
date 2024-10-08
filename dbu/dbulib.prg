@@ -105,7 +105,9 @@ WHILE .T.
        CASE KEY=1 .AND. cTIPOSQL="MDB"
             MDT("Sem clientelib para mdb")
        CASE KEY=1 .AND. cTIPOSQL="ACCDB"
-            MDT("Sem clientelib para mdb")     
+            MDT("Sem clientelib para mdb")  
+      CASE KEY=1 .AND. cTIPOSQL="MSSQL"
+            MDT("Sem clientelib para mdb")        
        //ADORDD ODBC     
        CASE KEY=2 .AND. cTIPOSQL="PGSQL"
             mdbmenu("PGSQL")
@@ -118,7 +120,9 @@ WHILE .T.
         CASE KEY=2 .AND. cTIPOSQL="MDB"
             mdbmenu("MDB")  
         CASE KEY=2 .AND. cTIPOSQL="ACCDB"
-            mdbmenu("ACCDB")              
+            mdbmenu("ACCDB")          
+        CASE KEY=2 .AND. cTIPOSQL="MSSQL"
+            mdbmenu("MSSQL")        
        //SQLMIX RDD     
        CASE KEY=3 .AND. cTIPOSQL="PGSQL"
             mixmenu("PGSQL")
@@ -132,6 +136,8 @@ WHILE .T.
             mixmenu("MDB")       
         CASE KEY=3 .AND. cTIPOSQL="ACCDB"
             mixmenu("ACCDB")  
+        CASE KEY=3 .AND. cTIPOSQL="MSSQL"
+            mixmenu("ACCDB")      
         //ODBC
         CASE KEY=4 .AND. cTIPOSQL="PGSQL"
             ODBCmenu("PGSQL")
@@ -145,6 +151,8 @@ WHILE .T.
             ODBCmenu("MDB")       
         CASE KEY=4 .AND. cTIPOSQL="ACCDB"
             ODBCmenu("ACCDB")           
+        CASE KEY=4 .AND. cTIPOSQL="MSSQL"
+            ODBCmenu("MSSQL")                
        OTHERWISE
             RETURN
     ENDCASE

@@ -41,7 +41,8 @@ IF cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
    loledb:=.F. //Requer aceole.db 32 e ou 64 instalado
 ENDIF
 
-IF cTIPOSQL="MYSQL"  .or. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+IF cTIPOSQL="MYSQL"  .or. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" ;
+                     .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
    OPENTIPOARQ()
    mdbdatabases()
 ENDIF
@@ -82,7 +83,8 @@ WHILE .T.
         OTHERWISE
             @ 03,24 SAY cTIPOSQL
     ENDCASE  
-    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
+    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" ;
+                        .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
        OPCAO(  4, 24, "&Criar database             ", 67 ) //c 67
     else
        OPCAO(  4, 24, "&Criar arquivo              ", 67 ) //c 67
@@ -408,7 +410,8 @@ ENDCASE
 
 
 //cria com sql query create database
- if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+ if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" ;
+                     .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
     cARQORI:=OPENTIPOARQ()
     cnewDATABASEX:=INPUTBOX(SPACE(30),"Novo database")
     cnewDATABASEX:=alltrim(cnewDATABASEX)
@@ -484,6 +487,9 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
         CASE  cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
               msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"ACCDB")
              executacmd(cMDBARQ,msql)         
+        CASE cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"  
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MSSQL")
+             executacmd(cMDBARQ,msql)     
        OTHERWISE
     ENDCASE      
     
@@ -545,7 +551,8 @@ DO CASE
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
         cDATABASEX:=cMDBARQ  
-   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
+   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64";
+                         .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
          cSERVERX:=PADR(cSERVERX,30," ")
         // cDATABASEX:=PADR(cDATABASEX,30," ") escolhido nao precisa digitar
          cUSERX:=PADR(cUSERX,30," ")
@@ -740,7 +747,9 @@ IF lOPEN
                       nFieldLength = fixnum(ors:fields(3):value)  //numeric_precision
                       nFieldDec    = fixnum(ors:fields(4):value)  //numeric_scale
                    endif
-                   AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))                              
+                   AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))   
+               CASE cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"       
+                   //implantar                        
              ENDCASE   
             
          ENDIF   
