@@ -250,7 +250,9 @@ IF ! EMPTY(cnewDATABASEX)
        //fechar a connecao e trocar o database
        //CDATABASEX:=CNEWDATABASEX
    ENDIF
-   //SQLITE MDB ACCDB
+   IF cTIPOSQL="SQLITE" .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB64"
+      mdbcria()
+   ENDIF
 ENDIF
 
 

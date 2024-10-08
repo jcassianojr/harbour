@@ -25,7 +25,7 @@ WHILE .T.
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
-            createadb()
+            createSqlitedb()
        CASE KEY=2
              IF selectdb()
                sqlitepack(odb)
@@ -262,7 +262,7 @@ ENDIF
 RETURN dbo1
 
 
-function createadb
+function createSqlitedb
    local cFileName := ''
    local cDBName := ''
    local nSlash := 0
