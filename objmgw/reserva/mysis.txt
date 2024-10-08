@@ -45,6 +45,7 @@ pacman -Suy
 pacman -Sy
 pacman -Syu
 pacman -Su
+pacman --noconfirm -S git {base,msys2}-devel mingw-w64-{i686,x86_64}-{clang,toolchain}
 pacman -S mingw-w64-x86_64-toolchain
 pacman -S mingw-w64-x86_64-cairo
 pacman -S mingw-w64-x86_64-firebird
