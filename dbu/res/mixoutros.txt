@@ -1,0 +1,60 @@
+conn1=RDDINFO( RDDI_CONNECT, {"MYSQL", "localhost",
+"root","password", "testHB"} )
+use test
+dbedit()
+? "Alias:", ALIAS()
+nconn2=RDDINFO( RDDI_CONNECT, { "FIREBIRD","LOCALHOST", "SYSDBA",
+"password",CURDIR()+"\TESTHB.fdb" } )
+use test
+dbedit()
+? "Alias:", ALIAS()
+nconn3=RDDINFO( RDDI_CONNECT, { "ODBC", "Driver={Microsoft Access
+Driver (*.mdb)};DBQ=" + CURDIR() + "\testHB.mdb" } )
+use test
+dbedit
+? "Alias:", ALIAS()
+RDDINFO( RDDI_CONNECT, {
+"ODBC","Driver={SQLServer};Server=LOCALHOST;Database=TESTHB;user=sa;password=password";"}'
+)
+use test
+dbedit
+? "Alias:", ALIAS()
+RDDINFO(RDDI_DISCONNECT, nConn1)
+RDDINFO(RDDI_DISCONNECT, nConn2)
+RDDINFO(RDDI_DISCONNECT, nConn3)
+
+
+connection to dbusearea (8 parameter).
+> The sample works bad if I
+>
+> _conn1:=RDDINFO(RDDI_CONNECT, {"MYSQL", "server1", "test",
+> "","test" ))
+> CreateTable()
+> _conn2:=RDDINFO(RDDI_CONNECT, {"MYSQL", "server2", "test",
+> "","test" ))
+> CreateTable2()
+>
+> DBUSEAREA( .T.,, "SELECT * FROM country", "country",,,,_conn1 )
+> Browse()
+> DBUSEAREA( .T.,, "SELECT * FROM country", "country2",,,,_conn2 )
+> Browse()
+>
+> .
+> .
+> .
+>
+> DBCLOSEALL()
+> RDDINFO(RDDI_DISCONNECT,_conn1)
+> RDDINFO(RDDI_DISCONNECT,_conn2)
+
+
+DDSETDEFAULT("SQLMIX")
+SET( _SET_DATEFORMAT, "yyyy-mm-dd" )
+aa := RDDINFO( RDDI_CONNECT, { "ODBC", "Server=server_name;Driver={SQL Server};Uid=username;database=dbname;pwd=password;" },'SQLMIX' )   
+If aa == 0
+    Alert("Cannot connect to MSSQL")
+   Else
+    Alert("Connection OK")
+ENDIF
+
+RETURN
