@@ -15,7 +15,7 @@ IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
    cUSERX:=PADR("root",30," ")
 ENDIF
 
-IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
    cUSERX:=PADR("postgres",30," ")
 ENDIF
 //
@@ -28,7 +28,7 @@ ENDIF
 IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
    loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //odbc 8.0(32b) odbc 9.0(64b)") 
 ENDIF 
-IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
    loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //odbc 8.0(32b) odbc 9.0(64b)") 
 ENDIF 
 
@@ -41,7 +41,7 @@ IF cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
    loledb:=.F. //Requer aceole.db 32 e ou 64 instalado
 ENDIF
 
-IF cTIPOSQL="MYSQL"  .or. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" ;
+IF cTIPOSQL="MYSQL"  .or. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL"  ;
                      .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
    OPENTIPOARQ()
    mdbdatabases()
@@ -83,7 +83,7 @@ WHILE .T.
         OTHERWISE
             @ 03,24 SAY cTIPOSQL
     ENDCASE  
-    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" ;
+    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"  ;
                         .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
        OPCAO(  4, 24, "&Criar database             ", 67 ) //c 67
     else
@@ -244,7 +244,7 @@ MDT(cDESTINO)
 
 
 cTABELAGRV:=cTABELA
-IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" //Dupla aspas maiuscula
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" //Dupla aspas maiuscula
    cTABELA:=CHR(34)+UPPER(cTABELA)+CHR(34)
 ENDIF
 
@@ -373,7 +373,9 @@ DO CASE
         endif    
     CASE cTIPOSQL="MARIADB"     
         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MARIADB  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
-    CASE cTIPOSQL="PGSQL" .or. cTIPOSQL="PGSQL64"
+    CASE cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"    
+        USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQL  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
+    CASE cTIPOSQL="PGSQL" .or. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
         if loledb
             TRY
               USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA PGSQL    FROM cSERVERx  USER CUSERX PASSWORD CPASSX
@@ -410,7 +412,7 @@ ENDCASE
 
 
 //cria com sql query create database
- if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" ;
+ if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"  ;
                      .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
     cARQORI:=OPENTIPOARQ()
     cnewDATABASEX:=INPUTBOX(SPACE(30),"Novo database")
@@ -478,7 +480,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
        CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MYSQL")
              executacmd(cMDBARQ,msql)
-          CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+          CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"PGSQL")
              executacmd(cMDBARQ,msql)          
        CASE  cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" 
@@ -510,7 +512,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
     endif    
     
     cTABELA:=cNOMETABELA //publica usada o opencmdarq
-    IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" //Dupla aspas maiuscula
+    IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" .OR. cTIPOSQL="PGSQL64" //Dupla aspas maiuscula
        cTABELA:=CHR(34)+UPPER(cTABELA)+CHR(34)
     ENDIF
     
@@ -551,7 +553,7 @@ DO CASE
           { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
         cDATABASEX:=cMDBARQ  
-   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64";
+   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" ;
                          .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
          cSERVERX:=PADR(cSERVERX,30," ")
         // cDATABASEX:=PADR(cDATABASEX,30," ") escolhido nao precisa digitar
@@ -643,7 +645,7 @@ IF cTIPOINFO="DATABASE"
    DO CASE
      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
          cCOMANDO = "SHOW DATABASES"
-      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64"  .OR. cTIPOSQL="MARIADB"
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
          cCOMANDO = "SELECT datname FROM pg_database;"    
       CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"  
          cCOMANDO = "SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb') "
@@ -661,7 +663,7 @@ IF cTIPOINFO="TABELA"
             cCOMANDO ="SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
        CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
             cCOMANDO = "SHOW TABLES"
-       CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+       CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
            cCOMANDO ="SELECT tablename FROM pg_tables WHERE schemaname='public'"   
            //SELECT table_name  FROM information_schema.tables  WHERE table_type = 'BASE TABLE' AND table_schema='public'
         CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"    
@@ -678,7 +680,7 @@ IF cTIPOINFO="ESTRUTURA"
             cCOMANDO ="PRAGMA table_info( " +  cTABELA  + ")"   
        CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
             cCOMANDO ="SHOW COLUMNS FROM "+cTABELA
-       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
            cCOMANDO ="SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
            cCOMANDO +=" FROM   information_schema.columns "
            cCOMANDO +=" WHERE   table_name = '"+UPPER(cTABELA)+"' ORDER BY ordinal_position ;" 
@@ -739,7 +741,7 @@ IF lOPEN
                    cFieldName := upper(alltrim( ors:fields(0):value ))
                    cFieldType  := upper( alltrim( ors:fields(1):value ) ) 
                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-               CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" 
+               CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
                    cFieldName := upper(alltrim( ors:fields(0):value )) //column_name
                    cFieldType := upper( alltrim( ors:fields(1):value ) ) // data_type
                    nFieldLength = fixnum(ors:fields(2):value) //tamanho string character_maximum_length
@@ -884,7 +886,7 @@ case cType == "@" //Datetime opcao mudar como texto fututamente
     nFieldDec := 0
     
     
-  CASE cType == "TEXT" .AND. (cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64")
+  CASE cType == "TEXT" .AND. (cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
        cFieldType := 'C'
        nFieldLength := 250
        nFieldDec := 0
@@ -1003,7 +1005,7 @@ DO CASE
         else
            cConn:="DRIVER={MariaDB ODBC 3.2 Driver};DATABASE="+cDATABASEX+";SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
         endif   
-   case cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64"
+   case cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
         //Driver={PostgreSQL ANSI};Server=IP address;Port=5432;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
         if empty(cDATABASEX)
             if loledb
@@ -1020,9 +1022,18 @@ DO CASE
         endif    
     CASE cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER"
          if empty(cDATABASEX)
-            cCONN:="Driver={SQL Server};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+            IF lPROVIDER
+               cCONN:="Provider=SQLOLEDB;Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+            ELSE
+               cCONN:="Driver={SQL Server};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+            ENDIF   
          else
-            cCONN:="Driver={SQL Server};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+            IF lPROVIDER
+               cCONN:="Provider=SQLOLEDB;Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+            ELSE
+               cCONN:="Driver={SQL Server};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+            
+            ENDIF   
          endif
 ENDCASE      
 RETURN cConn   

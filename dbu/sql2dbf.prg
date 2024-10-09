@@ -522,10 +522,10 @@ if valtype(cTIPOSQL)<>"C"
 ENDIF
  
    msql:=""
-   IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" //postgree e case sensitive deixando em maisuclav
+   IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" //postgree e case sensitive deixando em maisuclav
       cTABLENAME:=UPPER(cTABLENAME)
    ENDIF
-   IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB"
+   IF cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
       mSql := "CREATE TABLE "+cTablename+" ("
    ELSE
        mSql := "CREATE TABLE IF NOT EXISTS "+cTablename+" ("
@@ -540,7 +540,7 @@ ENDIF
       if i > 1
          mSql += ", "
       endif
-      IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" //postgreSQL e case sensitive deixando em maisuclas
+      IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" //postgreSQL e case sensitive deixando em maisuclas
          mFldnm:=UPPER(mFldnm)
       ENDIF
       mSql += alltrim(mFldnm)+" "
@@ -549,17 +549,18 @@ ENDIF
           //
           // Caracter
           //
-          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"  .OR. cTIPOSQL="ACCDB" ;
-               .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL")
+          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" ;
+               .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL".OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
              mSql += "VARCHAR("+LTRIM(STR(mFldLen))+")"
           case mFldType = "C"
              mSql += "CHAR("+LTRIM(STR(mFldLen))+")"    
          //
          // date datetime
          //     
-         case (mFldType = "D" .OR. mFldType = "T" ).AND. cTIPOSQL="PGSQL"
+         case (mFldType = "D" .OR. mFldType = "T" ).AND. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
             mSql += "TIMESTAMP"
-         case (mFldType = "D" .OR. mFldType = "T") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
+         case (mFldType = "D" .OR. mFldType = "T") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  ;
+                                                        .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "DATETIME"
         case mFldType = "D"
              mSql += "DATE"   
@@ -572,13 +573,13 @@ ENDIF
          // com decimais
          // Numerico ->FLOAT DOUBLE NUMERIC
          //
-        case mFldType = "N" .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL")
+        case mFldType = "N" .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL".OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
              if mFldDec > 0
                 mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
              else
                 IF mFldLen<=9
                     DO CASE
-                       CASE cTIPOSQL="PGSQL"
+                       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
                             mSQL += "INTEGER"
                        CASE ELSE
                             mSql += "INT"  //INTEGER("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
@@ -591,7 +592,7 @@ ENDIF
                 ENDIF    
              endif  
              
-         case mFldType = "N"  .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")
+         case mFldType = "N"  .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64")
              if mFldDec > 0
                 mSql += "DOUBLE"
              else
@@ -604,7 +605,7 @@ ENDIF
                 mSql += "INTEGER"
              endif
              
-         case mFldType = "N" .AND. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MARIADB")
+         case mFldType = "N" .AND. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB")
              if mFldDec > 0
                 mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
              else
@@ -617,14 +618,15 @@ ENDIF
           //
           // float DOUBLE
           // 
-          case (mFldType = "F" .or. mFldType = "Y") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")     
+          case (mFldType = "F" .or. mFldType = "Y") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  ; 
+                                                       .OR. cTIPOSQL="ACCDB".OR. cTIPOSQL="ACCDB64")     
                mSql += "DOUBLE"
           case (mFldType = "F" .or. mFldType = "Y")
                 mSql += "FLOAT"
           //
           //integer LONG
           //   
-          case mFldType = "I" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")    
+          case mFldType = "I" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64")    
              mSql += "LONG"
           case mFldType = "I"
              mSql += "INTEGER"
@@ -636,29 +638,32 @@ ENDIF
           //
           // logico boleano bit
           //   
-         case mFldType = "L" .AND. cTIPOSQL="PGSQL"
+         case mFldType = "L" .AND. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
             mSql += "BOOLEAN"
-         case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDDB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
+         case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" ;
+                                   .OR. cTIPOSQL="ACCDDB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "BIT"       
           case mFldType = "L"
              mSql += "BOOL"
           //
           // memo TEXT LONGTEXT
           //   
-          case mFldType = "M" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL")
+          case mFldType = "M" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL".OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
              mSql += "TEXT" 
-          case mFldType = "M" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")
+          case mFldType = "M" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" ;
+                                      .OR. cTIPOSQL="ACCDB".OR. cTIPOSQL="ACCDB64")
              mSql += "LONGTEXT"
           case mFldType = "M"
              mSql += "TEXT"
           //
           // blob LONGBINARY
           //   
-          case mFldType = "G" .AND. cTIPOSQL="PGSQL"
+          case mFldType = "G" .AND. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
             mSql += "BYTEA"
            case mFldType = "G" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
              mSql += "VARBINARY"  
-           case mFldType = "G" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB")
+           case mFldType = "G" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64".OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" ;
+                                     .OR. cTIPOSQL="ACCDB".OR. cTIPOSQL="ACCDB64")
              mSql += "LONGBINARY"        
           case mFldType = "G"
              mSql += "BLOB"
