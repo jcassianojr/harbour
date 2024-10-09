@@ -20,7 +20,7 @@ REM SET HB_NO_BACKGROUND=1
 SET HB_INSTALL_PREFIX=d:\harbour\
 SET HB_WITH_ADS=d:\harbour\hb3rd\acesdk\
 SET HB_WITH_CURL=d:\harbour\hb3rd\curl\include\
-#set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\include\
+rem #set HB_WITH_FIREBIRD=d:\harbour\hb3rd\firebird\include\
 SET HB_WITH_FREEIMAGE=d:\harbour\hb3rd\FreeImage\include\
 set HB_WITH_GS=d:\harbour\hb3rd\gscript\include\ghostscript\
 set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript\bin\
@@ -44,7 +44,7 @@ rem SET HB_DIR_MAGIC=
 SET HB_DIR_ADS=d:\harbour\hb3rd\acesdk\
 
 REM SET HB_ARCHITECTURE=w32
-IF "%CC_DIR%"    == "" SET CC_DIR=d:\devprg\hb32mgw12\comp\mingw
+IF "%CC_DIR%"    == "" SET CC_DIR=c:\devprg\msys64\mingw32\
 IF "%SUB_DIR%"   == "" SET SUB_DIR=gc
 IF "%HB_GT_LIB%" == "" SET HB_GT_LIB=$(GTWIN_LIB)
 IF "%BISON_DIR%" == "" SET BISON_DIR=C:/MSYS/1.0/bin
