@@ -46,7 +46,7 @@ SET HB_ARCH=w64
 IF "%CC_DIR%"=="" SET CC_DIR=c:\devprg\msys64\mingw64\
 IF "%SUB_DIR%"=="" SET SUB_DIR=gc64
 IF "%HB_GT_LIB%"=="" SET HB_GT_LIB=$(GTWIN_LIB)
-IF "%BISON_DIR%"=="" SET BISON_DIR=C:/MSYS/1.0/bin
+IF "%BISON_DIR%"=="" SET BISON_DIR=c:\devprg\msys64\usr\bin\
 
 SET _PATH=%PATH%
 SET PATH=%CC_DIR%\bin;%BISON_DIR%;%PATH%
