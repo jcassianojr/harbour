@@ -1,4 +1,5 @@
 #require "hbodbc"
+#require "hbmemio"
 
 #include "dbstruct.ch"
 #INCLUDE "BOX.CH"
@@ -49,11 +50,12 @@ WHILE .T.
        CASE KEY=4
             mdbtabela(cdatabasex)
        CASE KEY=5
-            odbcexpdbf()
+            odbcexpdbf(1)
        CASE KEY=6
             odbcdeltable()
        CASE KEY=7
-            odbcexpformat()
+            odbcexpdbf(2)
+           // odbcexpformat()
        OTHERWISE
             RETURN
     ENDCASE
@@ -151,6 +153,18 @@ LOCAL i
 LOCAL nFIM
 LOCAL aVALOR
 
+IF nTIPO=2
+  LCOPIANAT:=.f. //MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
+  tDOC:=pegtipodoc() // .t. Inclui dbf se for nativa
+  pegparexp() 
+  lDOCCAB  :=.F.
+  lDOCDAD  :=.F.
+  lDOCRECNO:=.F.
+  cSUBTIPO :=" "
+  PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+ENDIF
+
+
 mdbtabela(cdatabasex)
 cCONN=GERACONN(cDATABASEX,.F.)
 dsFunctions := TODBC():New( cCONN )
@@ -229,9 +243,14 @@ altd()
 
 avalor:={}
 cDESTINO:=cTABELAX+"_"+cTIPOSQL
-MDT(cDESTINO)
-DBCreate(cDESTINO, aSTRU, "DBFCDX" ) 
-DBUseArea( .T. , "DBFCDX" , cDESTINO, "DESTINO" , .T. , .F. ) 
+IF nTIPO=1 //arquivo fisico
+   MDT(cDESTINO)
+   DBCreate(cDESTINO, aSTRU, "DBFCDX" ) 
+   DBUseArea( .T. , "DBFCDX" , cDESTINO, "DESTINO" , .T. , .F. ) 
+ELSE
+   dbCreate( "mem:destino", aSTRU, , .T., "DESTINO" )
+ENDIF   
+   
 WHILE ! dsFunctions:Eof()
      FOR I= 1 TO nFIM
         AADD(aVALOR,dsFunctions:Fields[ i ]:VALUE)
@@ -257,6 +276,23 @@ WHILE ! dsFunctions:Eof()
 ENDDO
 dsFunctions:Close()
 dsFunctions:Destroy()
+
+IF nTIPO=2
+   cDESTINO:=cTABELAX+"_"+cTIPOSQL+zEXPOREXT
+   MDT(cDESTINO)
+   dbselectar("DESTINO")
+   nLASTREC:=   lastrec() 
+   zei_fort( nLASTREC,,,0)
+   dbgotop()
+   multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aSTRU)
+ENDIF
+
+dbselectar("DESTINO")
+dbclosearea()
+
+IF nTIPO=2
+   dbDrop( "mem:destino" )
+ENDIF
 return .t.
 
 function odbcdeltable()

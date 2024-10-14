@@ -19,6 +19,7 @@ rddado.hbc
 hbmysql.hbc
 hbpgsql.hbc
 hbodbc.hbc
+hbmemio.hbc
 #
 # sqlmix
 #

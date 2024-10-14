@@ -123,8 +123,7 @@ LOCAL I
 LOCAL nFIM
 LOCAL eVALOR
 
-IF cTIPO=2
-  PGSELECTTABLE()
+IF nTIPO=2
   LCOPIANAT:=.f. //MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
   tDOC:=pegtipodoc() // .t. Inclui dbf se for nativa
   pegparexp() 
@@ -132,7 +131,6 @@ IF cTIPO=2
   lDOCDAD  :=.F.
   lDOCRECNO:=.F.
   cSUBTIPO :=" "
-
   PegcsUB(tDOC)  //pegar o subtipo conforme tipo
 ENDIF
 
@@ -152,6 +150,7 @@ aSTRU:=DBSTRUCT()
 aSTRU:=sqltodbfstru(aSTRU)
 
 IF nTIPO=1 //arquivo fisico
+   MDT(cDESTINO)
    DBCreate(cDESTINO, aSTRU, "DBFCDX" ) 
    DBUseArea( .T. , "DBFCDX" , cDESTINO, "DESTINO" , .T. , .F. ) 
 else
@@ -159,6 +158,7 @@ else
   //dbCreate( "persons", { { "NAME", "C", 20, 0 }, { "FAMILYNAME", "C", 20, 0 }, { "BIRTH", "D", 8, 0 }, { "AMOUNT", "N", 9, 2 } }, , .T., "persons" )
   //nao passa o driver sqlmix ja e default rddSetDefault( "SQLMIX" )
   dbCreate( "DESTINO" , aSTRU, , .T., "DESTINO"  )
+  
   //DBCreate(<cDatabase>, <aStruct>, <cDriver> ) -> Nil 
   //nao precisa abrir area 4 parametro mantem aberto 
   //5 parametro alias
