@@ -3,6 +3,7 @@
 #include "dbinfo.ch"
 
 #require "hbsqlit3"
+#require "hbmemio"
 
 Function sqlitemenu()
 public oDB := nil
