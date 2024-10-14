@@ -93,7 +93,7 @@ WHILE .T.
        CASE KEY=4
             mdbtabela(cdatabasex)          
        CASE KEY=5
-            mixexpdbf()
+            mixexpdbf(1)
        CASE KEY=6
             mdbtabela(cdatabasex)
             IF MDG("Apagar Tabela"+cTABELAX)  
@@ -102,7 +102,8 @@ WHILE .T.
                closemix()
             ENDIF  
        CASE KEY=7
-            mixexpformat()
+            mixexpdbf(2)
+            //mixexpformat() usando sqlmix array memory migrar rdd quando disponivel
        OTHERWISE
             RETURN
     ENDCASE
@@ -114,13 +115,27 @@ RESTAA(aAMBIENTE)
 LAYOUT()
 RETURN .T.
 
-function mixexpdbf()
+function mixexpdbf(nTIPO)
 LOCAL cDESTINO
 LOCAL aSTRU
 LOCAL aVALOR
 LOCAL I
 LOCAL nFIM
 LOCAL eVALOR
+
+IF cTIPO=2
+  PGSELECTTABLE()
+  LCOPIANAT:=.f. //MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
+  tDOC:=pegtipodoc() // .t. Inclui dbf se for nativa
+  pegparexp() 
+  lDOCCAB  :=.F.
+  lDOCDAD  :=.F.
+  lDOCRECNO:=.F.
+  cSUBTIPO :=" "
+
+  PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+ENDIF
+
 
 mdbtabela(cdatabasex)
 
@@ -136,9 +151,19 @@ zei_fort( nLASTREC,,,0)
 aSTRU:=DBSTRUCT()
 aSTRU:=sqltodbfstru(aSTRU)
 
+IF nTIPO=1 //arquivo fisico
+   DBCreate(cDESTINO, aSTRU, "DBFCDX" ) 
+   DBUseArea( .T. , "DBFCDX" , cDESTINO, "DESTINO" , .T. , .F. ) 
+else
+  //cria um arrayrdd para usar na exportacao usar memoria mudar para rdd quqndo disponivel
+  //dbCreate( "persons", { { "NAME", "C", 20, 0 }, { "FAMILYNAME", "C", 20, 0 }, { "BIRTH", "D", 8, 0 }, { "AMOUNT", "N", 9, 2 } }, , .T., "persons" )
+  //nao passa o driver sqlmix ja e default rddSetDefault( "SQLMIX" )
+  dbCreate( "DESTINO" , aSTRU, , .T., "DESTINO"  )
+  //DBCreate(<cDatabase>, <aStruct>, <cDriver> ) -> Nil 
+  //nao precisa abrir area 4 parametro mantem aberto 
+  //5 parametro alias
+endif
 
-DBCreate(cDESTINO, aSTRU, "DBFCDX" ) 
-DBUseArea( .T. , "DBFCDX" , cDESTINO, "DESTINO" , .T. , .F. ) 
 
 dbselectar("ORIGEM")
 while ! eof()
@@ -166,13 +191,22 @@ while ! eof()
 
     dbselectar("ORIGEM")
     dbskip()
+    zei_fort(nLASTREC,,,1)
 enddo
+dbselectar("ORIGEM")
+dbclosearea()
 
-
+IF nTIPO=2
+   cDESTINO:=cTABELAX+"_"+cTIPOSQL+zEXPOREXT
+   MDT(cDESTINO)
+   dbselectar("DESTINO")
+   nLASTREC:=   lastrec() 
+   zei_fort( nLASTREC,,,0)
+   dbgotop()
+   multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aSTRU)
+ENDIF
 
 dbselectar("DESTINO")
-dbclosearea()
-dbselectar("ORIGEM")
 dbclosearea()
 
 
