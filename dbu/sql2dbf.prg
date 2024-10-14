@@ -21,7 +21,8 @@ WHILE .T.
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
     OPCAO(  7, 24, "&Exportar  DBF             ", 69 ) //E 
     OPCAO(  8, 24, "&Tabelas                   ", 84 ) //T
-     OPCAO( 9, 24, "&Apagar Tabela             ", 65 ) //A    
+    OPCAO(  9, 24, "&Apagar Tabela             ", 65 ) //A 
+    OPCAO( 10, 24, "Exportar &Formatos         ", 70 ) //F    
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -45,7 +46,7 @@ WHILE .T.
             endif     
        CASE KEY=4
             IF selectdb()
-               exportadbf(odb)  
+               exportadbf(odb,1)  
             endif       
        CASE KEY=5
              IF selectdb()
@@ -56,6 +57,10 @@ WHILE .T.
                 SqliteTables(odb)
                 sqllitedeltable(odb)
             endif
+       CASE KEY=7
+            IF selectdb()
+               exportadbf(odb,2)  
+            endif                   
        OTHERWISE
             RETURN
     ENDCASE
@@ -76,7 +81,7 @@ ENDIF
 return .t.
 
 
-function exportadbf(db)
+function exportadbf(db,ntipo)
 LOCAL cTABELAEXP
 IF MDG("Todas(SIM) Escolher Nao")
     aTable := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
@@ -86,12 +91,12 @@ IF MDG("Todas(SIM) Escolher Nao")
      endif
      for i := 1 to len( aTable )
         MDT( aTable[ i, 1 ])
-        Export2dbf(DB,aTable[ i, 1 ])
+        Export2dbf(DB,aTable[ i, 1 ],ntipo)
      next i
  else
     cTABELAEXP:=SQLITETABLES(DB)
     IF ! EMPTY(cTABELAEXP)
-       Export2dbf(DB,cTABELAEXP)
+       Export2dbf(DB,cTABELAEXP,Ntipo)
     ENDIF
  endif    
  return nil
@@ -310,7 +315,7 @@ function createSqlitedb
    endif
 return nil
 
-function export2dbf(ODB1,cNEWTABLE)
+function export2dbf(ODB1,cNEWTABLE,Ntipo)
    local aTable := {}
    local aTable1 := {}
    local cSQLTable := {}
@@ -358,8 +363,14 @@ function export2dbf(ODB1,cNEWTABLE)
       next i
       if len( aStruct ) > 0
          //cNEWARQ:=cNEWTABLE+"_exp"
-         dbcreate( cNewTable, aStruct )
-         use &cNewTable
+         if ntipo=1
+           dbcreate( cNewTable, aStruct )
+           DBUseArea( .T. , "DBFCDX" , cNewTable, "DESTINO" , .T. , .F. ) 
+         else
+           dbCreate( "mem:destino", aStruct, , .T., "DESTINO" )
+         endif  
+
+         //use &cNewTable
          if .not. used()
             msgstop( 'DBF File Creation error!', 'DBF<-->SQLite Exporter' )
             return nil
@@ -379,7 +390,21 @@ function export2dbf(ODB1,cNEWTABLE)
          dbcommit()
          dbunlock()
          mdt( "Successfully exported"+ cNEWTABLE )
+         
+         IF nTIPO=2
+           cDESTINO:=cSQLTable+"_sqlite"+zEXPOREXT
+           MDT(cDESTINO)
+           dbselectar("DESTINO")
+           nLASTREC:=   lastrec() 
+           zei_fort( nLASTREC,,,0)
+           dbgotop()
+           multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aSTRU)
+        ENDIF
+         
          dbcloseall() //close all
+         IF nTIPO=2
+            dbDrop( "mem:destino" )
+         ENDIF
          cNewTable := ''
       endif
    else
