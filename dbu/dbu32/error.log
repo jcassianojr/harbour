@@ -1,0 +1,141 @@
+----------------------------- xHarbour Error Log ------------------------------
+
+Date...............: 18/10/2024
+Time...............: 18:08:09
+
+Application name...: D:\develop\harbour\dbu\dbu32\dbu32.exe
+Workstation name...: DESKTOP-CAIAD50
+Available memory...: 2097151
+Current disk.......: D
+Current directory..: develop\harbour\dbu\dbu32
+Free disk space....: 12240756736
+
+Operating system...: Windows 10 10.0.19045
+xHarbour version...: Harbour 3.2.0dev (r2405310955)
+xHarbour built on..: Oct 18 2024 08:47:22
+C/C++ compiler.....: MinGW GNU C 14.2 (32-bit)
+Multi Threading....: NO
+VM Optimization....: 0
+
+Current Area ......:1
+
+-------------------------- Environmental Information --------------------------
+
+SET ALTERNATE......: OFF
+SET ALTFILE........: 
+SET AUTOPEN........: ON
+SET AUTORDER.......: 0
+SET AUTOSHARE......: 0
+SET BELL...........: OFF
+SET BLINK..........: .T.
+SET CANCEL.........: ON
+SET CENTURY........: ON
+SET COLOR..........: W+/B,N/W,B/N,N/N,N/W
+SET CONFIRM........: OFF
+SET CONSOLE........: ON
+SET COUNT..........: 0
+SET CURSOR.........: 1
+SET DATE FORMAT....: DD/MM/YYYY
+SET DBFLOCKSCHEME..: 0
+SET DEBUG..........: OFF
+SET DECIMALS.......: 2
+SET DEFAULT........: 
+SET DEFEXTENSIONS..: ON
+SET DELETED........: ON
+SET DELIMCHARS.....: ::
+SET DELIMETERS.....: OFF
+SET DEVICE.........: SCREEN
+SET DIRCASE........: 0
+SET DIRSEPARATOR...: \
+SET EOL............: 13
+SET EPOCH..........: 1964
+SET ERRORLOG.......: ERROR.LOG,.F.
+SET ESCAPE.........: ON
+SET EVENTMASK......: 1279
+SET EXACT..........: OFF
+SET EXCLUSIVE......: ON
+SET EXIT...........: OFF
+SET EXTRA..........: OFF
+SET EXTRAFILE......: 
+SET FILECASE.......: 0
+SET FIXED..........: OFF
+SET FORCEOPT.......: OFF
+SET HARDCOMMIT.....: ON
+SET IDLEREPEAT.....: ON
+SET INSERT.........: OFF
+SET INTENSITY......: ON
+SET LANGUAGE.......: PT.DE850
+SET MARGIN.........: 0
+SET MBLOCKSIZE.....: 64
+SET MCENTER........: OFF
+SET MESSAGE........: 0
+SET MFILEEXT.......: 
+SET OPTIMIZE.......: ON
+SET PATH...........: D:\DEVELOP\HARBOUR\DBU\DBU32\
+SET PRINTER........: OFF
+SET PRINTFILE......: LPT1
+SET SCOREBOARD.....: OFF
+SET SCROLLBREAK....: ON
+SET SOFTSEEK.......: ON
+SET STRICTREAD.....: OFF
+SET TRIMFILENAME...: .F.
+SET TYPEAHEAD......: 50
+SET UNIQUE.........: OFF
+SET VIDEOMODE......: 0
+SET WRAP...........: OFF
+
+---------------------------Detailed Work Area Items----------------------------
+
+
+-------------------- Internal Error Handling Information  ---------------------
+
+Subsystem Call ....: BASE
+System Code .......: 1003
+Default Status ....: .F.
+Description .......: Vari†vel n∆o existe
+Operation .........: CTIPSQL
+Arguments .........: 
+Involved File .....: 
+Dos Error Code ....: 0
+                   : <Outros>
+
+ Trace Through:
+----------------
+(b)ERRORSYS           :      79 in Module: d:\develop\harbour\objmgw\xhberr_mode.prg
+MDBEXP                :     253 in Module: d:\develop\harbour\dbu\mdb2dbf.prg
+MDBMENU               :     106 in Module: d:\develop\harbour\dbu\mdb2dbf.prg
+MENUSQL               :     113 in Module: d:\develop\harbour\dbu\dbulib.prg
+MAIN                  :     569 in Module: d:\develop\harbour\dbu\DBU.PRG
+
+
+############################## Video Screen Dump ##############################
+
++--------------------------------------------------------------------------------+
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|                                                                                |
+|RDD(DBFCDX) Extensao(.dbf) Memo(.fpt) Index(.cdx)                               |
+|Exportar Para(SSV) Delimitador(;)                                               |
+|Sepador Decimal(.) Oem Ansi(N) Separador Registro( ) Ano(DMA       /2) Logico(1 |
+|Error BASE/1003  Vari†vel n∆o existe: CTIPSQL                                   |
+|                                                                                |
+|Error at ...: OPENCMDBARQ(376) in Module: d:\develop\harbour\dbu\mdb2dbf.prg    |
+|Called from : MDBEXP(253) in Module: d:\develop\harbour\dbu\mdb2dbf.prg         |
+|Called from : MDBMENU(106) in Module: d:\develop\harbour\dbu\mdb2dbf.prg        |
+|Called from : MENUSQL(113) in Module: d:\develop\harbour\dbu\dbulib.prg         |
+|Called from : MAIN(569) in Module: d:\develop\harbour\dbu\DBU.PRG               |
++--------------------------------------------------------------------------------+
+
+

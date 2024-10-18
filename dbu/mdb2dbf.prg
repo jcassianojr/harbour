@@ -42,7 +42,7 @@ IF cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
 ENDIF
 
 IF cTIPOSQL="MYSQL"  .or. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL"  ;
-                     .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
+                     .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
    OPENTIPOARQ()
    mdbdatabases()
 ENDIF
@@ -84,7 +84,7 @@ WHILE .T.
             @ 03,24 SAY cTIPOSQL
     ENDCASE  
     if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"  ;
-                        .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
+                        .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
        OPCAO(  4, 24, "&Criar database             ", 67 ) //c 67
     else
        OPCAO(  4, 24, "&Criar arquivo              ", 67 ) //c 67
@@ -373,7 +373,7 @@ DO CASE
         endif    
     CASE cTIPOSQL="MARIADB"     
         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MARIADB  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
-    CASE cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"    
+    CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"    
         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQL  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
     CASE cTIPOSQL="PGSQL" .or. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
         if loledb
@@ -413,7 +413,7 @@ ENDCASE
 
 //cria com sql query create database
  if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"  ;
-                     .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
+                     .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
     cARQORI:=OPENTIPOARQ()
     cnewDATABASEX:=INPUTBOX(SPACE(30),"Novo database")
     cnewDATABASEX:=alltrim(cnewDATABASEX)
@@ -489,7 +489,7 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
         CASE  cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
               msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"ACCDB")
              executacmd(cMDBARQ,msql)         
-        CASE cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"  
+        CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"  
              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MSSQL")
              executacmd(cMDBARQ,msql)     
        OTHERWISE
@@ -554,7 +554,7 @@ DO CASE
           { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
         cDATABASEX:=cMDBARQ  
    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" ;
-                         .OR. cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"
+                         .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
          cSERVERX:=PADR(cSERVERX,30," ")
         // cDATABASEX:=PADR(cDATABASEX,30," ") escolhido nao precisa digitar
          cUSERX:=PADR(cUSERX,30," ")
@@ -750,7 +750,7 @@ IF lOPEN
                       nFieldDec    = fixnum(ors:fields(4):value)  //numeric_scale
                    endif
                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))   
-               CASE cTIPOSQL="MSSQL"   .OR. cTIPSQL="SQLSERVER"       
+               CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"       
                    //implantar                        
              ENDCASE   
             
@@ -1009,15 +1009,15 @@ DO CASE
         //Driver={PostgreSQL ANSI};Server=IP address;Port=5432;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
         if empty(cDATABASEX)
             if loledb
-               cConn:="DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //32 driver versao 
+               cConn:="DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX //+";pqopt={search_path=myschema,public}" //32 driver versao 
             else
-               cConn:="DRIVER={PostgreSQL ANSI(x64)};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //64 driver versao x64
+               cConn:="DRIVER={PostgreSQL ANSI(x64)};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX //+";pqopt={search_path=myschema,public}"  //64 driver versao x64
             endif
         else
             if loledb
-               cConn:="DRIVER={PostgreSQL ANSI};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //32 driver versao 
+               cConn:="DRIVER={PostgreSQL ANSI};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX //+";pqopt={search_path=myschema,public}"  //32 driver versao 
             else
-               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX //64 driver versao 964
+               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX //+";pqopt={search_path=myschema,public}" //64 driver versao 964
             endif
         endif    
     CASE cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER"
