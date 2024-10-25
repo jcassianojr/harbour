@@ -10,44 +10,6 @@
 
 REQUEST ADORDD
 
-function pegcfgbanco()
-IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
-   cUSERX:=PADR("root",30," ")
-ENDIF
-
-IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
-   cUSERX:=PADR("postgres",30," ")
-ENDIF
-//
-// ajustes nomes de drivers para 32 e 64 bits
-//
-loledb=.T.
-IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64  //oledb jet (32b) oledb accdb(64b)")
-ENDIF 
-IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //odbc 8.0(32b) odbc 9.0(64b)") 
-ENDIF 
-IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
-   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //odbc 8.0(32b) odbc 9.0(64b)") 
-ENDIF 
-
-//
-//mariadb mesmo nome de driver para 32 e 64 bits
-//
-
-
-IF cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
-   loledb:=.F. //Requer aceole.db 32 e ou 64 instalado
-ENDIF
-
-IF cTIPOSQL="MYSQL"  .or. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL"  ;
-                     .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
-   OPENTIPOARQ()
-   mdbdatabases()
-ENDIF
-return .t.
-
 
 Function mdbmenu(cUSOSQL)
 cTIPOSQL:=cUSOSQL   //Passa para privada usadas nas funcoes aBaixo
@@ -61,6 +23,8 @@ cUSERX    :=SPACE(30)
 cPASSX    :=SPACE(30)
 cTABELAX  :=SPACE(30)
 loledb=.T.
+lmdb  :=.f.
+laccdb :=.f.
 
 pegcfgbanco()
 
@@ -114,6 +78,56 @@ ENDDO
 RESTAA(aAMBIENTE)
 layout()
 return nil
+
+function pegcfgbanco()
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
+   cUSERX:=PADR("root",30," ")
+ENDIF
+
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
+   cUSERX:=PADR("postgres",30," ")
+ENDIF
+//
+// ajustes nomes de drivers para 32 e 64 bits
+//
+loledb=.T.
+IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64  //oledb jet (32b) oledb accdb(64b)")
+ENDIF 
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //odbc 8.0(32b) odbc 9.0(64b)") 
+ENDIF 
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //odbc 8.0(32b) odbc 9.0(64b)") 
+ENDIF 
+
+//
+//mariadb mesmo nome de driver para 32 e 64 bits
+//
+
+
+IF cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+   loledb:=.F. //Requer aceole.db 32 e ou 64 instalado
+ENDIF
+
+IF cTIPOSQL="MYSQL"  .or. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL"  ;
+                     .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
+   OPENTIPOARQ()
+   mdbdatabases()
+ENDIF
+
+lMDB:=.F.
+IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
+   lMDB:=.T.
+ENDIF
+lACCDB =.F.
+IF cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+   lACCDB:=.T.
+ENDIF
+
+
+return .t.
+
 
 
 function ExecArqSql
@@ -259,7 +273,14 @@ aSTRU:=dbstruct()
 //criar opcao de criar o dbf tratado con mdbtables 
 //importar via pipe ou outro
 IF tDOC=14
-   aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
+   IF lMDB .OR. lACCDB
+      //Ainda nao implantado testes com catalog ver outras opcoes
+      //utilizando sqltodbfstru
+      aSTRU:=sqltodbfstru(aSTRU)
+   ELSE
+      aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
+   ENDIF   
+   altd()
    cALIASADO:=ALIAS()
    DBCreate(ctabela+"_"+Ctiposql, aSTRU) 
    DBUseArea( .T. ,  , ctabela+"_"+Ctiposql,  , .F. , .F. ) 
@@ -341,6 +362,14 @@ for i:=1 to NFIM
         ENDIF
      endif
      
+     IF aStruct[i, DBS_TYPE]="I" .AND. (lmdb .or. Laccdb)
+        aStruct[i, DBS_TYPE]:="N"
+     ENDIF
+     
+     IF aStruct[i, DBS_TYPE]="L" .AND. (lmdb .or. Laccdb) .AND. aStruct[i, DBS_LEN]>1
+        aStruct[i, DBS_LEN]:=1
+     ENDIF
+     
      aRETU:=geracampodbf(aStruct[i, DBS_NAME],aStruct[i, DBS_TYPE],aStruct[i, DBS_LEN],aStruct[i, DBS_DEC])
      
      aStruct[i, DBS_NAME]:=aRETU[DBS_NAME]
@@ -355,13 +384,13 @@ function opencmdbarq()
 local lRETU
 lRETU:=.T.
 DO CASE
-    CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
+    CASE lMDB //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         if loledb
            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
         else
            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
         endif 
-    CASE cTIPOSQL="ACCDB"  .OR. cTIPOSQL="ACCDB64" 
+    CASE lACCDB //cTIPOSQL="ACCDB"  .OR. cTIPOSQL="ACCDB64" 
          USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
     CASE cTIPOSQL="SQLITE"  
          USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQLITE
@@ -399,9 +428,9 @@ return lRETU
 function mdbcria()
 
 DO CASE
-   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
+   CASE lMDB //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
-   CASE cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+   CASE lACDB //cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
    CASE cTIPOSQL="SQLITE" 
         cARQORI:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
@@ -429,7 +458,7 @@ ENDCASE
 endif 
 
 //cria com catalogx
-IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB64"//Cria com catalog
+IF lMDB .OR. lACCDB //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB64"//Cria com catalog
    CreateAccessDatabase( cARQORI)
 ENDIF  
 
@@ -480,13 +509,13 @@ FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
        CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MYSQL")
              executacmd(cMDBARQ,msql)
-          CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
+       CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"PGSQL")
              executacmd(cMDBARQ,msql)          
-       CASE  cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" 
-              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MDB")
+       CASE  lMDB //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" 
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MDB")
              executacmd(cMDBARQ,msql)
-        CASE  cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+        CASE lACCDB // cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
               msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"ACCDB")
              executacmd(cMDBARQ,msql)         
         CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"  
@@ -541,10 +570,10 @@ LOCAL cMDBARQ
 cMDBARQ:=""
 
 DO CASE
-   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
+   CASE lMDB //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
         cDATABASEX:=cMDBARQ
-   CASE cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+   CASE lACCDB //cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
         cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
         cDATABASEX:=cMDBARQ
    CASE cTIPOSQL="SQLITE"     
@@ -653,9 +682,10 @@ IF cTIPOINFO="DATABASE"
 ENDIF
 IF cTIPOINFO="TABELA"
     DO CASE
-       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
-            .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
-            .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+    //   CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
+    //        .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
+     //       .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+       CASE lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
             cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
               + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
                + " order by MSysObjects.name "
@@ -672,10 +702,11 @@ IF cTIPOINFO="TABELA"
 ENDIF
 IF cTIPOINFO="ESTRUTURA"
     DO CASE
+        CASE lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        //Implantar possivelmente com catalogx
-       CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
-             .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
-             .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+       //CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
+       //      .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
+       //      .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0   
             cCOMANDO ="PRAGMA table_info( " +  cTABELA  + ")"   
        CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
@@ -695,6 +726,18 @@ IF cTIPOINFO="CCAMPOSQL"
    cCOMANDO:=cCAMPOSQL
 ENDIF
 
+//ALTD()
+IF cTIPOINFO="ESTRUTURA" .AND. (LMDB .OR. lACCDB) //(  cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
+    //teste nao retornou registros verificar outras opcoes
+               //  .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" )
+    TRY        
+      ORS = oConn:OpenSchema(adSchemaColumns) //, {NULL, NULL, cTABELA})   
+    CATCH oERR
+        lOPEN:=.F.
+        ShowADOError(oERR,oConn,cCOMANDO) 
+    END          
+
+ELSE
       TRY
         oRS:Open(cCOMANDO, oConN, adOpenDynamic, adLockOptimistic )
         lOPEN:=.T.
@@ -702,10 +745,13 @@ ENDIF
         lOPEN:=.F.
         ShowADOError(oERR,oConn,cCOMANDO) 
       END
+ENDIF      
+
 IF .NOT. lOPEN
-  IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
-     .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
-      .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+   IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+  //IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
+  //   .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
+  //    .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
      //atribui direito de select porem as vezes e necessario fazer via ide 
       EXECUTACMD(cdatabase,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
   ENDIF
@@ -960,8 +1006,8 @@ IF vALTYPE(lPROVIDER)<>"L"
 ENDIF
 DO CASE
 
-   CASE cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .or. at(".MDB",upper(cCAMBASE))>0
-        if loledb //testando com driver no lugar do provider pois fixa o nome independente da versao do access sqlmix(usa driver) adordd(use provider)
+   CASE lMDB .OR. at(".MDB",upper(cCAMBASE))>0  ///cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .or. at(".MDB",upper(cCAMBASE))>0
+        if loledb // provider ou driver que fixa o nome independente da versao do access sqlmix(usa driver) adordd(use provider)
             IF lPROVIDER
                cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
             ELSE   
@@ -975,8 +1021,8 @@ DO CASE
             ENDIF   
         endif
         
-    CASE cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" .or. at(".ACCDB",upper(cCAMBASE))>0    
-        //testando com driver no lugar do provider pois fixa o nome independente da versao do access sqlmix(usa driver) adordd(use provider)
+    CASE Laccdb .or. at(".ACCDB",upper(cCAMBASE))>0    //cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" .or. at(".ACCDB",upper(cCAMBASE))>0    
+        //provider ou driver que fixa o nome independente da versao do access sqlmix(usa driver) adordd(use provider)
         IF lPROVIDER
            cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //driver 32 e 64 devem estar instalados
         ELSE   

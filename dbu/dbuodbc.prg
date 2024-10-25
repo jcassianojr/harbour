@@ -20,6 +20,8 @@ cUSERX    :=SPACE(30)
 cPASSX    :=SPACE(30)
 cTABELAX  :=SPACE(30)
 loledb=.T.
+lMDB  =.F.
+lACCDB =.F.
 
 pegcfgbanco()
 

@@ -12,7 +12,9 @@ private cTableName := ''
 private cNewTable := ''
 private lOpened := .f.
 
-
+loledb=hb_Version( HB_VERSION_BITWIDTH )<>64
+lMDB  =.F.
+lACCDB =.F.
 aAMBIENTE:=SALVAA()
 
 WHILE .T.

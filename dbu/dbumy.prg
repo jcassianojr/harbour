@@ -10,7 +10,11 @@ function mysqlmenu()
  aAMBIENTE:=SALVAA()
  
  cTIPOSQL="MYSQL"
- 
+
+
+ loledb=hb_Version( HB_VERSION_BITWIDTH )<>64
+ lMDB  =.F.
+ lACCDB =.F. 
  cSERVERX:="localhost"+space(21)
  cUSERX:=PADR("root",30," ")
  cDATABASEX:=space(30)
