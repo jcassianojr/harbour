@@ -54,10 +54,10 @@ WHILE .T.
        OPCAO(  4, 24, "&Criar arquivo              ", 67 ) //c 67
     endif   
     OPCAO(  5, 24, "Executar arquivo &SQL      ", 83 ) //S 83
-    OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73 
-    OPCAO(  7, 24, "&Exportar Tabela Formatos  ", 69 ) //E 69
-    OPCAO(  8, 24, "&Database Selecionar       ", 68 ) //D 68
-
+    OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 73  
+    OPCAO(  7, 24, "Exportar Tabela &Formatos  ", 69 ) //F 70 
+    OPCAO(  8, 24, "&Database Selecionar       ", 68 ) //D 68 
+    OPCAO(  9, 24, "&Exportar  DBF             ", 69 ) //E 69 
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
@@ -67,9 +67,11 @@ WHILE .T.
        CASE KEY=3
             MDBIMPDBF()
        CASE KEY=4
-            MDBEXP()
+            MDBEXP(2)
        CASE KEY=5     
             mdbdatabases()
+        CASE KEY=6
+            MDBEXP(1)     
        OTHERWISE
             EXIT
     ENDCASE
@@ -186,7 +188,7 @@ ENDIF
 cTABELAX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
 RETURN aResult
 
-function MDBEXP()
+function MDBEXP(nTIPO)
 LOCAL cCAMMDB   :=SPACE(100)
 LOCAL lCOPIANAT
 local Ldoc
@@ -195,9 +197,7 @@ LOCAL aSTRU
 LOCAL nFIM
 LOCAL i
 
-//IF cTIPOSQL="SQLITE" .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB64"
-   cMDBARQ:=OPENTIPOARQ() //escolhe arquivo 
-//ENDIF  
+cMDBARQ:=OPENTIPOARQ() 
 
 mdbtabela(cMDBARQ)
 
@@ -211,46 +211,21 @@ IF EMPTY(cTABELA)
    RETURN NIL
 ENDIF
 
-
-
-LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
-tDOC:=pegtipodoc(lCOPIANAT) // .t. Inclui dbf se for nativa
-if tDOC<>14 //dbf nao precisa adcional
-   pegparexp() 
-endif   
-lDOCCAB  :=.F.
-lDOCDAD  :=.F.
-lDOCRECNO:=.F.
-cSUBTIPO :=" "
-
-//
-// formatos nao disponiveis no copy to (nativa)
-//
-IF tDOC=1 //XML 
-   lCOPIANAT:=.F.
-ENDIF
-IF tDOC=2 //TAM 
-   lCOPIANAT:=.F.
-ENDIF
-IF tDOC=3 //TEC 
-   lCOPIANAT:=.F.
-ENDIF
-IF tDOC=4 //DBE 
-   lCOPIANAT:=.F.
-ENDIF
-IF tDOC=7 //XML
-   lCOPIANAT:=.F.
-ENDIF
-IF tDOC=8 //JSON 
-   lCOPIANAT:=.F.
-ENDIF
-IF tDOC=13 //SQL
-   lCOPIANAT:=.F.
+IF nTIPO=1
+   tdoc=14 //dbf
 ENDIF
 
-IF .NOT. lCOPIANAT
-   PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+IF nTIPO=2
+  LCOPIANAT:=.f. //MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
+  tDOC:=pegtipodoc() // .t. Inclui dbf se for nativa
+  pegparexp() 
+  lDOCCAB  :=.F.
+  lDOCDAD  :=.F.
+  lDOCRECNO:=.F.
+  cSUBTIPO :=" "
+  PegcsUB(tDOC)  //pegar o subtipo conforme tipo
 ENDIF
+
 
 hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
 cDESTINO:=cCAMMDB+cTABELA+"_"+Ctiposql+"."+zEXPOREXT
@@ -268,6 +243,7 @@ opencmdbarq()
 nLASTREC:=   reccount() 
 zei_fort( nLASTREC,,,0)
 aSTRU:=dbstruct()
+
 //ajustar adordd para melhor tratativa campos @ datatime m diferenciando logwchar memos
 //pois cria com tipos @ e M deixando o dbf com tipos incompativeis
 //criar opcao de criar o dbf tratado con mdbtables 
@@ -313,13 +289,8 @@ IF tDOC=14
      zei_fort(nLASTREC,,,1)
      dbskip()
    enddo
-
 ELSE
-  IF lCOPIANAT
-     COPYTO(cDESTINO)
-  ELSE
-     multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
-  ENDIF   
+   multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
 ENDIF
 dbcloseall()
 return nil

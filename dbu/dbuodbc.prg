@@ -57,7 +57,6 @@ WHILE .T.
             odbcdeltable()
        CASE KEY=7
             odbcexpdbf(2)
-           // odbcexpformat()
        OTHERWISE
             RETURN
     ENDCASE
@@ -148,7 +147,7 @@ function odbcimpdbf()
    dsFunctions:Destroy()
 return .t.
 
-function odbcexpdbf()
+function odbcexpdbf(ntipo)
 LOCAL aSTRU
 LOCAL cCONN
 LOCAL i
@@ -327,9 +326,6 @@ next i
 dsFunctions:Destroy()
 return .t.
 
-function odbcexpformat()
-//nao e rdd exp usa skip() odbc use oreg
-return .t.
 
 
 
