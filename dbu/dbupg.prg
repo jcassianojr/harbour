@@ -137,6 +137,7 @@ return .t.
 function PGstrudbf()
 local aRETU
 aRETU:={}
+altd()
 
   cCOMANDO ="SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
            cCOMANDO +=" FROM   information_schema.columns "
@@ -152,7 +153,7 @@ while .not. oQuery:eof()
    
     //tmsql comeca com 1 padrao harbour
     cFieldName := upper(alltrim( oRow:FieldGet(1) ) ) //column_name 0
-    cType      := upper( alltrim( oRow:FieldGet(2) )  ) // data_type1 
+    cFieldType := upper( alltrim( oRow:FieldGet(2) )  ) // data_type1 
     nFieldLength = fixnum(oRow:FieldGet(3) )  //tamanho string character_maximum_length 2
     if fixnum(oRow:FieldGet(4) ) >0//tamannho numeric 3
         nFieldLength = fixnum(oRow:FieldGet(4) )  //numeric_precision 3

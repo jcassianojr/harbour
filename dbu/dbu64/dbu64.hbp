@@ -64,7 +64,7 @@ d:\develop\harbour\dbu\mysqlrdd.prg
 # postgresql libpg
 #
 d:\develop\harbour\dbu\dbupg.prg
-d:\develop\harbour\dbu\dbupgexp
+d:\develop\harbour\dbu\dbupgexp 
 d:\develop\harbour\dbu\pgrdd.prg
 #
 d:\develop\harbour\dbu\dbumix.prg

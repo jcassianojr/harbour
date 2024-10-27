@@ -3,6 +3,7 @@
 #include "dbstruct.ch"
 #include "box.ch"
 #INCLUDE "DBINFO.CH"
+#INCLUDE "hbVER.CH"
 
 
 function mysqlmenu()
@@ -150,7 +151,7 @@ while .not. oQuery:eof()
    
     //tmsql comeca com 1 padrao harbour
     cFieldName := upper( alltrim( oRow:FieldGet(1) ) )
-    cType      := upper( alltrim( oRow:FieldGet(2) ) ) 
+    cFieldType := upper( alltrim( oRow:FieldGet(2) ) ) 
     AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
    
    oQuery:skip()

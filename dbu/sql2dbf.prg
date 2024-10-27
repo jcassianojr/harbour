@@ -1,6 +1,7 @@
 #include "dbstruct.ch"
 #INCLUDE "BOX.CH"
 #include "dbinfo.ch"
+#INCLUDE "hbVER.CH"
 
 #require "hbsqlit3"
 #require "hbmemio"
@@ -347,7 +348,7 @@ function export2dbf(ODB1,cNEWTABLE,Ntipo)
           //table info colunas
          //cid, name, type, "notnull", dflt_value, pk
          // 1    2     3      4           5         6
-         cType := upper( alltrim( aTable[ i, 3 ] ) ) 
+         cFieldType := upper( alltrim( aTable[ i, 3 ] ) ) 
          cFieldName := alltrim( aTable[ i, 2 ] )
          nFieldLength := 0
          nFieldDec := 0

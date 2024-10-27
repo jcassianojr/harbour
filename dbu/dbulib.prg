@@ -8,6 +8,7 @@
 #include "ads.ch"
 #include "dbinfo.ch"
 #include "TRY.ch"
+#INCLUDE "hbVER.CH"
 
 
 Function inputbox(eVAR,cTITULO)
