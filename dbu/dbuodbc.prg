@@ -303,7 +303,6 @@ mdbtabela(cdatabasex)
 IF .NOT. MDG("Apagar Tabela"+cTABELAX)  
    return .f.
 ENDIF
-altd()
 odbcexecsql("DROP TABLE  "+cTABELAX) 
 return .t.
 

@@ -137,7 +137,6 @@ return .t.
 function PGstrudbf()
 local aRETU
 aRETU:={}
-altd()
 
   cCOMANDO ="SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
            cCOMANDO +=" FROM   information_schema.columns "

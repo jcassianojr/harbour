@@ -213,7 +213,6 @@ ENDIF
 
 IF nTIPO=1
    tdoc=14 //dbf
-   zEXPOREXT="DBF"
 ENDIF
 
 IF nTIPO=2
@@ -253,9 +252,9 @@ IF tDOC=14
    IF lMDB .OR. lACCDB
       //Ainda nao implantado testes com catalog ver outras opcoes
       //utilizando sqltodbfstru
-      aSTRU:=sqltodbfstru(aSTRU)
-      //altd()
-      //aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
+      //aSTRU:=sqltodbfstru(aSTRU)
+      altd()
+      aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
    ELSE
       aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
    ENDIF   

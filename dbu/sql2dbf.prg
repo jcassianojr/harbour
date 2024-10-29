@@ -264,7 +264,6 @@ return lRETU
         AADD(aRESULT,aRETU[ i, 1 ])
 next i
   
- // altd()
 
   IF LEN(aResult)>0
      HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")

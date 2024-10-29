@@ -140,7 +140,6 @@ return .t.
 function mystrudbf()
 LOCAL aRETU
 aRETU:={}
-altd()
 oQuery := oServer:Query( "SHOW COLUMNS FROM "+cTABELAx )
 while .not. oQuery:eof()
    cFieldName := ''
