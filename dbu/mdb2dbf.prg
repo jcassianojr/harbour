@@ -402,9 +402,9 @@ return lRETU
 function mdbcria()
 
 DO CASE
-   CASE lMDB //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
+   CASE lMDB 
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
-   CASE lACDB //cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+   CASE lACDB 
         cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
    CASE cTIPOSQL="SQLITE" 
         cARQORI:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
@@ -432,16 +432,17 @@ ENDCASE
 endif 
 
 //cria com catalogx
-IF lMDB .OR. lACCDB //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB64"//Cria com catalog
-   CreateAccessDatabase( cARQORI)
+IF lMDB .OR. lACCDB 
+   CreateAccessDatabase( cARQORI)   
+   EXECUTACMD(cARQORI,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
+   EXECUTACMD(cARQORI,"create view showtables as select name from MSysObjects where MSysObjects.type In (1,4,6) and MSysObjects.name not like '~*' and MSysObjects.name not like 'MSys%'")
 ENDIF  
 
-//cria com create da rddado 
+//cria com create native
 IF cTIPOSQL="SQLITE"  
    createSqlitedb()
 ENDIF
 RETURN NIL
-
 
    
 FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
@@ -773,7 +774,7 @@ ENDIF
 if LEN(aRETU)=0 .AND. cTIPOINFO="TABELA" 
     IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        ocatalog:=win_oleCreateObject( "ADOX.Catalog" )  
-       ocatalog::ActiveConnection :=  oConn
+       ocatalog:ActiveConnection :=  oConn
        lOPEN:=.F.
        TRY
             ocatalog := oConn:OpenSchema( adSchemaTables )
@@ -794,7 +795,7 @@ endif
 if LEN(aRETU)=0 .AND. cTIPOINFO="ESTRUTURA" 
     IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        ocatalog:=win_oleCreateObject( "ADOX.Catalog" ) 
-       ocatalog::ActiveConnection :=  oConn 
+       ocatalog:ActiveConnection :=  oConn 
        lOPEN:=.F.
        TRY
             ocatalog := oConn:OpenSchema( adSchemaColumns )

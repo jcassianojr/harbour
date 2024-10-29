@@ -4,9 +4,14 @@
 
 #-vcshead=vcshead.ch
 #-tshead=tshead.ch
+
 #-manifest=dbu.Manifest  comentado erro compilacao 32 bits
+
 d:\develop\harbour\dbu\dbu.rc
 
+
+#-ldflags=--enable-stdcall-fixup
+#-ldflags=-Wl,--allow-multiple-definition -s -static
 #Use --enable-stdcall-fixup to disable these warnings
 #Use --disable-stdcall-fixup to disable these fixups
 
