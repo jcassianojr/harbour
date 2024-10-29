@@ -707,11 +707,16 @@ ENDIF
 
 /* a vezes e preciso conceder este acesso na ide para a consulta na retornar vazia
 cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC" 
+
+create view showtables as select name from MSysObjects where MSysObjects.type In (1,4,6) and MSysObjects.name not like '~*' and MSysObjects.name not like 'MSys%' 
+//nao aceita order by na criacao da view
+
 */
 
 IF .NOT. lOPEN
    IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
       EXECUTACMD(cdatabase,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
+      EXECUTACMD(cdatabase,"create view showtables as select name from MSysObjects where MSysObjects.type In (1,4,6) and MSysObjects.name not like '~*' and MSysObjects.name not like 'MSys%'")
   ENDIF
 ENDIF
 
@@ -768,6 +773,7 @@ ENDIF
 if LEN(aRETU)=0 .AND. cTIPOINFO="TABELA" 
     IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        ocatalog:=win_oleCreateObject( "ADOX.Catalog" )  
+       ocatalog::ActiveConnection :=  oConn
        lOPEN:=.F.
        TRY
             ocatalog := oConn:OpenSchema( adSchemaTables )
@@ -787,7 +793,8 @@ endif
 
 if LEN(aRETU)=0 .AND. cTIPOINFO="ESTRUTURA" 
     IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-       ocatalog:=win_oleCreateObject( "ADOX.Catalog" )  
+       ocatalog:=win_oleCreateObject( "ADOX.Catalog" ) 
+       ocatalog::ActiveConnection :=  oConn 
        lOPEN:=.F.
        TRY
             ocatalog := oConn:OpenSchema( adSchemaColumns )
