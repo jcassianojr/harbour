@@ -178,10 +178,12 @@ zei_fort( nLASTREC,,,0)
 aSTRU:={}
 nFIM:=len(dsFunctions:Fields)
 FOR i := 1 TO nFIM
+    //aqui o posicionameto e 2,3,4,5 diferente do padrao dbstruct 1,2,3,4
     cFieldName   := dsFunctions:Fields[ i ][2]
     cFieldType   := dsFunctions:Fields[ i ][3] 
     nFieldLength := dsFunctions:Fields[ i ][4]
     nFieldDec    := dsFunctions:Fields[ i ][5]
+    //sql.ch Standard SQL datatypes, using ANSI type numbering 
     DO CASE
        CASE cFIELDTYPE=SQL_CHAR
             cFIELDTYPE="CHAR"

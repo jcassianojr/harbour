@@ -633,9 +633,6 @@ catch oErr
    return aRETU
 end
 
-/* a vezes e preciso conceder este acesso na ide para a consulta na retornar vazia
-cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC" 
-*/
 
 oRS:= WIN_OLECreateObject('ADODB.RecordSet')
 oRS:CursorLocation := 3
@@ -653,9 +650,6 @@ IF cTIPOINFO="DATABASE"
 ENDIF
 IF cTIPOINFO="TABELA"
     DO CASE
-    //   CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
-    //        .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
-     //       .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        CASE lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
             cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
               + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
@@ -675,9 +669,6 @@ IF cTIPOINFO="ESTRUTURA"
     DO CASE
         CASE lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        //Implantar possivelmente com catalogx
-       //CASE cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
-       //      .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
-       //      .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0   
             cCOMANDO ="PRAGMA table_info( " +  cTABELA  + ")"   
        CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
@@ -697,17 +688,9 @@ IF cTIPOINFO="CCAMPOSQL"
    cCOMANDO:=cCAMPOSQL
 ENDIF
 
-//ALTD()
-IF cTIPOINFO="ESTRUTURA" .AND. (LMDB .OR. lACCDB) //(  cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
-    //teste nao retornou registros verificar outras opcoes
-               //  .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" )
-    TRY        
-      ORS = oConn:OpenSchema(adSchemaColumns) //, {NULL, NULL, cTABELA})   
-    CATCH oERR
-        lOPEN:=.F.
-        ShowADOError(oERR,oConn,cCOMANDO) 
-    END          
-
+lopen:=.f.
+IF cTIPOINFO="ESTRUTURA" .AND. (LMDB .OR. lACCDB) 
+    //abaixo com catalog
 ELSE
       TRY
         oRS:Open(cCOMANDO, oConN, adOpenDynamic, adLockOptimistic )
@@ -718,15 +701,17 @@ ELSE
       END
 ENDIF      
 
+
+/* a vezes e preciso conceder este acesso na ide para a consulta na retornar vazia
+cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC" 
+*/
+
 IF .NOT. lOPEN
    IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-  //IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS" .or. cTIPOSQL="ACCDB" ;
-  //   .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS64" .or. cTIPOSQL="ACCDB64" ;
-  //    .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-     //atribui direito de select porem as vezes e necessario fazer via ide 
       EXECUTACMD(cdatabase,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
   ENDIF
 ENDIF
+
 IF lOPEN
     while ! ors:eof
          IF cTIPOINFO="TABELA" .OR. cTIPOINFO="CCAMPOSQL" .OR. cTIPOINFO="DATABASE"
@@ -777,26 +762,129 @@ IF lOPEN
     oRs:Close()
 ENDIF
 
-/*
-altd()
-IF cTIPOSQL="MDB" .or. cTIPOSQL="ACCESS".or. at(".MDB",upper(cdatabase))>0
-   ocatalog:=win_oleCreateObject( "ADOX.Catalog" )
-   IF cTIPOINFO="TABELA" //.AND. LEN(aRETU)=0
-        TRY
-        ocatalog := oConn:OpenSchema( adSchemaColumns )
-      CATCH oERR
-        return  aRETU 
-      END
-      while ! ocatalog:eof()
-         Ors:movenext()
-      enddo
-      ocatalog:close()
-   ENDIF
-ENDIF
-*/
+if LEN(aRETU)=0 .AND. cTIPOINFO="TABELA" 
+    IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+       ocatalog:=win_oleCreateObject( "ADOX.Catalog" )  
+       lOPEN:=.F.
+       TRY
+            ocatalog := oConn:OpenSchema( adSchemaTables )
+             lOPEN:=.T.
+       CATCH oERR
+             lOPEN:=.F. 
+       END
+       IF lOPEN
+           while ! ocatalog:eof()
+                 AADD(aRETU,ocatalog:Fields( "TABLE_NAME" ):Value) // ocatalog:fields(0):value)
+                 ocatalog:movenext()
+            enddo
+           ocatalog:close()
+        ENDIF
+    ENDIF
+endif
+
+if LEN(aRETU)=0 .AND. cTIPOINFO="ESTRUTURA" 
+    IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+       ocatalog:=win_oleCreateObject( "ADOX.Catalog" )  
+       lOPEN:=.F.
+       TRY
+            ocatalog := oConn:OpenSchema( adSchemaColumns )
+             lOPEN:=.T.
+       CATCH oERR
+             lOPEN:=.F. 
+       END
+       IF lOPEN
+           while ! ocatalog:eof()
+                 IF UPPER(cTABELA)=UPPER(ocatalog:Fields( "TABLE_NAME" ):Value)
+                    cFieldName := UPPER(ocatalog:Fields( "COLUMN_NAME" ):Value)
+                    cFieldType := TipoDado2(ocatalog:Fields( "DATA_TYPE" ):Value)
+                    nFieldLength := 0
+                    nFieldDec := 0
+                    If cTIPO = "C"
+                        nFieldLength:=ocatalog:Fields( "CHARACTER_MAXIMUM_LENGTH" ):Value
+                    ENDIF
+                    If cTIPO = "N"
+                        nFieldLength:=ocatalog:Fields( "NUMERIC_PRECISION" ):Value
+                        nFieldDec   :=ocatalog:Fields( "NUMERIC_SCALE" ):Value
+                    ENDIF
+                    If cTIPO = "D"
+                        nFieldLength:=ocatalog:Fields( "DATETIME_PRECISION" ):Value
+                    ENDIF
+                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))   
+                 ENDIF
+                 ocatalog:movenext()
+            enddo
+           ocatalog:close()
+        ENDIF
+    ENDIF
+endif
+
 
 oConN:close()  
 RETURN aRETU 
+
+
+
+Function TipoDado2(nTipo)
+   do case
+      case nTipo=8.or.nTipo=12.or.nTipo=72.or.nTipo=129.or.nTipo=130.or.(nTipo>=200.and.nTipo<=203)
+           // adBSTR             8
+           // adGUID             72
+           // adChar             129
+           // adWChar            130
+           // adVarChar          200
+           // adLongVarChar      201
+           // adVarWChar         202
+           // adLongVarWChar     203
+           return 'C'
+
+      case nTipo= 17.or.nTipo= 16.or.nTipo= 14.or.nTipo=  5.or.nTipo=  3.or.nTipo=131.or.nTipo= 2 .or.nTipo=  6.or.;
+           nTipo=  4.or.nTipo=020.or.nTipo=018.or.nTipo=019.or.nTipo= 21.or.nTipo=138.or.nTipo=139
+           // adSmallInt         2
+           // adInteger          3
+           // adSingle           4
+           // adDouble           5
+           // adCurrency         6
+           // adDecimal          14
+           // adTinyInt          16
+           // adUnsignedTinyInt  17
+           // adUnsignedSmallInt 18
+           // adUnsignedInt      19
+           // adBigInt           20
+           // adUnsignedBigInt   21
+           // adNumeric          131
+           // adPropVariant      138
+           // adVarNumeric       139
+           return 'N' // Numerico
+
+      case nTipo=  7.or.nTipo=64.or.nTipo=133.or.nTipo=134.or.nTipo=135
+           // adDate             7
+           // adFileTime         64
+           // adDBDate           133
+           // adDBTime           134
+           // adDBTimeStamp      135
+           return 'D' // Data
+
+      case nTipo= 11
+           // adBoolean          11
+           return 'L' // Logico
+
+      case nTipo=128.or.nTipo=201.or.nTipo=203.or.nTipo=205
+           // adLongVarWChar     203
+           // adPropVariant      138
+           return 'M' // Memo
+
+      case nTipo=128.or.nTipo=204.or.nTipo=205
+           // adBinary           128
+           // adVarBinary        204
+           // adLongVarBinary    205
+           return 'I' // Imagem
+
+   otherwise
+      alert('Tipo de dado invalido: Campo '+cField+' Type='+str(nTipo))
+   endcase
+   return 'U'
+
+
 
 function geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)   
 local aRETU
@@ -1125,7 +1213,7 @@ FUNCTION CreateAccessDatabase( cDatabase, cPassword, lEncrypt )
    IIF( cPassword == NIL, cPassword := "''", NIL )
    IIF( lEncrypt == NIL, lEncrypt := .F., NIL )
 
-   oCatalog := CreateObject( "ADOX.Catalog" )
+   oCatalog := WIN_OLECreateObject( "ADOX.Catalog" )  //CreateObject( "ADOX.Catalog" )
    
     /* OLEDB:Engine Type=5
    Unknown 0

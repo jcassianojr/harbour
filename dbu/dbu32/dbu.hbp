@@ -1,10 +1,14 @@
 -gtwvg
 -gui
 -lng=pt_BR
+
 #-vcshead=vcshead.ch
 #-tshead=tshead.ch
 #-manifest=dbu.Manifest  comentado erro compilacao 32 bits
 d:\develop\harbour\dbu\dbu.rc
+
+#Use --enable-stdcall-fixup to disable these warnings
+#Use --disable-stdcall-fixup to disable these fixups
 
 hbct.hbc
 hbwin.hbc
