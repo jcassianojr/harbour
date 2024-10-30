@@ -89,71 +89,33 @@ aAMBIENTE:=SALVAA()
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
     @ 03,24 SAY cTIPOSQL
-    OPCAO(  4, 24, "&Nativo clientelib   ", 78 ) //N
-    OPCAO(  5, 24, "&ADORDD ODBC         ", 65 ) //A
-    OPCAO(  6, 24, "&RDD SQLMIX          ", 82 ) //I 
-    OPCAO(  7, 24, "&ODBC                ", 79 ) //D
+    OPCAO(  4, 24, "&Nativo clientelib   ", 78 ) //N 
+    OPCAO(  5, 24, "&ADORDD ODBC         ", 65 ) //A 
+    OPCAO(  6, 24, "&RDD SQLMIX          ", 82 ) //R 
+    OPCAO(  7, 24, "&ODBC                ", 79 ) //D 
+    OPCAO(  5, 24, "ADO&X ODBC           ", 88 ) //X
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1 .AND. cTIPOSQL="PGSQL"
            pgsqlmenu()
        CASE KEY=1 .AND. cTIPOSQL="MYSQL"
            mysqlmenu()
-       CASE KEY=1 .AND. cTIPOSQL="MARIADB"
-            MDT("Sem clientelib para mdb")      
        CASE KEY=1 .AND. cTIPOSQL="SQLITE"
-            sqlitemenu()
-       CASE KEY=1 .AND. cTIPOSQL="MDB"
-            MDT("Sem clientelib para mdb")
-       CASE KEY=1 .AND. cTIPOSQL="ACCDB"
-            MDT("Sem clientelib para mdb")  
-      CASE KEY=1 .AND. cTIPOSQL="MSSQL"
-            MDT("Sem clientelib para mdb")        
+            sqlitemenu()    
+       CASE KEY=1 
+            MDT("Sem clientelib para "+cTIPOSQL)      
        //ADORDD ODBC     
-       CASE KEY=2 .AND. cTIPOSQL="PGSQL"
-            mdbmenu("PGSQL")
-       CASE KEY=2 .AND. cTIPOSQL="MYSQL"
-            mdbmenu("MYSQL")
-       CASE KEY=2 .AND. cTIPOSQL="MARIADB"  
-            mdbmenu("MARIADB")  
-       CASE KEY=2 .AND. cTIPOSQL="SQLITE"
-            mdbmenu("SQLITE")
-        CASE KEY=2 .AND. cTIPOSQL="MDB"
-            mdbmenu("MDB")  
-        CASE KEY=2 .AND. cTIPOSQL="ACCDB"
-            mdbmenu("ACCDB")          
-        CASE KEY=2 .AND. cTIPOSQL="MSSQL"
-            mdbmenu("MSSQL")        
+       CASE KEY=2 
+            mdbmenu(cTIPOSQL)
        //SQLMIX RDD     
-       CASE KEY=3 .AND. cTIPOSQL="PGSQL"
-            mixmenu("PGSQL")
-       CASE KEY=3 .AND. cTIPOSQL="MYSQL"
-            mixmenu("MYSQL")    
-       CASE KEY=3 .AND. cTIPOSQL="MARIADB"
-            mixmenu("MARIADB")           
-       CASE KEY=3 .AND. cTIPOSQL="SQLITE"
-            mixmenu("SQLITE")
-       CASE KEY=3 .AND. cTIPOSQL="MDB"
-            mixmenu("MDB")       
-        CASE KEY=3 .AND. cTIPOSQL="ACCDB"
-            mixmenu("ACCDB")  
-        CASE KEY=3 .AND. cTIPOSQL="MSSQL"
-            mixmenu("ACCDB")      
+       CASE KEY=3 
+            mixmenu(cTIPOSQL)
         //ODBC
-        CASE KEY=4 .AND. cTIPOSQL="PGSQL"
-            ODBCmenu("PGSQL")
-       CASE KEY=4 .AND. cTIPOSQL="MYSQL"
-            ODBCmenu("MYSQL")    
-       CASE KEY=4 .AND. cTIPOSQL="MARIADB"
-            ODBCmenu("MARIADB")           
-       CASE KEY=4 .AND. cTIPOSQL="SQLITE"
-            ODBCmenu("SQLITE")
-       CASE KEY=4 .AND. cTIPOSQL="MDB"
-            ODBCmenu("MDB")       
-        CASE KEY=4 .AND. cTIPOSQL="ACCDB"
-            ODBCmenu("ACCDB")           
-        CASE KEY=4 .AND. cTIPOSQL="MSSQL"
-            ODBCmenu("MSSQL")                
+        CASE KEY=4 
+            ODBCmenu(cTIPOSQL)
+       //ADOX
+       CASE KEY=5 
+            adoxmenu(cTIPOSQL)
        OTHERWISE
             RETURN
     ENDCASE

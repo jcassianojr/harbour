@@ -33,7 +33,7 @@ ENDIF
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-    @ 03,24 SAY cTIPOSQL+" "+cDATABASEX
+    @ 03,24 SAY "ODBC"+" "+cTIPOSQL+" "+cDATABASEX
     OPCAO(  4, 24, "&Criar database            ", 67 ) //C
     OPCAO(  5, 24, "&Database Selecionar       ", 68 ) //D
     OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 

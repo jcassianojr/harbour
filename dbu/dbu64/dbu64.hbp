@@ -12,8 +12,8 @@ hbwin.hbc
 hbtip.hbc
 xhb.hbc
 rddads.hbc
-#copiada pasta contrib rddbm para devprg nao precisou mais bmd*2.prg
 rddbm.hbc
+
 hbsqlit3.hbc
 rddado.hbc
 hbmysql.hbc
@@ -70,6 +70,8 @@ d:\develop\harbour\dbu\pgrdd.prg
 d:\develop\harbour\dbu\dbumix.prg
 #
 d:\develop\harbour\dbu\dbuodbc.prg
+#
+d:\develop\harbour\dbu\adoxb.prg
 #
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  

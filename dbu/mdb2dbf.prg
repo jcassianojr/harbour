@@ -33,19 +33,19 @@ WHILE .T.
     DO CASE
        CASE cTIPOSQL="MDB" .OR.  cTIPOSQL="ACCESS" 
             IF loledb
-               @ 03,24 SAY "oledb(32b)"
+               @ 03,40 SAY "oledb(32b)"
             Else
-               @ 03,24 SAY "accdb(64b)"
+               @ 03,40 SAY "accdb(64b)"
             endif
        CASE cTIPOSQL="MYSQL"
             IF loledb
-               @ 03,24 SAY "odbc 8(32b)"
+               @ 03,40 SAY "odbc 8(32b)"
             Else
-               @ 03,24 SAY "odbc 9(64b)"
+               @ 03,40 SAY "odbc 9(64b)"
             endif
             
         OTHERWISE
-            @ 03,24 SAY cTIPOSQL
+            @ 03,24 SAY "ADORDD"+" "+cTIPOSQL
     ENDCASE  
     if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"  ;
                         .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
@@ -1136,7 +1136,7 @@ DO CASE
                cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX //+";pqopt={search_path=myschema,public}" //64 driver versao 964
             endif
         endif    
-    CASE cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER"
+    CASE cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="SQL"
          if empty(cDATABASEX)
             IF lPROVIDER
                cCONN:="Provider=SQLOLEDB;Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
@@ -1151,6 +1151,23 @@ DO CASE
             
             ENDIF   
          endif
+         
+    CASE cTIPOSQL = "DBASE"
+      cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=dBASE IV;"
+   CASE cTIPOSQL = "FIREBIRD" // ADOGDB
+      cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+   CASE cTIPOSQL = "PARADOX" // ADOPX
+      cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Paradox 5.x;" 
+   CASE cTIPOSQL == "XMLDB" // ADOXML
+      cCONN := "Provider=MSPersist"
+   CASE cTIPOSQL == "XML" // ADOXML
+      cCONN := "Provider=MSDAOSP;Data Source="+cCAMBASE+";" //MSXML2.DSOControl.2.6"
+   CASE cTIPOSQL = "XLS" // ADOXLS
+      cCONN :="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Excel 8.0;HDR=Yes;IMEX=1"
+   CASE cTIPOSQL = "REMOTE" // ADORDS
+      cCONN := "Provider=MS Remote;Remote Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cDATABASEX+";Remote Server=" + cSERVERX
+         
+         
 ENDCASE      
 RETURN cConn   
 
