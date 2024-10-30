@@ -1266,3 +1266,130 @@ endif
    oCatalog := NIL //NULL_OBJECT
 
 RETURN
+
+
+Function SQLDialeeto(cSQLCNV)
+     DO CASE
+            Case cTIPOSQL= "SQLITE"
+               //  '"LOWER(%1%)"        ,"LOWER(%1%)"
+               //  '"UPPER(%1%)"        ,"UPPER(%1%)"
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "CURRENT_DATE ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "LEN(", "LENGTH(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CURRENTDATETIME", " current_timestamp ")
+               // '  {"LEFT(%1%,%2%)"      ,"SUBSTR(%1%,1,%2%)"},;
+               // '        {"DTOS(%1%)"        ,"strftime('%Y%m%d',%1%)"},;
+               // '        {"DAY(%1%)"       ,"cast(strftime('%d',%1) as int)"},;
+               // ''        {"MONTH(%1%)"       ,"cast(strftime('%m',%1) as int)"},;
+               // '        {"YEAR(%1%)"        ,"cast(strftime('%Y',%1) as int)"},;
+               // '        {"REPL(%1%,%2%)"      ,"FORMAT('%.*c',%2%,%1%)"},;
+            Case cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
+               //  '"LOWER(%1%)"        ,"LOWER(%1%)"
+               //  '"UPPER(%1%)"        ,"UPPER(%1%)"
+               //  '"LEFT(%1%,%2%)"     ,"LEFT(%1%,%2%)"
+               //  '"DAY(%1%)"         ,"DAY(%1%)"
+               //  '"MONTH(%1%)"       ,"MONTH(%1%)"}
+               //  '"YEAR(%1%)"        ,"YEAR(%1%)"
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "SYSDATE()")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPEAT(")
+          //      '        {"DTOS(%1%)"        ,"DATE_FORMAT(%1%,'%Y%m%d')"},;
+            Case cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+            //     '"LOWER(%1%)"        ,"LOWER(%1%)"
+            //     '"UPPER(%1%)"        ,"UPPER(%1%)"
+            //     '"LEFT(%1%,%2%)"      ,"LEFT(%1%,%2%)"
+            //     '"CHR(%1%)"         ,"CHR(%1%)"
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "CURRENT_DATE ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "LEN(", "LENGTH(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "DAY(", "EXTRACT('DAY' FROM ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "MONTH(", "EXTRACT('MONTH' FROM ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "YEAR(", "EXTRACT('YEAR' FROM ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPEAT(")
+            Case cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER"
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "GETDATE() ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPLICATE(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "SUBSTR(", "SUBSTRING(")
+       //          '  {"STR(%1%,%2%,%3%)"      ,"STR(%1%,%2%,%3%)"},;
+      //           '       {"STR(%1%,%2%)"       ,"STR(%1%,%2%,0)"},;
+      //             '     {"DTOS(%1%)"        ,"CONVERT(char(8), %1%,11)"},;
+      //            '      {"IIF(%1%,%2%,%3%)"     ,"CASE WHEN %1% THEN %2% ELSE %3% END"},;
+            
+      //      Case "ODBC"
+            /*
+        '       {"STR(%1%,%2%,%3%)"      ,"{fn RIGHT({fn SPACE(%2%)}+{fn CONVERT({fn ROUND(%1%,%3%)},SQL_VARCHAR)},%2%)}"},;
+        '                {"STR(%1%,%2%)"       ,"{fn RIGHT({fn SPACE(%2%)}+{fn CONVERT({fn ROUND(%1%,0)},SQL_VARCHAR)},%2%)}"},;
+         '               {"SUBSTR(%1%,%2%,%3%)"    ,"{fn SUBSTRING(%1%,%2%,%3%)}"},;
+          '              {"DTOS(%1%)"        ,"{fn CONVERT({fn YEAR(%1%)}, SQL_VARCHAR)}+{fn RIGHT('0'+ {fn CONVERT({fn MONTH(%1%)},SQL_VARCHAR)},2)}+{fn RIGHT('0'+ {fn CONVERT({fn DAYOFMONTH(%1%)},SQL_VARCHAR)},2)}"},;
+      '                  {"DAY(%1%)"         ,"{fn DAYOFMONTH(%1%)}"},;
+     '                   {"MONTH(%1%)"       ,"{fn MONTH(%1%)}"},;
+      '                  {"YEAR(%1%)"        ,"{fn YEAR(%1%)}"},;
+         '               {"UPPER(%1%)"       ,"{fn UCASE(%1%)}"},;
+         '               {"LOWER(%1%)"       ,"{fn LCASE(%1%)}"},;
+         '               {"LEFT(%1%,%2%)"      ,"{fn LEFT(%1%,%2%)}"},;
+          '              {"LEN(%1%)"         ,"{fn LENGTH(%1%)}"},;
+         '               {"CHR(%1%)"         ,"{fn CHAR(%1%)}"},;
+         '               {"ASC(%1%)"         ,"{fn ASCII(%1%)}"},;
+         '               {"TODAY()"          ,"{fn CURDATE()}"},;
+         '               {"REPL(%1%,%2%)"      ,"{fn REPEAT(%1%,%2%)}"},;
+         '               {"TRIM(%1%)"        ,"{fn RTRIM(%1%)}"},;
+         ''               {"ALLTRIM(%1%)"       ,"{fn LTRIM( {fn RTRIM(%1%) } )}"},;
+         '               {"RIGHT(%1%)"       ,"{fn RIGHT(%1%)}"},;
+            */
+           
+           // Case "ADS", "ADVANTAGE"
+           
+           
+        //    Case "OLEDB"
+            /*
+   '    {"STR(%1%,%2%,%3%)"      ,"{fn RIGHT({fn SPACE(%2%)}+{fn CONVERT({fn ROUND(%1%,%3%)},SQL_VARCHAR)},%2%)}"},;
+   '                     {"STR(%1%,%2%)"       ,"{fn RIGHT({fn SPACE(%2%)}+{fn CONVERT({fn ROUND(%1%,0)},SQL_VARCHAR)},%2%)}"},;
+   '                     {"SUBSTR(%1%,%2%,%3%)"    ,"{fn SUBSTRING(%1%,%2%,%3%)}"},;
+   '                     {"DTOS(%1%)"        ,"{fn CONVERT({fn YEAR(%1%)}, SQL_VARCHAR)}+{fn RIGHT('0'+ {fn CONVERT({fn MONTH(%1%)},SQL_VARCHAR)},2)}+{fn RIGHT('0'+ {fn CONVERT({fn DAYOFMONTH(%1%)},SQL_VARCHAR)},2)}"},;
+   '                     {"DAY(%1%)"         ,"{fn DAYOFMONTH(%1%)}"},;
+   '                     {"MONTH(%1%)"       ,"{fn MONTH(%1%)}"},;
+   '                     {"YEAR(%1%)"        ,"{fn YEAR(%1%)}"},;
+   '                     {"UPPER(%1%)"       ,"{fn UCASE(%1%)}"},;
+   '                     {"LOWER(%1%)"       ,"{fn LCASE(%1%)}"},;
+   '                     {"LEN(%1%)"         ,"{fn LENGTH(%1%)}"},;
+   '                     {"CHR(%1%)"         ,"{fn CHAR(%1%)}"},;
+   '                     {"ASC(%1%)"         ,"{fn ASCII(%1%)}"},;
+   '                     {"TODAY()"          ,"{fn CURDATE()}"},;
+   '                     {"REPL(%1%,%2%)"      ,"{fn REPEAT(%1%,%2%)}"},;
+   '                     {"TRIM(%1%)"        ,"{fn RTRIM(%1%)}"},;
+   '                     {"ALLTRIM(%1%)"       ,"{fn LTRIM( {fn RTRIM(%1%) } )}"},;
+   '                     {"LEFT(%1%,%2%)"      ,"{fn LEFT(%1%,%2%)}"},;
+   '                     {"RIGHT(%1%)"       ,"{fn RIGHT(%1%)}"},;
+            */
+            Case "ORACLE", "OCI"
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "SYSDATE ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "LTRIM(RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "LEN(", "LENGTH(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPLICATE(")
+          //   '  {"LEFT(%1%,%2%)"     ,"SUBSTR(%1%,1,%2%)"},;
+           //  '           {"DTOS(%1%)"        ,"TO_CHAR(%1%,'YYYYMMDD')"},;
+           //  '           {"DAY(%1%)"         ,"TO_NUM(TO_CHAR(%1%,'DD'))"},;
+           //  '           {"MONTH(%1%)"       ,"TO_NUM(TO_CHAR(%1%,'MM'))"},;
+           //  '           {"YEAR(%1%)"        ,"TO_NUM(TO_CHAR(%1%,'YYYY'))"},;
+            
+            Case lMDB .OR. lACCDB
+                 cSQLCNV = STRTRAN(cSQLCNV, "CURRENTDATETIME", " now ")
+   
+     EndCASE
+RETURN cSQLCNV
+
