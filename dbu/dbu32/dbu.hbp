@@ -29,7 +29,8 @@ rddads.hbc
 #
 rddbm.hbc
 
-rddado.hbc
+#teste com direto abaixo
+#rddado.hbc
 #
 #nativas sqlite,libmysql,libpg,odbc
 #
@@ -69,6 +70,7 @@ d:\develop\harbour\dbu\sql2dbf.prg
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
+d:\develop\harbour\dbu\adordd.prg
 d:\develop\harbour\dbu\mdb2dbf.prg -b
 #
 # mysql libmysql
