@@ -256,25 +256,37 @@ Function ADOMsgAlert( cMsg )
 *
 *---------------------------------------------------------
 Function ADOSetDriver( StrDatabase, StrSenha, StrUsuario, StrServer, StrPort )
+   LOCAL cEXTENSAO
+   LOCAL cDIRETORIO
+   LOCAL cNAME
+   
+   cNAME:=""
+   cEXTENSAO:=""
+   cDIRETORIO:=""
+   
+   
+   hb_FNameSplit( StrDatabase,@cDIRETORIO, @cName, @CEXTENSAO )
+   cEXTENSAO=LOWER(cEXTENSAO)
+
    //public cADORDD := iif( cRDDName=NIL, "DBASE", cRDDName )
    StrConnection := ""
    StrDriver     := ADORDDDefault()
-   if StrDriver = "DBASE"
+   if StrDriver = "DBASE" //.DBF
       StrConnection := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+StrDatabase+";Extended Properties=dBASE IV;"
    endif
-   if StrDriver = "ACCESS" .OR. StrDriver = "MDB" // ADOMDB
+   if StrDriver = "ACCESS" .OR. StrDriver = "MDB" .OR. cEXTENSAO == ".mdb" // ADOMDB .MDB
       StrConnection := "Provider= MicroSoft.Jet.OLEDB.4.0;Data Source="+StrDatabase+";"
    endif
-   if StrDriver =  "ACCDB"
+   if StrDriver =  "ACCDB" .OR. cEXTENSAO == ".accdb"
       StrConnection:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+StrDatabase+";Mode=Share Deny None"
    endif
-   if StrDriver =  "SQLITE"
+   if StrDriver =  "SQLITE" .or. cEXTENSAO == ".sqlite" .or. cEXTENSAO == ".sqlite3" .or. cEXTENSAO == ".fossil" .or. cEXTENSAO == ".db3"
       StrConnection:="Driver={SQLite3 ODBC Driver};Database=" + StrDatabase + ";"
    endif
    if StrDriver="PGSQL" .OR. StrDriver="POSTGRESQL"
       StrConnection:="DRIVER={PostgreSQL ANSI};Server="+StrDatabase+";Uid="+StrUsuario+";Pwd="+StrSenha //+";pqopt={search_path=myschema,public}" //32 driver versao 
    endif
-   if StrDriver = "FIREBIRD" // ADOGDB
+   if StrDriver = "FIREBIRD" .or. cEXTENSAO == ".fgb" .or. cEXTENSAO == ".gdb"// ADOGDB
       StrConnection := "DRIVER=Firebird/InterBase(r) driver; UID="+StrUsuario+"; PWD="+StrSenha+"; DBNAME="+StrDatabase
    endif
    if StrDriver = "MYSQL" // ADOMySQL
@@ -287,7 +299,7 @@ Function ADOSetDriver( StrDatabase, StrSenha, StrUsuario, StrServer, StrPort )
    if StrDriver = "MARIADB"
       StrConnection:="DRIVER={MariaDB ODBC 3.2 Driver};SERVER="+StrServer+";UID="+StrUsuario+";PASSWORD="+StrSenha
    endif
-   if StrDriver = "PARADOX" // ADOPX
+   if StrDriver = "PARADOX" // ADOPX .DB
       StrConnection := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+StrDatabase+";Extended Properties=Paradox 5.x;" 
    endif
    if StrDriver = "SQL" .OR. StrDriver = "MSSQL" .OR. StrDriver = "SQLSERVER"
@@ -296,10 +308,10 @@ Function ADOSetDriver( StrDatabase, StrSenha, StrUsuario, StrServer, StrPort )
    if ADORDDDefault() == "XMLDB" // ADOXML
       StrConnection := "Provider=MSPersist"
    endif
-   if ADORDDDefault() == "XML" // ADOXML
+   if ADORDDDefault() == "XML" .OR. cEXTENSAO == ".xml"// ADOXML .XML
       StrConnection := "Provider=MSDAOSP;Data Source="+StrDatabase+";" //MSXML2.DSOControl.2.6"
    endif
-   if StrDriver = "XLS" // ADOXLS
+   if StrDriver = "XLS" .OR. cEXTENSAO == ".xls" // ADOXLS .XLS
       StrConnection := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+StrDatabase+";Extended Properties=Excel 8.0;HDR=Yes;IMEX=1" 
    endif
    if StrDriver = "REMOTE" // ADORDS

@@ -240,6 +240,7 @@ ENDIF
 
 
 MDT("abrindo arquivo de origem: "+cMDBARQ)
+altd()
 opencmdbarq()
 nLASTREC:=   reccount() 
 zei_fort( nLASTREC,,,0)
@@ -253,13 +254,12 @@ IF tDOC=14
    IF lMDB .OR. lACCDB
       //Ainda nao implantado testes com catalog ver outras opcoes
       //utilizando sqltodbfstru
+      altd()
       aSTRU:=sqltodbfstru(aSTRU)
-      //altd()
       //aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
    ELSE
       aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
    ENDIF   
-   altd()
    cALIASADO:=ALIAS()
    DBCreate(ctabela+"_"+Ctiposql, aSTRU) 
    DBUseArea( .T. ,  , ctabela+"_"+Ctiposql,  , .F. , .F. ) 
@@ -338,6 +338,9 @@ for i:=1 to NFIM
      
      IF aStruct[i, DBS_TYPE]="I" .AND. (lmdb .or. Laccdb)
         aStruct[i, DBS_TYPE]:="N"
+        //DBS_LEN TRAS precision int2 int4 int8
+        //Ajustustando o tamanho precisao para numerico para  2->4  4->8  8->16
+        aStruct[i, DBS_LEN]=aStruct[i, DBS_LEN]*2
      ENDIF
      
      IF aStruct[i, DBS_TYPE]="L" .AND. (lmdb .or. Laccdb) .AND. aStruct[i, DBS_LEN]>1
@@ -1234,9 +1237,21 @@ oConn:=NIL
 RETURN .t.
 
 
-FUNCTION CreateAccessDatabase( cDatabase, cPassword, lEncrypt )
+FUNCTION CreateAccessDatabase( cDatabase, cUserName,cPassword, lEncrypt )
 
    LOCAL oCatalog // AS ADOX.Catalog
+   LOCAL cEXTENSAO
+   LOCAL cDIRETORIO
+   LOCAL cNAME
+   
+    cNAME:=""
+   cEXTENSAO:=""
+   cDIRETORIO:=""
+   
+   
+   hb_FNameSplit( cDataBase,@cDIRETORIO, @cName, @CEXTENSAO )
+   cEXTENSAO=LOWER(cEXTENSAO)
+
 
    IIF( cPassword == NIL, cPassword := "''", NIL )
    IIF( lEncrypt == NIL, lEncrypt := .F., NIL )
@@ -1253,23 +1268,34 @@ FUNCTION CreateAccessDatabase( cDatabase, cPassword, lEncrypt )
    JetEngineType_Ace12 = 6
   */
    
-   
- if loledb //32 bits mdb
-   oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" +;
-                      "Data Source=" + cDatabase + ";" +;
-                      "JET OLEDB:Engine Type=5;" )
- else
-   if cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" //64 bits mdb
-     oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.12;" +;
-                        "Data Source=" + cDatabase + ";" +;
-                        "JET OLEDB:Engine Type=5;" )
-  else             //accdb  32 ou 64 bits    
-    oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.12;" +;
-                        "Data Source=" + cDatabase + ";" +;
-                        "JET OLEDB:Engine Type=6;" )
-  endif
-endif   
-
+ IF ! hb_FileExists( cDataBase )  
+    do case
+       case lACCDB .OR. cEXTENSAO == ".accdb"
+            oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.12;" +;
+                            "Data Source=" + cDatabase + ";" +;
+                            "JET OLEDB:Engine Type=6;" )
+       CASE lMDB   .OR. cEXTENSAO == ".mdb"
+          if loledb //32 bits mdb
+             oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" +;
+                                "Data Source=" + cDatabase + ";" +;
+                                "JET OLEDB:Engine Type=5;" )
+            else
+               oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.12;" +;
+                                  "Data Source=" + cDatabase + ";" +;
+                                  "JET OLEDB:Engine Type=5;" )
+          ENDIF
+       CASE cTIPOSQL="SQLITE" .or. cEXTENSAO == ".sqlite"  .or. cEXTENSAO == ".sqlite3"  .or. cEXTENSAO == ".fossil" .or. cEXTENSAO== ".db3"  
+           oCatalog:Create( "DRIVER=SQLite3 ODBC Driver;Database=" + cDataBase )
+       CASE cTIPOSQL="XLS" .or. cEXTENSAO == ".xls" 
+           oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False" )
+       CASE cEXTENSAO == ".db" .OR. cTIPOSQL == "PARADOX"
+          oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
+       CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cTIPOSQL == "FIREBIRD"
+          oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
+          
+    endcase
+    oCatalog := NIL //NULL_OBJECT
+endif
 /* exemplo pass e ou encripitado
    oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" +;
                     "Data Source=" + cDatabase + ";" +;
@@ -1277,11 +1303,6 @@ endif
                     "JET OLEDB:Engine Type=5;" +;
                     "JET OLEDB:Encrypt Database=" + IIF(lEncrypt, "TRUE", "FALSE" ) )
 */
-
-                    
-
-   oCatalog := NIL //NULL_OBJECT
-
 RETURN
 
 

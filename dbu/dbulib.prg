@@ -93,7 +93,7 @@ WHILE .T.
     OPCAO(  5, 24, "&ADORDD ODBC         ", 65 ) //A 
     OPCAO(  6, 24, "&RDD SQLMIX          ", 82 ) //R 
     OPCAO(  7, 24, "&ODBC                ", 79 ) //D 
-    OPCAO(  5, 24, "ADO&X ODBC           ", 88 ) //X
+    OPCAO(  8, 24, "ADO&X ODBC           ", 88 ) //X
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1 .AND. cTIPOSQL="PGSQL"

@@ -141,42 +141,56 @@ STATIC FUNCTION ADO_CREATE( nWA, aOpenInfo )
    LOCAL oCatalog := win_oleCreateObject( "ADOX.Catalog" )
    LOCAL aWAData := USRRDD_AREADATA( nWA )
    LOCAL oError, n
+   
+    LOCAL cEXTENSAO
+   LOCAL cDIRETORIO
+   LOCAL cNAME
+   
+    cNAME:=""
+   cEXTENSAO:=""
+   cDIRETORIO:=""
+   
+   
+   hb_FNameSplit( cDataBase,@cDIRETORIO, @cName, @CEXTENSAO )
+   cEXTENSAO=LOWER(cEXTENSAO)
+   
+   //Lower( Right( cDataBase, 7 ) ) == ".sqlite"
 
    DO CASE
  
     
-   CASE Lower( Right( cDataBase, 6 ) ) == ".accdb" .and. Upper( cDbEngine ) == "ACCDB"
+   CASE cEXTENSAO == ".accdb" .and. Upper( cDbEngine ) == "ACCDB"
       IF ! hb_FileExists( cDataBase )
          oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + cDataBase )
       ENDIF
       oConnection:Open( "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + cDataBase )  
       
-   CASE Upper( cDbEngine ) == "SQLITE"  .or. Lower( Right( cDataBase, 7 ) ) == ".sqlite"  .or. Lower( Right( cDataBase, 8 ) ) == ".sqlite3"  .or. Lower( Right( cDataBase, 7 ) ) == ".fossil" .or. Lower( Right( cDataBase, 4 ) ) == ".db3" 
+   CASE Upper( cDbEngine ) == "SQLITE"  .or. cEXTENSAO == ".sqlite"  .or. cEXTENSAO == ".sqlite3"  .or. cEXTENSAO == ".fossil" .or. cEXTENSAO== ".db3"  
       IF ! hb_FileExists( cDataBase )
          oCatalog:Create( "DRIVER=SQLite3 ODBC Driver;Database=" + cDataBase )
       ENDIF
       oConnection:Open( "DRIVER=SQLite3 ODBC Driver;Database=" + cDataBase )  
  
    
-   CASE Lower( Right( cDataBase, 4 ) ) == ".mdb" .OR. Upper( cDbEngine ) == "ACCESS"
+   CASE cEXTENSAO == ".mdb" .OR. Upper( cDbEngine ) == "ACCESS"
       IF ! hb_FileExists( cDataBase )
          oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase )
       ENDIF
       oConnection:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase )
 
-   CASE Lower( Right( cDataBase, 4 ) ) == ".xls"
+   CASE cEXTENSAO == ".xls" .OR. Upper( cDbEngine ) == "XLS"
       IF ! hb_FileExists( cDataBase )
          oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False" )
       ENDIF
       oConnection:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False" )
 
-   CASE Lower( Right( cDataBase, 3 ) ) == ".db" .OR. Upper( cDbEngine ) == "PARADOX"
+   CASE cEXTENSAO == ".db" .OR. Upper( cDbEngine ) == "PARADOX"
       IF ! hb_FileExists( cDataBase )
          oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
       ENDIF
       oConnection:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
 
-   CASE Lower( Right( cDataBase, 4 ) ) == ".fdb" .OR. Upper( cDbEngine ) == "FIREBIRD"
+   CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. Upper( cDbEngine ) == "FIREBIRD"
       IF ! hb_FileExists( cDataBase )
          oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
       ENDIF
@@ -233,7 +247,7 @@ STATIC FUNCTION ADO_CREATE( nWA, aOpenInfo )
    END SEQUENCE
 
    BEGIN SEQUENCE WITH {| oErr | Break( oErr ) }
-      IF Lower( Right( cDataBase, 4 ) ) == ".fdb"
+      IF cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb"
          oConnection:Execute( "CREATE TABLE " + cTableName + " (" + StrTran( StrTran( aWAData[ WA_SQLSTRUCT ], "[", '"' ), "]", '"' ) + ")" )
       ELSE
          oConnection:Execute( "CREATE TABLE [" + cTableName + "] (" + aWAData[ WA_SQLSTRUCT ] + ")" )
@@ -314,12 +328,19 @@ STATIC FUNCTION ADO_OPEN( nWA, aOpenInfo )
    LOCAL cName, aField, oError, nResult
    LOCAL oRecordSet, nTotalFields, n
    LOCAL cWAENGINE
-   LOCAL cWARQNAME
+   LOCAL cEXTENSAO
+   LOCAL cDIRETORIO
+   LOCAL cENGINE
+   
+   cNAME:=""
+   cEXTENSAO:=""
+   cDIRETORIO:=""
 
    /* When there is no ALIAS we will create new one using file name */
    IF Empty( aOpenInfo[ UR_OI_ALIAS ] )
-      hb_FNameSplit( aOpenInfo[ UR_OI_NAME ],, @cName )
+      hb_FNameSplit( aOpenInfo[ UR_OI_NAME ],@cDIRETORIO, @cName, @CEXTENSAO )
       aOpenInfo[ UR_OI_ALIAS ] := cName
+      cEXTENSAO=LOWER(cEXTENSAO)
    ENDIF
 
    IF Empty( aOpenInfo[ UR_OI_CONNECT ] )
@@ -331,17 +352,18 @@ STATIC FUNCTION ADO_OPEN( nWA, aOpenInfo )
       aWAData[ WA_SERVER ] := t_cServer
       aWAData[ WA_ENGINE ] := t_cEngine
       aWAData[ WA_CONNOPEN ] := .T.
+      cENGINE                := aWAData[ WA_ENGINE ]
 
       DO CASE
 
-      CASE Lower( Right( aOpenInfo[ UR_OI_NAME ], 6 ) ) == ".accdb" .or. aWAData[ WA_ENGINE ]  == "ACEOLEDB"
+      CASE cEXTENSAO == ".accdb" .or. cENGINE  == "ACEOLEDB"  .or. cENGINE  == "ACCDB" .or. cENGINE  == "ACCDB64" .or. cENGINE  == "MDB64"
          IF Empty( aWAData[ WA_PASSWORD ] )
             aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] )
          ELSE
             aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Jet OLEDB:Database Password=" + AllTrim( aWAData[ WA_PASSWORD ] ) )
          ENDIF
     
-     CASE aWAData[ WA_ENGINE ]  == "SQLITE"
+     CASE cENGINE  == "SQLITE" .or. cEXTENSAO == ".sqlite" .or. cEXTENSAO == ".sqlite3" .or. cEXTENSAO == ".fossil" .or. cEXTENSAO == ".db3"
          IF Empty( aWAData[ WA_PASSWORD ] )
             aWAData[ WA_CONNECTION ]:Open( "DRIVER=SQLite3 ODBC Driver;Database=" + aOpenInfo[ UR_OI_NAME ] )
          ELSE
@@ -349,65 +371,65 @@ STATIC FUNCTION ADO_OPEN( nWA, aOpenInfo )
          ENDIF  
       
       
-      CASE Lower( Right( aOpenInfo[ UR_OI_NAME ], 4 ) ) == ".mdb" .or. aWAData[ WA_ENGINE ]  == "ACCESS"
+      CASE cEXTENSAO == ".mdb" .or. cENGINE == "ACCESS" .or. cENGINE == "MDB"//aWAData[ WA_ENGINE ]  == "ACCESS" //Lower( Right( aOpenInfo[ UR_OI_NAME ], 4 ) ) == ".mdb"
          IF Empty( aWAData[ WA_PASSWORD ] )
             aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] )
          ELSE
             aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Jet OLEDB:Database Password=" + AllTrim( aWAData[ WA_PASSWORD ] ) )
          ENDIF
 
-      CASE Lower( Right( aOpenInfo[ UR_OI_NAME ], 4 ) ) == ".xls"
+      CASE cEXTENSAO == ".xls" .or. cENGINE == "XLS"
          aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False" )
 
-      CASE Lower( Right( aOpenInfo[ UR_OI_NAME ], 4 ) ) == ".dbf"
+      CASE cENGINE = "DBASE"
          aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Extended Properties=dBASE IV;User ID=Admin;Password=;" )
 
-      CASE Lower( Right( aOpenInfo[ UR_OI_NAME ], 3 ) ) == ".db" .or. aWAData[ WA_ENGINE ]  == "PARADOX"
-         aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Extended Properties='Paradox 3.x';" )
+      CASE cEXTENSAO == ".db" .or. cENGINE  == "PARADOX"
+         aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Extended Properties='Paradox 5.x';" )
 
-      CASE aWAData[ WA_ENGINE ] == "MARIADB"  
+      CASE cENGINE == "MARIADB"  
          aWAData[ WA_CONNECTION ]:Open( "DRIVER={MariaDB ODBC 3.2 Driver};" + ;
             "server=" + aWAData[ WA_SERVER ] + ;
             ";database=" + aOpenInfo[ UR_OI_NAME ] + ;
             ";uid=" + aWAData[ WA_USERNAME ] + ;
             ";pwd=" + aWAData[ WA_PASSWORD ] )
 
-      CASE aWAData[ WA_ENGINE ] == "PGSQL"  .OR. aWAData[ WA_ENGINE ] == "POSTGRESQL"
+      CASE cENGINE == "PGSQL"  .OR. cENGINE == "POSTGRESQL"
          aWAData[ WA_CONNECTION ]:Open( "DRIVER={PostgreSQL ANSI};" + ;
             "server=" + aWAData[ WA_SERVER ] + ;
             ";database=" + aOpenInfo[ UR_OI_NAME ] + ;
             ";uid=" + aWAData[ WA_USERNAME ] + ;
             ";pwd=" + aWAData[ WA_PASSWORD ] )
 
-      CASE aWAData[ WA_ENGINE ] == "PGSQL64"  
+      CASE cENGINE == "PGSQL64"  
          aWAData[ WA_CONNECTION ]:Open( "DRIVER={PostgreSQL ANSI(x64)};" + ;
             "server=" + aWAData[ WA_SERVER ] + ;
             ";database=" + aOpenInfo[ UR_OI_NAME ] + ;
             ";uid=" + aWAData[ WA_USERNAME ] + ;
             ";pwd=" + aWAData[ WA_PASSWORD ] )
   
-      CASE aWAData[ WA_ENGINE ] == "MYSQL"  //DRIVER={MySQL ODBC 3.51 Driver} Driver={MySQL ODBC 8.0 ANSI Driver};Server=hostname;Database= dbdata;Option=3;
+      CASE cENGINE == "MYSQL"  //DRIVER={MySQL ODBC 3.51 Driver} Driver={MySQL ODBC 8.0 ANSI Driver};Server=hostname;Database= dbdata;Option=3;
          aWAData[ WA_CONNECTION ]:Open( "DRIVER={MySQL ODBC 8.0 ANSI Driver};" + ;
             "server=" + aWAData[ WA_SERVER ] + ;
             ";database=" + aOpenInfo[ UR_OI_NAME ] + ;
             ";uid=" + aWAData[ WA_USERNAME ] + ;
             ";pwd=" + aWAData[ WA_PASSWORD ] )
 
-      CASE aWAData[ WA_ENGINE ] == "MYSQL64"  //DRIVER={MySQL ODBC 3.51 Driver} Driver={MySQL ODBC 8.0 ANSI Driver};Server=hostname;Database= dbdata;Option=3;
+      CASE cENGINE == "MYSQL64"  //DRIVER={MySQL ODBC 3.51 Driver} Driver={MySQL ODBC 8.0 ANSI Driver};Server=hostname;Database= dbdata;Option=3;
          aWAData[ WA_CONNECTION ]:Open( "DRIVER={MySQL ODBC 9.0 ANSI Driver};" + ;
             "server=" + aWAData[ WA_SERVER ] + ;
             ";database=" + aOpenInfo[ UR_OI_NAME ] + ;
             ";uid=" + aWAData[ WA_USERNAME ] + ;
             ";pwd=" + aWAData[ WA_PASSWORD ] )
 
-      CASE aWAData[ WA_ENGINE ] == "SQL" .OR. aWAData[ WA_ENGINE ] == "SQLSERVER" .OR. aWAData[ WA_ENGINE ] == "MSSQL"
+      CASE cENGINE == "SQL" .OR. cENGINE == "SQLSERVER" .OR. cENGINE == "MSSQL"
          aWAData[ WA_CONNECTION ]:Open( "Provider=SQLOLEDB;" + ;
             "server=" + aWAData[ WA_SERVER ] + ;
             ";database=" + aOpenInfo[ UR_OI_NAME ] + ;
             ";uid=" + aWAData[ WA_USERNAME ] + ;
             ";pwd=" + aWAData[ WA_PASSWORD ] )
 
-      CASE aWAData[ WA_ENGINE ] == "ORACLE" ,OR, aWAData[ WA_ENGINE ] == "OCI"
+      CASE cENGINE="ORACLE" .OR. cENGINE="OCI" //aWAData[ WA_ENGINE ] == "ORACLE" .OR. aWAData[ WA_ENGINE ] == "OCI"
          aWAData[ WA_CONNECTION ]:Open( "Provider=MSDAORA.1;" + ;
             "Persist Security Info=False" + ;
             iif( Empty( aWAData[ WA_SERVER ] ), ;
@@ -415,7 +437,7 @@ STATIC FUNCTION ADO_OPEN( nWA, aOpenInfo )
             ";User ID=" + aWAData[ WA_USERNAME ] + ;
             ";Password=" + aWAData[ WA_PASSWORD ] )
 
-      CASE aWAData[ WA_ENGINE ] == "FIREBIRD"
+      CASE cENGINE == "FIREBIRD" .or. cEXTENSAO == ".fgb" .or. cEXTENSAO == ".gdb"
          aWAData[ WA_CONNECTION ]:Open( "Driver=Firebird/InterBase(r) driver;" + ;
             "Persist Security Info=False" + ;
             ";Uid=" + aWAData[ WA_USERNAME ] + ;
