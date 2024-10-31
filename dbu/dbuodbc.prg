@@ -242,7 +242,6 @@ FOR i := 1 TO nFIM
     AADD(aSTRU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
 NEXT
 
-altd()
 
 avalor:={}
 cDESTINO:=cTABELAX+"_"+cTIPOSQL

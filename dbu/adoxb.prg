@@ -52,12 +52,12 @@ Function ADOConnect( StrDriver )
    nIndexOrder        := 1
    StrConnection      := StrDriver
    AADD( aADOConection, StrDriver ) // Controla numero de conexoes
-   nConnection        := len( aADOConection )
-   oADOConection      := TOLEAUTO():New("ADODB.connection")
-   oADOStream         := TOLEAUTO():New("ADODB.Stream")
-   oADOErrDescription := TOLEAUTO():New("ADODB.Err")
-   oADOIndex          := TOLEAUTO():New("ADOX.Index")
-   oADOCatalog        := TOLEAUTO():New("ADOX.Catalog")
+   nConnection        :=  len( aADOConection )
+   oADOConection      :=  win_oleCreateObject( "ADODB.Connection" )//TOLEAUTO():New("ADODB.connection")
+   oADOStream         :=  win_oleCreateObject( "ADODB.Stream" )//TOLEAUTO():New("ADODB.Stream")
+   oADOErrDescription :=  win_oleCreateObject( "ADODB.Err" )//TOLEAUTO():New("ADODB.Err")
+   oADOIndex          :=  win_oleCreateObject( "ADOX.Index" )//TOLEAUTO():New("ADOX.Index")
+   oADOCatalog        :=  win_oleCreateObject( "ADOX.Catalog" )//TOLEAUTO():New("ADOX.Catalog")
    oADOConection:CommandTimeOut    := 200
    oADOConection:ConnectionTimeOut := 10
    oADOConection:CursorLocation    := adUseClient
@@ -70,7 +70,7 @@ Function ADOConnect( StrDriver )
 *---------------------------------------------------------
 #ifdef _ADO_Harbour_
 Function ADODBCREATE( cDatabase )
-   oADOCreateCatalog := TOLEAUTO():New("ADOX.Catalog")
+   oADOCreateCatalog := win_oleCreateObject( "ADOX.Catalog" ) //TOLEAUTO():New("ADOX.Catalog")
    StrConnection := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase
    oADOCreateCatalog:Create( StrConnection )
    oADOCreateCatalog := nil
@@ -136,7 +136,7 @@ Function ADOCREATE( cTable, aFields )
 #ifdef _ADO_Harbour_
 Function ADOIndex( cTable, cIDXField, cIDXName, cIDXAscend )
    local adSortAscending := 1, adSortDescending := 2
-   local oADOTable := TOLEAUTO():New("ADOX.Table")
+   local oADOTable := win_oleCreateObject( "ADOX.Table" ) //TOLEAUTO():New("ADOX.Table")
    cIDXAscend := iif( cIDXAscend = nil, .t., cIDXAscend )
    if .not. ADOFILE( "INDEXES" )
       oADOCatalog:ActiveConnection := StrConnection
@@ -147,7 +147,7 @@ Function ADOIndex( cTable, cIDXField, cIDXName, cIDXAscend )
    endif
    AADD( aIndexOrder, cTable )
    nIndexOrder        := len( aIndexOrder )
-   oADOIndex[nIndexOrder] := TOLEAUTO():New("ADOX.Index")
+   oADOIndex[nIndexOrder] := win_oleCreateObject( "ADOX.Index" )  //TOLEAUTO():New("ADOX.Index")
    oADOIndex[nIndexOrder]:Name       := cIDXName
    oADOIndex[nIndexOrder]:Columns:Append( cIDXField )
    oADOIndex[nIndexOrder]:Columns( cIDXField ):SortOrder = iif( cIDXAscend, adSortAscending, adSortDescending )
@@ -181,7 +181,7 @@ Function ADOUse( cDatabase, lShared )
       AADD( aRecordSet, cDatabase )
       cRecordSet := cDatabase
       nRecordSet := len( aRecordSet )
-      oRS := oRecordSet[nRecordSet] := TOleAuto():New( "ADODB.Recordset" )
+      oRS := oRecordSet[nRecordSet] :=  win_oleCreateObject( "ADODB.Recordset" ) //TOleAuto():New( "ADODB.Recordset" )
       if "XML" $ cADORDD
          oRecordSet[nRecordSet]:Open( cDatabase, StrConnection, 1, 3 )
       else
@@ -227,7 +227,7 @@ Function ADOConnectRemote( StrDSN, StrServer )
    aIndexOrder   := {}
    nIndexOrder   := 1
    StrConnection := StrDriver
-   oADOConection := TOLEAUTO():New("RDS.DataControl")
+   oADOConection :=  win_oleCreateObject( "RDS.DataControl" ) //TOLEAUTO():New("RDS.DataControl")
    oADOConection:ExecuteOptions := adcExecAsync
    oADOConection:Connect        := "DSN=" + StrDriver
    oADOConection:Server         := StrServer

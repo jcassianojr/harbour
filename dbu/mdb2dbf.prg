@@ -240,7 +240,6 @@ ENDIF
 
 
 MDT("abrindo arquivo de origem: "+cMDBARQ)
-altd()
 opencmdbarq()
 nLASTREC:=   reccount() 
 zei_fort( nLASTREC,,,0)
@@ -254,7 +253,6 @@ IF tDOC=14
    IF lMDB .OR. lACCDB
       //Ainda nao implantado testes com catalog ver outras opcoes
       //utilizando sqltodbfstru
-      altd()
       aSTRU:=sqltodbfstru(aSTRU)
       //aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
    ELSE

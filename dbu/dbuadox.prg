@@ -24,11 +24,7 @@ lACCDB =.F.
 
 pegcfgbanco()
 
-//escolhe o arquivos
-IF cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" .OR. cTIPOSQL="SQLITE"
-   OPENTIPOARQ()
-ENDIF
-
+//Cria variaveis e inicializa obrigatorio
 ADOSetRDD( cTIPOSQL )
 
 WHILE .T.
@@ -46,7 +42,10 @@ WHILE .T.
        CASE KEY=1
             adoxcriadatabase()
        CASE KEY=2
-            mdbdatabases()
+            IF lMDB .OR. lACCDB
+            ELSE
+                mdbdatabases()
+            ENDIF    
        CASE KEY=3
             adoximpdbf()
        CASE KEY=4
@@ -94,8 +93,9 @@ function adoximpdbf()
     LOCAL nCAMPOS
     LOCAL cCAMPO
     
+    cMDBARQ:=OPENTIPOARQ()
+    
     aINDICES:={}
-
     cTABLE:=SPACE(30)
     mdt("escolha origem")
     tipodbfesc()
@@ -123,7 +123,9 @@ function adoximpdbf()
         adoxexecsql(Aindices) //Executa comando unico ou array de comandos
     endif    
     
-   cCONN=GERACONN(cDATABASEX,.F.)
+   cCONN=GERACONN(cDATABASEX)
+
+   altd()
    ADOCONNECT(cCONN)
    ADOUSE(cTABLE)
    ADOSELECT(cTABLE)
@@ -146,7 +148,7 @@ function adoximpdbf()
       dbskip()
    enddo
    dbclosearea()
-   ADOCLOSEALL()
+   ADOCLOSE()
    ADODISCONNECT()
 
 

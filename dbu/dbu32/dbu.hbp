@@ -90,8 +90,8 @@ d:\develop\harbour\dbu\dbumix.prg
 #
 d:\develop\harbour\dbu\dbuodbc.prg 
 #
-d:\develop\harbour\dbu\adoxb.prg
-d:\develop\harbour\dbu\dbuadox.prg
+d:\develop\harbour\dbu\adoxb.prg   -b
+d:\develop\harbour\dbu\dbuadox.prg -b
 
 
 d:\develop\harbour\objmgw\netdbf.prg
