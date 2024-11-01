@@ -23,6 +23,7 @@
 
 #include "try.ch"
 #include "adoxb.ch"
+#include "hbusrrdd.ch"
 #ifndef _ADO_xHarbour_
         #define _ADO_Harbour_
 #endif
@@ -369,7 +370,7 @@ LOCAL nCAMPOS
 LOCAL i
 LOCAL aRETU:={}
 LOCAL cCAMPO
-LOCAL cTIPO
+LOCAL cType
 LOCAL nLONG
 LOCAL nDECIMAIS
 LOCAL nTIPO
@@ -379,13 +380,27 @@ FOR I=1 TO nCAMPOS //recorset inicia com 0 usando i-1
     nTipo := oRecordSet[nRecordSet]:Fields( cCAMPO ):Type
     cType := TypeDat(nTipo,cCAMPO)
     nLong := oRecordSet[nRecordSet]:Fields( cCAMPO ):DefinedSize
-    IF cTIPO="N"
+    IF cType="N"
        nLong := oRecordSet[nRecordSet]:Fields( cCAMPO ):Precision
     ENDIF
     nDECIMAIS:=0
-    AADD(aRETU,{cCAMPO,cTIPO,nlong,nDECIMAIS,nTIPO})
+    AADD(aRETU,{cCAMPO,cType,nlong,nDECIMAIS,nTIPO})
+   
+     /* 
+    'msgbox .Fields(0).Name
+    'msgbox .Fields(0).Precision
+    'msgbox .Fields(0).Type
+    'msgbox .Fields(0).Attributes
+    'msgbox .Fields(0).DefinedSize
+    'msgbox .Fields(0).NumericScale
+    'msgbox .Fields(0).Status
+    */
+    
 NEXT I
 RETURN aRETU
+
+
+
 
 *
 *---------------------------------------------------------
@@ -931,7 +946,7 @@ Function TypeDat(nTipo,cField)
            // adBinary           128
            // adVarBinary        204
            // adLongVarBinary    205
-           return 'I' // Imagem
+           return 'G' // Imagem  HB_FT_OLE 
 
    otherwise
       alert('Tipo de dado invalido: Campo '+cField+' Type='+str(nTipo))
@@ -1339,3 +1354,5 @@ Function GetLockType(LockType As Integer) As String
 
 End Function
 */
+
+

@@ -129,9 +129,8 @@ function adoximpdbf()
    ADOUSE(cTABLE)
    ADOSELECT(cTABLE)
    
-   altd()
    aSTRUEXT:=ADOSTRU()
-
+   altd()
    
     DBSELECTAREA(cTABLE)
     nLASTREC:=reccount() 

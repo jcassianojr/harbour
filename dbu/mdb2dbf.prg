@@ -835,7 +835,12 @@ oConN:close()
 RETURN aRETU 
 
 
+//TIPOC     tras o descritivo caracter data numeric...
+//tipodado2 pega o tipo numerico do ado e convert para o tipo dbf padrao CNMDL
+//tipodado3 pega o typo numerico do ado e muda para o tipo numerico do harbour tipes extendidos
 
+
+//pega o tipo numerico do ado e convert para o tipo dbf padrao CNMDL
 Function TipoDado2(nTipo)
    do case
       case nTipo=8.or.nTipo=12.or.nTipo=72.or.nTipo=129.or.nTipo=130.or.(nTipo>=200.and.nTipo<=203)
@@ -889,13 +894,153 @@ Function TipoDado2(nTipo)
            // adBinary           128
            // adVarBinary        204
            // adLongVarBinary    205
-           return 'I' // Imagem
+           return 'G' // Imagem HB_FT_OLE 
 
    otherwise
       alert('Tipo de dado invalido: Campo '+cField+' Type='+str(nTipo))
    endcase
    return 'U'
 
+
+
+//pega o typo numerico do ado e muda para o tipo numerico do harbour
+function TipoDado3( nADOFieldType )
+//HB_FT_PICTURE ="P" sem equivalente ado
+
+   LOCAL nDBFFieldType  := 0
+   LOCAL cDBFFieldType  := ""
+
+   DO CASE
+
+   CASE nADOFieldType == adEmpty
+   CASE nADOFieldType == adTinyInt
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == adSmallInt
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == adInteger
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == adBigInt
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == adUnsignedTinyInt
+   CASE nADOFieldType == adUnsignedSmallInt
+   CASE nADOFieldType == adUnsignedInt
+   CASE nADOFieldType == adUnsignedBigInt
+   CASE nADOFieldType == adSingle
+
+   CASE nADOFieldType == adDouble
+      nDBFFieldType := HB_FT_DOUBLE
+      cDBFFieldType  := "B"
+
+   CASE nADOFieldType == adCurrency
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == adDecimal
+      nDBFFieldType := HB_FT_LONG
+      cDBFFieldType  := "N"
+
+   CASE nADOFieldType == adNumeric
+      nDBFFieldType := HB_FT_LONG
+      cDBFFieldType  := "N"
+
+   CASE nADOFieldType == adError
+   CASE nADOFieldType == adUserDefined
+   CASE nADOFieldType == adVariant
+      nDBFFieldType := HB_FT_ANY
+      cDBFFieldType  := "V"
+
+   CASE nADOFieldType == adIDispatch
+
+   CASE nADOFieldType == adIUnknown
+
+   CASE nADOFieldType == adGUID
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == adDate
+      nDBFFieldType := HB_FT_DATE
+      cDBFFieldType  := "D"
+
+   CASE nADOFieldType == adDBDate
+      nDBFFieldType := HB_FT_DATE
+      cDBFFieldType  := "D"
+
+   CASE nADOFieldType == adDBTime
+
+   CASE nADOFieldType == adDBTimeStamp
+      nDBFFieldType := HB_FT_TIMESTAMP
+      cDBFFieldType  := "@"
+
+   CASE nADOFieldType == adFileTime
+      nDBFFieldType := HB_FT_DATETIME
+      cDBFFieldType  := "T"
+
+   CASE nADOFieldType == adBSTR
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == adChar
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == adVarChar
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == adLongVarChar
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == adWChar
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == adVarWChar
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == adBinary
+      nDBFFieldType := HB_FT_OLE
+      cDBFFieldType  := "G"
+
+   CASE nADOFieldType == adVarBinary
+      nDBFFieldType := HB_FT_OLE
+      cDBFFieldType  := "G"
+
+   CASE nADOFieldType == adLongVarBinary
+      nDBFFieldType := HB_FT_OLE
+      cDBFFieldType  := "G"
+
+   CASE nADOFieldType == adChapter
+
+   CASE nADOFieldType == adVarNumeric
+
+  // CASE nADOFieldType == adArray
+
+
+   CASE nADOFieldType == adBoolean
+      nDBFFieldType := HB_FT_LOGICAL
+      cDBFFieldType  := "L"
+
+   CASE nADOFieldType == adLongVarWChar
+      nDBFFieldType := HB_FT_MEMO
+      cDBFFieldType  := "M"
+
+   CASE nADOFieldType == adPropVariant
+      nDBFFieldType := HB_FT_MEMO
+      cDBFFieldType  := "M"
+
+   ENDCASE
+
+   RETURN {nDBFFieldType,cDBFFieldType}
 
 
 function geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)   
