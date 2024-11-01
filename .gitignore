@@ -36,3 +36,6 @@ convcep/vcshead.ch
 dbu/error.log
 dbu/dbu32/error.log
 dbu/dbu32/ADOERRO.TXT
+dbu/dbu32/adoxb.prg
+dbu/dbu32/dbuadox.prg
+dbu/dbu32/mdb2dbf.prg

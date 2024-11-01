@@ -835,10 +835,10 @@ oConN:close()
 RETURN aRETU 
 
 
-//TIPOC     tras o descritivo caracter data numeric...
+//TIPOC     tras o descritivo caracter data numeric...(em dbudoc)
 //tipodado2 pega o tipo numerico do ado e convert para o tipo dbf padrao CNMDL
-//tipodado3 pega o typo numerico do ado e muda para o tipo numerico do harbour tipes extendidos
-
+// Adotipodbf( nADOFieldType,nTIPORETORNO ) 
+//numerico ado para nTIPORETRONO=1 numerico dbf, =2 tipo caracter exetendio(inclui double,ole...) =3 tuoos Basicos CMDLN
 
 //pega o tipo numerico do ado e convert para o tipo dbf padrao CNMDL
 Function TipoDado2(nTipo)
@@ -903,12 +903,18 @@ Function TipoDado2(nTipo)
 
 
 
-//pega o typo numerico do ado e muda para o tipo numerico do harbour
-function TipoDado3( nADOFieldType )
-//HB_FT_PICTURE ="P" sem equivalente ado
+//numerico ado para nTIPORETRONO=1 numerico dbf, =2 tipo caracter extendido(inclui double,ole...) =3 typos Basicos CMDLN 
+function Adotipodbf( nADOFieldType,nTIPORETORNO )
+//HB_FT_PICTURE ="P" sem equivalente ado harbour
+//adarray nao padrao rdd harbour conta na adox e na adordd
 
    LOCAL nDBFFieldType  := 0
    LOCAL cDBFFieldType  := ""
+  
+  IF nTIPORETORNO=3
+     RETURN TipoDado2(nADOFieldType)
+  ENDIF
+
 
    DO CASE
 
@@ -1040,7 +1046,7 @@ function TipoDado3( nADOFieldType )
 
    ENDCASE
 
-   RETURN {nDBFFieldType,cDBFFieldType}
+   RETURN if(nTIPORETORNO=1,nDBFFieldType,cDBFFieldType)
 
 
 function geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)   
@@ -1137,7 +1143,7 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
     nFieldLength := 8
     nFieldDec := 0
     
-case cType == "@" //Datetime opcao mudar como texto fututamente 
+case cType == "@" //Datetime opcao mudar como texto futuramente 
     cFieldType := 'D'
     nFieldLength := 8
     nFieldDec := 0    
