@@ -404,6 +404,9 @@ FOR I=1 TO nCAMPOS //recorset inicia com 0 usando i-1
        IF oRecordSet[nRecordSet]:Fields( cCAMPO ):Precision>0
           nLong := oRecordSet[nRecordSet]:Fields( cCAMPO ):Precision
        ENDIF   
+       IF nTIPO=5// adDouble           5
+          nDECIMAIS:=5
+       ENDIF
     ENDIF
     IF cType="L"
        nLONG :=1

@@ -618,8 +618,11 @@ local nFieldLength := 0
 local nFieldDec := 0
 local lopen
 Lopen:=.F.
+lARQMDBACCDB:=.F.
 
-
+IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+   lARQMDBACCDB:=.T.
+ENDIF
 
 cTIPOINFO:="TABELA"
 IF VALTYPE(cDATABASE)<>"C"
@@ -663,7 +666,7 @@ IF cTIPOINFO="DATABASE"
 ENDIF
 IF cTIPOINFO="TABELA"
     DO CASE
-       CASE lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+       CASE lARQMDBACCDB //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
             cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
               + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
                + " order by MSysObjects.name "
@@ -680,7 +683,7 @@ IF cTIPOINFO="TABELA"
 ENDIF
 IF cTIPOINFO="ESTRUTURA"
     DO CASE
-        CASE lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+        CASE lARQMDBACCDB //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        //Implantar possivelmente com catalogx
        CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0   
             cCOMANDO ="PRAGMA table_info( " +  cTABELA  + ")"   
@@ -710,7 +713,13 @@ ELSE
         lOPEN:=.T.
       CATCH oERR
         lOPEN:=.F.
-        ShowADOError(oERR,oConn,cCOMANDO) 
+        IF lARQMDBACCDB .AND. cTIPOINFO="TABELA"
+           //erro permisao acesso mysy
+           EXECUTACMD(cdatabase,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
+           EXECUTACMD(cdatabase,"create view showtables as select name from MSysObjects where MSysObjects.type In (1,4,6) and MSysObjects.name not like '~*' and MSysObjects.name not like 'MSys%'")
+        ELSE
+          ShowADOError(oERR,oConn,cCOMANDO) 
+        ENDIF  
       END
 ENDIF      
 
@@ -720,15 +729,8 @@ cCOMANDO:="GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC"
 
 create view showtables as select name from MSysObjects where MSysObjects.type In (1,4,6) and MSysObjects.name not like '~*' and MSysObjects.name not like 'MSys%' 
 //nao aceita order by na criacao da view
-
 */
 
-IF .NOT. lOPEN
-   IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-      EXECUTACMD(cdatabase,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
-      EXECUTACMD(cdatabase,"create view showtables as select name from MSysObjects where MSysObjects.type In (1,4,6) and MSysObjects.name not like '~*' and MSysObjects.name not like 'MSys%'")
-  ENDIF
-ENDIF
 
 IF lOPEN
     while ! ors:eof
@@ -782,63 +784,65 @@ ENDIF
 
 
 if LEN(aRETU)=0 .AND. cTIPOINFO="TABELA" 
-    IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-       ocatalog:=win_oleCreateObject( "ADOX.Catalog" )  
-       ocatalog:ActiveConnection := cConn
-       lOPEN:=.F.
-       TRY
-            ocatalog := oConn:OpenSchema( adSchemaTables )  
-             lOPEN:=.T.
-       CATCH oERR
-             lOPEN:=.F. 
-       END
-       IF lOPEN
-           while ! ocatalog:eof()
-                 cTABELA:=ocatalog:Fields( "TABLE_NAME" ):Value
-                 IF SUBSTR(cTABELA,1,4)<>"MSYS"
-                    AADD(aRETU,cTABELA) // ocatalog:fields(0):value)
-                 ENDIF   
-                 ocatalog:movenext()
-            enddo
-           ocatalog:close()
-        ENDIF
+   //necessario nova conecaro 
+   //nao funcionou criando olecreate adox.catalog
+    IF lARQMDBACCDB //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+      oXConection      :=  win_oleCreateObject( "ADODB.Connection" )
+      oXConection:Open( CCONN)
+      oXCatalog        := oXConection:OpenSchema(adSchemaTables)
+      do while .not. oXCatalog:EOF()
+         cTABELA:=upper(alltrim(oXCatalog:Fields( "TABLE_NAME" ):Value))
+         IF SUBSTR(cTABELA,1,4)<>"MSYS"
+            AADD(aRETU,cTABELA)
+         ENDIF   
+         oXCatalog:MoveNext()
+      enddo
     ENDIF
 endif
 
 if LEN(aRETU)=0 .AND. cTIPOINFO="ESTRUTURA" 
-    IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-       ocatalog:=win_oleCreateObject( "ADOX.Catalog" ) 
-       ocatalog:ActiveConnection :=  cConn 
-       lOPEN:=.F.
-       TRY
-            ocatalog := oConn:OpenSchema( adSchemaColumns )
-             lOPEN:=.T.
-       CATCH oERR
-             lOPEN:=.F. 
-       END
-       IF lOPEN
-           while ! ocatalog:eof()
-                 IF UPPER(cTABELA)=UPPER(ocatalog:Fields( "TABLE_NAME" ):Value)
-                    cFieldName := UPPER(ocatalog:Fields( "COLUMN_NAME" ):Value)
-                    cFieldType := TipoDado2(ocatalog:Fields( "DATA_TYPE" ):Value)
+    IF lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+      //nao funcionou criando olecreate adox.catalog
+      //necessario nova conecaro
+      oXConection      :=  win_oleCreateObject( "ADODB.Connection" )
+      oXConection:Open( CCONN)
+      oXCatalog        := oXConection:OpenSchema(adSchemaColumns)
+      do while .not. oXCatalog:EOF()
+                 IF UPPER(cTABELA)=UPPER(oXcatalog:Fields( "TABLE_NAME" ):Value)
+                    cFieldName := UPPER(oXcatalog:Fields( "COLUMN_NAME" ):Value)
+                    cFieldType := TipoDado2(oXcatalog:Fields( "DATA_TYPE" ):Value)
                     nFieldLength := 0
                     nFieldDec := 0
-                    If cTIPO = "C"
-                        nFieldLength:=ocatalog:Fields( "CHARACTER_MAXIMUM_LENGTH" ):Value
+                    If cFieldType = "C"
+                        nFieldLength:=oXcatalog:Fields( "CHARACTER_MAXIMUM_LENGTH" ):Value
+                        IF nFieldLength>250
+                           nFieldLength:=250
+                        ENDIF
+                        IF nFieldLength=0 //alguns long var estao trazendo 0 
+                           nFieldLength:=250
+                        ENDIF
                     ENDIF
-                    If cTIPO = "N"
-                        nFieldLength:=ocatalog:Fields( "NUMERIC_PRECISION" ):Value
-                        nFieldDec   :=ocatalog:Fields( "NUMERIC_SCALE" ):Value
+                    If cFieldType = "N"
+                        nFieldLength:=oXcatalog:Fields( "NUMERIC_PRECISION" ):Value
+                        nFieldDec   :=oXcatalog:Fields( "NUMERIC_SCALE" ):Value
                     ENDIF
-                    If cTIPO = "D"
-                        nFieldLength:=ocatalog:Fields( "DATETIME_PRECISION" ):Value
+                    If cFieldType = "D"
+                        nFieldLength:=oXcatalog:Fields( "DATETIME_PRECISION" ):Value
                     ENDIF
+                    If cFieldType = "L"
+                       nFieldLength:=1
+                    ENDIF
+                    IF oXcatalog:Fields( "DATA_TYPE" ):Value=5// adDouble   5
+                       IF nFieldDec=0
+                          nFieldDec:=5  //Coloca 5 como decimal
+                       ENDIF   
+                    ENDIF
+                    nFieldLength:=FIXINT(nFieldLength)
+                    nFieldDec   :=FIXINT(nFieldDec)
                     AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))   
                  ENDIF
-                 ocatalog:movenext()
-            enddo
-           ocatalog:close()
-        ENDIF
+                 oXcatalog:movenext()
+      enddo
     ENDIF
 endif
 

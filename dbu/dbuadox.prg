@@ -184,10 +184,13 @@ IF EMPTY(cTABELAX)
    mdbtabela(adotables())
 ENDIF  
 
+
+aSTRU2:=MDBTABLES(cDataBaseX,cTABELAX )
+altd()
+
 ADOUSE(cTABELAX)
 ADOSELECT(cTABELAX)
 aSTRU:=ADOSTRU() 
-ALTD()
 nFIM    := LEN(aSTRU)
 nLASTREC:=ADORecCount()
 zei_fort( nLASTREC,,,0)

@@ -5,7 +5,7 @@
 #-tshead=tshead.ch
 #-manifest=dbu.Manifest  comentado erro compilacao 32 bits
 
-d:\develop\harbour\dbu\dbu.rc
+#d:\develop\harbour\dbu\dbu.rc
 
 hbct.hbc
 hbwin.hbc
@@ -15,7 +15,8 @@ rddads.hbc
 rddbm.hbc
 
 hbsqlit3.hbc
-rddado.hbc
+#usando prg no lugar da lib abaixo
+#rddado.hbc
 hbmysql.hbc
 hbpgsql.hbc
 hbodbc.hbc
@@ -54,6 +55,7 @@ d:\develop\harbour\dbu\sql2dbf.prg
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
 d:\develop\harbour\dbu\mdb2dbf.prg 
+d:\develop\harbour\dbu\adordd.prg
 #
 # mysql libmysql
 #
@@ -72,6 +74,7 @@ d:\develop\harbour\dbu\dbumix.prg
 d:\develop\harbour\dbu\dbuodbc.prg
 #
 d:\develop\harbour\dbu\adoxb.prg
+d:\develop\harbour\dbu\dbuadox.prg 
 #
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  
