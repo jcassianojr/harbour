@@ -344,6 +344,25 @@ Function ADOFile( cFile )
       enddo
    endif
    return .f.
+   
+Function ADOTABLES()
+LOCAL aRETU
+LOCAL cTABELA
+aRETU:={}
+   if "XML" $ cADORDD .or. cADORDD = "XLS"
+      return file( cFile )
+   else
+      oADOCatalog := oADOConection:OpenSchema(adSchemaTables)
+      do while .not. oADOCatalog:EOF()
+         cTABELA:=upper(alltrim(oADOCatalog:Fields( "TABLE_NAME" ):Value))
+         IF SUBSTR(cTABELA,1,4)<>"MSYS"
+            AADD(aRETU,cTABELA)
+         ENDIF   
+         oADOCatalog:MoveNext()
+      enddo
+   endif
+   return aRETU
+   
 
 *
 *---------------------------------------------------------
@@ -380,10 +399,21 @@ FOR I=1 TO nCAMPOS //recorset inicia com 0 usando i-1
     nTipo := oRecordSet[nRecordSet]:Fields( cCAMPO ):Type
     cType := TypeDat(nTipo,cCAMPO)
     nLong := oRecordSet[nRecordSet]:Fields( cCAMPO ):DefinedSize
-    IF cType="N"
-       nLong := oRecordSet[nRecordSet]:Fields( cCAMPO ):Precision
-    ENDIF
     nDECIMAIS:=0
+    IF cType="N"
+       IF oRecordSet[nRecordSet]:Fields( cCAMPO ):Precision>0
+          nLong := oRecordSet[nRecordSet]:Fields( cCAMPO ):Precision
+       ENDIF   
+    ENDIF
+    IF cType="L"
+       nLONG :=1
+    ENDIF
+    IF cTYPE="C"
+       IF nLONG>250
+          nLONG:=250
+       ENDIF
+    ENDIF
+    
     AADD(aRETU,{cCAMPO,cType,nlong,nDECIMAIS,nTIPO})
    
      /* 
@@ -837,6 +867,10 @@ Function ADOReplace( cCampo, xDado )
 *---------------------------------------------------------
 Function ADOField( cStrField )
    LOCAL uVal,nTipo,cType,nLong,xValor:=nil,StrFileName
+   //pega o nome caso a cStrField seja numerico
+   IF valtype(cStrField)="N" //Necessario na chamada posicao -1 ado inicia com 0  dbf inicia com 1
+     cStrField:= oRecordSet[nRecordSet]:Fields( cStrField  ):name
+   ENDIF
    if valtype(cStrField)='C'
       cStrField := upper(alltrim(cStrField))
    endif

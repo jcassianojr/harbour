@@ -69,7 +69,10 @@ WHILE .T.
        CASE KEY=4
             MDBEXP(2)
        CASE KEY=5     
-            mdbdatabases()
+            IF lMDB .OR. lACCDB
+            ELSE
+                mdbdatabases()
+            ENDIF    
         CASE KEY=6
             MDBEXP(1)     
        OTHERWISE
@@ -177,10 +180,15 @@ ENDIF
 cDATABASEX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
 RETURN aResult
 
+
 function mdbtabela(cMDBARQ)
 local nChoices
 nChoices:=0
-aResult:=MDBTABLES(cMDBARQ )
+IF VALTYPE(cMDBARQ)="A"
+   aResult:=cMDBARQ
+ELSE
+   aResult:=MDBTABLES(cMDBARQ )
+ENDIF   
 IF LEN(aResult)>0
    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
    nChoices := ACHOICE( 4,23,21,54, aResult)
@@ -772,20 +780,24 @@ IF lOPEN
     oRs:Close()
 ENDIF
 
+
 if LEN(aRETU)=0 .AND. cTIPOINFO="TABELA" 
     IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        ocatalog:=win_oleCreateObject( "ADOX.Catalog" )  
-       ocatalog:ActiveConnection :=  oConn
+       ocatalog:ActiveConnection := cConn
        lOPEN:=.F.
        TRY
-            ocatalog := oConn:OpenSchema( adSchemaTables )
+            ocatalog := oConn:OpenSchema( adSchemaTables )  
              lOPEN:=.T.
        CATCH oERR
              lOPEN:=.F. 
        END
        IF lOPEN
            while ! ocatalog:eof()
-                 AADD(aRETU,ocatalog:Fields( "TABLE_NAME" ):Value) // ocatalog:fields(0):value)
+                 cTABELA:=ocatalog:Fields( "TABLE_NAME" ):Value
+                 IF SUBSTR(cTABELA,1,4)<>"MSYS"
+                    AADD(aRETU,cTABELA) // ocatalog:fields(0):value)
+                 ENDIF   
                  ocatalog:movenext()
             enddo
            ocatalog:close()
@@ -796,7 +808,7 @@ endif
 if LEN(aRETU)=0 .AND. cTIPOINFO="ESTRUTURA" 
     IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
        ocatalog:=win_oleCreateObject( "ADOX.Catalog" ) 
-       ocatalog:ActiveConnection :=  oConn 
+       ocatalog:ActiveConnection :=  cConn 
        lOPEN:=.F.
        TRY
             ocatalog := oConn:OpenSchema( adSchemaColumns )
@@ -830,8 +842,9 @@ if LEN(aRETU)=0 .AND. cTIPOINFO="ESTRUTURA"
     ENDIF
 endif
 
-
-oConN:close()  
+TRY
+  oConN:close()  
+END  
 RETURN aRETU 
 
 

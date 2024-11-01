@@ -71,7 +71,7 @@ d:\develop\harbour\dbu\sql2dbf.prg
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
 d:\develop\harbour\dbu\adordd.prg
-d:\develop\harbour\dbu\mdb2dbf.prg -b
+d:\develop\harbour\dbu\mdb2dbf.prg -B
 #
 # mysql libmysql
 #
@@ -90,7 +90,7 @@ d:\develop\harbour\dbu\dbumix.prg
 #
 d:\develop\harbour\dbu\dbuodbc.prg 
 #
-d:\develop\harbour\dbu\adoxb.prg   -b
+d:\develop\harbour\dbu\adoxb.prg   
 d:\develop\harbour\dbu\dbuadox.prg -b
 
 

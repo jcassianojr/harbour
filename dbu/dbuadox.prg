@@ -74,7 +74,7 @@ IF ! EMPTY(cnewDATABASEX)
    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER"
        adoxexecsql("CREATE DATABASE IF NOT EXISTS "+Cnewdatabasex)
    ENDIF
-   IF cTIPOSQL="SQLITE" .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB64"
+   IF cTIPOSQL="SQLITE" .OR. lMDB .OR. lACCDB
       mdbcria()
    ENDIF
 ENDIF
@@ -129,8 +129,6 @@ function adoximpdbf()
    ADOUSE(cTABLE)
    ADOSELECT(cTABLE)
    
-   aSTRUEXT:=ADOSTRU()
-   altd()
    
     DBSELECTAREA(cTABLE)
     nLASTREC:=reccount() 
@@ -157,7 +155,100 @@ function adoximpdbf()
 return .t.
 
 function adoxexpdbf(ntipo)
+
+LOCAL aSTRU
+LOCAL cCONN
+LOCAL i
+LOCAL nFIM
+LOCAL aVALOR
+
+IF nTIPO=2
+  LCOPIANAT:=.f. //MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
+  tDOC:=pegtipodoc() // .t. Inclui dbf se for nativa
+  pegparexp() 
+  lDOCCAB  :=.F.
+  lDOCDAD  :=.F.
+  lDOCRECNO:=.F.
+  cSUBTIPO :=" "
+  PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+ENDIF
+
+
+cMDBARQ:=OPENTIPOARQ()
+
+mdbtabela(cdatabasex)
+
+cCONN=GERACONN(cDATABASEX)
+ADOCONNECT(cCONN)
+IF EMPTY(cTABELAX)
+   mdbtabela(adotables())
+ENDIF  
+
+ADOUSE(cTABELAX)
+ADOSELECT(cTABELAX)
+aSTRU:=ADOSTRU() 
+ALTD()
+nFIM    := LEN(aSTRU)
+nLASTREC:=ADORecCount()
+zei_fort( nLASTREC,,,0)
+
+
+
+avalor:={}
+cDESTINO:=cTABELAX+"_"+cTIPOSQL
+IF nTIPO=1 //arquivo fisico
+   MDT(cDESTINO)
+   DBCreate(cDESTINO, aSTRU, "DBFCDX" ) 
+   DBUseArea( .T. , "DBFCDX" , cDESTINO, "DESTINO" , .T. , .F. ) 
+ELSE
+   dbCreate( "mem:destino", aSTRU, , .T., "DESTINO" )
+ENDIF   
+
+WHILE .NOT.  ADOEof() //.AND. .NOT. ADOBOF()
+     dbselectar("DESTINO")
+     NETRECAPP()
+     FOR I= 1 TO nFIM
+         cCAMPO:=aSTRU[i, DBS_NAME]
+         eVALOR:=ADOField(Ccampo)
+         if valtype(eVALOR)="C" .AND. SUBSTR(eVALOR,5,1)="-" .AND. SUBSTR(eVALOR,8,1)="-"
+            eVALOR = substr(eVALOR, 6, 2) + "/" + substr(eVALOR, 9, 2) + "/" + substr(eVALOR, 1, 4)
+            eVALOR = CTOD(eVALOR)
+         ENDIF
+         if valtype(eVALOR)="C"  .OR. valtype(eVALOR)="M"
+           eVALOR:=RANGEREPL(chr(0),chr(31),eVALOR," ") //Remove caracteres de controle
+           eVALOR:=TIRACE(eVALOR)
+        ENDIF 
+         IF ! EMPTY(eVALOR)
+            FIELDPUT(I,eVALOR)
+         ENDIF   
+     NEXT I
+     zei_fort(nLASTREC,,,1)
+    ADOMoveNext()
+ENDDO
+
+ADOCLOSE()
+ADODISCONNECT()
+
+
+IF nTIPO=2
+   cDESTINO:=cTABELAX+"_"+cTIPOSQL+zEXPOREXT
+   MDT(cDESTINO)
+   dbselectar("DESTINO")
+   nLASTREC:=   lastrec() 
+   zei_fort( nLASTREC,,,0)
+   dbgotop()
+   multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aSTRU)
+ENDIF
+
+dbselectar("DESTINO")
+dbclosearea()
+
+IF nTIPO=2
+   dbDrop( "mem:destino" )
+ENDIF
 return .t.
+
+
             
 function adoxdeltable()
 mdbtabela(cdatabasex)

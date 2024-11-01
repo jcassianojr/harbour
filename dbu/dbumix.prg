@@ -89,7 +89,10 @@ WHILE .T.
             mixcreatedatabase()
             closemix()
        CASE KEY=2
-            mdbdatabases()
+            IF lMDB .OR. lACCDB
+            ELSE
+                mdbdatabases()
+            ENDIF    
        CASE KEY=3
             miximpdbf()
        CASE KEY=4
