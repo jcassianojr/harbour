@@ -1,0 +1,1589 @@
+#line 11 "mdb2dbf.prg"
+REQUEST ADORDD
+
+
+Function mdbmenu(cUSOSQL)
+cTIPOSQL:=cUSOSQL
+public oDB := nil
+
+aAMBIENTE:=SALVAA()
+
+cSERVERX:="localhost"+space(21)
+cDATABASEX:=space(30)
+cUSERX    :=SPACE(30)
+cPASSX    :=SPACE(30)
+cTABELAX  :=SPACE(30)
+loledb=.T.
+lmdb  :=.F.
+laccdb :=.F.
+
+pegcfgbanco()
+
+WHILE .T.
+    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+    DO CASE
+       CASE cTIPOSQL="MDB" .OR.  cTIPOSQL="ACCESS"
+            IF loledb
+               @ 03,40 SAY "oledb(32b)"
+            Else
+               @ 03,40 SAY "accdb(64b)"
+            endif
+       CASE cTIPOSQL="MYSQL"
+            IF loledb
+               @ 03,40 SAY "odbc 8(32b)"
+            Else
+               @ 03,40 SAY "odbc 9(64b)"
+            endif
+
+        OTHERWISE
+            @ 03,24 SAY "ADORDD"+" "+cTIPOSQL
+    ENDCASE
+
+    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"   .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
+       OPCAO(  4, 24, "&Criar database             ", 67 )
+    else
+       OPCAO(  4, 24, "&Criar arquivo              ", 67 )
+    endif
+    OPCAO(  5, 24, "Executar arquivo &SQL      ", 83 )
+    OPCAO(  6, 24, "&Importar  DBF             ", 73 )
+    OPCAO(  7, 24, "Exportar Tabela &Formatos  ", 69 )
+    OPCAO(  8, 24, "&Database Selecionar       ", 68 )
+    OPCAO(  9, 24, "&Exportar  DBF             ", 69 )
+    KEY := menu( 1, 0 )
+    DO CASE
+       CASE KEY=1
+           mdbcria()
+       CASE KEY=2
+            ExecArqSql()
+       CASE KEY=3
+            MDBIMPDBF()
+       CASE KEY=4
+            MDBEXP(2)
+       CASE KEY=5
+            IF lMDB .OR. lACCDB
+            ELSE
+                mdbdatabases()
+            ENDIF
+        CASE KEY=6
+            MDBEXP(1)
+       OTHERWISE
+            EXIT
+    ENDCASE
+ENDDO
+
+RESTAA(aAMBIENTE)
+layout()
+return nil
+
+function pegcfgbanco()
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
+   cUSERX:=PADR("root",30," ")
+ENDIF
+
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+   cUSERX:=PADR("postgres",30," ")
+ENDIF
+
+
+
+loledb=.T.
+IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64
+ENDIF
+IF cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64
+ENDIF
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+   loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64
+ENDIF
+
+
+
+
+
+
+IF cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+   loledb:=.F.
+ENDIF
+
+
+IF cTIPOSQL="MYSQL"  .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL"   .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
+   OPENTIPOARQ()
+   mdbdatabases()
+ENDIF
+
+lMDB:=.F.
+IF cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
+   lMDB:=.T.
+ENDIF
+lACCDB =.F.
+IF cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+   lACCDB:=.T.
+ENDIF
+
+
+return .T.
+
+
+
+function ExecArqSql
+LOCAL cCOMANDO:=""
+LOCAL aCOMANDO:={}
+LOCAL cARQIMP:=""
+LOCAL nFILEUSO
+LOCAL cDELIM
+LOCAL cLINHA
+
+cARQIMP:=win_GetOPENFileName(, "Arquivos SQL",HB_CWD(), "Arquivos SQL", "*.SQL", 1 )
+cARQORI:=OPENTIPOARQ()
+
+IF FILE(cARQIMP)
+    nLASTREC:=FLINECOUNT(cARQIMP)
+    zei_fort( nLASTREC,,,0)
+
+    cDELIM:=FDELIM (cARQIMP,1024)
+    nFILEuso:=FOPEN(cARQIMP)
+     WHILE .T.
+        cLINHA:=FREADLINE (nFILEuso, 1024 ,.T. ,cDELIM)
+
+        AADD(aCOMANDO,cLINHA)
+
+        IF cLINHA="__FINAL__"
+           EXIT
+        ENDIF
+
+        zei_fort(nLASTREC,,,1)
+
+     enddo
+     fclose(nFILEuso)
+    executacmd(cARQORI,aCOMANDO)
+endif
+return .T.
+
+function mdbdatabases()
+local nChoices
+nChoices:=0
+aResult:=MDBTABLES()
+IF LEN(aResult)>0
+   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+  nChoices := ACHOICE( 4,23,21,54, aResult)
+ENDIF
+cDATABASEX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
+RETURN aResult
+
+
+function mdbtabela(cMDBARQ)
+local nChoices
+nChoices:=0
+IF VALTYPE(cMDBARQ)="A"
+   aResult:=cMDBARQ
+ELSE
+   aResult:=MDBTABLES(cMDBARQ )
+ENDIF
+IF LEN(aResult)>0
+   HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+   nChoices := ACHOICE( 4,23,21,54, aResult)
+ENDIF
+cTABELAX:=ALLTRIM(IIF( nChoices > 0, aResult[ nChoices ], ""))
+RETURN aResult
+
+function MDBEXP(nTIPO)
+LOCAL cCAMMDB   :=SPACE(100)
+LOCAL lCOPIANAT
+local Ldoc
+local Lgrvstruinfo
+LOCAL aSTRU
+LOCAL nFIM
+LOCAL i
+
+cMDBARQ:=OPENTIPOARQ()
+
+mdbtabela(cMDBARQ)
+
+cTABELA:=cTABELAX
+
+IF EMPTY(cTABELA)
+   cTABELA:=INPUTBOX(SPACE(30),"Tabela")
+ENDIF
+cTABELA:=ALLTRIM(cTABELA)
+IF EMPTY(cTABELA)
+   RETURN NIL
+ENDIF
+
+IF nTIPO=1
+   tdoc=14
+   zEXPOREXT="DBF"
+ENDIF
+
+IF nTIPO=2
+  LCOPIANAT:=.F.
+  tDOC:=pegtipodoc()
+  pegparexp()
+  lDOCCAB  :=.F.
+  lDOCDAD  :=.F.
+  lDOCRECNO:=.F.
+  cSUBTIPO :=" "
+  PegcsUB(tDOC)
+ENDIF
+
+
+hb_FNameSplit(cMDBARQ , @cCAMMDB, NIL, NIL )
+cDESTINO:=cCAMMDB+cTABELA+"_"+Ctiposql+"."+zEXPOREXT
+MDT(cDESTINO)
+
+
+cTABELAGRV:=cTABELA
+IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+   cTABELA:=CHR(34)+UPPER(cTABELA)+CHR(34)
+ENDIF
+
+
+MDT("abrindo arquivo de origem: "+cMDBARQ)
+opencmdbarq()
+nLASTREC:=   reccount()
+zei_fort( nLASTREC,,,0)
+aSTRU:=dbstruct()
+
+
+
+
+
+IF tDOC=14
+   IF lMDB .OR. lACCDB
+
+
+      aSTRU:=sqltodbfstru(aSTRU)
+
+   ELSE
+      aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
+   ENDIF
+   cALIASADO:=ALIAS()
+   DBCreate(ctabela+"_"+Ctiposql, aSTRU)
+   DBUseArea( .T. ,  , ctabela+"_"+Ctiposql,  , .F. , .F. )
+   cALIASDBF:=ALIAS()
+   nFIM:=FCOUNT()
+   dbselectar(cALIASADO)
+   dbgotop()
+   while ! eof()
+     aVALOR:={}
+     FOR I= 1 TO nFIM
+        AADD(aVALOR,FIELDGET(I))
+     NEXT I
+     dbselectar(cALIASDBF)
+     NETRECAPP()
+     FOR I= 1 TO nFIM
+         eVALOR:=aVALOR[I]
+         if valtype(eVALOR)="C" .AND. SUBSTR(eVALOR,5,1)="-" .AND. SUBSTR(eVALOR,8,1)="-"
+            eVALOR = substr(eVALOR, 6, 2) + "/" + substr(eVALOR, 9, 2) + "/" + substr(eVALOR, 1, 4)
+            eVALOR = CTOD(eVALOR)
+         ENDIF
+         if valtype(eVALOR)="C"  .OR. valtype(eVALOR)="M"
+           eVALOR:=RANGEREPL(chr(0),chr(31),eVALOR," ")
+           eVALOR:=TIRACE(eVALOR)
+        ENDIF
+         IF ! EMPTY(eVALOR)
+            FIELDPUT(I,eVALOR)
+         ENDIF
+     NEXT I
+     dbselectar(cALIASADO)
+     zei_fort(nLASTREC,,,1)
+     dbskip()
+   enddo
+ELSE
+   multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO))
+ENDIF
+dbcloseall()
+return nil
+
+function sqltodbfstru(aStruct)
+local nFIM
+local i
+LOCAL aTAM
+LOCAL nLENMAX
+LOCAL aRETU
+nFIM:=LEN(aStruct)
+for i:=1 to NFIM
+    nLENMAX:=0
+    IF (aStruct[i, DBS_TYPE]="I" .OR. aStruct[i, DBS_TYPE]="B") .AND. aStruct[i, DBS_LEN]=0 .AND. cTIPOSQL="SQLITE"
+       Ctmp:="select max( length( " + aStruct[i, DBS_NAME] + " ) ) from " + cTABELA
+        aTAM :=MDBTABLES(cMDBARQ,cTABELA , ctmp)
+        if len( aTAM ) > 0
+           nLenMAX := aTAM[ 1 ]
+        endif
+
+
+        IF aStruct[i, DBS_TYPE]="I"
+           aStruct[i, DBS_TYPE]:="N"
+           IF nLENMAX>8
+              aStruct[i, DBS_LEN]=nLENMAX
+           ELSE
+              aStruct[i, DBS_LEN]=8
+           ENDIF
+        ENDIF
+
+
+        IF aStruct[i, DBS_TYPE]="B"
+           aStruct[i, DBS_TYPE]:="N"
+           IF nLENMAX>15
+             aStruct[i, DBS_LEN]=nLENMAX+ 4
+           ELSE
+              aStruct[i, DBS_LEN]=15
+           ENDIF
+           aStruct[i, DBS_LEN]=4
+        ENDIF
+     endif
+
+     IF aStruct[i, DBS_TYPE]="I" .AND. (lmdb .OR. Laccdb)
+        aStruct[i, DBS_TYPE]:="N"
+
+
+        aStruct[i, DBS_LEN]=aStruct[i, DBS_LEN]*2
+     ENDIF
+
+     IF aStruct[i, DBS_TYPE]="L" .AND. (lmdb .OR. Laccdb) .AND. aStruct[i, DBS_LEN]>1
+        aStruct[i, DBS_LEN]:=1
+     ENDIF
+
+     aRETU:=geracampodbf(aStruct[i, DBS_NAME],aStruct[i, DBS_TYPE],aStruct[i, DBS_LEN],aStruct[i, DBS_DEC])
+
+     aStruct[i, DBS_NAME]:=aRETU[DBS_NAME]
+     aStruct[i, DBS_TYPE]:=aRETU[DBS_TYPE]
+     aStruct[i, DBS_LEN] :=aRETU[DBS_LEN]
+     aStruct[i, DBS_DEC] :=aRETU[DBS_DEC]
+
+next i
+return aStruct
+
+function opencmdbarq()
+local lRETU
+lRETU:=.T.
+DO CASE
+    CASE lMDB
+        if loledb
+           hb_adoSetTable( cTABELA ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+        else
+           hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "ACEOLEDB" ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+        endif
+    CASE lACCDB
+         hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "ACEOLEDB" ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+    CASE cTIPOSQL="SQLITE"
+         hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "SQLITE" ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
+        if loledb
+            hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "MYSQL" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+        else
+            hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "MYSQL64" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+        endif
+    CASE cTIPOSQL="MARIADB"
+        hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "MARIADB" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+    CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
+        hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "SQL" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+    CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+        if loledb
+            TRY
+              hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "PGSQL" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+            catch oErR
+              MDT("Erro Abrindo")
+              lRETU = .F.
+            END
+        else
+            TRY
+              hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "PGSQL64" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+            catch oErR
+              MDT("Erro Abrindo")
+              lRETU = .F.
+            END
+        endif
+ENDCASE
+return lRETU
+
+
+
+function mdbcria()
+
+DO CASE
+   CASE lMDB
+        cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+   CASE lACDB
+        cARQORI:=win_GetSAVEFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
+   CASE cTIPOSQL="SQLITE"
+
+
+
+        cARQORI:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite",  { { "SQLite", "*.sqlite" },{ "SQLite db", "*.DB" } ,  { "SQLite3", "*.sqlite3" },{ "SQLite db3", "*.DB3" } ,  { "SQLite Fossil", "*.fossil" } , { "All Files", "*.*" }} , 1 )
+ENDCASE
+
+
+
+
+ if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"   .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
+    cARQORI:=OPENTIPOARQ()
+    cnewDATABASEX:=INPUTBOX(SPACE(30),"Novo database")
+    cnewDATABASEX:=alltrim(cnewDATABASEX)
+    IF ! EMPTy(cnewDATABASEX)
+       IF hb_AScan( MDBTABLES(), cnewDATABASEX,,, .T. ) > 0
+           MDT("Ja existe Database "+cnewDATABASEX)
+          return .F.
+       ENDIF
+       cDATABASEX=""
+       executacmd(Carqori,"CREATE DATABASE IF NOT EXISTS "+Cnewdatabasex)
+       CDATABASEX:=CNEWDATABASEX
+    ENDIF
+endif
+
+
+IF lMDB .OR. lACCDB
+   CreateAccessDatabase( cARQORI)
+   EXECUTACMD(cARQORI,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
+   EXECUTACMD(cARQORI,"create view showtables as select name from MSysObjects where MSysObjects.type In (1,4,6) and MSysObjects.name not like '~*' and MSysObjects.name not like 'MSys%'")
+ENDIF
+
+
+IF cTIPOSQL="SQLITE"
+   createSqlitedb()
+ENDIF
+RETURN NIL
+
+
+FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
+    local aINDICES
+    LOCAL nINDICES
+    LOCAL cINDEXNAME
+    LOCAL J
+    local msql
+    local lgravasql
+
+
+    lgravasql:=mdg("gravar sql")
+    aINDICES:={}
+    dbUseArea( .F.,, cDBFARQ,, iif( .F. .OR. .F., ! .F., NIL ), .F. )
+    aSTRU:=DBSTRUCT()
+    nLASTREC:=reccount()
+    zei_fort( nLASTREC,,,0)
+    cNOMETABELA:=ALIAS()
+
+     nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
+     FOR j = 1 TO  nIndexes
+        cINDEXNAME := dbORDERINFO( DBOI_NAME , ,  j )
+        cINDEXNAME := StrTran(cINDEXNAME, "-", "_"  )
+         msql:="create index " + cINDEXNAME + " on " + cNometabela + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) "
+         aadd(Aindices,msql)
+     NEXT j
+    dbclosearea()
+
+    MDT(cNOMETABELA)
+
+    Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
+
+
+    msql:=""
+    DO CASE
+       CASE cTIPOSQL="SQLITE"
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"SQLITE")
+             executacmd(cMDBARQ,msql)
+       CASE  cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MYSQL")
+             executacmd(cMDBARQ,msql)
+       CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"PGSQL")
+             executacmd(cMDBARQ,msql)
+       CASE  lMDB
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MDB")
+             executacmd(cMDBARQ,msql)
+        CASE lACCDB
+              msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"ACCDB")
+             executacmd(cMDBARQ,msql)
+        CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
+             msql:= SqliteCreateTable(cNOMETABELA,aSTRU,"MSSQL")
+             executacmd(cMDBARQ,msql)
+       OTHERWISE
+    ENDCASE
+
+    IF lGRAVASQL.AND. ! EMPTY(msql)
+       HB_MEMOWRIT(cNOMETABELA+"_createtable_"+cTIPOSQL+".sql",Msql,.F.)
+    ENDIF
+
+    if len(aindices)>0
+
+        Executacmd(cMDBARQ,Aindices)
+        IF lGRAVASQL
+           msql:=""
+           for ii=1 to len(aINDICES)
+               mSQL+=aINDICEs[II]+ " ; "+HB_OSNEWLINE()
+           next ii
+           HB_MEMOWRIT(cNOMETABELA+"_createindex_"+cTIPOSQL+".sql",mSQL,.F.)
+        endif
+    endif
+
+    cTABELA:=cNOMETABELA
+    IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="POSTGRESQL" .OR. cTIPOSQL="PGSQL64"
+       cTABELA:=CHR(34)+UPPER(cTABELA)+CHR(34)
+    ENDIF
+
+    if nLASTREC>0
+      try
+        opencmdbarq()
+
+        try
+          append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
+        catch oErR
+          MDT("Erro anexando dados")
+        end
+      catch oErR
+        MDT("Erro ao abrir nova tabela")
+      end
+      dbcloseall()
+    endif
+
+    Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+
+
+RETURN .T.
+
+FUNCTION OPENTIPOARQ
+LOCAL cMDBARQ
+cMDBARQ:=""
+
+DO CASE
+   CASE lMDB
+        cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos mdb", "*.MDB", 1 )
+        cDATABASEX:=cMDBARQ
+   CASE lACCDB
+        cMDBARQ:=win_GetOPENFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos accdb", "*.accdb", 1 )
+        cDATABASEX:=cMDBARQ
+   CASE cTIPOSQL="SQLITE"
+
+
+
+        cMDBARQ:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite",  { { "SQLite", "*.sqlite" },{ "SQLite db", "*.DB" } ,  { "SQLite3", "*.sqlite3" },{ "SQLite db3", "*.DB3" } ,  { "SQLite Fossil", "*.fossil" } , { "All Files", "*.*" }} , 1 )
+        cDATABASEX:=cMDBARQ
+
+   CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"  .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
+         cSERVERX:=PADR(cSERVERX,30," ")
+
+         cUSERX:=PADR(cUSERX,30," ")
+         cPASSX:=PADR(cPASSX,30," ")
+          HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
+         @ 04,23 SAY "Server"
+
+         @ 08,23 SAY "user"
+         @ 10,23 say "pass"
+         @ 05,23 get cSERVERX
+
+         @ 09,23 get cuserx
+         @ 11,23 get cpassx
+         READ
+         cSERVERX:=ALLTRIM(cSERVERX)
+
+         cuserx:=alltrim(cuserx)
+         cpassx:=alltrim(cpassx)
+         cMDBARQ:=cDATABASEX
+ENDCASE
+RETURN cMDBARQ
+
+
+FUNCTION MDBIMPDBF()
+
+cMDBARQ:=OPENTIPOARQ()
+
+nOLDTIPO:=TIPODBF
+mdt("escolha origem")
+tipodbfesc()
+nORITIPO:=TIPODBF
+cORIDRIVER:=RDDNOME(TIPODBF)
+cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
+IF FILE (cARQORI)
+   DBF2MDB(cMDBARQ,cARQORI)
+   RDDNOME(nOLDTIPO)
+ENDIF
+
+
+FUNCTION MDBTABLES(cDataBase,cTABELA,cCAMPOSQL )
+LOCAL aRETU
+local cCONN
+LOCAL cCOMANDO
+LOCAL cTIPOINFO
+local cFieldName := ""
+local cFieldType := ""
+local nFieldLength := 0
+local nFieldDec := 0
+local lopen
+Lopen:=.F.
+lARQMDBACCDB:=.F.
+
+IF lMDB .OR. lACCDB .OR. at(".MDB",upper(cdatabase))>0 .OR. at(".ACCDB",upper(cdatabase))>0
+   lARQMDBACCDB:=.T.
+ENDIF
+
+cTIPOINFO:="TABELA"
+IF VALTYPE(cDATABASE)<>"C"
+   cTIPOINFO:="DATABASE"
+ENDIF
+IF VALTYPE(cTABELA)="C"
+   cTIPOINFO:="ESTRUTURA"
+ENDIF
+IF VALTYPE(cCAMPOSQL)="C"
+   cTIPOINFO:="CCAMPOSQL"
+ENDIF
+
+aRETU:={}
+cCONN:=GERACONN(cDATABASE)
+
+try
+   oConn:=WIN_OLECreateObject( "ADODB.Connection" )
+   with object oConn
+      :ConnectionString:=cConn
+      :Open()
+   END
+catch oErr
+   ShowADOError(oERR,oConn,cConn)
+   return aRETU
+end
+
+
+oRS:= WIN_OLECreateObject("ADODB.RecordSet")
+oRS:CursorLocation := 3
+
+cCOMANDO:=""
+IF cTIPOINFO="DATABASE"
+   DO CASE
+     CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+         cCOMANDO = "SHOW DATABASES"
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+         cCOMANDO = "SELECT datname FROM pg_database;"
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+         cCOMANDO = "SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb') "
+   ENDCASE
+ENDIF
+IF cTIPOINFO="TABELA"
+    DO CASE
+       CASE lARQMDBACCDB
+
+
+            cCOMANDO = "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) "  + " and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' "  + " order by MSysObjects.name "
+       CASE cTIPOSQL="SQLITE" .OR. at(".SQLITE",upper(cdatabase))>0
+            cCOMANDO ="SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+       CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+            cCOMANDO = "SHOW TABLES"
+       CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+           cCOMANDO ="SELECT tablename FROM pg_tables WHERE schemaname='public'"
+
+        CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+           cCOMANDO ="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';"
+    endcase
+ENDIF
+IF cTIPOINFO="ESTRUTURA"
+    DO CASE
+        CASE lARQMDBACCDB
+
+       CASE cTIPOSQL="SQLITE" .OR. at(".SQLITE",upper(cdatabase))>0
+            cCOMANDO ="PRAGMA table_info( " +  cTABELA  + ")"
+       CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+            cCOMANDO ="SHOW COLUMNS FROM "+cTABELA
+       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+           cCOMANDO ="SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
+           cCOMANDO +=" FROM   information_schema.columns "
+           cCOMANDO +=" WHERE   table_name = '"+UPPER(cTABELA)+"' ORDER BY ordinal_position ;"
+
+
+
+       CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+         cCOMANDO ="select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='" +  cTABELA  + "'"
+    endcase
+ENDIF
+IF cTIPOINFO="CCAMPOSQL"
+   cCOMANDO:=cCAMPOSQL
+ENDIF
+
+lopen:=.F.
+IF cTIPOINFO="ESTRUTURA" .AND. (LMDB .OR. lACCDB)
+
+ELSE
+      TRY
+        oRS:Open(cCOMANDO, oConN, 2, 3 )
+        lOPEN:=.T.
+      CATCH oERR
+        lOPEN:=.F.
+        IF lARQMDBACCDB .AND. cTIPOINFO="TABELA"
+
+           EXECUTACMD(cdatabase,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
+           EXECUTACMD(cdatabase,"create view showtables as select name from MSysObjects where MSysObjects.type In (1,4,6) and MSysObjects.name not like '~*' and MSysObjects.name not like 'MSys%'")
+        ELSE
+          ShowADOError(oERR,oConn,cCOMANDO)
+        ENDIF
+      END
+ENDIF
+
+
+
+
+
+
+
+
+
+
+IF lOPEN
+    while ! ors:eof
+         IF cTIPOINFO="TABELA" .OR. cTIPOINFO="CCAMPOSQL" .OR. cTIPOINFO="DATABASE"
+            AADD(aRETU,ors:fields(0):value)
+         ENDIF
+         IF cTIPOINFO="ESTRUTURA"
+            cFieldName := ""
+            cFieldType := ""
+            nFieldLength := 0
+            nFieldDec := 0
+
+
+
+
+            DO CASE
+               CASE cTIPOSQL="SQLITE" .OR. at(".SQLITE",upper(cdatabase))>0
+
+
+
+
+                   cFieldName := upper(alltrim( ors:fields(1):value ))
+                   cFieldType  := upper( alltrim( ors:fields(2):value ) )
+                   AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+               CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+
+
+
+
+                   cFieldName := upper(alltrim( ors:fields(0):value ))
+                   cFieldType  := upper( alltrim( ors:fields(1):value ) )
+                   AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+               CASE  cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+                   cFieldName := upper(alltrim( ors:fields(0):value ))
+                   cFieldType := upper( alltrim( ors:fields(1):value ) )
+                   nFieldLength = fixnum(ors:fields(2):value)
+                   if fixnum(ors:fields(3):value)>0
+                      nFieldLength = fixnum(ors:fields(3):value)
+                      nFieldDec    = fixnum(ors:fields(4):value)
+                   endif
+                   AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+               CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
+
+             ENDCASE
+
+         ENDIF
+        ors:movenext()
+    enddo
+    oRs:Close()
+ENDIF
+
+
+if LEN(aRETU)=0 .AND. cTIPOINFO="TABELA"
+
+
+    IF lARQMDBACCDB
+      oXConection      :=  win_oleCreateObject( "ADODB.Connection" )
+      oXConection:Open( CCONN)
+      oXCatalog        := oXConection:OpenSchema(20)
+      do while ! oXCatalog:EOF()
+         cTABELA:=upper(alltrim(oXCatalog:Fields( "TABLE_NAME" ):Value))
+         IF SUBSTR(cTABELA,1,4)<>"MSYS"
+            AADD(aRETU,cTABELA)
+         ENDIF
+         oXCatalog:MoveNext()
+      enddo
+    ENDIF
+endif
+
+if LEN(aRETU)=0 .AND. cTIPOINFO="ESTRUTURA"
+    IF lARQMDBACCDB
+
+
+      oXConection      :=  win_oleCreateObject( "ADODB.Connection" )
+      oXConection:Open( CCONN)
+      oXCatalog        := oXConection:OpenSchema(4)
+      do while ! oXCatalog:EOF()
+                 IF UPPER(cTABELA)=UPPER(oXcatalog:Fields( "TABLE_NAME" ):Value)
+                    cFieldName := UPPER(oXcatalog:Fields( "COLUMN_NAME" ):Value)
+                    cFieldType := TipoDado2(oXcatalog:Fields( "DATA_TYPE" ):Value)
+                    nFieldLength := 0
+                    nFieldDec := 0
+                    If cFieldType = "C"
+                        nFieldLength:=oXcatalog:Fields( "CHARACTER_MAXIMUM_LENGTH" ):Value
+                        IF nFieldLength>250
+                           nFieldLength:=250
+                        ENDIF
+                        IF nFieldLength=0
+                           nFieldLength:=250
+                        ENDIF
+                    ENDIF
+                    If cFieldType = "N"
+                        nFieldLength:=oXcatalog:Fields( "NUMERIC_PRECISION" ):Value
+                        nFieldDec   :=oXcatalog:Fields( "NUMERIC_SCALE" ):Value
+                    ENDIF
+                    If cFieldType = "D"
+                        nFieldLength:=oXcatalog:Fields( "DATETIME_PRECISION" ):Value
+                    ENDIF
+                    If cFieldType = "L"
+                       nFieldLength:=1
+                    ENDIF
+                    IF oXcatalog:Fields( "DATA_TYPE" ):Value=5
+                       IF nFieldDec=0
+                          nFieldDec:=5
+                       ENDIF
+                    ENDIF
+                    nFieldLength:=FIXINT(nFieldLength)
+                    nFieldDec   :=FIXINT(nFieldDec)
+                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
+                 ENDIF
+                 oXcatalog:movenext()
+      enddo
+    ENDIF
+endif
+
+TRY
+  oConN:close()
+END
+RETURN aRETU
+
+
+
+
+
+
+
+
+Function TipoDado2(nTipo)
+   do case
+      case nTipo=8.OR.nTipo=12.OR.nTipo=72.OR.nTipo=129.OR.nTipo=130.OR.(nTipo>=200.AND.nTipo<=203)
+
+
+
+
+
+
+
+
+           return "C"
+
+
+      case nTipo= 17.OR.nTipo= 16.OR.nTipo= 14.OR.nTipo=  5.OR.nTipo=  3.OR.nTipo=131.OR.nTipo= 2 .OR.nTipo=  6.OR. nTipo=  4.OR.nTipo=020.OR.nTipo=018.OR.nTipo=019.OR.nTipo= 21.OR.nTipo=138.OR.nTipo=139
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           return "N"
+
+      case nTipo=  7.OR.nTipo=64.OR.nTipo=133.OR.nTipo=134.OR.nTipo=135
+
+
+
+
+
+           return "D"
+
+      case nTipo= 11
+
+           return "L"
+
+      case nTipo=128.OR.nTipo=201.OR.nTipo=203.OR.nTipo=205
+
+
+           return "M"
+
+      case nTipo=128.OR.nTipo=204.OR.nTipo=205
+
+
+
+           return "G"
+
+   otherwise
+      alert("Tipo de dado invalido: Campo "+cField+" Type="+str(nTipo))
+   endcase
+   return "U"
+
+
+
+
+function Adotipodbf( nADOFieldType,nTIPORETORNO )
+
+
+
+   LOCAL nDBFFieldType  := 0
+   LOCAL cDBFFieldType  := ""
+
+  IF nTIPORETORNO=3
+     RETURN TipoDado2(nADOFieldType)
+  ENDIF
+
+
+   DO CASE
+
+   CASE nADOFieldType == 0
+   CASE nADOFieldType == 16
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == 2
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == 3
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == 20
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == 17
+   CASE nADOFieldType == 18
+   CASE nADOFieldType == 19
+   CASE nADOFieldType == 21
+   CASE nADOFieldType == 4
+
+   CASE nADOFieldType == 5
+      nDBFFieldType := HB_FT_DOUBLE
+      cDBFFieldType  := "B"
+
+   CASE nADOFieldType == 6
+      nDBFFieldType := HB_FT_INTEGER
+      cDBFFieldType  := "I"
+
+   CASE nADOFieldType == 14
+      nDBFFieldType := HB_FT_LONG
+      cDBFFieldType  := "N"
+
+   CASE nADOFieldType == 131
+      nDBFFieldType := HB_FT_LONG
+      cDBFFieldType  := "N"
+
+   CASE nADOFieldType == 10
+   CASE nADOFieldType == 132
+   CASE nADOFieldType == 12
+      nDBFFieldType := HB_FT_ANY
+      cDBFFieldType  := "V"
+
+   CASE nADOFieldType == 9
+
+   CASE nADOFieldType == 13
+
+   CASE nADOFieldType == 72
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == 7
+      nDBFFieldType := HB_FT_DATE
+      cDBFFieldType  := "D"
+
+   CASE nADOFieldType == 133
+      nDBFFieldType := HB_FT_DATE
+      cDBFFieldType  := "D"
+
+   CASE nADOFieldType == 134
+
+   CASE nADOFieldType == 135
+      nDBFFieldType := HB_FT_TIMESTAMP
+      cDBFFieldType  := "@"
+
+   CASE nADOFieldType == 64
+      nDBFFieldType := HB_FT_DATETIME
+      cDBFFieldType  := "T"
+
+   CASE nADOFieldType == 8
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == 129
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == 200
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == 201
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == 130
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == 202
+      nDBFFieldType := HB_FT_STRING
+      cDBFFieldType  := "C"
+
+   CASE nADOFieldType == 128
+      nDBFFieldType := HB_FT_OLE
+      cDBFFieldType  := "G"
+
+   CASE nADOFieldType == 204
+      nDBFFieldType := HB_FT_OLE
+      cDBFFieldType  := "G"
+
+   CASE nADOFieldType == 205
+      nDBFFieldType := HB_FT_OLE
+      cDBFFieldType  := "G"
+
+   CASE nADOFieldType == 136
+
+   CASE nADOFieldType == 139
+
+
+
+
+   CASE nADOFieldType == 11
+      nDBFFieldType := HB_FT_LOGICAL
+      cDBFFieldType  := "L"
+
+   CASE nADOFieldType == 203
+      nDBFFieldType := HB_FT_MEMO
+      cDBFFieldType  := "M"
+
+   CASE nADOFieldType == 138
+      nDBFFieldType := HB_FT_MEMO
+      cDBFFieldType  := "M"
+
+   ENDCASE
+
+   RETURN if(nTIPORETORNO=1,nDBFFieldType,cDBFFieldType)
+
+
+function geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)
+local aRETU
+local cSUBTIPO
+aRETU:={cFieldName,cFieldType,nFieldLength,nFieldDec}
+
+cTYPE:=cFieldType
+cSUBTIPO:=""
+IF SUBSTR(cTYPE,2,1)=":"
+   cFieldType:=SUBSTR(cTYPE,1,1)
+   cSUBTIPO  :=SUBSTR(cTYPE,3)
+   cTYPE     :=SUBSTR(cTYPE,1,1)
+ENDIF
+
+do case
+
+
+
+
+    CASE AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. AT(",",cTYPE)>0 .AND. (AT("NUMERIC",UPPER(CTYPE))>0 .OR. AT("DECIMAL",UPPER(CTYPE))>0 )
+       cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1 )
+       cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(",",cTMPSIZE)-1 )
+       nFieldLength := val(cTMPSIZE)
+       cTMPSIZE:=SUBSTR(cTYPE, AT(",",cTYPE) +1 )
+       cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
+       nFieldDec := val(cTMPSIZE)
+       cFieldType := "N"
+
+
+
+
+
+   case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0  .AND. AT(",",cTYPE)=0 .AND. AT("INT",UPPER(CTYPE))>0
+       cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1)
+       cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
+       nFieldLength:= VAL(cTMPSIZE)
+       cFieldType := "N"
+       nFieldDec := 0
+
+
+
+
+
+   case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. (AT("CHAR",UPPER(CTYPE))>0 .OR. AT("TEXT",UPPER(CTYPE))>0 )
+       cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1)
+       cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
+       nFieldLength := VAL(cTMPSIZE)
+       cFieldType := "C"
+       nFieldDec := 0
+
+
+  case  cType ==  "TINYINT"
+    cFieldType := "N"
+    nFieldLength := 2
+    nFieldDec := 0
+
+
+  case  cType == "INT2" .OR. cType == "SMALLINT"
+    cFieldType := "N"
+    nFieldLength := 4
+    nFieldDec := 0
+
+ case cType == "INTEGER" .OR. cType == "INT4" .OR. cType == "SERIAL"
+    cFieldType := "N"
+    nFieldLength := 8
+    nFieldDec := 0
+
+  case cType == "BIGINT" .OR. cType == "INT8" .OR. cType == "BIGSERIAL"
+    cFieldType := "N"
+    nFieldLength := 16
+    nFieldDec := 0
+
+
+ case cType == "DOUBLE PRECISION" .OR. cType == "FLOAT8"
+    cFieldType := "N"
+    nFieldLength := 19
+    nFieldDec := 9
+
+case cType == "MONEY"
+    cFieldType := "N"
+    nFieldLength := 12
+    nFieldDec := 2
+
+case cType == "REAL" .OR. cType == "FLOAT" .OR. cType == "DOUBLE" .OR. cType == "FLOAT4"
+    cFieldType := "N"
+    nFieldLength := 14
+    nFieldDec := 5
+
+
+
+ case cType == "DATE" .OR. cType == "DATETIME" .OR. cType == "SHORTDATE" .OR. cType == "TIMESTAMP"  .OR. cType == "D" .OR. cType == "TYPE_TIMESTAMP"  .OR. cType ==  "TYPE_DATE"
+    cFieldType := "D"
+    nFieldLength := 8
+    nFieldDec := 0
+
+case cType == "@"
+    cFieldType := "D"
+    nFieldLength := 8
+    nFieldDec := 0
+
+ case cType == "BOOL"  .OR. cType == "BOOLEAN"
+    cFieldType := "L"
+    nFieldLength := 1
+    nFieldDec := 0
+
+
+  CASE cType == "TEXT" .AND. (cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
+       cFieldType := "C"
+       nFieldLength := 250
+       nFieldDec := 0
+
+  CASE cType == "LONGTEXT" .OR. cType == "M"  .OR. cType == "WLONGVARCHAR"
+       cFieldType := "C"
+       nFieldLength := 250
+       nFieldDec := 0
+
+
+
+  case  AT("(",cTYPE)=0 .AND. AT(")",cTYPE)=0 .AND.  AT("TEXT",UPPER(CTYPE))>0
+       nFieldLength := 10
+       cFieldType := "M"
+       nFieldDec := 0
+
+
+
+
+  case  AT("(",cTYPE)=0 .AND. AT(")",cTYPE)=0 .AND.  AT("NUMERIC",UPPER(CTYPE))>0
+       cFieldType := "N"
+       IF nFieldLength =0
+          nFieldLength := 8
+          nFieldDec := 0
+       ENDIF
+
+
+
+
+  CASE cType == "VARCHAR" .OR. cType == "BPCHAR" .OR. AT("CHARACTER",UPPER(CTYPE))>0 .OR. cType == "WVARCHAR" .OR. cType == "WCHAR"
+       cFieldType := "C"
+       nFieldDec := 0
+
+
+  CASE cType == "NAME"
+       cFieldType := "C"
+       nFieldLength := 64
+       nFieldDec := 0
+
+   CASE cType == "C" .AND.   nFieldLength>250
+        nFieldLength := 250
+
+
+
+
+   CASE cType == "I" .AND. cSUBTIPO=="N"
+       cFieldType := "N"
+
+   CASE cType == "OID"
+       cFieldType := "N"
+       nFieldLength := 19
+       nFieldDec := 0
+
+ otherwise
+
+
+endcase
+
+
+aRETU:={cFieldName,cFieldType,nFieldLength,nFieldDec}
+return aRETU
+
+FUNCTION geraconn(cCAMBASE,lPROVIDER)
+LOCAL cCONN
+cConn  :=""
+IF VALTYPE(cCAMBASE)<>"C"
+   cCAMBASE:=""
+ENDIF
+IF vALTYPE(lPROVIDER)<>"L"
+   lPROVIDER:=.T.
+ENDIF
+DO CASE
+
+   CASE lMDB .OR. at(".MDB",upper(cCAMBASE))>0
+        if loledb
+            IF lPROVIDER
+               cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+            ELSE
+               cCONN:="Driver={Microsoft Access Driver (*.mdb)};Dbq="+cDATABASEX+";Mode=Share Deny None"
+            ENDIF
+        else
+            IF lPROVIDER
+               cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+            ELSE
+               cCONN:="Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq="+cDATABASEX+";Mode=Share Deny None"
+            ENDIF
+        endif
+
+    CASE Laccdb .OR. at(".ACCDB",upper(cCAMBASE))>0
+
+        IF lPROVIDER
+           cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None"
+        ELSE
+           cCONN:="Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq="+cDATABASEX+";Mode=Share Deny None"
+        ENDIF
+   CASE cTIPOSQL="SQLITE" .OR. at(".SQLITE",upper(cCAMBASE))>0
+        cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
+
+    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
+        if empty(cDATABASEX)
+            if loledb
+               cConn:="Driver={MySQL ODBC 8.0 ANSI Driver};Server="+cSERVERX+";Uid="+CUSERX+";Pwd="+cPASSX+";"
+            else
+               cConn:="Driver={MySQL ODBC 9.0 ANSI Driver};Server="+cSERVERX+";Uid="+CUSERX+";Pwd="+cPASSX+";"
+            endif
+        else
+            if loledb
+               cConn:="Driver={MySQL ODBC 8.0 ANSI Driver};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+CUSERX+";Pwd="+cPASSX+";"
+            else
+               cConn:="Driver={MySQL ODBC 9.0 ANSI Driver};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+CUSERX+";Pwd="+cPASSX+";"
+            endif
+        endif
+   case cTIPOSQL="MARIADB"
+        if empty(cDATABASEX)
+            cConn:="DRIVER={MariaDB ODBC 3.2 Driver};SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
+        else
+           cConn:="DRIVER={MariaDB ODBC 3.2 Driver};DATABASE="+cDATABASEX+";SERVER="+cSERVERX+";UID="+cUSERX+";PASSWORD="+cPASSX
+        endif
+   case cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+
+        if empty(cDATABASEX)
+            if loledb
+               cConn:="DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+            else
+               cConn:="DRIVER={PostgreSQL ANSI(x64)};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+            endif
+        else
+            if loledb
+               cConn:="DRIVER={PostgreSQL ANSI};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+            else
+               cConn:="DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX
+            endif
+        endif
+    CASE cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="SQL"
+         if empty(cDATABASEX)
+            IF lPROVIDER
+               cCONN:="Provider=SQLOLEDB;Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+cUSERX+";Pwd="+cPASSX+";"
+            ELSE
+               cCONN:="Driver={SQL Server};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+cUSERX+";Pwd="+cPASSX+";"
+            ENDIF
+         else
+            IF lPROVIDER
+               cCONN:="Provider=SQLOLEDB;Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX+";"
+            ELSE
+               cCONN:="Driver={SQL Server};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX+";"
+
+            ENDIF
+         endif
+
+    CASE cTIPOSQL = "DBASE"
+      cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=dBASE IV;"
+   CASE cTIPOSQL = "FIREBIRD"
+      cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+   CASE cTIPOSQL = "PARADOX"
+      cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Paradox 5.x;"
+   CASE cTIPOSQL == "XMLDB"
+      cCONN := "Provider=MSPersist"
+   CASE cTIPOSQL == "XML"
+      cCONN := "Provider=MSDAOSP;Data Source="+cCAMBASE+";"
+   CASE cTIPOSQL = "XLS"
+      cCONN :="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Excel 8.0;HDR=Yes;IMEX=1"
+   CASE cTIPOSQL = "REMOTE"
+      cCONN := "Provider=MS Remote;Remote Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cDATABASEX+";Remote Server=" + cSERVERX
+
+
+ENDCASE
+RETURN cConn
+
+
+
+
+Function executacmd(cCAMBASE,eCOMANDO)
+LOCAL cCHAVEV
+LOCAL cConn
+LOCAL aCOMANDOS:={}
+LOCAL nFIM
+LOCAL cCOMANDO:=""
+local i
+
+
+
+IF VALTYPE(eCOMANDO)="C"
+   AAdd(aCOMANDOS,eCOMANDO)
+ELSE
+   aCOMANDOS:=eCOMANDO
+ENDIF
+nFIM:=LEN(aCOMANDOS)
+
+cCHAVEV:=""
+cConn  :=geraconn(cCAMBASE)
+
+IF EMPTY(cConn)
+   return .F.
+endif
+
+try
+   oConn:=WIN_OLECreateObject( "ADODB.Connection" )
+   with object oConn
+      :ConnectionString:=cConn
+      :Open()
+   END
+catch oErr
+   ShowAdoError(oERR,oCoNn)
+   return .F.
+end
+
+try
+  oComm:=WIN_OLECreateObject( "ADODB.Command" )
+catch oErr
+    ShowAdoError(oERR,oCoNn)
+   return .F.
+end
+
+for i:=1 to nfim
+    cCOMANDO:=aCOMANDOS[I]
+    IF ! EMPTY(cCOMANDO)
+      try
+          with object oComm
+              :CommandText:=cCOMANDO
+              :CommandType:=1
+              :ActiveConnection:=oConn
+              :Execute()
+          end
+      end
+    ENDIF
+next i
+oConn:Close()
+oConn:=NIL
+RETURN .T.
+
+
+FUNCTION CreateAccessDatabase( cDatabase, cUserName,cPassword, lEncrypt )
+
+   LOCAL oCatalog
+   LOCAL cEXTENSAO
+   LOCAL cDIRETORIO
+   LOCAL cNAME
+
+    cNAME:=""
+   cEXTENSAO:=""
+   cDIRETORIO:=""
+
+
+   hb_FNameSplit( cDataBase,@cDIRETORIO, @cName, @CEXTENSAO )
+   cEXTENSAO=LOWER(cEXTENSAO)
+
+
+   IIF( cPassword == NIL, cPassword := "''", NIL )
+   IIF( lEncrypt == NIL, lEncrypt := .F., NIL )
+
+   oCatalog := WIN_OLECreateObject( "ADOX.Catalog" )
+
+
+
+
+
+
+
+
+
+
+
+ IF ! hb_FileExists( cDataBase )
+    do case
+       case lACCDB .OR. cEXTENSAO == ".accdb"
+
+
+            oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.12;" + "Data Source=" + cDatabase + ";" + "JET OLEDB:Engine Type=6;" )
+       CASE lMDB   .OR. cEXTENSAO == ".mdb"
+          if loledb
+
+
+             oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" + "Data Source=" + cDatabase + ";" + "JET OLEDB:Engine Type=5;" )
+            else
+
+
+               oCatalog:Create( "Provider=Microsoft.ACE.OLEDB.12;" + "Data Source=" + cDatabase + ";" + "JET OLEDB:Engine Type=5;" )
+          ENDIF
+       CASE cTIPOSQL="SQLITE" .OR. cEXTENSAO == ".sqlite"  .OR. cEXTENSAO == ".sqlite3"  .OR. cEXTENSAO == ".fossil" .OR. cEXTENSAO== ".db3"
+           oCatalog:Create( "DRIVER=SQLite3 ODBC Driver;Database=" + cDataBase )
+       CASE cTIPOSQL="XLS" .OR. cEXTENSAO == ".xls"
+           oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False" )
+       CASE cEXTENSAO == ".db" .OR. cTIPOSQL == "PARADOX"
+          oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
+       CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cTIPOSQL == "FIREBIRD"
+          oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
+
+    endcase
+    oCatalog := NIL
+endif
+
+
+
+
+
+
+
+RETURN
+
+
+Function SQLDialeeto(cSQLCNV)
+     DO CASE
+            Case cTIPOSQL= "SQLITE"
+
+
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "CURRENT_DATE ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "LEN(", "LENGTH(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CURRENTDATETIME", " current_timestamp ")
+
+
+
+
+
+
+            Case cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
+
+
+
+
+
+
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "SYSDATE()")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPEAT(")
+
+            Case cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+
+
+
+
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "CURRENT_DATE ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "LEN(", "LENGTH(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "DAY(", "EXTRACT('DAY' FROM ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "MONTH(", "EXTRACT('MONTH' FROM ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "YEAR(", "EXTRACT('YEAR' FROM ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPEAT(")
+            Case cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER"
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "GETDATE() ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPLICATE(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "SUBSTR(", "SUBSTRING(")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Case "ORACLE", "OCI"
+                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "SYSDATE ")
+                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "LTRIM(RTRIM(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "LEN(", "LENGTH(")
+                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPLICATE(")
+
+
+
+
+
+
+            Case lMDB .OR. lACCDB
+                 cSQLCNV = STRTRAN(cSQLCNV, "CURRENTDATETIME", " now ")
+
+     EndCASE
+RETURN cSQLCNV

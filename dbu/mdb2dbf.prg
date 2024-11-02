@@ -367,6 +367,52 @@ function opencmdbarq()
 local lRETU
 lRETU:=.T.
 DO CASE
+    CASE lMDB
+      // DBUseArea( <lNewArea> , <cDriver> , <cName>, <xcAlias> , <lShared> , <lReadOnly> ) -> Nil
+        if loledb
+           hb_adoSetTable( cTABELA ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+        else
+           hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "ACEOLEDB" ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+        endif
+    CASE lACCDB
+         hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "ACEOLEDB" ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+    CASE cTIPOSQL="SQLITE"
+         hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "SQLITE" ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+    CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"
+        if loledb
+            hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "MYSQL" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+        else
+            hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "MYSQL64" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+        endif
+    CASE cTIPOSQL="MARIADB"
+        hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "MARIADB" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+    CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
+        hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "SQL" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+    CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+        if loledb
+            TRY
+              hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "PGSQL" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+            catch oErR
+              MDT("Erro Abrindo")
+              lRETU = .F.
+            END
+        else
+            TRY
+              hb_adoSetTable( cTABELA ) ; hb_adoSetEngine( "PGSQL64" ) ; hb_adoSetServer( cSERVERx ) ; hb_adoSetUser( CUSERX ); hb_adoSetPassword( CPASSX ) ; dbUseArea( .F., "ADORDD", ( cMDBARQ ),, .T., .F. )
+            catch oErR
+              MDT("Erro Abrindo")
+              lRETU = .F.
+            END
+        endif
+ENDCASE
+return lRETU
+
+
+/*
+function opencmdbarq()
+local lRETU
+lRETU:=.T.
+DO CASE
     CASE lMDB //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
         if loledb
            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
@@ -405,7 +451,7 @@ DO CASE
         endif        
 ENDCASE
 return lRETU
-
+*/
 
 
 function mdbcria()
