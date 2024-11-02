@@ -5,7 +5,7 @@
 #-tshead=tshead.ch
 #-manifest=dbu.Manifest  comentado erro compilacao 32 bits
 
-#d:\develop\harbour\dbu\dbu.rc
+d:\develop\harbour\dbu\dbu.rc
 
 hbct.hbc
 hbwin.hbc

@@ -1,3 +1,3 @@
 rem SET PATH=d:\hb32\bin\..\bin;%PATH%
-call d:\devprg\hb64MGW12\HB64MGW12
+call d:\DEVPRG\hb64\hb64msys
 hbmk2 cepwebvia.hbp 
