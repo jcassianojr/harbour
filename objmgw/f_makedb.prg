@@ -25,6 +25,11 @@ LOCAL create_dbf := dbf_exist := old_cursor :=     ;
 LOCAL dbf_memo,memoext,temp_dbf,temp_dbt,temp_stru := ''
 LOCAL dbf_stru := {}
 LOCAL lMEMO
+LOCAL i
+LOCAL cTAG
+LOCAL cCHAVEDBF
+cTAG:=""
+CCHAVEDBF:=""
 
 cOLDRDD:=RDDSETDEFAULT()
 
@@ -36,6 +41,7 @@ ENDIF
 
 PRIVATE dbf_name := dbf_text := textline := '', handle := 0,   ;
         text_row := 7, new_stru := {}
+PRIVATE new_index := {}
 IF VALTYPE(lQUIT)#"L"
     lQUIT:=.T.
 ENDIF
@@ -178,6 +184,7 @@ DO WHILE .NOT. EMPTY(dbf_name)
    nREGORI:=RECNO()
    DBCLOSEAREA()
 
+  
    * Testa os sinalizadores e recria a base de dados, se necessario.
    IF dbf_exist .AND. (create_dbf .OR. lCRIA)
 
@@ -249,6 +256,7 @@ DO WHILE .NOT. EMPTY(dbf_name)
 
 
    ENDIF
+   
 
    IF create_dbf .OR.lCRIA
 
@@ -285,6 +293,8 @@ DO WHILE .NOT. EMPTY(dbf_name)
 
             nREGDES:=RECNO()
             pack
+            
+            
             dbclosearea()
 
 
@@ -301,6 +311,24 @@ DO WHILE .NOT. EMPTY(dbf_name)
 
 
    ENDIF
+   
+    //cria indices se nao existir 
+            IF ! FILE(dbf_name+hb_rddInfo( RDDI_ORDBAGEXT))
+                IF netuse(dbf_name,cDRIVER,.F.,.F.,.T.,.F.,30) 
+                    altd()
+                    IF LEN(new_index)>0
+                        FOR I= 1 TO LEN(new_index)
+                            cTAG:=new_index[i][1]
+                             cCHAVEDBF:=new_index[i][2]
+                            index on &cCHAVEDBF tag &cTAG to &dbf_name
+                        NEXT I
+                    endif
+                    dbclosearea()
+                else
+                    altd()    
+                endif
+            ENDIF
+   
 
    * Obtem prox. linha de def. da base de dados a partir do dicion. dados.
    GETDBFDEF()
@@ -347,6 +375,8 @@ IF UPPER(SUBSTR(textline, 1, 6)) = 'DBFDEF'
     textline = LTRIM(SUBSTR(textline, 7))
     dbf_name = PARSE(@textline)
     dbf_text = textline
+    new_stru = {}
+    new_index ={}
 
 ELSE
     * Do contrario, define dbf_name como uma cadeia vazia e
@@ -383,6 +413,13 @@ STATIC FUNCTION LOADSTRU
 * Carrega as definicoes da base de dados para o array de estruturas.
 
 LOCAL fld_dec := fld_len := fld_name := fld_type := message := ''
+LOCAL cTAG
+LOCAL cCHAVEDBF
+LOCAL cCHAVESQL
+
+cTAG:=""
+cCHAVEDBF:=""
+cCHAVESQL:=""
 
 * Apaga o novo array de estruturas.
 new_stru := {}
@@ -432,9 +469,28 @@ DO WHILE UPPER(SUBSTR(textline, 1, 6)) != 'ENDDEF'
 
 ENDDO
 
+IF UPPER(SUBSTR(textline, 1, 6)) = 'ENDDEF'
+   NEXTLINE()
+ENDIF
+
+IF UPPER(SUBSTR(textline, 1, 8))="DEFINDEX"
+    NEXTLINE()
+    WHILE UPPER(SUBSTR(textline, 1, 8)) != 'ENDINDEX'
+        * Obtem e verifica as definicoes de campo do dicionario de dados.
+        cTAG = UPPER(PARSE(@textline))     
+        cCHAVEDBF = UPPER(PARSE(@textline))     
+        cCHAVESQL = UPPER(PARSE(@textline))          
+        ALTD()
+            * Carrega cada definicao de campo para o array de indices
+        AADD(new_index,{cTAG,cCHAVEDBF,cCHAVESQL})        
+        NEXTLINE()
+   ENDDO
+ENDIF
+
+
 * Move o ponteiro para o inicio do arquivo.
 IF ! EMPTY(ALIAS())
-   GO TOP
+   DBGOTOP()
 ENDIF
 RETURN NIL
 
