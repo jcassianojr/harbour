@@ -261,8 +261,11 @@ IF tDOC=14
    IF lMDB .OR. lACCDB
       //Ainda nao implantado testes com catalog ver outras opcoes
       //utilizando sqltodbfstru
-      aSTRU:=sqltodbfstru(aSTRU)
-      //aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
+      //aSTRU:=sqltodbfstru(aSTRU)
+      aSTRU   :=MDBTABLES(cMDBARQ,cTABELAgrv)
+      altd()
+      aINDICES:=MDBTABLES(cMDBARQ,cTABELAgrv,"__INDEX__")
+      altd()
    ELSE
       aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
    ENDIF   
@@ -678,7 +681,11 @@ IF VALTYPE(cTABELA)="C"
    cTIPOINFO:="ESTRUTURA"
 ENDIF
 IF VALTYPE(cCAMPOSQL)="C"
-   cTIPOINFO:="CCAMPOSQL"
+   IF cCAMPOSQL="__INDEX__"
+      cTIPOINFO:="__INDEX__"
+   ELSE
+      cTIPOINFO:="CCAMPOSQL"
+   ENDIF   
 ENDIF
 
 aRETU:={}
@@ -751,7 +758,7 @@ IF cTIPOINFO="CCAMPOSQL"
 ENDIF
 
 lopen:=.f.
-IF cTIPOINFO="ESTRUTURA" .AND. (LMDB .OR. lACCDB) 
+IF (cTIPOINFO="ESTRUTURA" .OR. cTIPOINFO="__INDEX__") .AND. lARQMDBACCDB
     //abaixo com catalog
 ELSE
       TRY
@@ -819,7 +826,7 @@ IF lOPEN
                    endif
                    AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))   
                CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"       
-                   //implantar                        
+                   //implantar   catalog? outra?                    
              ENDCASE   
             
          ENDIF   
@@ -888,6 +895,26 @@ if LEN(aRETU)=0 .AND. cTIPOINFO="ESTRUTURA"
                     AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))   
                  ENDIF
                  oXcatalog:movenext()
+      enddo
+    ENDIF
+endif
+
+
+if LEN(aRETU)=0 .AND. cTIPOINFO="__INDEX__" 
+    IF lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+      //nao funcionou criando olecreate adox.catalog
+      //necessario nova conecaro
+      oXConection      :=  win_oleCreateObject( "ADODB.Connection" )
+      oXConection:Open( CCONN)
+      oXCatalog        := oXConection:OpenSchema(adSchemaIndexes)
+      do while .not. oXCatalog:EOF()
+         IF UPPER(cTABELA)=UPPER(oXcatalog:Fields( "TABLE_NAME" ):Value)
+            cCHAVENAME  := UPPER(oXcatalog:Fields( "INDEX_NAME" ):Value)
+            cCHAVECAMPO  := UPPER(oXcatalog:Fields( "COLUMN_NAME" ):Value)
+                    //PRIMARY_KEY
+            AADD(aRETU,{cCHAVENAME,cCHAVECAMPO})   
+         ENDIF
+         oXcatalog:movenext()
       enddo
     ENDIF
 endif
