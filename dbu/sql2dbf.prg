@@ -367,7 +367,7 @@ function export2dbf(ODB1,cNEWTABLE,Ntipo)
       if len( aStruct ) > 0
          //cNEWARQ:=cNEWTABLE+"_exp"
          if ntipo=1
-           dbcreate( cNewTable, aStruct )
+           dbcreate( cNewTable, aStruct,"DBFCDX" )
            DBUseArea( .T. , "DBFCDX" , cNewTable, "DESTINO" , .T. , .F. ) 
          else
            dbCreate( "mem:destino", aStruct, , .T., "DESTINO" )

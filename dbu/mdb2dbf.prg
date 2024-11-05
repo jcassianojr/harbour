@@ -261,17 +261,34 @@ IF tDOC=14
    IF lMDB .OR. lACCDB
       //Ainda nao implantado testes com catalog ver outras opcoes
       //utilizando sqltodbfstru
-      //aSTRU:=sqltodbfstru(aSTRU)
-      aSTRU   :=MDBTABLES(cMDBARQ,cTABELAgrv)
-      altd()
+      aSTRU:=sqltodbfstru(aSTRU)
+      //funcionou o catalog porem com ordem diferente dos campos
+      //gerando erro na gravacao
+      //aSTRU   :=MDBTABLES(cMDBARQ,cTABELAgrv)
       aINDICES:=MDBTABLES(cMDBARQ,cTABELAgrv,"__INDEX__")
-      altd()
    ELSE
       aSTRU:=MDBTABLES(cMDBARQ,cTABELAgrv)
    ENDIF   
    cALIASADO:=ALIAS()
-   DBCreate(ctabela+"_"+Ctiposql, aSTRU) 
+   DBCreate(ctabela+"_"+Ctiposql, aSTRU,"DBFCDX" )
    DBUseArea( .T. ,  , ctabela+"_"+Ctiposql,  , .F. , .F. ) 
+   IF LEN(aINDICES)>0
+      cCHAVEINDEX=aINDICES[1,1]
+      cCAMPOSINDEX:=""
+      FOR I= 1 TO LEN(aINDICES)
+          IF cCHAVEINDEX<>aINDICES[I,1]
+             cCHAVEINDEX=aINDICES[I,1]
+             cCAMPOSINDEX=aINDICES[I,2]
+          ELSE 
+             IF EMPTY(cCAMPOSINDEX)   
+                cCAMPOSINDEX:=aINDICES[I,2]
+             ELSE
+                cCAMPOSINDEX:=cCAMPOSINDEX+","+aINDICES[I,2]
+             ENDIF
+          ENDIF
+//          alert(Cchaveindex+" "+CCAMPOSINDEX)
+      NEXT I
+   ENDIF
    cALIASDBF:=ALIAS()
    nFIM:=FCOUNT()
    dbselectar(cALIASADO)
@@ -279,12 +296,12 @@ IF tDOC=14
    while ! eof()
      aVALOR:={}
      FOR I= 1 TO nFIM
-        AADD(aVALOR,FIELDGET(I))
+        AADD(aVALOR,{FIELDGET(I),FIELDNAME(I)}) //guarda o nome do campo caso a ordem venha invertida
      NEXT I
      dbselectar(cALIASDBF)
      NETRECAPP()
      FOR I= 1 TO nFIM
-         eVALOR:=aVALOR[I]
+         eVALOR:=aVALOR[I][1]
          if valtype(eVALOR)="C" .AND. SUBSTR(eVALOR,5,1)="-" .AND. SUBSTR(eVALOR,8,1)="-"
             eVALOR = substr(eVALOR, 6, 2) + "/" + substr(eVALOR, 9, 2) + "/" + substr(eVALOR, 1, 4)
             eVALOR = CTOD(eVALOR)
@@ -292,9 +309,13 @@ IF tDOC=14
          if valtype(eVALOR)="C"  .OR. valtype(eVALOR)="M"
            eVALOR:=RANGEREPL(chr(0),chr(31),eVALOR," ") //Remove caracteres de controle
            eVALOR:=TIRACE(eVALOR)
+           eVALOR:=ALLTRIM(eVALOR)
         ENDIF 
          IF ! EMPTY(eVALOR)
-            FIELDPUT(I,eVALOR)
+             nPOSDBF:=FieldPos(aVALOR[I][2]) 
+             fieldput(nPOSDBF,Evalor)
+             //grava com o nome do campo casos a posicao dos campos ados seja difetente dos campos dbf
+            //FIELDPUT(I,eVALOR)
          ENDIF   
      NEXT I
      dbselectar(cALIASADO)

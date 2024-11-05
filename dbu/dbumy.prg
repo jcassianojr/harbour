@@ -171,8 +171,8 @@ IF LEN(aRETU)=0
    return .f.
 endif
 
-DBCreate(ctabelaX+"_mysql", aRETU) 
-DBUseArea( .T. ,  , ctabelaX+"_mysql", , .F. , .F. ) 
+DBCreate(ctabelaX+"_mysql", aRETU,"DBFCDX") 
+DBUseArea( .T. , "DBFCDX" , ctabelaX+"_mysql", , .F. , .F. ) 
     //  cARQIMPUNL:=ctabela+"_"+Ctiposql+"_pipe.unl"
     //  APPEND FROM &cARQIMPUNL. DELIMITED  WITH PIPE
 

@@ -174,8 +174,8 @@ local eVALOR
 PGSELECTTABLE()
 aRETU:=PGstrudbf()
 
-DBCreate(ctabelaX+"_pgsql", aRETU) 
-DBUseArea( .T. ,  , ctabelaX+"_pgsql", , .F. , .F. ) 
+DBCreate(ctabelaX+"_pgsql", aRETU,"DBFCDX") 
+DBUseArea( .T. , "DBFCDX" , ctabelaX+"_pgsql", , .F. , .F. ) 
 
 oQuery2  := oServer:Query( "SELECT * FROM "+chr(34)+cTABELAx+chr(34))  //aspas duplas tenta maiscula
 IF oServer:NetErr()
