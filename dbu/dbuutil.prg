@@ -1029,7 +1029,6 @@ return M->done_ok
 *+
 *+    Function filebox()
 *+
-*+    Called from ( dbuger.prg   )   3 - function geradbf()
 *+                ( dbustru.prg  )   1 - modi_stru()
 *+                ( dbuview.prg  )   1 - function open_dbf()
 *+                                   1 - function get_ntx()

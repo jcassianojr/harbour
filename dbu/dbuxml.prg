@@ -148,4 +148,52 @@ else
 endif
 return sRet
 
-*+ EOF: FAZ.PRG
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+    Function TIPOXML()
+*+
+*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+function TIPOXML( cTIPO,nTAM,nDEC )
+
+local cRETU := ""
+do case
+case cTIPO = 'C'
+   cRETU := 'string'
+case cTIPO = 'N'
+   IF nDEC=0
+      cRETU := 'i4' //+alltrim(str(ntam))
+   ELSE
+      cRETU := 'r8' //'float'
+   ENDIF
+case cTIPO = 'L'
+   cRETU := 'boolean'
+case cTIPO = 'D'
+   cRETU := 'date'  //datetime
+case cTIPO = 'M'
+   cRETU := 'string'
+endcase
+return cRETU
+
+
+/*
+XML Schema :
+<DataRoot>
+   <Estrutura>
+      <Campo>
+        <Nome></Nome>
+        <Tipo></Tipo>
+        <Tamanho></Tamanho>
+        <Decimal></Decimal>
+      </Campo>
+   </Estrutura>
+   <Indice>
+      <Chave></Chave>
+   </Indice>
+   <Dados>
+      <Registro>
+        <#Nome do campo#></#Nome do campo#>
+      </Registro>
+   </Dados>
+</DataRoot>
+*/

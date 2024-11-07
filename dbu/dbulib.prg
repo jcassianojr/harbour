@@ -477,24 +477,39 @@ RETURN lRETU
 
 
 *************************
-function copiardbfpara()
+function copiardbfpara(nTIPOPR) //1 Copiar 2 anexar
 LOCAL aAMBIENTE
 LOCAL nOLDTIPO
 LOCAL nORITIPO
 LOCAL cORIDRIVER
 LOCAL cARQORI
 LOCAL nTIPDOC
+LOCAL cDESTINO
+
+IF VALTYPE(nTIPOPR)<>"N"
+    nTIPOPR:=1
+ENDIF
 
 aAMBIENTE:=SALVAA()
 nOLDTIPO=TIPODBF
 
-alertX("escolha origem")
+if nTIPOPR=1
+   alertX("escolha origem")
+else
+   alertX("escolha destino")
+endif   
 tipodbfesc()
 nORITIPO:=TIPODBF
 cORIDRIVER:=RDDNOME(TIPODBF)
-cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
-
-LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
+if nTIPOPR=1
+   cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
+else
+   cDESTINO:=win_GetOpenFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos de destino", "*.dbf", 1 )
+endif
+LCOPIANAT:=.F.
+IF nTIPOPR=1
+   LCOPIANAT:=MDG("Copia Nativa(SIM) Interna(NAO)")
+ENDIF   
 
 //nao mostrar tipo 14 dbf na escolha nao spbrepor na copia passando falso aqui
 tDOC:=   pegtipodoc(.F.)
@@ -530,15 +545,28 @@ IF .NOT.  lCOPIANAT
    PegcsUB(tDOC)  //pegar o subtipo conforme tipo
 ENDIF
 
-IF LCOPIANAT
-   cDESTINO:=TROCAEXT(cARQORI,zEXPOREXT)
-   MDT("abrindo arquivo de origem: "+cARQORI)
-   USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER) 
-   COPYTO(cDESTINO)
-   dbcloseall()
-ELSE
-   multidocs(nTIPDOC,cARQORI)
-ENDIF   
+IF nTIPOPR=1
+    IF LCOPIANAT
+       cDESTINO:=TROCAEXT(cARQORI,zEXPOREXT)
+       MDT("abrindo arquivo de origem: "+cARQORI)
+       USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER) 
+       COPYTO(cDESTINO)
+       dbcloseall()
+    ELSE
+       multidocs(nTIPDOC,cARQORI)
+    ENDIF   
+ENDIF
+IF nTIPOPR=2
+   IF zEXPOREXT="DBF" .OR. zEXPOREXT="SDF" .OR. zEXPOREXT="DLM" .OR. zEXPOREXT="CSV"  .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="PSV"  .OR. zEXPOREXT="TSV"   .OR. zEXPOREXT="SSV" 
+     cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*."+zEXPOREXT, 1 )
+     MDT("abrindo arquivo de destino: "+cDESTINO)
+     USE (cDESTINO) ALIAS DESTINO EXCLUSIVE NEW VIA  (cORIDRIVER) 
+     APPENDFROM(cARQORI)
+     dbcloseall()
+   ELSE
+      MDT("Ainda nao disponivel para "  +zEXPOREXT)
+   ENDIF  
+ENDIF
 
 RESTAA(aAMBIENTE)
 TIPODBF:=nOLDTIPO
@@ -647,6 +675,9 @@ DO CASE
        APPEND FROM  &cDESTINO.  while zei_fort(nLASTREC,,,1)  DELIMITED   WITH WITH &zDELIMITE
 ENDCASE   
 RETURN NIL
+
+
+
 
 *+********************************************************************
 *+
