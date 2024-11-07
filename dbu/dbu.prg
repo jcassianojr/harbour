@@ -444,7 +444,7 @@ abrir_b[ 3 ] = "sysfunc = 0 .AND. .NOT. box_open"
 
 DECLARE criar_b[ 11 ]
 criar_m:={"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso" ,;
-                 "sem  uso","sem  uso","SDF->DBF","DLM->DBF","DBE->DBF"}
+                 "sem  uso","sem  uso","Sem  uso","Sem  uso","Sem  uso"}
 //criar_m[5]:=ZEXPOREXT   //agora usa geradoc 0 que pergunta o tipo  de exportacao        
 
 criar_b[ 1 ] = "sysfunc = 0"
@@ -655,11 +655,11 @@ do while .T.
             cur_area := 0
          endif
       case M->func_sel = 9
-         GERADBF( 7 )
+        // GERADBF( 7 )
       case M->func_sel = 10
-         GERADBF( 8 )
+        // GERADBF( 8 )
       case M->func_sel = 11
-         GERADBF( 9 )
+        // GERADBF( 9 )
       otherwise
          if empty( M->cur_dbf )
             view_err := "Nao h  arquivo de dados na corrente area selecionada"
