@@ -822,6 +822,7 @@ case M->sysparam = 2
 case M->sysparam = 4
 
    if M->keystroke <> 13
+      
       keyboard chr( M->keystroke )
 
    endif
@@ -1241,6 +1242,7 @@ while M->menu_func > 0 .and. M->menu_sel = 0
    setcolor( M->color5 )
    menu_sel := achoice( 3, M->ml, M->mb, M->mr, &a._m, &a._b, "mu_func", ;
                         menu_deflt[ M->menu_func ], menu_deflt[ M->menu_func ] - 1 )
+                        
 
    do case
 
@@ -1270,7 +1272,10 @@ if M->menu_func <> 0
 
 endif
 
-if ltrim( str( M->menu_func ) ) $ M->exit_str
+
+//Menus que Saem do loop (sem necessidade de checar dbf_aberto) f2=2 f3=3 ...
+//exit_str definida no dbu.prg
+if ltrim( str( M->menu_func ) ) $ M->exit_str  .or. (M->menu_func = 2 .and. M->menu_sel > 3 ) //menus que saem do loop exit_str ou //abir outros databases
    sysfunc  := M->menu_func
    func_sel := M->menu_sel
 else

@@ -436,11 +436,19 @@ exit_str := "3569"
 ajuda_m := { "Ajuda" }
 ajuda_b := { .T. }
 
-abrir_m:= {"Database","Indice","Visao"}
-abrir_b:=array(3)
+abrir_m:= {"Database","Indice","Visao","POSTGRESQL",;
+            "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL"}
+abrir_b:=array(10)
 abrir_b[ 1 ] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[ 2 ] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
 abrir_b[ 3 ] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[ 4 ] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[ 5 ] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[ 6 ] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[ 7 ] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[ 8 ] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[ 9 ] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[10 ] = "sysfunc = 0 .AND. .NOT. box_open"
 
 DECLARE criar_b[ 11 ]
 criar_m:={"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso" ,;
@@ -491,9 +499,9 @@ setar_b[ 5 ] = "sysfunc = 0"
 setar_b[ 6 ] = "sysfunc = 0"
 setar_b[ 7 ] = "sysfunc = 0"
 
-util_m := { "Rem Reg Dup", "Exportar", "Sort DBF", "POSTGRESQL",;
-            "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","FixarTodos","ZeraTodos",;
-            "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs","Converter"}
+util_m := { "Rem Reg Dup", "Exportar", "Sort DBF", ;
+            "FixarTodos","ZeraTodos", "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs","Converter", ;
+            "sem uso","sem uso","sem uso","sem uso","sem uso","sem uso","sem uso"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.,.T.}
 //FOR X=5 TO 16
 //     util_b[x]:="EMPTY(cur_dbf)"
@@ -550,7 +558,25 @@ endif
 do while .T.
    cur_func := M->sysfunc
    do case
-   case M->sysfunc = 9
+   case M->sysfunc = 2 .and. M->func_sel > 3 //abir outros databases 
+       do case
+         case M->func_sel = 4
+           MENUSQL("PGSQL")
+      case M->func_sel = 5
+           MENUSQL("SQLITE")
+      case M->func_sel = 6
+           MENUSQL("MARIADB")
+      case M->func_sel = 7
+           MENUSQL("MYSQL")
+      case M->func_sel = 8
+           MENUSQL("MDB")
+      case M->func_sel = 9
+          MENUSQL("ACCDB")
+      case M->func_sel = 10
+          MENUSQL("MSSQL")
+      endcase
+      sysfunc := 0  //setar para nao retornar ficar em loop
+   case M->sysfunc = 9 //utilitarios F9
       do case
       case M->func_sel = 1
           if rsvp( "Limpar Registros Duplicados" ) = "S" 
@@ -565,61 +591,66 @@ do while .T.
 
       case M->func_sel = 3
            sortdbf()
+           
+     
       case M->func_sel = 4
-           MENUSQL("PGSQL")
-      case M->func_sel = 5
-           MENUSQL("SQLITE")
-      case M->func_sel = 6
-           MENUSQL("MARIADB")
-      case M->func_sel = 7
-           MENUSQL("MYSQL")
-      case M->func_sel = 8
-           MENUSQL("MDB")
-      case M->func_sel = 9
-          MENUSQL("ACCDB")
-      case M->func_sel = 10
-          MENUSQL("MSSQL")
-      case M->func_sel = 11
            if rsvp( "Fixar Todos ? (S/N)" ) = "S"
                FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
                stat_msg( "Fixar Todos Concluido" )
            endif
-      case M->func_sel = 12
+      case M->func_sel = 5
            if rsvp( "Zerar Todos ? (S/N)" ) = "S"
               if mdg( "Realmente Zerar Todos ? (S/N)" )
                  FAZERDBF( { || dbuzap() }, .t. ,{|| copybkdbf(ARQUIVO)},{||memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
                  stat_msg( "Zerar Todos Concluido" )
               endif
            endif
-      case M->func_sel = 13
+      case M->func_sel = 6
            IF MDG("Criar Inexistentes")
               DBETODBF("*.DBE")
            ELSE
               DBETODBF()
            ENDIF
            stat_msg( "DBEs->DBF Concluido" )
-      case M->func_sel = 14
+      case M->func_sel = 7
           if rsvp( "Corrigir Todos ? (S/N)" ) = "S"
               if mdg( "Corrigir Todos ? (S/N)" )
                  multidocs(4)
                  DBETODBF(,,.T.)
               endif
            endif
-      case M->func_sel = 15
+      case M->func_sel = 8
           if rsvp( "Converter memos entre formatos" ) = "S" 
 		     convertmemo() 
           ENDIF
-      case M->func_sel = 16 // podera ser usado para outro menu pois agora a funcao e unica 
+      case M->func_sel = 9// podera ser usado para outro menu pois agora a funcao e unica 
           if rsvp( "Sincronizar Tabelas" ) = "S" 
 		     dBUsincdbf()
           ENDIF
-      case M->func_sel = 17
+      case M->func_sel = 10
           if rsvp( "Converter  entre formatos" ) = "S" 
 		       converttipo() 
-          ENDIF   
+          ENDIF 
+          
+     case M->func_sel = 11
+         //  MENUSQL("PGSQL")
+      case M->func_sel = 12
+         //    MENUSQL("SQLITE")
+      case M->func_sel = 13
+        //     MENUSQL("MARIADB")
+      case M->func_sel = 14
+        //     MENUSQL("MYSQL")
+      case M->func_sel = 15
+        //     MENUSQL("MDB")
+      case M->func_sel = 16
+        //    MENUSQL("ACCDB")
+      case M->func_sel = 17
+        //    MENUSQL("MSSQL")      
+          
+            
       endcase
       sysfunc := 0
-   case M->sysfunc = 5
+   case M->sysfunc = 5 //F5 edicao
       if .not. empty( dbf[ 1 ] )
          setup()
          if empty( M->view_err )
@@ -644,7 +675,7 @@ do while .T.
          view_err := "Nao database em uso"
       endif
       sysfunc := 0
-   case M->sysfunc = 3
+   case M->sysfunc = 3 //f3 criar
       do case
       case M->func_sel = 1
          hi_cur()
@@ -690,7 +721,7 @@ do while .T.
          endif
       endcase
       sysfunc := 0
-   case M->sysfunc = 6 .and. M->func_sel < 7
+   case M->sysfunc = 6 .and. M->func_sel < 7 //f6 apoio
       if empty( M->cur_dbf )
          view_err := "Nao ha arquivo de dados na corrente area selecionada"
          sysfunc  := 0
@@ -739,7 +770,7 @@ do while .T.
       dehi_cur()
       sysfunc := 0
 
-   case M->sysfunc = 6 .and. ( M->func_sel = 7 .or. M->func_sel = 8 )
+   case M->sysfunc = 6 .and. ( M->func_sel = 7 .or. M->func_sel = 8 ) //f6 apoio intem 7 e 8
       LAYOUT()
       if .not. empty( dbf[ 1 ] )
          setup()
