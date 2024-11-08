@@ -310,7 +310,7 @@ aAMBIENTE:=SALVAA()
       OPCAO( 21, 14, "DB&F                                ", 70 ) //F 14 70
   ENDIF
   tdoc := menu( 2, 0 )
-  RESTAA(aAMBIENTE)
+  
   DO CASE
      CASE tDOC=1
           zEXPOREXT="XML"
@@ -346,6 +346,7 @@ aAMBIENTE:=SALVAA()
      tDOC =5       //retorna para o tipo 5 DML a geracao SSV CSV UNL PSV TSV SQL usam as funcoes da DML
   ENDIF
   
+  RESTAA(aAMBIENTE)
 return tDOC
 
 *+********************************************************************
@@ -541,9 +542,11 @@ IF tDOC=13 //SQL
    lCOPIANAT:=.F.
 ENDIF
 
-IF .NOT.  lCOPIANAT
-   PegcsUB(tDOC)  //pegar o subtipo conforme tipo
-ENDIF
+IF nTIPOPR=1
+    IF .NOT.  lCOPIANAT
+       PegcsUB(tDOC)  //pegar o subtipo conforme tipo
+    ENDIF
+ENDIF    
 
 IF nTIPOPR=1
     IF LCOPIANAT

@@ -501,7 +501,7 @@ setar_b[ 7 ] = "sysfunc = 0"
 
 util_m := { "Rem Reg Dup", "Exportar", "Sort DBF", ;
             "FixarTodos","ZeraTodos", "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs","Converter", ;
-            "sem uso","sem uso","sem uso","sem uso","sem uso","sem uso","sem uso"}
+            "Format->DBF","sem uso","sem uso","sem uso","sem uso","sem uso","sem uso"}
 util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.,.T.}
 //FOR X=5 TO 16
 //     util_b[x]:="EMPTY(cur_dbf)"
@@ -586,7 +586,7 @@ do while .T.
           IF MDG("Todos(SIM) Escolher (NAO)")
               multidocs(0) //passa 0 par a perguntar o formato
           ELSE    
-             copiardbfpara()
+             copiardbfpara(1)
           ENDIF  
 
       case M->func_sel = 3
@@ -633,7 +633,7 @@ do while .T.
           ENDIF 
           
      case M->func_sel = 11
-         //  MENUSQL("PGSQL")
+          copiardbfpara(2) //append formatos para dbf
       case M->func_sel = 12
          //    MENUSQL("SQLITE")
       case M->func_sel = 13
