@@ -15,7 +15,7 @@ while .T.
    CABE3( 'FOPTO_3 - Relatorios', 23 )
    OPCAO( 04, 01, " &A - Ponto Escrito  ENT/SAI     ", 65, " Emite Cart„o de Ponto Escrito, Apenas Entrada e Sa¡da " )
    OPCAO( 05, 01, " &B - Ponto Escrito  Passagens   ", 66, " Emite Cart„o de Ponto Escrito, Todas Passagens do dia " )
-   OPCAO( 06, 01, " &C - Movimento Di rio ENT/SAI   ", 67, " Emite o Movimento Di rio do Ponto Entrada e Saida     " )
+   OPCAO( 06, 01, " &C - Movimento Diario ENT/SAI   ", 67, " Emite o Movimento Di rio do Ponto Entrada e Saida     " )
    OPCAO( 07, 01, " &D - Movimento Diario Passagens ", 68, " Emite o Movimento Di rio do Ponto Passagens do Dia    " )
    OPCAO( 08, 01, " &E - Movimento Qtde Dias        ", 69, " Lista o Movimento Mensal do Ponto, Qtde Dias          " )
    OPCAO( 09, 01, " &F - Ponto e Totais             ", 70, " Lista os Apontamentos e Totais                        " )
@@ -101,7 +101,7 @@ while .T.
       // cCAM+="WRPTF.EXE $"+ALLTRIM(zUSER)+"%#"
 	  //"$"+ALLTRIM(zUSER)+"%#"
       // hb_run(cCAM)
-	  WAPI_ShellExecute ( NIL, "Open", cCAM+"WRPTF.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, 1 )
+	  WAPI_ShellExecute ( NIL, "Open", cCAM+"WRPT.EXE", "F$"+ALLTRIM(zUSER)+"%#", cCAM, 1 )
 	//  hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
 	// essSW_SHOWNORMAL = 1
 	  
@@ -109,11 +109,11 @@ while .T.
        cCAM:=ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
        //cCAM+="WRPTX.EXE $"+ALLTRIM(zUSER)+"%RH#"
        //hb_run(cCAM)
-	   WAPI_ShellExecute ( NIL, "Open", cCAM+"WRPTX.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, 1 )
+	   WAPI_ShellExecute ( NIL, "Open", cCAM+"WRPT.EXE", "X$"+ALLTRIM(zUSER)+"%#", cCAM, 1 )
    case OPCAO = 26   //3 wrtp integrado
        cCAM:=ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
        //cCAM+="WRPTI.EXE $"+ALLTRIM(zUSER)+"%RH#"
-	   WAPI_ShellExecute ( NIL, "Open", cCAM+"WRPTI.EXE", "$"+ALLTRIM(zUSER)+"%#", cCAM, 1 )
+	   WAPI_ShellExecute ( NIL, "Open", cCAM+"WRPT.EXE", "I$"+ALLTRIM(zUSER)+"%#", cCAM, 1 )
    case Opcao = 27
        WIN_PRINTDLGDC()
    case Opcao = 28
