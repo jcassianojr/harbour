@@ -14,8 +14,9 @@ private cNewTable := ''
 private lOpened := .f.
 
 loledb=hb_Version( HB_VERSION_BITWIDTH )<>64
-lMDB  =.F.
-lACCDB =.F.
+lMDB    :=.F.
+lACCDB  :=.F.
+cTIPOSQL:="SQLITE"
 aAMBIENTE:=SALVAA()
 
 WHILE .T.
@@ -87,6 +88,15 @@ return .t.
 
 function exportadbf(db,ntipo)
 LOCAL cTABELAEXP
+IF nTIPO=2
+  LCOPIANAT:=.f. //MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
+  tDOC:=pegtipodoc() // .t. Inclui dbf se for nativa
+  pegparexp() 
+  lDOCCAB  :=.F.
+  lDOCDAD  :=.F.
+  lDOCRECNO:=.F.
+  cSUBTIPO :=" "
+ENDIF  
 IF MDG("Todas(SIM) Escolher Nao")
     aTable := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
      if len( aTable ) == 0
@@ -168,7 +178,7 @@ IF ! Empty( stmt )
    for i := 1 to sqlite3_column_count( stmt )
       type1 := upper(alltrim(sqlite3_column_decltype( stmt,i)))
       do case
-         case type1 == "INTEGER" .or. type1 == "REAL" .or. type1 == "FLOAT" .or. type1 == "DOUBLE"
+         case type1 == "INTEGER" .or. type1 == "REAL" .or. type1 == "FLOAT" .or. type1 == "DOUBLE" .OR. type1 == "INT" .OR. type1 == "SMALLINT"
             aadd(typesarr,"N")
          case type1 == "DATE" .or. type1 == "DATETIME" .or. type1 == "TIMESTAMP"
             aadd(typesarr,"D")
@@ -352,9 +362,12 @@ function export2dbf(ODB1,cNEWTABLE,Ntipo)
          nFieldLength := 0
          nFieldDec := 0
         
+        
         aTMP:= geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)
         
-        IF aTMP[DBS_LEN]=0
+        
+        
+        IF aTMP[DBS_LEN]=0 .OR. aTMP[DBS_LEN]=250 //text geracampo volta 250 tentando ajustar o valor mais proximo
             aTable1 := sqltablestru( oDB1, 'select max( length( ' + cFieldName + ' ) ) from ' + c2sql( cSQLTable ) )
            if len( aTable1 ) > 0
               aTMP[DBS_LEN] := val( alltrim( aTable1[ 1, 1 ] ) )
@@ -401,7 +414,7 @@ function export2dbf(ODB1,cNEWTABLE,Ntipo)
            nLASTREC:=   lastrec() 
            zei_fort( nLASTREC,,,0)
            dbgotop()
-           multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aSTRU)
+           multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aStruct)
         ENDIF
          
          dbcloseall() //close all
@@ -452,7 +465,7 @@ Function export2sql(odb,cDBFFILE)
    
    //criado funcao para usar tambem no dbudoc
    
-   mSQL:=SqliteCreateTable(cTablename,aStruct)
+   mSQL:=SqliteCreateTable(cTablename,aStruct,"SQLITE")
 
 
    if !miscsql( oDB, mSql )

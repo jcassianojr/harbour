@@ -1221,6 +1221,12 @@ do case
     nFieldLength := 4
     nFieldDec := 0     
     
+  case  cType == "INT" 
+    cFieldType := 'N'
+    nFieldLength := 8
+    nFieldDec := 0     
+    
+    
  case cType == "INTEGER" .OR. cType == "INT4" .OR. cType == "SERIAL"
     cFieldType := 'N'
     nFieldLength := 8
@@ -1265,7 +1271,7 @@ case cType == "@" //Datetime opcao mudar como texto futuramente
     nFieldDec := 0
     
     
-  CASE cType == "TEXT" .AND. (cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
+  CASE cType == "TEXT" .AND. ( cTIPOSQL="SQLITE" .OR. cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
        cFieldType := 'C'
        nFieldLength := 250
        nFieldDec := 0
