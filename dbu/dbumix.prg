@@ -70,7 +70,7 @@ ENDIF
 //mdbtabela(cdatabasex)
 
 cOLDRDD:=rddSetDefault( "SQLMIX" )
-//OPENSQLMIX()
+//mix_open()
 
 WHILE .T.
     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
@@ -85,9 +85,9 @@ WHILE .T.
     KEY := menu( 1, 0 )
     DO CASE
        CASE KEY=1
-            OPENSQLMIX()
+            mix_open()
             mixcreatedatabase()
-            closemix()
+            mix_close()
        CASE KEY=2
             IF lMDB .OR. lACCDB
             ELSE
@@ -102,9 +102,9 @@ WHILE .T.
        CASE KEY=6
             mdbtabela(cdatabasex)
             IF MDG("Apagar Tabela"+cTABELAX)  
-               OPENSQLMIX() 
-               mixexecutesql("DROP TABLE  "+cTABELAX) 
-               closemix()
+               mix_open() 
+               mix_executesql("DROP TABLE  "+cTABELAX) 
+               mix_close()
             ENDIF  
        CASE KEY=7
             mixexpdbf(2)
@@ -252,10 +252,10 @@ function miximpdbf()
      NEXT j
 
     msql:= SqliteCreateTable(cTABLE,aSTRU,cTIPOSQL)
-    OPENSQLMIX()  
-    mixexecutesql(msql) 
+    mix_open()  
+    mix_executesql(msql) 
     if len(aindices)>0
-        mixexecutesql(Aindices) //Executa comando unico ou array de comandos
+        mix_executesql(Aindices) //Executa comando unico ou array de comandos
     endif    
     
     
@@ -272,12 +272,12 @@ function miximpdbf()
          mSql += c2sql(&mFldNm)
       next
       mSql += ")"
-      mixexecutesql(msql)
+      mix_executesql(msql)
       dbskip()
    enddo
     
     dbclosearea()
-    closemix()
+    mix_close()
 return .t.
 
 function mixcreatedatabase()
@@ -286,7 +286,7 @@ cnewDATABASEX:=alltrim(cnewDATABASEX)
 IF ! EMPTY(cnewDATABASEX)
    if cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" ;
                        .OR. cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"
-       mixexecutesql("CREATE DATABASE IF NOT EXISTS "+Cnewdatabasex)
+       mix_executesql("CREATE DATABASE IF NOT EXISTS "+Cnewdatabasex)
        //fechar a connecao e trocar o database
        //CDATABASEX:=CNEWDATABASEX
    ENDIF
@@ -296,24 +296,46 @@ IF ! EMPTY(cnewDATABASEX)
 ENDIF
 
 
-function mixexecutesql(eCOMANDO)
+function mix_executesql(eCOMANDO,lTRANS,lMES)
 LOCAL aCOMANDOS:={}
 LOCAL nFIM
 LOCAL i
+Local lRet
+lRET:=.T.
+IF VALTYPE(LMES)<>"L"
+   lMES:=.F.
+ENDIF
 IF VALTYPE(eCOMANDO)="C"
    AAdd(aCOMANDOS,eCOMANDO) 
 ELSE
    aCOMANDOS:=eCOMANDO
 ENDIF
 nFIM:=LEN(aCOMANDOS)
+IF lTRANS
+   RDDINFO( RDDI_EXECUTE, "BEGIN TRANSACTION")
+ENDIF
 for i:=1 to nfim
     cCOMANDO:=aCOMANDOS[I]
-    rddInfo( RDDI_EXECUTE, cCOMANDO )
+    lRet :=rddInfo( RDDI_EXECUTE, cCOMANDO )
+    IF RDDINFO(RDDI_ERRORNO) = 9999
+			* da este error cuando delete no encuentra nada que borrar. No debería dar error.
+			lRet := .T.
+	else
+       if Lmes
+          MDT(cstr(RDDINFO(RDDI_ERROR))+" Error "+cstr(RDDINFO(RDDI_ERRORNO)))
+       endif
+    endif
 next i
-RETURN .T.
+IF lTRANS
+   RDDINFO(RDDI_EXECUTE, "COMMIT TRANSACTION")
+ENDIF
+//RDDINFO(RDDI_EXECUTE, "ROLLBACK TRANSACTION")
+RETURN lRet 
 
+Function mix_Query()		// returns last sql instruction
+Return RDDINFO( RDDI_QUERY )
 
-FUNCTION OPENSQLMIX() 
+FUNCTION mix_open() 
 LOCAL cCONN
 cCONN:=""
 rddSetDefault( "SQLMIX" )
@@ -329,12 +351,29 @@ DO CASE
        cCONN=GERACONN(cDATABASEX,.F.) //Sqlmix usa driver no lugar de provider(adooledb) geraconn(cCAMBASE,lPROVIDER)
        nCONN:=rddInfo( RDDI_CONNECT, { "ODBC", cCONN } )
 ENDCASE
-RETURN
+ if ! ( nConn > 0) 
+		mdt("Erro ao connectar "+cServerx+" "+cstr(RDDINFO(RDDI_ERROR))+" Error"+cstr(RDDINFO(RDDI_ERRORNO)))
+		nConn := 0
+	endif
+RETURN nConn
 
-FUNCTION CLOSEMIX()
-IF .NOT. EMPTY(nconn)
-   RDDINFO(RDDI_DISCONNECT, nConn1)
+FUNCTION mix_close()
+IF .NOT. EMPTY(nconn) .and. nConn <> 0
+   RDDINFO(RDDI_DISCONNECT, nConn)
 ENDIF
+
+
+Function mix_Conn()
+	IF HB_ISNIL(nConn)
+		//  Select the default connection.
+		nConn := RDDINFO(RDDI_CONNECTION)		// esto NO selecciona una conexion, siempre regresa cero 0
+	ELSE
+		//  Select the current connection.
+*		msgbox("Seleccionando conexcion "+str(nConn))
+*		RDDINFO(RDDI_CONNECTION,,,nConn)
+		nConn := RDDINFO(RDDI_CONNECTION,,,nConn)
+	ENDIF
+Return nConn
 
 function mixexpformat()
 mdbtabela(cdatabasex)
