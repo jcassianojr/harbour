@@ -1336,7 +1336,9 @@ return aRETU
 
 FUNCTION geraconn(cCAMBASE,lPROVIDER)
 LOCAL cCONN
+LOCAL cSQLUSER
 cConn  :=""
+cSQLUSER:=""
 IF VALTYPE(cCAMBASE)<>"C" //ser for database nao tem caminho usa cservex
    cCAMBASE:="" //atribui vazio 
 ENDIF
@@ -1406,21 +1408,24 @@ DO CASE
             endif
         endif    
     CASE cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="SQL"
+         IF EMPTY(cUSERX)
+            cSQLUSER:="; Trusted_Connection=True;"
+         ELSE
+            cSQLUSER:="; Uid="+cUSERX+"; Pwd="+cPASSX+";" 
+         ENDIF
          if empty(cDATABASEX)
             IF lPROVIDER
-               cCONN:="Provider=SQLOLEDB;Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+               cCONN:="Provider=SQLOLEDB;Server="+cSERVERX+";Database="+cDATABASEX+cSQLUSER
             ELSE
-               cCONN:="Driver={SQL Server};Server="+cSERVERX+";Database="+cDATABASEX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+               cCONN:="Driver={SQL Server};Server="+cSERVERX+";Database="+cDATABASEX+cSQLUSER
             ENDIF   
          else
             IF lPROVIDER
-               cCONN:="Provider=SQLOLEDB;Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
+               cCONN:="Provider=SQLOLEDB;Server="+cSERVERX+cSQLUSER 
             ELSE
-               cCONN:="Driver={SQL Server};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX+";" 
-            
+               cCONN:="Driver={SQL Server};Server="+cSERVERX+cSQLUSER
             ENDIF   
          endif
-         
     CASE cTIPOSQL = "DBASE"
       cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=dBASE IV;"
    CASE cTIPOSQL = "FIREBIRD" // ADOGDB
@@ -1435,8 +1440,11 @@ DO CASE
       cCONN :="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Excel 8.0;HDR=Yes;IMEX=1"
    CASE cTIPOSQL = "REMOTE" // ADORDS
       cCONN := "Provider=MS Remote;Remote Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cDATABASEX+";Remote Server=" + cSERVERX
-         
-         
+  Case cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
+       cCONN :="Provider=MSDAORA.1;Persist Security Info=False;Data source=" +cDATABASEX+ ";User ID=" + cUSERX +  ";Password=" + cPASSX
+       //Provider=OraOLEDB.Oracle.1;Persist Security Info=False;User ID=someuser;Data Source=someserver;
+       //"Provider=OraOLEDB.Oracle;dbq=localhost:1521/XE;Database=myDataBase;", User, Pass
+       //"Provider=MSDAORA.1;Password=[pwd];User ID=[schema name];Data Source=[db name];Persist Security Info=True")
 ENDCASE      
 RETURN cConn   
 
@@ -1677,7 +1685,7 @@ Function SQLDialeeto(cSQLCNV)
    '                     {"LEFT(%1%,%2%)"      ,"{fn LEFT(%1%,%2%)}"},;
    '                     {"RIGHT(%1%)"       ,"{fn RIGHT(%1%)}"},;
             */
-            Case "ORACLE", "OCI"
+            Case cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
                  cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "SYSDATE ")
                  cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
                  cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
