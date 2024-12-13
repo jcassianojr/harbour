@@ -1441,7 +1441,12 @@ DO CASE
    CASE cTIPOSQL = "REMOTE" // ADORDS
       cCONN := "Provider=MS Remote;Remote Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cDATABASEX+";Remote Server=" + cSERVERX
   Case cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
-       cCONN :="Provider=MSDAORA.1;Persist Security Info=False;Data source=" +cDATABASEX+ ";User ID=" + cUSERX +  ";Password=" + cPASSX
+       cSQLUSER:=";User ID=" + cUSERX +  ";Password=" + cPASSX
+       IF lPROVIDER
+           cCONN :="Provider=MSDAORA.1;Persist Security Info=False;Data source=" +cDATABASEX+ cSQLUSER
+       ELSE
+           cCONN :="DRIVER={Microsoft ODBC For Oracle};SERVER=" + cSERVERX + "; UID= " + cUSERX +  ";PWD=" + cPASSX 
+       ENDIF    
        //Provider=OraOLEDB.Oracle.1;Persist Security Info=False;User ID=someuser;Data Source=someserver;
        //"Provider=OraOLEDB.Oracle;dbq=localhost:1521/XE;Database=myDataBase;", User, Pass
        //"Provider=MSDAORA.1;Password=[pwd];User ID=[schema name];Data Source=[db name];Persist Security Info=True")
