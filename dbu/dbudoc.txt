@@ -1,0 +1,3 @@
+dbCreate( cFile, aStruct, cRDD, lKeepOpen, cAlias, cDelimArg, cCodePage, nConnection ) --> <lSuccess>
+dbUseArea( [<lNewArea>], [<cDriver>], <cName>, [<xcAlias>], [<lShared>], [<lReadonly>], [<cCodePage>],  [<nConnection>] ) --> <lSuccess> 
+
