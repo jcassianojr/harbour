@@ -44,7 +44,7 @@ IF cTIPOSQL="MARIADB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
 ENDIF
 
 //access mdb accdb nao tem nativo
-IF cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+IF Lmdb .or. laccdb 
    cTIPOMIX:="ODBC"
    OPENTIPOARQ()
 ENDIF
@@ -346,6 +346,8 @@ DO CASE
         nCONN:=rddInfo( RDDI_CONNECT, { "POSTGRESQL", cSERVERX, cUSERX, cPASSX, cDATABASEX} )      
    CASE cTIPOMIX="SQLITE" 
         nCONN:=rddInfo( RDDI_CONNECT, { "SQLITE3", cDATABASEX} )    
+   CASE cTIPOMIX="ORACLE"   
+        nCONN:=rddInfo( RDDI_CONNECT, { "OCILIB", cSERVERX, cUSERX, cPASSX, cDATABASEX} )  
    CASE cTIPOMIX="ODBC"  //Cserver Conneccao
        Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
        cCONN=GERACONN(cDATABASEX,.F.) //Sqlmix usa driver no lugar de provider(adooledb) geraconn(cCAMBASE,lPROVIDER)
