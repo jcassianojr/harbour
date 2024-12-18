@@ -29,7 +29,7 @@ sddodbc.hbc
 sddmy.hbc
 sddpg.hbc
 sddsqlt3.hbc
-sddoci.hbc
+#sddoci.hbc
 
 
 d:\develop\harbour\dbu\DBU.PRG  

@@ -17,6 +17,7 @@ REQUEST SDDODBC
 REQUEST SDDMY
 REQUEST SDDPG
 REQUEST SDDSQLITE3
+//REQUEST SDDOCI //erro ao iniciar dbu testar outras versoes ocilib.dll
 
 ANNOUNCE RDDSYS
 
