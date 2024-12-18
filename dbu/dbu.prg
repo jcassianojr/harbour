@@ -437,8 +437,8 @@ ajuda_m := { "Ajuda" }
 ajuda_b := { .T. }
 
 abrir_m:= {"Database","Indice","Visao","POSTGRESQL",;
-            "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL"}
-abrir_b:=array(10)
+            "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE"}
+abrir_b:=array(11)
 abrir_b[ 1 ] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[ 2 ] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
 abrir_b[ 3 ] = "sysfunc = 0 .AND. .NOT. box_open"
@@ -449,6 +449,7 @@ abrir_b[ 7 ] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[ 8 ] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[ 9 ] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[10 ] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[11 ] = "sysfunc = 0 .AND. .NOT. box_open"
 
 DECLARE criar_b[ 11 ]
 criar_m:={"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso" ,;
@@ -574,6 +575,8 @@ do while .T.
           MENUSQL("ACCDB")
       case M->func_sel = 10
           MENUSQL("MSSQL")
+       case M->func_sel = 11
+          MENUSQL("ORACLE")         
       endcase
       sysfunc := 0  //setar para nao retornar ficar em loop
    case M->sysfunc = 9 //utilitarios F9

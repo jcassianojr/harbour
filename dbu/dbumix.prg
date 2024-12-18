@@ -39,8 +39,13 @@ lACCDB =.F.
 pegcfgbanco()
 cTIPOMIX:=cTIPOSQL
 
-//Mariadb nao tem nativo
-IF cTIPOSQL="MARIADB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+//Mariadb MSSQL nao tem nativo
+IF cTIPOSQL="MARIADB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" 
+   cTIPOMIX:="ODBC"
+ENDIF
+
+//ORACLE COMO ODBC ate ajustar ocilib
+IF cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
    cTIPOMIX:="ODBC"
 ENDIF
 
@@ -49,6 +54,7 @@ IF Lmdb .or. laccdb
    cTIPOMIX:="ODBC"
    OPENTIPOARQ()
 ENDIF
+//Verifica novamentes apos opentipoarq
 IF at(".MDB",upper(cdatabaseX))>0 .or. at(".ACCDB",upper(cdatabaseX))>0
    cTIPOMIX:="ODBC"
 ENDIF
@@ -160,18 +166,18 @@ IF nTIPO=1 //arquivo fisico
    DBCreate(cDESTINO, aSTRU, "DBFCDX" ) 
    DBUseArea( .T. , "DBFCDX" , cDESTINO, "DESTINO" , .T. , .F. ) 
 else
-  //cria um arrayrdd para usar na exportacao usar memoria mudar para rdd quqndo disponivel
-  //dbCreate( "persons", { { "NAME", "C", 20, 0 }, { "FAMILYNAME", "C", 20, 0 }, { "BIRTH", "D", 8, 0 }, { "AMOUNT", "N", 9, 2 } }, , .T., "persons" )
-  //nao passa o driver sqlmix ja e default rddSetDefault( "SQLMIX" )
+  
+  //cria um arrayrdd para usar na exportacao usar memoria mudar para rdd quando disponivel
+ // dbCreate( cFile, aStruct, cRDD, lKeepOpen, cAlias, cDelimArg, cCodePage, nConnection ) --> <lSuccess>
+  //nao passa o driver sqlmix ja e default rddSetDefault( "SQLMIX" ) 
+   //nao precisa abrir area lKeepOpen 4 parametro mantem aberto 
   dbCreate( "DESTINO" , aSTRU, , .T., "DESTINO"  )
   
-  //DBCreate(<cDatabase>, <aStruct>, <cDriver> ) -> Nil 
-  //nao precisa abrir area 4 parametro mantem aberto 
-  //5 parametro alias
 endif
 
 
 dbselectar("ORIGEM")
+dbgotop()
 while ! eof()
       aVALOR:={}
      FOR I= 1 TO nFIM

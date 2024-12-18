@@ -103,7 +103,7 @@ WHILE .T.
        CASE KEY=1 .AND. cTIPOSQL="SQLITE"
             sqlitemenu()    
        CASE KEY=1 
-            MDT("Sem clientelib para "+cTIPOSQL)      
+            MDT("Sem clientelib para "+cTIPOSQL)   
        //ADORDD ODBC     
        CASE KEY=2 
             mdbmenu(cTIPOSQL)
