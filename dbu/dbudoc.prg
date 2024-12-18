@@ -546,13 +546,36 @@ if tDOC = 4
    cTEXTO += "DRIVER="+ RDDNAME() +clin
    cTEXTO += "NUMMAINTAINED="+str(nIndexes,1) + cLIN
    cTEXTO += "MAINTAIN0="+cARQ+".CDX" + cLIN
+   cINDEXTEXTO:=""
    IF nIndexes>0
       FOR j = 1 TO  nIndexes
          cTEXTO += "TAG"   + str(j - 1,1) + "=" + dbORDERINFO( DBOI_NAME , ,  j ) + clin
          cTEXTO += "INDEX" + str(j - 1,1) + "=" + dbORDERINFO( DBOI_EXPRESSION , ,  j ) + clin
          cTEXTO += "INDEXFIELDS" + str(j - 1,1) + "=" + MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j ))+ clin
+        cINDEXNAME := dbORDERINFO( DBOI_NAME , ,  j )
+        cINDEXNAME := StrTran(cINDEXNAME, "-", "_"  )  //Tracos nao aceitos trocando por undescore
+        cINDEXTEXTO +="create index " + cINDEXNAME + " on " + cARQ + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) ;"+clin
       NEXT j   
    endif 
+   cTEXTO += clin+"[SQLITE]"+clin
+   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"SQLITE")
+   CTEXTO += cINDEXTEXTO
+   cTEXTO += clin+"[MSSQL]"+clin
+   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"MSSQL")
+   CTEXTO += cINDEXTEXTO
+   cTEXTO += clin+"[MYSQL]"+clin
+   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"MYSQL")
+   CTEXTO += cINDEXTEXTO
+   cTEXTO += clin+"[POSTGRESQL]"+clin
+   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"POSTGRESQL")
+   CTEXTO += cINDEXTEXTO
+   cTEXTO += clin+"[ACCESS]"+clin
+   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"ACCESS")
+   CTEXTO += cINDEXTEXTO
+   cTEXTO += clin+"[ORACLE]"+clin
+   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"ORACLE")
+   CTEXTO += cINDEXTEXTO
+   
 endif
 
 //verificas se a quantidade de registros

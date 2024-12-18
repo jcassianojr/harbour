@@ -631,12 +631,12 @@ ENDIF
                     DO CASE
                        CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
                             mSQL += "INTEGER"
-                       CASE ELSE
+                       OTHERWISE
                             mSql += "INT"  //INTEGER("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
                     ENDCASE        
                 ELSE
                     DO CASE
-                       CASE ELSE
+                       OTHERWISE
                             mSql += "BIGINT"  //"bigint("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
                     ENdCASE            
                 ENDIF    
