@@ -1176,9 +1176,9 @@ ENDIF
 do case
 
     //
-    // numeric(l,d) decimal(l,d) o tamanho esta entre parentes
+    // numeric(l,d) decimal(l,d)  number(l,d) o tamanho esta entre parentes
     //
-    CASE AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. AT(",",cTYPE)>0 .AND. (AT("NUMERIC",UPPER(CTYPE))>0 .OR. AT("DECIMAL",UPPER(CTYPE))>0 )
+    CASE AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. AT(",",cTYPE)>0 .AND. (AT("NUMERIC",UPPER(CTYPE))>0 .OR. AT("DECIMAL",UPPER(CTYPE))>0 .OR. AT("NUMBER",UPPER(CTYPE))>0  )
        cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1 )
        cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(",",cTMPSIZE)-1 )
        nFieldLength := val(cTMPSIZE)
@@ -1189,9 +1189,9 @@ do case
 
 
     //
-    //  tyniint(n) int(n) tamanho esta entre parentes
+    //  tyniint(n) int(n) number(n) tamanho esta entre parentes
     //
-   case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0  .AND. AT(",",cTYPE)=0 .AND. AT("INT",UPPER(CTYPE))>0 
+   case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0  .AND. AT(",",cTYPE)=0 .AND. (AT("INT",UPPER(CTYPE))>0 .or. AT("NUMBER",UPPER(CTYPE))>0 )
        cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1) 
        cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
        nFieldLength:= VAL(cTMPSIZE)
@@ -1200,9 +1200,9 @@ do case
    
    
     //
-    // varchar(n) char(n) text(n) o tamanho esta entre parentes
+    // varchar(n) char(n) text(n)  VARCHAR2(n) o tamanho esta entre parentes 
     //
-   case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. (AT("CHAR",UPPER(CTYPE))>0 .OR. AT("TEXT",UPPER(CTYPE))>0 )
+   case AT("(",cTYPE)>0 .AND. AT(")",cTYPE)>0 .AND. (AT("CHAR",UPPER(CTYPE))>0 .OR. AT("TEXT",UPPER(CTYPE))>0 .OR. AT("VARCHAR2",UPPER(CTYPE))>0  )
        cTMPSIZE:=SUBSTR(cTYPE, AT("(",cTYPE) +1) 
        cTMPSIZE:=SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE)-1 )
        nFieldLength := VAL(cTMPSIZE)
@@ -1260,7 +1260,7 @@ case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == 
     nFieldLength := 8
     nFieldDec := 0
     
-case cType == "@" //Datetime opcao mudar como texto futuramente 
+case cType == "@" //Datetime opcao mudar como texto ou datetime futuramente 
     cFieldType := 'D'
     nFieldLength := 8
     nFieldDec := 0    
@@ -1269,14 +1269,19 @@ case cType == "@" //Datetime opcao mudar como texto futuramente
     cFieldType := 'L'
     nFieldLength := 1
     nFieldDec := 0
+
+ CASE cType == "CLOB" .AND. ( cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI") //Memo mas tratando com char(250)
+       cFieldType := 'C'
+       nFieldLength := 250
+       nFieldDec := 0    
     
     
-  CASE cType == "TEXT" .AND. ( cTIPOSQL="SQLITE" .OR. cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
+  CASE cType == "TEXT" .AND. ( cTIPOSQL="SQLITE" .OR. cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )  //Memo mas tratando com char(250)
        cFieldType := 'C'
        nFieldLength := 250
        nFieldDec := 0
     
-  CASE cType == "LONGTEXT" .OR. cType == "M"  .OR. cType == "WLONGVARCHAR"
+  CASE cType == "LONGTEXT" .OR. cType == "M"  .OR. cType == "WLONGVARCHAR"  //Memo mas tratando com char(250)
        cFieldType := 'C'
        nFieldLength := 250
        nFieldDec := 0

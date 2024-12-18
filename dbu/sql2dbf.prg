@@ -590,6 +590,8 @@ ENDIF
           //
           // Caracter
           //
+          Case mFldType = "C" .AND. (cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI")
+              mSql += "VARCHAR2 ("+LTRIM(STR(mFldLen))+")"
           case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" ;
                .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL".OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
              mSql += "VARCHAR("+LTRIM(STR(mFldLen))+")"
@@ -614,6 +616,13 @@ ENDIF
          // com decimais
          // Numerico ->FLOAT DOUBLE NUMERIC
          //
+        case mFldType = "N" .AND.  (cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI")
+              if mFldDec > 0
+                mSql += "NUMBER("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
+             else
+                mSql += "NUMBER("+hb_ntos(mFldLen)+")"
+             endif
+        
         case mFldType = "N" .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL".OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
              if mFldDec > 0
                 mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
@@ -678,7 +687,9 @@ ENDIF
              mSql += "DOUBLE"
           //
           // logico boleano bit
-          //   
+          // 
+          case mFldType = "L" .AND.  (cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI")
+           mSql += "NUMBER (1)" 
          case mFldType = "L" .AND. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
             mSql += "BOOLEAN"
          case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" ;
@@ -689,6 +700,8 @@ ENDIF
           //
           // memo TEXT LONGTEXT
           //   
+          case mFldType = "M" .AND.  (cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI")
+              mSql += "CLOB"
           case mFldType = "M" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL".OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
              mSql += "TEXT" 
           case mFldType = "M" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" ;
