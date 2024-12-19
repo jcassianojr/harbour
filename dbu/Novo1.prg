@@ -1,1 +1,0 @@
-Case (cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI")
