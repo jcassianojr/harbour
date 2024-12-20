@@ -14,6 +14,7 @@ d:\develop\harbour\dbu\dbu.rc
 #-ldflags=-Wl,--allow-multiple-definition -s -static
 #Use --enable-stdcall-fixup to disable these warnings
 #Use --disable-stdcall-fixup to disable these fixups
+#-locilib
 
 hbct.hbc
 hbwin.hbc
