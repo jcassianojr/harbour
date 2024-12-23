@@ -602,7 +602,7 @@ ENDIF
          //
          //
          //V = Varchar and Varchar (Binary)    
-         Case mFldType = "V" .AND. cTIPOSQL="SQLITE"   
+         Case mFldType = "V" .AND. (cTIPOSQL="SQLITE"  .or. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" ) 
               if mFldDec > 0
                 mSql +=  "TEXT(" + hb_ntos(mFldDec) + ")"
              else
@@ -693,6 +693,9 @@ ENDIF
                mSql += "DOUBLE"
          Case mFldType = "F" .AND. cTIPOSQL="SQLITE"   
                mSql += "REAL " 
+          case mFldType = "F" .and. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB")
+                mSql += "FLOAT("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"     
+               
           case mFldType = "F" 
                 mSql += "FLOAT"
          //
@@ -706,6 +709,8 @@ ENDIF
              endif
           case mFldType = "Y"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
                mSql += "MONEY "   
+          case mFldType = "Y" .and. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB")
+                mSql += "DECIMAL("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"                  
           
           case  mFldType = "Y"
                 mSql += "FLOAT"      
@@ -714,17 +719,19 @@ ENDIF
           //   
           case mFldType = "I" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .OR. cTIPOSQL="ACCDB"  .OR. cTIPOSQL="ACCDB64")    
              mSql += "LONG"
-          case mFldType = "I"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")   
+          case mFldType = "I"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB")   
               mSql += "INT"
           case mFldType = "I"
              mSql += "INTEGER"
          //
-         // double
+         // B double
          //    
           case mFldType = "B"
              mSql += "DOUBLE"
          case mFldType = "B"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")  
-               mSql += "FLOAT"  
+               mSql += "FLOAT" 
+          case mFldType = "B" .and. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB")
+                mSql += "DOUBLE("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"         
              
           //
           // L = logico boleano bit
@@ -771,11 +778,11 @@ ENDIF
          * Q = Varbinary 
           Case mFldType = "Q" .AND. cTIPOSQL="SQLITE"   
                mSql += "BLOB " 
-          case mFldType = "Q"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")     
+          case mFldType = "Q"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" )     
                mSql += "VARBINARY("+hb_ntos(mFldLen)+")"
 
           * W = Blob
-          Case mFldType = "W" .AND. cTIPOSQL="SQLITE"   
+          Case mFldType = "W" .AND. (cTIPOSQL="SQLITE"  .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" ) 
                mSql += "BLOB " 
           case mFldType = "W"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER") 
              Sql += "IMAGE"
