@@ -26,6 +26,7 @@ loledb=.T.
 lmdb  :=.f.
 laccdb :=.f.
 
+
 pegcfgbanco()
 
 WHILE .T.
@@ -258,6 +259,7 @@ aSTRU:=dbstruct()
 //criar opcao de criar o dbf tratado con mdbtables 
 //importar via pipe ou outro
 IF tDOC=14
+   aINDICES:={}
    IF lMDB .OR. lACCDB
       //Ainda nao implantado testes com catalog ver outras opcoes
       //utilizando sqltodbfstru
@@ -689,8 +691,10 @@ local nFieldDec := 0
 local lopen
 Lopen:=.F.
 lARQMDBACCDB:=.F.
+cCOMANDO:=""
 
-IF lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+
+IF lMDB .OR. lACCDB 
    lARQMDBACCDB:=.T.
 ENDIF
 
@@ -702,11 +706,14 @@ IF VALTYPE(cTABELA)="C"
    cTIPOINFO:="ESTRUTURA"
 ENDIF
 IF VALTYPE(cCAMPOSQL)="C"
-   IF cCAMPOSQL="__INDEX__"
-      cTIPOINFO:="__INDEX__"
-   ELSE
-      cTIPOINFO:="CCAMPOSQL"
-   ENDIF   
+   do case 
+      case cCAMPOSQL="__INDEX__"
+          cTIPOINFO:="__INDEX__"
+      case cCAMPOSQL="__VERSION__"
+          cTIPOINFO:="__VERSION__"
+      OTHERWISE    
+          cTIPOINFO:="CCAMPOSQL"
+   ENDCASE   
 ENDIF
 
 aRETU:={}
@@ -777,6 +784,27 @@ ENDIF
 IF cTIPOINFO="CCAMPOSQL"
    cCOMANDO:=cCAMPOSQL
 ENDIF
+IF cTIPOINFO="__INDEX__"
+   DO CASE
+      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+           cCOMANDO ="SHOW INDEXES FROM "+cTABELA
+   ENDCASE
+ENDIF
+IF cTIPOINFO="__VERSION__"
+   DO CASE
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"  
+           cCOMANDO ="SELECT @@VERSION"
+      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+           cCOMANDO ="SELECT Version() AS 'VER'"
+      CASE cTIPOSQL="FIREBIRD" 
+           cCOMANDO ="SELECT RDB$GET_CONTEXT('SYSTEM', 'ENGINE_VERSION') AS 'VER' FROM RDB$DATABASE"
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0 
+           cCOMANDO ="SELECT sqlite_version() AS 'VER'"
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
+           cCOMANDO ="SELECT version()"      
+   ENDCASE
+ENDIF
+
 
 lopen:=.f.
 IF (cTIPOINFO="ESTRUTURA" .OR. cTIPOINFO="__INDEX__") .AND. lARQMDBACCDB
@@ -808,7 +836,7 @@ create view showtables as select name from MSysObjects where MSysObjects.type In
 
 IF lOPEN
     while ! ors:eof
-         IF cTIPOINFO="TABELA" .OR. cTIPOINFO="CCAMPOSQL" .OR. cTIPOINFO="DATABASE"
+         IF cTIPOINFO="TABELA" .OR. cTIPOINFO="CCAMPOSQL" .OR. cTIPOINFO="DATABASE" .OR. cTIPOINFO="__VERSION__"
             AADD(aRETU,ors:fields(0):value)  //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
          ENDIF   
          IF cTIPOINFO="ESTRUTURA"
@@ -851,6 +879,17 @@ IF lOPEN
              ENDCASE   
             
          ENDIF   
+         IF cTIPOINFO="__INDEX__"
+            DO CASE
+               CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR.cTIPOSQL="MARIADB"
+                     //1table,2non_unique,3key_name,4_seq_in_index.5column_name....
+                    cCHAVENAME  := upper(alltrim( ors:fields(3):value ))
+                    cCHAVECAMPO := upper(alltrim( ors:fields(5):value ))
+                    AADD(aRETU,{cCHAVENAME,cCHAVECAMPO})   
+            ENDCASE
+         ENDIF
+         
+         
         ors:movenext()
     enddo
     oRs:Close()
