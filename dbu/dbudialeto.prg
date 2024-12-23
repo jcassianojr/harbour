@@ -8,7 +8,7 @@ cCOMANDO:="BEGIN TRANSACTION"
            cCOMANDO ="START TRANSACTION;"
       CASE cTIPOSQL="FIREBIRD" 
            cCOMANDO ="SET TRANSACTION"
-      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0 
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0 
            cCOMANDO ="BEGIN TRANSACTION;"
       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
            cCOMANDO ="BEGIN;"      
@@ -25,8 +25,8 @@ cCOMANDO:="COMMIT TRANSACTION"
            cCOMANDO ="COMMIT;"
       CASE cTIPOSQL="FIREBIRD" 
            cCOMANDO ="COMMIT"
-      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0 
-           cCOMANDO ="COMMIT;"
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0 
+           cCOMANDO ="end transaction"
       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
            cCOMANDO ="COMMIT;"      
    ENDCASE
@@ -42,7 +42,7 @@ cCOMANDO:="ROLLBACK TRANSACTION"
            cCOMANDO ="ROLLBACK;"
       CASE cTIPOSQL="FIREBIRD" 
            cCOMANDO ="ROLLBACK"
-      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0 
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0 
            cCOMANDO ="ROLLBACK;"
       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
            cCOMANDO ="ROLLBACK;"      
@@ -62,7 +62,7 @@ cCOMANDO:=""
            cCOMANDO =""
       CASE cTIPOSQL="FIREBIRD" 
            cCOMANDO =""
-      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabase))>0 
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0 
            cCOMANDO =""
       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
            cCOMANDO =""      

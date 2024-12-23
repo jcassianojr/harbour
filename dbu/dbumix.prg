@@ -319,7 +319,7 @@ ELSE
 ENDIF
 nFIM:=LEN(aCOMANDOS)
 IF lTRANS
-   RDDINFO( RDDI_EXECUTE, "BEGIN TRANSACTION")
+   RDDINFO( RDDI_EXECUTE, Dialeto_begin())
 ENDIF
 for i:=1 to nfim
     cCOMANDO:=aCOMANDOS[I]
@@ -334,9 +334,9 @@ for i:=1 to nfim
     endif
 next i
 IF lTRANS
-   RDDINFO(RDDI_EXECUTE, "COMMIT TRANSACTION")
+   RDDINFO(RDDI_EXECUTE, Dialeto_commit())
 ENDIF
-//RDDINFO(RDDI_EXECUTE, "ROLLBACK TRANSACTION")
+//RDDINFO(RDDI_EXECUTE, Dialeto_rollback())
 RETURN lRet 
 
 Function mix_Query()		// returns last sql instruction
