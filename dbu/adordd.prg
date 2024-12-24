@@ -327,7 +327,7 @@ STATIC FUNCTION ADO_OPEN( nWA, aOpenInfo )
    LOCAL aWAData := USRRDD_AREADATA( nWA )
    LOCAL cName, aField, oError, nResult
    LOCAL oRecordSet, nTotalFields, n
-   LOCAL cWAENGINE
+//   LOCAL cWAENGINE
    LOCAL cEXTENSAO
    LOCAL cDIRETORIO
    LOCAL cENGINE
