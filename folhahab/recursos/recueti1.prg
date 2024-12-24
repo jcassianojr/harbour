@@ -22,7 +22,7 @@
 *:     Documentado 05/13/94 em 15:46                DISK!  vers„o 5.01
 *:*****************************************************************************
 
-
+FUNCTION RECUETI1()
 DO WHILE .T.
    @ 13,00 CLEAR
    SETCOLOR("W/G")
@@ -43,7 +43,7 @@ DO WHILE .T.
    EDITA2()
    REST SCREEN FROM TELA_1
 ENDDO
-RETU
+RETURN
 
 *!*****************************************************************************
 *!

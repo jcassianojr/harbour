@@ -8,10 +8,10 @@
 *:
 **:*****************************************************************************
 
-
+FUNCTION RECUGER2()
  PADRAO('RECUEDIT','RECUEDIT',"' '+mARQUIVO+' '+mDESCRICAO+' '","mARQUIVO","Codigos","Arquivo Descricao",;
        {|| PEGCHAVE("mARQUIVO",SPACE(8),"Arquivo")},{|| tREDIT()},{||gREDIT()},{|| lREDIT() })
-
+RETURN
 
 
 function tREDIT

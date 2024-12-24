@@ -51,25 +51,25 @@ Set( _SET_CONFIRM, .F.) //checar alguns .t.
 SET TALK OFF ''checar nao tem ainda na std.ch changelog.txt
 SET SAFETY OFF ''checar nao tem ainda na std.ch changelog.txt
 
-cRDDEXT="CDX"
+cRDDEXT:="CDX"
 
 PATHX:=HB_CWD() 
 ZDIRE:=HB_CWD()
 ZDIRN:=HB_CWD()
 
 Set( _SET_PATH, PATHX)
-ZDATA=DATE()
-DXDIA=DATE()
+ZDATA:=DATE()
+DXDIA:=DATE()
 ANOUSO  := year( DXDIA )
-ZCODMANA5=1
-ZERRO:=""
-zNERRO:=0
+ZCODMANA5:=1
+ZERRO    :=""
+zNERRO   :=0
 
-HELPARQ="TOOLHELP"
-READVAR=""
+HELPARQ:="TOOLHELP"
+READVAR:=""
 
 
-SACENTUA=.T.
+SACENTUA:=.T.
 SetKey( 39, {|| AC_AGUDO() } )
 SetKey( 94, {|| AC_CIRC() } )
 SetKey( 96, {|| AC_CRASE() } )

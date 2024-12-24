@@ -19,7 +19,7 @@
 *:     Documentado 05/13/94 em 15:46                DISK!  vers„o 5.01
 *:*****************************************************************************
 
-
+FUNCTION RECUSER()
 WHILE .T.
    CABE3("  Diversos - Apuracao  - Configuracao "+SPAC(20),19)
    MDS(HB_CWD())

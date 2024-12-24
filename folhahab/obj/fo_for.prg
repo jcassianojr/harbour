@@ -18,7 +18,7 @@
 *:*****************************************************************************
 
 
-
+function fo_for()
 CABEX('Imprimir Formul rios')
 PARA FGRUPO
 ZDATA=DXDIA
@@ -48,5 +48,5 @@ WHILE .T.
    ENDIF
    FO_RELL(MAT2[ACHEI])
 ENDDO
-RETU .T.
+RETURN .T.
 *: FIM: FO_FOR.PRG

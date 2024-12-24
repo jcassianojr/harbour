@@ -33,10 +33,12 @@ g_oMenuBar:addItem( { oMenu12, "Recursos" } )
 //return (oMenu12)
 */
 
+
+FUNCTION RECUMENU()
 PUBLIC DADO
 DXDIA=DATE()
 Set( _SET_MESSAGE, 6 , .T. )
-DO WHILE .T.
+WHILE .T.
    SETCOLOR("+W/BR, N/W")
    @ 00,00 CLEA
    @ 00,00 SAY " <<RECURSOS>> v5.3b"
@@ -76,4 +78,5 @@ DO WHILE .T.
       ENDIF
    ENDCASE
 ENDDO
+RETURN
 *: FIM: RECUMENU.PRG

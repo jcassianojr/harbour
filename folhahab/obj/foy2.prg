@@ -14,6 +14,7 @@
 #INCLUDE "INKEY.CH"
 #INCLUDE "BOX.CH"
 
+FUNCTION FOY2()
 CABEX( 'Configurar Ordenacao' )
 para CCWORK, CCNTX, CCPERG
 INFOR( CCNTX, "DBF+NTX+STR(SEQ,3)", CCNTX, .T. )
@@ -36,6 +37,7 @@ if CCWORK = 0       //Indexar
       INDEXT(,, .T. )
    endcase
 endif
+RETURN
 
 *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+

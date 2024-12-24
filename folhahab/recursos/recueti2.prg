@@ -9,7 +9,8 @@
 *:*****************************************************************************
 ////#INCLUDE "COMANDO.CH"
 
-DO WHILE .T.
+FUNCTION RECUETI2()
+WHILE .T.
    @ 13,00 CLEAR
    SETCOLOR("W/G")
    @ 13,27 CLEAR TO 15,51
@@ -25,7 +26,7 @@ DO WHILE .T.
    EDITA()
    REST SCREEN FROM TELA_2
 ENDDO
-RETU
+RETURN
 
 *!*****************************************************************************
 *!

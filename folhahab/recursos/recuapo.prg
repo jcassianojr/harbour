@@ -10,8 +10,9 @@
 *:     Documentado 05/13/94 em 15:46                DISK!  vers„o 5.01
 *:****************************************************************************
 
-
+FUNCTION RECUAPO()
 recuapo2() //CHAMA Dutilitario de dara
+RETURN
 /*
 WHILE .T.
    cabe3("  Arquivos, Utilitarios, Telememo, Agenda, Bloco de Anotacoes     ",20)
