@@ -15,6 +15,7 @@ d:\develop\harbour\dbu\dbu.rc
 #Use --enable-stdcall-fixup to disable these warnings
 #Use --disable-stdcall-fixup to disable these fixups
 #-locilib
+-m -n -w0 -es2 -ge1
 
 hbct.hbc
 hbwin.hbc

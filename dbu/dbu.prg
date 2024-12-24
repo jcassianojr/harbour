@@ -246,8 +246,6 @@ NEXT iLOOP
 //Recebe um arquivo para abrir
 com_line := param1
 
-
-
 ACENTUA=.T.
 SetKey( 39, {|| AC_AGUDO() } )
 SetKey( 94, {|| AC_CIRC() } )
@@ -255,7 +253,7 @@ SetKey( 96, {|| AC_CRASE() } )
 SetKey( 126, {|| AC_TIL() } )
 SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERTX( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
 SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alertX("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
-SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
+//SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
 
 
 lVERTXT := .T.
@@ -341,7 +339,8 @@ mframe    := "---|+-+|"
 sframe    := "+-+|+-+|"
 
 need_field := need_ntx := need_relat := need_filtr := box_open := .F.
-kf1        := kf2 := kf3 := kf4 := kf5 := kf6 := ""
+//kf1        := kf2 := kf3 := kf4 := kf5 := kf6 := ""
+kf1 :=kf2 := kf3 := kf4 := kf5 := kf6 := ""
 help_code  := 0
 curs_on    := .F.
 cur_dir    := ""
@@ -828,7 +827,11 @@ do while .T.
 enddo
 RETU 
 
+Function HELP()
+return .t.
 
+
+/*
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
 *+    Function HELP()
@@ -925,6 +928,7 @@ setcolor( POP_COR )
 restscreen( 00, 00, 24, 79, HEL_SCR )
 setpos( POP_ROW, POP_COL )
 retu .T.
+*/
 
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -933,17 +937,16 @@ retu .T.
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-func DBUDIR
+function DBUDIR
 
 local cDIR := space( 80 )
 @ 24, 00 say "Ir para"
 @ 24, 10 get cDIR  pict "@S50"
-if !READDBU()
+if ! READDBU()
    retu .F.
 endif
-if !empty( cDIR )
+if ! empty( cDIR )
    HB_CWD(cDIR)
-   // dirchange( cDIR )
 endif
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -952,7 +955,7 @@ endif
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-func DBUDELFOR
+function DBUDELFOR
 local cDIR := space( 80 )
 local nLASTREC
 @ 24, 00 say "Apagar"
@@ -987,7 +990,7 @@ endif
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-func DBUREDE( cARQ, cIND, lMODO )
+function DBUREDE( cARQ, cIND, lMODO )
 
 local cEXT := XEXT()
 if valtype( lMODO ) # "L"
@@ -1029,7 +1032,7 @@ if valtype( cIND ) = "C"
       ALERTX( "Arquivo de Indices Nao Encontrado " )
    endif
 endif
-retu .T.
+return .T.
 
 
 
@@ -1039,7 +1042,7 @@ retu .T.
 *+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-func READDBU
+function READDBU
 
 setcursor( if( readinsert(), 1, 2 ) )
 read
@@ -1047,7 +1050,7 @@ setcursor( 0 )
 if lastkey() == K_ESC
    retu .F.
 endif
-retu .T.
+return .T.
 
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
@@ -1074,7 +1077,7 @@ HB_STRTOTS()
 HB_HOUR()
 HB_MINUTE()
 HB_SEC()
-RETU .T.
+RETURN .T.
 
 function errindex()
 return .t.
