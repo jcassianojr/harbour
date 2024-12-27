@@ -1473,7 +1473,9 @@ DO CASE
     CASE cTIPOSQL = "DBASE"
       cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=dBASE IV;"
    CASE cTIPOSQL = "FIREBIRD" // ADOGDB
-      cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+      cCONN := "DRIVER=Firebird ODBC driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+      //cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+      
    CASE cTIPOSQL = "PARADOX" // ADOPX
       cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Paradox 5.x;" 
    CASE cTIPOSQL == "XMLDB" // ADOXML
@@ -1614,7 +1616,8 @@ FUNCTION CreateAccessDatabase( cDatabase, cUserName,cPassword, lEncrypt )
        CASE cEXTENSAO == ".db" .OR. cTIPOSQL == "PARADOX"
           oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
        CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cTIPOSQL == "FIREBIRD"
-          oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
+          //oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
+          oCatalog:Create( "DRIVER=Firebird ODBC driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
           
     endcase
     oCatalog := NIL //NULL_OBJECT

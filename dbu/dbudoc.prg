@@ -557,24 +557,24 @@ if tDOC = 4
         cINDEXTEXTO +="create index " + cINDEXNAME + " on " + cARQ + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) ;"+clin
       NEXT j   
    endif 
-   cTEXTO += clin+"[SQLITE]"+clin
-   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"SQLITE")
-   CTEXTO += cINDEXTEXTO
-   cTEXTO += clin+"[MSSQL]"+clin
-   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"MSSQL")
-   CTEXTO += cINDEXTEXTO
-   cTEXTO += clin+"[MYSQL]"+clin
-   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"MYSQL")
-   CTEXTO += cINDEXTEXTO
-   cTEXTO += clin+"[POSTGRESQL]"+clin
-   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"POSTGRESQL")
-   CTEXTO += cINDEXTEXTO
-   cTEXTO += clin+"[ACCESS]"+clin
-   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"ACCESS")
-   CTEXTO += cINDEXTEXTO
-   cTEXTO += clin+"[ORACLE]"+clin
-   cTEXTO += SqliteCreateTable(cARQ,aESTRU,"ORACLE")
-   CTEXTO += cINDEXTEXTO
+   cTEXTO += clin+"[SQLITE]"
+   cTEXTO += clin+SqliteCreateTable(cARQ,aESTRU,"SQLITE")
+   CTEXTO += clin+cINDEXTEXTO
+   cTEXTO += clin+"[MSSQL]"
+   cTEXTO += clin+SqliteCreateTable(cARQ,aESTRU,"MSSQL")
+   CTEXTO += clin+cINDEXTEXTO
+   cTEXTO += clin+"[MYSQL]"
+   cTEXTO += clin+SqliteCreateTable(cARQ,aESTRU,"MYSQL")
+   CTEXTO += clin+cINDEXTEXTO
+   cTEXTO += clin+"[POSTGRESQL]"
+   cTEXTO += clin+SqliteCreateTable(cARQ,aESTRU,"POSTGRESQL")
+   CTEXTO += clin+cINDEXTEXTO
+   cTEXTO += clin+"[ACCESS]"
+   cTEXTO += clin+SqliteCreateTable(cARQ,aESTRU,"ACCESS")
+   CTEXTO += clin+cINDEXTEXTO
+   cTEXTO += clin+"[ORACLE]"
+   cTEXTO += clin+SqliteCreateTable(cARQ,aESTRU,"ORACLE")
+   CTEXTO += clin+cINDEXTEXTO
    
 endif
 
