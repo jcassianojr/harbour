@@ -23,7 +23,7 @@ REQUEST DBFCDX
 
 function main
 PUBLIC BUSCA
-MVINFOConfTela("Recursos")
+MVINFOConfTela("Recursos - Modulo de Utilidades")
 
 HB_LANGSELECT('PT')       
 HB_IDLESTATE()
@@ -48,33 +48,33 @@ Set( _SET_SCOREBOARD, .f. )
 //Set( _SET_EXACT, .f. )
 Set( _SET_CONFIRM, .F.) //checar alguns .t.
 
-SET TALK OFF ''checar nao tem ainda na std.ch changelog.txt
-SET SAFETY OFF ''checar nao tem ainda na std.ch changelog.txt
+SET TALK OFF //''checar nao tem ainda na std.ch changelog.txt
+SET SAFETY OFF  //''checar nao tem ainda na std.ch changelog.txt
 
-cRDDEXT:="CDX"
+memvar->cRDDEXT:="CDX"
 
-PATHX:=HB_CWD() 
-ZDIRE:=HB_CWD()
-ZDIRN:=HB_CWD()
+memvar->PATHX:=HB_CWD() 
+memvar->ZDIRE:=HB_CWD()
+memvar->ZDIRN:=HB_CWD()
 
-Set( _SET_PATH, PATHX)
-ZDATA:=DATE()
-DXDIA:=DATE()
-ANOUSO  := year( DXDIA )
-ZCODMANA5:=1
-ZERRO    :=""
-zNERRO   :=0
+Set( _SET_PATH, memvar->PATHX)
+memvar->ZDATA:=DATE()
+memvar->DXDIA:=DATE()
+memvar->ANOUSO  := year( memvar->DXDIA )
+memvar->ZCODMANA5:=1
+memvar->ZERRO    :=""
+memvar->zNERRO   :=0
 
-HELPARQ:="TOOLHELP"
-READVAR:=""
+memvar->HELPARQ:="TOOLHELP"
+memvar->READVAR:=""
 
 
-SACENTUA:=.T.
+memvar->ACENTUA:=.T.
 SetKey( 39, {|| AC_AGUDO() } )
 SetKey( 94, {|| AC_CIRC() } )
 SetKey( 96, {|| AC_CRASE() } )
 SetKey( 126, {|| AC_TIL() } )
-SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERT( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey( K_ALT_S, {|| memvar->ACENTUA := ! memvar->ACENTUA, ALERT( "Acentuacao: " +if(memvar->acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
 SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alert("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
 
 SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
@@ -89,11 +89,11 @@ SetKey( K_F10, {|| MUDADATA() } )
 //RELOGIO()
 
 set( _SET_EVENTMASK, HB_INKEY_ALL)
-lMOUSE:=.F.
-MOUSE_X      := 0
-MOUSE_Y      := 0
-MOUSE_B      := 0
-aMENUPROMPTS := {}
+memvar->lMOUSE:=.F.
+memvar->MOUSE_X      := 0
+memvar->MOUSE_Y      := 0
+memvar->MOUSE_B      := 0
+memvar->aMENUPROMPTS := {}
 
 
 deletaarq("TEMP*.*")
@@ -102,18 +102,18 @@ deletaarq("*.LOG")
 
 
 //Variaveis Controle Impressora,Video Arquivo
-cARQSPO:=""
-nTIPSPO:=0
-cIMPCOM:=CHR(15)
-cIMPEXP:=CHR(18)
-cIMPTIT:=CHR(14)
-cIMPNEG:=CHR(27)+CHR(69)
-cIMPNER:=CHR(27)+CHR(70)
-cIMPORI:=""
-lIMPEMAIL:=.F.
+memvar->cARQSPO:=""
+memvar->nTIPSPO:=0
+memvar->cIMPCOM:=CHR(15)
+memvar->cIMPEXP:=CHR(18)
+memvar->cIMPTIT:=CHR(14)
+memvar->cIMPNEG:=CHR(27)+CHR(69)
+memvar->cIMPNER:=CHR(27)+CHR(70)
+memvar->cIMPORI:=""
+memvar->lIMPEMAIL:=.F.
 
-ZDIRE:="ERRO"
-ZUSER:=PADR(NNETWHOAMI(),10)
+memvar->ZDIRE:="ERRO"
+memvar->ZUSER:=PADR(NNETWHOAMI(),10)
 
 
 INFOR("RECURNTX","DBF+NTX+STR(SEQ,3)","RECURNTX",.T.)

@@ -22,38 +22,38 @@ FUNCTION RECUGER1()
 IMPHP()
 
 
-AQ=CHR(27)+CHR(71)
-DQ=CHR(27)+CHR(72)
-AE=cIMPTIT
-AC=cIMPCOM
-DC=cIMPEXP
-AI=CHR(27)+CHR(52)
-DI=CHR(27)+CHR(53)
-AN=cIMPNEG 
-DN=cIMPNER
-AX=CHR(27)+CHR(83)+CHR(00)
-AD=CHR(27)+CHR(83)+CHR(01)
-DXD=CHR(27)+CHR(84)
-AS=CHR(27)+CHR(45)+CHR(00)
-DS=CHR(27)+CHR(45)+CHR(01)
-AEC=CHR(27)+CHR(87)+CHR(00)
-DEC=CHR(27)+CHR(87)+CHR(01)
-AIE=CHR(27)+CHR(52)+CHR(27)+CHR(87)+CHR(01)
-DIE=CHR(27)+CHR(53)+CHR(27)+CHR(87)+CHR(00)
-AIC=CHR(27)+CHR(91)+CHR(50)+CHR(27)+CHR(52)
-DIC=CHR(27)+CHR(91)+CHR(48)+CHR(27)+CHR(53)
-ACA=CHR(27)+CHR(91)+CHR(50)
-ACB=CHR(27)+CHR(91)+CHR(51)
-ACC=CHR(27)+CHR(91)+CHR(52)
-ACD=CHR(27)+CHR(91)+CHR(53)
-DCE=CHR(27)+CHR(91)+CHR(48)
-ZMES=MMES(MONTH(ZDATA))
-ZDIA=DTOC(ZDATA)
-ZANO=STRZERO(YEAR(ZDATA),4)
-ZRSM=REPL("-",132)
-ZRDM=REPL("=",132)
-ZRSS=REPL("-",80)
-ZRDS=REPL("=",80)
+memvar->AQ=CHR(27)+CHR(71)
+memvar->DQ=CHR(27)+CHR(72)
+memvar->AE=memvar->cIMPTIT
+memvar->AC=memvar->cIMPCOM
+memvar->DC=memvar->cIMPEXP
+memvar->AI=CHR(27)+CHR(52)
+memvar->DI=CHR(27)+CHR(53)
+memvar->AN=memvar->cIMPNEG 
+memvar->DN=memvar->cIMPNER
+memvar->AX=CHR(27)+CHR(83)+CHR(00)
+memvar->AD=CHR(27)+CHR(83)+CHR(01)
+memvar->DXD=CHR(27)+CHR(84)
+memvar->AS=CHR(27)+CHR(45)+CHR(00)
+memvar->DS=CHR(27)+CHR(45)+CHR(01)
+memvar->AEC=CHR(27)+CHR(87)+CHR(00)
+memvar->DEC=CHR(27)+CHR(87)+CHR(01)
+memvar->AIE=CHR(27)+CHR(52)+CHR(27)+CHR(87)+CHR(01)
+memvar->DIE=CHR(27)+CHR(53)+CHR(27)+CHR(87)+CHR(00)
+memvar->AIC=CHR(27)+CHR(91)+CHR(50)+CHR(27)+CHR(52)
+memvar->DIC=CHR(27)+CHR(91)+CHR(48)+CHR(27)+CHR(53)
+memvar->ACA=CHR(27)+CHR(91)+CHR(50)
+memvar->ACB=CHR(27)+CHR(91)+CHR(51)
+memvar->ACC=CHR(27)+CHR(91)+CHR(52)
+memvar->ACD=CHR(27)+CHR(91)+CHR(53)
+memvar->DCE=CHR(27)+CHR(91)+CHR(48)
+memvar->ZMES=MMES(MONTH(memvar->ZDATA))
+memvar->ZDIA=DTOC(memvar->ZDATA)
+memvar->ZANO=STRZERO(YEAR(memvar->ZDATA),4)
+memvar->ZRSM=REPL("-",132)
+memvar->ZRDM=REPL("=",132)
+memvar->ZRSS=REPL("-",80)
+memvar->ZRDS=REPL("=",80)
 
 
 DO WHILE .T.
@@ -65,15 +65,15 @@ DO WHILE .T.
    @ 08,30 TO 11,49 DOUB
    OPCAO(09,32,'    &Simples     ',83)
    OPCAO(10,32,'  &Configurada   ',67)
-   OPCAO:=MENU(,0)
+   memvar->OPCAO:=MENU(,0)
    SETCOLOR("W/N")
    DO CASE
-   CASE OPCAO=1 ; RECUETI1()
-   CASE OPCAO=2 ; RECUETI2()
-   OTHERWISE    ; DBCLOSEALL() ; RETU
+   CASE memvar->OPCAO=1 ; RECUETI1()
+   CASE memvar->OPCAO=2 ; RECUETI2()
+   OTHERWISE    ; DBCLOSEALL() ; RETURN .T.
    ENDCASE
 ENDDO
-RETURN
+RETURN .T.
 
 *!*****************************************************************************
 *!
@@ -85,37 +85,43 @@ RETURN
 *!*****************************************************************************
 FUNC CAD1
 PARA MODO
-KEY=LASTKEY()
+memvar->KEY=LASTKEY()
 DO CASE
-   CASE MODO<4
+   CASE memvar->MODO<4
       RETU(1)
-   CASE KEY=7
-      COR=SETCOLOR()
+   CASE memvar->KEY=7
+      memvar->COR=SETCOLOR()
       SETCOLOR("W/N")
       IF MDG('Deseja mesmo apagar?')
          NETRECDEL()
-         PCK1=.T.
+         memvar->PCK1=.T.
       ENDIF
-      SETCOLOR(COR)
+      SETCOLOR(memvar->COR)
       RETU(2)
-   CASE KEY=22
-      NETRECapp()
-      @ ROW(),51      GET ALTURA  VALID ALTURA  < 9  .AND. ! EMPTY(ALTURA)
-      @ ROW(),COL()+1 GET LARGURA VALID LARGURA > 4  .AND. ! EMPTY(LARGURA)
-      @ ROW(),COL()+1 GET COLUNAS VALID COLUNAS < 11 .AND. ! EMPTY(COLUNAS)
+   CASE memvar->KEY=22
+      memvar->nALTURA:=0
+      memvar->nLARGURA:=0
+      memvar->nCOLUNAS:=0
+      @ ROW(),51      GET NALTURA  VALID memvar->NALTURA  < 9  .AND. ! EMPTY(memvar->NALTURA)
+      @ ROW(),COL()+1 GET NLARGURA VALID memvar->NLARGURA > 4  .AND. ! EMPTY(memvar->NLARGURA)
+      @ ROW(),COL()+1 GET NCOLUNAS VALID memvar->NCOLUNAS < 11 .AND. ! EMPTY(memvar->NCOLUNAS)
       READCUR()
-      IF ALTURA=0 .OR. LARGURA=0 .OR. COLUNAS=0
-         NETRECDEL()
+      IF memvar->NALTURA=0 .OR. memvar->NLARGURA=0 .OR. memvar->NCOLUNAS=0
          RETU(2)
+      ELSE
+         NETRECapp()
+          FIELD->ALTURA:=memvar->nALTURA
+          FIELD->LARGURA:=memvar->nLARGURA
+          FIELD->COLUNAS:=memvar->nCOLUNAS
       ENDIF
       RETU(1)
-   CASE KEY=13
-      ALT=ALTURA
-      LAR=LARGURA
-      COL=COLUNAS
-      IMPRIME=.T.
+   CASE memvar->KEY=13
+      memvar->ALT:=FIELD->ALTURA
+      memvar->LAR:=FIELD->LARGURA
+      memvar->COL:=FIELD->COLUNAS
+      memvar->IMPRIME:=.T.
       RETU(0)
-   CASE KEY=27
+   CASE memvar->KEY=27
       RETU(0)
    ENDCASE
 RETU(1)
@@ -141,5 +147,5 @@ SETCOLOR("W/G")
 @ 08,51 SAY 'Lin'
 @ 08,55 SAY 'Col'
 @ 08,59 SAY 'Car'
-RETURN
+RETURN .T.
 *: FIM: RECUGER1.PRG

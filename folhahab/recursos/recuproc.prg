@@ -5,7 +5,7 @@
 *!         Fun‡„o: CABE2()
 *!
 *!*****************************************************************************
-FUNC CABE2(TITULO)                                   &&CABECARIO PARA OS MENUS
+function CABE2(TITULO)                                   &&CABECARIO PARA OS MENUS
 SETCOLOR("N/W")
 @ 06,04 CLEA TO 06,74
 @ 06,06 SAY TITULO
@@ -17,7 +17,7 @@ RETU(.T.)
 *!         Fun‡„o: CABE3()
 *!
 *!*****************************************************************************
-FUNC CABE3(TITULO,QT)                                &&CABECARIO PARA OS MENUS
+function CABE3(TITULO,QT)                                &&CABECARIO PARA OS MENUS
 SETCOLOR("W/N")
 @ 04,01 CLEA TO 04,78
 @ 06,01 CLEA TO 06,78
@@ -47,7 +47,7 @@ SETCOLOR("N/W")
 @ 10,1 SAY SPAC(33)+'Arquivo vazio'+SPAC(32)
 SETCOLOR("+W/BR")
 INKEY(0)
-RETU
+RETURN .T.
 
 
 *!*****************************************************************************
@@ -57,13 +57,13 @@ RETU
 *!    Chamado por: CA()               (fun‡„o    em RECUETI2.PRG, chamado  no Dbedit())
 *!
 *!*****************************************************************************
-FUNC ARQ(NOMEARQ)                        &&VERIFICA A EXISTENCIA DE UM ARQUIVO
+function ARQ(NOMEARQ)                        &&VERIFICA A EXISTENCIA DE UM ARQUIVO
 IF NOMEARQ = SPAC(25)
    MDT("NOME DO ARQUIVO NAO PODE SER VAZIO")
    RETU(.F.)
 ENDIF
-NOMEARX=ALLTRIM(NOMEARQ)+'.DBF'
-IF ! file(NOMEARX)
+memvar->NOMEARX=ALLTRIM(NOMEARQ)+'.DBF'
+IF ! file(memvar->NOMEARX)
    MDT("ESTE ARQUIVO NAO EXISTE - VERIFIQUE !")
    RETU(.F.)
 ENDIF
@@ -82,7 +82,7 @@ RETU(.T.)
 *!          Chama: NSHOW              ( em RECUPROC.PRG)
 *!
 *!*****************************************************************************
-FUNC NSHOW1               &&VERIFICA SE O ARQUIVO ESTA VAZIO ANTES DO DBEDIT
+function NSHOW1               &&VERIFICA SE O ARQUIVO ESTA VAZIO ANTES DO DBEDIT
 IF EOF()
    //CLEAR TYPEAHEAD
    hb_keyClear()
@@ -96,13 +96,15 @@ IF EOF()
 ENDIF
 RETU(.T.)
 
-FUNC MDI(cVAR)
+function MDI(cVAR)
 CABE2(cVAR)
 RETU .T.
-FUNC COR
-RETU .T.
-FUNC CABEX(cVAR)
-CABE2(cVAR)
 
+function COR
+RETU .T.
+
+function CABEX(cVAR)
+CABE2(cVAR)
+RETURN .T.
 *: FIM: RECUPROC.PRG
 

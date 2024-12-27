@@ -6,7 +6,7 @@
 #-manifest=recursos.Manifest  comentado erro compilacao 32 bits
 
 #-m -n -w3 -es2 -ge1
--m -n -w -es2 -ge1
+-m -n -w0 -es2 -ge1
 
 hbct.hbc
 hbwin.hbc
@@ -17,14 +17,14 @@ hbmisc.hbc
 recursos.prg
 recuproc.prg
 recumenu.prg
-recuger.prg
-recuger1.prg
+#recuger.prg
 recuger2.prg
-recuapo.prg
-recuser.prg
+#recuapo.prg
+#recuser.prg
 recueti1.prg
 recueti2.prg
 recuapo2.prg
+recuger1.prg
 ..\obj\disk01.prg
 ..\obj\disk06.prg
 ..\obj\disklib.prg

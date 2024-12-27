@@ -27,12 +27,12 @@ WHILE .T.
    OPCAO( 09,23 , " &A Gerador de Etiquetas           " ,65, "  Etiquetas simples e configuradas.   ")
    OPCAO( 10,23 , " &B Editor  de Cartas              " ,66, "  Cria, Altera, Imprime Cartas.       ")
 //   OPCAO( 11,23 , " &C DBF Editor                     " ,67, "  Gera relat¢rio sobre arquivo DBF.   ")
-   OP:=MENU(,6)
+   memvar->OP:=MENU(,6)
    SETCOLOR("W/N")
    DO CASE
-   CASE OP=1 ; RECUGER1()
-   CASE OP=2 ; RECUGER2()
-   CASE OP=3
+   CASE memvar->OP=1 ; RECUGER1()
+   CASE memvar->OP=2 ; RECUGER2()
+   CASE memvar->OP=3
       /*
       TAMANHO="132"
       GRUPO='*.DBF       '
@@ -47,5 +47,5 @@ WHILE .T.
    OTHERWISE ; RETURN NIL
    ENDCASE
 ENDDO
-RETURN
+RETURN .T.
 *: FIM: RECUGER.PRG

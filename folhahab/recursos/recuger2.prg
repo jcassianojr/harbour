@@ -41,8 +41,8 @@ READCUR()
 return .t.
 
 function lREDIT
-mARQUIVO:=ProfileString( "FOLHA.INI","PATH","RECUEDIT" , "" )+mARQUIVO+".txt"
-imparq(marquivo,msetup,mmarlin,mmarinf,mmarsup,mmaresq,mmardir,mmarcol) //,mgraf)
+mARQUIVO:=ProfileString( "FOLHA.INI","PATH","RECUEDIT" , "" )+MEMVAR->mARQUIVO+".txt"
+imparq(MEMVAR->marquivo,MEMVAR->msetup,MEMVAR->mmarlin,MEMVAR->mmarinf,MEMVAR->mmarsup,MEMVAR->mmaresq,MEMVAR->mmardir,MEMVAR->mmarcol) //,mgraf)
 return .t.
 
 
