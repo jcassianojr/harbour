@@ -741,7 +741,8 @@ local lgravasql
 
 lgravasql := mdg("gravar sql")
 aINDICES  := {}
-use &cDBFARQ.
+dbUseArea( .F.,, cDBFARQ,, .T., .F. )
+//use &cDBFARQ.
 aSTRU    := DBSTRUCT()
 nLASTREC := reccount()
 zei_fort(nLASTREC,,,0)

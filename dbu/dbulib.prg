@@ -695,7 +695,8 @@ IF nTIPOPR = 1
    IF LCOPIANAT
       cDESTINO := TROCAEXT(cARQORI,zEXPOREXT)
       MDT("abrindo arquivo de origem: "+cARQORI)
-      USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA (cORIDRIVER)
+      //USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA (cORIDRIVER)
+      dbUseArea( .T., (cORIDRIVER), (cARQORI), "ORIGEM", .F. , .F. )
       COPYTO(cDESTINO)
       dbcloseall()
    ELSE
@@ -706,7 +707,8 @@ IF nTIPOPR = 2
    IF zEXPOREXT = "DBF" .OR. zEXPOREXT = "SDF" .OR. zEXPOREXT = "DLM" .OR. zEXPOREXT = "CSV" .OR. zEXPOREXT = "UNL" .OR. zEXPOREXT = "PSV" .OR. zEXPOREXT = "TSV" .OR. zEXPOREXT = "SSV"
       cARQORI := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*."+zEXPOREXT,1)
       MDT("abrindo arquivo de destino: "+cDESTINO)
-      USE (cDESTINO) ALIAS DESTINO EXCLUSIVE NEW VIA (cORIDRIVER)
+      //USE (cDESTINO) ALIAS DESTINO EXCLUSIVE NEW VIA (cORIDRIVER)
+      dbUseArea( .T., (cORIDRIVER), (cDESTINO), "DESTINO", .F. , .F. )
       APPENDFROM(cARQORI)
       dbcloseall()
    ELSE

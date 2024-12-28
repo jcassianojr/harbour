@@ -987,7 +987,7 @@ FUNCTION tirace2( cXml )
    FOR nCont := 1 TO Len( cRemoveTag )
       cXml := StrTran( cXml, cRemoveTag[ nCont ], "" )
    NEXT
-   IF ![
+   IF ! ["] $ cXml // Pode ser usado aspas simples
       cXml := StrTran( cXml, [ '],["])
    ENDIF
    IF Chr( 195 ) $ cXml

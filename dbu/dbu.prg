@@ -1073,13 +1073,14 @@ if (!HB_FILEEXISTS(cARQ)) .and. (!HB_FILEEXISTS(cARQ+".dbf"))
 endif
 USOVIA := RDDNOME(TIPODBF)
 while .T.
-   //    DBUSEAREA(new area,cDRIVE,cFILE,cALIAS,lMODO,lREAD)
-
    //dbusearea( .T., USOVIA, cARQ,, !lMODO )
+  // DBUseArea( <lNewArea> , <cDriver> , <cName>, <xcAlias> , <lShared> , <lReadOnly>,<cCodePage>,<nConnection> ) -> lSuccess
    IF lMODO
-      USE (cARQ) EXCLUSIVE NEW VIA USOVIA
+      dbUseArea( .T., USOVIA, (cARQ),, .F. , .F. )
+      //USE (cARQ) EXCLUSIVE NEW VIA USOVIA
    ELSE
-      USE (cARQ) SHARED NEW VIA USOVIA
+      dbUseArea( .T., USOVIA, (cARQ),, .T. , .F. )
+      //USE (cARQ) SHARED NEW VIA USOVIA
    ENDIF
    if !neterr()
       exit

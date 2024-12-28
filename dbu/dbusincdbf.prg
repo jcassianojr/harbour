@@ -1,10 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : dbusincdbf.prg
-// +
-// +
 // +
 // +     Sistema:
 // +
@@ -14,20 +10,13 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:07 am
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
 #include "dbinfo.ch"
 
-// *************************
 
 // +--------------------------------------------------------------------
 // +
@@ -72,10 +61,12 @@ FUNCTION dBUsincdbf()
    filecopy( cARQDES, trocaext( cARQDES, "_old.dbf" ) )
 
    MDT( "abrindo arquivo de origen: " + cARQORI )
-   USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
+   //USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
+   dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .T. , .F. )
 
    MDT( "abrindo arquivo de destino: " + cARQDES )
-   USE ( cARQDES ) ALIAS DESTINO EXCLUSIVE NEW VIA ( cDESDRIVER )
+   //USE ( cARQDES ) ALIAS DESTINO EXCLUSIVE NEW VIA ( cDESDRIVER )
+   dbUseArea( .T., ( cDESDRIVER ), ( cARQDES ), "DESTINO", .F. , .F. )
 
    MDT( "Importando registros para: " + cARQDES )
    dbSelectAr( "ORIGEM" )
@@ -120,7 +111,6 @@ FUNCTION dBUsincdbf()
    alertX( "sincronizado" )
 
 
-// ************************
 
 // +--------------------------------------------------------------------
 // +
@@ -168,7 +158,8 @@ FUNCTION sortdbf()
    filecopy( cARQORI, cARQDES )
 
    MDT( "abrindo arquivo de origem: " + cARQORI )
-   USE ( cARQORI ) ALIAS ORIGEM EXCLUSIVE NEW VIA ( cORIDRIVER )
+   //USE ( cARQORI ) ALIAS ORIGEM EXCLUSIVE NEW VIA ( cORIDRIVER )
+   dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .F. , .F. )
 
    mdt( "Ordenando por: " + cSORTED )
 // __dbSort( cToFileName, aFields, bFor, bWhile, nNext, nRecord, lRest, cRDD     , nConnection, cCodePage )
@@ -180,7 +171,6 @@ FUNCTION sortdbf()
    alertX( "sincronizado" )
 
 
-// ************************
 
 // +--------------------------------------------------------------------
 // +
@@ -212,10 +202,11 @@ FUNCTION limparegdupdbf()
    filecopy( cARQORI, trocaext( cARQORI, "_old.dbf" ) )
 
    MDT( "abrindo arquivo de origem: " + cARQORI )
-   USE ( cARQORI ) ALIAS ORIGEM EXCLUSIVE NEW VIA ( cORIDRIVER )
+   //USE ( cARQORI ) ALIAS ORIGEM EXCLUSIVE NEW VIA ( cORIDRIVER )
+   dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .F., .F. )
 
    MDT( "Limpando Registro Duplicados: " )
-   dbSelectAr( "ORIGEM" )
+   dbSelectArEA( "ORIGEM" )
    dbSetOrder( 1 )
    cCHAVE   := IndexKey()
    nLASTREC := LastRec()

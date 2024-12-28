@@ -84,7 +84,9 @@ FOR XY := 1 TO LEN(aARQMEMOS)
    cNEWDBF := "new_"+cARQORISEMEXT
 
    MDT("abrindo arquivo antigo: "+cOLDDBF)
-   USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA (cORIDRIVER) //"DBFNTX" 	via driver antigo
+   //FDBUseArea( <lNewArea> , <cDriver> , <cName>, <xcAlias> , <lShared> , <lReadOnly>,<cCodePage>,<nConnection> ) -> lSuccess
+   dbUseArea( .T., (cORIDRIVER), (cOLDDBF), "aliasantigo", .T. , .F. )
+   //USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA (cORIDRIVER) //"DBFNTX" 	via driver antigo
 
    MDT("copiando estrutura")
    try
@@ -100,10 +102,11 @@ IF file(cNEWDBF+".DBF") .AND. file(cNEWDBF+cDESMEMO)  // ".FPT" a extensao do rd
    MDT("copia efetuada:"+cNEWDBF+".DBF"+" "+cNEWDBF+cDESMEMO)
 ENDIF
 
-USE (cNEWDBF) ALIAS aliasnovo EXCLUSIVE NEW VIA (cDESDRIVER) //abre a copia usa o rdddefauld destino ultimo atribuido
+dbUseArea( .T., (cDESDRIVER), (cNEWDBF), "aliasnovo", .F. , .F. )
+//USE (cNEWDBF) ALIAS aliasnovo EXCLUSIVE NEW VIA (cDESDRIVER) //abre a copia usa o rdddefauld destino ultimo atribuido
 
 MDT("Importando registros para: "+cNEWDBF)
-SELE ALIASNOVO
+dbSelectArea( "ALIASNOVO" )
 
 nLASTREC := NetRegCount(cOLDDBF)
 zei_fort(nLASTREC,,,0)
@@ -175,7 +178,8 @@ FOR XY := 1 TO LEN(aARQDBF)
    cNEWDBF := "new_"+cARQNOME
 
    MDT("abrindo arquivo antigo: "+cOLDDBF)
-   USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA (cORIDRIVER) //	via driver antigo utiliza aliasantigo mas o driver defaiult e o destino
+  // USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA (cORIDRIVER) //	via driver antigo utiliza aliasantigo mas o driver defaiult e o destino
+  dbUseArea( .T., (cORIDRIVER), (cOLDDBF), "aliasantigo", .T. , .F. )
 
 
    MDT("copiando estrutura")
@@ -200,7 +204,8 @@ ENDIF
 IF file(cNEWDBF+cDESEXT)
    MDT("copia efetuada:"+cNEWDBF+cDESEXT)
 
-   USE (cNEWDBF) ALIAS aliasnovo EXCLUSIVE NEW VIA (cDESDRIVER) //abre a copia usa o rdddefauld destino ultimo atribuido utiliza aliasnovo
+   //USE (cNEWDBF) ALIAS aliasnovo EXCLUSIVE NEW VIA (cDESDRIVER) //abre a copia usa o rdddefauld destino ultimo atribuido utiliza aliasnovo
+   dbUseArea( .T., (cDESDRIVER), (cNEWDBF), "aliasnovo", .F. , .F. )
 
    MDT("Importando registros para: "+cNEWDBF)
    //  SELE ALIASNOVO

@@ -681,7 +681,9 @@ FUNCTION export2sql( odb, cDBFFILE )
    cTablename := TIRAEXT( cDBFFILE )
 // use &cTablename.
 
-   USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
+
+ dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .T. , .F. )
+  // USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
 // USE (cDBFFILE)  SHARED NEW //VIA  (cORIDRIVER)
 
    aStruct := dbStruct()

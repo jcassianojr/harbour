@@ -2305,7 +2305,9 @@ FUNCTION enter_rc
 FUNCTION OBTER( XARQ, XINX, XSEE, XCAM )   // SEEK MAIS RETORNO CAMPO
 
    DBF_USO := Alias()
-   USE &XARQ INDEX &XINX NEW SHARED
+   //USE &XARQ INDEX &XINX NEW SHARED
+   dbUseArea( .T.,, XARQ,, .T. , .F. ) 
+   dbSetIndex( XINX )
    WHILE NetErr()
    ENDDO
    dbGoTop()

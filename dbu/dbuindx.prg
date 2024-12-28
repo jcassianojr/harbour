@@ -321,17 +321,21 @@ FUNCTION do_index
       zei_fort( nLASTREC,,, 0 )
       IF tipodbf = 1 .OR. tipodbf = 3  // .or. tipodbf = 5
          IF Left( K_EXP, 1 ) # "<"
-            INDEX ON &k_exp TO &filename eval zei_fort( nLASTREC,,, 1 )
+            //INDEX ON &k_exp TO &filename eval zei_fort( nLASTREC,,, 1 )
+            ordCondSet(,,,, {|| zei_fort( nLASTREC,,, 1 )},, RecNo(),,,,,,,,,,,,, ) ; ordCreate( filename,, k_exp, {|| &k_exp}, )
          ELSE
             K_EXP := SubStr( K_EXP, 2 )
-            INDEX ON &k_exp TO &filename eval zei_fort( nLASTREC,,, 1 )
+            //INDEX ON &k_exp TO &filename eval zei_fort( nLASTREC,,, 1 )
+            ordCondSet(,,,, {|| zei_fort( nLASTREC,,, 1 )},, RecNo(),,,,,,,,,,,,, ) ; ordCreate( filename,, k_exp, {|| &k_exp}, )
          ENDIF
       ELSE
          IF Left( K_EXP, 1 ) # "<"
-            INDEX ON &k_exp TAG &K_TAG TO &filename eval zei_fort( nLASTREC,,, 1 )
+            //INDEX ON &k_exp TAG &K_TAG TO &filename eval zei_fort( nLASTREC,,, 1 )
+            ordCondSet(,,,, {|| zei_fort( nLASTREC,,, 1 )},, RecNo(),,,,,,,,,,,,, ) ; ordCreate( filename, K_TAG, k_exp, {|| &k_exp}, )
          ELSE
             K_EXP := SubStr( K_EXP, 2 )
-            INDEX ON &k_exp TAG &K_TAG TO &filename eval zei_fort( nLASTREC,,, 1 )
+            //INDEX ON &k_exp TAG &K_TAG TO &filename eval zei_fort( nLASTREC,,, 1 )
+            ordCondSet(,,,, {|| zei_fort( nLASTREC,,, 1 )},, RecNo(),,,,,,,,,,,,, ) ; ordCreate( filename, K_TAG, k_exp, {|| &k_exp}, )
          ENDIF
       ENDIF
       CLOSE INDEX
