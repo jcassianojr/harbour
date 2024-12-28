@@ -1,0 +1,336 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 27-Dez-2024 at  8:41 pm
+*+
+*+--------------------------------------------------------------------
+
+acento()        <unresolved function>
+
+  Called from ( recueti1.prg )   1 - function cad()
+
+ac_agudo()      <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+ac_circ()       <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+ac_crase()      <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+ac_til()        <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+agen()          <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+arq()           in recuproc.prg
+
+  Called from ( recueti2.prg )   2 - function ca()
+
+cabe2()         in recuproc.prg
+
+  Called from ( recuapo2.prg )   1 - function recuapo2()
+              ( recuger1.prg )   1 - function recuger1()
+              ( recuproc.prg )   1 - function cabex()
+                                 1 - function mdi()
+
+cabe3()         in recuproc.prg
+
+  Called from ( recuger.prg  )   1 - function recuger()
+              ( recuser.prg  )   1 - function recuser()
+
+checkimp()      <unresolved function>
+
+  Called from ( recueti2.prg )   1 - function lista()
+
+delerec()       <unresolved function>
+
+  Called from ( recueti1.prg )   1 - function cad()
+              ( recueti2.prg )   1 - function ca()
+
+deletaarq()     <unresolved function>
+
+  Called from ( recursos.prg )   3 - function main()
+
+edita()         in recueti2.prg
+
+  Called from ( recueti2.prg )   1 - function recueti2()
+
+edita2()        in recueti1.prg
+
+  Called from ( recueti1.prg )   1 - function recueti1()
+
+filtro()        <unresolved function>
+
+  Called from ( recueti2.prg )   1 - function lista()
+
+fim()           <unresolved function>
+
+  Called from ( recumenu.prg )   1 - function recumenu()
+
+folutil3()      in recuapo2.prg
+
+  Called from ( recuapo2.prg )   1 - function recuapo2()
+
+folutil4()      in recuapo2.prg
+
+  Called from ( recuapo2.prg )   1 - function recuapo2()
+
+folutil5()      in recuapo2.prg
+
+  Called from ( recuapo2.prg )   2 - function recuapo2()
+
+foy2()          <unresolved function>
+
+  Called from ( recumenu.prg )   2 - function recumenu()
+              ( recuser.prg  )   2 - function recuser()
+
+gredit()        in recuger2.prg
+
+  Called from ( recuger2.prg )   1 - function recuger2()
+
+hb_cwd()        in harbour.lib
+
+  Called from ( recursos.prg )   3 - function main()
+              ( recuser.prg  )   1 - function recuser()
+
+hb_dispbox()    in harbour.lib
+
+  Called from ( recumenu.prg )   3 - function recumenu()
+
+hb_idlestate()  in harbour.lib
+
+  Called from ( recursos.prg )   2 - function main()
+
+hb_keyclear()   in harbour.lib
+
+  Called from ( recuproc.prg )   1 - function nshow1()
+
+hb_langselect() in harbour.lib
+
+  Called from ( recursos.prg )   2 - function main()
+
+hb_run()        in harbour.lib
+
+  Called from ( recursos.prg )   1 - function main()
+
+help()          <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+imparq()        <unresolved function>
+
+  Called from ( recuger2.prg )   1 - function lredit()
+
+impend()        <unresolved function>
+
+  Called from ( recueti2.prg )   1 - function lista()
+
+impfol()        <unresolved function>
+
+  Called from ( recueti2.prg )   1 - function lista()
+
+imphp()         <unresolved function>
+
+  Called from ( recuger.prg  )   1 - function recuger()
+              ( recuger1.prg )   1 - function recuger1()
+
+impressora()    <unresolved function>
+
+  Called from ( recueti2.prg )   1 - function lista()
+
+infor()         <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+lista()         in recueti2.prg
+
+  Called from ( recueti2.prg )   1 - function ca()
+
+lredit()        in recuger2.prg
+
+  Called from ( recuger2.prg )   1 - function recuger2()
+
+md()            <unresolved function>
+
+  Called from ( recuapo2.prg )   1 - function folutil3()
+                                 2 - function folutil4()
+                                 2 - function folutil5()
+                                 1 - function recuapo2()
+
+mdg()           <unresolved function>
+
+  Called from ( recueti1.prg )   1 - function cad()
+              ( recueti2.prg )   2 - function ca()
+              ( recuger1.prg )   1 - function cad1()
+              ( recumenu.prg )   1 - function recumenu()
+
+mds()           <unresolved function>
+
+  Called from ( recueti1.prg )   2 - function cad()
+              ( recueti2.prg )   4 - function ca()
+              ( recuser.prg  )   1 - function recuser()
+
+mdt()           <unresolved function>
+
+  Called from ( recuapo2.prg )   1 - function folutil3()
+                                 1 - function folutil4()
+                                 1 - function folutil5()
+              ( recueti1.prg )   4 - function cad()
+              ( recueti2.prg )   1 - function ca()
+                                 3 - function lista()
+              ( recuproc.prg )   2 - function arq()
+
+mmes()          <unresolved function>
+
+  Called from ( recuger1.prg )   1 - function recuger1()
+
+mudadata()      <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+mvinfoconftela( <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+netrecapp()     <unresolved function>
+
+  Called from ( recueti1.prg )   1 - function cad()
+              ( recueti2.prg )   1 - function ca()
+              ( recuger1.prg )   1 - function cad1()
+              ( recuproc.prg )   1 - function nshow1()
+
+netrecdel()     <unresolved function>
+
+  Called from ( recueti1.prg )   1 - function cad()
+              ( recueti2.prg )   1 - function ca()
+              ( recuger1.prg )   1 - function cad1()
+
+netregosok()    <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+netuse()        <unresolved function>
+
+  Called from ( recueti1.prg )   2 - function edita2()
+              ( recueti2.prg )   2 - function ca()
+                                 2 - function edita()
+                                 2 - function lista()
+
+nnetwhoami()    <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+notep()         <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+nshow()         in recuproc.prg
+
+  Called from ( recuproc.prg )   1 - function nshow1()
+
+nshow1()        in recuproc.prg
+
+  Called from ( recueti1.prg )   1 - function edita2()
+              ( recueti2.prg )   1 - function edita()
+
+opcao()         <unresolved function>
+
+  Called from ( recuapo2.prg )   4 - function recuapo2()
+              ( recueti1.prg )   2 - function recueti1()
+              ( recueti2.prg )   2 - function recueti2()
+              ( recuger.prg  )   2 - function recuger()
+              ( recuger1.prg )   2 - function recuger1()
+              ( recumenu.prg )   5 - function recumenu()
+              ( recuser.prg  )   2 - function recuser()
+
+padrao()        <unresolved function>
+
+  Called from ( recuger2.prg )   1 - function recuger2()
+
+pegchave()      <unresolved function>
+
+  Called from ( recuger2.prg )   1 - function recuger2()
+
+profilestring() <unresolved function>
+
+  Called from ( recuger2.prg )   1 - function lredit()
+
+rcampo()        <unresolved function>
+
+  Called from ( recueti2.prg )   3 - function ca()
+
+readcur()       <unresolved function>
+
+  Called from ( recuapo2.prg )   1 - function folutil3()
+                                 2 - function folutil4()
+                                 2 - function folutil5()
+              ( recueti1.prg )   3 - function cad()
+              ( recueti2.prg )   7 - function ca()
+              ( recuger1.prg )   1 - function cad1()
+              ( recuger2.prg )   1 - function gredit()
+
+recuapo2()      in recuapo2.prg
+
+  Called from ( recuapo.prg  )   1 - function recuapo()
+              ( recumenu.prg )   1 - function recumenu()
+
+recueti1()      in recueti1.prg
+
+  Called from ( recuger1.prg )   1 - function recuger1()
+
+recueti2()      in recueti2.prg
+
+  Called from ( recuger1.prg )   1 - function recuger1()
+
+recuger1()      in recuger1.prg
+
+  Called from ( recuger.prg  )   1 - function recuger()
+              ( recumenu.prg )   1 - function recumenu()
+
+recuger2()      in recuger2.prg
+
+  Called from ( recuger.prg  )   1 - function recuger()
+              ( recumenu.prg )   1 - function recumenu()
+
+recumenu()      in recumenu.prg
+
+  Called from ( recursos.prg )   1 - function main()
+
+repl()          <unresolved function>
+
+  Called from ( recuger1.prg )   4 - function recuger1()
+
+teclas()        <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+telatip()       in recuger1.prg
+
+  Called from ( recueti1.prg )   1 - function cad()
+              ( recueti2.prg )   1 - function lista()
+
+tele()          <unresolved function>
+
+  Called from ( recursos.prg )   1 - function main()
+
+tredit()        in recuger2.prg
+
+  Called from ( recuger2.prg )   1 - function recuger2()
+
+video()         in hbct.lib
+
+  Called from ( recueti2.prg )   1 - function lista()
+
+zei_fort()      <unresolved function>
+
+  Called from ( recueti2.prg )   2 - function lista()
+
+__setcentury()  <unresolved function>
+
+  Called from ( recursos.prg )   4 - function main()

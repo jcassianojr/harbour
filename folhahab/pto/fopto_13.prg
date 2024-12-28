@@ -1,24 +1,60 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+--------------------------------------------------------------------
 *+
-*+    Source Module => C:\DEVELOP\CLIPPER\FOLHA\PTO\FOPTO_13.PRG
 *+
-*+    Reformatted by Click! 2.03 on Jun-25-2003 at  5:15 pm
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+    Programa  : fopto_13.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:32 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
-CABE2( 'FOPTO_13 - Ver/Imprimir Arquivo do RelЂgio-TXT' )
+
+CABE2('FOPTO_13 - Ver/Imprimir Arquivo do RelЂgio-TXT')
 ntipo := PEGRELOGIO()
-DADO  := pegarqcon( nTIPO, "TXT" )
+DADO  := pegarqcon(nTIPO,"TXT")
 FOPTO13(DADO)
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function FOPTO13()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNC FOPTO13(DADO)
-if MDG( "Visualizar" )
-   VERTXT( DADO,,, { 4, 0, 24, 79 }, .F. )
+
+if MDG("Visualizar")
+   VERTXT(DADO,,,{4,0,24,79},.F.)
 endif
-if MDG( "Imprimir" )
-   IMPARQ( DADO )
+if MDG("Imprimir")
+   IMPARQ(DADO)
 endif
 retu
 
 
-*+ EOF: FOPTO_13.PRG
+
+*+ EOF: fopto_13.prg
+*+

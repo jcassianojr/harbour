@@ -1,28 +1,55 @@
-*:*****************************************************************************
-*:
-*:       FOGD.PRG: Menu Para Calcular e Apurar
-*:      Linguagem: Clipper 5.x
-*:        Sistema: FOLHA DE PAGAMENTO
-*:      Copyright (c) 1998,  SOFTEC  S/C Ltda.
-*:  Atualizado em: 17/07/98
-*:
-*:*****************************************************************************
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : fod.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:45 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
+// :*****************************************************************************
+// :
+// :       FOGD.PRG: Menu Para Calcular e Apurar
+// :      Linguagem: Clipper 5.x
+// :        Sistema: FOLHA DE PAGAMENTO
+// :      Copyright (c) 1998,  SOFTEC  S/C Ltda.
+// :  Atualizado em: 17/07/98
+// :
+// :*****************************************************************************
 
 
 
 
 PRIV HELPDBF
-HELPDBF="FOD"
+HELPDBF := "FOD"
 
-Set( _SET_MESSAGE, 23 , .T. )
+Set(_SET_MESSAGE,23,.T.)
 WHILE .T.
-   op:=4
+   op := 4
    CABEX('Menu Principal de Calculos')
    MD()
    @ 07,00 TO 21,39 DOUB
    @ 07,40 TO 21,79 DOUB
-   @ 09,03 SAY "C lculos:"
-   @ 09,43 SAY "Refazer Incidencias:"
+   @ 09,03 SAY "C lculos:"                    
+   @ 09,43 SAY "Refazer Incidencias:"         
    @ 11,03 PROM "1 - Iniciar o Mˆs.        " MESS "Faz os movimentos para come‡ar um mˆs"
    @ 13,03 PROM "2 - Premio Tributado.     " MESS "Faz o calculo do Premio Tributado"
    @ 14,03 PROM "3 - Adiantamento Salarial." MESS "Faz o calculo do Adiantamento Salarial"
@@ -37,33 +64,60 @@ WHILE .T.
    @ 19,43 PROM "E - Folha Complementar    " MESS "Refaz incidencias tribut rias Complementar"
    MENU TO OP
    DO CASE
-      CASE OP = 1 ; FOD7()
-      CASE OP = 2 ; FOD9()
-      CASE OP = 3 ; FOD1()
-      CASE OP = 4 ; FOD2(1)
-      CASE OP = 5 ; FOD5(1)
-      CASE OP = 6 ; FOD2(2)
-      CASE OP = 7 ; FOD5(2)
-      CASE OP = 8 ; FODINS(1)
-      CASE OP = 9 ; FODINS(2)
-      CASE OP =10 ; FODINS(3)
-      CASE OP =11 ; FODINS(4)
-      CASE OP =12 ; FODINS(5)
-      OTHERWISE   ; RETU
+   CASE OP = 1 
+      FOD7()
+   CASE OP = 2 
+      FOD9()
+   CASE OP = 3 
+      FOD1()
+   CASE OP = 4 
+      FOD2(1)
+   CASE OP = 5 
+      FOD5(1)
+   CASE OP = 6 
+      FOD2(2)
+   CASE OP = 7 
+      FOD5(2)
+   CASE OP = 8 
+      FODINS(1)
+   CASE OP = 9 
+      FODINS(2)
+   CASE OP = 10 
+      FODINS(3)
+   CASE OP = 11 
+      FODINS(4)
+   CASE OP = 12 
+      FODINS(5)
+   OTHERWISE 
+      RETU
    ENDCASE
 ENDDO
 
-*!*****************************************************************************
-*!
-*!       TABIRRF
-*!
-*!    Chamado por: FOD9.PRG
-*!               : FOD2.PRG
-*!               : FOD1B.PRG
-*!
-*!*****************************************************************************
+// !*****************************************************************************
+// !
+// !       TABIRRF
+// !
+// !    Chamado por: FOD9.PRG
+// !               : FOD2.PRG
+// !               : FOD1B.PRG
+// !
+// !*****************************************************************************
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function TABIRRF()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNCTION TABIRRF
-if !  netuse("TABIRRF") //BREDE("TABIRRF",1)
+
+if !netuse("TABIRRF")   //BREDE("TABIRRF",1)
    retu .f.
 endif
 DBGOTO(MESTRAB)
@@ -101,19 +155,33 @@ RETU .t.
 /*
 Calculo do Valor dos Dependentes
 */
-*!*****************************************************************************
-*!
-*!         Fun‡„o: CALCDEPE()
-*!
-*!    Chamado por: FOD9.PRG
-*!               : FOD1B.PRG
-*!               : FOD2BAS.PRG
-*!
-*!*****************************************************************************
+// !*****************************************************************************
+// !
+// !         Fun‡„o: CALCDEPE()
+// !
+// !    Chamado por: FOD9.PRG
+// !               : FOD1B.PRG
+// !               : FOD2BAS.PRG
+// !
+// !*****************************************************************************
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function CALCDEPE()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNC CALCDEPE
-VAL4:= IF(DEP>QTDEIRRF,QTDEIRRF*VDEPENDE,DEP*VDEPENDE)
-IF mFATORIRRF#0
-   VAL4:= ROUND(VAL4/mFATORIRRF,2)
+
+VAL4 := IF(DEP > QTDEIRRF,QTDEIRRF * VDEPENDE,DEP * VDEPENDE)
+IF mFATORIRRF # 0
+   VAL4 := ROUND(VAL4 / mFATORIRRF,2)
 ENDIF
 RETU VAL4
 
@@ -121,81 +189,140 @@ RETU VAL4
 /*
 Calculo do Valor do Desconto do Irrf
 */
-*!*****************************************************************************
-*!
-*!         Fun‡„o: CALCIRRF()
-*!
-*!    Chamado por: FOD9.PRG
-*!               : FOD1B.PRG
-*!               : FOD2DES.PRG
-*!
-*!*****************************************************************************
+// !*****************************************************************************
+// !
+// !         Fun‡„o: CALCIRRF()
+// !
+// !    Chamado por: FOD9.PRG
+// !               : FOD1B.PRG
+// !               : FOD2DES.PRG
+// !
+// !*****************************************************************************
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function CALCIRRF()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNC CALCIRRF
-nBASEIRRF:= IF(mFATORIRRF#0,ROUND(BASE*mFATORIRRF,2),BASE)
+
+nBASEIRRF := IF(mFATORIRRF # 0,ROUND(BASE * mFATORIRRF,2),BASE)
 DO CASE
-   CASE nBASEIRRF <= IRRF1 ; IR3:= IRTX1 ; DESCIR:= IRPA1
-   CASE nBASEIRRF <= IRRF2 ; IR3:= IRTX2 ; DESCIR:= IRPA2
-   CASE nBASEIRRF <= IRRF3 ; IR3:= IRTX3 ; DESCIR:= IRPA3
-   CASE nBASEIRRF <= IRRF4 ; IR3:= IRTX4 ; DESCIR:= IRPA4
-   CASE nBASEIRRF <= IRRF5 ; IR3:= IRTX5 ; DESCIR:= IRPA5
-   CASE nBASEIRRF <= IRRF6 ; IR3:= IRTX6 ; DESCIR:= IRPA6
-   CASE nBASEIRRF <= IRRF7 ; IR3:= IRTX7 ; DESCIR:= IRPA7
+CASE nBASEIRRF <= IRRF1 
+   IR3    := IRTX1
+   DESCIR := IRPA1
+CASE nBASEIRRF <= IRRF2 
+   IR3    := IRTX2
+   DESCIR := IRPA2
+CASE nBASEIRRF <= IRRF3 
+   IR3    := IRTX3
+   DESCIR := IRPA3
+CASE nBASEIRRF <= IRRF4 
+   IR3    := IRTX4
+   DESCIR := IRPA4
+CASE nBASEIRRF <= IRRF5 
+   IR3    := IRTX5
+   DESCIR := IRPA5
+CASE nBASEIRRF <= IRRF6 
+   IR3    := IRTX6
+   DESCIR := IRPA6
+CASE nBASEIRRF <= IRRF7 
+   IR3    := IRTX7
+   DESCIR := IRPA7
 ENDCASE
 IF IR3 <> 0
-   IR3A:= (IR3/100)
-   IR2:= (nBASEIRRF * IR3A)
-   VALDESCIR:= (IR2 - DESCIR)
-   ** VALOR MINIMO DE DESCONTO = MIN_DESCON = DIV5
+   IR3A      := (IR3 / 100)
+   IR2       := (nBASEIRRF * IR3A)
+   VALDESCIR := (IR2 - DESCIR)
+   // * VALOR MINIMO DE DESCONTO = MIN_DESCON = DIV5
    IF VALDESCIR <= DESC_MINIMO
-      VALDESCIR:= IR3:= 0.00
+      VALDESCIR := IR3 := 0.00
    ENDIF
 ELSE
-   VALDESCIR:= IR3:= 0.00
+   VALDESCIR := IR3 := 0.00
 ENDIF
-IF ARREIRRF='S'.AND.VALDESCIR>0
-   VALDESCIR := (INT((VALDESCIR+.5)*100)/100)
+IF ARREIRRF = 'S' .AND. VALDESCIR > 0
+   VALDESCIR := (INT((VALDESCIR+.5) * 100) / 100)
 ENDIF
-IF DESPIRRF='S'
+IF DESPIRRF = 'S'
    VALDESCIR := INT(VALDESCIR)
 ENDIF
-VALDESCIR:= IF(mFATORIRR2#0,ROUND(VALDESCIR/mFATORIRR2,2),VALDESCIR)
+VALDESCIR := IF(mFATORIRR2 # 0,ROUND(VALDESCIR / mFATORIRR2,2),VALDESCIR)
 RETU
 
-*!*****************************************************************************
-*!
-*!         Fun‡„o: VALARRE()
-*!
-*!*****************************************************************************
+// !*****************************************************************************
+// !
+// !         Fun‡„o: VALARRE()
+// !
+// !*****************************************************************************
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function VALARRE()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNC VALARRE
+
 PARA XARRE
 MDS('Arredondando')
 IF VEN > DES
-   SALDO =VEN-DES
-   SALDO1=INT(SALDO/XARRE)
-   SALDO2=SALDO1*XARRE
-   SALDO3=SALDO2+XARRE
-   SALDO4=ROUND(SALDO3-SALDO+0.001,2)
+   SALDO  := VEN - DES
+   SALDO1 := INT(SALDO / XARRE)
+   SALDO2 := SALDO1 * XARRE
+   SALDO3 := SALDO2+XARRE
+   SALDO4 := ROUND(SALDO3 - SALDO+0.001,2)
 ELSE
-   RETU(DES-VEN)
+   RETU (DES - VEN)
 ENDIF
-RETU(IF(SALDO4=XARRE,0,SALDO4))
+RETU (IF(SALDO4 = XARRE,0,SALDO4))
 
-*!***************************************************************************
-*!
-*!         Fun‡„o: TRUNCAR()
-*!
-*!***************************************************************************
+// !***************************************************************************
+// !
+// !         Fun‡„o: TRUNCAR()
+// !
+// !***************************************************************************
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function TRUNCAR()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNC TRUNCAR(Arg1)
-local Local1:= 0, Local2:= 0 , vdpos
-vdpos:= At(".", Str(Arg1 * 100)) - 1
+
+local Local1 := 0,Local2 := 0,vdpos
+vdpos := At(".",Str(Arg1 * 100)) - 1
 if (vdpos > 0)
-    Local2:= Val(SubStr(Str(Arg1 * 100), 1, vdpos))
-    Local1:= Local2 / 100
+   Local2 := Val(SubStr(Str(Arg1 * 100),1,vdpos))
+   Local1 := Local2 / 100
 else
-    Local1:= Arg1
+   Local1 := Arg1
 endif
 return Local1
 
 
 
-*: FIM: FOD.PRG
+// : FIM: FOD.PRG
+
+*+ EOF: fod.prg
+*+

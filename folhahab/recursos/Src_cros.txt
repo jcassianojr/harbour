@@ -1,0 +1,72 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 27-Dez-2024 at  8:41 pm
+*+
+*+--------------------------------------------------------------------
+
+recuapo.prg
+
+  Function RECUAPO()
+
+recuapo2.prg
+
+  Function RECUAPO2()
+  Function folutil3()
+  Function folutil4()
+  Function folutil5()
+
+recueti1.prg
+
+  Function RECUETI1()
+  Function EDITA2()
+  Function CAD()
+
+recueti2.prg
+
+  Function RECUETI2()
+  Function EDITA()
+  Function CA()
+  Function LISTA()
+
+recuger.prg
+
+  Function RECUGER()
+
+recuger1.prg
+
+  Function RECUGER1()
+  Function CAD1()
+  Function TELATIP()
+
+recuger2.prg
+
+  Function RECUGER2()
+  Function tREDIT()
+  Function gREDIT()
+  Function lREDIT()
+
+recumenu.prg
+
+  Function RECUMENU()
+
+recuproc.prg
+
+  Function CABE2()
+  Function CABE3()
+  Function NSHOW()
+  Function ARQ()
+  Function NSHOW1()
+  Function MDI()
+  Function COR()
+  Function CABEX()
+
+recursos.prg
+
+  Function main()
+  Function corrigeendereco()
+  Function m_da()
+
+recuser.prg
+
+  Function RECUSER()
+

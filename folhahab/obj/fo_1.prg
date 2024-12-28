@@ -1,44 +1,71 @@
-*:*****************************************************************************
-*:
-*:       FO_1.PRG: VERIFICACAO DA EMPRESA SOLICITADA)
-*:      Linguagem: Clipper 5.x
-*:        Sistema: FOLHA DE PAGAMENTO
-*:      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-*:  Atualizado em: 10/03/99
-*:
-*:*****************************************************************************
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : fo_1.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:45 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
+// :*****************************************************************************
+// :
+// :       FO_1.PRG: VERIFICACAO DA EMPRESA SOLICITADA)
+// :      Linguagem: Clipper 5.x
+// :        Sistema: FOLHA DE PAGAMENTO
+// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
+// :  Atualizado em: 10/03/99
+// :
+// :*****************************************************************************
 
 
 
 CABEX('Empresa nÑo Cadastrada')
-IF ! MDG('Deseja Cadastr†-la')
+IF !MDG('Deseja Cadastr†-la')
    @ 04,00 CLEA
    RETU .F.
 ENDIF
-mSENHA:=SPACE(5)
+mSENHA := SPACE(5)
 MDS('Digite a sua Senha')
-SET COLOR TO    ,G/G
-@ 23,40 GET mSENHA
+SET COLOR TO ,G/G
+@ 23,40 GET mSENHA         
 READCUR()
 CRIARVARS("FIRMA")
 CRIARVARS("BCOFGTS")
-mNRCLIEN:=NREMP
-mEMP:=NREMP
+mNRCLIEN := NREMP
+mEMP     := NREMP
 
 
 NOVOREG("FIRMA","FIRMA",mNRCLIEN)
 NOVOREG("BCOFGTS","BCOFGTS",mEMP)
 
 
-MDS('Criando Area de Trabalho')      &&CRIA DIRETORIO
-NOVOPATH='EMP'+SUBSTR(STRZERO(YEAR(DXDIA),4),3,2)+STRZERO(NREMP,3)
-IF DIRMAKE(NOVOPATH)#0
+MDS('Criando Area de Trabalho')   //CRIA DIRETORIO
+NOVOPATH := 'EMP'+SUBSTR(STRZERO(YEAR(DXDIA),4),3,2)+STRZERO(NREMP,3)
+IF DIRMAKE(NOVOPATH) # 0
    ALERTX("Erro Ao Criar empresa(Diretorio)")
    RETU .F.
 ENDIF
-cOLDDIR:=HB_CWD()
+cOLDDIR := HB_CWD()
 // IF DIRCHANGE(HB_CWD()+NOVOPATH)#0
-IF HB_CWD(NOVOPATH)=cOLDIR
+IF HB_CWD(NOVOPATH) = cOLDIR
    ALERTX("Erro Ao Criar empresa(Mover Dir)")
    RETU .F.
 ENDIF
@@ -69,14 +96,14 @@ MAKEDBF("..\MG01.DBE")
 MAKEDBF("..\PROV13.DBE")
 MAKEDBF("..\PROVFE.DBE")
 MAKEDBF("..\RESFOR.DBE")
-aFOLHA:={{"NUMERO",   "N",5,0},{"CONTAS","N", 4,0},;
-         {"HORAS" ,   "N",7,2},{"VALOR","N",12,2},;
-         {"CONTROLE", "N",9,0},{"FATOR","N", 6,4},;
-         {"TRIBUTIRR","N",1,0},{"TRIBUTINPS","N",1,0},;
-         {"TRIB_FGTS","N",1,0},{"TIPO","N",1,0},;
-         {"VALORBASE","N",1,0}}
-FOR X=0 TO 12
-    DBCREATE("FP"+STRZERO(NREMP,4)+STRZERO(X,2),aFOLHA)
+aFOLHA := {{"NUMERO","N",5,0},{"CONTAS","N",4,0},;
+ {"HORAS","N",7,2},{"VALOR","N",12,2},;
+ {"CONTROLE","N",9,0},{"FATOR","N",6,4},;
+ {"TRIBUTIRR","N",1,0},{"TRIBUTINPS","N",1,0},;
+ {"TRIB_FGTS","N",1,0},{"TIPO","N",1,0},;
+ {"VALORBASE","N",1,0}}
+FOR X := 0 TO 12
+   DBCREATE("FP"+STRZERO(NREMP,4)+STRZERO(X,2),aFOLHA)
 NEXT X
 DBCREATE("FO_FP13A",aFOLHA)
 DBCREATE("FO_FP13B",aFOLHA)
@@ -88,4 +115,7 @@ ALERTX("Use Cadastro Empresa Para os Dados Cadastrais")
 ALERTX("ê Necessario indexar Arquivos em Configura Sistema")
 RETU
 
-*: FIM: FO_1.PRG
+// : FIM: FO_1.PRG
+
+*+ EOF: fo_1.prg
+*+

@@ -1,13 +1,40 @@
-*:*****************************************************************************
-*:
-*:
-*:    FOLIS_A.PRG: Acumula Folhas Anuais,Sal.Variavel 13§,Rais,Infome e Dirf
-*:      Linguagem: Clipper 5.x
-*:        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-*:      Copyright (c) 1998,  SOFTEC  S/C Ltda.
-*:  Atualizado em: 22/01/97
-*:
-*:*****************************************************************************
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : folis_a.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:26 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
+// :*****************************************************************************
+// :
+// :
+// :    FOLIS_A.PRG: Acumula Folhas Anuais,Sal.Variavel 13§,Rais,Infome e Dirf
+// :      Linguagem: Clipper 5.x
+// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
+// :      Copyright (c) 1998,  SOFTEC  S/C Ltda.
+// :  Atualizado em: 22/01/97
+// :
+// :*****************************************************************************
 
 
 WHILE .T.
@@ -22,15 +49,27 @@ WHILE .T.
    @ 21,1 PROM " H - Criar Arquivo Dirf Juridica Avulsa                                       "
    MENU TO OPC
    DO CASE
-   CASE OPC= 1 ; FOLIS_A1(0)
-   CASE OPC= 2 ; FOLIS_A2()
-   CASE OPC= 3 ; FOLIS_A3()
-   CASE OPC= 4 ; FOLIS_A4()
-   CASE OPC= 5 ; FOLIS_A5()
-   CASE OPC= 6 ; FOLIS_A6()
-   CASE OPC= 7 ; FOLIS_A7()
-   CASE OPC= 8 ; FOLIS_A8()
-   OTHERWISE  ; RETU
+   CASE OPC = 1 
+      FOLIS_A1(0)
+   CASE OPC = 2 
+      FOLIS_A2()
+   CASE OPC = 3 
+      FOLIS_A3()
+   CASE OPC = 4 
+      FOLIS_A4()
+   CASE OPC = 5 
+      FOLIS_A5()
+   CASE OPC = 6 
+      FOLIS_A6()
+   CASE OPC = 7 
+      FOLIS_A7()
+   CASE OPC = 8 
+      FOLIS_A8()
+   OTHERWISE 
+      RETU
    ENDCASE
 ENDDO
-*: FIM: FOLIS_A.PRG
+// : FIM: FOLIS_A.PRG
+
+*+ EOF: folis_a.prg
+*+

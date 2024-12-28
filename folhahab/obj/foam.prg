@@ -1,12 +1,39 @@
-*:*****************************************************************************
-*:
-*:       FOAM.PRG: Ocorrencias Coletivas
-*:      Linguagem: Clipper 5.x
-*:        Sistema: FOLHA DE PAGAMENTO
-*:      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-*:  Atualizado em: 04/08/94      8:59
-*:
-*:*****************************************************************************
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : foam.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:45 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
+// :*****************************************************************************
+// :
+// :       FOAM.PRG: Ocorrencias Coletivas
+// :      Linguagem: Clipper 5.x
+// :        Sistema: FOLHA DE PAGAMENTO
+// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :  Atualizado em: 04/08/94      8:59
+// :
+// :*****************************************************************************
 
 
 CABEX('Cadastramento de Ocorrencias Coletivas')
@@ -18,15 +45,15 @@ xFOAL(1)
 
 
 
-IF ! netuse(pes) //AREDE(PES,PES,1)
+IF !netuse(pes)   //AREDE(PES,PES,1)
    RETU
 ENDIF
-FILTRO=''
-FI=TRIM(FILTRO)
-FILTRO=FILTRO(FI)
+FILTRO := ''
+FI     := TRIM(FILTRO)
+FILTRO := FILTRO(FI)
 SET FILTER TO &FILTRO
 
-IF ! netuse("FO_OCO") //AREDE("FO_OCO","FO_OCO",0)
+IF !netuse("FO_OCO")  //AREDE("FO_OCO","FO_OCO",0)
    DBCLOSEALL()
    RETU
 ENDIF
@@ -35,17 +62,17 @@ ENDIF
 MDS('Aguarde Cadastrando Dados')
 DBSELECTAR(PES)
 DBGOTOP()
-WHILE ! EOF()
+WHILE !EOF()
    PETELA(7)
-   mDEPTO:=DEPTO
-   mSETOR:=SETOR
-   mSECAO:=SECAO
-   mCHAPA:=CHAPA
-   mNOMEF:=NOME
-   mNUMERO:=NUMERO
-   mBUSCA:=STR(mNUMERO,8)+DTOS(mDATASAIDA)
+   mDEPTO  := DEPTO
+   mSETOR  := SETOR
+   mSECAO  := SECAO
+   mCHAPA  := CHAPA
+   mNOMEF  := NOME
+   mNUMERO := NUMERO
+   mBUSCA  := STR(mNUMERO,8)+DTOS(mDATASAIDA)
    DBSELECTAR("FO_OCO")
-   IF ! DBSEEK(mBUSCA)
+   IF !DBSEEK(mBUSCA)
       netrecapp()
       REPLVARS()
    ENDIF
@@ -55,4 +82,7 @@ ENDDO
 DBCLOSEALL()
 
 
-*: FIM: FOAM.PRG
+// : FIM: FOAM.PRG
+
+*+ EOF: foam.prg
+*+

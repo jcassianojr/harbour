@@ -1,0 +1,750 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 27-Dez-2024 at  9:46 pm
+*+
+*+--------------------------------------------------------------------
+
+disk01.prg
+
+  Function GRAPT()
+  Function GRAPS()
+
+disk05.prg
+
+  Function ATUALIZA()
+
+disk06.prg
+
+  Function TituloUF()
+  Function CheckTitulo()
+  Function valcns()
+  Function formataRICI()
+  Function CHECKRICI()
+  Function valpis()
+  Function formatapis()
+  Function valbco()
+
+disklib.prg
+
+  Function NOTEP()
+  Function AGEN()
+  Function TELE()
+  Function LOGOTIPO()
+  Function FIM()
+  Function QUADRO()
+  Function NEXTREC()
+  Function PREVREC()
+  Function DELEREC()
+  Function MD()
+  Function MDT()
+  Function MUDADATA()
+  Function OBSSAY()
+  Function OBSGET()
+  Function FOYD()
+  Function CorrigeFo_pes()
+  Function PETELA()
+  Function PEGVALTAB()
+  Function PEGVALTIP()
+  Function PEGFOLMES()
+  Function PEGFOLSEN()
+  Function PEGFOLPAT()
+  Function SALHM()
+
+flib01.prg
+
+  Function CTAFUN()
+  Function DVFU()
+
+flib02.prg
+
+  Function PADRAO()
+  Function fPAD()
+  Function PEGCHAVE()
+  Function TECLAF11()
+  Function ESCOLHEXI()
+
+flib03.prg
+
+  Function ZERAVARS()
+  Function CRIARVARS()
+  Function LIMPAVARS()
+  Function REPORVARS()
+  Function IGUALVARS()
+  Function APAGAREG()
+  Function NOVOREG()
+
+flib05.prg
+
+  Function RFILORD()
+  Function RFILTRO()
+  Function RCAMPO()
+  Function FILTRO()
+  Function FILORD()
+  Function DFILTRO()
+
+flib06.prg
+
+  Function OBTER()
+
+flib07.prg
+
+  Function CHECKTAB()
+
+flib09.prg
+
+  Function PEG13()
+
+flib10.prg
+
+  Function USERMCRI()
+  Function USERMDEC()
+
+flib11.prg
+
+  Function ARQUSAR()
+  Function ARQCTA()
+  Function ARQPES()
+  Function PEGSEMANA()
+
+flib12.prg
+
+  Function VERSEHA()
+
+flib13.prg
+
+  Function LISTARUE()
+
+flib14.prg
+
+  Function PEGRELCTA()
+
+flib15.prg
+
+  Function TELAPEG()
+  Function TELASAY()
+
+flib16.prg
+
+  Function EDITPEG()
+  Function EDITSAY()
+
+flib17.prg
+
+  Function ULTIMOREG()
+
+fo0.prg
+
+  Function fo0()
+  Function iFO0N()
+  Function gFO0I()
+  Function tFO0I()
+
+fo0g.prg
+
+  Function FO0GK01()
+
+fo0j.prg
+
+  Function FOKT()
+  Function FOKS()
+  Function FOKG()
+
+fo0m.prg
+
+  Function tFO0M()
+  Function gFO0M()
+
+fo1.prg
+
+  Function FO1SA()
+  Function FO1SC()
+  Function FO1VC()
+  Function FO1VA()
+  Function FO1P()
+
+fo1g.prg
+
+  Function DVSA()
+  Function CRITCONV()
+
+fo1n.prg
+
+  Function DELDBFNTX()
+
+fo1o.prg
+
+  Function tFO1O()
+  Function gFO1O()
+
+fo1w.prg
+
+  Function iMADA()
+  Function tMADA()
+  Function gMADA()
+  Function CHECKCID()
+  Function CheckBacen()
+
+fo2.prg
+
+  Function gFO2()
+  Function tFO2()
+
+fo3.prg
+
+  Function FO3H()
+
+fo3a.prg
+
+  Function gFO3A()
+  Function tFO3AA()
+  Function gFO3AA()
+  Function iFO3AA()
+
+fo3b.prg
+
+  Function gFO3B()
+  Function tFO3B()
+
+fo3c.prg
+
+  Function fo3c()
+  Function gCADCBO()
+
+fo3e.prg
+
+  Function gFO3E()
+  Function tFO3E()
+
+fo3f.prg
+
+  Function gFO3F()
+  Function tFO3F()
+  Function tFO3FA()
+  Function gFO3FA()
+  Function iFO3FA()
+
+fo3g.prg
+
+  Function gFO3G()
+  Function tFO3G()
+  Function tFO3GA()
+  Function gFO3GA()
+  Function iFO3GA()
+
+fo4.prg
+
+  Function FO41()
+  Function FO42()
+  Function FO43()
+  Function FOTMES()
+  Function gFUNC()
+
+fo41a.prg
+
+  Function fo41a()
+
+fo41c.prg
+
+  Function fo41c()
+
+fo42a.prg
+
+  Function GRVPSL()
+
+fo42d.prg
+
+  Function FO42K()
+
+fo42e.prg
+
+  Function fo42e()
+
+fo43d.prg
+
+  Function FO43DT()
+  Function FO43DS()
+  Function FO43DG()
+
+fo43x.prg
+
+  Function fo43x()
+  Function FO43XX()
+  Function FO43YY()
+  Function FO43XROD()
+
+fo43z.prg
+
+  Function FO43ZZR()
+  Function FO43ZZ()
+
+fo5.prg
+
+  Function tDEPTO()
+  Function gDEPTO()
+  Function xFO5G()
+  Function iDEPTO()
+
+fo6.prg
+
+  Function FO61()
+  Function FO6T()
+  Function FO6T2()
+  Function FO6T3()
+  Function FO6T4()
+  Function FO6T5()
+  Function FO6L()
+  Function FO6GR()
+
+fo7.prg
+
+  Function FO77()
+  Function FO713()
+  Function FO713A()
+  Function FOSFAMCHV()
+  Function FOSFAMREG()
+
+fo7alib.prg
+
+  Function CHECKFGTS()
+  Function CHECKCTPS()
+  Function CHECKSERIE()
+  Function CHECKMOTDEM()
+  Function CHECKSEXO()
+  Function CHECKADM()
+  Function FOSFAMQTDE()
+
+fo7c.prg
+
+  Function FO7CCAB()
+
+fo7e.prg
+
+  Function fo7e()
+
+fo7W.prg
+
+  Function chkpesdup()
+  Function VALSITU()
+  Function VALOCO()
+  Function CorrigeEndereco()
+  Function BacenNacion()
+  Function iFOPTO4E()
+
+fo7z.prg
+
+  Function gFO7Z()
+
+foa.prg
+
+  Function foa()
+  Function FOAA1()
+  Function FOAA10()
+  Function FOAA11()
+  Function FOARPLS()
+  Function FOAA2()
+  Function FOAA3()
+  Function FOAA4()
+
+foa1.prg
+
+  Function foa1()
+
+foa3.prg
+
+  Function foa3()
+
+foa4.prg
+
+  Function VAREDIT()
+
+foa6.prg
+
+  Function foa6()
+  Function FOA601()
+  Function FOA602()
+
+foa7.prg
+
+  Function foa7()
+
+foa8.prg
+
+  Function FOA8A()
+  Function FOA8B()
+  Function gFOA8B()
+  Function FOA8C()
+
+foaa.prg
+
+  Function CADSEQ()
+
+foaa8.prg
+
+  Function foaa8()
+
+foal.prg
+
+  Function tFOAL()
+  Function gFOAL()
+  Function iFOAL()
+  Function xFOAL()
+
+foax.prg
+
+  Function foax()
+
+foc.prg
+
+  Function FOC1()
+  Function FOC2()
+
+foca1.prg
+
+  Function foca1()
+  Function FOCAX()
+
+foca2.prg
+
+  Function foca2()
+
+focb.prg
+
+  Function focb()
+
+focc.prg
+
+  Function focc()
+  Function FOCCX()
+  Function FOCBX()
+  Function FOCIX()
+  Function FOCHX()
+  Function FOCITAU()
+
+focd.prg
+
+  Function focd()
+  Function FOCDX()
+  Function FOCD01()
+
+focf.prg
+
+  Function focf()
+  Function FOCFX()
+
+focj.prg
+
+  Function FOCJX()
+
+fock.prg
+
+  Function PEGVSEM()
+
+fod.prg
+
+  Function TABIRRF()
+  Function CALCDEPE()
+  Function CALCIRRF()
+  Function VALARRE()
+  Function TRUNCAR()
+
+fod2.prg
+
+  Function fod2()
+
+fod5.prg
+
+  Function fod5()
+
+fodins.prg
+
+  Function fodins()
+
+foe.prg
+
+  Function FOEE()
+
+foe21.prg
+
+  Function foe21()
+
+foe22.prg
+
+  Function foe22()
+
+foe23.prg
+
+  Function foe23()
+
+foe24.prg
+
+  Function foe24()
+
+foe2a.prg
+
+  Function foe2a()
+
+foe6.prg
+
+  Function foe6()
+
+fof.prg
+
+  Function FOFF()
+  Function FOFF2()
+
+fofb.prg
+
+  Function MESHOLG()
+  Function MESHOLT()
+
+fofhol.prg
+
+  Function fofhol()
+  Function FOFX()
+  Function HOLA1()
+  Function HOLB1()
+  Function HOLD1()
+  Function HOLG1()
+  Function HOLH1()
+  Function HOLI1()
+  Function HOLJ1()
+  Function CABHOL()
+
+fog.prg
+
+  Function FOGAA()
+  Function FOGBB()
+
+fog2.prg
+
+  Function fog2()
+
+foga.prg
+
+  Function CADFOGA()
+  Function GFOGA()
+
+foge.prg
+
+  Function HORPADS()
+  Function HORPADG()
+  Function HORPADT()
+  Function HORPADL()
+
+foh.prg
+
+  Function FOH1()
+  Function FOHE()
+  Function FOHF()
+  Function tFOHE()
+  Function gFOHE()
+  Function iFOHE()
+  Function tFOHF()
+  Function gFOHF()
+  Function iFOHF()
+
+foha.prg
+
+  Function foha()
+  Function FOHA01()
+  Function FOHA02()
+  Function FOHA03()
+  Function FOHA04()
+
+fohg2.prg
+
+  Function TIRACX()
+  Function FWRITX()
+  Function G2R13()
+  Function G2R14()
+  Function G2R30()
+  Function G2R32()
+
+fohh.prg
+
+  Function fohh()
+  Function FOHHH()
+  Function FOHHROD()
+
+fohi.prg
+
+  Function fohi()
+
+fohs.prg
+
+  Function FOHHS()
+
+foi.prg
+
+  Function FOII()
+  Function FOIIA()
+  Function FOIIB()
+
+foi20.prg
+
+  Function foi20()
+
+foi2a.prg
+
+  Function foi2a()
+
+foi2b.prg
+
+  Function foi2b()
+  Function FOI2B01()
+  Function FOI2B02()
+
+foia.prg
+
+  Function foia()
+
+foib.prg
+
+  Function CADTIT()
+
+foic0.prg
+
+  Function foic0()
+
+foic1.prg
+
+  Function foic1()
+
+foid.prg
+
+  Function foid()
+  Function FOID01()
+  Function FOID02()
+  Function FOID03()
+  Function FOID04()
+  Function FOID05()
+  Function FOID06()
+
+foid0.prg
+
+  Function foid0()
+
+foid1.prg
+
+  Function foid1()
+
+foif0.prg
+
+  Function foif0()
+
+folerr.prg
+
+  Function ERRPRINTER()
+  Function ERRINDEX()
+
+folha1.prg
+
+  Function main()
+
+folmenu.prg
+
+  Function MENU7()
+  Function MENUC()
+  Function MENUCC()
+  Function MENUA()
+  Function MENU6()
+  Function iFO6D()
+  Function MAC()
+
+folproc.prg
+
+  Function CABEX()
+  Function INCIDE()
+  Function GRAVA1()
+  Function GRAVA()
+  Function GRAVA2()
+  Function SALMES()
+  Function FODZER()
+  Function MDL()
+  Function VALCTA()
+  Function NSHOW1()
+  Function NSHOW()
+  Function ACHRET()
+  Function CABE2()
+
+fouc2.prg
+
+  Function FOUC2A()
+
+foue.prg
+
+  Function foue()
+  Function tFOUE()
+  Function gFOUE()
+  Function vFOUE()
+  Function lFOUE()
+
+foug.prg
+
+  Function FOUG01()
+
+fox.prg
+
+  Function fox()
+  Function FMANUAL()
+  Function MANUALT()
+  Function MANRETA()
+  Function MANRETM()
+
+foy.prg
+
+  Function FOYC()
+  Function FOYB()
+  Function FOY5()
+
+foy2.prg
+
+  Function FOY2()
+  Function iFOY2()
+  Function tFOY2()
+  Function gFOY2()
+  Function INDEXT()
+  Function PEGCAMINI()
+
+foy4.prg
+
+  Function limpar()
+
+foy8.prg
+
+  Function foy8()
+  Function MUDADBF()
+
+foy9.prg
+
+  Function tFOY9()
+  Function gFOY9()
+  Function aFOY9()
+  Function lFOY9()
+  Function MEMOS()
+
+foyaa.prg
+
+  Function FOREDIT()
+
+fo_for.prg
+
+  Function fo_for()
+
+fo_rell.prg
+
+  Function fo_rell()
+  Function IMPLIN()
+  Function IMPCAB()
+  Function IMPCOT()
+  Function IMPROD()
+  Function ASS()
+  Function MEMOX()
+  Function LAYR()
+  Function CALCVAR()
+  Function CALCTOT()
+
+fo_vt.prg
+
+  Function vtatutk()
+

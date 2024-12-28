@@ -1,0 +1,251 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 27-Dez-2024 at  9:21 pm
+*+
+*+--------------------------------------------------------------------
+
+:new()          <unresolved function>
+
+  Called from ( cepwebvia.pr )   1 - create class viacep()
+                                 1 - function cepweb()
+                                 1 - procedure ceprepublica()
+
+buscaibge()     <unresolved function>
+
+  Called from ( cepruaimp.pr )   2 - function main()
+
+cepapiawe()     in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function main()
+
+cepapicep()     in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function main()
+
+cepbrasilaberto in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function main()
+
+cepbrasilapi()  in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function main()
+
+cepopencep()    in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function main()
+
+ceprepublica()  in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function main()
+
+cepweb()        in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function main()
+
+coduf()         <unresolved function>
+
+  Called from ( cepruaimp.pr )   3 - function main()
+              ( convcep.prg  )   3 - function main()
+
+createobject()  in hbwin.lib
+
+  Called from ( cepwebvia.pr )   1 - function cepapiawe()
+                                 1 - function cepapicep()
+                                 1 - function cepbrasilaberto()
+                                 1 - function cepbrasilapi()
+                                 1 - function cepopencep()
+
+filecopy()      in hbct.lib
+
+  Called from ( cepruaimp.pr )   2 - function main()
+
+flinecount()    in xhb.lib
+
+  Called from ( convcep.prg  )   1 - function main()
+
+formatacep()    in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function cepapicep()
+
+gravaruaimp()   in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   7 - function main()
+                                 1 - function opencepjason()
+
+gravaruanao()   in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   7 - function main()
+
+hb_atokens()    in harbour.lib
+
+  Called from ( cepwebvia.pr )   1 - create class viacep()
+
+hb_idlestate()  in harbour.lib
+
+  Called from ( cepruaimp.pr )   1 - function main()
+              ( cepwebvia.pr )   1 - function main()
+              ( convcep.prg  )   1 - function main()
+
+hb_langselect() in harbour.lib
+
+  Called from ( convcep.prg  )   1 - function main()
+
+idbairro()      in cepruaimp.prg
+
+  Called from ( cepruaimp.pr )   2 - function main()
+
+jasoncountry()  in convcep.prg
+
+  Called from ( convcep.prg  )   1 - function main()
+
+mdg()           <unresolved function>
+
+  Called from ( convcep.prg  )   1 - function main()
+
+msgyesno()      <unresolved function>
+
+  Called from ( cepwebvia.pr )  13 - function main()
+              ( convcep.prg  )  17 - function main()
+
+mvinfoconftela( <unresolved function>
+
+  Called from ( convcep.prg  )   1 - function main()
+
+netgrvcam()     <unresolved function>
+
+  Called from ( convcep.prg  )   4 - function main()
+
+netgrvz()       <unresolved function>
+
+  Called from ( convcep.prg  )  10 - function jasoncountry()
+
+netpack()       <unresolved function>
+
+  Called from ( convcep.prg  )   2 - function main()
+
+netrecapp()     <unresolved function>
+
+  Called from ( convcep.prg  )   1 - function cidconvinc()
+                                 1 - function jasoncountry()
+                                 3 - function main()
+
+netrecdel()     <unresolved function>
+
+  Called from ( convcep.prg  )   3 - function main()
+
+netreclock()    in xhb.lib
+
+  Called from ( convcep.prg  )   1 - function jasoncountry()
+                                 7 - function main()
+
+netregosok()    <unresolved function>
+
+  Called from ( convcep.prg  )   1 - function main()
+
+netuse()        <unresolved function>
+
+  Called from ( convcep.prg  )   1 - function jasoncountry()
+                                17 - function main()
+
+new()           <unresolved function>
+
+  Called from ( cepwebvia.pr )   1 - create class viacep()
+
+ohttp:close()   <unresolved function>
+
+  Called from ( cepwebvia.pr )   1 - create class viacep()
+                                 1 - procedure ceprepublica()
+
+ohttp:open()    <unresolved function>
+
+  Called from ( cepwebvia.pr )   1 - create class viacep()
+                                 1 - procedure ceprepublica()
+
+ohttp:readall() <unresolved function>
+
+  Called from ( cepwebvia.pr )   1 - create class viacep()
+                                 1 - procedure ceprepublica()
+
+opencepjason()  in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function main()
+
+opg:open()      <unresolved function>
+
+  Called from ( cepwebvia.pr )   1 - function cepapiawe()
+                                 1 - function cepapicep()
+                                 1 - function cepbrasilaberto()
+                                 1 - function cepbrasilapi()
+                                 1 - function cepopencep()
+
+opg:send()      <unresolved function>
+
+  Called from ( cepwebvia.pr )   1 - function cepapiawe()
+                                 1 - function cepapicep()
+                                 1 - function cepbrasilaberto()
+                                 1 - function cepbrasilapi()
+                                 1 - function cepopencep()
+
+pegcidconv()    <unresolved function>
+
+  Called from ( convcep.prg  )   1 - function main()
+
+pegnodojason()  in convcep.prg
+
+  Called from ( cepwebvia.pr )   9 - function cepapiawe()
+                                 4 - function cepapicep()
+                                 6 - function cepbrasilaberto()
+                                 6 - function cepbrasilapi()
+                                 6 - function cepopencep()
+                                 7 - function opencepjason()
+              ( convcep.prg  )  12 - function jasoncountry()
+
+tipclienthttp() in hbtip.lib
+
+  Called from ( cepwebvia.pr )   1 - create class viacep()
+                                 1 - procedure ceprepublica()
+
+tiraout()       <unresolved function>
+
+  Called from ( cepruaimp.pr )   1 - function main()
+              ( cepwebvia.pr )   1 - function opencepjason()
+
+tratacidade()   in cepruaimp.prg
+
+  Called from ( cepruaimp.pr )   2 - function main()
+
+tratanome()     <unresolved function>
+
+  Called from ( cepruaimp.pr )   4 - function main()
+                                 1 - function tratacidade()
+              ( convcep.prg  )   3 - function jasoncountry()
+                                 1 - function main()
+
+viacep()        in cepwebvia.prg
+
+  Called from ( cepwebvia.pr )   1 - function cepweb()
+
+xmlnode()       <unresolved function>
+
+  Called from ( cepwebvia.pr )   5 - procedure ceprepublica()
+
+xmltransform()  <unresolved function>
+
+  Called from ( cepwebvia.pr )   1 - create class viacep()
+                                 1 - function cepapiawe()
+                                 1 - function cepapicep()
+                                 1 - function cepbrasilaberto()
+                                 1 - function cepbrasilapi()
+                                 1 - function cepopencep()
+                                 1 - function opencepjason()
+                                 1 - procedure ceprepublica()
+
+zei_fort()      <unresolved function>
+
+  Called from ( convcep.prg  )  14 - function main()
+
+__setcentury()  <unresolved function>
+
+  Called from ( cepruaimp.pr )   1 - function main()
+              ( cepwebvia.pr )   1 - function main()
+              ( convcep.prg  )   1 - function main()

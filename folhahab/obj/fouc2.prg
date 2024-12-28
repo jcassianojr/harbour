@@ -1,41 +1,68 @@
-*:*****************************************************************************
-*:
-*:      FOUC2.PRG: Cadastro de Admitidos e Demitidos
-*:      Linguagem: Clipper 5.x
-*:        Sistema: FOLHA DE PAGAMENTO
-*:          Autor: Equipe Disk
-*:      Copyright (c) 1997,  SOFTEC  S/C Ltda.
-*:  Atualizado em: 02/10/97
-*:
-*:*****************************************************************************
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : fouc2.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:46 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
+// :*****************************************************************************
+// :
+// :      FOUC2.PRG: Cadastro de Admitidos e Demitidos
+// :      Linguagem: Clipper 5.x
+// :        Sistema: FOLHA DE PAGAMENTO
+// :          Autor: Equipe Disk
+// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
+// :  Atualizado em: 02/10/97
+// :
+// :*****************************************************************************
 
 ////#INCLUDE "COMANDO.CH"
 #INCLUDE "INKEY.CH"
 
 CABEX('Cadastro de Admitidos e Demitidos')
 
-PRIV HELPDBF:="100329"
-POS1=SPAC(40)
-aNUM:={}
-aCOD:={}
-aTIP:={}
+PRIV HELPDBF := "100329"
+POS1 := SPAC(40)
+aNUM := {}
+aCOD := {}
+aTIP := {}
 
-CTA10:=CTA20:=CTA25:=CTA31:=CTA32:=CTA35:=CTA40:=0
-CTA43:=CTA45:=CTA50:=CTA60:=CTA70:=CTA80:=0
-CTFOL:=ATIVOS:=SALM:=0
-aTELA:=TELAPEG("CAGED")
-cCOMANO :=STRZERO(YEAR(DXDIA),4)
-cCOMMES :=STRZERO(MESTRAB,2)
-cCONTATO:=PADR(OBTER("FIRMA",,NREMP,"RESPONSAV"),20)
-cNUMCON :=PADR(OBTER("FIRMA",,NREMP,"CONCAGED"),7)
-mPORTE:= PADR(OBTER("FIRMA",,NREMP,"PORTE"),1)
-IF mPORTE="O"
-   mPORTE:="N"
+CTA10    := CTA20 := CTA25 := CTA31 := CTA32 := CTA35 := CTA40 := 0
+CTA43    := CTA45 := CTA50 := CTA60 := CTA70 := CTA80 := 0
+CTFOL    := ATIVOS := SALM := 0
+aTELA    := TELAPEG("CAGED")
+cCOMANO  := STRZERO(YEAR(DXDIA),4)
+cCOMMES  := STRZERO(MESTRAB,2)
+cCONTATO := PADR(OBTER("FIRMA",,NREMP,"RESPONSAV"),20)
+cNUMCON  := PADR(OBTER("FIRMA",,NREMP,"CONCAGED"),7)
+mPORTE   := PADR(OBTER("FIRMA",,NREMP,"PORTE"),1)
+IF mPORTE = "O"
+   mPORTE := "N"
 ENDIF
-IF mPORTE="N"
-   mPORTE:="1"
+IF mPORTE = "N"
+   mPORTE := "1"
 ELSE
-   mPORTE:="2"
+   mPORTE := "2"
 ENDIF
 
 
@@ -43,36 +70,36 @@ ENDIF
 
 //@ 16,00 SAY 'Arquivo'
 //@ 18,00 SAY 'Caminho para gerar arquivo'
-@ 20,00 SAY 'Confime a Competencia'
-@ 22,00 SAY 'Digite Cabecario Complementar'
+@ 20,00 SAY 'Confime a Competencia'                 
+@ 22,00 SAY 'Digite Cabecario Complementar'         
 //@ 16,40 GET cARQNOM
 //@ 18,40 GET CAMINHO
-@ 20,40 GET cCOMMES
-@ 20,45 GET cCOMANO
-@ 22,40 GET POS1
-IF ! READCUR()
+@ 20,40 GET cCOMMES         
+@ 20,45 GET cCOMANO         
+@ 22,40 GET POS1            
+IF !READCUR()
    RETU
 ENDIF
 
-cARQ:=WIN_GETSAVEFILENAME(        , "Arquivo caged", "c:\temp\","txt"   , "*.txt" , 1            ,               , "C"+cCOMANO+".M"+cCOMMES)
+cARQ := WIN_GETSAVEFILENAME(,"Arquivo caged","c:\temp\","txt","*.txt",1,,"C"+cCOMANO+".M"+cCOMMES)
 
 
-IF ! netuse(pes) 
+IF !netuse(pes)
    RETU
 ENDIF
-FILTRO='((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MES.AND.YEAR(DEMITIDO)>=ANO)).AND.CATEGORIA<>"11".AND.CATEGORIA<>"05"'
+FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MES.AND.YEAR(DEMITIDO)>=ANO)).AND.CATEGORIA<>"11".AND.CATEGORIA<>"05"'
 SET FILTER TO &FILTRO
 
 //1a. Passagens Admitidos
 DBSELECTAR(PES)
 DBGOTOP()
-WHILE ! EOF()
-   IF MONTH(ADMITIDO)=MES.AND.YEAR(ADMITIDO)=ANO
+WHILE !EOF()
+   IF MONTH(ADMITIDO) = MES .AND. YEAR(ADMITIDO) = ANO
       PETELA(4)
       FOUC2A(1)
    ENDIF
-   IF YEAR(ADMITIDO)<ANO.OR.MONTH(ADMITIDO)<MESc
-      ATIVOS++
+   IF YEAR(ADMITIDO) < ANO .OR. MONTH(ADMITIDO) < MESc
+      ATIVOS ++
    ENDIF
    DBSKIP()
 ENDDO
@@ -80,15 +107,15 @@ ENDDO
 //2a. Passagens Demitidos
 DBSELECTAR(PES)
 DBGOTOP()
-WHILE ! EOF()
-   IF MONTH(DEMITIDO)=MES.AND.YEAR(DEMITIDO)=ANO
+WHILE !EOF()
+   IF MONTH(DEMITIDO) = MES .AND. YEAR(DEMITIDO) = ANO
       PETELA(7)
       FOUC2A(2)
    ENDIF
    DBSKIP()
 ENDDO
 
-IF CTFOL=0
+IF CTFOL = 0
    DBCLOSEALL()
    RETU
 ENDIF
@@ -97,29 +124,29 @@ ENDIF
 
 
 IF MDG("Gerar arquivo Rais")
-  IF ! netuse("FIRMA") 
-     DBCLOSEALL()
-     RETU
+   IF !netuse("FIRMA")
+      DBCLOSEALL()
+      RETU
    ENDIF
-   
-   nSEQ:=1
-   USO=FCREATE(cARQ)     &&ABRINDO ARQUIVO
-   IF FERROR()#0
+
+   nSEQ := 1
+   USO  := FCREATE(cARQ)  //ABRINDO ARQUIVO
+   IF FERROR() # 0
       ALERTX("Erro na Criacao do Arquivo")
       RETU
    ENDIF
    DBSELECTAR("FIRMA")
-   IF PESSOA='J'
-      mCGC=SUBSTR(CGC,1,2)+SUBSTR(CGC,4,3)+SUBSTR(CGC,8,3)+SUBSTR(CGC,12,4)+SUBSTR(CGC,17,2)
-      mPES="1"
+   IF PESSOA = 'J'
+      mCGC := SUBSTR(CGC,1,2)+SUBSTR(CGC,4,3)+SUBSTR(CGC,8,3)+SUBSTR(CGC,12,4)+SUBSTR(CGC,17,2)
+      mPES := "1"
    ELSE
-      mCGC="00"+CEI
-      mPES="2"
+      mCGC := "00"+CEI
+      mPES := "2"
    ENDIF
-   xCEP:=STRTRAN( CEP,"-","")
-   xCEP:=STRTRAN(XCEP," ","0")
-   xTELEFONE:=STRTRAN( TELEFONE,"-","")
-   xTELEFONE:=STRTRAN(XTELEFONE," ","0")
+   xCEP      := STRTRAN(CEP,"-","")
+   xCEP      := STRTRAN(XCEP," ","0")
+   xTELEFONE := STRTRAN(TELEFONE,"-","")
+   xTELEFONE := STRTRAN(XTELEFONE," ","0")
    //Regitro tipo A
    FWRITE(USO,"A")
    FWRITE(USO,"2")
@@ -131,7 +158,7 @@ IF MDG("Gerar arquivo Rais")
    FWRITE(USO,mPES)
    FWRITE(USO,PADR(mCGC,14))
    FWRITE(USO,ACEPAD(RAZAO,35))
-   FWRITE(USO,ACEPAD(ENDERECO,40))        //Logradouro
+   FWRITE(USO,ACEPAD(ENDERECO,40))  //Logradouro
    FWRITE(USO,PADR(xCEP,8))
    FWRITE(USO,ACEPAD(ESTADO,2))
    FWRITE(USO,ACEPAD(DDD,4))
@@ -141,7 +168,7 @@ IF MDG("Gerar arquivo Rais")
    FWRITE(USO,STRZERO(LEN(aNUM),5))
    FWRITE(USO,"  "+hb_osnewline())
    //Regitro tipo b
-   nSEQ++
+   nSEQ ++
    FWRITE(USO,"B")
    FWRITE(USO,mPES)
    FWRITE(USO,PADR(mCGC,14))
@@ -158,30 +185,30 @@ IF MDG("Gerar arquivo Rais")
    FWRITE(USO,mPORTE)
    FWRITE(USO,SPACE(6))
    FWRITE(USO,hb_osnewline())
-   FOR X= 1 TO LEN(aNUM)
-       DBSELECTAR(PES)
-       DBGOTOP()
-       IF DBSEEK(aNUM[X])
-         DATANAS=STRZERO(DAY(NASC),2)+STRZERO(MONTH(NASC),2)+STRZERO(YEAR(NASC),4)
-         DATADM =STRZERO(DAY(ADMITIDO),2)+STRZERO(MONTH(ADMITIDO),2)+STRZERO(YEAR(ADMITIDO),4)
-         SALM:=0 //Zero o Salario Evitar Erro Chamafuncao
+   FOR X := 1 TO LEN(aNUM)
+      DBSELECTAR(PES)
+      DBGOTOP()
+      IF DBSEEK(aNUM[X])
+         DATANAS := STRZERO(DAY(NASC),2)+STRZERO(MONTH(NASC),2)+STRZERO(YEAR(NASC),4)
+         DATADM  := STRZERO(DAY(ADMITIDO),2)+STRZERO(MONTH(ADMITIDO),2)+STRZERO(YEAR(ADMITIDO),4)
+         SALM    := 0   //Zero o Salario Evitar Erro Chamafuncao
          SALHM()
-         cSALM=STRZERO(SALM,9,2)
-         cSALM=STRTRAN(cSALM,".","")
-         cHRME=PADR(INT(HRSEM),2)
-         mESCOLA:=VAL(ESCRAIS)
-         IF mESCOLA>9
-            mESCOLA:=9
+         cSALM   := STRZERO(SALM,9,2)
+         cSALM   := STRTRAN(cSALM,".","")
+         cHRME   := PADR(INT(HRSEM),2)
+         mESCOLA := VAL(ESCRAIS)
+         IF mESCOLA > 9
+            mESCOLA := 9
          ENDIF
 
          //Regitro tipo C
-         nSEQ++
+         nSEQ ++
          FWRITE(USO,"C")
          FWRITE(USO,mPES)
          FWRITE(USO,PADR(mCGC,14))
          FWRITE(USO,STRZERO(nSEQ,5))
          FWRITE(USO,PIS)
-         FWRITE(USO,IF(SEXO="M","1","2"))
+         FWRITE(USO,IF(SEXO = "M","1","2"))
          FWRITE(USO,DATANAS)
          FWRITE(USO,STR(mESCOLA,1))
          FWRITE(USO,SPACE(5))
@@ -189,15 +216,15 @@ IF MDG("Gerar arquivo Rais")
          FWRITE(USO,cHRME)
          FWRITE(USO,DATADM)
          FWRITE(USO,STRZERO(aCOD[X],2))
-         FWRITE(USO,IF(aTIP[X]=1,"00",STRZERO(DAY(DEMITIDO),2)))
+         FWRITE(USO,IF(aTIP[X] = 1,"00",STRZERO(DAY(DEMITIDO),2)))
          FWRITE(USO,ACEPAD(NOME,40))
          FWRITE(USO,RIGHT(PROFIS,7))
-         FWRITE(USO,RIGHT(SERIE ,3))
+         FWRITE(USO,RIGHT(SERIE,3))
          FWRITE(USO,ACEPAD(CTPSUF,2))
          FWRITE(USO,SPACE(7))
-         mRACA=OBTER( "FO_TAB",,"RACS"+ALLTRIM(STR(RACS)),"CODIG2")
+         mRACA := OBTER("FO_TAB",,"RACS"+ALLTRIM(STR(RACS)),"CODIG2")
          FWRITE(USO,mRACA)
-         IF VAL(DEFICI)>0
+         IF VAL(DEFICI) > 0
             FWRITE(USO,"2")
          ELSE
             FWRITE(USO,"1")
@@ -205,7 +232,7 @@ IF MDG("Gerar arquivo Rais")
          FWRITE(USO,OBTER("FUNCAO",,FUNCAO,"CBONEW"))
          FWRITE(USO,SPACE(14))
          FWRITE(USO,hb_osnewline())
-       ENDIF
+      ENDIF
    NEXT X
 
 
@@ -214,70 +241,70 @@ IF MDG("Gerar arquivo Rais")
    FWRITE(USO,CHR(26))
    FCLOSE(USO)
 ENDIF
-IF ! MDG("Imprimir")
+IF !MDG("Imprimir")
    RETU .F.
 ENDIF
 
-IF ! MDL('Cad.Geral Empreg.Desemp. 4923/65',0)
+IF !MDL('Cad.Geral Empreg.Desemp. 4923/65',0)
    RETU .F.
 ENDIF
 
-CTLIN=80
-FL:=0
-nENT:=CTA10+CTA20+CTA25+CTA35+CTA70          //ENTRADAS
-nSAI:=CTA31+CTA32+CTA40+CTA43+CTA45+CTA50+CTA60+CTA80
-CTAG:=ATIVOS+nENT-nSAI                 //SALDO
+CTLIN := 80
+FL    := 0
+nENT  := CTA10+CTA20+CTA25+CTA35+CTA70  //ENTRADAS
+nSAI  := CTA31+CTA32+CTA40+CTA43+CTA45+CTA50+CTA60+CTA80
+CTAG  := ATIVOS+nENT - nSAI   //SALDO
 
 
-IF ! NETUSE("CAGED") 
+IF !NETUSE("CAGED")
    DBCLOSEALL()
    RETU
 ENDIF
 
 IMPRESSORA()
 
-FOR X= 1 TO LEN(aNUM)
-    DBSELECTAR(PES)
-    DBGOTOP()
-    IF DBSEEK(aNUM[X])
-       IF CTLIN > 55
-          FL++
-          @ 1,  1 SAY impstr(Cimpcom)
-          @ 2, 20 SAY IMPCHR(cIMPTIT)+MSG2
-          @ 3,  5 SAY IMPCHR(cIMPTIT)+' CADASTRO GERAL DE EMPREGADOS E DESEMPREGADOS LEI 4.923/65'
-          @ 5, 0 SAY POS1
-          @ 5,50 SAY TIME()
-          @ 5,60 SAY DXDIA
-          @ 5,70 SAY 'FL. '+STRZERO(FL,4)
-          @ 6,1 SAY CGC1+"-"+MSG2
-          @ 7,0 SAY REPL('-',80)
-          CTLIN=8
-          IF FL=1
-             DBSELECTAR("CAGED")
-             DBGOTOP()
-             WHILE ! EOF()
-                @ CTLIN,0 SAY CODIGO
-                @ CTLIN,4 SAY TIRACE(DESCRICAO)
-                cVAR:="CTA"+CODIGO
-                nQTDE:=&cVAR.
-                @ CTLIN,55 SAY nQTDE
-                CTLIN++
-                DBSKIP()
-             ENDDO
-             @ CTLIN,0 SAY REPL('-',80)
-             CTLIN++
-          ENDIF
-       ENDIF
-       DBSELECTAR(PES)
-       @ CTLIN,0 SAY NUMERO
-       @ CTLIN,9 SAY ADMITIDO
-       @ CTLIN,18 SAY DEMITIDO
-       @ CTLIN,27 SAY STRZERO(aCOD[X],2)
-       @ CTLIN,30 SAY NOME
-       CTLIN++
-    ENDIF
+FOR X := 1 TO LEN(aNUM)
+   DBSELECTAR(PES)
+   DBGOTOP()
+   IF DBSEEK(aNUM[X])
+      IF CTLIN > 55
+         FL ++
+         @  1,1  SAY impstr(Cimpcom)                                                                      
+         @  2,20 SAY IMPCHR(cIMPTIT)+MSG2                                                                 
+         @  3,5  SAY IMPCHR(cIMPTIT)+' CADASTRO GERAL DE EMPREGADOS E DESEMPREGADOS LEI 4.923/65'         
+         @  5,0  SAY POS1                                                                                 
+         @  5,50 SAY TIME()                                                                               
+         @  5,60 SAY DXDIA                                                                                
+         @  5,70 SAY 'FL. '+STRZERO(FL,4)                                                                 
+         @  6,1  SAY CGC1+"-"+MSG2                                                                        
+         @  7,0  SAY REPL('-',80)                                                                         
+         CTLIN := 8
+         IF FL = 1
+            DBSELECTAR("CAGED")
+            DBGOTOP()
+            WHILE !EOF()
+               @ CTLIN,0 SAY CODIGO                    
+               @ CTLIN,4 SAY TIRACE(DESCRICAO)         
+               cVAR  := "CTA"+CODIGO
+               nQTDE := &cVAR.
+               @ CTLIN,55 SAY nQTDE         
+               CTLIN ++
+               DBSKIP()
+            ENDDO
+            @ CTLIN,0 SAY REPL('-',80)         
+            CTLIN ++
+         ENDIF
+      ENDIF
+      DBSELECTAR(PES)
+      @ CTLIN,0  SAY NUMERO                     
+      @ CTLIN,9  SAY ADMITIDO                   
+      @ CTLIN,18 SAY DEMITIDO                   
+      @ CTLIN,27 SAY STRZERO(aCOD[X],2)         
+      @ CTLIN,30 SAY NOME                       
+      CTLIN ++
+   ENDIF
 NEXT X
-@ PROW()+0,0 SAY REPL('-',80)
+@ PROW()+ 0,0 SAY REPL('-',80)         
 IMPFOL()
 VIDEO()
 DBCLOSEALL()
@@ -285,38 +312,68 @@ IMPEND()
 RETU
 
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function FOUC2A()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNC FOUC2A(nTIPO)
+
 TELASAY(aTELA)
 set key K_F11 to TECLAF11
-@ 12, 12 SAY ADMITIDO
-@ 14, 12 SAY DEMITIDO
-@  8, 33 GET MOTIVODEM VALID VERSEHA("CAGED",,STR(MOTIVODEM,2),"DESCRICAO","'C¢digo CAGED inconsistente '")
-IF nTIPO=1
-   @  8, 36 SAY "ADMISSAO"
+@ 12,12 SAY ADMITIDO                                                                                              
+@ 14,12 SAY DEMITIDO                                                                                              
+@  8,33 GET MOTIVODEM VALID VERSEHA("CAGED",,STR(MOTIVODEM,2),"DESCRICAO","'C¢digo CAGED inconsistente '")        
+IF nTIPO = 1
+   @  8,36 SAY "ADMISSAO"         
 ELSE
-   @  8, 36 SAY "DEMISSAO"
+   @  8,36 SAY "DEMISSAO"         
 ENDIF
 READCUR()
-setkey( K_F11 , nil )
+setkey(K_F11,nil)
 DO CASE
-   CASE MOTIVODEM = 10 ; CTA10++
-   CASE MOTIVODEM = 20 ; CTA20++
-   CASE MOTIVODEM = 25 ; CTA25++
-   CASE MOTIVODEM = 31 ; CTA31++
-   CASE MOTIVODEM = 32 ; CTA32++
-   CASE MOTIVODEM = 35 ; CTA35++
-   CASE MOTIVODEM = 40 ; CTA40++
-   CASE MOTIVODEM = 43 ; CTA43++
-   CASE MOTIVODEM = 45 ; CTA45++
-   CASE MOTIVODEM = 50 ; CTA50++
-   CASE MOTIVODEM = 60 ; CTA60++
-   CASE MOTIVODEM = 70 ; CTA70++
-   CASE MOTIVODEM = 80 ; CTA80++
+CASE MOTIVODEM = 10 
+   CTA10 ++
+CASE MOTIVODEM = 20 
+   CTA20 ++
+CASE MOTIVODEM = 25 
+   CTA25 ++
+CASE MOTIVODEM = 31 
+   CTA31 ++
+CASE MOTIVODEM = 32 
+   CTA32 ++
+CASE MOTIVODEM = 35 
+   CTA35 ++
+CASE MOTIVODEM = 40 
+   CTA40 ++
+CASE MOTIVODEM = 43 
+   CTA43 ++
+CASE MOTIVODEM = 45 
+   CTA45 ++
+CASE MOTIVODEM = 50 
+   CTA50 ++
+CASE MOTIVODEM = 60 
+   CTA60 ++
+CASE MOTIVODEM = 70 
+   CTA70 ++
+CASE MOTIVODEM = 80 
+   CTA80 ++
 ENDCASE
-CTFOL++
+CTFOL ++
 AADD(aNUM,NUMERO)
 AADD(aCOD,MOTIVODEM)
 AADD(aTIP,nTIPO)
 RETU .T.
 
-*: FIM: FOUC2.PRG
+// : FIM: FOUC2.PRG
+
+*+ EOF: fouc2.prg
+*+

@@ -1,12 +1,39 @@
-*:*****************************************************************************
-*:
-*:   FORES_B.PRG : Planilhas de F‚rias
-*:     Linguagem : Clipper 5.x
-*:        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
-*:      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-*:  Atualizado em: 04/26/94      9:00
-*:
-*:*****************************************************************************
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : fores_b.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:41 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
+// :*****************************************************************************
+// :
+// :   FORES_B.PRG : Planilhas de F‚rias
+// :     Linguagem : Clipper 5.x
+// :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
+// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :  Atualizado em: 04/26/94      9:00
+// :
+// :*****************************************************************************
 
 IMPHP()
 
@@ -22,13 +49,23 @@ WHILE .T.
    @ 14,1 PROM ' F - Provis„o Ferias Acumulada '
    MENU TO OPCAO2
    DO CASE
-      CASE OPCAO2=1 ; FORES_B1()
-      CASE OPCAO2=2 ; FORES_B2()
-      CASE OPCAO2=3 ; FORES_B3()
-      CASE OPCAO2=4 ; FORES_B4()
-      CASE OPCAO2=5 ; FORES_B5()
-      CASE OPCAO2=6 ; FORES_B6()
-      OTHERWISE     ; RETU
+   CASE OPCAO2 = 1 
+      FORES_B1()
+   CASE OPCAO2 = 2 
+      FORES_B2()
+   CASE OPCAO2 = 3 
+      FORES_B3()
+   CASE OPCAO2 = 4 
+      FORES_B4()
+   CASE OPCAO2 = 5 
+      FORES_B5()
+   CASE OPCAO2 = 6 
+      FORES_B6()
+   OTHERWISE 
+      RETU
    ENDCASE
 ENDDO
-*: FIM: FORES_B.PRG
+// : FIM: FORES_B.PRG
+
+*+ EOF: fores_b.prg
+*+

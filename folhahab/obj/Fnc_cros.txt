@@ -1,0 +1,4444 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 27-Dez-2024 at  9:46 pm
+*+
+*+--------------------------------------------------------------------
+
+acento()        <unresolved function>
+
+  Called from ( fo3.prg      )   8 - function fo3h()
+              ( fo43x.prg    )   2 - function fo43xrod()
+                                 4 - function fo43xx()
+                                 3 - function fo43yy()
+              ( fo43z.prg    )   2 - function fo43zz()
+              ( foca2.prg    )   8 - function foca2()
+              ( focc.prg     )   3 - function focbx()
+                                 1 - function foccx()
+              ( focd.prg     )   1 - function focd()
+                                15 - function focdx()
+              ( focf.prg     )   1 - function focfx()
+              ( focj.prg     )   7 - function focjx()
+              ( fock.prg     )   1 - function focjx()
+              ( fog7.prg     )   3 - function fog2()
+              ( fog8.prg     )  20 - function fog2()
+              ( fohd.prg     )   6 - function foha04()
+              ( fohh.prg     )   3 - function fohhh()
+              ( fohi.prg     )   5 - function fohi()
+              ( foi2b.prg    )   5 - function foi2b()
+                                 2 - function foi2b01()
+              ( fouef.prg    )   2 - function lfoue()
+              ( fox.prg      )   1 - function fmanual()
+              ( fo_rell.prg  )   1 - function implin()
+
+acepad()        <unresolved function>
+
+  Called from ( fouc2.prg    )  10 - function cabe2()
+
+aconvertend()   <unresolved function>
+
+  Called from ( fo7w.prg     )   1 - function corrigeendereco()
+
+ac_agudo()      <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+ac_circ()       <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+ac_crase()      <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+ac_til()        <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+afoy9()         in foy9.prg
+
+  Called from ( foy9.prg     )   1 - function mudadbf()
+
+agen()          in disklib.prg
+
+  Called from ( folha1.prg   )   1 - function main()
+
+alertx()        <unresolved function>
+
+  Called from ( disk06.prg   )   1 - function checkrici()
+                                 1 - function checktitulo()
+                                 1 - function valcns()
+                                 2 - function valpis()
+              ( disklib.prg  )   1 - function pegfolpat()
+                                 1 - function pegfolsen()
+                                 1 - function pegvaltab()
+              ( flib01.prg   )   2 - function ctafun()
+              ( flib02.prg   )   2 - function fpad()
+                                 2 - function padrao()
+                                 1 - function teclaf11()
+              ( flib05.prg   )   1 - function rfilord()
+              ( flib07.prg   )   2 - function checktab()
+              ( flib12.prg   )   1 - function verseha()
+              ( flib14.prg   )   1 - function pegrelcta()
+              ( flib15.prg   )   1 - function telasay()
+              ( flib16.prg   )   1 - function editsay()
+              ( fo0.prg      )   2 - function fo0()
+              ( fo1.prg      )   1 - function gfo0m()
+              ( fo1g.prg     )   1 - function critconv()
+                                 1 - function dvsa()
+              ( fo41a.prg    )   3 - function fo41a()
+              ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7alib.prg  )   1 - function checkadm()
+                                 2 - function checkfgts()
+              ( foa1.prg     )   4 - function foa1()
+              ( foa2.prg     )   3 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foa4.prg     )   2 - function varedit()
+              ( foa5.prg     )   5 - function varedit()
+              ( foa8.prg     )   1 - function foa8a()
+              ( foaa.prg     )   1 - function foa8c()
+              ( foao.prg     )   2 - function xfoal()
+              ( foax.prg     )   1 - function foax()
+              ( foca2.prg    )   1 - function foca2()
+              ( focb.prg     )   1 - function focb()
+              ( focc.prg     )   1 - function focc()
+                                 1 - function fochx()
+                                 2 - function focitau()
+              ( fod1.prg     )   3 - function truncar()
+              ( fod1b.prg    )   2 - function truncar()
+              ( fof.prg      )   1 - function foe6()
+              ( fog.prg      )   1 - function cabhol()
+              ( foh.prg      )   1 - function horpadl()
+              ( foha.prg     )   1 - function foha()
+              ( fohc.prg     )   2 - function foha04()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohg2.prg    )   6 - function foha04()
+              ( fohh.prg     )   2 - function fohh()
+              ( fohi.prg     )   1 - function fohi()
+              ( fohs.prg     )   2 - function fohi()
+              ( foi2b.prg    )   1 - function foi2b()
+              ( foic1.prg    )   1 - function foic1()
+              ( foid.prg     )   1 - function foid()
+              ( folerr.prg   )   1 - function errindex()
+              ( folha1.prg   )   4 - function main()
+              ( folmenu.prg  )   1 - function menu7()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( foug.prg     )   4 - function lfoue()
+              ( foy.prg      )   1 - function foyb()
+                                 1 - function foyc()
+              ( foy6.prg     )   3 - function limpar()
+              ( fo_1.prg     )   5 - function gfo7z()
+
+alltrue()       <unresolved function>
+
+  Called from ( fo0.prg      )   2 - function gfo0i()
+              ( fo2.prg      )   1 - function gfo2()
+              ( fo7a.prg     )   6 - function ifopto4e()
+              ( fo7c.prg     )   2 - function fosfamqtde()
+              ( foa8.prg     )   2 - function foa8b()
+              ( foy.prg      )   2 - function foyb()
+              ( foy2.prg     )   1 - function ifoy2()
+
+apagareg()      in flib03.prg
+
+  Called from ( flib02.prg   )   1 - function fpad()
+              ( fo6.prg      )   1 - function fo61()
+
+arqcta()        in flib11.prg
+
+  Called from ( foa6.prg     )   1 - function foa6()
+              ( foa7.prg     )   1 - function foa7()
+              ( foax.prg     )   1 - function foax()
+              ( foca2.prg    )   1 - function foca2()
+              ( focb.prg     )   1 - function focb()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( foe23.prg    )   1 - function foe23()
+              ( foe6.prg     )   1 - function foe6()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( foha.prg     )   1 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi20.prg    )   1 - function foi20()
+              ( foia.prg     )   1 - function foia()
+              ( foic0.prg    )   1 - function foic0()
+              ( foid.prg     )   1 - function foid()
+              ( foid0.prg    )   1 - function foid0()
+
+arqpes()        in flib11.prg
+
+  Called from ( foa6.prg     )   1 - function foa6()
+              ( foa7.prg     )   1 - function foa7()
+              ( foax.prg     )   1 - function foax()
+              ( foca2.prg    )   1 - function foca2()
+              ( focc.prg     )   1 - function focc()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( focj.prg     )   1 - function focfx()
+              ( fock.prg     )   1 - function focjx()
+              ( foe22.prg    )   1 - function foe22()
+              ( foe23.prg    )   1 - function foe23()
+              ( foe24.prg    )   1 - function foe24()
+              ( foe2a.prg    )   1 - function foe2a()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( foha.prg     )   1 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi20.prg    )   1 - function foi20()
+              ( foia.prg     )   1 - function foia()
+              ( foic0.prg    )   1 - function foic0()
+
+arqusar()       in flib11.prg
+
+  Called from ( foa1.prg     )   1 - function foa1()
+              ( foa2.prg     )   1 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foa4.prg     )   1 - function foa3()
+              ( foa6.prg     )   1 - function foa6()
+              ( foa7.prg     )   1 - function foa7()
+              ( foab.prg     )   1 - function foaa8()
+              ( foax.prg     )   1 - function foax()
+              ( foca2.prg    )   1 - function foca2()
+              ( focb.prg     )   1 - function focb()
+              ( focc.prg     )   1 - function focc()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( focj.prg     )   1 - function focfx()
+              ( fock.prg     )   1 - function focjx()
+              ( foe22.prg    )   1 - function foe22()
+              ( foe23.prg    )   1 - function foe23()
+              ( foe24.prg    )   1 - function foe24()
+              ( foe2a.prg    )   1 - function foe2a()
+              ( foe6.prg     )   1 - function foe6()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( foha.prg     )   1 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fohi.prg     )   1 - function fohi()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi20.prg    )   1 - function foi20()
+              ( foia.prg     )   1 - function foia()
+              ( foic0.prg    )   1 - function foic0()
+              ( foid.prg     )   1 - function foid()
+              ( foid0.prg    )   1 - function foid0()
+              ( foy6.prg     )   1 - function limpar()
+
+atualiza()      in disk05.prg
+
+  Called from ( fo1x.prg     )   2 - function checkbacen()
+              ( foya.prg     )  22 - function memos()
+
+bom()           in hbct.lib
+
+  Called from ( foha.prg     )   1 - function foha()
+
+cabex()         in folproc.prg
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( fo0.prg      )   1 - function fo0()
+              ( fo1.prg      )   1 - function fo1sa()
+                                 1 - function fo1sc()
+                                 1 - function gfo0m()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo1j.prg     )   1 - function critconv()
+              ( fo1k.prg     )   1 - function critconv()
+              ( fo1l.prg     )   1 - function critconv()
+              ( fo1m.prg     )   1 - function critconv()
+              ( fo1n.prg     )   1 - function critconv()
+              ( fo1x.prg     )   1 - function checkbacen()
+              ( fo3.prg      )   1 - function fo3h()
+                                 1 - function tfo2()
+              ( fo4.prg      )   1 - function fo41()
+                                 1 - function fo42()
+                                 1 - function fo43()
+                                 1 - function ifo3ga()
+              ( fo41a.prg    )   1 - function fo41a()
+              ( fo41c.prg    )   1 - function fo41c()
+              ( fo42b.prg    )   1 - function grvpsl()
+              ( fo42c.prg    )   1 - function grvpsl()
+              ( fo42e.prg    )   1 - function fo42e()
+              ( fo5.prg      )   1 - function fo43zz()
+              ( fo6.prg      )   1 - function fo6gr()
+                                 2 - function idepto()
+              ( fo7.prg      )   1 - function fo6gr()
+              ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7b.prg     )   1 - function fosfamqtde()
+              ( foa.prg      )   1 - function foa()
+                                 1 - function foaa1()
+                                 1 - function foaa10()
+                                 1 - function foaa11()
+                                 1 - function foaa2()
+                                 1 - function foaa3()
+                                 1 - function foaa4()
+              ( foa1.prg     )   1 - function foa1()
+              ( foa2.prg     )   1 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foa4.prg     )   1 - function foa3()
+              ( foa5.prg     )   1 - function varedit()
+              ( foa6.prg     )   1 - function foa6()
+              ( foa7.prg     )   1 - function foa7()
+              ( foa8.prg     )   1 - function foa7()
+                                 1 - function foa8a()
+                                 1 - function foa8b()
+                                 1 - function foa8c()
+              ( foa9.prg     )   1 - function foa8c()
+              ( foaa.prg     )   1 - function foa8c()
+              ( foaa8.prg    )   1 - function foaa8()
+              ( foab.prg     )   1 - function foaa8()
+              ( foam.prg     )   1 - function xfoal()
+              ( foao.prg     )   1 - function xfoal()
+              ( foax.prg     )   1 - function foax()
+              ( foc.prg      )   1 - function foax()
+                                 1 - function foc1()
+                                 1 - function foc2()
+              ( focc.prg     )   2 - function focc()
+              ( fod.prg      )   1 - function pegvsem()
+              ( fod1.prg     )   1 - function truncar()
+              ( fod1b.prg    )   1 - function truncar()
+              ( fod2.prg     )   2 - function fod2()
+              ( fod2cre.prg  )   1 - function fod2()
+              ( fod2des.prg  )   1 - function fod2()
+              ( fod2enc.prg  )   1 - function fod2()
+              ( fod5.prg     )   1 - function fod5()
+              ( fod7.prg     )   1 - function fod5()
+              ( fod9.prg     )   1 - function fod5()
+              ( foe.prg      )   1 - function fodins()
+                                 1 - function foee()
+              ( foe22.prg    )   1 - function foe22()
+              ( foe24.prg    )   1 - function foe24()
+              ( foe6.prg     )   1 - function foe6()
+              ( fof.prg      )   1 - function foe6()
+                                 1 - function foff()
+                                 1 - function foff2()
+              ( fog.prg      )   1 - function cabhol()
+                                 1 - function fogaa()
+                                 1 - function fogbb()
+              ( fog6.prg     )   1 - function fog2()
+              ( foga.prg     )   1 - function fog2()
+              ( fogb.prg     )   1 - function gfoga()
+              ( foge.prg     )   1 - function gfoga()
+              ( foh.prg      )   1 - function foh1()
+                                 1 - function horpadl()
+              ( fohg2.prg    )   1 - function foha04()
+              ( fohi.prg     )   1 - function fohi()
+              ( foi.prg      )   1 - function fohhs()
+                                 1 - function foii()
+                                 1 - function foiia()
+                                 1 - function foiib()
+              ( foi20.prg    )   1 - function foi20()
+              ( foib.prg     )   1 - function foia()
+              ( foic0.prg    )   1 - function foic0()
+              ( foid0.prg    )   1 - function foid0()
+              ( foif0.prg    )   2 - function foif0()
+              ( foif1.prg    )   3 - function foif0()
+              ( folmenu.prg  )   1 - function menu6()
+                                 1 - function menu7()
+                                 1 - function menua()
+                                 1 - function menuc()
+                                 1 - function menucc()
+              ( folproc.prg  )   1 - function mdl()
+              ( fou.prg      )   1 - function cabe2()
+              ( fouc1.prg    )   1 - function cabe2()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( fouc3.prg    )   1 - function fouc2a()
+              ( foug.prg     )   1 - function lfoue()
+              ( foy.prg      )   1 - function foy5()
+                                 1 - function foyc()
+                                 1 - function manretm()
+              ( foy2.prg     )   1 - function foy2()
+              ( foy6.prg     )   1 - function limpar()
+              ( foy8.prg     )   1 - function foy8()
+              ( fo_1.prg     )   1 - function gfo7z()
+              ( fo_for.prg   )   2 - function fo_for()
+
+cabhol()        in fofhol.prg
+
+  Called from ( fofhol.prg   )   2 - function fofx()
+
+calcdepe()      in fod.prg
+
+  Called from ( fod1b.prg    )   1 - function truncar()
+              ( fod2bas.prg  )   1 - function fod2()
+              ( fod5.prg     )   1 - function fod5()
+              ( fod9.prg     )   1 - function fod5()
+
+calcirrf()      in fod.prg
+
+  Called from ( fod1b.prg    )   1 - function truncar()
+              ( fod2des.prg  )   1 - function fod2()
+              ( fod5.prg     )   1 - function fod5()
+              ( fod9.prg     )   1 - function fod5()
+
+calctot()       in fo_rell.prg
+
+  Called from ( fo_rell.prg  )   2 - function fo_rell()
+
+calcvar()       in fo_rell.prg
+
+  Called from ( fo_rell.prg  )   2 - function fo_rell()
+
+cep2uf()        <unresolved function>
+
+  Called from ( fo7w.prg     )   1 - function chkpesdup()
+
+checkadm()      in fo7alib.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+checkbacen()    in fo1w.prg
+
+  Called from ( fo7a.prg     )   3 - function ifopto4e()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+
+checkcid()      in fo1w.prg
+
+  Called from ( fo0.prg      )   3 - function gfo0i()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo2.prg      )   1 - function gfo2()
+              ( fo3f.prg     )   1 - function gfo3f()
+              ( fo7a.prg     )   5 - function ifopto4e()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( focc.prg     )   1 - function focitau()
+
+checkcta()      <unresolved function>
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+              ( focc.prg     )   1 - function fochx()
+                                 1 - function focitau()
+
+checkctps()     in fo7alib.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+checkemail()    <unresolved function>
+
+  Called from ( fo1g.prg     )   1 - function fo1p()
+              ( fo3f.prg     )   1 - function gfo3f()
+              ( fo7a.prg     )   1 - function ifopto4e()
+
+checkfgts()     in fo7alib.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+checkimp()      <unresolved function>
+
+  Called from ( fo3.prg      )   1 - function fo3h()
+              ( fo6.prg      )   1 - function fo6l()
+              ( fohc.prg     )   1 - function foha04()
+              ( foic1a.prg   )   1 - function foic1()
+              ( foic1b.prg   )   1 - function foic1()
+              ( foif1.prg    )   1 - function foif0()
+              ( folerr.prg   )   1 - function errprinter()
+              ( folproc.prg  )   1 - function mdl()
+              ( fouec.prg    )   1 - function lfoue()
+              ( fouef.prg    )   1 - function lfoue()
+              ( foug.prg     )   1 - function lfoue()
+              ( fox.prg      )   1 - function fmanual()
+              ( fo_rell.prg  )   1 - function fo_rell()
+
+checkmotdem()   in fo7alib.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+checkrg()       <unresolved function>
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7w.prg     )   1 - function chkpesdup()
+
+checkrici()     in disk06.prg
+
+  Called from ( fo7.prg      )   1 - function fosfamreg()
+
+checkserie()    in fo7alib.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+checksexo()     in fo7alib.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+checktab()      in flib07.prg
+
+  Called from ( fo0.prg      )   1 - function gfo0i()
+              ( fo1g.prg     )   3 - function fo1p()
+              ( fo2.prg      )   1 - function gfo2()
+              ( fo3f.prg     )   1 - function gfo3f()
+              ( fo7a.prg     )  24 - function ifopto4e()
+              ( fo7c.prg     )   4 - function fosfamqtde()
+              ( fo7w.prg     )   1 - function valsitu()
+              ( fo7z.prg     )   1 - function gfo7z()
+              ( foa2.prg     )   1 - function foa1()
+              ( foal.prg     )   2 - function gfoal()
+              ( focc.prg     )   1 - function focitau()
+              ( focd.prg     )   1 - function focdx()
+              ( fohh.prg     )   1 - function fohhh()
+              ( foi2a.prg    )   1 - function foi2a()
+              ( fouef.prg    )   1 - function lfoue()
+              ( foug.prg     )   2 - function lfoue()
+
+checktitulo()   in disk06.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7w.prg     )   1 - function chkpesdup()
+
+chkpesdup()     in fo7w.prg
+
+  Called from ( fo7w.prg     )   8 - function fosfamreg()
+
+chkufcep()      <unresolved function>
+
+  Called from ( fo1g.prg     )   1 - function fo1p()
+              ( fo1w.prg     )   2 - function gmada()
+              ( fo2.prg      )   2 - function gfo2()
+              ( fo3f.prg     )   1 - function gfo3f()
+              ( fo7a.prg     )   1 - function ifopto4e()
+              ( focc.prg     )   1 - function focitau()
+              ( foug.prg     )   1 - function lfoue()
+
+clrvars()       <unresolved function>
+
+  Called from ( disk05.prg   )   2 - function atualiza()
+              ( flib02.prg   )   1 - function padrao()
+              ( flib03.prg   )   1 - function criarvars()
+                                 1 - function zeravars()
+              ( foa8.prg     )   1 - function foa7()
+              ( fod2.prg     )   1 - function fod2()
+              ( fod2bas.prg  )   2 - function fod2()
+
+clsbox()        <unresolved function>
+
+  Called from ( flib09.prg   )   1 - function peg13()
+              ( flib11.prg   )   1 - function arqusar()
+              ( fox.prg      )   1 - function manualt()
+
+clscor()        <unresolved function>
+
+  Called from ( fo1l.prg     )   1 - function critconv()
+              ( fod2.prg     )   2 - function fod2()
+              ( foha.prg     )   1 - function foha()
+              ( folmenu.prg  )   2 - function main()
+                                 1 - function menucc()
+              ( fox.prg      )   1 - function manualt()
+              ( foy8.prg     )   3 - function foy8()
+                                 1 - function mudadbf()
+
+clsrow()        <unresolved function>
+
+  Called from ( flib13.prg   )   1 - function listarue()
+              ( fo41b.prg    )   1 - function fo41a()
+              ( fo6.prg      )   1 - function fo6t()
+              ( fod2.prg     )   1 - function fod2()
+              ( foha.prg     )   1 - function foha()
+              ( folmenu.prg  )   3 - function main()
+
+cnpjcpfpict()   <unresolved function>
+
+  Called from ( flib16.prg   )   1 - function editsay()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo2.prg      )   1 - function gfo2()
+              ( fo3f.prg     )   1 - function gfo3f()
+
+cnpjcpfval()    <unresolved function>
+
+  Called from ( flib16.prg   )   1 - function editsay()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo2.prg      )   1 - function gfo2()
+              ( fo3f.prg     )   1 - function gfo3f()
+
+corrigeendereco in fo7w.prg
+
+  Called from ( disklib.prg  )   1 - function corrigefo_pes()
+
+corrigefo_pes() in disklib.prg
+
+  Called from ( disklib.prg  )   1 - function foyd()
+              ( fo7a.prg     )   2 - function ifopto4e()
+
+criarvars()     in flib03.prg
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( fo1.prg      )   1 - function gfo0m()
+              ( fo6.prg      )   1 - function idepto()
+              ( foam.prg     )   1 - function xfoal()
+              ( fo_1.prg     )   2 - function gfo7z()
+
+critconv()      in fo1g.prg
+
+  Called from ( fo1g.prg     )   1 - function fo1p()
+
+ctafun()        in flib01.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+dbskipex()      <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function nextrec()
+                                 1 - function prevrec()
+              ( flib02.prg   )   2 - function padrao()
+
+decode()        in hbyaml.lib
+                or xhb.lib
+
+  Called from ( flib10.prg   )   1 - function usermdec()
+
+deldbfntx()     in fo1n.prg
+
+  Called from ( fo1.prg      )   1 - function fo1sa()
+                                 3 - function gfo0m()
+              ( fo1n.prg     )  41 - function critconv()
+
+delerec()       in disklib.prg
+
+  Called from ( fo7b.prg     )   1 - function fosfamqtde()
+              ( foaa.prg     )   1 - function cadseq()
+              ( foga.prg     )   1 - function cadfoga()
+              ( foge.prg     )   1 - function gfoga()
+
+deletaarq()     <unresolved function>
+
+  Called from ( folha1.prg   )   3 - function main()
+
+dfiltro()       in flib05.prg
+
+  Called from ( flib05.prg   )   1 - function rfiltro()
+
+digadata()      <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function mudadata()
+
+dirmake()       in hbct.lib
+
+  Called from ( fo_1.prg     )   1 - function gfo7z()
+
+dvfu()          in flib01.prg
+
+  Called from ( flib01.prg   )   1 - function ctafun()
+
+editpeg()       in flib16.prg
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( flib16.prg   )   1 - function editsay()
+              ( fo6.prg      )   1 - function idepto()
+              ( fo7z.prg     )   1 - function fo7e()
+
+editsay()       in flib16.prg
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo3a.prg     )   3 - function gfo3a()
+              ( fo6.prg      )   2 - function fo61()
+              ( fo7z.prg     )   1 - function gfo7z()
+              ( fohg2.prg    )   1 - function foha04()
+              ( foy.prg      )   1 - function foy5()
+
+encode()        in hbyaml.lib
+
+  Called from ( flib10.prg   )   1 - function usermcri()
+              ( folha1.prg   )   7 - function main()
+
+eom()           in hbct.lib
+
+  Called from ( foha.prg     )   1 - function foha()
+
+equvars()       <unresolved function>
+
+  Called from ( disk05.prg   )   1 - function atualiza()
+              ( flib02.prg   )   2 - function padrao()
+              ( flib03.prg   )   1 - function igualvars()
+              ( foa8.prg     )   1 - function foa7()
+              ( fod2.prg     )   1 - function fod2()
+              ( fod2bas.prg  )   1 - function fod2()
+              ( foif0.prg    )   1 - function foif0()
+              ( foug.prg     )   1 - function lfoue()
+
+escarr()        <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function escolhexi()
+
+escolhexi()     in flib02.prg
+
+  Called from ( flib02.prg   )  34 - function teclaf11()
+              ( folha1.prg   )   1 - function main()
+
+expand()        in hbct.lib
+                or hbct.lib
+
+  Called from ( foug.prg     )   1 - function foug01()
+
+ext()           <unresolved function>
+
+  Called from ( focc.prg     )   2 - function focix()
+              ( fock.prg     )   2 - function focjx()
+              ( fouef.prg    )   1 - function lfoue()
+
+fdelim()        <unresolved function>
+
+  Called from ( foya.prg     )   1 - function memos()
+
+filecopy()      in hbct.lib
+
+  Called from ( fo1k.prg     )   1 - function critconv()
+              ( foic1.prg    )   1 - function foic1()
+              ( folha1.prg   )   4 - function main()
+
+filenames()     <unresolved function>
+
+  Called from ( fo1.prg      )   2 - function fo1p()
+              ( fo1l.prg     )   1 - function critconv()
+              ( foy8.prg     )   1 - function mudadbf()
+
+filord()        in flib05.prg
+
+  Called from ( fo3.prg      )   1 - function fo3h()
+              ( fo42c.prg    )   1 - function grvpsl()
+              ( fo42d.prg    )   1 - function grvpsl()
+              ( fo43d.prg    )   1 - function fo42e()
+              ( fo43x.prg    )   1 - function fo43x()
+              ( fo43z.prg    )   1 - function fo43xrod()
+              ( fo6.prg      )   1 - function fo6l()
+              ( fo711.prg    )   1 - function fosfamreg()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( fo7f.prg     )   1 - function fo7e()
+              ( fo7g.prg     )   1 - function fo7e()
+              ( foca1.prg    )   1 - function foca1()
+              ( focc.prg     )   1 - function focc()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( foch.prg     )   1 - function focfx()
+              ( fock.prg     )   1 - function focjx()
+              ( foe21.prg    )   1 - function foe21()
+              ( foe22.prg    )   1 - function foe22()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( foia.prg     )   1 - function foia()
+              ( fouec.prg    )   1 - function lfoue()
+              ( fo_rell.prg  )   2 - function fo_rell()
+
+filtro()        in flib05.prg
+
+  Called from ( flib02.prg   )   3 - function padrao()
+              ( flib05.prg   )   1 - function filord()
+              ( fo41a.prg    )   1 - function fo41a()
+              ( fo41c.prg    )   1 - function fo41c()
+              ( fo42e.prg    )   1 - function fo42e()
+              ( foa2.prg     )   1 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foa6.prg     )   1 - function foa6()
+              ( foa7.prg     )   1 - function foa7()
+              ( foa9.prg     )   1 - function foa8c()
+              ( foam.prg     )   1 - function xfoal()
+              ( foao.prg     )   1 - function xfoal()
+              ( foca2.prg    )   1 - function foca2()
+              ( focj.prg     )   1 - function focfx()
+              ( fod1b.prg    )   1 - function truncar()
+              ( fod2.prg     )   1 - function fod2()
+              ( fod9.prg     )   1 - function fod5()
+              ( foe23.prg    )   1 - function foe23()
+              ( foe24.prg    )   1 - function foe24()
+              ( foe2a.prg    )   1 - function foe2a()
+              ( foe6.prg     )   1 - function foe6()
+              ( fog7.prg     )   1 - function fog2()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohg2.prg    )   2 - function foha04()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi2a.prg    )   1 - function foi2a()
+              ( foi2b.prg    )   1 - function foi2b()
+              ( foic1.prg    )   1 - function foic1()
+              ( foy6.prg     )   1 - function limpar()
+
+fim()           in disklib.prg
+
+  Called from ( folha1.prg   )   1 - function main()
+
+flinecount()    in xhb.lib
+
+  Called from ( foya.prg     )   1 - function memos()
+              ( fo_vt.prg    )   2 - function vtatutk()
+
+fmanual()       in fox.prg
+
+  Called from ( fox.prg      )   2 - function fox()
+
+fo0()           in fo0.prg
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+fo0g()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo0j()          <unresolved function>
+
+  Called from ( fo0.prg      )   1 - function fo0()
+
+fo0m()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foaa2()
+
+fo1()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+fo1g()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1j()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1k()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1l()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1m()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1n()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1o()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1p()          in fo1.prg
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1sa()         in fo1.prg
+
+  Called from ( fo1.prg      )   3 - function gfo0m()
+
+fo1sc()         in fo1.prg
+
+  Called from ( fo1.prg      )   3 - function gfo0m()
+
+fo1t()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1va()         in fo1.prg
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1vc()         in fo1.prg
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1w()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo1x()          <unresolved function>
+
+  Called from ( fo1.prg      )   1 - function gfo0m()
+
+fo2()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+fo3()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+fo3a()          <unresolved function>
+
+  Called from ( fo3.prg      )   1 - function tfo2()
+
+fo3b()          <unresolved function>
+
+  Called from ( fo3.prg      )   1 - function tfo2()
+
+fo3c()          in fo3c.prg
+
+  Called from ( fo3.prg      )   3 - function tfo2()
+
+fo3e()          <unresolved function>
+
+  Called from ( fo3.prg      )   1 - function tfo2()
+
+fo3f()          <unresolved function>
+
+  Called from ( fo3.prg      )   1 - function tfo2()
+
+fo3g()          <unresolved function>
+
+  Called from ( fo3.prg      )   1 - function tfo2()
+
+fo3h()          in fo3.prg
+
+  Called from ( fo3.prg      )   1 - function tfo2()
+
+fo4()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menu7()
+
+fo41()          in fo4.prg
+
+  Called from ( fo4.prg      )   1 - function ifo3ga()
+
+fo41a()         in fo41a.prg
+
+  Called from ( fo4.prg      )   2 - function fo41()
+
+fo41b()         <unresolved function>
+
+  Called from ( fo4.prg      )   1 - function fo41()
+
+fo41c()         in fo41c.prg
+
+  Called from ( fo4.prg      )   2 - function fo41()
+
+fo42()          in fo4.prg
+
+  Called from ( fo4.prg      )   1 - function ifo3ga()
+
+fo42a()         <unresolved function>
+
+  Called from ( fo4.prg      )   1 - function fo42()
+
+fo42b()         <unresolved function>
+
+  Called from ( fo4.prg      )   1 - function fo42()
+
+fo42c()         <unresolved function>
+
+  Called from ( fo4.prg      )   1 - function fo42()
+
+fo42d()         <unresolved function>
+
+  Called from ( fo4.prg      )   1 - function fo42()
+
+fo42e()         in fo42e.prg
+
+  Called from ( fo4.prg      )   3 - function fo42()
+
+fo42k()         in fo42d.prg
+
+  Called from ( fo42d.prg    )   1 - function grvpsl()
+
+fo43()          in fo4.prg
+
+  Called from ( fo4.prg      )   1 - function ifo3ga()
+
+fo43d()         <unresolved function>
+
+  Called from ( fo4.prg      )   1 - function ifo3ga()
+
+fo43dg()        in fo43d.prg
+
+  Called from ( fo43d.prg    )   1 - function fo42e()
+
+fo43ds()        in fo43d.prg
+
+  Called from ( fo43d.prg    )   1 - function fo42e()
+
+fo43dt()        in fo43d.prg
+
+  Called from ( fo43d.prg    )   1 - function fo42e()
+
+fo43x()         in fo43x.prg
+
+  Called from ( fo4.prg      )   1 - function fo43()
+                                 1 - function fotmes()
+
+fo43xrod()      in fo43x.prg
+
+  Called from ( fo43x.prg    )   1 - function fo43xx()
+                                 1 - function fo43yy()
+
+fo43xx()        in fo43x.prg
+
+  Called from ( fo43x.prg    )   1 - function fo43x()
+
+fo43yy()        in fo43x.prg
+
+  Called from ( fo43x.prg    )   1 - function fo43x()
+
+fo43z()         <unresolved function>
+
+  Called from ( fo4.prg      )   1 - function fotmes()
+
+fo43zz()        in fo43z.prg
+
+  Called from ( fo43z.prg    )   1 - function fo43xrod()
+
+fo43zzr()       in fo43z.prg
+
+  Called from ( fo43z.prg    )   1 - function fo43xrod()
+
+fo5()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+fo6()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menu6()
+
+fo61()          in fo6.prg
+
+  Called from ( fo6.prg      )   6 - function fo6gr()
+                                12 - function idepto()
+
+fo6gr()         in fo6.prg
+
+  Called from ( fo6.prg      )   2 - function idepto()
+
+fo6l()          in fo6.prg
+
+  Called from ( fo6.prg      )   1 - function fo6gr()
+                                 2 - function idepto()
+              ( folmenu.prg  )   1 - function menucc()
+
+fo6t()          in fo6.prg
+
+  Called from ( fo6.prg      )   1 - function fo6gr()
+                                 1 - function idepto()
+
+fo6t2()         in fo6.prg
+
+  Called from ( fo6.prg      )   2 - function fo61()
+
+fo6t3()         in fo6.prg
+
+  Called from ( fo6.prg      )   2 - function fo61()
+
+fo6t4()         in fo6.prg
+
+  Called from ( fo6.prg      )   2 - function fo61()
+
+fo6t5()         in fo6.prg
+
+  Called from ( fo6.prg      )   2 - function fo61()
+
+fo7()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menu7()
+
+fo711()         <unresolved function>
+
+  Called from ( fo7.prg      )   1 - function fo77()
+
+fo713()         in fo7.prg
+
+  Called from ( fo7.prg      )   1 - function fo6gr()
+
+fo713a()        in fo7.prg
+
+  Called from ( fo7.prg      )  10 - function fo713()
+
+fo77()          in fo7.prg
+
+  Called from ( fo7.prg      )   1 - function fo6gr()
+
+fo7a()          <unresolved function>
+
+  Called from ( fo7.prg      )   1 - function fo6gr()
+
+fo7b()          <unresolved function>
+
+  Called from ( fo7.prg      )   1 - function fo6gr()
+
+fo7c()          <unresolved function>
+
+  Called from ( fo7.prg      )   1 - function fo77()
+              ( folmenu.prg  )   1 - function menucc()
+
+fo7ccab()       in fo7c.prg
+
+  Called from ( fo7c.prg     )   2 - function fosfamqtde()
+
+fo7d()          <unresolved function>
+
+  Called from ( fo7.prg      )   1 - function fo77()
+              ( folmenu.prg  )   1 - function menucc()
+
+fo7e()          in fo7e.prg
+
+  Called from ( fo7.prg      )   3 - function fo77()
+
+fo7f()          <unresolved function>
+
+  Called from ( fo7.prg      )   1 - function fo77()
+
+fo7g()          <unresolved function>
+
+  Called from ( fo7.prg      )   1 - function fo77()
+
+fo7w()          <unresolved function>
+
+  Called from ( fo7.prg      )   1 - function fo6gr()
+
+fo7z()          <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menu7()
+
+foa()           in foa.prg
+
+  Called from ( folmenu.prg  )   3 - function menua()
+
+foa1()          in foa1.prg
+
+  Called from ( foa.prg      )   1 - function foaa1()
+
+foa2()          <unresolved function>
+
+  Called from ( foa.prg      )   2 - function foaa1()
+
+foa3()          in foa3.prg
+
+  Called from ( foa.prg      )   1 - function foaa1()
+
+foa4()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foaa1()
+
+foa5()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foaa2()
+
+foa6()          in foa6.prg
+
+  Called from ( foa.prg      )   1 - function foaa1()
+
+foa601()        in foa6.prg
+
+  Called from ( foa6.prg     )   5 - function foa6()
+
+foa602()        in foa6.prg
+
+  Called from ( foa6.prg     )   2 - function foa6()
+
+foa7()          in foa7.prg
+
+  Called from ( foa.prg      )   1 - function foaa1()
+
+foa8()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foaa2()
+
+foa8a()         in foa8.prg
+
+  Called from ( foa.prg      )   1 - function foaa2()
+
+foa8b()         in foa8.prg
+
+  Called from ( foa.prg      )   1 - function foaa2()
+
+foa8c()         in foa8.prg
+
+  Called from ( foa.prg      )   2 - function foaa2()
+
+foa9()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foaa2()
+
+foaa()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foa()
+
+foaa1()         in foa.prg
+
+  Called from ( foa.prg      )   1 - function foa()
+
+foaa10()        in foa.prg
+
+  Called from ( foa.prg      )   1 - function foa()
+
+foaa11()        in foa.prg
+
+  Called from ( foa.prg      )   1 - function foa()
+
+foaa2()         in foa.prg
+
+  Called from ( foa.prg      )   1 - function foa()
+
+foaa3()         in foa.prg
+
+  Called from ( foa.prg      )   1 - function foa()
+
+foaa4()         in foa.prg
+
+  Called from ( foa.prg      )   1 - function foa()
+
+foaa8()         in foaa8.prg
+
+  Called from ( foa.prg      )   1 - function foa()
+                                 1 - function foaa11()
+
+foab()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foaa1()
+
+foal()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foa()
+                                 1 - function foaa4()
+
+foam()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foaa4()
+
+foao()          <unresolved function>
+
+  Called from ( foa.prg      )   1 - function foaa4()
+
+foarpls()       in foa.prg
+
+  Called from ( foa.prg      )   1 - function foaa11()
+
+foax()          in foax.prg
+
+  Called from ( foa.prg      )   3 - function foaa3()
+
+foc()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menuc()
+
+foc1()          in foc.prg
+
+  Called from ( foc.prg      )   1 - function foax()
+
+foc2()          in foc.prg
+
+  Called from ( foc.prg      )   2 - function foc1()
+
+foca1()         in foca1.prg
+
+  Called from ( foc.prg      )   2 - function foc2()
+
+foca2()         in foca2.prg
+
+  Called from ( foc.prg      )   1 - function foc1()
+
+focax()         in foca1.prg
+
+  Called from ( foca1.prg    )   2 - function foca1()
+
+focb()          in focb.prg
+
+  Called from ( foc.prg      )   1 - function foc1()
+
+focbx()         in focc.prg
+
+  Called from ( focc.prg     )   2 - function focc()
+
+focc()          in focc.prg
+
+  Called from ( foc.prg      )   5 - function foc2()
+
+foccx()         in focc.prg
+
+  Called from ( focc.prg     )   2 - function focc()
+
+focd()          in focd.prg
+
+  Called from ( foc.prg      )   1 - function foc2()
+
+focd01()        in focd.prg
+
+  Called from ( focd.prg     )  11 - function focdx()
+              ( focf.prg     )   1 - function focfx()
+
+focdx()         in focd.prg
+
+  Called from ( focd.prg     )   2 - function focd()
+
+focf()          in focf.prg
+
+  Called from ( foc.prg      )   2 - function foc2()
+
+focfx()         in focf.prg
+
+  Called from ( focf.prg     )   2 - function focf()
+
+focg()          <unresolved function>
+
+  Called from ( foc.prg      )   1 - function foc1()
+              ( foe2a.prg    )   1 - function foe2a()
+
+foch()          <unresolved function>
+
+  Called from ( foc.prg      )   1 - function foax()
+
+fochx()         in focc.prg
+
+  Called from ( focc.prg     )   2 - function focc()
+
+focitau()       in focc.prg
+
+  Called from ( focc.prg     )   2 - function focc()
+
+focix()         in focc.prg
+
+  Called from ( focc.prg     )   2 - function focc()
+
+focj()          <unresolved function>
+
+  Called from ( foc.prg      )   1 - function foc2()
+
+focjx()         in focj.prg
+
+  Called from ( focj.prg     )   2 - function focfx()
+
+fock()          <unresolved function>
+
+  Called from ( foc.prg      )   1 - function foc1()
+
+fod()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+fod1()          <unresolved function>
+
+  Called from ( fod.prg      )   1 - function pegvsem()
+
+fod1b()         <unresolved function>
+
+  Called from ( fod1.prg     )   1 - function truncar()
+
+fod2()          in fod2.prg
+
+  Called from ( fod.prg      )   2 - function pegvsem()
+
+fod2bas()       <unresolved function>
+
+  Called from ( fod2.prg     )   1 - function fod2()
+
+fod2cre()       <unresolved function>
+
+  Called from ( fod2.prg     )   1 - function fod2()
+
+fod2des()       <unresolved function>
+
+  Called from ( fod2.prg     )   1 - function fod2()
+
+fod2enc()       <unresolved function>
+
+  Called from ( fod2.prg     )   1 - function fod2()
+
+fod5()          in fod5.prg
+
+  Called from ( fod.prg      )   2 - function pegvsem()
+
+fod7()          <unresolved function>
+
+  Called from ( fod.prg      )   1 - function pegvsem()
+              ( fod1.prg     )   1 - function truncar()
+              ( fod2.prg     )   1 - function fod2()
+              ( fod9.prg     )   1 - function fod5()
+
+fod9()          <unresolved function>
+
+  Called from ( fod.prg      )   1 - function pegvsem()
+
+fodins()        in fodins.prg
+
+  Called from ( fod.prg      )   5 - function pegvsem()
+
+fodzer()        in folproc.prg
+
+  Called from ( foa1.prg     )   1 - function foa1()
+              ( foa2.prg     )   1 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foa4.prg     )   1 - function foa3()
+              ( foa5.prg     )   1 - function varedit()
+              ( foa8.prg     )   1 - function foa7()
+                                 1 - function foa8c()
+              ( foa9.prg     )   1 - function foa8c()
+              ( foaa8.prg    )   1 - function foaa8()
+              ( fod1b.prg    )   1 - function truncar()
+              ( fod2des.prg  )   1 - function fod2()
+              ( fod5.prg     )   1 - function fod5()
+              ( fod7.prg     )   1 - function fod5()
+              ( fod9.prg     )   1 - function fod5()
+              ( foi20.prg    )   1 - function foi20()
+
+foe()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+foe21()         in foe21.prg
+
+  Called from ( foe.prg      )   2 - function foee()
+
+foe22()         in foe22.prg
+
+  Called from ( foe.prg      )   1 - function foee()
+
+foe23()         in foe23.prg
+
+  Called from ( foe.prg      )   1 - function foee()
+
+foe24()         in foe24.prg
+
+  Called from ( foe.prg      )   1 - function foee()
+
+foe2a()         in foe2a.prg
+
+  Called from ( foe.prg      )   1 - function foee()
+
+foe6()          in foe6.prg
+
+  Called from ( foe.prg      )   1 - function foee()
+
+foee()          in foe.prg
+
+  Called from ( foe.prg      )   1 - function fodins()
+
+fof()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menuc()
+
+fofb()          <unresolved function>
+
+  Called from ( fof.prg      )   1 - function foe6()
+
+foff()          in fof.prg
+
+  Called from ( fof.prg      )   1 - function foe6()
+
+foff2()         in fof.prg
+
+  Called from ( fof.prg      )   1 - function foff()
+
+fofhol()        in fofhol.prg
+
+  Called from ( fof.prg      )   8 - function foff()
+                                 4 - function foff2()
+
+fofx()          in fofhol.prg
+
+  Called from ( fofhol.prg   )   2 - function fofhol()
+
+fog()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menu7()
+
+fog2()          in fog2.prg
+
+  Called from ( fog.prg      )   2 - function fogaa()
+
+fog6()          <unresolved function>
+
+  Called from ( fog.prg      )   1 - function fogbb()
+
+fog7()          <unresolved function>
+
+  Called from ( fog.prg      )   1 - function fogbb()
+
+fog8()          <unresolved function>
+
+  Called from ( fog.prg      )   1 - function fogbb()
+
+foga()          <unresolved function>
+
+  Called from ( fog.prg      )   1 - function fogaa()
+
+fogaa()         in fog.prg
+
+  Called from ( fog.prg      )   1 - function cabhol()
+
+fogb()          <unresolved function>
+
+  Called from ( fog.prg      )   1 - function fogbb()
+
+fogbb()         in fog.prg
+
+  Called from ( fog.prg      )   1 - function cabhol()
+
+foge()          <unresolved function>
+
+  Called from ( fog.prg      )   1 - function fogbb()
+
+foh()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menuc()
+
+foh1()          in foh.prg
+
+  Called from ( foh.prg      )   1 - function horpadl()
+
+foha()          in foha.prg
+
+  Called from ( foh.prg      )   3 - function foh1()
+
+foha01()        in foha.prg
+
+  Called from ( foha.prg     )   2 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+
+foha02()        in foha.prg
+
+  Called from ( foha.prg     )   2 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+
+foha03()        in foha.prg
+
+  Called from ( foha.prg     )   2 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+
+foha04()        in foha.prg
+
+  Called from ( foha.prg     )   1 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+
+fohc()          <unresolved function>
+
+  Called from ( foh.prg      )   1 - function foh1()
+
+fohd()          <unresolved function>
+
+  Called from ( foh.prg      )   1 - function foh1()
+
+fohe()          in foh.prg
+
+  Called from ( foh.prg      )   1 - function foh1()
+
+fohf()          in foh.prg
+
+  Called from ( foh.prg      )   1 - function foh1()
+
+fohg2()         <unresolved function>
+
+  Called from ( foh.prg      )   1 - function foh1()
+
+fohh()          in fohh.prg
+
+  Called from ( foh.prg      )   4 - function foh1()
+
+fohhh()         in fohh.prg
+
+  Called from ( fohh.prg     )   1 - function fohh()
+
+fohhrod()       in fohh.prg
+
+  Called from ( fohh.prg     )   2 - function fohhh()
+
+fohhs()         in fohs.prg
+
+  Called from ( fohs.prg     )   1 - function fohi()
+
+fohi()          in fohi.prg
+
+  Called from ( foh.prg      )   1 - function foh1()
+
+fohs()          <unresolved function>
+
+  Called from ( foh.prg      )   1 - function foh1()
+
+foi()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menuc()
+
+foi20()         in foi20.prg
+
+  Called from ( foi.prg      )   1 - function foiia()
+
+foi2a()         in foi2a.prg
+
+  Called from ( foi.prg      )   1 - function foiib()
+
+foi2b()         in foi2b.prg
+
+  Called from ( foi.prg      )   1 - function foiib()
+
+foi2b01()       in foi2b.prg
+
+  Called from ( foi2b.prg    )   1 - function foi2b()
+              ( foid.prg     )   1 - function foid01()
+
+foi2b02()       in foi2b.prg
+
+  Called from ( foi2b.prg    )   2 - function foi2b()
+
+foia()          in foia.prg
+
+  Called from ( foi.prg      )   1 - function foiia()
+
+foib()          <unresolved function>
+
+  Called from ( foi.prg      )   2 - function foii()
+
+foic0()         in foic0.prg
+
+  Called from ( foi.prg      )   1 - function foiia()
+
+foic1()         in foic1.prg
+
+  Called from ( foi.prg      )   1 - function foiib()
+
+foic1a()        <unresolved function>
+
+  Called from ( foic1.prg    )   1 - function foic1()
+
+foic1b()        <unresolved function>
+
+  Called from ( foic1.prg    )   1 - function foic1()
+
+foid()          in foid.prg
+
+  Called from ( foi.prg      )   1 - function foii()
+                                 1 - function foiia()
+
+foid0()         in foid0.prg
+
+  Called from ( foi.prg      )   1 - function foiia()
+
+foid01()        in foid.prg
+
+  Called from ( foi2b.prg    )   1 - function foi2b()
+              ( foid.prg     )   1 - function foid()
+
+foid02()        in foid.prg
+
+  Called from ( foi2b.prg    )   1 - function foi2b()
+              ( foid.prg     )   1 - function foid()
+                                 1 - function foid01()
+
+foid03()        in foid.prg
+
+  Called from ( foi2b.prg    )   1 - function foi2b()
+              ( foid.prg     )   1 - function foid05()
+
+foid04()        in foid.prg
+
+  Called from ( foi2b.prg    )   1 - function foi2b()
+              ( foid.prg     )   1 - function foid()
+
+foid05()        in foid.prg
+
+  Called from ( foi2b.prg    )   3 - function foi2b()
+              ( foid.prg     )   4 - function foid()
+
+foid06()        in foid.prg
+
+  Called from ( foid.prg     )   2 - function foid()
+
+foid1()         in foid1.prg
+
+  Called from ( foi.prg      )   1 - function foii()
+
+foif0()         in foif0.prg
+
+  Called from ( foi.prg      )   1 - function foiia()
+
+foif1()         <unresolved function>
+
+  Called from ( foi.prg      )   1 - function foii()
+
+foii()          in foi.prg
+
+  Called from ( foi.prg      )   1 - function fohhs()
+
+foiia()         in foi.prg
+
+  Called from ( foi.prg      )   2 - function foii()
+
+foiib()         in foi.prg
+
+  Called from ( foi.prg      )   1 - function foii()
+
+fokg()          in fo0j.prg
+
+  Called from ( fo0j.prg     )   1 - function fo0gk01()
+
+foks()          in fo0j.prg
+
+  Called from ( fo0j.prg     )   1 - function fo0gk01()
+
+fokt()          in fo0j.prg
+
+  Called from ( fo0j.prg     )   1 - function fo0gk01()
+
+folis_d9()      <unresolved function>
+
+  Called from ( fo7.prg      )   1 - function fo6gr()
+
+folmenu()       <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+fopto_4a()      <unresolved function>
+
+  Called from ( fo0.prg      )   1 - function fo0()
+
+fopto_4c()      <unresolved function>
+
+  Called from ( fo0.prg      )   5 - function fo0()
+
+fopto_4f()      <unresolved function>
+
+  Called from ( fo0.prg      )   1 - function fo0()
+
+formatacpf()    <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function corrigefo_pes()
+
+formatarg()     <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function corrigefo_pes()
+              ( fo7a.prg     )   1 - function ifopto4e()
+
+fosfamchv()     in fo7.prg
+
+  Called from ( fo7.prg      )   1 - function fo6gr()
+              ( fo7a.prg     )   1 - function ifopto4e()
+
+fosfamqtde()    in fo7alib.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+              ( foa7.prg     )   2 - function foa7()
+              ( fod1b.prg    )   1 - function truncar()
+              ( fod2bas.prg  )   2 - function fod2()
+              ( fod5.prg     )   1 - function fod5()
+              ( fod9.prg     )   1 - function fod5()
+              ( fofhol.prg   )   1 - function fofx()
+
+fotmes()        in fo4.prg
+
+  Called from ( fo4.prg      )   2 - function fo43()
+
+fou()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function menu7()
+
+fouc1()         <unresolved function>
+
+  Called from ( fou.prg      )   1 - function cabe2()
+
+fouc2()         <unresolved function>
+
+  Called from ( fou.prg      )   1 - function cabe2()
+
+fouc2a()        in fouc2.prg
+
+  Called from ( fouc2.prg    )   2 - function cabe2()
+
+fouc3()         <unresolved function>
+
+  Called from ( fou.prg      )   1 - function cabe2()
+
+foue()          in foue.prg
+
+  Called from ( fou.prg      )   1 - function cabe2()
+
+fouec()         <unresolved function>
+
+  Called from ( fou.prg      )   1 - function cabe2()
+              ( foue.prg     )   1 - function lfoue()
+
+fouef()         <unresolved function>
+
+  Called from ( fou.prg      )   1 - function cabe2()
+              ( foue.prg     )   1 - function lfoue()
+
+foug()          <unresolved function>
+
+  Called from ( fou.prg      )   1 - function cabe2()
+
+foug01()        in foug.prg
+
+  Called from ( foug.prg     )  42 - function lfoue()
+
+fox()           in fox.prg
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+foy()           <unresolved function>
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+foy2()          in foy2.prg
+
+  Called from ( fo1l.prg     )   1 - function critconv()
+              ( foy.prg      )  10 - function manretm()
+
+foy4()          <unresolved function>
+
+  Called from ( foy.prg      )   1 - function manretm()
+
+foy5()          in foy.prg
+
+  Called from ( foy.prg      )   1 - function manretm()
+
+foy6()          <unresolved function>
+
+  Called from ( foy.prg      )   1 - function manretm()
+
+foy8()          in foy8.prg
+
+  Called from ( foy.prg      )   1 - function manretm()
+
+foy9()          <unresolved function>
+
+  Called from ( foy.prg      )   1 - function manretm()
+
+foya()          <unresolved function>
+
+  Called from ( foy.prg      )   1 - function manretm()
+
+foyaa()         <unresolved function>
+
+  Called from ( foy9.prg     )   1 - function afoy9()
+
+foyb()          in foy.prg
+
+  Called from ( foy.prg      )   1 - function manretm()
+
+foyc()          in foy.prg
+
+  Called from ( foy.prg      )   1 - function manretm()
+
+foyd()          in disklib.prg
+
+  Called from ( foy.prg      )   1 - function manretm()
+
+fo_1()          <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+fo_for()        in fo_for.prg
+
+  Called from ( fo0.prg      )  20 - function fo0()
+              ( fo0g.prg     )   1 - function tfo0i()
+              ( fo1.prg      )   7 - function gfo0m()
+              ( fo1o.prg     )   1 - function deldbfntx()
+              ( fo1w.prg     )   1 - function gfo1o()
+              ( fo2.prg      )   1 - function checkbacen()
+              ( fo3.prg      )   2 - function tfo2()
+              ( fo3a.prg     )   1 - function fo3h()
+                                 1 - function gfo3a()
+              ( fo3b.prg     )   1 - function ifo3aa()
+              ( fo3c.prg     )   2 - function fo3c()
+              ( fo3e.prg     )   1 - function gcadcbo()
+              ( fo3f.prg     )   1 - function gfo3f()
+                                 1 - function tfo3e()
+              ( fo3g.prg     )   1 - function gfo3g()
+                                 1 - function ifo3fa()
+              ( fo5.prg      )   1 - function fo43zz()
+              ( fo7.prg      )   2 - function fo6gr()
+              ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7z.prg     )   1 - function fo7e()
+              ( foa.prg      )   1 - function foaa11()
+              ( foa8.prg     )   1 - function foa8b()
+              ( foal.prg     )   1 - function foaa8()
+              ( fof.prg      )   1 - function foe6()
+              ( fofb.prg     )   1 - function foff2()
+              ( foh.prg      )   1 - function fohe()
+                                 1 - function fohf()
+              ( folmenu.prg  )   1 - function mac()
+                                 6 - function menu6()
+                                 1 - function menuc()
+                                 5 - function menucc()
+              ( fou.prg      )   1 - function cabe2()
+              ( foy.prg      )   1 - function manretm()
+              ( foy2.prg     )   1 - function foy2()
+
+fo_rell()       in fo_rell.prg
+
+  Called from ( disklib.prg  )   1 - function agen()
+                                 1 - function notep()
+                                 1 - function tele()
+              ( fo0.prg      )   1 - function fo0()
+              ( fo0m.prg     )   1 - function fokg()
+              ( fog.prg      )   1 - function fogaa()
+              ( foy9.prg     )   1 - function lfoy9()
+              ( fo_for.prg   )   1 - function fo_for()
+
+fo_unid()       <unresolved function>
+
+  Called from ( fo5.prg      )   1 - function fo43zz()
+
+fpad()          in flib02.prg
+
+  Called from ( flib02.prg   )   9 - function padrao()
+
+freadline()     <unresolved function>
+
+  Called from ( foya.prg     )   1 - function memos()
+
+freevars()      <unresolved function>
+
+  Called from ( disk05.prg   )   1 - function atualiza()
+              ( flib03.prg   )   1 - function limpavars()
+
+fwritx()        in fohg2.prg
+
+  Called from ( fohg2.prg    )  94 - function foha04()
+                                17 - function g2r13()
+                                16 - function g2r14()
+                                27 - function g2r30()
+                                42 - function g2r32()
+
+g2r13()         in fohg2.prg
+
+  Called from ( fohg2.prg    )   1 - function foha04()
+
+g2r14()         in fohg2.prg
+
+  Called from ( fohg2.prg    )   1 - function foha04()
+
+g2r30()         in fohg2.prg
+
+  Called from ( fohg2.prg    )   2 - function foha04()
+
+g2r32()         in fohg2.prg
+
+  Called from ( fohg2.prg    )   2 - function foha04()
+
+gcadcbo()       in fo3c.prg
+
+  Called from ( fo3c.prg     )   2 - function fo3c()
+
+gdepto()        in fo5.prg
+
+  Called from ( fo5.prg      )   1 - function fo43zz()
+
+gfo0i()         in fo0.prg
+
+  Called from ( fo0.prg      )  18 - function fo0()
+
+gfo0m()         in fo0m.prg
+
+  Called from ( fo0m.prg     )   1 - function fokg()
+
+gfo1o()         in fo1o.prg
+
+  Called from ( fo1o.prg     )   1 - function deldbfntx()
+
+gfo2()          in fo2.prg
+
+  Called from ( fo2.prg      )   1 - function checkbacen()
+
+gfo3a()         in fo3a.prg
+
+  Called from ( fo3a.prg     )   1 - function fo3h()
+
+gfo3aa()        in fo3a.prg
+
+  Called from ( fo3a.prg     )   1 - function gfo3a()
+
+gfo3b()         in fo3b.prg
+
+  Called from ( fo3b.prg     )   1 - function ifo3aa()
+
+gfo3e()         in fo3e.prg
+
+  Called from ( fo3e.prg     )   1 - function gcadcbo()
+
+gfo3f()         in fo3f.prg
+
+  Called from ( fo3f.prg     )   1 - function tfo3e()
+
+gfo3fa()        in fo3f.prg
+
+  Called from ( fo3f.prg     )   1 - function gfo3f()
+
+gfo3g()         in fo3g.prg
+
+  Called from ( fo3g.prg     )   1 - function ifo3fa()
+
+gfo3ga()        in fo3g.prg
+
+  Called from ( fo3g.prg     )   1 - function gfo3g()
+
+gfo7z()         in fo7z.prg
+
+  Called from ( fo7z.prg     )   1 - function fo7e()
+
+gfoa8b()        in foa8.prg
+
+  Called from ( foa8.prg     )   1 - function foa8b()
+
+gfoal()         in foal.prg
+
+  Called from ( foal.prg     )   1 - function foaa8()
+              ( foam.prg     )   1 - function xfoal()
+
+gfoga()         in foga.prg
+
+  Called from ( foga.prg     )   2 - function cadfoga()
+
+gfohf()         in foh.prg
+
+  Called from ( foh.prg      )   1 - function fohf()
+
+gfoue()         in foue.prg
+
+  Called from ( foue.prg     )   1 - function foue()
+
+gfoy2()         in foy2.prg
+
+  Called from ( foy2.prg     )   1 - function foy2()
+
+gfoy9()         in foy9.prg
+
+  Called from ( foy9.prg     )   1 - function mudadbf()
+
+gfunc()         in fo4.prg
+
+  Called from ( fo43x.prg    )   1 - function fo43x()
+              ( fo43z.prg    )   1 - function fo43xrod()
+              ( fo7.prg      )   1 - function fo77()
+
+gmada()         in fo1w.prg
+
+  Called from ( fo1w.prg     )   1 - function gfo1o()
+
+graps()         in disk01.prg
+
+  Called from ( disk05.prg   )   1 - function atualiza()
+              ( flib02.prg   )   1 - function padrao()
+              ( fo6.prg      )   1 - function fo6gr()
+                                 1 - function idepto()
+              ( foif0.prg    )   1 - function foif0()
+              ( foif1.prg    )   1 - function foif0()
+              ( folproc.prg  )   1 - function fodzer()
+              ( fox.prg      )   1 - function fox()
+              ( fo_for.prg   )   1 - function fo_for()
+
+grapt()         in disk01.prg
+
+  Called from ( disk05.prg   )   1 - function atualiza()
+              ( flib02.prg   )   1 - function padrao()
+              ( fo6.prg      )   1 - function fo6gr()
+                                 1 - function idepto()
+              ( foif0.prg    )   1 - function foif0()
+              ( foif1.prg    )   1 - function foif0()
+              ( folproc.prg  )   1 - function fodzer()
+              ( fox.prg      )   1 - function fox()
+              ( fo_for.prg   )   1 - function fo_for()
+
+grava1()        in folproc.prg
+
+  Called from ( folproc.prg  )   2 - function grava2()
+
+grava2()        in folproc.prg
+
+  Called from ( foa1.prg     )   1 - function foa1()
+              ( foa2.prg     )   1 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foa9.prg     )   1 - function foa8c()
+              ( foab.prg     )   1 - function foaa8()
+              ( foao.prg     )   1 - function xfoal()
+              ( fod1b.prg    )   8 - function truncar()
+              ( fod2bas.prg  )  10 - function fod2()
+              ( fod2cre.prg  )   2 - function fod2()
+              ( fod2des.prg  )  18 - function fod2()
+              ( fod2enc.prg  )   1 - function fod2()
+              ( fod7.prg     )   1 - function fod5()
+              ( fod9.prg     )   7 - function fod5()
+              ( foy6.prg     )   1 - function limpar()
+
+grvpsl()        in fo42a.prg
+
+  Called from ( fo42a.prg    )   1 - function fo41c()
+              ( fo42b.prg    )   1 - function grvpsl()
+
+grvval()        <unresolved function>
+
+  Called from ( fohg2.prg    )  10 - function foha04()
+                                 6 - function g2r30()
+
+hb_alert()      in harbour.lib
+
+  Called from ( disklib.prg  )   1 - function mdt()
+
+hb_atokens()    in harbour.lib
+
+  Called from ( foya.prg     )   4 - function memos()
+              ( fo_vt.prg    )   1 - function vtatutk()
+
+hb_cwd()        in harbour.lib
+
+  Called from ( disklib.prg  )   4 - function pegfolpat()
+              ( fo1.prg      )   4 - function fo1p()
+                                 2 - function fo1vc()
+                                 2 - function gfo0m()
+              ( fo1l.prg     )   2 - function critconv()
+              ( fo1m.prg     )   2 - function critconv()
+              ( fo1x.prg     )   2 - function checkbacen()
+              ( fo41a.prg    )   1 - function fo41a()
+              ( foic1.prg    )   1 - function foic1()
+              ( foif0.prg    )   1 - function foif0()
+              ( fox.prg      )   1 - function fmanual()
+              ( foy.prg      )   2 - function foyc()
+              ( foy2.prg     )   1 - function indext()
+              ( foy8.prg     )   3 - function foy8()
+              ( fo_1.prg     )   3 - function gfo7z()
+
+hb_dispbox()    in harbour.lib
+
+  Called from ( disk01.prg   )   1 - function grapt()
+              ( disklib.prg  )   1 - function fim()
+                                 1 - function quadro()
+              ( flib02.prg   )   2 - function padrao()
+              ( flib05.prg   )   3 - function rfilord()
+                                 4 - function rfiltro()
+              ( flib09.prg   )   1 - function peg13()
+              ( flib11.prg   )   1 - function arqusar()
+              ( flib13.prg   )   1 - function listarue()
+              ( flib15.prg   )   5 - function telasay()
+              ( flib16.prg   )   5 - function editsay()
+              ( fo0.prg      )   1 - function fo0()
+              ( fo0m.prg     )   1 - function tfo0m()
+              ( fo1l.prg     )   1 - function critconv()
+              ( fo1o.prg     )   1 - function tfo1o()
+              ( fo1w.prg     )   1 - function tmada()
+              ( fo1x.prg     )   1 - function checkbacen()
+              ( fo2.prg      )   1 - function tfo2()
+              ( fo3a.prg     )   1 - function tfo3aa()
+              ( fo3b.prg     )   1 - function tfo3b()
+              ( fo3e.prg     )   1 - function tfo3e()
+              ( fo3f.prg     )   1 - function tfo3f()
+                                 1 - function tfo3fa()
+              ( fo3g.prg     )   1 - function tfo3g()
+                                 1 - function tfo3ga()
+              ( fo4.prg      )   1 - function fo41()
+                                 1 - function fo42()
+                                 1 - function fo43()
+                                 1 - function fotmes()
+                                 1 - function gfunc()
+                                 1 - function ifo3ga()
+              ( fo41a.prg    )   1 - function fo41a()
+              ( fo41b.prg    )   1 - function fo41a()
+              ( fo43d.prg    )   1 - function fo43dt()
+              ( fo5.prg      )   4 - function idepto()
+                                 1 - function tdepto()
+              ( fo6.prg      )   1 - function fo61()
+                                 1 - function fo6t()
+                                 1 - function fo6t2()
+                                 1 - function fo6t3()
+                                 1 - function fo6t5()
+              ( fo7.prg      )   1 - function fo6gr()
+              ( fo7a.prg     )   2 - function ifopto4e()
+              ( fo7w.prg     )   1 - function ifopto4e()
+              ( fo7z.prg     )   1 - function gfo7z()
+              ( foa.prg      )   1 - function foa()
+                                 1 - function foaa1()
+                                 1 - function foaa10()
+                                 1 - function foaa11()
+                                 1 - function foaa2()
+                                 1 - function foaa3()
+                                 1 - function foaa4()
+              ( foa1.prg     )   3 - function foa1()
+              ( foa2.prg     )   1 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foa4.prg     )   1 - function foa3()
+              ( foa6.prg     )   1 - function foa6()
+              ( foaa.prg     )   1 - function foa8c()
+              ( foaa8.prg    )   1 - function foaa8()
+              ( foal.prg     )   1 - function tfoal()
+              ( foat.prg     )   1 - function xfoal()
+              ( foax.prg     )   4 - function foax()
+              ( foc.prg      )   1 - function foax()
+                                 1 - function foc1()
+                                 1 - function foc2()
+              ( focc.prg     )   1 - function fochx()
+                                 1 - function focitau()
+              ( fod1.prg     )   1 - function truncar()
+              ( fod2.prg     )   2 - function fod2()
+              ( fod2enc.prg  )   1 - function fod2()
+              ( fod9.prg     )   1 - function fod5()
+              ( foe.prg      )   1 - function fodins()
+                                 1 - function foee()
+              ( foe22.prg    )   3 - function foe22()
+              ( foe23.prg    )   1 - function foe23()
+              ( foe24.prg    )   1 - function foe24()
+              ( foe2a.prg    )   2 - function foe2a()
+              ( foe6.prg     )   1 - function foe6()
+              ( fof.prg      )   1 - function foe6()
+                                 1 - function foff()
+                                 1 - function foff2()
+              ( fofb.prg     )   1 - function mesholt()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog.prg      )   1 - function cabhol()
+                                 1 - function fogaa()
+                                 1 - function fogbb()
+              ( foge.prg     )   1 - function horpadt()
+              ( foh.prg      )   1 - function foh1()
+                                 1 - function horpadl()
+                                 1 - function tfohe()
+                                 1 - function tfohf()
+              ( foi.prg      )   1 - function fohhs()
+                                 1 - function foii()
+                                 1 - function foiib()
+              ( foif0.prg    )   1 - function foif0()
+              ( folmenu.prg  )   4 - function main()
+                                 1 - function menu6()
+                                 1 - function menua()
+                                 1 - function menuc()
+                                 1 - function menucc()
+              ( foug.prg     )   1 - function lfoue()
+              ( fox.prg      )   1 - function fox()
+              ( foy.prg      )   1 - function manretm()
+              ( foy2.prg     )   1 - function tfoy2()
+              ( foy9.prg     )   1 - function memos()
+              ( foyaa.prg    )   1 - function memos()
+
+hb_filedelete() in harbour.lib
+
+  Called from ( foya.prg     )   1 - function memos()
+
+hb_fileexists() in harbour.lib
+
+  Called from ( disklib.prg  )   1 - function pegfolpat()
+              ( fo1.prg      )   1 - function fo1vc()
+              ( fohg2.prg    )   1 - function foha04()
+
+hb_fopen()      <unresolved function>
+
+  Called from ( fo_vt.prg    )   2 - function vtatutk()
+
+hb_freadline()  in xhb.lib
+
+  Called from ( fo_vt.prg    )   3 - function vtatutk()
+
+hb_idlestate()  in harbour.lib
+
+  Called from ( folha1.prg   )   2 - function main()
+
+hb_keyclear()   in harbour.lib
+
+  Called from ( foaa.prg     )   1 - function foa8c()
+              ( foga.prg     )   1 - function fog2()
+              ( foib.prg     )   1 - function foia()
+              ( folproc.prg  )   1 - function nshow1()
+              ( foyaa.prg    )   2 - function memos()
+
+hb_langselect() in harbour.lib
+
+  Called from ( folha1.prg   )   2 - function main()
+
+hb_memoread()   in harbour.lib
+
+  Called from ( fox.prg      )   1 - function fmanual()
+
+hb_scroll()     in harbour.lib
+
+  Called from ( disk01.prg   )   1 - function grapt()
+              ( flib02.prg   )   1 - function padrao()
+              ( flib15.prg   )   1 - function telasay()
+              ( fo4.prg      )   1 - function fotmes()
+              ( fo5.prg      )   4 - function idepto()
+              ( fofb.prg     )   1 - function mesholt()
+
+hb_sha256()     in harbour.lib
+
+  Called from ( folha1.prg   )   1 - function main()
+
+help()          <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+horpadg()       in foge.prg
+
+  Called from ( foge.prg     )   2 - function gfoga()
+
+horpadl()       in foge.prg
+
+  Called from ( foge.prg     )   1 - function gfoga()
+
+horpads()       in foge.prg
+
+  Called from ( foge.prg     )   1 - function gfoga()
+
+horpadt()       in foge.prg
+
+  Called from ( foge.prg     )   1 - function gfoga()
+
+hotinkey()      <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( foe23.prg    )   2 - function foe23()
+
+idepto()        in fo5.prg
+
+  Called from ( fo5.prg      )   1 - function fo43zz()
+
+ifo0n()         in fo0.prg
+
+  Called from ( fo0.prg      )   1 - function fo0()
+
+ifo3aa()        in fo3a.prg
+
+  Called from ( fo3a.prg     )   1 - function gfo3a()
+
+ifo3fa()        in fo3f.prg
+
+  Called from ( fo3f.prg     )   1 - function gfo3f()
+
+ifo3ga()        in fo3g.prg
+
+  Called from ( fo3g.prg     )   1 - function gfo3g()
+
+ifo6d()         in folmenu.prg
+
+  Called from ( folmenu.prg  )   2 - function menu6()
+
+ifoal()         in foal.prg
+
+  Called from ( foal.prg     )   1 - function foaa8()
+
+ifohe()         in foh.prg
+
+  Called from ( foh.prg      )   1 - function fohe()
+
+ifohf()         in foh.prg
+
+  Called from ( foh.prg      )   1 - function fohf()
+
+ifopto4e()      in fo7w.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+ifoy2()         in foy2.prg
+
+  Called from ( foy2.prg     )   1 - function foy2()
+
+igualvars()     in flib03.prg
+
+  Called from ( flib02.prg   )   1 - function fpad()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo6.prg      )   1 - function fo61()
+              ( foy9.prg     )   1 - function afoy9()
+
+imada()         in fo1w.prg
+
+  Called from ( fo1w.prg     )   1 - function gfo1o()
+
+imparq()        <unresolved function>
+
+  Called from ( fo7w.prg     )   1 - function fosfamreg()
+              ( focc.prg     )   1 - function fochx()
+                                 1 - function focitau()
+              ( fohg2.prg    )   1 - function foha04()
+              ( foi2b.prg    )   1 - function foi2b()
+              ( foid.prg     )   1 - function foid()
+
+impcab()        in fo_rell.prg
+
+  Called from ( fo_rell.prg  )   3 - function fo_rell()
+
+impchr()        <unresolved function>
+
+  Called from ( fo42d.prg    )   2 - function fo42k()
+              ( fo43x.prg    )   3 - function fo43xx()
+                                 2 - function fo43yy()
+              ( fo43z.prg    )   3 - function fo43zz()
+                                 2 - function fo43zzr()
+              ( fo6.prg      )   2 - function fo6l()
+              ( fo711.prg    )   2 - function fosfamreg()
+              ( fo7c.prg     )   2 - function fo7ccab()
+              ( fo7d.prg     )   2 - function fo7ccab()
+              ( fo7e.prg     )   2 - function fo7e()
+              ( fo7g.prg     )   1 - function fo7e()
+              ( foca1.prg    )   2 - function focax()
+              ( foca2.prg    )   2 - function foca2()
+              ( focc.prg     )   3 - function focbx()
+                                 3 - function foccx()
+              ( focd.prg     )   2 - function focdx()
+              ( focf.prg     )   2 - function focfx()
+              ( focg.prg     )   1 - function focfx()
+              ( foch.prg     )   2 - function focfx()
+              ( focj.prg     )   2 - function focjx()
+              ( fock.prg     )   1 - function focjx()
+              ( fofhol.prg   )   1 - function cabhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( fog7.prg     )   2 - function fog2()
+              ( foha.prg     )   1 - function foha01()
+              ( fohh.prg     )   1 - function fohhh()
+              ( foi2a.prg    )   3 - function foi2a()
+              ( foi2b.prg    )   2 - function foi2b()
+                                 1 - function foi2b01()
+              ( foia.prg     )   2 - function foia()
+              ( foic1a.prg   )   2 - function foic1()
+              ( foic1b.prg   )   2 - function foic1()
+              ( foid.prg     )   2 - function foid()
+                                 2 - function foid01()
+              ( foid1.prg    )   2 - function foid1()
+              ( foif1.prg    )   6 - function foif0()
+              ( fouc1.prg    )   1 - function cabe2()
+              ( fouc2.prg    )   2 - function cabe2()
+              ( fouec.prg    )   2 - function lfoue()
+              ( fouef.prg    )   1 - function lfoue()
+
+impcot()        in fo_rell.prg
+
+  Called from ( fo_rell.prg  )   2 - function fo_rell()
+
+impend()        <unresolved function>
+
+  Called from ( flib13.prg   )   1 - function listarue()
+              ( fo3.prg      )   1 - function fo3h()
+              ( fo6.prg      )   1 - function fo6l()
+              ( fo711.prg    )   1 - function fosfamreg()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( fo7g.prg     )   1 - function fo7e()
+              ( foca1.prg    )   1 - function foca1()
+              ( foca2.prg    )   1 - function foca2()
+              ( focb.prg     )   1 - function focb()
+              ( focc.prg     )   1 - function focc()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( focg.prg     )   1 - function focfx()
+              ( foch.prg     )   1 - function focfx()
+              ( focj.prg     )   1 - function focfx()
+              ( fock.prg     )   1 - function focjx()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( foha.prg     )   1 - function foha01()
+                                 1 - function foha02()
+                                 1 - function foha03()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fohi.prg     )   1 - function fohi()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi2a.prg    )   1 - function foi2a()
+              ( foi2b.prg    )   1 - function foi2b()
+              ( foia.prg     )   1 - function foia()
+              ( foic1a.prg   )   1 - function foic1()
+              ( foic1b.prg   )   1 - function foic1()
+              ( foid.prg     )   1 - function foid()
+              ( foid1.prg    )   1 - function foid1()
+              ( foif1.prg    )   1 - function foif0()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( fouec.prg    )   1 - function lfoue()
+              ( fouef.prg    )   1 - function lfoue()
+              ( foug.prg     )   1 - function lfoue()
+              ( fox.prg      )   1 - function fmanual()
+              ( fo_rell.prg  )   1 - function fo_rell()
+
+impfol()        <unresolved function>
+
+  Called from ( fo3.prg      )   1 - function fo3h()
+              ( fo42d.prg    )   1 - function fo42k()
+              ( fo6.prg      )   1 - function fo6l()
+              ( fo711.prg    )   1 - function fosfamreg()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( fo7g.prg     )   1 - function fo7e()
+              ( foca1.prg    )   1 - function foca1()
+              ( foca2.prg    )   1 - function foca2()
+              ( focb.prg     )   1 - function focb()
+              ( focc.prg     )   1 - function focc()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+                                 1 - function focfx()
+              ( focg.prg     )   1 - function focfx()
+              ( foch.prg     )   1 - function focfx()
+              ( focj.prg     )   1 - function focjx()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( foha.prg     )   1 - function foha01()
+                                 1 - function foha02()
+                                 1 - function foha03()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohd.prg     )   2 - function foha04()
+              ( fohh.prg     )   1 - function fohhrod()
+              ( fohi.prg     )   1 - function fohi()
+              ( foi2a.prg    )   1 - function foi2a()
+              ( foi2b.prg    )   1 - function foi2b()
+              ( foia.prg     )   1 - function foia()
+              ( foic1a.prg   )   1 - function foic1()
+              ( foic1b.prg   )   1 - function foic1()
+              ( foid1.prg    )   1 - function foid1()
+              ( fouc1.prg    )   1 - function cabe2()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( fouec.prg    )   1 - function lfoue()
+              ( fouef.prg    )   1 - function lfoue()
+              ( foug.prg     )   1 - function lfoue()
+              ( fox.prg      )   1 - function fmanual()
+              ( fo_rell.prg  )   1 - function fo_rell()
+                                 1 - function implin()
+
+imphp()         <unresolved function>
+
+  Called from ( fo4.prg      )   1 - function fo43()
+              ( fo42d.prg    )   1 - function grvpsl()
+              ( fo6.prg      )   1 - function fo6l()
+              ( fo7.prg      )   1 - function fo77()
+              ( foc.prg      )   1 - function foax()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog.prg      )   1 - function cabhol()
+              ( foh.prg      )   1 - function horpadl()
+              ( foi.prg      )   1 - function fohhs()
+              ( fou.prg      )   1 - function cabe2()
+              ( fox.prg      )   1 - function fmanual()
+
+implin()        in fo_rell.prg
+
+  Called from ( fo_rell.prg  )   1 - function impcab()
+                                 1 - function impcot()
+                                 1 - function improd()
+
+impressora()    <unresolved function>
+
+  Called from ( flib13.prg   )   1 - function listarue()
+              ( fo3.prg      )   1 - function fo3h()
+              ( fo6.prg      )   1 - function fo6l()
+              ( fo711.prg    )   1 - function fosfamreg()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   2 - function fo7e()
+              ( fo7g.prg     )   2 - function fo7e()
+              ( foca1.prg    )   1 - function foca1()
+              ( foca2.prg    )   1 - function foca2()
+              ( focb.prg     )   1 - function focb()
+              ( focc.prg     )   1 - function focc()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( focg.prg     )   1 - function focfx()
+              ( foch.prg     )   1 - function focfx()
+              ( focj.prg     )   1 - function focfx()
+              ( fock.prg     )   1 - function focjx()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( foha.prg     )   1 - function foha01()
+              ( fohc.prg     )   2 - function foha04()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fohi.prg     )   1 - function fohi()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi2a.prg    )   1 - function foi2a()
+              ( foi2b.prg    )   1 - function foi2b()
+                                 1 - function foi2b02()
+              ( foia.prg     )   1 - function foia()
+              ( foic1a.prg   )   1 - function foic1()
+              ( foic1b.prg   )   1 - function foic1()
+              ( foid.prg     )   3 - function foid()
+                                 1 - function foid06()
+              ( foid1.prg    )   1 - function foid1()
+              ( foif1.prg    )   1 - function foif0()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( foug.prg     )   1 - function lfoue()
+              ( fox.prg      )   1 - function fmanual()
+              ( fo_rell.prg  )   3 - function fo_rell()
+
+improd()        in fo_rell.prg
+
+  Called from ( fo_rell.prg  )   3 - function fo_rell()
+
+impstr()        <unresolved function>
+
+  Called from ( fo42d.prg    )   2 - function fo42k()
+              ( fo43x.prg    )   2 - function fo43xx()
+                                 2 - function fo43yy()
+              ( fo43z.prg    )   1 - function fo43zz()
+                                 1 - function fo43zzr()
+              ( fo6.prg      )   2 - function fo6l()
+              ( fo711.prg    )   2 - function fosfamreg()
+              ( fo7c.prg     )   2 - function fo7ccab()
+              ( fo7d.prg     )   2 - function fo7ccab()
+              ( fo7e.prg     )   2 - function fo7e()
+              ( fo7g.prg     )   2 - function fo7e()
+              ( foca1.prg    )   2 - function focax()
+              ( foca2.prg    )   2 - function foca2()
+              ( focc.prg     )   2 - function focbx()
+                                 2 - function foccx()
+              ( focd.prg     )   2 - function focdx()
+              ( focf.prg     )   2 - function focfx()
+              ( focg.prg     )   1 - function focfx()
+              ( foch.prg     )   2 - function focfx()
+              ( focj.prg     )   2 - function focjx()
+              ( fock.prg     )   2 - function focjx()
+              ( fofhol.prg   )   4 - function fofx()
+              ( fog2.prg     )   3 - function fog2()
+              ( fog7.prg     )   2 - function fog2()
+              ( foha.prg     )   2 - function foha01()
+                                13 - function foha02()
+              ( fohd.prg     )   2 - function foha04()
+              ( fohh.prg     )  14 - function fohhh()
+              ( fohi.prg     )  11 - function fohi()
+              ( foi2a.prg    )   2 - function foi2a()
+              ( foi2b.prg    )   2 - function foi2b()
+              ( foia.prg     )   8 - function foia()
+              ( foic1a.prg   )   2 - function foic1()
+              ( foic1b.prg   )   1 - function foic1()
+              ( foid.prg     )   2 - function foid()
+                                 2 - function foid01()
+              ( foid1.prg    )   2 - function foid1()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( fouef.prg    )   2 - function lfoue()
+              ( fox.prg      )   1 - function fmanual()
+
+incide()        in folproc.prg
+
+  Called from ( fodins.prg   )   1 - function fodins()
+
+indext()        in foy2.prg
+
+  Called from ( foy2.prg     )   3 - function foy2()
+
+infor()         <unresolved function>
+
+  Called from ( fo1x.prg     )   1 - function checkbacen()
+              ( fod7.prg     )   1 - function fod5()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( foif0.prg    )   1 - function foif0()
+              ( folha1.prg   )   6 - function main()
+              ( foy2.prg     )   1 - function foy2()
+                                 1 - function indext()
+              ( fo_vt.prg    )   2 - function vtatutk()
+
+initvars()      <unresolved function>
+
+  Called from ( disk05.prg   )   2 - function atualiza()
+              ( flib03.prg   )   1 - function criarvars()
+              ( fo7a.prg     )   1 - function ifopto4e()
+              ( foa8.prg     )   1 - function foa7()
+              ( fod2.prg     )   1 - function fod2()
+              ( fod2bas.prg  )   1 - function fod2()
+              ( foif0.prg    )   1 - function foif0()
+              ( foug.prg     )   1 - function lfoue()
+
+layr()          in fo_rell.prg
+
+  Called from ( fo_rell.prg  )   3 - function fo_rell()
+
+lermouse()      <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function padrao()
+
+lfoue()         in foue.prg
+
+  Called from ( foue.prg     )   1 - function foue()
+
+lfoy9()         in foy9.prg
+
+  Called from ( foy9.prg     )   1 - function mudadbf()
+
+limpar()        in foy4.prg
+
+  Called from ( foy4.prg     )  10 - function pegcamini()
+
+limpavars()     in flib03.prg
+
+  Called from ( flib02.prg   )   2 - function padrao()
+              ( fo6.prg      )   1 - function idepto()
+              ( fo7a.prg     )   1 - function ifopto4e()
+
+listarue()      in flib13.prg
+
+  Called from ( fo42d.prg    )   1 - function grvpsl()
+              ( fo43x.prg    )   2 - function fo43x()
+              ( fo43z.prg    )   1 - function fo43xrod()
+
+logotipo()      in disklib.prg
+
+  Called from ( folha1.prg   )   2 - function main()
+
+mac()           in folmenu.prg
+
+  Called from ( folmenu.prg  )   2 - function menu7()
+
+makedbf()       <unresolved function>
+
+  Called from ( fo1.prg      )   4 - function fo1vc()
+                                 3 - function gfo0m()
+              ( fo1m.prg     )  33 - function critconv()
+              ( foy.prg      )   2 - function foyc()
+              ( foy8.prg     )   1 - function mudadbf()
+              ( fo_1.prg     )  25 - function gfo7z()
+
+makevar()       <unresolved function>
+
+  Called from ( flib05.prg   )   1 - function rfiltro()
+
+make_empty()    <unresolved function>
+
+  Called from ( flib06.prg   )   1 - function obter()
+
+manualt()       in fox.prg
+
+  Called from ( fox.prg      )   1 - function fmanual()
+                                 1 - function fox()
+
+md()            in disklib.prg
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( fo0j.prg     )   1 - function fo0gk01()
+              ( fo4.prg      )   1 - function fo41()
+                                 1 - function fo42()
+                                 1 - function fo43()
+                                 1 - function ifo3ga()
+              ( fo43d.prg    )   1 - function fo42e()
+              ( fo6.prg      )   2 - function fo6gr()
+                                 2 - function idepto()
+              ( foaa.prg     )   2 - function cadseq()
+              ( fod.prg      )   1 - function pegvsem()
+              ( foga.prg     )   1 - function cadfoga()
+              ( foge.prg     )   1 - function gfoga()
+              ( fou.prg      )   1 - function cabe2()
+              ( fox.prg      )   1 - function fox()
+              ( foyaa.prg    )   2 - function foredit()
+
+mdg()           <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function delerec()
+                                 1 - function pegfolmes()
+              ( flib02.prg   )   3 - function padrao()
+                                 2 - function teclaf11()
+              ( flib03.prg   )   1 - function apagareg()
+              ( fo1.prg      )   2 - function fo1p()
+                                 2 - function fo1sa()
+                                 1 - function fo1sc()
+                                 2 - function fo1va()
+                                 1 - function fo1vc()
+              ( fo1j.prg     )   2 - function critconv()
+              ( fo1k.prg     )   2 - function critconv()
+              ( fo1l.prg     )   4 - function critconv()
+              ( fo1m.prg     )   2 - function critconv()
+              ( fo1n.prg     )   2 - function critconv()
+              ( fo1x.prg     )   6 - function checkbacen()
+              ( fo3a.prg     )   1 - function gfo3a()
+              ( fo3f.prg     )   1 - function gfo3f()
+              ( fo3g.prg     )   1 - function gfo3g()
+              ( fo4.prg      )   1 - function fotmes()
+              ( fo41a.prg    )   5 - function fo41a()
+              ( fo41b.prg    )   2 - function fo41a()
+              ( fo41c.prg    )   1 - function fo41c()
+              ( fo42e.prg    )   1 - function fo42e()
+              ( fo43x.prg    )   2 - function fo43x()
+              ( fo43z.prg    )   1 - function fo43xrod()
+              ( fo6.prg      )   1 - function idepto()
+              ( fo7.prg      )   2 - function fo6gr()
+                                 1 - function fo713()
+              ( fo7a.prg     )   2 - function ifopto4e()
+              ( fo7c.prg     )   2 - function fosfamqtde()
+              ( fo7g.prg     )   1 - function fo7e()
+              ( fo7w.prg     )   1 - function fosfamreg()
+                                 1 - function ifopto4e()
+                                 3 - function valsitu()
+              ( foa1.prg     )   1 - function foa1()
+              ( foa2.prg     )   1 - function foa1()
+              ( foa7.prg     )   1 - function foa7()
+              ( foa8.prg     )   3 - function foa7()
+              ( foa9.prg     )   1 - function foa8c()
+              ( foax.prg     )   4 - function foax()
+              ( focc.prg     )   1 - function focc()
+                                 2 - function fochx()
+                                 2 - function focitau()
+              ( fod1.prg     )   3 - function truncar()
+              ( fod1b.prg    )   2 - function truncar()
+              ( fod2.prg     )   5 - function fod2()
+              ( fod7.prg     )   1 - function fod5()
+              ( fod9.prg     )   2 - function fod5()
+              ( foe22.prg    )   1 - function foe22()
+              ( fog2.prg     )   1 - function fog2()
+              ( fog6.prg     )   2 - function fog2()
+              ( foha.prg     )   4 - function foha()
+              ( fohc.prg     )   3 - function foha04()
+              ( fohg2.prg    )   2 - function foha04()
+              ( fohi.prg     )   1 - function fohi()
+              ( foi.prg      )   1 - function foii()
+                                 1 - function foiib()
+              ( foi20.prg    )   2 - function foi20()
+              ( foi2b.prg    )   3 - function foi2b()
+              ( foic0.prg    )   1 - function foic0()
+              ( foic1.prg    )   2 - function foic1()
+              ( foid.prg     )   3 - function foid()
+              ( foid0.prg    )   1 - function foid0()
+              ( foif0.prg    )   1 - function foif0()
+              ( foif1.prg    )   1 - function foif0()
+              ( folha1.prg   )   2 - function main()
+              ( fouc1.prg    )   1 - function cabe2()
+              ( fouc2.prg    )   2 - function cabe2()
+              ( fouc3.prg    )   1 - function fouc2a()
+              ( fouef.prg    )   2 - function lfoue()
+              ( foy.prg      )   1 - function foyb()
+                                 1 - function foyc()
+                                10 - function manretm()
+              ( foy2.prg     )   1 - function foy2()
+              ( foy4.prg     )   7 - function pegcamini()
+              ( foy6.prg     )   1 - function limpar()
+              ( foy8.prg     )   1 - function foy8()
+              ( foyaa.prg    )   1 - function foredit()
+              ( fo_1.prg     )   1 - function gfo7z()
+
+mdl()           in folproc.prg
+
+  Called from ( fo42d.prg    )   1 - function grvpsl()
+              ( fo43x.prg    )   1 - function fo43x()
+              ( fo43z.prg    )   1 - function fo43xrod()
+              ( fo711.prg    )   1 - function fosfamreg()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( fo7g.prg     )   1 - function fo7e()
+              ( foca1.prg    )   1 - function foca1()
+              ( foca2.prg    )   1 - function foca2()
+              ( focb.prg     )   1 - function focb()
+              ( focc.prg     )   3 - function focc()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( focg.prg     )   1 - function focfx()
+              ( foch.prg     )   1 - function focfx()
+              ( focj.prg     )   1 - function focfx()
+              ( fock.prg     )   1 - function focjx()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( fog7.prg     )   1 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( foha.prg     )   1 - function foha()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fohi.prg     )   1 - function fohi()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi2a.prg    )   1 - function foi2a()
+              ( foi2b.prg    )   1 - function foi2b()
+              ( foia.prg     )   1 - function foia()
+              ( foic1.prg    )   1 - function foic1()
+              ( foid.prg     )   1 - function foid()
+              ( foid1.prg    )   1 - function foid1()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( fouec.prg    )   1 - function lfoue()
+              ( fouef.prg    )   1 - function lfoue()
+
+mds()           <unresolved function>
+
+  Called from ( disk01.prg   )   1 - function grapt()
+              ( disklib.prg  )   1 - function mudadata()
+                                 1 - function pegfolsen()
+              ( flib02.prg   )   1 - function escolhexi()
+                                 8 - function padrao()
+                                 1 - function pegchave()
+              ( flib05.prg   )   1 - function dfiltro()
+                                 1 - function rfiltro()
+              ( flib11.prg   )   1 - function arqusar()
+                                 1 - function pegsemana()
+              ( flib12.prg   )   2 - function verseha()
+              ( flib14.prg   )   1 - function pegrelcta()
+              ( fo0.prg      )   1 - function ifo0n()
+              ( fo1.prg      )   2 - function gfo0m()
+              ( fo1j.prg     )   1 - function critconv()
+              ( fo1k.prg     )   1 - function critconv()
+              ( fo1l.prg     )   1 - function critconv()
+              ( fo1n.prg     )   1 - function deldbfntx()
+              ( fo1w.prg     )   1 - function imada()
+              ( fo1x.prg     )   6 - function checkbacen()
+              ( fo3a.prg     )   1 - function ifo3aa()
+              ( fo3c.prg     )   2 - function fo3c()
+              ( fo3f.prg     )   1 - function ifo3fa()
+              ( fo3g.prg     )   1 - function ifo3ga()
+              ( fo41a.prg    )   4 - function fo41a()
+              ( fo42a.prg    )   3 - function fo41c()
+              ( fo42b.prg    )   1 - function grvpsl()
+              ( fo42c.prg    )   1 - function grvpsl()
+              ( fo42d.prg    )   1 - function grvpsl()
+              ( fo42e.prg    )   5 - function fo42e()
+              ( fo43d.prg    )   1 - function fo42e()
+              ( fo43z.prg    )   1 - function fo43xrod()
+              ( fo6.prg      )   3 - function fo61()
+                                 9 - function fo6gr()
+                                 2 - function fo6l()
+                                14 - function idepto()
+              ( fo7.prg      )   1 - function fosfamchv()
+              ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7alib.prg  )   1 - function checkadm()
+                                 2 - function checkfgts()
+              ( fo7b.prg     )   1 - function fosfamqtde()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( foa1.prg     )   1 - function foa1()
+              ( foa2.prg     )   2 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foa7.prg     )   2 - function foa7()
+              ( foa8.prg     )   1 - function foa8a()
+                                 1 - function foa8c()
+                                 1 - function gfoa8b()
+              ( foa9.prg     )   1 - function foa8c()
+              ( foab.prg     )   1 - function foaa8()
+              ( foam.prg     )   1 - function xfoal()
+              ( foax.prg     )   2 - function foax()
+              ( foca1.prg    )   1 - function foca1()
+              ( foca2.prg    )   2 - function foca2()
+              ( focb.prg     )   1 - function focb()
+              ( focc.prg     )   5 - function focc()
+              ( focf.prg     )   1 - function focf()
+              ( focj.prg     )   2 - function focfx()
+              ( fod.prg      )   1 - function valarre()
+              ( fod1.prg     )   3 - function truncar()
+              ( fod1b.prg    )   3 - function truncar()
+              ( fod2.prg     )   9 - function fod2()
+              ( fod2bas.prg  )  11 - function fod2()
+              ( fod2cre.prg  )   3 - function fod2()
+              ( fod2des.prg  )   7 - function fod2()
+              ( fod5.prg     )   5 - function fod5()
+              ( fod7.prg     )   1 - function fod5()
+              ( fod9.prg     )   2 - function fod5()
+              ( fodins.prg   )   1 - function fodins()
+              ( foe24.prg    )   1 - function foe24()
+              ( foe2a.prg    )   1 - function foe2a()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   2 - function fog2()
+              ( fog6.prg     )   2 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( foga.prg     )   1 - function cadfoga()
+              ( fogb.prg     )   1 - function gfoga()
+              ( foh.prg      )   1 - function ifohe()
+              ( foha.prg     )   3 - function foha()
+              ( fohc.prg     )   3 - function foha04()
+              ( fohg2.prg    )   1 - function foha04()
+              ( fohi.prg     )   2 - function fohi()
+              ( fohs.prg     )   2 - function fohi()
+              ( foi20.prg    )   1 - function foi20()
+              ( foi2a.prg    )   1 - function foi2a()
+              ( foi2b.prg    )   4 - function foi2b()
+                                 1 - function foi2b02()
+              ( foia.prg     )   2 - function foia()
+              ( foic0.prg    )   3 - function foic0()
+              ( foic1.prg    )   3 - function foic1()
+              ( foid.prg     )   3 - function foid()
+                                 1 - function foid06()
+              ( foif0.prg    )   1 - function foif0()
+              ( foif1.prg    )   2 - function foif0()
+              ( folha1.prg   )   3 - function main()
+              ( folmenu.prg  )   1 - function ifo6d()
+              ( fouc1.prg    )   1 - function cabe2()
+              ( fouef.prg    )   1 - function lfoue()
+              ( foug.prg     )   1 - function lfoue()
+              ( fox.prg      )   1 - function fmanual()
+                                 4 - function fox()
+              ( foy.prg      )   1 - function foyc()
+              ( foy2.prg     )   1 - function ifoy2()
+              ( foy4.prg     )   7 - function limpar()
+              ( foya.prg     )   3 - function memos()
+              ( foyaa.prg    )   1 - function memos()
+              ( fo_1.prg     )   2 - function gfo7z()
+              ( fo_for.prg   )   1 - function fo_for()
+              ( fo_rell.prg  )   2 - function fo_rell()
+
+mdt()           in disklib.prg
+
+  Called from ( disk06.prg   )   3 - function valbco()
+              ( disklib.prg  )   1 - function nextrec()
+                                 1 - function prevrec()
+              ( flib02.prg   )   1 - function fpad()
+                                 1 - function padrao()
+              ( flib03.prg   )   2 - function igualvars()
+                                 1 - function novoreg()
+              ( flib13.prg   )   1 - function listarue()
+              ( fo1k.prg     )   1 - function critconv()
+              ( fo41b.prg    )   1 - function fo41a()
+              ( fo42b.prg    )   1 - function grvpsl()
+              ( fo43d.prg    )   1 - function fo42e()
+              ( fo6.prg      )   1 - function fo61()
+                                 5 - function fo6gr()
+                                 1 - function idepto()
+              ( fo7b.prg     )   1 - function fosfamqtde()
+              ( foa1.prg     )   1 - function foa1()
+              ( foa7.prg     )   1 - function foa7()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( focj.prg     )   1 - function focfx()
+              ( foe22.prg    )   1 - function foe22()
+              ( foe23.prg    )   1 - function foe23()
+              ( fog6.prg     )   1 - function fog2()
+              ( foga.prg     )   1 - function cadfoga()
+              ( foge.prg     )   1 - function horpadl()
+              ( foha.prg     )   1 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohd.prg     )   2 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fohi.prg     )   3 - function fohi()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi.prg      )   2 - function foii()
+              ( foi20.prg    )   1 - function foi20()
+              ( fouc1.prg    )   1 - function cabe2()
+              ( fouef.prg    )   2 - function lfoue()
+              ( foy8.prg     )   2 - function foy8()
+                                 1 - function mudadbf()
+              ( fo_rell.prg  )   1 - function fo_rell()
+
+memox()         in fo_rell.prg
+
+  Called from ( fo_rell.prg  )  12 - function fo_rell()
+
+menu6()         in folmenu.prg
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+menu7()         in folmenu.prg
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+menua()         in folmenu.prg
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+menuc()         in folmenu.prg
+
+  Called from ( folmenu.prg  )   1 - function main()
+
+menucc()        in folmenu.prg
+
+  Called from ( folmenu.prg  )   1 - function menuc()
+
+mesholg()       in fofb.prg
+
+  Called from ( fofb.prg     )   1 - function foff2()
+
+mesholt()       in fofb.prg
+
+  Called from ( fofb.prg     )   1 - function foff2()
+
+mmes()          <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function pegfolmes()
+                                 1 - function salhm()
+              ( fo4.prg      )   2 - function fotmes()
+              ( fo41a.prg    )   2 - function fo41a()
+              ( fo41b.prg    )   3 - function fo41a()
+              ( fo41c.prg    )   2 - function fo41c()
+              ( fo42a.prg    )   1 - function fo41c()
+              ( fo43x.prg    )   2 - function fo43xx()
+                                 1 - function fo43yy()
+              ( fo43z.prg    )   1 - function fo43zz()
+                                 1 - function fo43zzr()
+              ( focc.prg     )   1 - function focix()
+              ( fog2.prg     )   1 - function fog2()
+              ( foif0.prg    )   1 - function foif0()
+              ( foif1.prg    )   1 - function foif0()
+              ( folha1.prg   )   1 - function main()
+              ( folmenu.prg  )   1 - function main()
+              ( folproc.prg  )   1 - function salmes()
+              ( fo_rell.prg  )   1 - function fo_rell()
+
+mudadata()      in disklib.prg
+
+  Called from ( fod2.prg     )   1 - function fod2()
+              ( folha1.prg   )   2 - function main()
+
+mudadbf()       in foy8.prg
+
+  Called from ( foy8.prg     )   2 - function foy8()
+
+mvinfoconftela( <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+netgrvcam()     <unresolved function>
+
+  Called from ( fo1x.prg     )   4 - function checkbacen()
+              ( fo42e.prg    )   7 - function fo42e()
+              ( fo5.prg      )   3 - function fo43zz()
+              ( foic1.prg    )   7 - function foic1()
+              ( foy4.prg     )   1 - function limpar()
+
+netpack()       <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( fo5.prg      )   1 - function fo43zz()
+              ( fo6.prg      )   1 - function idepto()
+              ( fo7b.prg     )   1 - function fosfamqtde()
+              ( foaa.prg     )   1 - function foa8c()
+              ( foge.prg     )   1 - function gfoga()
+              ( foic0.prg    )   1 - function foic0()
+              ( foy4.prg     )   1 - function limpar()
+              ( foyaa.prg    )   1 - function memos()
+
+netrecapp()     <unresolved function>
+
+  Called from ( disk05.prg   )   1 - function atualiza()
+              ( disklib.prg  )   1 - function salhm()
+              ( flib03.prg   )   1 - function novoreg()
+              ( fo1m.prg     )   2 - function critconv()
+              ( fo42a.prg    )   1 - function grvpsl()
+              ( fo5.prg      )   1 - function idepto()
+              ( fo6.prg      )   1 - function fo61()
+              ( fo7.prg      )   1 - function fo713a()
+              ( fo7a.prg     )   3 - function ifopto4e()
+              ( foa.prg      )   1 - function foarpls()
+              ( foa5.prg     )   1 - function varedit()
+              ( foa6.prg     )   1 - function foa602()
+              ( foa7.prg     )   1 - function foa7()
+              ( foa8.prg     )   2 - function foa7()
+                                 1 - function foa8c()
+              ( foaa.prg     )   1 - function cadseq()
+              ( foaa8.prg    )   1 - function foaa8()
+              ( foam.prg     )   1 - function xfoal()
+              ( fod2.prg     )   1 - function fod2()
+              ( fod5.prg     )   1 - function fod5()
+              ( fog6.prg     )   1 - function fog2()
+              ( foga.prg     )   1 - function cadfoga()
+              ( fogb.prg     )   1 - function gfoga()
+              ( foge.prg     )   1 - function gfoga()
+              ( foha.prg     )   1 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+              ( foi20.prg    )   1 - function foi20()
+              ( foic0.prg    )   1 - function foic0()
+              ( foid0.prg    )   1 - function foid0()
+              ( foif0.prg    )   1 - function foif0()
+              ( folproc.prg  )   1 - function grava2()
+                                 1 - function nshow1()
+              ( foy9.prg     )   1 - function memos()
+              ( foya.prg     )   2 - function memos()
+              ( foyaa.prg    )   1 - function foredit()
+              ( fo_vt.prg    )   2 - function vtatutk()
+
+netrecdel()     <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function delerec()
+              ( flib02.prg   )   1 - function padrao()
+              ( flib03.prg   )   1 - function apagareg()
+              ( foax.prg     )   2 - function foax()
+              ( fod2.prg     )   1 - function fod2()
+              ( foic0.prg    )   1 - function foic0()
+              ( folproc.prg  )   2 - function fodzer()
+              ( foy4.prg     )   5 - function limpar()
+              ( foyaa.prg    )   1 - function foredit()
+
+netreclock()    in xhb.lib
+
+  Called from ( disk05.prg   )   5 - function atualiza()
+              ( disklib.prg  )   1 - function foyd()
+              ( flib02.prg   )   1 - function padrao()
+              ( flib03.prg   )   1 - function reporvars()
+              ( fo0j.prg     )   1 - function fo0gk01()
+                                 1 - function fokg()
+              ( fo41a.prg    )   1 - function fo41a()
+              ( fo41b.prg    )   1 - function fo41a()
+              ( fo41c.prg    )   1 - function fo41c()
+              ( fo42b.prg    )   1 - function grvpsl()
+              ( fo43d.prg    )   1 - function fo43dg()
+              ( fo6.prg      )   1 - function fo61()
+              ( fo7.prg      )   1 - function fo713()
+                                 1 - function fo713a()
+              ( fo7a.prg     )   3 - function ifopto4e()
+              ( fo7alib.prg  )   1 - function fosfamqtde()
+              ( foa.prg      )   1 - function foarpls()
+              ( foa4.prg     )   1 - function varedit()
+              ( foa5.prg     )   1 - function varedit()
+              ( foa6.prg     )   1 - function foa602()
+              ( foa7.prg     )   1 - function foa7()
+              ( foa8.prg     )   1 - function foa7()
+                                 1 - function foa8a()
+                                 1 - function foa8c()
+              ( foaa.prg     )   1 - function cadseq()
+              ( foaa8.prg    )   1 - function foaa8()
+              ( fod2.prg     )   2 - function fod2()
+              ( fod2bas.prg  )   1 - function fod2()
+              ( fod2des.prg  )   1 - function fod2()
+              ( fod5.prg     )   2 - function fod5()
+              ( fod7.prg     )   1 - function fod5()
+              ( fodins.prg   )   1 - function fodins()
+              ( fog6.prg     )   2 - function fog2()
+              ( foga.prg     )   1 - function cadfoga()
+              ( foge.prg     )   1 - function horpadg()
+              ( foha.prg     )   1 - function foha()
+              ( fohc.prg     )   3 - function foha04()
+              ( foi20.prg    )   1 - function foi20()
+              ( foic0.prg    )   2 - function foic0()
+              ( foid0.prg    )   1 - function foid0()
+              ( foif0.prg    )   1 - function foif0()
+              ( folproc.prg  )   1 - function grava2()
+              ( foy9.prg     )   1 - function memos()
+              ( foyaa.prg    )   1 - function foredit()
+                                 1 - function memos()
+              ( fo_vt.prg    )   2 - function vtatutk()
+
+netrecunlcom()  <unresolved function>
+
+  Called from ( flib03.prg   )   1 - function novoreg()
+
+netregcount()   <unresolved function>
+
+  Called from ( fod2.prg     )   1 - function fod2()
+
+netregosok()    <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+netuse()        <unresolved function>
+
+  Called from ( disk05.prg   )   2 - function atualiza()
+              ( disklib.prg  )   1 - function foyd()
+                                 1 - function pegvaltab()
+                                 1 - function salhm()
+              ( flib02.prg   )   1 - function escolhexi()
+                                 1 - function padrao()
+              ( flib03.prg   )   1 - function apagareg()
+                                 1 - function criarvars()
+                                 1 - function igualvars()
+                                 1 - function limpavars()
+                                 1 - function novoreg()
+                                 1 - function reporvars()
+                                 1 - function zeravars()
+              ( flib05.prg   )   2 - function rfilord()
+              ( flib06.prg   )   1 - function obter()
+              ( flib07.prg   )   1 - function checktab()
+              ( flib11.prg   )   3 - function arqcta()
+                                 2 - function arqpes()
+                                 8 - function arqusar()
+              ( flib12.prg   )   1 - function verseha()
+              ( flib13.prg   )   1 - function listarue()
+              ( flib14.prg   )   1 - function pegrelcta()
+              ( flib15.prg   )   1 - function telapeg()
+              ( flib16.prg   )   1 - function editpeg()
+              ( flib17.prg   )   1 - function ultimoreg()
+              ( fo0j.prg     )   1 - function fo0gk01()
+              ( fo1m.prg     )   2 - function critconv()
+              ( fo1x.prg     )   2 - function checkbacen()
+              ( fo3.prg      )   1 - function fo3h()
+              ( fo41a.prg    )   2 - function fo41a()
+              ( fo41b.prg    )   1 - function fo41a()
+              ( fo41c.prg    )   2 - function fo41c()
+              ( fo42a.prg    )   3 - function fo41c()
+              ( fo42b.prg    )   3 - function grvpsl()
+              ( fo42c.prg    )   1 - function grvpsl()
+              ( fo42d.prg    )   2 - function grvpsl()
+              ( fo42e.prg    )   1 - function fo42e()
+              ( fo43d.prg    )   1 - function fo42e()
+              ( fo43x.prg    )   1 - function fo43x()
+              ( fo43z.prg    )   2 - function fo43xrod()
+              ( fo5.prg      )   1 - function fo43zz()
+                                 1 - function idepto()
+              ( fo6.prg      )   2 - function fo61()
+                                 1 - function fo6gr()
+                                 1 - function fo6l()
+                                 1 - function idepto()
+              ( fo7.prg      )   3 - function fo713()
+              ( fo711.prg    )   2 - function fosfamreg()
+              ( fo7a.prg     )   3 - function ifopto4e()
+              ( fo7alib.prg  )   1 - function fosfamqtde()
+              ( fo7b.prg     )   1 - function fosfamqtde()
+              ( fo7c.prg     )   6 - function fosfamqtde()
+              ( fo7d.prg     )   2 - function fo7ccab()
+              ( fo7e.prg     )   3 - function fo7e()
+              ( fo7f.prg     )   1 - function fo7e()
+              ( fo7g.prg     )   2 - function fo7e()
+              ( fo7w.prg     )   1 - function fosfamreg()
+              ( foa.prg      )   2 - function foarpls()
+              ( foa1.prg     )   2 - function foa1()
+              ( foa2.prg     )   2 - function foa1()
+              ( foa3.prg     )   2 - function foa3()
+              ( foa4.prg     )   1 - function foa3()
+              ( foa5.prg     )   4 - function varedit()
+              ( foa8.prg     )   6 - function foa7()
+                                 1 - function foa8a()
+                                 2 - function foa8c()
+              ( foa9.prg     )   3 - function foa8c()
+              ( foaa.prg     )   1 - function foa8c()
+              ( foaa8.prg    )   3 - function foaa8()
+              ( foab.prg     )   3 - function foaa8()
+              ( foal.prg     )   1 - function gfoal()
+                                 1 - function xfoal()
+              ( foam.prg     )   2 - function xfoal()
+              ( foao.prg     )   4 - function xfoal()
+              ( foca1.prg    )   3 - function foca1()
+              ( focc.prg     )   1 - function focc()
+                                 1 - function focitau()
+              ( focd.prg     )   2 - function focd()
+              ( focf.prg     )   2 - function focf()
+              ( focg.prg     )   2 - function focfx()
+              ( foch.prg     )   1 - function focfx()
+              ( focj.prg     )   2 - function focfx()
+              ( fod.prg      )   1 - function tabirrf()
+              ( fod1.prg     )   1 - function truncar()
+              ( fod1b.prg    )   3 - function truncar()
+              ( fod2.prg     )   5 - function fod2()
+              ( fod2bas.prg  )   5 - function fod2()
+              ( fod2cre.prg  )   4 - function fod2()
+              ( fod2des.prg  )   6 - function fod2()
+              ( fod2enc.prg  )   4 - function fod2()
+              ( fod5.prg     )   4 - function fod5()
+              ( fod7.prg     )   4 - function fod5()
+              ( fod9.prg     )   3 - function fod5()
+              ( fodins.prg   )   6 - function fodins()
+              ( foe21.prg    )   2 - function foe21()
+              ( foe2a.prg    )   1 - function foe2a()
+              ( fof.prg      )   1 - function foe6()
+              ( fofhol.prg   )   2 - function fofhol()
+              ( fog2.prg     )   2 - function fog2()
+              ( fog6.prg     )   3 - function fog2()
+              ( fog7.prg     )   1 - function fog2()
+              ( fog8.prg     )   2 - function fog2()
+              ( foga.prg     )   2 - function fog2()
+              ( fogb.prg     )   2 - function gfoga()
+              ( foge.prg     )   1 - function gfoga()
+              ( foha.prg     )   2 - function foha()
+              ( fohc.prg     )   3 - function foha04()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohg2.prg    )   6 - function foha04()
+              ( fohh.prg     )   2 - function fohh()
+              ( fohi.prg     )   2 - function fohi()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi20.prg    )   3 - function foi20()
+              ( foi2a.prg    )   4 - function foi2a()
+              ( foi2b.prg    )   8 - function foi2b()
+              ( foia.prg     )   1 - function foia()
+              ( foib.prg     )   2 - function foia()
+              ( foic0.prg    )   3 - function foic0()
+              ( foic1.prg    )   2 - function foic1()
+              ( foid.prg     )   5 - function foid()
+              ( foid0.prg    )   1 - function foid0()
+              ( foid1.prg    )   1 - function foid1()
+              ( foif0.prg    )   5 - function foif0()
+              ( foif1.prg    )   2 - function foif0()
+              ( folha1.prg   )   2 - function main()
+              ( fouc1.prg    )   1 - function cabe2()
+              ( fouc2.prg    )   3 - function cabe2()
+              ( fouc3.prg    )   2 - function fouc2a()
+              ( foue.prg     )   1 - function gfoue()
+              ( fouec.prg    )   1 - function lfoue()
+              ( fouef.prg    )   3 - function lfoue()
+              ( foug.prg     )   2 - function lfoue()
+              ( fox.prg      )   1 - function fox()
+              ( foy.prg      )   1 - function foy5()
+              ( foy2.prg     )   1 - function indext()
+              ( foy4.prg     )   2 - function limpar()
+              ( foy6.prg     )   2 - function limpar()
+              ( foy8.prg     )   1 - function foy8()
+              ( foy9.prg     )   2 - function memos()
+              ( foya.prg     )   2 - function memos()
+              ( foyaa.prg    )   1 - function memos()
+              ( fo_for.prg   )   1 - function fo_for()
+              ( fo_rell.prg  )   6 - function fo_rell()
+              ( fo_vt.prg    )   2 - function vtatutk()
+
+netzap()        <unresolved function>
+
+  Called from ( fo1k.prg     )   1 - function critconv()
+              ( fo1l.prg     )   1 - function critconv()
+              ( fo1x.prg     )   2 - function checkbacen()
+              ( fo42a.prg    )   1 - function fo41c()
+              ( foa8.prg     )   1 - function foa7()
+              ( fod2.prg     )   1 - function fod2()
+              ( fogb.prg     )   1 - function gfoga()
+              ( foi20.prg    )   1 - function foi20()
+              ( foic0.prg    )   1 - function foic0()
+              ( foid0.prg    )   1 - function foid0()
+              ( foif0.prg    )   1 - function foif0()
+
+nextrec()       in disklib.prg
+
+  Called from ( disklib.prg  )   1 - function delerec()
+              ( fo0j.prg     )   1 - function fo0gk01()
+              ( fo43d.prg    )   1 - function fo42e()
+              ( foge.prg     )   1 - function gfoga()
+
+nnetwhoami()    <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+nobreak()       <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( fo6.prg      )   1 - function fo6gr()
+                                 1 - function idepto()
+              ( foa4.prg     )   1 - function foa3()
+              ( foe23.prg    )   1 - function foe23()
+              ( folha1.prg   )   1 - function main()
+              ( fox.prg      )   1 - function fmanual()
+                                 1 - function fox()
+
+notep()         in disklib.prg
+
+  Called from ( folha1.prg   )   1 - function main()
+
+novoreg()       in flib03.prg
+
+  Called from ( flib02.prg   )   1 - function fpad()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo_1.prg     )   2 - function gfo7z()
+
+nshow()         in folproc.prg
+
+  Called from ( folproc.prg  )   1 - function nshow1()
+
+nshow1()        in folproc.prg
+
+  Called from ( foaa.prg     )   1 - function foa8c()
+              ( foga.prg     )   1 - function fog2()
+              ( foyaa.prg    )   1 - function memos()
+
+obter()         in flib06.prg
+
+  Called from ( disklib.prg  )   1 - function corrigefo_pes()
+              ( fo1x.prg     )   2 - function checkbacen()
+              ( fo3.prg      )   1 - function fo3h()
+              ( fo41c.prg    )   2 - function fo41c()
+              ( fo42a.prg    )   1 - function grvpsl()
+              ( fo43z.prg    )   1 - function fo43zz()
+              ( fo5.prg      )   2 - function xfo5g()
+              ( fo7.prg      )   1 - function fo6gr()
+              ( fo7alib.prg  )   2 - function checkfgts()
+                                 4 - function checkmotdem()
+                                 1 - function checksexo()
+              ( fo7c.prg     )   2 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( fo7w.prg     )   1 - function bacennacion()
+              ( foa8.prg     )   2 - function foa8c()
+              ( foaa8.prg    )   1 - function foaa8()
+              ( fod2.prg     )   2 - function fod2()
+              ( fod2enc.prg  )   1 - function fod2()
+              ( fofhol.prg   )   1 - function cabhol()
+                                 2 - function fofx()
+              ( fog2.prg     )   1 - function fog2()
+              ( foha.prg     )   3 - function foha()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohg2.prg    )  12 - function foha04()
+                                 1 - function g2r13()
+                                 1 - function g2r30()
+              ( fohh.prg     )   1 - function fohhh()
+              ( fohs.prg     )   1 - function fohi()
+              ( folha1.prg   )   6 - function main()
+              ( fouc2.prg    )   5 - function cabe2()
+              ( fouef.prg    )   2 - function lfoue()
+              ( foug.prg     )   6 - function lfoue()
+
+opcao()         <unresolved function>
+
+  Called from ( disklib.prg  )  12 - function pegfolmes()
+              ( flib02.prg   )   5 - function padrao()
+              ( flib09.prg   )   4 - function peg13()
+              ( flib11.prg   )   8 - function arqusar()
+              ( flib13.prg   )   5 - function listarue()
+              ( fo0.prg      )  30 - function fo0()
+              ( fo1.prg      )  23 - function gfo0m()
+              ( foa.prg      )  10 - function foa()
+                                 8 - function foaa1()
+                                 2 - function foaa10()
+                                 3 - function foaa11()
+                                 8 - function foaa2()
+                                 3 - function foaa3()
+                                 3 - function foaa4()
+              ( foc.prg      )  11 - function foax()
+              ( foe.prg      )  10 - function fodins()
+              ( foh.prg      )  10 - function horpadl()
+              ( fohc.prg     )   3 - function foha04()
+              ( foi.prg      )   7 - function fohhs()
+                                 8 - function foiia()
+              ( folmenu.prg  )  13 - function main()
+                                 7 - function menu6()
+                                23 - function menu7()
+              ( foy.prg      )  15 - function manretm()
+
+otb:addcolumn() <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function padrao()
+
+otb:down()      <unresolved function>
+
+  Called from ( flib02.prg   )   2 - function padrao()
+
+otb:gobottom()  <unresolved function>
+
+  Called from ( flib02.prg   )   2 - function padrao()
+
+otb:gotop()     <unresolved function>
+
+  Called from ( flib02.prg   )   3 - function padrao()
+
+otb:left()      <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function padrao()
+
+otb:pagedown()  <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function padrao()
+
+otb:pageup()    <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function padrao()
+
+otb:refreshall( <unresolved function>
+
+  Called from ( flib02.prg   )   3 - function padrao()
+
+otb:right()     <unresolved function>
+
+  Called from ( flib02.prg   )   1 - function padrao()
+
+otb:stabilize() <unresolved function>
+
+  Called from ( flib02.prg   )   2 - function padrao()
+
+otb:up()        <unresolved function>
+
+  Called from ( flib02.prg   )   2 - function padrao()
+
+padrao()        in flib02.prg
+
+  Called from ( disklib.prg  )   1 - function agen()
+                                 1 - function notep()
+                                 1 - function tele()
+              ( fo0.prg      )  21 - function fo0()
+              ( fo0g.prg     )   1 - function tfo0i()
+              ( fo0m.prg     )   1 - function fokg()
+              ( fo1.prg      )   6 - function gfo0m()
+              ( fo1o.prg     )   1 - function deldbfntx()
+              ( fo1w.prg     )   1 - function gfo1o()
+              ( fo2.prg      )   1 - function checkbacen()
+              ( fo3.prg      )   1 - function tfo2()
+              ( fo3a.prg     )   1 - function fo3h()
+                                 1 - function gfo3a()
+              ( fo3b.prg     )   1 - function ifo3aa()
+              ( fo3c.prg     )   2 - function fo3c()
+              ( fo3e.prg     )   1 - function gcadcbo()
+              ( fo3f.prg     )   1 - function gfo3f()
+                                 1 - function tfo3e()
+              ( fo3g.prg     )   1 - function gfo3g()
+                                 1 - function ifo3fa()
+              ( fo5.prg      )   1 - function fo43zz()
+              ( fo7.prg      )   2 - function fo6gr()
+              ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7z.prg     )   1 - function fo7e()
+              ( foa.prg      )   1 - function foaa11()
+              ( foa8.prg     )   1 - function foa8b()
+              ( foal.prg     )   1 - function foaa8()
+              ( fof.prg      )   1 - function foe6()
+              ( fofb.prg     )   1 - function foff2()
+              ( foh.prg      )   1 - function fohe()
+                                 1 - function fohf()
+              ( folmenu.prg  )   1 - function mac()
+                                 6 - function menu6()
+              ( foue.prg     )   1 - function foue()
+              ( foy.prg      )   2 - function foyb()
+                                 2 - function manretm()
+              ( foy2.prg     )   1 - function foy2()
+              ( foy9.prg     )   1 - function mudadbf()
+
+peg13()         in flib09.prg
+
+  Called from ( flib11.prg   )   1 - function arqusar()
+              ( fodins.prg   )   1 - function fodins()
+              ( foy4.prg     )   4 - function pegcamini()
+
+pegapass()      <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+pegcamini()     in foy2.prg
+
+  Called from ( fo1w.prg     )   2 - function checkbacen()
+                                 1 - function checkcid()
+                                 1 - function gfo1o()
+              ( fo3.prg      )   1 - function fo3h()
+                                 1 - function tfo2()
+              ( fo3a.prg     )   1 - function fo3h()
+              ( fo3e.prg     )   1 - function gcadcbo()
+              ( fo3f.prg     )   3 - function tfo3e()
+              ( fo3g.prg     )   4 - function ifo3fa()
+              ( fo7.prg      )   1 - function fo6gr()
+              ( folmenu.prg  )   1 - function mac()
+                                 3 - function menu6()
+              ( foy2.prg     )   1 - function indext()
+              ( foya.prg     )   3 - function memos()
+
+pegchave()      in flib02.prg
+
+  Called from ( disklib.prg  )   1 - function agen()
+                                 1 - function notep()
+                                 1 - function tele()
+              ( fo0.prg      )  19 - function fo0()
+              ( fo0g.prg     )   1 - function tfo0i()
+              ( fo0m.prg     )   1 - function fokg()
+              ( fo1.prg      )   5 - function gfo0m()
+              ( fo1o.prg     )   1 - function deldbfntx()
+              ( fo2.prg      )   1 - function checkbacen()
+              ( fo3.prg      )   1 - function tfo2()
+              ( fo3a.prg     )   1 - function fo3h()
+              ( fo3b.prg     )   1 - function ifo3aa()
+              ( fo3c.prg     )   2 - function fo3c()
+              ( fo3e.prg     )   1 - function gcadcbo()
+              ( fo3f.prg     )   1 - function tfo3e()
+              ( fo3g.prg     )   1 - function ifo3fa()
+              ( fo7.prg      )   1 - function fo6gr()
+              ( fo7w.prg     )   1 - function ifopto4e()
+              ( fo7z.prg     )   1 - function fo7e()
+              ( foa.prg      )   1 - function foaa11()
+              ( fof.prg      )   1 - function foe6()
+              ( fofb.prg     )   1 - function foff2()
+              ( folmenu.prg  )   1 - function mac()
+                                 4 - function menu6()
+              ( foue.prg     )   1 - function foue()
+              ( foy.prg      )   2 - function manretm()
+              ( foy9.prg     )   1 - function mudadbf()
+
+pegfolmes()     in disklib.prg
+
+  Called from ( folha1.prg   )   1 - function main()
+
+pegfolpat()     in disklib.prg
+
+  Called from ( folha1.prg   )   1 - function main()
+
+pegfolsen()     in disklib.prg
+
+  Called from ( folha1.prg   )   1 - function main()
+
+pegrelcta()     in flib14.prg
+
+  Called from ( foa2.prg     )   1 - function foa1()
+              ( foa6.prg     )   2 - function foa6()
+              ( focf.prg     )   1 - function focf()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fohd.prg     )   2 - function foha04()
+              ( fohg2.prg    )  13 - function foha04()
+              ( foif1.prg    )   1 - function foif0()
+
+pegsemana()     in flib11.prg
+
+  Called from ( flib11.prg   )   1 - function arqusar()
+              ( fod5.prg     )   1 - function fod5()
+
+pegvaltab()     in disklib.prg
+
+  Called from ( fod2.prg     )   2 - function fod2()
+
+pegvaltip()     in disklib.prg
+
+  Called from ( fod2bas.prg  )   2 - function fod2()
+
+pegvsem()       in fock.prg
+
+  Called from ( fock.prg     )   5 - function focjx()
+
+petela()        in disklib.prg
+
+  Called from ( disklib.prg  )   1 - function foyd()
+              ( fo41a.prg    )   2 - function fo41a()
+              ( fo41b.prg    )   1 - function fo41a()
+              ( fo43d.prg    )   1 - function fo43dt()
+              ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7b.prg     )   1 - function fosfamqtde()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( fo7g.prg     )   1 - function fo7e()
+              ( foa1.prg     )   1 - function foa1()
+              ( foa2.prg     )   1 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foa5.prg     )   1 - function varedit()
+              ( foa6.prg     )   1 - function foa6()
+              ( foa7.prg     )   1 - function foa7()
+              ( foa9.prg     )   1 - function foa8c()
+              ( foab.prg     )   1 - function foaa8()
+              ( foam.prg     )   1 - function xfoal()
+              ( foax.prg     )   1 - function foax()
+              ( focc.prg     )   1 - function fochx()
+                                 1 - function focitau()
+              ( fod1b.prg    )   1 - function truncar()
+              ( fod2bas.prg  )   1 - function fod2()
+              ( fod2cre.prg  )   1 - function fod2()
+              ( fod2des.prg  )   1 - function fod2()
+              ( fod5.prg     )   1 - function fod5()
+              ( fod7.prg     )   1 - function fod5()
+              ( fod9.prg     )   1 - function fod5()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohg2.prg    )   2 - function foha04()
+              ( foi20.prg    )   1 - function foi20()
+              ( foic0.prg    )   1 - function foic0()
+              ( fouc2.prg    )   2 - function cabe2()
+              ( foue.prg     )   1 - function gfoue()
+              ( foy6.prg     )   1 - function limpar()
+
+pict()          <unresolved function>
+
+  Called from ( flib16.prg   )   1 - function editsay()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo2.prg      )   1 - function gfo2()
+              ( fo3f.prg     )   1 - function gfo3f()
+
+prevrec()       in disklib.prg
+
+  Called from ( fo0j.prg     )   1 - function fo0gk01()
+              ( fo43d.prg    )   1 - function fo42e()
+              ( foge.prg     )   1 - function gfoga()
+
+profilestring() <unresolved function>
+
+  Called from ( foy2.prg     )   1 - function pegcamini()
+
+rcampo()        in flib05.prg
+
+  Called from ( flib05.prg   )   1 - function rfilord()
+                                 1 - function rfiltro()
+
+readcur()       <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function mudadata()
+                                 1 - function obsget()
+                                 1 - function pegfolsen()
+              ( flib02.prg   )   1 - function fpad()
+                                 1 - function padrao()
+                                 1 - function pegchave()
+              ( flib05.prg   )   2 - function rfiltro()
+              ( flib11.prg   )   1 - function arqusar()
+                                 1 - function pegsemana()
+              ( flib13.prg   )   1 - function listarue()
+              ( flib14.prg   )   1 - function pegrelcta()
+              ( flib16.prg   )   2 - function editsay()
+              ( fo0.prg      )   1 - function gfo0i()
+                                 1 - function ifo0n()
+              ( fo0j.prg     )   3 - function fokg()
+              ( fo0m.prg     )   1 - function gfo0m()
+              ( fo1g.prg     )   4 - function fo1p()
+              ( fo1o.prg     )   1 - function gfo1o()
+              ( fo1w.prg     )   1 - function gmada()
+                                 1 - function imada()
+              ( fo1x.prg     )   1 - function checkbacen()
+              ( fo2.prg      )   1 - function gfo2()
+              ( fo3.prg      )   1 - function fo3h()
+              ( fo3a.prg     )   1 - function ifo3aa()
+              ( fo3b.prg     )   1 - function gfo3b()
+              ( fo3c.prg     )   1 - function gcadcbo()
+              ( fo3e.prg     )   1 - function gfo3e()
+              ( fo3f.prg     )   1 - function gfo3f()
+                                 1 - function ifo3fa()
+              ( fo3g.prg     )   1 - function gfo3g()
+                                 1 - function gfo3ga()
+                                 1 - function ifo3ga()
+              ( fo4.prg      )   1 - function fotmes()
+              ( fo41a.prg    )   5 - function fo41a()
+              ( fo41b.prg    )   1 - function fo41a()
+              ( fo41c.prg    )   1 - function fo41c()
+              ( fo42a.prg    )   2 - function fo41c()
+              ( fo42b.prg    )   4 - function grvpsl()
+              ( fo42d.prg    )   1 - function grvpsl()
+              ( fo42e.prg    )   2 - function fo42e()
+              ( fo43d.prg    )   1 - function fo42e()
+                                 3 - function fo43dg()
+              ( fo43z.prg    )   2 - function fo43xrod()
+              ( fo5.prg      )   1 - function gdepto()
+                                 1 - function idepto()
+              ( fo6.prg      )   2 - function fo61()
+                                 1 - function fo6gr()
+                                 1 - function fo6l()
+                                 1 - function fo6t2()
+                                 1 - function fo6t3()
+                                 1 - function fo6t4()
+                                 1 - function fo6t5()
+                                 2 - function idepto()
+              ( fo7.prg      )   1 - function fosfamchv()
+              ( fo711.prg    )   1 - function fosfamreg()
+              ( fo7a.prg     )  13 - function ifopto4e()
+              ( fo7alib.prg  )   1 - function checkadm()
+              ( fo7b.prg     )   1 - function fosfamqtde()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( fo7w.prg     )   1 - function ifopto4e()
+              ( fo7z.prg     )   1 - function gfo7z()
+              ( foa1.prg     )   3 - function foa1()
+              ( foa2.prg     )   5 - function foa1()
+              ( foa3.prg     )   2 - function foa3()
+              ( foa4.prg     )   1 - function varedit()
+              ( foa5.prg     )   1 - function varedit()
+              ( foa6.prg     )   1 - function foa6()
+              ( foa7.prg     )   2 - function foa7()
+              ( foa8.prg     )   1 - function foa8a()
+                                 2 - function foa8c()
+                                 1 - function gfoa8b()
+              ( foa9.prg     )   1 - function foa8c()
+              ( foaa.prg     )   2 - function cadseq()
+              ( foaa8.prg    )   3 - function foaa8()
+              ( foal.prg     )   1 - function gfoal()
+                                 1 - function ifoal()
+              ( foax.prg     )   2 - function foax()
+              ( foca1.prg    )   1 - function foca1()
+              ( foca2.prg    )   2 - function foca2()
+              ( focc.prg     )   5 - function focc()
+                                 1 - function fochx()
+                                 1 - function focitau()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   2 - function focf()
+              ( focj.prg     )   2 - function focfx()
+              ( fod1.prg     )   2 - function truncar()
+              ( fod1b.prg    )   1 - function truncar()
+              ( fod2.prg     )   3 - function fod2()
+              ( fod2enc.prg  )   1 - function fod2()
+              ( fod9.prg     )   1 - function fod5()
+              ( foe21.prg    )   1 - function foe21()
+              ( foe22.prg    )   1 - function foe22()
+              ( foe24.prg    )   1 - function foe24()
+              ( foe2a.prg    )   1 - function foe2a()
+              ( fofb.prg     )   1 - function mesholg()
+              ( fofhol.prg   )   2 - function fofhol()
+              ( fog2.prg     )   2 - function fog2()
+              ( fog6.prg     )   3 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( foga.prg     )   1 - function cadfoga()
+                                 1 - function gfoga()
+              ( foge.prg     )   2 - function gfoga()
+                                 1 - function horpadg()
+              ( foh.prg      )   1 - function gfohe()
+                                 1 - function gfohf()
+                                 1 - function ifohe()
+              ( foha.prg     )   3 - function foha()
+                                 1 - function foha04()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fohi.prg     )   3 - function fohi()
+              ( fohs.prg     )   3 - function fohi()
+              ( foi2a.prg    )   1 - function foi2a()
+              ( foi2b.prg    )   2 - function foi2b()
+              ( foia.prg     )   1 - function foia()
+              ( foib.prg     )   1 - function cadtit()
+              ( foic1.prg    )   2 - function foic1()
+              ( foid.prg     )   1 - function foid()
+              ( foif0.prg    )   1 - function foif0()
+              ( foif1.prg    )   1 - function foif0()
+              ( folmenu.prg  )   1 - function ifo6d()
+              ( fouc1.prg    )   1 - function cabe2()
+              ( fouc2.prg    )   1 - function cabe2()
+                                 1 - function fouc2a()
+              ( foue.prg     )   1 - function gfoue()
+                                 1 - function lfoue()
+              ( fouef.prg    )   1 - function lfoue()
+              ( foug.prg     )   2 - function lfoue()
+              ( foy.prg      )   1 - function foyc()
+              ( foy2.prg     )   1 - function gfoy2()
+                                 1 - function ifoy2()
+              ( foy6.prg     )   1 - function limpar()
+              ( foy9.prg     )   8 - function gfoy9()
+                                 2 - function memos()
+              ( foyaa.prg    )   2 - function foredit()
+                                 1 - function memos()
+              ( fo_1.prg     )   1 - function gfo7z()
+              ( fo_rell.prg  )   1 - function fo_rell()
+              ( fo_vt.prg    )   1 - function vtatutk()
+
+repl()          <unresolved function>
+
+  Called from ( disk01.prg   )   1 - function graps()
+                                 1 - function grapt()
+              ( flib05.prg   )   3 - function rfiltro()
+              ( fo0j.prg     )  19 - function fokt()
+              ( fo3.prg      )   1 - function fo3h()
+              ( fo42d.prg    )   3 - function fo42k()
+              ( fo43x.prg    )   2 - function fo43xrod()
+                                 2 - function fo43xx()
+                                 1 - function fo43yy()
+              ( fo43z.prg    )   2 - function fo43zz()
+                                 3 - function fo43zzr()
+              ( fo6.prg      )   3 - function fo6l()
+                                 1 - function fo6t()
+                                12 - function fo6t2()
+                                 2 - function fo6t3()
+                                 2 - function fo6t4()
+                                 2 - function fo6t5()
+              ( fo711.prg    )   3 - function fosfamreg()
+              ( fo7c.prg     )   1 - function fo7ccab()
+                                 1 - function fosfamqtde()
+              ( fo7d.prg     )   3 - function fo7ccab()
+              ( fo7e.prg     )   4 - function fo7e()
+              ( fo7g.prg     )   3 - function fo7e()
+              ( foa1.prg     )   7 - function foa1()
+              ( foa2.prg     )   5 - function foa1()
+              ( foa3.prg     )   5 - function foa3()
+              ( foa4.prg     )   1 - function foa3()
+              ( foaa.prg     )   1 - function foa8c()
+              ( foat.prg     )   5 - function xfoal()
+              ( foax.prg     )   2 - function foax()
+              ( foca1.prg    )   5 - function focax()
+              ( foca2.prg    )   5 - function foca2()
+              ( focb.prg     )   3 - function focb()
+              ( focc.prg     )   6 - function focbx()
+                                 6 - function foccx()
+              ( focd.prg     )   3 - function focdx()
+              ( focf.prg     )   7 - function focfx()
+              ( focg.prg     )   2 - function focfx()
+              ( foch.prg     )   3 - function focfx()
+              ( focj.prg     )   7 - function focjx()
+              ( fock.prg     )  12 - function focjx()
+              ( fod2enc.prg  )   5 - function fod2()
+              ( foe.prg      )   1 - function foee()
+              ( foe21.prg    )   8 - function foe21()
+              ( foe22.prg    )  14 - function foe22()
+              ( foe23.prg    )  17 - function foe23()
+              ( foe24.prg    )  13 - function foe24()
+              ( foe2a.prg    )  27 - function foe2a()
+              ( foe6.prg     )  13 - function foe6()
+              ( fog2.prg     )   4 - function fog2()
+              ( fog7.prg     )   4 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( foga.prg     )   2 - function fog2()
+              ( foge.prg     )   1 - function horpadt()
+              ( fohd.prg     )   9 - function foha04()
+              ( fohg2.prg    )   1 - function foha04()
+              ( fohh.prg     )   4 - function fohhh()
+                                 3 - function fohhrod()
+              ( foi2a.prg    )   4 - function foi2a()
+              ( foi2b.prg    )   3 - function foi2b()
+                                 1 - function foi2b01()
+              ( foia.prg     )   5 - function foia()
+              ( foib.prg     )   1 - function foia()
+              ( foic1a.prg   )   6 - function foic1()
+              ( foic1b.prg   )   6 - function foic1()
+              ( foid.prg     )   4 - function foid()
+                                 3 - function foid01()
+                                 2 - function foid02()
+              ( foid1.prg    )   5 - function foid1()
+              ( foif0.prg    )   1 - function foif0()
+              ( foif1.prg    )   2 - function foif0()
+              ( folmenu.prg  )   1 - function main()
+              ( fouc1.prg    )   9 - function cabe2()
+              ( fouc2.prg    )   3 - function cabe2()
+              ( fouc3.prg    )   9 - function fouc2a()
+              ( fouec.prg    )   3 - function lfoue()
+              ( fouef.prg    )  12 - function lfoue()
+              ( fox.prg      )   1 - function fox()
+              ( foyaa.prg    )   3 - function memos()
+              ( fo_rell.prg  )   4 - function fo_rell()
+
+replvars()      <unresolved function>
+
+  Called from ( disk05.prg   )   2 - function atualiza()
+              ( flib02.prg   )   1 - function padrao()
+              ( flib03.prg   )   1 - function novoreg()
+                                 1 - function reporvars()
+              ( foa8.prg     )   1 - function foa7()
+              ( foam.prg     )   1 - function xfoal()
+              ( fod2.prg     )   1 - function fod2()
+              ( foif0.prg    )   1 - function foif0()
+
+reporvars()     in flib03.prg
+
+  Called from ( flib02.prg   )   1 - function fpad()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo6.prg      )   1 - function fo61()
+
+restaa()        <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function agen()
+                                 1 - function notep()
+                                 1 - function tele()
+              ( flib02.prg   )   2 - function escolhexi()
+
+rfilord()       in flib05.prg
+
+  Called from ( flib05.prg   )   1 - function filord()
+                                 1 - function filtro()
+              ( fo41b.prg    )   1 - function fo41a()
+              ( fo42a.prg    )   1 - function fo41c()
+              ( fo6.prg      )   1 - function fo6gr()
+              ( foif0.prg    )   1 - function foif0()
+              ( foif1.prg    )   1 - function foif0()
+              ( fouc3.prg    )   1 - function fouc2a()
+              ( foy8.prg     )   1 - function foy8()
+
+rfiltro()       in flib05.prg
+
+  Called from ( flib05.prg   )   1 - function rfilord()
+
+salhm()         in disklib.prg
+
+  Called from ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( fo7f.prg     )   1 - function fo7e()
+              ( foa1.prg     )   1 - function foa1()
+              ( foa9.prg     )   1 - function foa8c()
+              ( foao.prg     )   1 - function xfoal()
+              ( foca1.prg    )   1 - function focax()
+              ( focd.prg     )   1 - function focdx()
+              ( fod1b.prg    )   1 - function truncar()
+              ( fod2bas.prg  )   1 - function fod2()
+              ( fod2cre.prg  )   1 - function fod2()
+              ( fod2des.prg  )   1 - function fod2()
+              ( fod5.prg     )   1 - function fod5()
+              ( foe21.prg    )   1 - function foe21()
+              ( foe23.prg    )   1 - function foe23()
+              ( fofhol.prg   )   1 - function fofx()
+              ( fog2.prg     )   1 - function fog2()
+              ( fohh.prg     )   1 - function fohhh()
+              ( foia.prg     )   1 - function foia()
+              ( foic0.prg    )   1 - function foic0()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( fouef.prg    )   1 - function lfoue()
+
+salmes()        in folproc.prg
+
+  Called from ( foug.prg     )   3 - function lfoue()
+
+salvaa()        <unresolved function>
+
+  Called from ( disklib.prg  )   1 - function agen()
+                                 1 - function notep()
+                                 1 - function tele()
+              ( flib02.prg   )   1 - function escolhexi()
+
+scrollbardispla <unresolved function>
+
+  Called from ( flib02.prg   )   3 - function padrao()
+              ( fo6.prg      )   1 - function fo6gr()
+                                 1 - function idepto()
+              ( fox.prg      )   1 - function fmanual()
+                                 1 - function fox()
+
+scrollbarnew()  <unresolved function>
+
+  Called from ( flib02.prg   )   2 - function padrao()
+              ( fo6.prg      )   1 - function fo6gr()
+                                 2 - function idepto()
+              ( fox.prg      )   1 - function fmanual()
+                                 1 - function fox()
+
+scrollbarupdate <unresolved function>
+
+  Called from ( flib02.prg   )   3 - function padrao()
+              ( fo6.prg      )   1 - function fo6gr()
+                                 1 - function idepto()
+              ( folproc.prg  )   1 - function achret()
+              ( fox.prg      )   1 - function fox()
+                                 1 - function manreta()
+                                 1 - function manretm()
+
+store()         <unresolved function>
+
+  Called from ( fod2cre.prg  )   4 - function fod2()
+
+strtohex()      in xhb.lib
+
+  Called from ( folha1.prg   )   1 - function main()
+
+strval()        <unresolved function>
+
+  Called from ( disk06.prg   )   1 - function checktitulo()
+              ( flib02.prg   )   2 - function teclaf11()
+              ( fo7w.prg     )   1 - function chkpesdup()
+              ( fohg2.prg    )   2 - function tiracx()
+
+tabirrf()       in fod.prg
+
+  Called from ( fod1b.prg    )   1 - function truncar()
+              ( fod2.prg     )   1 - function fod2()
+              ( fod5.prg     )   1 - function fod5()
+              ( fod9.prg     )   1 - function fod5()
+
+tdepto()        in fo5.prg
+
+  Called from ( fo5.prg      )   1 - function fo43zz()
+
+teclas()        <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+telapeg()       in flib15.prg
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( flib15.prg   )   1 - function telasay()
+              ( fo6.prg      )   1 - function idepto()
+              ( fouc2.prg    )   1 - function cabe2()
+
+telasay()       in flib15.prg
+
+  Called from ( flib02.prg   )   1 - function padrao()
+              ( flib16.prg   )   1 - function editsay()
+              ( fo1g.prg     )   1 - function fo1p()
+              ( fo3a.prg     )   2 - function gfo3a()
+              ( fo6.prg      )   2 - function fo61()
+              ( fohg2.prg    )   1 - function foha04()
+              ( fouc2.prg    )   1 - function fouc2a()
+              ( foy.prg      )   1 - function foy5()
+
+tele()          in disklib.prg
+
+  Called from ( folha1.prg   )   1 - function main()
+
+tfo0i()         in fo0.prg
+
+  Called from ( fo0.prg      )  18 - function fo0()
+
+tfo0m()         in fo0m.prg
+
+  Called from ( fo0m.prg     )   1 - function fokg()
+
+tfo1o()         in fo1o.prg
+
+  Called from ( fo1o.prg     )   1 - function deldbfntx()
+
+tfo2()          in fo2.prg
+
+  Called from ( fo2.prg      )   1 - function checkbacen()
+
+tfo3aa()        in fo3a.prg
+
+  Called from ( fo3a.prg     )   1 - function gfo3a()
+
+tfo3b()         in fo3b.prg
+
+  Called from ( fo3b.prg     )   1 - function ifo3aa()
+
+tfo3e()         in fo3e.prg
+
+  Called from ( fo3e.prg     )   1 - function gcadcbo()
+
+tfo3f()         in fo3f.prg
+
+  Called from ( fo3f.prg     )   1 - function tfo3e()
+
+tfo3fa()        in fo3f.prg
+
+  Called from ( fo3f.prg     )   1 - function gfo3f()
+
+tfo3g()         in fo3g.prg
+
+  Called from ( fo3g.prg     )   1 - function ifo3fa()
+
+tfo3ga()        in fo3g.prg
+
+  Called from ( fo3g.prg     )   1 - function gfo3g()
+
+tfoal()         in foal.prg
+
+  Called from ( foal.prg     )   1 - function foaa8()
+              ( foam.prg     )   1 - function xfoal()
+
+tfohf()         in foh.prg
+
+  Called from ( foh.prg      )   1 - function fohf()
+
+tfoue()         in foue.prg
+
+  Called from ( foue.prg     )   1 - function foue()
+
+tfoy2()         in foy2.prg
+
+  Called from ( foy2.prg     )   1 - function foy2()
+
+tfoy9()         in foy9.prg
+
+  Called from ( foy9.prg     )   1 - function mudadbf()
+
+tipogra()       <unresolved function>
+
+  Called from ( fox.prg      )   1 - function fmanual()
+
+tirace()        <unresolved function>
+
+  Called from ( fohg2.prg    )   1 - function tiracx()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( foya.prg     )   2 - function memos()
+
+tiracx()        in fohg2.prg
+
+  Called from ( focc.prg     )   5 - function fochx()
+                                 9 - function focitau()
+              ( fohg2.prg    )   5 - function foha04()
+                                 1 - function fwritx()
+
+tiraext()       <unresolved function>
+
+  Called from ( fo1l.prg     )   1 - function critconv()
+              ( foy8.prg     )   1 - function mudadbf()
+
+tiraout()       <unresolved function>
+
+  Called from ( disk06.prg   )   1 - function checkrici()
+                                 1 - function checktitulo()
+                                 1 - function formatapis()
+                                 1 - function formatarici()
+                                 1 - function valcns()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7g.prg     )   1 - function fo7e()
+              ( fog8.prg     )   4 - function fog2()
+              ( fohh.prg     )   1 - function fohhh()
+              ( fouc1.prg    )   4 - function cabe2()
+              ( fouc3.prg    )   2 - function fouc2a()
+              ( fouef.prg    )   2 - function lfoue()
+              ( foug.prg     )   1 - function lfoue()
+
+tmada()         in fo1w.prg
+
+  Called from ( fo1w.prg     )   1 - function gfo1o()
+
+tmpfile()       <unresolved function>
+
+  Called from ( fo6.prg      )   1 - function fo6gr()
+              ( foca2.prg    )   1 - function foca2()
+              ( foch.prg     )   1 - function focfx()
+              ( fock.prg     )   1 - function focjx()
+              ( foha.prg     )   1 - function foha()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fouc3.prg    )   1 - function fouc2a()
+              ( fo_rell.prg  )   1 - function fo_rell()
+
+trocahtt()      <unresolved function>
+
+  Called from ( fog.prg      )   2 - function cabhol()
+
+truncar()       in fod.prg
+
+  Called from ( fod2des.prg  )   3 - function fod2()
+
+ultimoreg()     in flib17.prg
+
+  Called from ( fo0.prg      )   1 - function fo0()
+              ( fo0m.prg     )   1 - function fokg()
+              ( fo1o.prg     )   1 - function deldbfntx()
+              ( fo2.prg      )   1 - function checkbacen()
+              ( fo3a.prg     )   1 - function fo3h()
+              ( fo3f.prg     )   1 - function tfo3e()
+              ( fo3g.prg     )   1 - function ifo3fa()
+              ( fo7.prg      )   1 - function fo6gr()
+              ( fo7w.prg     )   1 - function ifopto4e()
+              ( foa.prg      )   1 - function foaa11()
+              ( folmenu.prg  )   1 - function menu6()
+              ( foue.prg     )   1 - function foue()
+
+valarre()       in fod.prg
+
+  Called from ( fod1b.prg    )   1 - function truncar()
+              ( fod2des.prg  )   1 - function fod2()
+              ( fod9.prg     )   1 - function fod5()
+
+valcei()        <unresolved function>
+
+  Called from ( fo1g.prg     )   1 - function fo1p()
+
+valcns()        in disk06.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7w.prg     )   1 - function chkpesdup()
+
+valcpf()        <unresolved function>
+
+  Called from ( fo1g.prg     )   1 - function fo1p()
+              ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7w.prg     )   1 - function chkpesdup()
+                                 1 - function ifopto4e()
+              ( focc.prg     )   1 - function fochx()
+
+valcta()        in folproc.prg
+
+  Called from ( foa2.prg     )   1 - function foa1()
+              ( foa3.prg     )   1 - function foa3()
+              ( foca1.prg    )   5 - function focax()
+              ( focc.prg     )   6 - function focbx()
+                                 4 - function foccx()
+                                 6 - function fochx()
+                                 6 - function focitau()
+                                 4 - function focix()
+              ( focj.prg     )   4 - function focjx()
+              ( fod1b.prg    )   9 - function truncar()
+              ( fod2bas.prg  )   1 - function fod2()
+              ( fod2enc.prg  )   1 - function fod2()
+              ( fod9.prg     )   4 - function fod5()
+              ( foe21.prg    )   5 - function foe21()
+              ( foe24.prg    )   4 - function foe24()
+              ( foe2a.prg    )   4 - function foe2a()
+              ( fohh.prg     )   1 - function fohhh()
+              ( fohs.prg     )   1 - function fohhs()
+              ( foy6.prg     )   1 - function limpar()
+
+valie()         <unresolved function>
+
+  Called from ( fo1g.prg     )   1 - function fo1p()
+              ( fo2.prg      )   1 - function gfo2()
+              ( fo3f.prg     )   1 - function gfo3f()
+
+valoco()        in fo7w.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+valpis()        in disk06.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+              ( fo7w.prg     )   1 - function chkpesdup()
+                                 1 - function ifopto4e()
+              ( foug.prg     )   1 - function lfoue()
+
+valsitu()       in fo7w.prg
+
+  Called from ( fo7a.prg     )   1 - function ifopto4e()
+
+verseha()       in flib12.prg
+
+  Called from ( disk06.prg   )   1 - function valpis()
+              ( fo1g.prg     )   4 - function fo1p()
+              ( fo1w.prg     )   2 - function checkbacen()
+                                 2 - function checkcid()
+              ( fo2.prg      )   1 - function gfo2()
+              ( fo3a.prg     )   1 - function gfo3aa()
+                                 1 - function ifo3aa()
+              ( fo3f.prg     )   1 - function gfo3fa()
+                                 1 - function ifo3fa()
+              ( fo3g.prg     )   3 - function gfo3g()
+                                 1 - function gfo3ga()
+                                 1 - function ifo3ga()
+              ( fo5.prg      )   2 - function gdepto()
+                                 1 - function xfo5g()
+              ( fo6.prg      )   1 - function fo61()
+              ( fo7a.prg     )  11 - function ifopto4e()
+              ( fo7w.prg     )   1 - function ifopto4e()
+              ( foaa8.prg    )   2 - function foaa8()
+              ( fod2enc.prg  )   1 - function fod2()
+              ( foha.prg     )   2 - function foha()
+              ( fohc.prg     )   1 - function foha04()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohg2.prg    )   1 - function foha04()
+              ( folha1.prg   )   1 - function main()
+              ( fouc2.prg    )   1 - function fouc2a()
+              ( foug.prg     )   2 - function lfoue()
+
+vertxt()        <unresolved function>
+
+  Called from ( fo7w.prg     )   1 - function fosfamreg()
+              ( focc.prg     )   1 - function fochx()
+                                 1 - function focitau()
+              ( fohg2.prg    )   1 - function foha04()
+              ( foi2b.prg    )   1 - function foi2b()
+              ( foid.prg     )   1 - function foid()
+
+vfoue()         in foue.prg
+
+  Called from ( foue.prg     )   3 - function gfoue()
+
+video()         in hbct.lib
+
+  Called from ( flib13.prg   )   1 - function listarue()
+              ( fo3.prg      )   1 - function fo3h()
+              ( fo6.prg      )   1 - function fo6l()
+              ( fo711.prg    )   1 - function fosfamreg()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   3 - function fo7e()
+              ( fo7g.prg     )   2 - function fo7e()
+              ( foca1.prg    )   1 - function foca1()
+              ( foca2.prg    )   1 - function foca2()
+              ( focb.prg     )   1 - function focb()
+              ( focc.prg     )   1 - function focc()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( focg.prg     )   1 - function focfx()
+              ( foch.prg     )   1 - function focfx()
+              ( focj.prg     )   1 - function focfx()
+              ( fock.prg     )   1 - function focjx()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( foha.prg     )   1 - function foha01()
+              ( fohc.prg     )   2 - function foha04()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( fohi.prg     )   1 - function fohi()
+              ( fohs.prg     )   1 - function fohi()
+              ( foi2a.prg    )   1 - function foi2a()
+              ( foi2b.prg    )   1 - function foi2b()
+                                 1 - function foi2b02()
+              ( foia.prg     )   1 - function foia()
+              ( foic1a.prg   )   1 - function foic1()
+              ( foic1b.prg   )   1 - function foic1()
+              ( foid.prg     )   2 - function foid()
+                                 1 - function foid06()
+              ( foid1.prg    )   1 - function foid1()
+              ( foif1.prg    )   1 - function foif0()
+              ( fouc2.prg    )   1 - function cabe2()
+              ( foug.prg     )   1 - function lfoue()
+              ( fox.prg      )   1 - function fmanual()
+              ( fo_rell.prg  )   3 - function fo_rell()
+
+vtatutk()       in fo_vt.prg
+
+  Called from ( foy.prg      )   2 - function manretm()
+
+win_getsavefile in hbwin.lib
+
+  Called from ( foic1.prg    )   1 - function foic1()
+              ( fouc2.prg    )   1 - function cabe2()
+
+xdecdat()       <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+xdecode()       <unresolved function>
+
+  Called from ( folha1.prg   )   1 - function main()
+
+xfo5g()         in fo5.prg
+
+  Called from ( fo5.prg      )   2 - function gdepto()
+
+xfoal()         in foal.prg
+
+  Called from ( foal.prg     )   3 - function gfoal()
+              ( foam.prg     )   1 - function xfoal()
+
+zei_fort()      <unresolved function>
+
+  Called from ( disk05.prg   )   2 - function atualiza()
+              ( fo1x.prg     )   6 - function checkbacen()
+              ( fo3.prg      )   1 - function fo3h()
+              ( fo42c.prg    )   1 - function grvpsl()
+              ( fo42d.prg    )   1 - function grvpsl()
+              ( fo42e.prg    )  14 - function fo42e()
+              ( fo43d.prg    )   1 - function fo42e()
+              ( fo43x.prg    )   1 - function fo43x()
+              ( fo43z.prg    )   1 - function fo43xrod()
+              ( fo5.prg      )   6 - function fo43zz()
+              ( fo6.prg      )   1 - function fo6gr()
+                                 1 - function fo6l()
+              ( fo711.prg    )   1 - function fosfamreg()
+              ( fo7c.prg     )   1 - function fosfamqtde()
+              ( fo7d.prg     )   1 - function fo7ccab()
+              ( fo7e.prg     )   1 - function fo7e()
+              ( fo7f.prg     )   1 - function fo7e()
+              ( fo7g.prg     )   2 - function fo7e()
+              ( foa.prg      )   1 - function foarpls()
+              ( foax.prg     )   2 - function foax()
+              ( foca1.prg    )   1 - function foca1()
+              ( foca2.prg    )   1 - function foca2()
+              ( focc.prg     )   1 - function focc()
+              ( focd.prg     )   1 - function focd()
+              ( focf.prg     )   1 - function focf()
+              ( foch.prg     )   1 - function focfx()
+              ( fod2.prg     )   2 - function fod2()
+              ( foe21.prg    )   1 - function foe21()
+              ( foe22.prg    )   1 - function foe22()
+              ( foe6.prg     )   1 - function foe6()
+              ( fofhol.prg   )   1 - function fofhol()
+              ( fog2.prg     )   1 - function fog2()
+              ( fog8.prg     )   1 - function fog2()
+              ( foha.prg     )   1 - function foha()
+              ( fohd.prg     )   1 - function foha04()
+              ( fohg2.prg    )   3 - function foha04()
+              ( fohh.prg     )   1 - function fohh()
+              ( foi2b.prg    )   2 - function foi2b()
+              ( foia.prg     )   2 - function foia()
+              ( foic0.prg    )   2 - function foic0()
+              ( foic1.prg    )  15 - function foic1()
+              ( foid.prg     )   3 - function foid()
+              ( foid0.prg    )   1 - function foid0()
+              ( fouc3.prg    )   1 - function fouc2a()
+              ( fouec.prg    )   1 - function lfoue()
+              ( foy4.prg     )   8 - function limpar()
+              ( foya.prg     )   2 - function memos()
+              ( fo_rell.prg  )   2 - function fo_rell()
+              ( fo_vt.prg    )   4 - function vtatutk()
+
+zeravars()      in flib03.prg
+
+  Called from ( flib02.prg   )   1 - function fpad()
+
+__setcentury()  <unresolved function>
+
+  Called from ( folha1.prg   )   4 - function main()

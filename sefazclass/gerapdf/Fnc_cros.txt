@@ -1,0 +1,29 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 27-Dez-2024 at  9:24 pm
+*+
+*+--------------------------------------------------------------------
+
+:new()          <unresolved function>
+
+  Called from ( gerapdf.prg  )   1 - function main()
+
+hbnfedageral()  <unresolved function>
+
+  Called from ( gerapdf.prg  )   1 - function main()
+
+hb_idlestate()  in harbour.lib
+
+  Called from ( gerapdf.prg  )   1 - function main()
+
+odanfe:topdf()  <unresolved function>
+
+  Called from ( gerapdf.prg  )   1 - function main()
+
+wapi_shellexecu in hbwin.lib
+
+  Called from ( gerapdf.prg  )   1 - function pdfopen()
+
+__setcentury()  <unresolved function>
+
+  Called from ( gerapdf.prg  )   1 - function main()

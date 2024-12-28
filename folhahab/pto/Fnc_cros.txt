@@ -1,0 +1,2526 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 27-Dez-2024 at  9:34 pm
+*+
+*+--------------------------------------------------------------------
+
+:execute()      <unresolved function>
+
+  Called from ( fopto_32.prg )   1 - function fopto31a()
+              ( fopto_3l.prg )   1 - function imphorlogix()
+              ( fopto_cat.pr )   6 - function fopto4ugrv()
+
+:open()         <unresolved function>
+
+  Called from ( fopto_32.prg )   1 - function fopto31a()
+              ( fopto_3l.prg )   1 - function imphorlogix()
+              ( fopto_cat.pr )   1 - function fopto4ugrv()
+
+acento()        <unresolved function>
+
+  Called from ( foptop.prg   )   3 - function cabec()
+              ( fopto_3g.prg )   1 - function fopto3f()
+
+ac_agudo()      <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+ac_circ()       <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+ac_crase()      <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+ac_til()        <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+agen()          <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+alertx()        <unresolved function>
+
+  Called from ( folhapto.prg )   4 - function main()
+              ( fopto_1.prg  )   2 - function main()
+              ( fopto_11.prg )   1 - function fopto1101()
+                                 2 - function fopto_rep()
+              ( fopto_14.prg )   5 - function fopto_14()
+              ( fopto_15.prg )   1 - function showadoerror()
+              ( fopto_16.prg )   1 - function showadoerror()
+              ( fopto_19.prg )   4 - function fopto_19()
+              ( fopto_2.prg  )   3 - function fopto_19()
+              ( fopto_21.prg )   3 - function fopto21cs()
+              ( fopto_22.prg )   1 - function verpassagens()
+              ( fopto_25.prg )   2 - function fopto_25()
+              ( fopto_26.prg )   5 - function fopto_25()
+              ( fopto_2e.prg )   1 - function fopto2b02()
+              ( fopto_2g.prg )   3 - function strhor()
+              ( fopto_2h.prg )   1 - function fopto_2h()
+              ( fopto_2i.prg )   1 - function fopto_2i()
+              ( fopto_2j.prg )   1 - function fopto_2j()
+              ( fopto_2m.prg )   1 - 
+              ( fopto_3.prg  )   1 - function fopto_2j()
+              ( fopto_37.prg )   1 - function gfopto37()
+                                 1 - function pegsaldobco()
+              ( fopto_4.prg  )   2 - function imphorlogix()
+              ( fopto_4g.prg )   3 - function escpadcor()
+                                 1 - function pegptohor()
+              ( fopto_4h.prg )   1 - function horpadtoesc()
+              ( fopto_4o.prg )   2 - function fopto_4m2()
+              ( fopto_4p.prg )   1 - function gfopto4o()
+                                 1 - function gfopto4p()
+              ( fopto_4v.prg )   2 - function tfopto4t()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+              ( fopto_5.prg  )   2 - function geraafd()
+              ( fopto_6.prg  )   5 - function geraafd()
+
+alltrue()       <unresolved function>
+
+  Called from ( fopto_16.prg )   1 - function showadoerror()
+              ( fopto_24.prg )   3 - function fopto_24()
+              ( fopto_37.prg )   3 - function pegsaldobco()
+              ( fopto_48.prg )   1 - function fopto44hor()
+              ( fopto_4e.prg )   3 - function gfopto4e()
+              ( fopto_4g.prg )   1 - function fopto4gpad()
+                                 1 - function trocahtt()
+              ( fopto_4j.prg )   1 - function gfopto4j()
+                                 1 - function ifopto4j()
+              ( fopto_4l.prg )   1 - function gfopto4l()
+                                 1 - function trocapro()
+              ( fopto_4m.prg )   1 - function fopto_4l2()
+                                 1 - function gfopto4m()
+              ( fopto_4p.prg )   1 - function gfopto4p()
+              ( fopto_4q.prg )   1 - function gfopto4p()
+              ( fopto_4r.prg )   1 - function fopto_4r()
+              ( fopto_4t.prg )   1 - function cfopto4r2()
+                                 3 - function gfopto4t()
+
+anostr()        in fopto_3i.prg
+
+  Called from ( fopto_3i.prg )   2 - function fopto3f()
+
+apagareg()      <unresolved function>
+
+  Called from ( fopto_4o.prg )   1 - function gfopto4o()
+
+arqlogdatahora( <unresolved function>
+
+  Called from ( fopto_15.prg )   2 - function showadoerror()
+
+bhor()          <unresolved function>
+
+  Called from ( fopto_31.prg )   2 - function fopto31()
+              ( fopto_36.prg )   5 - function fopto36()
+              ( fopto_3j.prg )   3 - function fopto3j()
+              ( fopto_3l.prg )   7 - function fopto3k()
+              ( fopto_48.prg )   1 - function g48a()
+
+bom()           in hbct.lib
+
+  Called from ( fopto_3l.prg )   1 - function imphorlogix()
+
+cabe2()         in foptop.prg
+
+  Called from ( foptop.prg   )   1 - function cabex()
+                                 1 - function mdl()
+              ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_12.prg )   1 - function fopto_12()
+              ( fopto_13.prg )   1 - function calchor1()
+              ( fopto_14.prg )   1 - function fopto_14()
+              ( fopto_15.prg )   1 - function fopto_14()
+              ( fopto_16.prg )   1 - function showadoerror()
+              ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_18.prg )   1 - function showadoerror()
+              ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_22.prg )   1 - function pegferiados()
+              ( fopto_23.prg )   1 - function fopto_23()
+              ( fopto_24.prg )   1 - function fopto_24()
+              ( fopto_25.prg )   8 - function fopto_25()
+              ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_27.prg )   1 - function bcoextra()
+              ( fopto_28.prg )   1 - function bcoextra()
+              ( fopto_29.prg )   1 - function bcoextra()
+              ( fopto_2a.prg )   1 - function fopto_2a()
+              ( fopto_2b.prg )   1 - function fopto_2a()
+              ( fopto_2e.prg )   1 - function fopto2b02()
+              ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_2h.prg )   1 - function fopto_2h()
+              ( fopto_2i.prg )   1 - function fopto_2i()
+              ( fopto_2j.prg )   1 - function fopto_2j()
+              ( fopto_2m.prg )   1 - 
+              ( fopto_2y.prg )   1 - function fopto_2j()
+              ( fopto_37.prg )   1 - function pegsaldobco()
+              ( fopto_3l.prg )   1 - function fopto3k()
+              ( fopto_43.prg )   1 - function imphorlogix()
+              ( fopto_45.prg )   1 - function fopto44hor()
+              ( fopto_48.prg )   1 - function fopto_482()
+              ( fopto_4f.prg )   1 - function trocahtt()
+              ( fopto_4g.prg )   1 - function horpadtoesc()
+              ( fopto_4k.prg )   1 - function trocapro()
+              ( fopto_4l.prg )   1 - function fopto_4l2()
+              ( fopto_4m.prg )   1 - function fopto_4m2()
+              ( fopto_4n.prg )   1 - function fopto_4m2()
+              ( fopto_4v.prg )   1 - function tfopto4t()
+              ( fopto_cat.pr )   1 - function fopto4ugrv()
+
+cabe3()         in foptop.prg
+
+  Called from ( fopto_1.prg  )   1 - function main()
+              ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_3.prg  )   1 - function fopto_2j()
+              ( fopto_36.prg )   1 - function fopto33()
+              ( fopto_4.prg  )   1 - function imphorlogix()
+              ( fopto_4j.prg )   1 - function tfopto4i()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+              ( fopto_5.prg  )   1 - function geraafd()
+              ( fopto_6.prg  )   2 - function fopto4u()
+                                 1 - function geraafd()
+
+cabec()         in foptop.prg
+
+  Called from ( fopto_33.prg )   2 - function fopto33()
+              ( fopto_3a.prg )   1 - function gfopto37()
+              ( fopto_3b.prg )   3 - function fopto3b()
+              ( fopto_3d.prg )   1 - function fopto_3d()
+              ( fopto_3e.prg )   1 - function fopto_3e()
+              ( fopto_3f.prg )   2 - function fopto3f()
+
+calchor1()      in fopto_12.prg
+
+  Called from ( fopto_12.prg )   2 - function fopto_12()
+
+calcpascoa()    in fopto_21.prg
+
+  Called from ( fopto_21.prg )   1 - function fopto_19()
+
+cdia()          <unresolved function>
+
+  Called from ( fopto_22.prg )   1 - function dimp22()
+              ( fopto_3a.prg )   1 - function gfopto37()
+              ( fopto_4g.prg )   1 - function gfopto4g()
+                                 1 - function ifopto4g()
+
+cfopto4r()      in fopto_4r.prg
+
+  Called from ( fopto_4r.prg )   3 - function gfopto4r()
+
+cfopto4r2()     in fopto_4r.prg
+
+  Called from ( fopto_4r.prg )   3 - function gfopto4r()
+
+checkcid()      <unresolved function>
+
+  Called from ( fopto_4e.prg )   2 - function gfopto4e()
+              ( fopto_4h.prg )   1 - function gfopto4h()
+
+checkcri()      in foptoc.prg
+
+  Called from ( foptop.prg   )   3 - function pegcompete()
+              ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_15.prg )   2 - function fopto_14()
+              ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_21.prg )   1 - function fo21cri()
+              ( fopto_22.prg )   2 - function pegferiados()
+              ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_2h.prg )   1 - function fopto_2h()
+              ( fopto_37.prg )   4 - function gfopto37()
+                                 1 - function pegsaldobco()
+              ( fopto_43.prg )   1 - function imphorlogix()
+              ( fopto_48.prg )   1 - function fopto44hor()
+                                 1 - function fopto_482()
+              ( fopto_4g.prg )   1 - function fopto4gapa()
+                                 2 - function trocahtt()
+              ( fopto_4j.prg )   1 - function trocapro()
+              ( fopto_4k.prg )   1 - function trocapro()
+              ( fopto_4l.prg )   1 - function fopto_4l2()
+                                 1 - function trocapro()
+              ( fopto_4m.prg )   1 - function fopto_4l2()
+                                 1 - function fopto_4m2()
+              ( fopto_4n.prg )   1 - function fopto_4m2()
+              ( fopto_4q.prg )   1 - function gfopto4p()
+              ( fopto_4s.prg )   1 - function cfopto4r2()
+              ( fopto_4t.prg )   1 - function cfopto4r2()
+              ( fopto_4v.prg )   1 - function tfopto4t()
+
+checkimp()      <unresolved function>
+
+  Called from ( foptop.prg   )   1 - function mdl()
+              ( fopto_3i.prg )   1 - function fopto3f()
+
+checkpass()     <unresolved function>
+
+  Called from ( fopto_4p.prg )   1 - function gfopto4p()
+
+checkrg()       <unresolved function>
+
+  Called from ( fopto_4e.prg )   1 - function gfopto4e()
+
+checktab()      <unresolved function>
+
+  Called from ( fopto_4a.prg )   2 - function gfopto4a()
+              ( fopto_4e.prg )   3 - function gfopto4e()
+              ( fopto_4h.prg )   1 - function gfopto4h()
+              ( fopto_4t.prg )   1 - function gfopto4t()
+
+chkufcep()      <unresolved function>
+
+  Called from ( fopto_4e.prg )   1 - function gfopto4e()
+              ( fopto_4h.prg )   1 - function gfopto4h()
+
+chor()          <unresolved function>
+
+  Called from ( fopto_12.prg )  18 - function fopto_12()
+              ( fopto_26.prg )  21 - function fopto_25()
+                                 6 - function peghorflex()
+              ( fopto_37.prg )  23 - function fopto37()
+              ( fopto_3l.prg )  12 - function fopto3k()
+                                 2 - function fopto3lesc()
+              ( fopto_48.prg )   1 - function g48b()
+
+clrvars()       <unresolved function>
+
+  Called from ( fopto_23.prg )   2 - function fopto_23()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_26.prg )   2 - function fopto_25()
+              ( fopto_2e.prg )   1 - function fopto2b02()
+              ( fopto_37.prg )   1 - function pegsaldobco()
+              ( fopto_43.prg )   2 - function imphorlogix()
+              ( fopto_6.prg  )   1 - function fopto4u()
+
+clsbox()        <unresolved function>
+
+  Called from ( fopto_22.prg )   1 - function dimp22()
+              ( fopto_37.prg )   1 - function gfopto37()
+
+clscor()        <unresolved function>
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+
+clsrow()        <unresolved function>
+
+  Called from ( foptom.prg   )   2 - function pegfolga()
+
+cmes()          <unresolved function>
+
+  Called from ( foptop.prg   )   1 - function pegcompete()
+
+cnpjcpfpict()   <unresolved function>
+
+  Called from ( fopto_4h.prg )   1 - function gfopto4h()
+
+cnpjcpfval()    <unresolved function>
+
+  Called from ( fopto_4h.prg )   1 - function gfopto4h()
+
+corrigeendereco <unresolved function>
+
+  Called from ( fopto_4e.prg )   1 - function gfopto4e()
+
+createobject()  in hbwin.lib
+
+  Called from ( fopto_32.prg )   4 - function fopto31a()
+              ( fopto_3l.prg )   3 - function imphorlogix()
+
+criarvars()     <unresolved function>
+
+  Called from ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_37.prg )   5 - function gfopto37()
+              ( fopto_44.prg )   1 - function imphorlogix()
+              ( fopto_48.prg )   1 - function fopto_482()
+              ( fopto_4j.prg )   1 - function tfopto4i()
+              ( fopto_4k.prg )   1 - function trocapro()
+              ( fopto_4l.prg )   1 - function fopto_4l2()
+              ( fopto_4m.prg )   1 - function fopto_4m2()
+
+ctohora()       <unresolved function>
+
+  Called from ( fopto_15.prg )   1 - function fopto_14()
+
+decodeval()     <unresolved function>
+
+  Called from ( fopto_4p.prg )   1 - function gfopto4p()
+
+deletaarq()     <unresolved function>
+
+  Called from ( folhapto.prg )   3 - function main()
+
+deletefile()    in hbct.lib
+
+  Called from ( fopto_29.prg )   2 - function fo29apg()
+
+editsay()       <unresolved function>
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+
+encode()        in hbyaml.lib
+
+  Called from ( folhapto.prg )   8 - function main()
+              ( fopto_4o.prg )   1 - function fopto_4m2()
+
+encodeval()     <unresolved function>
+
+  Called from ( fopto_4p.prg )   2 - function gfopto4p()
+
+eom()           in hbct.lib
+
+  Called from ( fopto_3l.prg )   1 - function imphorlogix()
+              ( fopto_4x.prg )   2 - function tfopto4t()
+
+equvars()       <unresolved function>
+
+  Called from ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_23.prg )   2 - function fopto_23()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_2e.prg )   1 - function fopto2b02()
+              ( fopto_45.prg )   3 - function fopto44hor()
+              ( fopto_6.prg  )   1 - function fopto4ugrv()
+
+escolhexi()     <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( foptoc.prg   )   1 - function pegequip()
+                                 1 - function pegrelogio()
+              ( fopto_19.prg )   1 - function fopto_19()
+
+escpadcor()     in fopto_4g.prg
+
+  Called from ( fopto_4g.prg )   1 - function gfopto4g()
+                                 1 - function ifopto4g()
+
+filecopy()      in hbct.lib
+
+  Called from ( fopto_14.prg )   1 - function fopto_14()
+              ( fopto_19.prg )   1 - function fopto_19()
+
+filesize()      in hbct.lib
+
+  Called from ( fopto_14.prg )   1 - function fopto_14()
+              ( fopto_3l.prg )   1 - function fopto3k()
+
+filetoemail()   <unresolved function>
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+
+filord()        <unresolved function>
+
+  Called from ( fopto_31.prg )   1 - function fopto_31()
+              ( fopto_33.prg )   1 - function fopto_33()
+              ( fopto_36.prg )   1 - function fopto33()
+              ( fopto_3b.prg )   1 - function gfopto37()
+              ( fopto_3f.prg )   1 - function fopto_3e()
+              ( fopto_3i.prg )   1 - function fopto3f()
+              ( fopto_3j.prg )   1 - function anostr()
+              ( fopto_3k.prg )   1 - function fopto_3k()
+
+filtro()        <unresolved function>
+
+  Called from ( fopto_12.prg )   1 - function fopto_12()
+              ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_22.prg )   1 - function pegferiados()
+              ( fopto_23.prg )   1 - function fopto_23()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_27.prg )   1 - function bcoextra()
+              ( fopto_28.prg )   1 - function bcoextra()
+              ( fopto_2a.prg )   1 - function fopto_2a()
+              ( fopto_2b.prg )   1 - function fopto2b02()
+              ( fopto_2e.prg )   1 - function fopto2b02()
+              ( fopto_32.prg )   1 - function fopto31a()
+              ( fopto_37.prg )   1 - function fopto37()
+              ( fopto_3a.prg )   1 - function gfopto37()
+              ( fopto_3d.prg )   1 - function fopto_3d()
+              ( fopto_3e.prg )   1 - function fopto_3e()
+              ( fopto_3g.prg )   1 - function fopto3f()
+              ( fopto_3h.prg )   1 - function fopto3f()
+              ( fopto_3k.prg )   1 - function fopto_3k()
+              ( fopto_48.prg )   1 - function fopto_482()
+              ( fopto_4k.prg )   1 - function trocapro()
+              ( fopto_4l.prg )   1 - function fopto_4l2()
+              ( fopto_4m.prg )   1 - function fopto_4m2()
+
+fim()           <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+fixentsai()     in fopto_12.prg
+
+  Called from ( fopto_12.prg )   1 - function fopto12grv()
+                                 1 - function fopto_12()
+
+fixstr()        <unresolved function>
+
+  Called from ( fopto_cat.pr )   7 - function fopto4ugrv()
+
+flinecount()    in xhb.lib
+
+  Called from ( fopto_11.prg )   1 - function fopto1101()
+
+fo1w()          <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fo21cri()       in fopto_21.prg
+
+  Called from ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_18.prg )   1 - function showadoerror()
+              ( fopto_21.prg )  12 - function fopto_19()
+              ( fopto_36.prg )   5 - function fopto33()
+              ( fopto_4x.prg )   5 - function tfopto4t()
+
+fo29apg()       in fopto_29.prg
+
+  Called from ( fopto_29.prg )  12 - function bcoextra()
+
+fo3ktot()       in fopto_3k.prg
+
+  Called from ( fopto_3k.prg )   1 - function fopto_3k()
+
+fo7w()          <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto1101()     in fopto_11.prg
+
+  Called from ( fopto_11.prg )   1 - function fopto_rep()
+
+fopto12grv()    in fopto_12.prg
+
+  Called from ( fopto_12.prg )   5 - function fopto_12()
+
+fopto13()       in fopto_13.prg
+
+  Called from ( fopto_13.prg )   1 - function calchor1()
+              ( fopto_25.prg )   1 - function fopto_25()
+
+fopto21cs()     in fopto_21.prg
+
+  Called from ( fopto_21.prg )   5 - function fopto_19()
+
+fopto2b01()     in fopto_2b.prg
+
+  Called from ( fopto_2b.prg )   1 - function fopto_2a()
+
+fopto2b02()     in fopto_2b.prg
+
+  Called from ( fopto_2b.prg )   1 - function fopto2b01()
+                                 1 - function fopto_2a()
+
+fopto2h()       in fopto_2h.prg
+
+  Called from ( fopto_27.prg )   1 - function bcoextra()
+              ( fopto_2h.prg )   1 - function fopto_2h()
+
+fopto31()       in fopto_31.prg
+
+  Called from ( fopto_31.prg )   1 - function fopto_31()
+
+fopto31a()      in fopto_31.prg
+
+  Called from ( fopto_31.prg )   2 - function fopto31()
+
+fopto32()       in fopto_32.prg
+
+  Called from ( fopto_32.prg )   1 - function fopto31a()
+
+fopto33()       in fopto_33.prg
+
+  Called from ( fopto_33.prg )   1 - function fopto_33()
+
+fopto36()       in fopto_36.prg
+
+  Called from ( fopto_36.prg )   1 - function fopto33()
+
+fopto37()       in fopto_37.prg
+
+  Called from ( fopto_37.prg )   1 - function pegsaldobco()
+
+fopto3b()       in fopto_3b.prg
+
+  Called from ( fopto_3b.prg )   1 - function gfopto37()
+
+fopto3f()       in fopto_3f.prg
+
+  Called from ( fopto_3f.prg )   1 - function fopto_3e()
+
+fopto3i()       in fopto_3i.prg
+
+  Called from ( fopto_3i.prg )   1 - function fopto3f()
+
+fopto3j()       in fopto_3j.prg
+
+  Called from ( fopto_3j.prg )   1 - function anostr()
+
+fopto3k()       in fopto_3k.prg
+
+  Called from ( fopto_3k.prg )   1 - function fopto_3k()
+
+fopto3lesc()    in fopto_3l.prg
+
+  Called from ( fopto_3l.prg )   4 - function fopto3k()
+
+fopto44()       in fopto_44.prg
+
+  Called from ( fopto_44.prg )   1 - function gfopto44()
+
+fopto44a()      in fopto_44.prg
+
+  Called from ( fopto_44.prg )   2 - function gfopto44()
+
+fopto44hor()    in fopto_44.prg
+
+  Called from ( fopto_44.prg )   8 - function gfopto44()
+
+fopto4gapa()    in fopto_4g.prg
+
+  Called from ( fopto_5.prg  )   1 - function geraafd()
+
+fopto4gpad()    in fopto_4g.prg
+
+  Called from ( fopto_5.prg  )   1 - function geraafd()
+
+fopto4q01()     in fopto_4q.prg
+
+  Called from ( fopto_4k.prg )   1 - function trocapro()
+              ( fopto_4q.prg )   1 - function gfopto4p()
+              ( fopto_4s.prg )   1 - function cfopto4r2()
+
+fopto4q02()     in fopto_4q.prg
+
+  Called from ( fopto_4q.prg )   1 - function fopto4q01()
+              ( fopto_6.prg  )   1 - function geraafd()
+
+fopto4u()       in fopto_6.prg
+
+  Called from ( fopto_4j.prg )   8 - function tfopto4i()
+              ( fopto_6.prg  )  10 - function geraafd()
+
+fopto4ugrv()    in fopto_6.prg
+
+  Called from ( fopto_6.prg  )   3 - function fopto4u()
+
+foptom()        <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+fopto_1()       <unresolved function>
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+
+fopto_11()      <unresolved function>
+
+  Called from ( fopto_1.prg  )   1 - function main()
+              ( fopto_14.prg )   2 - function fopto_14()
+
+fopto_12()      in fopto_12.prg
+
+  Called from ( fopto_1.prg  )   1 - function main()
+              ( fopto_11.prg )   2 - function fopto_rep()
+              ( fopto_19.prg )   2 - function fopto_19()
+              ( fopto_3l.prg )   1 - function fopto3k()
+              ( fopto_4j.prg )   1 - function tfopto4i()
+
+fopto_13()      <unresolved function>
+
+  Called from ( fopto_1.prg  )   1 - function main()
+
+fopto_14()      in fopto_14.prg
+
+  Called from ( fopto_1.prg  )   2 - function main()
+
+fopto_15()      <unresolved function>
+
+  Called from ( fopto_1.prg  )   2 - function main()
+
+fopto_16()      <unresolved function>
+
+  Called from ( fopto_1.prg  )   2 - function main()
+
+fopto_17()      <unresolved function>
+
+  Called from ( fopto_1.prg  )   1 - function main()
+
+fopto_18()      <unresolved function>
+
+  Called from ( fopto_1.prg  )   1 - function main()
+
+fopto_19()      in fopto_19.prg
+
+  Called from ( fopto_1.prg  )   6 - function main()
+              ( fopto_4x.prg )   1 - function geraafd()
+
+fopto_2()       <unresolved function>
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+
+fopto_21()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_22()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_23()      in fopto_23.prg
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_26.prg )   1 - function fopto_25()
+
+fopto_24()      in fopto_24.prg
+
+  Called from ( fopto_2.prg  )   3 - function fopto_19()
+
+fopto_25()      in fopto_25.prg
+
+  Called from ( fopto_2.prg  )   4 - function fopto_19()
+              ( fopto_3.prg  )   2 - function fopto_2j()
+              ( fopto_6.prg  )   2 - function geraafd()
+
+fopto_26()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_27()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_28()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_29()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_2a()      in fopto_2a.prg
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_2b()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_2g()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_2h()      in fopto_2h.prg
+
+  Called from ( fopto_12.prg )   1 - function fopto_12()
+              ( fopto_2.prg  )   2 - function fopto_19()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+
+fopto_2i()      in fopto_2i.prg
+
+  Called from ( fopto_12.prg )   2 - function fopto_12()
+              ( fopto_2.prg  )   2 - function fopto_19()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+
+fopto_2j()      in fopto_2j.prg
+
+  Called from ( fopto_12.prg )   1 - function fopto_12()
+              ( fopto_2.prg  )   2 - function fopto_19()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+
+fopto_2m()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_2y()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+
+fopto_3()       <unresolved function>
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+
+fopto_31()      in fopto_31.prg
+
+  Called from ( fopto_3.prg  )   3 - function fopto_2j()
+
+fopto_32()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_33()      in fopto_33.prg
+
+  Called from ( fopto_3.prg  )   4 - function fopto_2j()
+
+fopto_36()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_37()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_3a()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_3b()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_3d()      in fopto_3d.prg
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_3e()      in fopto_3e.prg
+
+  Called from ( fopto_1.prg  )   2 - function main()
+
+fopto_3f()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_3g()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_3h()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_3i()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_3j()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+fopto_3k()      in fopto_3k.prg
+
+  Called from ( fopto_3.prg  )   2 - function fopto_2j()
+
+fopto_3l()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+
+fopto_4()       <unresolved function>
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+
+fopto_43()      <unresolved function>
+
+  Called from ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+              ( fopto_5.prg  )   1 - function geraafd()
+
+fopto_44()      <unresolved function>
+
+  Called from ( fopto_5.prg  )   1 - function geraafd()
+
+fopto_45()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_48()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_482()     in fopto_48.prg
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_49()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4a()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4b()      <unresolved function>
+
+  Called from ( fopto_5.prg  )   1 - function geraafd()
+
+fopto_4c()      in fopto_4c.prg
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4e()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4f()      <unresolved function>
+
+  Called from ( fopto_5.prg  )   1 - function geraafd()
+
+fopto_4g()      <unresolved function>
+
+  Called from ( fopto_5.prg  )   1 - function geraafd()
+
+fopto_4h()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4i()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4j()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4k()      <unresolved function>
+
+  Called from ( fopto_6.prg  )   1 - function geraafd()
+
+fopto_4l()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_5.prg  )   1 - function geraafd()
+
+fopto_4l2()     in fopto_4l.prg
+
+  Called from ( fopto_5.prg  )   1 - function geraafd()
+
+fopto_4m()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4m2()     in fopto_4m.prg
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4n()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4o()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4p()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4q()      <unresolved function>
+
+  Called from ( fopto_6.prg  )   1 - function geraafd()
+
+fopto_4r()      in fopto_4r.prg
+
+  Called from ( fopto_6.prg  )   2 - function geraafd()
+
+fopto_4s()      <unresolved function>
+
+  Called from ( fopto_6.prg  )   1 - function geraafd()
+
+fopto_4t()      <unresolved function>
+
+  Called from ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_4v()      <unresolved function>
+
+  Called from ( fopto_5.prg  )   1 - function geraafd()
+
+fopto_4x()      <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fopto_5()       <unresolved function>
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+
+fopto_6()       <unresolved function>
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+
+fopto_cat()     <unresolved function>
+
+  Called from ( fopto_1.prg  )   3 - function main()
+
+fopto_rep()     in fopto_1.prg
+
+  Called from ( fopto_1.prg  )   1 - function main()
+
+formatarg()     <unresolved function>
+
+  Called from ( fopto_4e.prg )   2 - function gfopto4e()
+
+formatatel()    <unresolved function>
+
+  Called from ( fopto_32.prg )   1 - function fopto32()
+
+fox()           <unresolved function>
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+
+foy2()          <unresolved function>
+
+  Called from ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_4.prg  )   2 - function imphorlogix()
+
+foy8()          <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+foyd()          <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+fo_for()        <unresolved function>
+
+  Called from ( fopto_1.prg  )   4 - function main()
+              ( fopto_16.prg )   1 - function showadoerror()
+              ( fopto_3.prg  )   1 - function fopto_2j()
+              ( fopto_4.prg  )   6 - function imphorlogix()
+
+fo_rell()       <unresolved function>
+
+  Called from ( fopto_44.prg )   1 - function imphorlogix()
+              ( fopto_49.prg )   1 - function fopto_482()
+              ( fopto_4a.prg )   1 - function tfopto49()
+              ( fopto_4b.prg )   1 - function gfopto4a()
+              ( fopto_4c.prg )   1 - function fopto_4c()
+              ( fopto_4e.prg )   1 - function gfopto4c()
+              ( fopto_4f.prg )   1 - function tfopto4e()
+              ( fopto_4h.prg )   1 - function horpadtoesc()
+              ( fopto_4i.prg )   1 - function tfopto4h()
+              ( fopto_4j.prg )   3 - function tfopto4i()
+              ( fopto_5.prg  )   1 - function geraafd()
+              ( fo_unid.prg  )   1 - 
+
+fo_unid()       <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+freadline()     <unresolved function>
+
+  Called from ( fopto_19.prg )   4 - function fopto_19()
+              ( fopto_2g.prg )   2 - function strhor()
+              ( fopto_4v.prg )   2 - function tfopto4t()
+
+ft_easter()     in fopto_21.prg
+
+  Called from ( fopto_21.prg )   1 - function calcpascoa()
+
+g48a()          in fopto_48.prg
+
+  Called from ( fopto_48.prg )   1 - function gfopto48()
+
+g48b()          in fopto_48.prg
+
+  Called from ( fopto_48.prg )   1 - function gfopto48()
+
+gafdterr()      in fopto_1.prg
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+
+gdepto()        <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+geraafd()       in fopto_4x.prg
+
+  Called from ( fopto_1.prg  )   1 - function main()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+
+gfopto24()      in fopto_24.prg
+
+  Called from ( fopto_24.prg )   3 - function fopto_24()
+
+gfopto37()      in fopto_37.prg
+
+  Called from ( fopto_37.prg )   1 - function pegsaldobco()
+
+gfopto44()      in fopto_44.prg
+
+  Called from ( fopto_44.prg )   1 - function imphorlogix()
+              ( fopto_5.prg  )   1 - function geraafd()
+
+gfopto48()      in fopto_48.prg
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+              ( fopto_48.prg )   1 - function fopto44hor()
+
+gfopto49()      in fopto_49.prg
+
+  Called from ( fopto_49.prg )   1 - function fopto_482()
+
+gfopto4a()      in fopto_4a.prg
+
+  Called from ( fopto_4a.prg )   1 - function tfopto49()
+
+gfopto4b()      in fopto_4b.prg
+
+  Called from ( fopto_4b.prg )   1 - function gfopto4a()
+
+gfopto4c()      in fopto_4c.prg
+
+  Called from ( fopto_4c.prg )   1 - function fopto_4c()
+
+gfopto4e()      in fopto_4e.prg
+
+  Called from ( fopto_4e.prg )   1 - function gfopto4c()
+
+gfopto4f()      in fopto_4f.prg
+
+  Called from ( fopto_4f.prg )   1 - function tfopto4e()
+
+gfopto4g()      in fopto_4g.prg
+
+  Called from ( fopto_4g.prg )   1 - function fopto4gpad()
+                                 1 - function trocahtt()
+
+gfopto4h()      in fopto_4h.prg
+
+  Called from ( fopto_4h.prg )   1 - function horpadtoesc()
+
+gfopto4i()      in fopto_4i.prg
+
+  Called from ( fopto_4i.prg )   1 - function tfopto4h()
+
+gfopto4j()      in fopto_4j.prg
+
+  Called from ( fopto_4j.prg )   3 - function tfopto4i()
+
+gfopto4l()      in fopto_4l.prg
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+              ( fopto_4l.prg )   1 - function trocapro()
+
+gfopto4m()      in fopto_4m.prg
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+              ( fopto_4m.prg )   1 - function fopto_4l2()
+                                 1 - function fopto_4m2()
+
+gfopto4o()      in fopto_4o.prg
+
+  Called from ( fopto_4o.prg )   1 - function fopto_4m2()
+
+gfopto4p()      in fopto_4p.prg
+
+  Called from ( fopto_4p.prg )   1 - function gfopto4o()
+
+gfopto4q()      in fopto_4q.prg
+
+  Called from ( fopto_4q.prg )   1 - function gfopto4p()
+
+gfopto4r()      in fopto_4r.prg
+
+  Called from ( fopto_4r.prg )   1 - function fopto_4r()
+
+gfopto4t()      in fopto_4t.prg
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+              ( fopto_4t.prg )   1 - function cfopto4r2()
+
+gfounid()       in fo_unid.prg
+
+  Called from ( fo_unid.prg  )   1 - 
+
+graps()         <unresolved function>
+
+  Called from ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_12.prg )   1 - function fopto_12()
+              ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_26.prg )   1 - function fopto_25()
+
+grapt()         <unresolved function>
+
+  Called from ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_12.prg )   1 - function fopto_12()
+              ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_2b.prg )   1 - function fopto2b02()
+
+grava()         in foptop.prg
+
+  Called from ( foptop.prg   )   1 - function grava2()
+
+grava1()        in foptop.prg
+
+  Called from ( foptop.prg   )   1 - function grava2()
+
+grava2()        in foptop.prg
+
+  Called from ( fopto_25.prg )   1 - function fopto_25()
+
+grvval()        <unresolved function>
+
+  Called from ( fopto_25.prg )   2 - function fopto_25()
+
+hb_cwd()        in harbour.lib
+
+  Called from ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_4v.prg )   1 - function tfopto4t()
+
+hb_dispbox()    in harbour.lib
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+              ( foptop.prg   )   1 - function cabe3()
+              ( fopto_24.prg )   1 - function tfopto24()
+              ( fopto_44.prg )   1 - function tfopto44()
+              ( fopto_48.prg )   1 - function tfopto48()
+              ( fopto_49.prg )   1 - function tfopto49()
+              ( fopto_4a.prg )   1 - function tfopto4a()
+              ( fopto_4b.prg )   1 - function tfopto4b()
+              ( fopto_4c.prg )   1 - function tfopto4c()
+              ( fopto_4e.prg )   1 - function tfopto4e()
+              ( fopto_4f.prg )   1 - function tfopto4f()
+              ( fopto_4g.prg )   1 - function tfopto4g()
+              ( fopto_4h.prg )   1 - function tfopto4h()
+              ( fopto_4l.prg )   1 - function tfopto4l()
+              ( fopto_4m.prg )   1 - function tfopto4m()
+              ( fopto_4o.prg )   1 - function tfopto4o()
+              ( fopto_4p.prg )   1 - function tfopto4p()
+              ( fopto_4q.prg )   1 - function tfopto4q()
+              ( fopto_4r.prg )   1 - function tfopto4r()
+              ( fopto_4t.prg )   1 - function tfopto4t()
+              ( fo_unid.prg  )   1 - function tfounid()
+
+hb_fileexists() in harbour.lib
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( fopto_11.prg )   1 - function fopto1101()
+              ( fopto_14.prg )   1 - function fopto_14()
+              ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_4v.prg )   1 - function tfopto4t()
+
+hb_fnamesplit() in harbour.lib
+
+  Called from ( fopto_19.prg )   1 - function fopto_19()
+
+hb_fopen()      <unresolved function>
+
+  Called from ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_4v.prg )   1 - function tfopto4t()
+
+hb_idlestate()  in harbour.lib
+
+  Called from ( folhapto.prg )   2 - function main()
+
+hb_keyclear()   in harbour.lib
+
+  Called from ( fopto_22.prg )   2 - function pegferiados()
+
+hb_keyput()     in harbour.lib
+
+  Called from ( fopto_22.prg )   2 - function dimp22()
+
+hb_langselect() in harbour.lib
+
+  Called from ( folhapto.prg )   2 - function main()
+
+hb_memowrit()   in harbour.lib
+
+  Called from ( fopto_15.prg )   2 - function showadoerror()
+
+hb_run()        in harbour.lib
+
+  Called from ( folhapto.prg )   1 - function main()
+
+hb_scroll()     in harbour.lib
+
+  Called from ( fopto_4m.prg )   1 - function tfopto4m()
+              ( fopto_4t.prg )   1 - function tfopto4t()
+
+hb_sha256()     in harbour.lib
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( fopto_4p.prg )   1 - function gfopto4p()
+
+hb_valtoexp()   in harbour.lib
+
+  Called from ( fopto_15.prg )   2 - function showadoerror()
+
+help()          <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+horpadtoesc()   in fopto_4g.prg
+
+  Called from ( fopto_5.prg  )   1 - function geraafd()
+
+iafdterr()      in fopto_1.prg
+
+  Called from ( fopto_1.prg  )   1 - function main()
+              ( fopto_37.prg )   1 - function gfopto37()
+
+idepto()        <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+ifopto48()      in fopto_48.prg
+
+  Called from ( fopto_48.prg )   1 - function fopto44hor()
+
+ifopto49()      in fopto_49.prg
+
+  Called from ( fopto_49.prg )   1 - function fopto_482()
+
+ifopto4b()      in fopto_4b.prg
+
+  Called from ( fopto_4b.prg )   1 - function gfopto4a()
+
+ifopto4c()      in fopto_4c.prg
+
+  Called from ( fopto_4c.prg )   1 - function fopto_4c()
+
+ifopto4e()      <unresolved function>
+
+  Called from ( fopto_4e.prg )   1 - function gfopto4c()
+
+ifopto4g()      in fopto_4g.prg
+
+  Called from ( fopto_4g.prg )   1 - function trocahtt()
+
+ifopto4j()      in fopto_4j.prg
+
+  Called from ( fopto_4j.prg )   3 - function tfopto4i()
+
+ifopto4l()      in fopto_4l.prg
+
+  Called from ( fopto_4l.prg )   1 - function trocapro()
+
+ifopto4m()      in fopto_4m.prg
+
+  Called from ( fopto_4m.prg )   1 - function fopto_4l2()
+
+ifopto4o()      in fopto_4o.prg
+
+  Called from ( fopto_4o.prg )   1 - function fopto_4m2()
+
+ifopto4p()      in fopto_4p.prg
+
+  Called from ( fopto_4p.prg )   1 - function gfopto4o()
+
+ifopto4r()      in fopto_4r.prg
+
+  Called from ( fopto_4r.prg )   1 - function fopto_4r()
+
+ifopto4t()      in fopto_4t.prg
+
+  Called from ( fopto_4t.prg )   1 - function cfopto4r2()
+
+igualvars()     <unresolved function>
+
+  Called from ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_44.prg )   1 - function fopto44()
+              ( fopto_4g.prg )   1 - function ifopto4g()
+
+imparq()        <unresolved function>
+
+  Called from ( fopto_13.prg )   1 - function fopto13()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_2e.prg )   1 - function fopto2b02()
+              ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_3l.prg )   1 - function fopto3k()
+
+impend()        <unresolved function>
+
+  Called from ( fopto_3a.prg )   1 - function gfopto37()
+              ( fopto_3b.prg )   1 - function fopto3b()
+              ( fopto_3d.prg )   1 - function fopto_3d()
+              ( fopto_3e.prg )   1 - function fopto_3e()
+              ( fopto_3g.prg )   1 - function fopto3f()
+              ( fopto_3h.prg )   1 - function fopto3f()
+
+impfol()        <unresolved function>
+
+  Called from ( foptop.prg   )   1 - function rodap()
+              ( fopto_31.prg )   2 - function fopto31()
+              ( fopto_32.prg )   1 - function fopto32()
+              ( fopto_36.prg )   2 - function fopto36()
+              ( fopto_3a.prg )   1 - function gfopto37()
+              ( fopto_3b.prg )   4 - function fopto3b()
+              ( fopto_3d.prg )   1 - function fopto_3d()
+              ( fopto_3e.prg )   1 - function fopto_3e()
+              ( fopto_3f.prg )   1 - function fopto3f()
+              ( fopto_3g.prg )   2 - function fopto3f()
+              ( fopto_3h.prg )   1 - function fopto3f()
+              ( fopto_3j.prg )   1 - function fopto3j()
+
+imphorlogix()   in fopto_3l.prg
+
+  Called from ( fopto_3l.prg )   1 - function fopto3k()
+
+imphp()         <unresolved function>
+
+  Called from ( foptom.prg   )   1 - function pegfolga()
+              ( fopto_3.prg  )   1 - function fopto_2j()
+
+impressora()    <unresolved function>
+
+  Called from ( fopto_32.prg )   1 - function fopto32()
+              ( fopto_36.prg )   1 - function fopto33()
+                                 2 - function fopto36()
+              ( fopto_3a.prg )   1 - function gfopto37()
+              ( fopto_3b.prg )   3 - function fopto3b()
+              ( fopto_3d.prg )   2 - function fopto_3d()
+              ( fopto_3e.prg )   1 - function fopto_3e()
+              ( fopto_3f.prg )   2 - function fopto3f()
+              ( fopto_3g.prg )   1 - function fopto3f()
+              ( fopto_3h.prg )   1 - function fopto3f()
+              ( fopto_3i.prg )   1 - function fopto3i()
+              ( fopto_3j.prg )   1 - function anostr()
+
+impstr()        <unresolved function>
+
+  Called from ( fopto_31.prg )  10 - function fopto31()
+              ( fopto_36.prg )  11 - function fopto36()
+              ( fopto_3f.prg )   4 - function fopto3f()
+              ( fopto_3j.prg )   1 - function fopto3j()
+              ( fopto_3k.prg )   1 - function fopto3k()
+
+incide()        in foptop.prg
+
+  Called from ( foptop.prg   )   1 - function grava2()
+
+infor()         <unresolved function>
+
+  Called from ( folhapto.prg )   9 - function main()
+              ( foptoc.prg   )   3 - function checkcri()
+              ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_3i.prg )   1 - function fopto3f()
+              ( fopto_4g.prg )   1 - function pegptohor()
+
+initvars()      <unresolved function>
+
+  Called from ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_23.prg )   2 - function fopto_23()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_2e.prg )   1 - function fopto2b02()
+              ( fopto_37.prg )   1 - function pegsaldobco()
+              ( fopto_43.prg )   2 - function imphorlogix()
+              ( fopto_45.prg )   3 - function fopto44hor()
+              ( fopto_6.prg  )   1 - function fopto4u()
+
+ipto4gpad()     in fopto_4g.prg
+
+  Called from ( fopto_4g.prg )   1 - function fopto4gpad()
+
+listarue()      <unresolved function>
+
+  Called from ( fopto_31.prg )   1 - function fopto_31()
+              ( fopto_32.prg )   1 - function fopto31a()
+              ( fopto_33.prg )   1 - function fopto_33()
+              ( fopto_36.prg )   1 - function fopto33()
+              ( fopto_3b.prg )   1 - function gfopto37()
+              ( fopto_3f.prg )   1 - function fopto_3e()
+              ( fopto_3i.prg )   1 - function fopto3f()
+              ( fopto_3j.prg )   1 - function anostr()
+              ( fopto_3k.prg )   1 - function fopto_3k()
+
+logotipo()      <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+mdg()           <unresolved function>
+
+  Called from ( folhapto.prg )   2 - function main()
+              ( foptoc.prg   )   1 - function tarqrel()
+              ( fopto_1.prg  )   4 - function main()
+              ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_12.prg )   2 - function fopto_12()
+              ( fopto_13.prg )   2 - function fopto13()
+              ( fopto_14.prg )   2 - function fopto_14()
+              ( fopto_19.prg )   3 - function fopto_19()
+              ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_21.prg )   2 - function fopto_19()
+              ( fopto_22.prg )   1 - function dimp22()
+              ( fopto_24.prg )   2 - function fopto_24()
+              ( fopto_25.prg )   2 - function fopto_25()
+              ( fopto_28.prg )   1 - function bcoextra()
+              ( fopto_29.prg )   2 - function bcoextra()
+                                 1 - function fo29apg()
+              ( fopto_2a.prg )   1 - function fopto_2a()
+              ( fopto_2b.prg )   1 - function fopto_2a()
+              ( fopto_2e.prg )   1 - function fopto2b02()
+              ( fopto_2g.prg )   3 - function strhor()
+              ( fopto_2h.prg )   1 - function fopto_2h()
+              ( fopto_2i.prg )   1 - function fopto_2i()
+              ( fopto_2j.prg )   1 - function fopto_2j()
+              ( fopto_37.prg )   3 - function pegsaldobco()
+              ( fopto_3b.prg )   2 - function gfopto37()
+              ( fopto_3j.prg )   2 - function anostr()
+              ( fopto_3l.prg )   4 - function fopto3k()
+              ( fopto_4.prg  )   2 - function imphorlogix()
+              ( fopto_4f.prg )   1 - function trocahtt()
+              ( fopto_4j.prg )   2 - function tfopto4i()
+              ( fopto_4q.prg )   1 - function fopto4q01()
+
+mdl()           in foptop.prg
+
+  Called from ( fopto_31.prg )   1 - function fopto_31()
+              ( fopto_32.prg )   1 - function fopto31a()
+              ( fopto_33.prg )   1 - function fopto_33()
+              ( fopto_36.prg )   1 - function fopto33()
+              ( fopto_3a.prg )   1 - function gfopto37()
+              ( fopto_3b.prg )   1 - function gfopto37()
+              ( fopto_3d.prg )   1 - function fopto_3d()
+              ( fopto_3e.prg )   1 - function fopto_3e()
+              ( fopto_3f.prg )   1 - function fopto_3e()
+              ( fopto_3g.prg )   1 - function fopto3f()
+              ( fopto_3h.prg )   1 - function fopto3f()
+              ( fopto_3j.prg )   1 - function anostr()
+              ( fopto_3k.prg )   1 - function fopto_3k()
+
+mds()           <unresolved function>
+
+  Called from ( folhapto.prg )   3 - function main()
+              ( foptop.prg   )   1 - function pegcompete()
+              ( fopto_11.prg )   3 - function fopto_rep()
+              ( fopto_12.prg )   2 - function fopto_12()
+              ( fopto_14.prg )   1 - function fopto_14()
+              ( fopto_15.prg )   1 - function fopto_14()
+              ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_19.prg )   2 - function fopto_19()
+              ( fopto_21.prg )   2 - function fopto_19()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_27.prg )   1 - function bcoextra()
+              ( fopto_28.prg )   2 - function bcoextra()
+              ( fopto_29.prg )   1 - function bcoextra()
+              ( fopto_2a.prg )   1 - function fopto_2a()
+              ( fopto_2b.prg )   1 - function fopto2b01()
+              ( fopto_33.prg )   1 - function fopto_33()
+              ( fopto_37.prg )   1 - function pegsaldobco()
+              ( fopto_3i.prg )   2 - function fopto3f()
+              ( fopto_3k.prg )   2 - function fopto_3k()
+              ( fopto_3l.prg )   1 - function fopto3k()
+              ( fopto_4.prg  )   2 - function imphorlogix()
+              ( fopto_48.prg )   1 - function ifopto48()
+              ( fopto_49.prg )   1 - function ifopto49()
+              ( fopto_4c.prg )   1 - function ifopto4c()
+              ( fopto_4e.prg )   1 - function gfopto4c()
+              ( fopto_4g.prg )   1 - function horpadtoesc()
+                                 1 - function ifopto4g()
+                                 1 - function ipto4gpad()
+              ( fopto_4j.prg )   2 - function ifopto4j()
+                                 2 - function trocapro()
+              ( fopto_4l.prg )   1 - function ifopto4l()
+              ( fopto_4m.prg )   1 - function fopto_4m2()
+                                 1 - function ifopto4m()
+              ( fopto_4n.prg )   1 - function fopto_4m2()
+              ( fopto_4o.prg )   1 - function fopto_4m2()
+                                 1 - function ifopto4o()
+              ( fopto_4p.prg )   1 - function ifopto4p()
+              ( fopto_4q.prg )   2 - function fopto4q01()
+                                 1 - function fopto4q02()
+              ( fopto_4r.prg )   1 - function ifopto4r()
+              ( fopto_4t.prg )   1 - function ifopto4t()
+
+mdt()           <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( foptop.prg   )   1 - function pegcompete()
+              ( fopto_14.prg )   1 - function fopto_14()
+              ( fopto_19.prg )   1 - function fopto_19()
+
+mmes()          <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( fopto_31.prg )   1 - function fopto31()
+
+mudadata()      <unresolved function>
+
+  Called from ( folhapto.prg )   2 - function main()
+
+mvinfoconftela( <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+netgrvcam()     <unresolved function>
+
+  Called from ( foptop.prg   )   1 - function pegcompete()
+              ( fopto_3l.prg )   3 - function fopto3k()
+              ( fopto_43.prg )   8 - function imphorlogix()
+
+netpack()       <unresolved function>
+
+  Called from ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_3l.prg )   1 - function fopto3k()
+              ( fopto_4j.prg )   1 - function trocapro()
+              ( fopto_4q.prg )   1 - function fopto4q02()
+              ( fopto_4s.prg )   1 - function cfopto4r2()
+              ( fopto_6.prg  )   3 - function fopto4u()
+
+netrecapp()     <unresolved function>
+
+  Called from ( foptop.prg   )   1 - function grava2()
+                                 1 - function pegcompete()
+              ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_15.prg )   1 - function fopto_14()
+              ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_19.prg )   2 - function fopto_19()
+              ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_23.prg )   3 - function fopto_23()
+              ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_2h.prg )   1 - function fopto_2h()
+              ( fopto_2i.prg )   2 - function fopto_2i()
+              ( fopto_37.prg )   2 - function fopto37()
+                                 1 - function pegsaldobco()
+              ( fopto_3l.prg )   3 - function fopto3k()
+                                 1 - function imphorlogix()
+              ( fopto_43.prg )   1 - function imphorlogix()
+              ( fopto_45.prg )   3 - function fopto44hor()
+              ( fopto_48.prg )   1 - function fopto_482()
+              ( fopto_4j.prg )   1 - function ifopto4j()
+                                 1 - function trocapro()
+              ( fopto_4k.prg )   1 - function trocapro()
+              ( fopto_4l.prg )   1 - function fopto_4l2()
+              ( fopto_4m.prg )   1 - function fopto_4m2()
+              ( fopto_4n.prg )   2 - function fopto_4m2()
+              ( fopto_4q.prg )   1 - function fopto4q01()
+              ( fopto_4s.prg )   1 - function cfopto4r2()
+              ( fopto_4v.prg )   1 - function tfopto4t()
+              ( fopto_6.prg  )   1 - function fopto4ugrv()
+
+netrecdel()     <unresolved function>
+
+  Called from ( fopto_11.prg )   3 - function fopto_rep()
+              ( fopto_22.prg )   1 - function dimp22()
+              ( fopto_2b.prg )   1 - function fopto2b02()
+              ( fopto_2y.prg )   1 - function fopto_2j()
+              ( fopto_3l.prg )   1 - function fopto3k()
+              ( fopto_4g.prg )   1 - function fopto4gapa()
+              ( fopto_4j.prg )   2 - function trocapro()
+              ( fopto_4q.prg )   1 - function fopto4q02()
+              ( fopto_4s.prg )   1 - function cfopto4r2()
+              ( fopto_6.prg  )   1 - function fopto4ugrv()
+
+netreclock()    in xhb.lib
+
+  Called from ( foptop.prg   )   1 - function grava1()
+                                 2 - function pegcompete()
+              ( fopto_1.prg  )   1 - function gafdterr()
+              ( fopto_12.prg )   1 - function fopto12grv()
+                                 3 - function fopto_12()
+              ( fopto_19.prg )   2 - function fopto_19()
+              ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_22.prg )   1 - function dimp22()
+              ( fopto_23.prg )   5 - function fopto_23()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_26.prg )   2 - function fopto_25()
+              ( fopto_28.prg )   1 - function bcoextra()
+              ( fopto_2a.prg )   1 - function fopto_2a()
+              ( fopto_2g.prg )   2 - function strhor()
+              ( fopto_2h.prg )   1 - function fopto2h()
+                                 1 - function fopto_2h()
+              ( fopto_2i.prg )   2 - function fopto_2i()
+              ( fopto_2j.prg )   1 - function fopto_2j()
+              ( fopto_2m.prg )   1 - 
+              ( fopto_3l.prg )   1 - function fopto3k()
+              ( fopto_43.prg )   1 - function imphorlogix()
+              ( fopto_45.prg )   3 - function fopto44hor()
+              ( fopto_4f.prg )   2 - function trocahtt()
+              ( fopto_4g.prg )   1 - function horpadtoesc()
+              ( fopto_4n.prg )   2 - function fopto_4m2()
+              ( fopto_4q.prg )   1 - function fopto4q01()
+              ( fopto_4v.prg )   1 - function tfopto4t()
+              ( fopto_6.prg  )   2 - function fopto4u()
+
+netrecunlcom()  <unresolved function>
+
+  Called from ( fopto_2m.prg )   1 - 
+
+netregosok()    <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+netuse()        <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( foptoc.prg   )   1 - function checkcri()
+                                 1 - function pegarqcon()
+                                 1 - function tarqrel()
+              ( foptop.prg   )   1 - function pegcompete()
+                                 1 - function pegcx()
+              ( fopto_1.prg  )   2 - function fopto_rep()
+                                 1 - function gafdterr()
+              ( fopto_11.prg )   4 - function fopto_rep()
+              ( fopto_12.prg )   7 - function fopto_12()
+              ( fopto_15.prg )   1 - function fopto_14()
+              ( fopto_17.prg )   2 - function showadoerror()
+              ( fopto_18.prg )   1 - function showadoerror()
+              ( fopto_19.prg )   8 - function fopto_19()
+              ( fopto_21.prg )   5 - function fopto_19()
+                                 1 - function pegferiados()
+              ( fopto_22.prg )   7 - function pegferiados()
+                                 1 - function pegtotano()
+                                 1 - function temalmoco()
+                                 3 - function verpassagens()
+              ( fopto_23.prg )   9 - function fopto_23()
+              ( fopto_25.prg )   8 - function fopto_25()
+              ( fopto_26.prg )  11 - function fopto_25()
+              ( fopto_27.prg )   2 - function bcoextra()
+              ( fopto_28.prg )   2 - function bcoextra()
+              ( fopto_2a.prg )   1 - function fopto_2a()
+              ( fopto_2b.prg )   1 - function fopto2b02()
+              ( fopto_2e.prg )   3 - function fopto2b02()
+              ( fopto_2g.prg )   2 - function strhor()
+              ( fopto_2h.prg )   3 - function fopto_2h()
+              ( fopto_2i.prg )   5 - function fopto_2i()
+              ( fopto_2j.prg )   3 - function fopto_2j()
+              ( fopto_2m.prg )   1 - 
+              ( fopto_2y.prg )   2 - function fopto_2j()
+              ( fopto_31.prg )  11 - function fopto_31()
+              ( fopto_32.prg )   2 - function fopto31a()
+              ( fopto_33.prg )   3 - function fopto_33()
+              ( fopto_36.prg )  11 - function fopto33()
+                                 1 - function pegsaldobco()
+              ( fopto_37.prg )  12 - function fopto37()
+                                 2 - function pegsaldobco()
+              ( fopto_3a.prg )   2 - function gfopto37()
+              ( fopto_3b.prg )   3 - function gfopto37()
+              ( fopto_3d.prg )   2 - function fopto_3d()
+              ( fopto_3e.prg )   2 - function fopto_3e()
+              ( fopto_3f.prg )   2 - function fopto_3e()
+              ( fopto_3g.prg )   2 - function fopto3f()
+              ( fopto_3h.prg )   3 - function fopto3f()
+              ( fopto_3i.prg )   2 - function fopto3f()
+                                 1 - function fopto3i()
+              ( fopto_3j.prg )   7 - function anostr()
+              ( fopto_3k.prg )   2 - function fopto_3k()
+              ( fopto_3l.prg )  17 - function fopto3k()
+                                 1 - function imphorlogix()
+              ( fopto_43.prg )   5 - function imphorlogix()
+              ( fopto_45.prg )   3 - function fopto44hor()
+              ( fopto_48.prg )   2 - function fopto_482()
+              ( fopto_4f.prg )   2 - function trocahtt()
+              ( fopto_4g.prg )   1 - function fopto4gapa()
+                                 1 - function horpadtoesc()
+                                 2 - function ifopto4g()
+                                 2 - function pegptohor()
+              ( fopto_4j.prg )   2 - function trocapro()
+              ( fopto_4k.prg )   2 - function trocapro()
+              ( fopto_4l.prg )   2 - function fopto_4l2()
+              ( fopto_4m.prg )   2 - function fopto_4m2()
+              ( fopto_4n.prg )   2 - function fopto_4m2()
+              ( fopto_4q.prg )   2 - function fopto4q01()
+                                 1 - function fopto4q02()
+              ( fopto_4s.prg )   3 - function cfopto4r2()
+              ( fopto_4v.prg )   1 - function tfopto4t()
+              ( fopto_4x.prg )   1 - function geraafd()
+                                 1 - function tfopto4t()
+              ( fopto_6.prg  )   3 - function fopto4u()
+              ( fopto_cat.pr )   2 - function fopto4ugrv()
+
+netzap()        <unresolved function>
+
+  Called from ( fopto_37.prg )   1 - function fopto37()
+
+nnetwhoami()    <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+notep()         <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+novoreg()       <unresolved function>
+
+  Called from ( fopto_37.prg )   5 - function gfopto37()
+              ( fopto_4g.prg )   1 - function ifopto4g()
+              ( fopto_4j.prg )   1 - function ifopto4j()
+              ( fopto_4o.prg )   1 - function gfopto4o()
+
+numat()         in hbct.lib
+                or hbct.lib
+
+  Called from ( fopto_19.prg )   4 - function fopto_19()
+
+obter()         <unresolved function>
+
+  Called from ( folhapto.prg )   7 - function main()
+              ( foptoc.prg   )   1 - function checkcri()
+              ( fopto_1.prg  )   1 - function fopto_rep()
+              ( fopto_19.prg )   2 - function fopto_19()
+              ( fopto_22.prg )   1 - function verpassagens()
+              ( fopto_32.prg )   2 - function fopto32()
+              ( fopto_44.prg )   1 - function fopto44a()
+              ( fopto_4f.prg )   1 - function trocahtt()
+              ( fopto_4j.prg )   1 - function gfopto4j()
+                                 4 - function ifopto4j()
+              ( fopto_4l.prg )   1 - function gfopto4l()
+              ( fopto_4m.prg )   1 - function gfopto4m()
+              ( fopto_4t.prg )   1 - function gfopto4t()
+              ( fopto_cat.pr )   1 - function fopto4ugrv()
+
+ocon:close()    <unresolved function>
+
+  Called from ( fopto_15.prg )   1 - function fopto_14()
+
+ocon:errors()   <unresolved function>
+
+  Called from ( fopto_15.prg )   1 - function showadoerror()
+
+ocon:errors:cou <unresolved function>
+
+  Called from ( fopto_15.prg )   1 - function showadoerror()
+
+ocon:open()     <unresolved function>
+
+  Called from ( fopto_15.prg )   1 - function fopto_14()
+
+oconn:close()   <unresolved function>
+
+  Called from ( fopto_32.prg )   1 - function fopto31a()
+              ( fopto_3l.prg )   1 - function imphorlogix()
+              ( fopto_cat.pr )   1 - function fopto4ugrv()
+
+opcao()         <unresolved function>
+
+  Called from ( foptom.prg   )   8 - function pegfolga()
+              ( fopto_1.prg  )  26 - function main()
+              ( fopto_2.prg  )  27 - function fopto_19()
+              ( fopto_3.prg  )  29 - function fopto_2j()
+              ( fopto_4.prg  )  36 - function imphorlogix()
+              ( fopto_4j.prg )  11 - function tfopto4i()
+              ( fopto_5.prg  )  36 - function geraafd()
+              ( fopto_6.prg  )  19 - function geraafd()
+
+ordcount()      in harbour.lib
+                or hbrdd.lib
+
+  Called from ( fopto_4g.prg )   1 - function pegptohor()
+
+oregistr2:close <unresolved function>
+
+  Called from ( fopto_32.prg )   2 - function fopto31a()
+                                 1 - function fopto32()
+
+oregistr2:field <unresolved function>
+
+  Called from ( fopto_32.prg )   4 - function fopto31a()
+                                20 - function fopto32()
+
+oregistr2:moven <unresolved function>
+
+  Called from ( fopto_32.prg )   2 - function fopto31a()
+                                 1 - function fopto32()
+
+oregistr2:open( <unresolved function>
+
+  Called from ( fopto_32.prg )   2 - function fopto31a()
+                                 1 - function fopto32()
+
+oregistro:close <unresolved function>
+
+  Called from ( fopto_32.prg )   1 - function fopto32()
+              ( fopto_3l.prg )   1 - function imphorlogix()
+
+oregistro:field <unresolved function>
+
+  Called from ( fopto_32.prg )  31 - function fopto32()
+              ( fopto_3l.prg )   5 - function imphorlogix()
+
+oregistro:moven <unresolved function>
+
+  Called from ( fopto_3l.prg )   1 - function imphorlogix()
+
+oregistro:open( <unresolved function>
+
+  Called from ( fopto_32.prg )   1 - function fopto32()
+              ( fopto_3l.prg )   1 - function imphorlogix()
+
+ors:close()     <unresolved function>
+
+  Called from ( fopto_15.prg )   1 - function fopto_14()
+
+ors:fields()    <unresolved function>
+
+  Called from ( fopto_15.prg )   5 - function fopto_14()
+
+ors:movenext()  <unresolved function>
+
+  Called from ( fopto_15.prg )   1 - function fopto_14()
+
+ors:open()      <unresolved function>
+
+  Called from ( fopto_15.prg )   1 - function fopto_14()
+
+orsdes:close()  <unresolved function>
+
+  Called from ( fopto_cat.pr )   3 - function fopto4ugrv()
+
+orsdes:fields() <unresolved function>
+
+  Called from ( fopto_cat.pr )   7 - function fopto4ugrv()
+
+orsdes:open()   <unresolved function>
+
+  Called from ( fopto_cat.pr )   3 - function fopto4ugrv()
+
+padrao()        <unresolved function>
+
+  Called from ( fopto_1.prg  )   4 - function main()
+              ( fopto_16.prg )   1 - function showadoerror()
+              ( fopto_24.prg )   3 - function fopto_24()
+              ( fopto_37.prg )   1 - function pegsaldobco()
+              ( fopto_4.prg  )   6 - function imphorlogix()
+              ( fopto_44.prg )   1 - function imphorlogix()
+              ( fopto_48.prg )   1 - function fopto44hor()
+              ( fopto_49.prg )   1 - function fopto_482()
+              ( fopto_4a.prg )   1 - function tfopto49()
+              ( fopto_4b.prg )   1 - function gfopto4a()
+              ( fopto_4c.prg )   1 - function fopto_4c()
+              ( fopto_4e.prg )   1 - function gfopto4c()
+              ( fopto_4f.prg )   1 - function tfopto4e()
+              ( fopto_4g.prg )   1 - function fopto4gpad()
+                                 1 - function trocahtt()
+              ( fopto_4h.prg )   1 - function horpadtoesc()
+              ( fopto_4i.prg )   1 - function tfopto4h()
+              ( fopto_4j.prg )   3 - function tfopto4i()
+              ( fopto_4l.prg )   1 - function trocapro()
+              ( fopto_4m.prg )   1 - function fopto_4l2()
+              ( fopto_4o.prg )   1 - function fopto_4m2()
+              ( fopto_4p.prg )   1 - function gfopto4o()
+              ( fopto_4q.prg )   1 - function gfopto4p()
+              ( fopto_4r.prg )   1 - function fopto_4r()
+              ( fopto_4t.prg )   1 - function cfopto4r2()
+              ( fopto_5.prg  )   1 - function geraafd()
+              ( fo_unid.prg  )   1 - 
+
+parqdio()       in foptoc.prg
+
+  Called from ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_31.prg )   1 - function fopto_31()
+              ( fopto_33.prg )   1 - function fopto_33()
+              ( fopto_3d.prg )   1 - function fopto_3d()
+              ( fopto_3g.prg )   1 - function fopto3f()
+              ( fopto_3h.prg )   1 - function fopto3f()
+              ( fopto_4j.prg )   1 - function trocapro()
+
+pegapass()      <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+pegarqcon()     in foptoc.prg
+
+  Called from ( foptoc.prg   )   1 - function tarqrel()
+              ( fopto_13.prg )   1 - function calchor1()
+              ( fopto_14.prg )   2 - function fopto_14()
+              ( fopto_18.prg )   1 - function showadoerror()
+
+pegcamini()     <unresolved function>
+
+  Called from ( foptoc.prg   )   1 - function checkcri()
+
+pegchave()      <unresolved function>
+
+  Called from ( fopto_1.prg  )   3 - function main()
+              ( fopto_24.prg )   3 - function fopto_24()
+              ( fopto_4.prg  )   5 - function imphorlogix()
+              ( fopto_44.prg )   1 - function imphorlogix()
+              ( fopto_4a.prg )   1 - function tfopto49()
+              ( fopto_4f.prg )   1 - function tfopto4e()
+              ( fopto_4i.prg )   1 - function tfopto4h()
+              ( fopto_4q.prg )   1 - function gfopto4p()
+              ( fopto_5.prg  )   1 - function geraafd()
+              ( fo_unid.prg  )   1 - 
+
+pegcompete()    in foptop.prg
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( fopto_2.prg  )   5 - function fopto_19()
+              ( fopto_21.prg )   1 - function fopto_19()
+
+pegcx()         in foptop.prg
+
+  Called from ( fopto_22.prg )   1 - function pegferiados()
+              ( fopto_23.prg )   2 - function fopto_23()
+              ( fopto_25.prg )   2 - function fopto_25()
+              ( fopto_2e.prg )   2 - function fopto2b02()
+              ( fopto_31.prg )   1 - function fopto_31()
+              ( fopto_36.prg )   1 - function fopto33()
+
+pegequip()      in foptoc.prg
+
+  Called from ( fopto_15.prg )   2 - function fopto_14()
+              ( fopto_19.prg )   1 - function fopto_19()
+
+pegferiados()   in fopto_21.prg
+
+  Called from ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_36.prg )   1 - function fopto33()
+              ( fopto_37.prg )   1 - function fopto37()
+              ( fopto_4g.prg )   1 - function trocahtt()
+
+pegfolga()      in foptoc.prg
+
+  Called from ( fopto_3l.prg )   2 - function fopto3k()
+              ( fopto_4b.prg )   1 - function ifopto4b()
+
+pegfolmes()     <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+pegfolpat()     <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+
+pegfolsen()     <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+peghorfix()     in foptoc.prg
+
+  Called from ( fopto_12.prg )   1 - function fopto_12()
+              ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_37.prg )   1 - function fopto37()
+              ( fopto_3l.prg )   1 - function fopto3k()
+
+peghorflex()    in fopto_26.prg
+
+  Called from ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_37.prg )   1 - function fopto37()
+
+pegptohor()     in fopto_4g.prg
+
+  Called from ( fopto_22.prg )   1 - function fopto22()
+                                 1 - function pegferiados()
+              ( fopto_2j.prg )   2 - function fopto_2j()
+              ( fopto_31.prg )   1 - function fopto31()
+              ( fopto_3l.prg )   4 - function fopto3k()
+              ( fopto_44.prg )   1 - function fopto44hor()
+                                 1 - function imphorlogix()
+              ( fopto_4b.prg )   1 - function gfopto4a()
+              ( fopto_4g.prg )   1 - function trocahtt()
+                                 1 - function xfopto4g()
+              ( fopto_4l.prg )   1 - function trocapro()
+
+pegrelogio()    in foptoc.prg
+
+  Called from ( foptoc.prg   )   1 - function parqdio()
+              ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_13.prg )   1 - function calchor1()
+              ( fopto_14.prg )   1 - function fopto_14()
+              ( fopto_16.prg )   1 - function showadoerror()
+              ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_18.prg )   1 - function showadoerror()
+              ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_3e.prg )   1 - function fopto_3e()
+              ( fopto_4j.prg )   1 - function trocapro()
+
+pegsaldobco()   in fopto_36.prg
+
+  Called from ( fopto_22.prg )   1 - function dimp22()
+              ( fopto_23.prg )   1 - function fopto_23()
+              ( fopto_24.prg )   1 - function tfopto24()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_36.prg )   1 - function fopto36()
+              ( fopto_37.prg )   1 - function gfopto37()
+              ( fopto_3j.prg )   1 - function fopto3j()
+
+pegtotano()     in fopto_22.prg
+
+  Called from ( fopto_22.prg )   1 - function dimp22()
+              ( fopto_23.prg )   1 - function fopto_23()
+              ( fopto_24.prg )   1 - function tfopto24()
+              ( fopto_36.prg )   1 - function fopto36()
+
+petela()        <unresolved function>
+
+  Called from ( fopto_1.prg  )   1 - function fopto_rep()
+              ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_23.prg )   1 - function fopto_23()
+              ( fopto_25.prg )   1 - function fopto_25()
+              ( fopto_26.prg )   1 - function fopto_25()
+              ( fopto_27.prg )   1 - function bcoextra()
+              ( fopto_28.prg )   1 - function bcoextra()
+              ( fopto_2e.prg )   1 - function fopto2b02()
+              ( fopto_2y.prg )   1 - function fopto_2j()
+              ( fopto_32.prg )   1 - function fopto32()
+              ( fopto_36.prg )   1 - function fopto36()
+              ( fopto_37.prg )   1 - function fopto37()
+              ( fopto_3b.prg )   1 - function fopto3b()
+              ( fopto_3f.prg )   1 - function fopto3f()
+              ( fopto_3l.prg )   1 - function fopto3k()
+              ( fopto_43.prg )   1 - function imphorlogix()
+              ( fopto_4f.prg )   1 - function trocahtt()
+              ( fopto_6.prg  )   2 - function fopto4u()
+              ( fopto_cat.pr )   2 - function fopto4ugrv()
+
+pict()          <unresolved function>
+
+  Called from ( fopto_4h.prg )   1 - function gfopto4h()
+
+pot32lin()      in fopto_32.prg
+
+  Called from ( fopto_32.prg )  16 - function fopto32()
+
+profilestring() <unresolved function>
+
+  Called from ( fopto_15.prg )   1 - function fopto_14()
+              ( fopto_3.prg  )   3 - function fopto_2j()
+              ( fopto_cat.pr )   1 - function fopto4ugrv()
+
+pto4b01()       in fopto_4b.prg
+
+  Called from ( fopto_4b.prg )   1 - function gfopto4b()
+
+readcur()       <unresolved function>
+
+  Called from ( foptop.prg   )   1 - function pegcompete()
+              ( fopto_1.prg  )   1 - function iafdterr()
+              ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_12.prg )   1 - function fopto_12()
+              ( fopto_14.prg )   1 - function fopto_14()
+              ( fopto_15.prg )   1 - function fopto_14()
+              ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_19.prg )   2 - function fopto_19()
+              ( fopto_21.prg )   3 - function fopto_19()
+              ( fopto_22.prg )   2 - function dimp22()
+              ( fopto_24.prg )   6 - function gfopto24()
+              ( fopto_25.prg )   4 - function fopto_25()
+              ( fopto_27.prg )   1 - function bcoextra()
+              ( fopto_28.prg )   2 - function bcoextra()
+              ( fopto_29.prg )   1 - function bcoextra()
+              ( fopto_2b.prg )   1 - function fopto2b01()
+              ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_2m.prg )   1 - 
+              ( fopto_33.prg )   1 - function fopto_33()
+              ( fopto_36.prg )   1 - function fopto33()
+              ( fopto_37.prg )   1 - function gfopto37()
+                                 1 - function pegsaldobco()
+              ( fopto_3f.prg )   1 - function fopto_3e()
+              ( fopto_3i.prg )   2 - function fopto3f()
+              ( fopto_3k.prg )   2 - function fopto_3k()
+              ( fopto_3l.prg )   1 - function fopto3k()
+              ( fopto_44.prg )   4 - function gfopto44()
+              ( fopto_45.prg )   9 - function fopto44hor()
+              ( fopto_48.prg )   1 - function fopto_482()
+                                 1 - function gfopto48()
+                                 1 - function ifopto48()
+              ( fopto_49.prg )   1 - function gfopto49()
+                                 1 - function ifopto49()
+              ( fopto_4a.prg )   1 - function gfopto4a()
+              ( fopto_4b.prg )   1 - function gfopto4b()
+                                 1 - function ifopto4b()
+              ( fopto_4c.prg )   1 - function gfopto4c()
+                                 1 - function ifopto4c()
+              ( fopto_4e.prg )   1 - function gfopto4c()
+                                 1 - function gfopto4e()
+              ( fopto_4f.prg )   1 - function gfopto4f()
+                                 1 - function trocahtt()
+              ( fopto_4g.prg )   1 - function fopto4gapa()
+                                 1 - function gfopto4g()
+                                 1 - function horpadtoesc()
+                                 2 - function ifopto4g()
+                                 1 - function ipto4gpad()
+              ( fopto_4h.prg )   1 - function gfopto4h()
+              ( fopto_4i.prg )   1 - function gfopto4i()
+              ( fopto_4j.prg )   1 - function gfopto4j()
+                                 2 - function ifopto4j()
+                                 1 - function trocapro()
+              ( fopto_4k.prg )   1 - function trocapro()
+              ( fopto_4l.prg )   1 - function fopto_4l2()
+                                 1 - function gfopto4l()
+                                 1 - function ifopto4l()
+              ( fopto_4m.prg )   1 - function fopto_4m2()
+                                 1 - function gfopto4m()
+                                 1 - function ifopto4m()
+              ( fopto_4n.prg )   1 - function fopto_4m2()
+              ( fopto_4o.prg )   1 - function fopto_4m2()
+                                 1 - function gfopto4o()
+              ( fopto_4p.prg )   1 - function gfopto4p()
+                                 1 - function ifopto4p()
+              ( fopto_4q.prg )   1 - function fopto4q02()
+                                 1 - function gfopto4q()
+              ( fopto_4r.prg )   1 - function gfopto4r()
+              ( fopto_4t.prg )   1 - function gfopto4t()
+                                 1 - function ifopto4t()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+              ( fopto_6.prg  )   2 - function fopto4u()
+              ( fo_unid.prg  )   1 - function gfounid()
+
+recuger2()      <unresolved function>
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+redefile()      <unresolved function>
+
+  Called from ( foptoc.prg   )   4 - function checkcri()
+              ( fopto_18.prg )   1 - function showadoerror()
+
+repl()          <unresolved function>
+
+  Called from ( foptop.prg   )   4 - function cabec()
+                                 2 - function rodap()
+              ( fopto_31.prg )   8 - function fopto31()
+              ( fopto_32.prg )   7 - function fopto32()
+              ( fopto_36.prg )  11 - function fopto36()
+              ( fopto_3a.prg )   1 - function gfopto37()
+              ( fopto_3b.prg )   3 - function fopto3b()
+              ( fopto_3f.prg )   3 - function fopto3f()
+              ( fopto_3g.prg )   2 - function fopto3f()
+              ( fopto_3h.prg )   4 - function fopto3f()
+              ( fopto_3j.prg )   5 - function fopto3j()
+              ( fopto_3k.prg )   1 - function fo3ktot()
+                                 1 - function fopto3k()
+
+replvars()      <unresolved function>
+
+  Called from ( fopto_17.prg )   1 - function showadoerror()
+              ( fopto_23.prg )   1 - function fopto_23()
+              ( fopto_37.prg )   1 - function pegsaldobco()
+              ( fopto_45.prg )   3 - function fopto44hor()
+              ( fopto_48.prg )   1 - function fopto_482()
+              ( fopto_4f.prg )   2 - function trocahtt()
+              ( fopto_4j.prg )   1 - function ifopto4j()
+              ( fopto_4k.prg )   1 - function trocapro()
+              ( fopto_4l.prg )   1 - function fopto_4l2()
+              ( fopto_4m.prg )   1 - function fopto_4m2()
+              ( fopto_6.prg  )   1 - function fopto4ugrv()
+
+restaa()        <unresolved function>
+
+  Called from ( fopto_22.prg )   1 - function dimp22()
+
+rodap()         in foptop.prg
+
+  Called from ( fopto_33.prg )   1 - function fopto33()
+                                 1 - function fopto_33()
+
+salvaa()        <unresolved function>
+
+  Called from ( fopto_22.prg )   1 - function dimp22()
+
+showadoerror()  in fopto_15.prg
+
+  Called from ( fopto_15.prg )   2 - function fopto_14()
+              ( fopto_32.prg )   3 - function fopto31a()
+                                 2 - function fopto32()
+              ( fopto_3l.prg )   2 - function imphorlogix()
+              ( fopto_cat.pr )   4 - function fopto4ugrv()
+
+stod()          in harbour.lib
+                or hbnf.lib
+
+  Called from ( fopto_21.prg )   1 - function ft_easter()
+
+strtohex()      in xhb.lib
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( fopto_4p.prg )   1 - function gfopto4p()
+
+strval()        <unresolved function>
+
+  Called from ( fopto_31.prg )   3 - function fopto31()
+              ( fopto_32.prg )   3 - function fopto31a()
+                                51 - function fopto32()
+              ( fopto_36.prg )   3 - function fopto36()
+              ( fopto_3j.prg )   3 - function fopto3j()
+
+tarqrel()       in foptoc.prg
+
+  Called from ( foptoc.prg   )   1 - function parqdio()
+              ( fopto_16.prg )   1 - function showadoerror()
+              ( fopto_17.prg )   2 - function showadoerror()
+              ( fopto_18.prg )   1 - function showadoerror()
+              ( fopto_3e.prg )   1 - function fopto_3e()
+
+tdepto()        <unresolved function>
+
+  Called from ( fopto_4.prg  )   1 - function imphorlogix()
+
+teclas()        <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+telasay()       <unresolved function>
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+
+tele()          <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+
+tfopto24()      in fopto_24.prg
+
+  Called from ( fopto_24.prg )   3 - function fopto_24()
+
+tfopto44()      in fopto_44.prg
+
+  Called from ( fopto_44.prg )   1 - function fopto44hor()
+                                 1 - function imphorlogix()
+              ( fopto_5.prg  )   1 - function geraafd()
+
+tfopto48()      in fopto_48.prg
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+              ( fopto_48.prg )   1 - function fopto44hor()
+
+tfopto49()      in fopto_49.prg
+
+  Called from ( fopto_49.prg )   1 - function fopto_482()
+
+tfopto4a()      in fopto_4a.prg
+
+  Called from ( fopto_4a.prg )   1 - function tfopto49()
+
+tfopto4b()      in fopto_4b.prg
+
+  Called from ( fopto_4b.prg )   1 - function gfopto4a()
+
+tfopto4c()      in fopto_4c.prg
+
+  Called from ( fopto_4c.prg )   1 - function fopto_4c()
+
+tfopto4e()      in fopto_4e.prg
+
+  Called from ( fopto_4e.prg )   1 - function gfopto4c()
+
+tfopto4f()      in fopto_4f.prg
+
+  Called from ( fopto_4f.prg )   1 - function tfopto4e()
+
+tfopto4g()      in fopto_4g.prg
+
+  Called from ( fopto_4g.prg )   1 - function fopto4gpad()
+                                 1 - function trocahtt()
+
+tfopto4h()      in fopto_4h.prg
+
+  Called from ( fopto_4h.prg )   1 - function horpadtoesc()
+
+tfopto4i()      in fopto_4i.prg
+
+  Called from ( fopto_4i.prg )   1 - function tfopto4h()
+
+tfopto4j()      in fopto_4j.prg
+
+  Called from ( fopto_4j.prg )   3 - function tfopto4i()
+
+tfopto4l()      in fopto_4l.prg
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+              ( fopto_4l.prg )   1 - function fopto_4l2()
+                                 1 - function trocapro()
+
+tfopto4m()      in fopto_4m.prg
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+              ( fopto_4m.prg )   1 - function fopto_4l2()
+                                 1 - function fopto_4m2()
+
+tfopto4o()      in fopto_4o.prg
+
+  Called from ( fopto_4o.prg )   1 - function fopto_4m2()
+
+tfopto4p()      in fopto_4p.prg
+
+  Called from ( fopto_4p.prg )   1 - function gfopto4o()
+
+tfopto4q()      in fopto_4q.prg
+
+  Called from ( fopto_4q.prg )   1 - function gfopto4p()
+
+tfopto4r()      in fopto_4r.prg
+
+  Called from ( fopto_4r.prg )   1 - function fopto_4r()
+
+tfopto4t()      in fopto_4t.prg
+
+  Called from ( fopto_37.prg )   1 - function gfopto37()
+              ( fopto_4t.prg )   1 - function cfopto4r2()
+
+tfounid()       in fo_unid.prg
+
+  Called from ( fo_unid.prg  )   1 - 
+
+tirace()        <unresolved function>
+
+  Called from ( fopto_3a.prg )   1 - function gfopto37()
+
+tiraout()       <unresolved function>
+
+  Called from ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_3l.prg )   1 - function fopto3k()
+              ( fopto_cat.pr )   1 - function fopto4ugrv()
+
+trocahtt()      in fopto_4f.prg
+
+  Called from ( fopto_5.prg  )   2 - function geraafd()
+
+trocapro()      in fopto_4j.prg
+
+  Called from ( fopto_11.prg )   1 - function fopto_rep()
+              ( fopto_15.prg )   1 - function fopto_14()
+              ( fopto_19.prg )   1 - function fopto_19()
+              ( fopto_4j.prg )   1 - function tfopto4i()
+              ( fopto_4x.prg )   1 - function tfopto4t()
+
+ultimoreg()     <unresolved function>
+
+  Called from ( fopto_1.prg  )   3 - function main()
+              ( fopto_4.prg  )   3 - function imphorlogix()
+              ( fopto_44.prg )   1 - function imphorlogix()
+              ( fopto_4b.prg )   1 - function ifopto4b()
+              ( fopto_4q.prg )   1 - function gfopto4p()
+
+usermcri()      <unresolved function>
+
+  Called from ( fopto_1.prg  )   1 - function main()
+              ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_3.prg  )   1 - function fopto_2j()
+              ( fopto_4.prg  )   1 - function imphorlogix()
+              ( fopto_4o.prg )   3 - function gfopto4o()
+              ( fopto_5.prg  )   1 - function geraafd()
+              ( fopto_6.prg  )   1 - function geraafd()
+
+valcns()        <unresolved function>
+
+  Called from ( fopto_4e.prg )   1 - function gfopto4e()
+
+valcpf()        <unresolved function>
+
+  Called from ( fopto_4e.prg )   1 - function gfopto4e()
+
+valie()         <unresolved function>
+
+  Called from ( fopto_4h.prg )   1 - function gfopto4h()
+
+valpis()        <unresolved function>
+
+  Called from ( fopto_21.prg )   1 - function fopto_19()
+              ( fopto_23.prg )   1 - function fopto_23()
+              ( fopto_31.prg )   1 - function fopto31()
+              ( fopto_36.prg )   1 - function fopto36()
+              ( fopto_4e.prg )   1 - function gfopto4e()
+
+valsitu()       <unresolved function>
+
+  Called from ( fopto_4e.prg )   1 - function gfopto4e()
+
+verpassagens()  in fopto_22.prg
+
+  Called from ( fopto_22.prg )   1 - function dimp22()
+              ( fopto_36.prg )   1 - function fopto36()
+              ( fopto_37.prg )   1 - function fopto37()
+                                 1 - function gfopto37()
+              ( fopto_4l.prg )   1 - function gfopto4l()
+              ( fopto_4m.prg )   1 - function gfopto4m()
+              ( fopto_4t.prg )   1 - function gfopto4t()
+
+verseha()       <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( fopto_1.prg  )   1 - function main()
+              ( fopto_2.prg  )   1 - function fopto_19()
+              ( fopto_3.prg  )   1 - function fopto_2j()
+              ( fopto_4.prg  )   1 - function imphorlogix()
+              ( fopto_4b.prg )   1 - function ifopto4b()
+              ( fopto_4e.prg )   6 - function gfopto4e()
+              ( fopto_4f.prg )   2 - function trocahtt()
+              ( fopto_4l.prg )   1 - function gfopto4l()
+              ( fopto_4o.prg )   1 - function fopto_4m2()
+                                 1 - function gfopto4o()
+              ( fopto_4t.prg )   1 - function gfopto4t()
+              ( fopto_5.prg  )   1 - function geraafd()
+              ( fopto_6.prg  )   1 - function geraafd()
+
+vertxt()        <unresolved function>
+
+  Called from ( fopto_13.prg )   1 - function fopto13()
+              ( fopto_3l.prg )   1 - function fopto3k()
+
+video()         in hbct.lib
+
+  Called from ( fopto_32.prg )   1 - function fopto32()
+              ( fopto_36.prg )   1 - function fopto33()
+                                 2 - function fopto36()
+              ( fopto_3b.prg )   3 - function fopto3b()
+              ( fopto_3d.prg )   1 - function fopto_3d()
+              ( fopto_3f.prg )   1 - function fopto3f()
+              ( fopto_3i.prg )   2 - function fopto3i()
+              ( fopto_3j.prg )   1 - function anostr()
+
+wapi_shellexecu in hbwin.lib
+
+  Called from ( fopto_3.prg  )   3 - function fopto_2j()
+
+win_getopenfile in hbwin.lib
+
+  Called from ( fopto_2g.prg )   1 - function strhor()
+              ( fopto_4v.prg )   1 - function tfopto4t()
+
+win_getsavefile in hbwin.lib
+
+  Called from ( fopto_25.prg )   1 - function fopto_25()
+
+win_olecreateob in hbwin.lib
+
+  Called from ( fopto_15.prg )   2 - function fopto_14()
+              ( fopto_cat.pr )   3 - function fopto4ugrv()
+
+win_printdlgdc( in hbwin.lib
+
+  Called from ( fopto_3.prg  )   1 - function fopto_2j()
+
+xdecdat()       <unresolved function>
+
+  Called from ( folhapto.prg )   1 - function main()
+              ( fopto_4p.prg )   1 - function gfopto4p()
+
+xdecode()       <unresolved function>
+
+  Called from ( folhapto.prg )   2 - function main()
+              ( fopto_4p.prg )   3 - function gfopto4p()
+
+xencode()       <unresolved function>
+
+  Called from ( fopto_4p.prg )   4 - function gfopto4p()
+                                 1 - function ifopto4p()
+
+xfopto4g()      in fopto_4g.prg
+
+  Called from ( fopto_4g.prg )   1 - function gfopto4g()
+                                 1 - function ifopto4g()
+
+zei_fort()      <unresolved function>
+
+  Called from ( fopto_11.prg )   3 - function fopto1101()
+                                 6 - function fopto_rep()
+              ( fopto_18.prg )   1 - function showadoerror()
+              ( fopto_2h.prg )   2 - function fopto_2h()
+              ( fopto_2i.prg )   4 - function fopto_2i()
+              ( fopto_2j.prg )   2 - function fopto_2j()
+              ( fopto_31.prg )   1 - function fopto_31()
+              ( fopto_32.prg )   1 - function fopto31a()
+              ( fopto_33.prg )   1 - function fopto_33()
+              ( fopto_36.prg )   1 - function fopto33()
+              ( fopto_37.prg )   1 - function fopto37()
+              ( fopto_3b.prg )   1 - function gfopto37()
+              ( fopto_3f.prg )   1 - function fopto_3e()
+              ( fopto_3g.prg )   1 - function fopto3f()
+              ( fopto_3h.prg )   1 - function fopto3f()
+              ( fopto_3i.prg )   1 - function fopto3f()
+              ( fopto_3j.prg )   1 - function anostr()
+              ( fopto_3k.prg )   1 - function fopto_3k()
+              ( fopto_3l.prg )   4 - function fopto3k()
+              ( fopto_4j.prg )   4 - function trocapro()
+              ( fopto_4q.prg )   1 - function fopto4q01()
+                                 2 - function fopto4q02()
+              ( fopto_4s.prg )   2 - function cfopto4r2()
+              ( fopto_6.prg  )   6 - function fopto4u()
+
+__setcentury()  <unresolved function>
+
+  Called from ( folhapto.prg )   4 - function main()
+              ( fopto_3.prg  )   2 - function fopto_2j()

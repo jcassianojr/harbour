@@ -1,30 +1,50 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+--------------------------------------------------------------------
 *+
-*+    Source Module => C:\DEVELOP\CLIPPER\FOLHA\PTO\FOPTO_18.PRG
 *+
-*+    Reformatted by Click! 2.03 on Jun-25-2003 at  5:15 pm
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+    Programa  : fopto_18.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:32 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
-CABE2( 'FOPTO_18 - Criando Arquivo TXT Com Base Arquivo Reserva' )
+
+CABE2('FOPTO_18 - Criando Arquivo TXT Com Base Arquivo Reserva')
 
 ntipo := PEGRELOGIO()
 
-cDD := TARQREL( nTIPO, .F. )
+cDD := TARQREL(nTIPO,.F.)
 
-if ! REDEFILE( cDD, "DBF", .T. )
+if !REDEFILE(cDD,"DBF",.T.)
    retu .F.
 endif
 
-TIPC:=pegarqcon( nTIPO, "PRO" )
+TIPC := pegarqcon(nTIPO,"PRO")
 
-FO21CRI(cDD,"FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+FO21CRI(cDD,"FO_DIO","STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)")
 
-if ! NETUSE(cDD) 
+if !NETUSE(cDD)
    retu .F.
 endif
-nLASTREC:=LASTREC()
-zei_fort( nLASTREC,,,0)
+nLASTREC := LASTREC()
+zei_fort(nLASTREC,,,0)
 cTXT += ".TXT"
 if TIPC = "S"
    COPY to &cTXT. SDF while zei_fort(nLASTREC,,,1)
@@ -34,4 +54,6 @@ if TIPC = "D"
 endif
 dbcloseall()
 
-*+ EOF: FOPTO_18.PRG
+
+*+ EOF: fopto_18.prg
+*+

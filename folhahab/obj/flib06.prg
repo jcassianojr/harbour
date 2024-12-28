@@ -1,53 +1,90 @@
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : flib06.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:44 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
 #INCLUDE "INKEY.CH"
 ////#INCLUDE "COMANDO.CH"
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+
+*+--------------------------------------------------------------------
+*+
+*+
 *+
 *+    Function OBTER()
-*+    esta funcao e diferente da obter do modulo mana5
 *+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 *+
-funcTION OBTER( cARQ,eSemUso, KEYINDEX, cCAMPO, nIND, nROW, nCOL, cMES, cMES2, cDEF )            
-local cDBF := alias()
-local FECHAR  := .F.
-local cRETU   := ""
-if valtype( nIND ) # "N"
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+funcTION OBTER(cARQ,eSemUso,KEYINDEX,cCAMPO,nIND,nROW,nCOL,cMES,cMES2,cDEF)
+
+local cDBF   := alias()
+local FECHAR := .F.
+local cRETU  := ""
+if valtype(nIND) # "N"
    nIND := 1
 endif
-if valtype (cDEF) # "U"
+if valtype(cDEF) # "U"
    cRETU := cDEF
 endif
-if select( cARQ ) = 0 
-   if ! netuse(cARQ) 
+if select (cARQ) = 0
+   if !netuse(cARQ)
       return cRETU
    endif
    FECHAR := .T.
 else
-   dbselectar( cARQ )
+   dbselectar(cARQ)
 endif
 if nIND > 1
-   dbsetorder( nIND )
+   dbsetorder(nIND)
 endif
 dbgotop()
 IF dbseek(keyindex)
-   cRETU:=&cCAMPO.
+   cRETU := &cCAMPO.
 else
-   IF VALTYPE(cDEF)="U"
-     cRETU:=MAKE_EMPTY(cCAMPO)
+   IF VALTYPE(cDEF) = "U"
+      cRETU := MAKE_EMPTY(cCAMPO)
    ENDIF
 endif
-if valtype( nROW ) = "N"
-   if ! EMPTY(cRETU)
-      @ nROW, nCOL say &cMES.
+if valtype(nROW) = "N"
+   if !EMPTY(cRETU)
+      @ nROW,nCOL say &cMES.         
    else
-      @ nROW, nCOL say &cMES2.
+      @ nROW,nCOL say &cMES2.         
    endif
 endif
 if FECHAR
    dbclosearea()
 endif
-if ! empty( cDBF )
+if !empty(cDBF)
    dbselectar(cDBF)
 endif
 return cRETU
+
+*+ EOF: flib06.prg
+*+

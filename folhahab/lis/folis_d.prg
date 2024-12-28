@@ -1,12 +1,39 @@
-*:*****************************************************************************
-*:
-*:    FOLIS_D.PRG: Revisar Acumulo de Dados,Tabela de UFIR,Vari veis,Arquivos
-*:      Linguagem: Clipper 5.x
-*:        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-*:      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-*:  Atualizado em: 23/02/99
-*:
-*:*****************************************************************************
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : folis_d.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 27-Dez-2024 as  9:26 pm
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
+// :*****************************************************************************
+// :
+// :    FOLIS_D.PRG: Revisar Acumulo de Dados,Tabela de UFIR,Vari veis,Arquivos
+// :      Linguagem: Clipper 5.x
+// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
+// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
+// :  Atualizado em: 23/02/99
+// :
+// :*****************************************************************************
 
 WHILE .T.
    CABE3("  Revisar Acumulo de Dados, Tabela de UFIR, Vari veis, Arquivos  ",24,79)
@@ -26,30 +53,46 @@ WHILE .T.
    @ 19,1 PROM " N - Sincronizar Rais TXT Cadastro de Funcionarios                            "
    MENU TO OPCAO2
    DO CASE
-      CASE OPCAO2=1  ; FOLIS_D2() //A
-      CASE OPCAO2=2  ; FOLIS_D1(0) //B
-      CASE OPCAO2=3  ; FOLIS_D1(1) //C
-      CASE OPCAO2=4  //D
-          if mdg("Checar Cadastro")
-             FO7W()
-          endif
-          IF mdg("Checar codigos")  
-             FOLIS_D9()
-          endif    
-      CASE OPCAO2=5  ; FOLIS_D3(0) //E
-      CASE OPCAO2=6  ; FOLIS_D3(1) //F
-      CASE OPCAO2=7  ; FOY2(0,"FOLISNTX") //G
-      CASE OPCAO2=8  ; FOY2(1,"FOLISNTX") //H
-      CASE OPCAO2=9  ; FOLIS_D6() //I
-      CASE OPCAO2=10 ; FOLIS_D7() //J
-      CASE OPCAO2=11 ; FOLIS_DA() //K
-      CASE OPCAO2=12 ; FOLIS_DC() //L
-      CASE OPCAO2=13
-           PADRAO("PROV13","PROV13","' '+STR(mNUMERO,8)+' '+STR(mMES,2)+' '+STR(mANO,4)+' '+STR(mDEPTO,4)+' '+STR(mSETOR,3)+' '+STR(mSECAO,3)+' '+STR(mAVOS,2)+' '+STR(mVALLIQ,12,2)","STRZERO(mNUMERO,8)+STRZERO(mANO,4)+STRZERO(mMES,2)","Provis„o 13o. Acumulada","Numero   Mes/Ano Dep  Set Sec Av Liquido",;
-              {|| alltrue(mCHAVE:=STRZERO(mNUMERO,8)+STRZERO(mANO,4)+STRZERO(mMES,2))},"PROV13","PROV13",{|| FO_FOR("GRUPO='PROV13'")})
-               MMES=MMES(OP) //Volta Status 
-      CASE OPCAO2=14 ; IMPRAIS() //N
-   OTHERWISE     ; RETU
+   CASE OPCAO2 = 1    //A
+      FOLIS_D2()
+   CASE OPCAO2 = 2    //B
+      FOLIS_D1(0)
+   CASE OPCAO2 = 3    //C
+      FOLIS_D1(1)
+   CASE OPCAO2 = 4  //D
+      if mdg("Checar Cadastro")
+         FO7W()
+      endif
+      IF mdg("Checar codigos")
+         FOLIS_D9()
+      endif
+   CASE OPCAO2 = 5    //E
+      FOLIS_D3(0)
+   CASE OPCAO2 = 6    //F
+      FOLIS_D3(1)
+   CASE OPCAO2 = 7    //G
+      FOY2(0,"FOLISNTX")
+   CASE OPCAO2 = 8    //H
+      FOY2(1,"FOLISNTX")
+   CASE OPCAO2 = 9    //I
+      FOLIS_D6()
+   CASE OPCAO2 = 10   //J
+      FOLIS_D7()
+   CASE OPCAO2 = 11   //K
+      FOLIS_DA()
+   CASE OPCAO2 = 12   //L
+      FOLIS_DC()
+   CASE OPCAO2 = 13
+      PADRAO("PROV13","PROV13","' '+STR(mNUMERO,8)+' '+STR(mMES,2)+' '+STR(mANO,4)+' '+STR(mDEPTO,4)+' '+STR(mSETOR,3)+' '+STR(mSECAO,3)+' '+STR(mAVOS,2)+' '+STR(mVALLIQ,12,2)","STRZERO(mNUMERO,8)+STRZERO(mANO,4)+STRZERO(mMES,2)","Provis„o 13o. Acumulada","Numero   Mes/Ano Dep  Set Sec Av Liquido",;
+       {|| alltrue(mCHAVE := STRZERO(mNUMERO,8)+STRZERO(mANO,4)+STRZERO(mMES,2))},"PROV13","PROV13",{|| FO_FOR("GRUPO='PROV13'")})
+      MMES := MMES(OP)  //Volta Status
+   CASE OPCAO2 = 14   //N
+      IMPRAIS()
+   OTHERWISE 
+      RETU
    ENDCASE
 ENDDO
-*: FIM: FOLIS_D.PRG
+// : FIM: FOLIS_D.PRG
+
+*+ EOF: folis_d.prg
+*+
