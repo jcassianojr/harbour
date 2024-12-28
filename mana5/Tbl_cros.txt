@@ -1,0 +1,27 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 28-Dez-2024 at  9:58 am
+*+
+*+--------------------------------------------------------------------
+
+cnpjie.prg
+
+   Tables: USE MANARQ NEW SHARED
+           USE MANARQ1 NEW SHARED
+
+m_db.prg
+
+  Indexes: index on &mINDEXP tag &cTAG. EVAL ZEI_FORT(nLASTREC,,,1)
+           index on &mINDEXP to &mDIRIND EVAL ZEI_FORT(nLASTREC,,,1)
+           index on &mINDEXP tag &cTAG. DESCEN EVAL ZEI_FORT(nLASTREC,,,1)
+           index on &mINDEXP to &mDIRIND DESCEN EVAL ZEI_FORT(nLASTREC,,,1)
+
+mana5.prg
+
+  Indexes: index on &cEXP. TAG &mTAG. EVAL ZEI_FORT(nLASTREC,,,1)
+           index on &cEXP. to &cNTX. EVAL ZEI_FORT(nLASTREC,,,1)
+
+mlib29.prg
+
+   Tables: dbusearea(lNEW,cDRIVER,cARQ,,lSHA,.F.)
+

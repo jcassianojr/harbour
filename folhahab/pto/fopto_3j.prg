@@ -1,229 +1,229 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_3j.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:33 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_3j.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:33 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-////#INCLUDE "COMANDO.CH"
+// //#INCLUDE "COMANDO.CH"
 
-cPN := "PN"+ANOMESW
-cPT := "PT"+ANOMESW
+cPN := "PN" + ANOMESW
+cPT := "PT" + ANOMESW
 
-lMIN := MDG("Resumo Final em minutos sexadecimal")
+lMIN := MDG( "Resumo Final em minutos sexadecimal" )
 
-if !netuse("FIRMA")
-   retu
-endif
-dbgotop()
-dbseek(NREMP)
+IF !netuse( "FIRMA" )
+RETU
+ENDIF
+dbGoTop()
+dbSeek( NREMP )
 mRAZ := RAZAO
 mCGC := CGC
 mEND := ENDERECO
 mBAI := BAIRRO
 mCID := CIDADE
 mEST := ESTADO
-dbcloseall()
+dbCloseAll()
 
-if !NETUSE("CONTAS")
-   retu
-endif
+IF !NETUSE( "CONTAS" )
+RETU
+ENDIF
 
-if !NETUSE(pes)
-   dbcloseall()
-   retu
-endif
+IF !NETUSE( pes )
+dbCloseAll()
+RETU
+ENDIF
 FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
 INX    := ""
-FILORD(.T.)
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-if valtype(INX) = "N"
-   dbsetorder(INX)
+FILORD( .T. )
+nLASTREC := LastRec()
+zei_fort( nLASTREC,,, 0 )
+IF ValType( INX ) = "N"
+dbSetOrder( INX )
 ELSE
-   ordDestroy("temp")
-   ordcreate(,"temp",inx)
-   ordSetFocus("temp")
+ordDestroy( "temp" )
+ordCreate(, "temp", inx )
+ordSetFocus( "temp" )
 ENDIF
-set filter to &FILTRO
+SET FILTER TO &FILTRO
 
-if !NETUSE(cPN)
-   dbcloseall()
-   retu
-endif
+IF !NETUSE( cPN )
+dbCloseAll()
+RETU
+ENDIF
 
-if !NETUSE(cPT)
-   dbcloseall()
-   retu
-endif
+IF !NETUSE( cPT )
+dbCloseAll()
+RETU
+ENDIF
 
-if !NETUSE("TABTURNO")
-   dbcloseall()
-   retu
-endif
-
-
-if !NETUSE(if(lSECBCO,"BCOBAK","BCOHRS"))
-   dbcloseALL()
-   retu
-endif
-cSELE6 := ALIAS()
-
-if !MDL('FOPTO-3J - Listagem Apontamento e Totais Banco Horas')
-   retu
-endif
-if MDG("Espacar Entrelinha")
-   IMPRESSORA()
-   qqout(chr(27)+"3"+"72")
-   VIDEO()
-endif
-
-LISTARUE({| X | FOPTO3J(X)})
-
-retu
+IF !NETUSE( "TABTURNO" )
+dbCloseAll()
+RETU
+ENDIF
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function FOPTO3J()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func FOPTO3J
+IF !NETUSE( if( lSECBCO, "BCOBAK", "BCOHRS" ) )
+dbCloseAll()
+RETU
+ENDIF
+cSELE6 := Alias()
+
+IF !MDL( 'FOPTO-3J - Listagem Apontamento e Totais Banco Horas' )
+RETU
+ENDIF
+IF MDG( "Espacar Entrelinha" )
+IMPRESSORA()
+QQOut( Chr( 27 ) + "3" + "72" )
+VIDEO()
+ENDIF
+
+LISTARUE( {| X | FOPTO3J( X ) } )
+
+RETU
 
 
-para COMPARE
-dbselectar(PES)
-dbgotop()
-while !eof()
-   if &COMPARE
-      DBSELECTAR("CONTAS")
-      @ prow()+ 1,0 say IMPSTR(cIMPEXP)+repl('=',80)                          
-      @ prow()+ 1,0 say "FOLHA DE PONTO - "+mRAZ                              
-      @ prow(),56   say "CGC:"+mCGC                                           
-      @ prow()+ 1,0 say "End: "+mEND+" - "+mBAI+" - "+mCID+" - "+mEST         
-      if !empty(NOMSETOR)
-         @ prow()+ 1,0 say NOMSETOR         
-      endif
-      dbselectar(PES)
-      TSA    := TIPO
-      NUM    := NUMERO
-      ANO    := str(year(DXDIA),4)
-      DIAINI := ctod("  /  /  ")
-      DIAFIM := ctod("  /  /  ")
-      dbselectar(cPN)
-      dbgotop()
-      dbseek(str(NUM,8))
-      while NUM = NUMERO .and. !eof()
-         if empty(DIAINI)
-            DIAINI := DATA
-         endif
-         DIAFIM := DATA
-         dbskip()
-      enddo
-      dbselectar(PES)
-      @ prow()+ 1,0 say "Funcionario:"+str(NUM,8)+"-"+NOME+" PERIODO:"+dtoc(DIAINI)+"-"+dtoc(DIAFIM)           
-      @ prow()+ 1,0 say "Depto: "+STRVAL(DEPTO,4)+"/"+STRVAL(SETOR,3)+"/"+STRVAL(SECAO,3)+" Horario: "         
-      cHT  := HT
-      cHTT := HTT
-      dADM := ADMITIDO
-      dbselectar("TABTURNO")
-      dbgotop()
-      if dbseek(cHTT)
-         @ prow(),30   say NOME                            
-         @ prow()+ 1,0 say "Admitido: "+dtoc(dADM)         
-         if !empty(NOM2)
-            @ prow(),30 say NOM2         
-         endif
-      else
-         @ prow(),30   say "Descritivo de Horario nao Cadastrado"         
-         @ prow()+ 1,0 say "Admitido: "+dtoc(dADM)                        
-      endif
-      @ prow()+ 1,0 say repl('-',80)         
-      @ prow()+ 1,0 say "DIA "               
-      @ prow(),18   say "Reducao"            
-      @ prow(),28   say "Banco"              
-      @ prow(),38   say "Horas"              
-      @ prow()+ 1,0 say repl('-',80)         
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function FOPTO3J()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC FOPTO3J
 
-      //saldo anterior
-      dbselectar(cSELE6)
-      nSALDO := pegsaldobco(NUM,nANOANT,nMESANT)
-      if nSALDO <> 0.00
-         @ prow()+ 1,0 say "Saldo Banco Horas="+strzero(nMESANT,2)+"/"+strzero(nANOANT,4)                       
-         @ prow(),38   say if(lMIN,BHOR(nSALDO),nSALDO)                                   pict "9999.99"        
-      endif
+   PARA COMPARE
 
-      //Movimento do mes
-      dbselectar(cPN)
-      dbgotop()
-      dbseek(str(NUM,8))
-      while NUM = NUMERO .and. !eof()
-         X := day(DATA)
-         @ prow()+ 1,0 say strzero(X,2)         
-         @ prow(), 3   say COD                  
-         if !empty(ENT) .or. !empty(SAI)
-            @ prow(),06 say ENT pict '##.##'        
-            @ prow(),12 say SAI pict '##.##'        
-         endif
-         @ prow(),18 say REDSN          
-         @ prow(),30 say BCOSN          
-         @ prow(),38 say BCOHRS         
-         dbskip()
-      enddo
-      @ prow()+ 2,0 say repl('=',80)         
+   dbSelectAr( PES )
+   dbGoTop()
+   WHILE !Eof()
+      IF &COMPARE
+         dbSelectAr( "CONTAS" )
+         @ PRow() + 1, 0 SAY IMPSTR( cIMPEXP ) + repl( '=', 80 )
+         @ PRow() + 1, 0 SAY "FOLHA DE PONTO - " + mRAZ
+         @ PRow(), 56   SAY "CGC:" + mCGC
+         @ PRow() + 1, 0 SAY "End: " + mEND + " - " + mBAI + " - " + mCID + " - " + mEST
+         IF !Empty( NOMSETOR )
+            @ PRow() + 1, 0 SAY NOMSETOR
+         ENDIF
+         dbSelectAr( PES )
+         TSA    := TIPO
+         NUM    := NUMERO
+         ANO    := Str( Year( DXDIA ), 4 )
+         DIAINI := CToD( "  /  /  " )
+         DIAFIM := CToD( "  /  /  " )
+         dbSelectAr( cPN )
+         dbGoTop()
+         dbSeek( Str( NUM, 8 ) )
+         WHILE NUM = NUMERO .AND. !Eof()
+            IF Empty( DIAINI )
+               DIAINI := DATA
+            ENDIF
+            DIAFIM := DATA
+            dbSkip()
+         ENDDO
+         dbSelectAr( PES )
+         @ PRow() + 1, 0 SAY "Funcionario:" + Str( NUM, 8 ) + "-" + NOME + " PERIODO:" + DToC( DIAINI ) + "-" + DToC( DIAFIM )
+         @ PRow() + 1, 0 SAY "Depto: " + STRVAL( DEPTO, 4 ) + "/" + STRVAL( SETOR, 3 ) + "/" + STRVAL( SECAO, 3 ) + " Horario: "
+         cHT  := HT
+         cHTT := HTT
+         dADM := ADMITIDO
+         dbSelectAr( "TABTURNO" )
+         dbGoTop()
+         IF dbSeek( cHTT )
+            @ PRow(), 30   SAY NOME
+            @ PRow() + 1, 0 SAY "Admitido: " + DToC( dADM )
+            IF !Empty( NOM2 )
+               @ PRow(), 30 SAY NOM2
+            ENDIF
+         ELSE
+            @ PRow(), 30   SAY "Descritivo de Horario nao Cadastrado"
+            @ PRow() + 1, 0 SAY "Admitido: " + DToC( dADM )
+         ENDIF
+         @ PRow() + 1, 0 SAY repl( '-', 80 )
+         @ PRow() + 1, 0 SAY "DIA "
+         @ PRow(), 18   SAY "Reducao"
+         @ PRow(), 28   SAY "Banco"
+         @ PRow(), 38   SAY "Horas"
+         @ PRow() + 1, 0 SAY repl( '-', 80 )
 
-      //Total
-      nTOTBCOHRS := 0
-      dbselectar(cPT)
-      dbgotop()
-      if dbseek(NUM)
-         @ prow()+ 1,0 say "Atual"                                            
-         @ prow(),38   say if(lMIN,BHOR(BCOHRS),BCOHRS) pict "9999.99"        
-         nTOTBCOHRS := BCOHRS
-      endif
+         // saldo anterior
+         dbSelectAr( cSELE6 )
+         nSALDO := pegsaldobco( NUM, nANOANT, nMESANT )
+         IF nSALDO <> 0.00
+            @ PRow() + 1, 0 SAY "Saldo Banco Horas=" + StrZero( nMESANT, 2 ) + "/" + StrZero( nANOANT, 4 )
+            @ PRow(), 38   SAY if( lMIN, BHOR( nSALDO ), nSALDO )                                   PICT "9999.99"
+         ENDIF
 
-      //saldo
-      if nSALDO+nTOTBCOHRS <> 0.00
-         @ prow()+ 1,0 say "Saldo"                                                                  
-         @ prow(),38   say if(lMIN,BHOR(nSALDO+nTOTBCOHRS),nSALDO+nTOTBCOHRS) pict "9999.99"        
-      endif
+         // Movimento do mes
+         dbSelectAr( cPN )
+         dbGoTop()
+         dbSeek( Str( NUM, 8 ) )
+         WHILE NUM = NUMERO .AND. !Eof()
+            X := Day( DATA )
+            @ PRow() + 1, 0 SAY StrZero( X, 2 )
+            @ PRow(), 3   SAY COD
+            IF !Empty( ENT ) .OR. !Empty( SAI )
+               @ PRow(), 06 SAY ENT PICT '##.##'
+               @ PRow(), 12 SAY SAI PICT '##.##'
+            ENDIF
+            @ PRow(), 18 SAY REDSN
+            @ PRow(), 30 SAY BCOSN
+            @ PRow(), 38 SAY BCOHRS
+            dbSkip()
+         ENDDO
+         @ PRow() + 2, 0 SAY repl( '=', 80 )
 
-      @ prow()+ 1,0 say repl('=',80)         
+         // Total
+         nTOTBCOHRS := 0
+         dbSelectAr( cPT )
+         dbGoTop()
+         IF dbSeek( NUM )
+            @ PRow() + 1, 0 SAY "Atual"
+            @ PRow(), 38   SAY if( lMIN, BHOR( BCOHRS ), BCOHRS ) PICT "9999.99"
+            nTOTBCOHRS := BCOHRS
+         ENDIF
 
-      IMPFOL()
-   endif
-   dbselectar(PES)
-   dbskip()
-enddo
+         // saldo
+         IF nSALDO + nTOTBCOHRS <> 0.00
+            @ PRow() + 1, 0 SAY "Saldo"
+            @ PRow(), 38   SAY if( lMIN, BHOR( nSALDO + nTOTBCOHRS ), nSALDO + nTOTBCOHRS ) PICT "9999.99"
+         ENDIF
+
+         @ PRow() + 1, 0 SAY repl( '=', 80 )
+
+         IMPFOL()
+      ENDIF
+      dbSelectAr( PES )
+      dbSkip()
+   ENDDO
 
 
-*+ EOF: fopto_3j.prg
-*+
+// + EOF: fopto_3j.prg
+// +

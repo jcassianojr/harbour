@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fores_a8.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:41 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fores_a8.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:41 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -38,55 +38,55 @@
 // :
 // :*****************************************************************************
 
-IF !MDG("Deseja Excluir Lan‡amentos de Demitidos do Ano Anterior")
-   RETU .T.
+IF !MDG( "Deseja Excluir Lan‡amentos de Demitidos do Ano Anterior" )
+RETU .T.
 ENDIF
-FORESA8("FO_PFE","FO_PFE")
-FORESA8("FO_RSS","FO_RSS")
+FORESA8( "FO_PFE", "FO_PFE" )
+FORESA8( "FO_RSS", "FO_RSS" )
 RETU .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function FORESA8()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNC FORESA8(cARQ,cIND)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function FORESA8()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC FORESA8( cARQ, cIND )
 
-IF !NETUSE(PES)   //AREDE(PES,PES,0)
-   RETU .T.
-ENDIF
-IF !NETUSE(cARQ)  //AREDE(cARQ,cIND,0)
-   RETU .T.
-ENDIF]
-cSELE2 := ALIAS()
-DBGOTOP()
-WHILE !EOF()
-   mNUMERO := NUMERO
-   dbselectar(pes)
-   DBGOTOP()
-   DBSEEK(mNUMERO)
-   ACHADO := FOUND()  //usa found softseek para loop
-   DBSELECTAR(cSELE2)
-   WHILE mNUMERO = NUMERO
-      IF !ACHADO
-         netrecdel()
-      ENDIF
-      DBSKIP()
+   IF !NETUSE( PES )   // AREDE(PES,PES,0)
+      RETU .T.
+   ENDIF
+   IF !NETUSE( cARQ )  // AREDE(cARQ,cIND,0)
+      RETU .T.
+   ENDIF ]
+   cSELE2 := Alias()
+   dbGoTop()
+   WHILE !Eof()
+      mNUMERO := NUMERO
+      dbSelectAr( pes )
+      dbGoTop()
+      dbSeek( mNUMERO )
+      ACHADO := Found()  // usa found softseek para loop
+      dbSelectAr( cSELE2 )
+      WHILE mNUMERO = NUMERO
+         IF !ACHADO
+            netrecdel()
+         ENDIF
+         dbSkip()
+      ENDDO
    ENDDO
-ENDDO
-DBCLOSEALL()
-RETU .T.
+   dbCloseAll()
+   RETU .T.
 
 
 
 
-*+ EOF: fores_a8.prg
-*+
+// + EOF: fores_a8.prg
+// +

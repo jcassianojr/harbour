@@ -1,131 +1,131 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_2e.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:32 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_2e.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:32 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-CABE2('FOPTO_2E - Transferir Totais Para a Folha')
-CX := array(24)
-LF := chr(13)+chr(10)
+CABE2( 'FOPTO_2E - Transferir Totais Para a Folha' )
+CX := Array( 24 )
+LF := Chr( 13 ) + Chr( 10 )
 
 aCODCTA := PEGCX()
-aTR     := PEGCX("T")
+aTR     := PEGCX( "T" )
 
-if !NETUSE("FOPTOCON")
-   retu .F.
-endif
-if !dbseek(nremp)
-   dbgotop()
-endif
-cARQUIVO := alltrim(CAMINEX)
-eFORMULA := alltrim(EXPORTA)
-dbcloseall()
+IF !NETUSE( "FOPTOCON" )
+RETU .F.
+ENDIF
+IF !dbSeek( nremp )
+dbGoTop()
+ENDIF
+cARQUIVO := AllTrim( CAMINEX )
+eFORMULA := AllTrim( EXPORTA )
+dbCloseAll()
 
-cPT := "PT"+ANOMESW
+cPT := "PT" + ANOMESW
 
 
-if !NETUSE(PES)
-   retu
-endif
+IF !NETUSE( PES )
+RETU
+ENDIF
 FILTRO := "EMPTY(DEMITIDO)"
-FI     := trim(FILTRO)
-FILTRO := FILTRO(FI)
-set filter to &FILTRO
+FI     := Trim( FILTRO )
+FILTRO := FILTRO( FI )
+SET FILTER TO &FILTRO
 INITVARS()
 CLRVARS()
 
 
-if !NETUSE(cPT)
-   retu
-endif
+IF !NETUSE( cPT )
+RETU
+ENDIF
 
-nHANDLE := fcreate(cARQUIVO)
-IF FERROR() # 0
-   ALERTX("Erro na Cria‡„o do Arquivo")
-   RETU
+nHANDLE := FCreate( cARQUIVO )
+IF FError() # 0
+ALERTX( "Erro na Cria‡„o do Arquivo" )
+RETU
 ENDIF
 
 
-dbselectar(PES)
-dbgotop()
-while !eof()
-   PETELA(8)
-   EQUVARS()
-   //Anlise feita com arquivo pes pois checar tipo horista/mensalista entre outros na macro
-   afill(CX,0)
-   for X := 1 to 24
-      cVAR := aCODCTA[X]
-      if !empty(&cVAR.)
-         CX[X] = &CVAR
-      endif
-   next X
-   dbselectar(cPT)
-   dbgotop()
-   if dbseek(mNUMERO)
-      HX := {CTA01,CTA02,CTA03,CTA04,CTA05,CTA06,CTA07,CTA08,;
-       CTA09,CTA10,CTA11,CTA12,CTA13,CTA14,CTA15,CTA16,;
-       CTA17,CTA18,CTA19,CTA20,CTA21,CTA22,CTA23,CTA24}
-      VX := {VAL01,VAL02,VAL03,VAL04,VAL05,VAL06,VAL07,VAL08,;
-       VAL09,VAL10,VAL11,VAL12,VAL13,VAL14,VAL15,VAL16,;
-       VAL17,VAL18,VAL19,VAL20,VAL21,VAL22,VAL23,VAL24}
-      for X := 1 to 24
-         if HX[X] # 0 .and. aTR[X] # "N"
-            fwrite(nHANDLE,&eFORMULA)
-         endif
-      next X
-   endif
-   dbselectar(PES)
-   dbskip()
-enddo
-dbcloseall()
-fwrite(nHANDLE,chr(26))
-fclose(nHANDLE)
-if MDG("Deseja Imprimir o arquivo Gerado")
-   IMPARQ(cARQUIVO)
-endif
+dbSelectAr( PES )
+dbGoTop()
+WHILE !Eof()
+PETELA( 8 )
+EQUVARS()
+// Anlise feita com arquivo pes pois checar tipo horista/mensalista entre outros na macro
+AFill( CX, 0 )
+FOR X := 1 TO 24
+cVAR := aCODCTA[ X ]
+IF !Empty( &cVAR. )
+CX[ X ] = &CVAR
+ENDIF
+NEXT X
+dbSelectAr( cPT )
+dbGoTop()
+IF dbSeek( mNUMERO )
+HX := { CTA01, CTA02, CTA03, CTA04, CTA05, CTA06, CTA07, CTA08, ;
+            CTA09, CTA10, CTA11, CTA12, CTA13, CTA14, CTA15, CTA16, ;
+            CTA17, CTA18, CTA19, CTA20, CTA21, CTA22, CTA23, CTA24 }
+VX := { VAL01, VAL02, VAL03, VAL04, VAL05, VAL06, VAL07, VAL08, ;
+            VAL09, VAL10, VAL11, VAL12, VAL13, VAL14, VAL15, VAL16, ;
+            VAL17, VAL18, VAL19, VAL20, VAL21, VAL22, VAL23, VAL24 }
+FOR X := 1 TO 24
+IF HX[ X ] # 0 .AND. aTR[ X ] # "N"
+FWrite( nHANDLE, &eFORMULA )
+ENDIF
+NEXT X
+ENDIF
+dbSelectAr( PES )
+dbSkip()
+ENDDO
+dbCloseAll()
+FWrite( nHANDLE, Chr( 26 ) )
+FClose( nHANDLE )
+IF MDG( "Deseja Imprimir o arquivo Gerado" )
+IMPARQ( cARQUIVO )
+ENDIF
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function STRHOR()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func STRHOR(nVAL,nPOS,nDEC)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function STRHOR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC STRHOR( nVAL, nPOS, nDEC )
+
+   LOCAL cRETVAL := 0
+
+   cRETVAL := StrTran( StrZero( nVAL, nPOS, nDEC ), ".", "" )
+   RETU cRETVAL
 
 
-local cRETVAL := 0
-cRETVAL := strtran(strzero(nVAL,nPOS,nDEC),".","")
-retu cRETVAL
-
-
-*+ EOF: fopto_2e.prg
-*+
+// + EOF: fopto_2e.prg
+// +

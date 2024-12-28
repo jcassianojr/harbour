@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fofb.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fofb.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -35,63 +35,64 @@
 // :
 // :*****************************************************************************
 
-#INCLUDE "BOX.CH"
+#include "BOX.CH"
 
-PADRAO("MESHOL","MESHOL","' '+mNOME+' '+LEFT(mMES1,50)","mNOME","Cadastro de Mensagens","Nome Mensagem",;
- {|| PEGCHAVE("mNOME",SPACE(6),"Codigo:")},{|| MESHOLT()},{|| MESHOLG()},{|| FO_FOR("GRUPO='MESHOL'")})
+PADRAO( "MESHOL", "MESHOL", "' '+mNOME+' '+LEFT(mMES1,50)", "mNOME", "Cadastro de Mensagens", "Nome Mensagem", ;
+      {|| PEGCHAVE( "mNOME", Space( 6 ), "Codigo:" ) }, {|| MESHOLT() }, {|| MESHOLG() }, {|| FO_FOR( "GRUPO='MESHOL'" ) } )
 RETU .T.
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MESHOLG()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MESHOLG()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNC MESHOLG
 
-@ 11,26 GET mNOME         
-@ 14,26 GET mMES1         
-@ 16,26 GET mMES2         
-@ 18,26 GET mMES3         
-READCUR()
-RETU .T.
+   @ 11, 26 GET mNOME
+   @ 14, 26 GET mMES1
+   @ 16, 26 GET mMES2
+   @ 18, 26 GET mMES3
+   READCUR()
+   RETU .T.
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MESHOLT()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MESHOLT()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
 FUNC MESHOLT
 
-HB_dispbox(8,0,20,78,B_DOUBLE+" ")
-@ 11,13 SAY "Mensagem  "+CHR(16)+SPAC(10)+CHR(17)                   
-@ 14,13 SAY "1  Linha "+CHR(26)                                     
-@ 16,13 SAY "2  Linha "+CHR(26)                                     
-@ 18,13 SAY "3  Linha "+CHR(26)                                     
-@ 08,00 SAY " - "                                                   
-@ 08,03 SAY SPAC(23)+"Mensagens  Para  Holleriths"+SPAC(26)         
-hb_scroll(09,79,21,79)
-@ 21,01 SAY SPAC(78)         
-RETU .T.
+   hb_DispBox( 8, 0, 20, 78, B_DOUBLE + " " )
+   @ 11, 13 SAY "Mensagem  " + Chr( 16 ) + SPAC( 10 ) + Chr( 17 )
+   @ 14, 13 SAY "1  Linha " + Chr( 26 )
+   @ 16, 13 SAY "2  Linha " + Chr( 26 )
+   @ 18, 13 SAY "3  Linha " + Chr( 26 )
+   @ 08, 00 SAY " - "
+   @ 08, 03 SAY SPAC( 23 ) + "Mensagens  Para  Holleriths" + SPAC( 26 )
+   hb_Scroll( 09, 79, 21, 79 )
+   @ 21, 01 SAY SPAC( 78 )
+   RETU .T.
 
 // : FIM: FOFB.PRG
 
-*+ EOF: fofb.prg
-*+
+// + EOF: fofb.prg
+// +

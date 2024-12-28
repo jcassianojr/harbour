@@ -1,253 +1,344 @@
-*+膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊
-*+
-*+    Source Module => C:\DEVELOP\OBJ\DISK68.PRG
-*+
-*+    Functions: Function CARDCHEK()
-*+               Function CHECKCTA()
-*+               Function CALCDIG()
-*+               Function DAC10()
-*+
-*+    Reformatted by Click! 2.03 on Sep-13-2004 at  9:54 am
-*+
-*+膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : disk68.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:41 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-#INCLUDE "INKEY.CH"
+// +膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊
+// +
+// +    Source Module => C:\DEVELOP\OBJ\DISK68.PRG
+// +
+// +    Functions: Function CARDCHEK()
+// +               Function CHECKCTA()
+// +               Function CALCDIG()
+// +               Function DAC10()
+// +
+// +    Reformatted by Click! 2.03 on Sep-13-2004 at  9:54 am
+// +
+// +膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊膊
 
-*+北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
-*+
-*+    Function CARDCHEK()
-*+
-*+北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
-*+
-function CARDCHEK( Arg1 )
+#include "INKEY.CH"
 
-local Local1
-local Local2
-local Local3
-local Local4
-local Local5
-local lRETU  := .F.
-local aCards := { "AmEx", "Visa", "MasterCard", "Discover", ;
-                  "Carte Blanche", "Diners", "JCB" }
+// +北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+// +
+// +    Function CARDCHEK()
+// +
+// +北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+// +
 
-if lastkey() = K_UP .or. lastkey() = K_DOWN
-   retu .T.
-endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CARDCHEK()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION CARDCHEK( Arg1 )
 
-Local3 := 0
+   LOCAL Local1
+   LOCAL Local2
+   LOCAL Local3
+   LOCAL Local4
+   LOCAL Local5
+   LOCAL lRETU  := .F.
+   LOCAL aCards := { "AmEx", "Visa", "MasterCard", "Discover", ;
+      "Carte Blanche", "Diners", "JCB" }
 
-if valtype( aRG1 ) # "C"
-   ARg1 := strzero( aRG1, len( arg1 ) )
-endif
+   IF LastKey() = K_UP .OR. LastKey() = K_DOWN
+      RETU .T.
+   ENDIF
 
-ARg1 := TIRAOUT( aRG1 )
-Arg1 := alltrim( Arg1 )
+   Local3 := 0
 
-if empty( ARG1 )
-   ALERTX( "Numero N苚 Informado" )
-   retu .F.
-endif
+   IF ValType( aRG1 ) # "C"
+      ARg1 := StrZero( aRG1, Len( arg1 ) )
+   ENDIF
 
-if ( left( Arg1, 1 ) == "0" )
-   ALERTX( "Numero Come嘺ndo com Zero" )
-   retu .F.
-endif
+   ARg1 := TIRAOUT( aRG1 )
+   Arg1 := AllTrim( Arg1 )
 
-if ( len( Arg1 ) < 16 )
-   Local4 := replicate( "0", 16 - len( Arg1 ) ) + Arg1
-else
-   Local4 := Arg1
-endif
-for Local1 := 1 to 15 Step 2
-   Local2 := val( substr( Local4, Local1, 1 ) ) * 2
-   if ( Local2 > 9 )
-      Local3 += ( 1 + Local2 % 10 )
-   else
-      Local3 += Local2
-   endif
-next
-for Local1 := 2 to 16 Step 2
-   Local3 += val( substr( Local4, Local1, 1 ) )
-next
-if ( Local3 == 0 .or. Local3 % 10 != 0 )
-   Local5 := - 1
-else
-   Local4 := left( Arg1, 2 )
-   do case
-   case Local4 == "34" .or. Local4 == "37"
-      Local5 := 1
-   case Local4 == "36"
-      Local5 := 6
-   case Local4 == "38"
-      if ( substr( Arg1, 3, 1 ) == "9" )
+   IF Empty( ARG1 )
+      ALERTX( "Numero N苚 Informado" )
+      RETU .F.
+   ENDIF
+
+   IF ( Left( Arg1, 1 ) == "0" )
+      ALERTX( "Numero Come嘺ndo com Zero" )
+      RETU .F.
+   ENDIF
+
+   IF ( Len( Arg1 ) < 16 )
+      Local4 := Replicate( "0", 16 - Len( Arg1 ) ) + Arg1
+   ELSE
+      Local4 := Arg1
+   ENDIF
+   FOR Local1 := 1 TO 15 STEP 2
+      Local2 := Val( SubStr( Local4, Local1, 1 ) ) * 2
+      IF ( Local2 > 9 )
+         Local3 += ( 1 + Local2 % 10 )
+      ELSE
+         Local3 += Local2
+      ENDIF
+   NEXT
+   FOR Local1 := 2 TO 16 STEP 2
+      Local3 += Val( SubStr( Local4, Local1, 1 ) )
+   NEXT
+   IF ( Local3 == 0 .OR. Local3 % 10 != 0 )
+      Local5 := -1
+   ELSE
+      Local4 := Left( Arg1, 2 )
+      DO CASE
+      CASE Local4 == "34" .OR. Local4 == "37"
+         Local5 := 1
+      CASE Local4 == "36"
+         Local5 := 6
+      CASE Local4 == "38"
+         IF ( SubStr( Arg1, 3, 1 ) == "9" )
+            Local5 := 5
+         ELSE
+            Local5 := 6
+         ENDIF
+      CASE Local4 == "31" .OR. Local4 == "33" .OR. Local4 == "35"
+         Local4 := Left( Arg1, 6 )
+         DO CASE
+         CASE Local4 >= "311200" .AND. Local4 <= "312099"
+            Local5 := 7
+         CASE Local4 >= "315800" .AND. Local4 <= "315999"
+            Local5 := 7
+         CASE Local4 >= "333700" .AND. Local4 <= "334999"
+            Local5 := 7
+         CASE Local4 >= "352800" .AND. Local4 <= "358999"
+            Local5 := 7
+         OTHERWISE
+            Local5 := -1
+         ENDCASE
+      CASE Local4 == "30"
+         Local4 := Left( Arg1, 6 )
+         IF ( Local4 >= "308800" .AND. Local4 <= "309499" )
+            Local5 := 7
+         ELSEIF ( Local4 >= "309600" .AND. Local4 <= "310299" )
+            Local5 := 7
+         ELSE
+            Local5 := 6
+         ENDIF
+      CASE Left( Local4, 1 ) == "4"
+         Local5 := 2
+      CASE Local4 >= "51" .AND. Local4 <= "55"
+         Local5 := 3
+      CASE Local4 == "60" .AND. SubStr( Arg1, 3, 2 ) == "11"
+         Local5 := 4
+      CASE Left( Local4, 1 ) == "9"
          Local5 := 5
-      else
-         Local5 := 6
-      endif
-   case Local4 == "31" .or. Local4 == "33" .or. Local4 == "35"
-      Local4 := left( Arg1, 6 )
-      do case
-      case Local4 >= "311200" .and. Local4 <= "312099"
-         Local5 := 7
-      case Local4 >= "315800" .and. Local4 <= "315999"
-         Local5 := 7
-      case Local4 >= "333700" .and. Local4 <= "334999"
-         Local5 := 7
-      case Local4 >= "352800" .and. Local4 <= "358999"
-         Local5 := 7
-      otherwise
-         Local5 := - 1
-      endcase
-   case Local4 == "30"
-      Local4 := left( Arg1, 6 )
-      if ( Local4 >= "308800" .and. Local4 <= "309499" )
-         Local5 := 7
-      elseif ( Local4 >= "309600" .and. Local4 <= "310299" )
-         Local5 := 7
-      else
-         Local5 := 6
-      endif
-   case left( Local4, 1 ) == "4"
-      Local5 := 2
-   case Local4 >= "51" .and. Local4 <= "55"
-      Local5 := 3
-   case Local4 == "60" .and. substr( Arg1, 3, 2 ) == "11"
-      Local5 := 4
-   case left( Local4, 1 ) == "9"
-      Local5 := 5
-   otherwise
-      Local5 := 0
-   endcase
-endif
-if local5 > 0
-   lRETU := .T.
-   ALERTX( aCards[ local5 ] )
-else
-   ALERTX( "Nero Inv爈ido" )
-endif
-return lRETU
+      OTHERWISE
+         Local5 := 0
+      ENDCASE
+   ENDIF
+   IF local5 > 0
+      lRETU := .T.
+      ALERTX( aCards[ local5 ] )
+   ELSE
+      ALERTX( "Nero Inv爈ido" )
+   ENDIF
 
-*+北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
-*+
-*+    Function CHECKCTA()
-*+
-*+北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
-*+
-func CHECKCTA( cBANCO, cAGENCIA, cCONTA )
+   RETURN lRETU
 
-local eTOT := 0
-if lastkey() = K_UP .or. lastkey() = K_DOWN
-   retu .T.
-endif
-if valtype( cBANCO ) = "N"
-   cBANCO := strzero( cBANCO, 3 )
-endif
-if cBANCO # "033" .and. cBANCO # "237" .and. cBANCO # "341"
-   retu .T.
-endif
-//Ajustando Conta
-cCONTA := strtran( cCONTA, " ", "" )
-cCONTA := TIRAOUT( cCONTA )
-//Ajustando Agencia
-cAGENCIA := strtran( cAGENCIA, " ", "" )
-cAGENCIA := TIRAOUT( cAGENCIA )
-do case
-case cBANCO = "033"
-   if len( cCONTA ) # 9
-      ALERTX( "Quantidade de Digitos da Conta Diferente de 9" )
-      retu .F.
-   endif
-   cAGENCIA := right( cAGENCIA, 3 )
-   eTOT     += CALCDIG( 7, substr( cAGENCIA, 1, 1 ) )
-   eTOT     += CALCDIG( 3, substr( cAGENCIA, 2, 1 ) )
-   eTOT     += CALCDIG( 1, substr( cAGENCIA, 3, 1 ) )
-   eTOT     += CALCDIG( 9, substr( cCONTA, 1, 1 ) )
-   eTOT     += CALCDIG( 7, substr( cCONTA, 2, 1 ) )
-   eTOT     += CALCDIG( 1, substr( cCONTA, 3, 1 ) )
-   eTOT     += CALCDIG( 3, substr( cCONTA, 4, 1 ) )
-   eTOT     += CALCDIG( 1, substr( cCONTA, 5, 1 ) )
-   eTOT     += CALCDIG( 9, substr( cCONTA, 6, 1 ) )
-   eTOT     += CALCDIG( 7, substr( cCONTA, 7, 1 ) )
-   eTOT     += CALCDIG( 3, substr( cCONTA, 8, 1 ) )
-   eTOT     := strzero( eTOT )
-   eTOT     := right( eTOT, 1 )
-   eTOT     := if( val( eTOT ) > 0, 10 - val( eTOT ), 0 )
-   if eTOT # val( substr( cCONTA, 9, 1 ) )
-      ALERTX( "Checagem da Conta n刼 Confere" )
-      retu .F.
-   endif
-case cBANCO = "341"
-   if ( dac10( cAGENCIA + left( cCONTA, 5 ) ) != right( cCONTA, 1 ) )
-      ALERTX( "Checagem da Conta n刼 Confere" )
-      retu .F.
-   endif
-case cBANCO = "237"
-   eTOT := 0
-   nFIM := len( cCONTA )
-   nINI := nFIM
-   nFIM --
-   for X := 1 to nFIM
-      eTOT += nINI * val( substr( cCONTA, X, 1 ) )
-      nINI --
-   next X
-   nRES := eTOT % 11
-   nRES := 11 - nRES
-   nRES := if( nRES = 10, "P", str( nRES, 1 ) )
-   if nRES <> right( cCONTA, 1 )
-      ALERTX( "Digito de Controle n刼 confere" )
-      retu .F.
-   endif
-endcase
-retu .T.
+// +北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+// +
+// +    Function CHECKCTA()
+// +
+// +北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+// +
 
-*+北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
-*+
-*+    Function CALCDIG()
-*+
-*+    Called from ( disk68.prg   )  11 - function checkcta()
-*+
-*+北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
-*+
-func CALCDIG( n1, n2 )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKCTA()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC CHECKCTA( cBANCO, cAGENCIA, cCONTA )
 
-local eRETU
-if valtype( N2 ) = "C"
-   N2 := val( N2 )
-endif
-eRETU := N1 * N2
-eRETU := strzero( eRETU )
-eRETU := right( eRETU, 1 )
-eRETU := val( eRETU )
-retu eRETU
+   LOCAL eTOT := 0
+
+   IF LastKey() = K_UP .OR. LastKey() = K_DOWN
+      RETU .T.
+   ENDIF
+   IF ValType( cBANCO ) = "N"
+      cBANCO := StrZero( cBANCO, 3 )
+   ENDIF
+   IF cBANCO # "033" .AND. cBANCO # "237" .AND. cBANCO # "341"
+      RETU .T.
+   ENDIF
+// Ajustando Conta
+   cCONTA := StrTran( cCONTA, " ", "" )
+   cCONTA := TIRAOUT( cCONTA )
+// Ajustando Agencia
+   cAGENCIA := StrTran( cAGENCIA, " ", "" )
+   cAGENCIA := TIRAOUT( cAGENCIA )
+   DO CASE
+   CASE cBANCO = "033"
+      IF Len( cCONTA ) # 9
+         ALERTX( "Quantidade de Digitos da Conta Diferente de 9" )
+         RETU .F.
+      ENDIF
+      cAGENCIA := Right( cAGENCIA, 3 )
+      eTOT     += CALCDIG( 7, SubStr( cAGENCIA, 1, 1 ) )
+      eTOT     += CALCDIG( 3, SubStr( cAGENCIA, 2, 1 ) )
+      eTOT     += CALCDIG( 1, SubStr( cAGENCIA, 3, 1 ) )
+      eTOT     += CALCDIG( 9, SubStr( cCONTA, 1, 1 ) )
+      eTOT     += CALCDIG( 7, SubStr( cCONTA, 2, 1 ) )
+      eTOT     += CALCDIG( 1, SubStr( cCONTA, 3, 1 ) )
+      eTOT     += CALCDIG( 3, SubStr( cCONTA, 4, 1 ) )
+      eTOT     += CALCDIG( 1, SubStr( cCONTA, 5, 1 ) )
+      eTOT     += CALCDIG( 9, SubStr( cCONTA, 6, 1 ) )
+      eTOT     += CALCDIG( 7, SubStr( cCONTA, 7, 1 ) )
+      eTOT     += CALCDIG( 3, SubStr( cCONTA, 8, 1 ) )
+      eTOT     := StrZero( eTOT )
+      eTOT     := Right( eTOT, 1 )
+      eTOT     := if( Val( eTOT ) > 0, 10 - Val( eTOT ), 0 )
+      IF eTOT # Val( SubStr( cCONTA, 9, 1 ) )
+         ALERTX( "Checagem da Conta n刼 Confere" )
+         RETU .F.
+      ENDIF
+   CASE cBANCO = "341"
+      IF ( dac10( cAGENCIA + Left( cCONTA, 5 ) ) != Right( cCONTA, 1 ) )
+         ALERTX( "Checagem da Conta n刼 Confere" )
+         RETU .F.
+      ENDIF
+   CASE cBANCO = "237"
+      eTOT := 0
+      nFIM := Len( cCONTA )
+      nINI := nFIM
+      nFIM--
+      FOR X := 1 TO nFIM
+         eTOT += nINI * Val( SubStr( cCONTA, X, 1 ) )
+         nINI--
+      NEXT X
+      nRES := eTOT % 11
+      nRES := 11 - nRES
+      nRES := if( nRES = 10, "P", Str( nRES, 1 ) )
+      IF nRES <> Right( cCONTA, 1 )
+         ALERTX( "Digito de Controle n刼 confere" )
+         RETU .F.
+      ENDIF
+   ENDCASE
+   RETU .T.
+
+// +北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+// +
+// +    Function CALCDIG()
+// +
+// +    Called from ( disk68.prg   )  11 - function checkcta()
+// +
+// +北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CALCDIG()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC CALCDIG( n1, n2 )
+
+   LOCAL eRETU
+
+   IF ValType( N2 ) = "C"
+      N2 := Val( N2 )
+   ENDIF
+   eRETU := N1 * N2
+   eRETU := StrZero( eRETU )
+   eRETU := Right( eRETU, 1 )
+   eRETU := Val( eRETU )
+   RETU eRETU
 
 // *******************************
 
-*+北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
-*+
-*+    Function DAC10()
-*+
-*+    Called from ( disk68.prg   )   1 - function checkcta()
-*+
-*+北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
-*+
-function DAC10( Arg1 )
+// +北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+// +
+// +    Function DAC10()
+// +
+// +    Called from ( disk68.prg   )   1 - function checkcta()
+// +
+// +北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+// +
 
-local cnumero
-local ninicio
-local ntotal
-local ccpoaux
-local x
-ninicio := len( alltrim( Arg1 ) ) + 1
-ntotal  := 0
-if ( ninicio < 2 )
-   ninicio := 2
-endif
-ccpoaux := "0" + alltrim( Arg1 )
-for x := ninicio to 1 step - 2
-   cnumero := substr( ccpoaux, x, 1 )
-   ntotal  += at( cnumero, "516273849" )
-   ntotal  += val( substr( ccpoaux, x - 1, 1 ) )
-next
-return alltrim( str( at( substr( str( ntotal, 3 ), 3, 1 ), "987654321" ) ) )
 
-*+ EOF: DISK68.PRG
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function DAC10()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNCTION DAC10( Arg1 )
+
+   LOCAL cnumero
+   LOCAL ninicio
+   LOCAL ntotal
+   LOCAL ccpoaux
+   LOCAL x
+
+   ninicio := Len( AllTrim( Arg1 ) ) + 1
+   ntotal  := 0
+   IF ( ninicio < 2 )
+      ninicio := 2
+   ENDIF
+   ccpoaux := "0" + AllTrim( Arg1 )
+   FOR x := ninicio TO 1 STEP - 2
+      cnumero := SubStr( ccpoaux, x, 1 )
+      ntotal  += At( cnumero, "516273849" )
+      ntotal  += Val( SubStr( ccpoaux, x - 1, 1 ) )
+   NEXT
+
+   RETURN AllTrim( Str( At( SubStr( Str( ntotal, 3 ), 3, 1 ), "987654321" ) ) )
+
+// + EOF: DISK68.PRG
+
+// + EOF: disk68.prg
+// +

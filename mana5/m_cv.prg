@@ -1,172 +1,184 @@
-*+--------------------------------------------------------------------
-*+
-*+    Programa  : m_cv.prg  Manutencao Especial de Arquivos manarq manarq1 manfec duplicidades inexistes cruzamento 
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_cv.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:57 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-MDI("Manutencao Especial de Arquivos")
-lFECMES := MDG("Efetuar Fechamento Mensal")
+
+MDI( "Manutencao Especial de Arquivos" )
+lFECMES := MDG( "Efetuar Fechamento Mensal" )
 
 
 IF lFECMES
-   IF USEREDE("MANFEC",1,99)
-      DBGOTOp()
-      WHILE !EOF()
-         IF FECHAAUTO = "S"
-            IF EMPTY(OPER04)
-               ALERTX(ARQORI)
-            ELSE
-               AADD(aARQX,ALLTRIM(OPER04))
-            ENDIF
-         ENDIF
-         DBSKIP()
-      ENDDO
-      DBCLOSEAREA()
-      nARQ := LEN(aARQX)
-      FOR N := 1 TO nARQ
-         cVAR := aARQX[N]
-         cVAR := &("{||"+cVAR+"}")
-         eval(cVAR)
-      NEXT N
-   ENDIF
-   RETURN .t.
+IF USEREDE( "MANFEC", 1, 99 )
+dbGoTop()
+WHILE !Eof()
+IF FECHAAUTO = "S"
+IF Empty( OPER04 )
+ALERTX( ARQORI )
+ELSE
+AAdd( aARQX, AllTrim( OPER04 ) )
+ENDIF
+ENDIF
+dbSkip()
+ENDDO
+dbCloseArea()
+nARQ := Len( aARQX )
+FOR N := 1 TO nARQ
+cVAR := aARQX[ N ]
+cVAR := &( "{||" + cVAR + "}" )
+Eval( cVAR )
+NEXT N
+ENDIF
+RETURN .T.
 ENDIF
 
-FILMCV  := ""
-FILMCV  := RFILORD(zARQ1,.F.)
-aARQX   := {}
-lFIXAR  := MDG("Fixar Arquivo")
-lAPAGA  := MDG("Excluir Arquivos Fechados Inexistentes")
+FILMCV := ""
+FILMCV := RFILORD( zARQ1, .F. )
+aARQX  := {}
+lFIXAR := MDG( "Fixar Arquivo" )
+lAPAGA := MDG( "Excluir Arquivos Fechados Inexistentes" )
 
 
-if lFIXAR .or. lAPAGA
-   if !USECHK(ZDIRC+"MANARQ",ZDIRC+"MANARQ",.T.)
-      dbcloseall()
-      retu .F.
-   endif
-   set filter to &FILMCV.
-   if !USECHK(ZDIRC+"MANARQ1",ZDIRC+"MANARQ",.T.)
-      dbcloseall()
-      retu .F.
-   endif
+IF lFIXAR .OR. lAPAGA
+IF !USECHK( ZDIRC + "MANARQ", ZDIRC + "MANARQ", .T. )
+dbCloseAll()
+RETU .F.
+ENDIF
+SET FILTER TO &FILMCV.
+IF !USECHK( ZDIRC + "MANARQ1", ZDIRC + "MANARQ", .T. )
+dbCloseAll()
+RETU .F.
+ENDIF
 
-   dbselectar("MANARQ")
-   nLASTREC := lastrec()
-   nPOSREC  := 1
-   dbgotop()
-   while !eof()
-      if at("CEP",CAMINHO) > 0 .or. ARQANO > 0 .or. PULAFIX = "S"   //Nao Inclui os CEPS Fechados
-      else
-         @ 24,00 say padr(ARQUIVO,80)         
-         aadd(aARQX,alltrim(ARQUIVO))
-      endif
-      if ARQANO > 0
-         cARQ := alltrim(caminho)+alltrim(ARQUIVO)+".DBF"
-         if ! file(cARQ)
-            @ 23,00 say cARQ         
-            netrecdel()
-            dbselectar("MANARQ1")
-            dbgotop()
-            while cARQ = alltrim(ARQUIVO) .and. !eof()
-               netrecdel()
-               dbskip()
-            enddo
-         endif
-      endif
-      dbselectar("MANARQ")
-      dbskip()
-      ZEI_FORT(nLASTREC,.T.,nPOSREC)
-      nPOSREC ++
-   enddo
-   if lFIXAR
-      DBSELECTAR("MANARQ")
-      pack
-      DBSELECTAR("MANARQ1")
-      pack
-   endif
-
-   
-   dbcloseall()
-
-   if lFIXAR
-     nLASTREC := len(aARQX)
-     for X := 1 to nLASTREC
-        mARQUIVO := aARQX[X]
-        @ 24,00 say padr(mARQUIVO,80)         
-        if mARQUIVO # "MANARQ" .and. mARQUIVO # "MANARQ1"
-           if USEREDE(mARQUIVO,0,99,,,300)
-              pack
-              dbclosearea()
-           endif
-        endif
-        ZEI_FORT(nLASTREC,.F.,X)
-     next
-  endif
-endif
-
-if mdg("Apagar Duplicidades Configuracao Indexacao")
-   if ! USECHK(ZDIRC+"MANARQ1",ZDIRC+"MANARQ",.T.)
-      dbcloseall()
-      retu .F.
-   endif
-   dbgotop()
-   while !eof()
-      cARQUIVO := ARQUIVO
-      nITEM    := ITEM
-      dbskip()
-      if !eof()
-         if cARQUIVO = ARQUIVO .AND. nITEM = ITEM
-            netrecdel()
-         endif
-      endif
-   enddo
-   if lFIXAR
-      pack
-   endif
-   dbcloseall()
-endif
-
-if mdg("Apagar Indices sem Arquivo")
-   if !USECHK(ZDIRC+"MANARQ",ZDIRC+"MANARQ",.T.)
-      dbcloseall()
-      retu .F.
-   endif
-   if !USECHK(ZDIRC+"MANARQ1",ZDIRC+"MANARQ",.T.)
-      dbcloseall()
-      retu .F.
-   endif
-   DBSELECTAR("MANARQ1")
-   DBGOTOP()
-   WHILE !EOF()
-      cARQUIVO := ARQUIVO
-      DBSELECTAR("MANARQ")
-      DBGOTOP()
-      lTEM := DBSEEK(cARQUIVO)
-      DBSELECTAR("MANARQ1")
-      IF !lTEM
-         netrecdel()
-      ENDIF
-      DBSKIP()
-   ENDDO
-   if lFIXAR
-      DBSELECTAR("MANARQ1")
-      pack
-   endif
-   dbcloseall()
-endif
+dbSelectAr( "MANARQ" )
+nLASTREC := LastRec()
+nPOSREC  := 1
+dbGoTop()
+WHILE !Eof()
+IF At( "CEP", CAMINHO ) > 0 .OR. ARQANO > 0 .OR. PULAFIX = "S"   // Nao Inclui os CEPS Fechados
+ELSE
+@ 24, 00 SAY PadR( ARQUIVO, 80 )
+AAdd( aARQX, AllTrim( ARQUIVO ) )
+ENDIF
+IF ARQANO > 0
+cARQ := AllTrim( caminho ) + AllTrim( ARQUIVO ) + ".DBF"
+IF !File( cARQ )
+@ 23, 00 SAY cARQ
+netrecdel()
+dbSelectAr( "MANARQ1" )
+dbGoTop()
+WHILE cARQ = AllTrim( ARQUIVO ) .AND. !Eof()
+netrecdel()
+dbSkip()
+ENDDO
+ENDIF
+ENDIF
+dbSelectAr( "MANARQ" )
+dbSkip()
+ZEI_FORT( nLASTREC, .T., nPOSREC )
+nPOSREC++
+ENDDO
+IF lFIXAR
+dbSelectAr( "MANARQ" )
+PACK
+dbSelectAr( "MANARQ1" )
+PACK
+ENDIF
 
 
+dbCloseAll()
+
+IF lFIXAR
+nLASTREC := Len( aARQX )
+FOR X := 1 TO nLASTREC
+mARQUIVO := aARQX[ X ]
+@ 24, 00 SAY PadR( mARQUIVO, 80 )
+IF mARQUIVO # "MANARQ" .AND. mARQUIVO # "MANARQ1"
+IF USEREDE( mARQUIVO, 0, 99,,, 300 )
+PACK
+dbCloseArea()
+ENDIF
+ENDIF
+ZEI_FORT( nLASTREC, .F., X )
+NEXT
+ENDIF
+ENDIF
+
+IF mdg( "Apagar Duplicidades Configuracao Indexacao" )
+IF !USECHK( ZDIRC + "MANARQ1", ZDIRC + "MANARQ", .T. )
+dbCloseAll()
+RETU .F.
+ENDIF
+dbGoTop()
+WHILE !Eof()
+cARQUIVO := ARQUIVO
+nITEM    := ITEM
+dbSkip()
+IF !Eof()
+IF cARQUIVO = ARQUIVO .AND. nITEM = ITEM
+netrecdel()
+ENDIF
+ENDIF
+ENDDO
+IF lFIXAR
+PACK
+ENDIF
+dbCloseAll()
+ENDIF
+
+IF mdg( "Apagar Indices sem Arquivo" )
+IF !USECHK( ZDIRC + "MANARQ", ZDIRC + "MANARQ", .T. )
+dbCloseAll()
+RETU .F.
+ENDIF
+IF !USECHK( ZDIRC + "MANARQ1", ZDIRC + "MANARQ", .T. )
+dbCloseAll()
+RETU .F.
+ENDIF
+dbSelectAr( "MANARQ1" )
+dbGoTop()
+WHILE !Eof()
+cARQUIVO := ARQUIVO
+dbSelectAr( "MANARQ" )
+dbGoTop()
+lTEM := dbSeek( cARQUIVO )
+dbSelectAr( "MANARQ1" )
+IF !lTEM
+netrecdel()
+ENDIF
+dbSkip()
+ENDDO
+IF lFIXAR
+dbSelectAr( "MANARQ1" )
+PACK
+ENDIF
+dbCloseAll()
+ENDIF
+
+
+
+// + EOF: m_cv.prg
+// +

@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fo7b.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fo7b.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -46,25 +46,25 @@
 
 PCK := .F.
 CTR := 0
-CABEX('EXCLUI UM FUNCIONARIO')
-MDS('REGISTRO FUNCIONARIO ->')
-@ 24,35 GET CTR PICT '#######'        
+CABEX( 'EXCLUI UM FUNCIONARIO' )
+MDS( 'REGISTRO FUNCIONARIO ->' )
+@ 24, 35 GET CTR PICT '#######'
 READCUR()
-IF !netuse(pes)   //AREDE(PES,PES,0)
-   RETU
+IF !netuse( pes )   // AREDE(PES,PES,0)
+RETU
 ENDIF
-DBGOTOP()
-if dbSEEK(CTR)
-   PETELA(7)
-   DELEREC()
+dbGoTop()
+IF dbSeek( CTR )
+PETELA( 7 )
+DELEREC()
 ELSE
-   MDT('Funcionario n„o Encontrado')
+MDT( 'Funcionario n„o Encontrado' )
 ENDIF
-DBCLOSEALL()
-netpack(pes,pck)
+dbCloseAll()
+netpack( pes, pck )
 RETU
 
 // : FIM: FO7B.PRG
 
-*+ EOF: fo7b.prg
-*+
+// + EOF: fo7b.prg
+// +

@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : cepwebvia.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:21 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : cepwebvia.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:21 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 /*
 http://www.pctoledo.com.br/forum/viewtopic.php?f=39&t=17470&start=75#p118783
@@ -37,13 +37,13 @@ http://www.pctoledo.com.br/forum/viewtopic.php?f=39&t=17470&start=75#p118783
 4. Microsoft XML, v 6.0 for latest versions of MS Office.
 */
 
-//https://brasilaberto.com/blog/posts/5-melhores-apis-de-cep-2023
+// https://brasilaberto.com/blog/posts/5-melhores-apis-de-cep-2023
 //
 // https://api.brasilaberto.com/v1/zipcode/01001000
-//*** https://viacep.com.br/ws/01001000/json/
+// *** https://viacep.com.br/ws/01001000/json/
 // https://opencep.com/v1/15050305
 // https://brasilapi.com.br/api/cep/v2/01001000
-//*** https://cdn.apicep.com/file/apicep/06233-030.json
+// *** https://cdn.apicep.com/file/apicep/06233-030.json
 
 #include "tshead.ch"
 
@@ -51,427 +51,431 @@ REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function Main()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Main()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION Main()
 
-PRIVATE cCep,cBairro,cCidade,cEndereco,cUF,cID
+   PRIVATE cCep, cBairro, cCidade, cEndereco, cUF, cID
 
-Set(_SET_CODEPAGE,"PTISO")
-SetMode(25,80)
-CLS   //necessario as vezes trava apos a mudanca para 25,80
-HB_IDLESTATE()
-rddsetdefault("DBFCDX")
-Set(_SET_OPTIMIZE,.t.)
-Set(_SET_DELETED,.t.)
-Set(_SET_SOFTSEEK,.t.)
-__SetCentury(.t.)
-Set(_SET_EPOCH,year(date()) - 60)
-Set(_SET_DATEFORMAT,"dd/mm/yyyy")
-
-
-
-nERRO := 0
-
-if !file("cepruaimp.dbf")
-   alert("Falta cepruaimp.dbf")
-   quit
-endif
-
-lRUAVAZIA    := MSGYESNO("Checar Ruas Em Branco")
-lBAIRROVAZIO := MSGYESNO("Checar Bairro em Branco")
-lNOMECURTO   := MSGYESNO("Checar Ruas com nomes menores que 5 letras")
-lAPAGANAO    := MSGYESNO("Apaga Nao encontrado")
-
-lCHECKVIACEP := MSGYESNO("Usar viacep")
-//lCHECKAPICOR  :=MSGYESNO("Usar apicor")
-lCHECKREPVIR  := MSGYESNO("Usar RepVirtual")
-lCHECKAPICEP  := MSGYESNO("Usar apicep")
-lCHECKAPIAWE  := MSGYESNO("Usar apiAWE")
-lBrasilAberto := MSGYESNO("Usar BrasilAberto")
-lopencep      := MSGYESNO("Usar opencep")
-lBrasilAPI    := MSGYESNO("Usar BrasilAPI")
-
-lGERACEPTXT := MSGYESNO("Gerar ceps.csv")
-lGERACEPRUA := MSGYESNO("Gerar cepruaimp.csv ")
+   Set( _SET_CODEPAGE, "PTISO" )
+   SetMode( 25, 80 )
+   CLS   // necessario as vezes trava apos a mudanca para 25,80
+   hb_idleState()
+   rddSetDefault( "DBFCDX" )
+   Set( _SET_OPTIMIZE, .T. )
+   Set( _SET_DELETED, .T. )
+   Set( _SET_SOFTSEEK, .T. )
+   __SetCentury( .T. )
+   Set( _SET_EPOCH, Year( Date() ) - 60 )
+   Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
 
 
-IF lGERACEPTXT
-   nFILECEPS := FCREATE("ceps.csv")
-ENDIF
 
-IF lGERACEPRUA
-   nGRAVA := FCREATE("cepruaimp.csv")
-   cLINHA := "cep,ibge,rua,complemento,bairro,cidade,uf"+HB_OSNEWLINE()
-   FWRITE(nGRAVA,cLINHA)
-ENDIF
+   nERRO := 0
+
+   IF !File( "cepruaimp.dbf" )
+      Alert( "Falta cepruaimp.dbf" )
+      QUIT
+   ENDIF
+
+   lRUAVAZIA    := MSGYESNO( "Checar Ruas Em Branco" )
+   lBAIRROVAZIO := MSGYESNO( "Checar Bairro em Branco" )
+   lNOMECURTO   := MSGYESNO( "Checar Ruas com nomes menores que 5 letras" )
+   lAPAGANAO    := MSGYESNO( "Apaga Nao encontrado" )
+
+   lCHECKVIACEP := MSGYESNO( "Usar viacep" )
+// lCHECKAPICOR  :=MSGYESNO("Usar apicor")
+   lCHECKREPVIR  := MSGYESNO( "Usar RepVirtual" )
+   lCHECKAPICEP  := MSGYESNO( "Usar apicep" )
+   lCHECKAPIAWE  := MSGYESNO( "Usar apiAWE" )
+   lBrasilAberto := MSGYESNO( "Usar BrasilAberto" )
+   lopencep      := MSGYESNO( "Usar opencep" )
+   lBrasilAPI    := MSGYESNO( "Usar BrasilAPI" )
+
+   lGERACEPTXT := MSGYESNO( "Gerar ceps.csv" )
+   lGERACEPRUA := MSGYESNO( "Gerar cepruaimp.csv " )
 
 
-IF FILE("cepruaimp.cdx")  //apaga o indice caso algum importador use outra chave para o index primario
-   ferase("cepruaimp.cdx")
-endif
+   IF lGERACEPTXT
+      nFILECEPS := FCreate( "ceps.csv" )
+   ENDIF
 
-use cepruaimp new exclusive
+   IF lGERACEPRUA
+      nGRAVA := FCreate( "cepruaimp.csv" )
+      cLINHA := "cep,ibge,rua,complemento,bairro,cidade,uf" + hb_osNewLine()
+      FWrite( nGRAVA, cLINHA )
+   ENDIF
 
-dbRecall()  //retorna os que nao achou na busca anterior pois uf cidade estao em branco e o cepruaimp deleta para tratativas
+
+   IF File( "cepruaimp.cdx" )  // apaga o indice caso algum importador use outra chave para o index primario
+      FErase( "cepruaimp.cdx" )
+   ENDIF
+
+   USE cepruaimp NEW EXCLUSIVE
+
+   dbRecall()  // retorna os que nao achou na busca anterior pois uf cidade estao em branco e o cepruaimp deleta para tratativas
 // o web service tem limite diario de consultas assim nao busca novamente nao consumindo o web service
-index on CEP tag cep
+   INDEX ON CEP TAG cep
 
 
-OpenCepjason()
-
-
-
-mArquivo  := 'C*.dbf'
-mListaArq := Directory(mArquivo)
-nFIMARQ   := LEN(mListaArq)
-For KK := 1 to nFIMARQ  //LEN(mListaArq)
-   cFILECEP := lower(mListaArq[KK,1])
-   cFILECEP := strtran(cFILECEP,".dbf","")
-
-   IF cFILECEP <> "cepbai" .AND. cFILECEP <> "ceprua" .AND. cFILECEP <> "cidconv" .and. cFILECEP <> "cepruaimp" .and. cFILECEP <> "cepgeo" .and. cFILECEP <> "ce_f"
-      dbusearea(.T.,"DBFCDX",cFILECEP,,.F.)
-      ordlistadd(cFILECEP)
-      @ 23,00 say cFILECEP         
-      cFILTRO := ""
-      cFILTRO += IF(lRUAVAZIA," EMPTY(RUA) ","")
-      cFILTRO += IF(lBAIRROVAZIO,IF(EMPTY(cFILTRO),""," .OR. ")+" EMPTY(CHVBAI) ","")
-      cFILTRO += IF(lNOMECURTO,IF(EMPTY(cFILTRO),""," .OR. ")+" LEN(ALLTRIM(RUA))<=5 ","")
-      SET FILTER TO &cFILTRO.   //EMPTY(RUA) .or. empty(field->chvbai)
-      ntotrec := reccount()
-      NRECUSO := 0
-
-      dbgotop()
-      while !eof()
-         nRECUSO ++
-         @ 24,00 say cFILECEP         
-         @ 24,10 SAY nTOTREC          
-         @ 24,20 SAY nRECUSO          
-
-         lTEMCEP := .T.   //marca true para nao apagar se consultra cep nao encontrar vira false
-         cCEP    := field->cep
+   OpenCepjason()
 
 
 
-         dbselectar("cepruaimp")
-         dbgotop()
-         if !dbseek(cCEP)   //Ja pesquisado
+   mArquivo  := 'C*.dbf'
+   mListaArq := Directory( mArquivo )
+   nFIMARQ   := Len( mListaArq )
+   FOR KK := 1 TO nFIMARQ  // LEN(mListaArq)
+      cFILECEP := Lower( mListaArq[ KK, 1 ] )
+      cFILECEP := StrTran( cFILECEP, ".dbf", "" )
 
-            cBairro      := ""
-            cCidade      := ""
-            cEndereco    := ""
-            cUF          := ""
-            cIBGE        := ""
-            cComplemento := ""
-            cTIPORUA     := ""
-            cDDD         := ""
-            cLATITUDE    := ""
-            cLONGITUDE   := ""
+      IF cFILECEP <> "cepbai" .AND. cFILECEP <> "ceprua" .AND. cFILECEP <> "cidconv" .AND. cFILECEP <> "cepruaimp" .AND. cFILECEP <> "cepgeo" .AND. cFILECEP <> "ce_f"
+         dbUseArea( .T., "DBFCDX", cFILECEP,, .F. )
+         ordListAdd( cFILECEP )
+         @ 23, 00 SAY cFILECEP
+         cFILTRO := ""
+         cFILTRO += IF( lRUAVAZIA, " EMPTY(RUA) ", "" )
+         cFILTRO += IF( lBAIRROVAZIO, IF( Empty( cFILTRO ), "", " .OR. " ) + " EMPTY(CHVBAI) ", "" )
+         cFILTRO += IF( lNOMECURTO, IF( Empty( cFILTRO ), "", " .OR. " ) + " LEN(ALLTRIM(RUA))<=5 ", "" )
+         SET FILTER TO &cFILTRO.   // EMPTY(RUA) .or. empty(field->chvbai)
+         ntotrec := RecCount()
+         NRECUSO := 0
 
-            lTEMCEP := .F.
+         dbGoTop()
+         WHILE !Eof()
+            nRECUSO++
+            @ 24, 00 SAY cFILECEP
+            @ 24, 10 SAY nTOTREC
+            @ 24, 20 SAY nRECUSO
+
+            lTEMCEP := .T.   // marca true para nao apagar se consultra cep nao encontrar vira false
+            cCEP    := field->cep
+
+
+
+            dbSelectAr( "cepruaimp" )
+            dbGoTop()
+            IF !dbSeek( cCEP )   // Ja pesquisado
+
+               cBairro      := ""
+               cCidade      := ""
+               cEndereco    := ""
+               cUF          := ""
+               cIBGE        := ""
+               cComplemento := ""
+               cTIPORUA     := ""
+               cDDD         := ""
+               cLATITUDE    := ""
+               cLONGITUDE   := ""
+
+               lTEMCEP := .F.
 
             /*
              if lCHECKAPICOR //correio web primeria busca
-    		    ? '  CEPAPI:'+ cCEP
+          ? '  CEPAPI:'+ cCEP
                 ?
-    		     ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
-    			 IF ! empty(cEndereco+cBairro)
+           ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
+        IF ! empty(cEndereco+cBairro)
                     GRAVARUAIMP()
                     lTEMCEP:=.T.
-    			 else
+        else
                     GRAVARUANAO('nao localizado web correio')
-                 endif   
-             endif 
+                 endif
+             endif
              */
 
-            if lCHECKVIACEP   //via cep web segunda busca
-               ? '  CEPCOR:'+cCEP
-               ?
-               oCep := cepWeb(cCEP)
-               IF !oCep == NIL
-                  cCIDADE      := oCep:cLocalidade
-                  cENDERECO    := oCep:cLogradouro
-                  cBAIRRO      := oCep:cBairro
-                  cComplemento := oCep:cComplemento
-                  cUF          := oCep:cUF
-                  cIBGE        := oCep:cIBGE
-                  GRAVARUAIMP()
-                  lTEMCEP := .T.
-               else
-                  GRAVARUANAO('nao localizado viacep')
+               IF lCHECKVIACEP   // via cep web segunda busca
+                  ? '  CEPCOR:' + cCEP
+                  ?
+                  oCep := cepWeb( cCEP )
+                  IF !oCep == NIL
+                     cCIDADE      := oCep:cLocalidade
+                     cENDERECO    := oCep:cLogradouro
+                     cBAIRRO      := oCep:cBairro
+                     cComplemento := oCep:cComplemento
+                     cUF          := oCep:cUF
+                     cIBGE        := oCep:cIBGE
+                     GRAVARUAIMP()
+                     lTEMCEP := .T.
+                  ELSE
+                     GRAVARUANAO( 'nao localizado viacep' )
+                  ENDIF
                ENDIF
-            endif
 
-            if lCHECKREPVIR
-               ? '  CEPREP:'+cCEP
-               ?
-               CepRepublica(cCEP)
-               IF !empty(cEndereco+cBairro)
-                  GRAVARUAIMP()
-                  lTEMCEP := .T.
-               else
-                  GRAVARUANAO('nao localizado rep Virtual')
-               endif
+               IF lCHECKREPVIR
+                  ? '  CEPREP:' + cCEP
+                  ?
+                  CepRepublica( cCEP )
+                  IF !Empty( cEndereco + cBairro )
+                     GRAVARUAIMP()
+                     lTEMCEP := .T.
+                  ELSE
+                     GRAVARUANAO( 'nao localizado rep Virtual' )
+                  ENDIF
+               ENDIF
+
+               IF lCHECKAPICEP
+                  ? '  APICEP:' + cCEP
+                  ?
+                  CepAPICEP( cCEP )
+                  IF !Empty( cEndereco + cBairro )
+                     GRAVARUAIMP()
+                     lTEMCEP := .T.
+                  ELSE
+                     GRAVARUANAO( 'nao localizado apicep' )
+                  ENDIF
+               ENDIF
+
+               IF lCHECKAPIAWE
+                  ? '  APIAWE:' + cCEP
+                  ?
+                  CepAPIAWE( cCEP )
+                  IF !Empty( cEndereco + cBairro )
+                     GRAVARUAIMP()
+                     lTEMCEP := .T.
+                  ELSE
+                     GRAVARUANAO( 'nao localizado apiAWE' )
+                  ENDIF
+               ENDIF
+
+               IF LBrasilAberto
+                  ? '  BrasilAberto:' + cCEP
+                  ?
+                  CEPBrasilAberto( cCEP )
+                  IF !Empty( cEndereco + cBairro )
+                     GRAVARUAIMP()
+                     lTEMCEP := .T.
+                  ELSE
+                     GRAVARUANAO( 'nao localizado BrasilAberto' )
+                  ENDIF
+               ENDIF
+
+               IF Lopencep
+                  ? '  opencep:' + cCEP
+                  ?
+                  CEPopencep( cCEP )
+                  IF !Empty( cEndereco + cBairro )
+                     GRAVARUAIMP()
+                     lTEMCEP := .T.
+                  ELSE
+                     GRAVARUANAO( 'nao localizado opencep' )
+                  ENDIF
+               ENDIF
+
+               IF LBrasilAPI
+                  ? '  BrasilAPI:' + cCEP
+                  ?
+                  CEPBrasilAPI( cCEP )
+                  IF !Empty( cEndereco + cBairro )
+                     GRAVARUAIMP()
+                     lTEMCEP := .T.
+                  ELSE
+                     GRAVARUANAO( 'nao localizado BrasilAPI' )
+                  ENDIF
+               ENDIF
+
+
+               IF lGERACEPTXT .AND. lTEMCEP .AND. !Empty( cEndereco + cBairro )
+                  FWrite( nFILECEPS, cCEP + hb_osNewLine() )
+               ENDIF
+
+
+               IF lGERACEPRUA .AND. lTEMCEP .AND. !Empty( cEndereco + cBairro )
+                  cLINHA := cCEP + "," + cIBGE + "," + cENDERECO + "," + cComplemento + "," + cBairro + "," + cCIDADE + "," + Left( cUF, 2 ) + hb_osNewLine()
+                  FWrite( nGRAVA, cLINHA )
+               ENDIF
+
+
             ENDIF
-
-            IF lCHECKAPICEP
-               ? '  APICEP:'+cCEP
-               ?
-               CepAPICEP(cCEP)
-               IF !empty(cEndereco+cBairro)
-                  GRAVARUAIMP()
-                  lTEMCEP := .T.
-               else
-                  GRAVARUANAO('nao localizado apicep')
-               endif
+            dbSelectAr( cFILECEP )
+            IF lapaganao .AND. !lTEMCEP
+               dbDelete()
             ENDIF
+            dbSkip()
+         ENDDO
+         dbSelectAr( cFILECEP )
+         dbCloseArea()
+      ENDIF
+   NEXT KK
 
-            IF lCHECKAPIAWE
-               ? '  APIAWE:'+cCEP
-               ?
-               CepAPIAWE(cCEP)
-               IF !empty(cEndereco+cBairro)
-                  GRAVARUAIMP()
-                  lTEMCEP := .T.
-               else
-                  GRAVARUANAO('nao localizado apiAWE')
-               endif
-            ENDIF
+   IF lGERACEPRUA
+      FClose( nGRAVA )
+   ENDIF
 
-            IF LBrasilAberto
-               ? '  BrasilAberto:'+cCEP
-               ?
-               CEPBrasilAberto(cCEP)
-               IF !empty(cEndereco+cBairro)
-                  GRAVARUAIMP()
-                  lTEMCEP := .T.
-               else
-                  GRAVARUANAO('nao localizado BrasilAberto')
-               endif
-            ENDIF
+   IF lGERACEPTXT
+      FClose( nFILECEPS )
+   ENDIF
 
-            IF Lopencep
-               ? '  opencep:'+cCEP
-               ?
-               CEPopencep(cCEP)
-               IF !empty(cEndereco+cBairro)
-                  GRAVARUAIMP()
-                  lTEMCEP := .T.
-               else
-                  GRAVARUANAO('nao localizado opencep')
-               endif
-            ENDIF
-
-            IF LBrasilAPI
-               ? '  BrasilAPI:'+cCEP
-               ?
-               CEPBrasilAPI(cCEP)
-               IF !empty(cEndereco+cBairro)
-                  GRAVARUAIMP()
-                  lTEMCEP := .T.
-               else
-                  GRAVARUANAO('nao localizado BrasilAPI')
-               endif
-            ENDIF
+   dbSelectAr( "cepruaimp" )
+   DELETE ALL FOR Empty( rua ) .AND. Empty( bairro )
+   PACK
+   dbCloseAll()
 
 
-            IF lGERACEPTXT .AND. lTEMCEP .AND. !empty(cEndereco+cBairro)
-               FWRITE(nFILECEPS,cCEP+HB_OSNEWLINE())
-            ENDIF
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function FormataCEP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNCTION FormataCEP( eCEP )
+
+   IF ValType( eCEP ) = "N"
+      eCEP := StrZero( eCEP, 8 )
+   ENDIF
+   eCEP := AllTrim( eCEP )
+   IF At( "-", eCEP ) = 0 .AND. Len( eCEP ) = 8
+      eCEP := Left( eCEP, 5 ) + "-" + Right( eCEP, 3 )
+   ENDIF
+
+   RETURN eCEP
 
 
-            IF lGERACEPRUA .AND. lTEMCEP .AND. !empty(cEndereco+cBairro)
-               cLINHA := cCEP+","+cIBGE+","+cENDERECO+","+cComplemento+","+cBairro+","+cCIDADE+","+LEFT(cUF,2)+HB_OSNEWLINE()
-               FWRITE(nGRAVA,cLINHA)
-            ENDIF
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function GRAVARUANAO()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION GRAVARUANAO( cMENSAGEM )
+
+   ? cMENSAGEM
+   ?
+   dbSelectAr( "cepruaimp" )   // grava para nao buscr online novamente
+   IF !dbSeek( cCEP )
+      dbAppend()
+      field->cep := cCEP
+      IF !Empty( cCIDADE ) .AND. !Empty( cUF )
+         field->cidade := cCIDADE
+         field->uf     := cUF
+      ENDIF
+   ENDIF
+
+   RETURN .T.
 
 
-         endif
-         DBSELECTAR(cFILECEP)
-         if lapaganao .and. !lTEMCEP
-            dbdelete()
-         endif
-         dbskip()
-      ENDDO
-      DBSELECTAR(cFILECEP)
-      dbclosearea()
-   endif
-NEXT KK
-
-IF lGERACEPRUA
-   FCLOSE(nGRAVA)
-ENDIF
-
-IF lGERACEPTXT
-   FCLOSE(nFILECEPS)
-ENDIF
-
-dbselectar("cepruaimp")
-delete all for empty(rua) .and. empty(bairro)
-pack
-dbcloseall()
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function FormataCEP()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION FormataCEP(eCEP)
-
-IF VALTYPE(eCEP) = "N"
-   eCEP := STRZERO(eCEP,8)
-ENDIF
-eCEP := ALLTRIM(eCEP)
-IF AT("-",eCEP) = 0 .AND. LEN(eCEP) = 8
-   eCEP := LEFT(eCEP,5)+"-"+RIGHT(eCEP,3)
-ENDIF
-RETURN eCEP
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function GRAVARUANAO()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION GRAVARUANAO(cMENSAGEM)
-
-? cMENSAGEM
-?
-dbselectar("cepruaimp")   //grava para nao buscr online novamente
-if !dbseek(cCEP)
-   dbappend()
-   field->cep := cCEP
-   if !empty(cCIDADE) .AND. !EMPTY(cUF)
-      field->cidade := cCIDADE
-      field->uf     := cUF
-   endif
-endif
-RETURN .T.
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function GRAVARUAIMP()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function GRAVARUAIMP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION GRAVARUAIMP()
 
-IF cENDERECO = "ull,"   //alguns web service trazem null
-   cENDERECO := ""
-ENDIF
-IF cBAIRRO = "ull,"   //alguns web service trazem null
-   cBAIRRO := ""
-ENDIF
-dbselectar("cepruaimp")
-if !dbseek(cCEP)
-   dbappend()
-   field->cep := cCEP
-endif
-if empty(field->codibge) .AND. !EMPTY(cIBGE)
-   field->codibge := cIBGE
-endif
-if empty(field->rua) .AND. !EMPTY(cENDERECO)
-   field->rua := cENDERECO
-endif
-if empty(field->obs) .AND. !EMPTY(cComplemento)
-   field->obs := cComplemento
-endif
-if empty(field->bairro) .AND. !EMPTY(cBairro)
-   field->bairro := cBairro
-endif
-if empty(field->cidade) .AND. !EMPTY(cCIDADE)
-   field->cidade := cCIDADE
-endif
-if empty(field->uf) .AND. !EMPTY(cUF)
-   field->uf := cUF
-endif
-if empty(field->tipo) .AND. !EMPTY(cTIPORUA)
-   field->tipo := cTIPORUA
-endif
+   IF cENDERECO = "ull,"   // alguns web service trazem null
+      cENDERECO := ""
+   ENDIF
+   IF cBAIRRO = "ull,"   // alguns web service trazem null
+      cBAIRRO := ""
+   ENDIF
+   dbSelectAr( "cepruaimp" )
+   IF !dbSeek( cCEP )
+      dbAppend()
+      field->cep := cCEP
+   ENDIF
+   IF Empty( field->codibge ) .AND. !Empty( cIBGE )
+      field->codibge := cIBGE
+   ENDIF
+   IF Empty( field->rua ) .AND. !Empty( cENDERECO )
+      field->rua := cENDERECO
+   ENDIF
+   IF Empty( field->obs ) .AND. !Empty( cComplemento )
+      field->obs := cComplemento
+   ENDIF
+   IF Empty( field->bairro ) .AND. !Empty( cBairro )
+      field->bairro := cBairro
+   ENDIF
+   IF Empty( field->cidade ) .AND. !Empty( cCIDADE )
+      field->cidade := cCIDADE
+   ENDIF
+   IF Empty( field->uf ) .AND. !Empty( cUF )
+      field->uf := cUF
+   ENDIF
+   IF Empty( field->tipo ) .AND. !Empty( cTIPORUA )
+      field->tipo := cTIPORUA
+   ENDIF
 
-if empty(field->DDD) .AND. !EMPTY(cDDD)
-   field->DDD := cDDD
-endif
-if empty(field->LATITUDE) .AND. !EMPTY(cLATITUDE)
-   field->LATITUDE := cLATITUDE
-endif
-if empty(field->LONGITUDE) .AND. !EMPTY(cLONGITUDE)
-   field->LONGITUDE := cLONGITUDE
-endif
-RETURN .T.
+   IF Empty( field->DDD ) .AND. !Empty( cDDD )
+      field->DDD := cDDD
+   ENDIF
+   IF Empty( field->LATITUDE ) .AND. !Empty( cLATITUDE )
+      field->LATITUDE := cLATITUDE
+   ENDIF
+   IF Empty( field->LONGITUDE ) .AND. !Empty( cLONGITUDE )
+      field->LONGITUDE := cLONGITUDE
+   ENDIF
+
+   RETURN .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Procedure CepRepublica()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-PROCEDURE CepRepublica(xCep)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Procedure CepRepublica()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+PROCEDURE CepRepublica( xCep )
 
-LOCAL oHttp,cXML
-LOCAL xRes,xResTxt,xUf,xCidade,xTipo,xEnde,xBairro,xRetorno := {}
+   LOCAL oHttp, cXML
+   LOCAL xRes, xResTxt, xUf, xCidade, xTipo, xEnde, xBairro, xRetorno := {}
 
-xCep  := strtran(xCep,"-")
-oHttp := TIpClientHttp():new("http://cep.republicavirtual.com.br/web_cep.php?cep="+xCep+"&formato=xml")
-IF !oHttp:open()
-   Return .F.
-ENDIF
-inkey(.5)
+   xCep  := StrTran( xCep, "-" )
+   oHttp := TIpClientHttp():new( "http://cep.republicavirtual.com.br/web_cep.php?cep=" + xCep + "&formato=xml" )
+   IF !oHttp:open()
+      RETURN .F.
+   ENDIF
+   Inkey( .5 )
 
-cXML := oHttp:readAll()
-oHttp:close()
+   cXML := oHttp:readAll()
+   oHttp:close()
 
-cXML := XmlTransform(cXML)
+   cXML := XmlTransform( cXML )
 
-IF Empty(cXML)
-   Return .F.
-ENDIF
-cBairro   := XmlNode(cXml,"bairro")
-cCidade   := XmlNode(cXml,"cidade")
-cEndereco := XmlNode(cXml,"logradouro")
-cUF       := XmlNode(cXml,"uf")
-cTIPORUA  := XmlNode(cXml,"tipo_logradouro")
+   IF Empty( cXML )
+      RETURN .F.
+   ENDIF
+   cBairro   := XmlNode( cXml, "bairro" )
+   cCidade   := XmlNode( cXml, "cidade" )
+   cEndereco := XmlNode( cXml, "logradouro" )
+   cUF       := XmlNode( cXml, "uf" )
+   cTIPORUA  := XmlNode( cXml, "tipo_logradouro" )
 
-RETURN .T.
+   RETURN .T.
 
 /*
 STATIC FUNCTION ConsultaCep( cCep, cBairro, cCidade, cEndereco, cUF, cId )
@@ -514,73 +518,73 @@ STATIC FUNCTION SoapEnvelope( cCEP )
 */
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function AppVersaoExe()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION AppVersaoExe() 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function AppVersaoExe()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION AppVersaoExe()
 
-RETURN ""
+   RETURN ""
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function AppUserName()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION AppUserName() 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function AppUserName()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION AppUserName()
 
-RETURN ""
-
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CEPapicEp()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function CEPapicEp(cCEP)
-
-//https://cdn.apicep.com/file/apicep/06233-030.json //api necessita traco usado formatacep abaico
-cURL := "https://cdn.apicep.com/file/apicep/"+formatacep(cCEP)+".json"
-oPg  := CreateObject("Msxml2.XMLHTTP.6.0")  //oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
-oPg:Open("GET",cUrl,.F.)
-oPg:Send()
-cXMl := oPg:ResponseBody
-//{"code":"06233-030","state":"SP","city":"Osasco","district":"Piratininga","address":"Rua Paula Rodrigues","status":200,"ok":true,"statusText":"ok"}
-cXMl := XmlTransform(cXMl)
+   RETURN ""
 
 
-CUF       := pegnodojason(cXMl,'state":')
-cCIDADE   := pegnodojason(cXMl,'city":')
-cBairro   := pegnodojason(cXMl,'district":')
-cENDERECO := pegnodojason(cXMl,'address":')
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CEPapicEp()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION CEPapicEp( cCEP )
+
+// https://cdn.apicep.com/file/apicep/06233-030.json //api necessita traco usado formatacep abaico
+   cURL := "https://cdn.apicep.com/file/apicep/" + formatacep( cCEP ) + ".json"
+   oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )  // oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
+   oPg:Open( "GET", cUrl, .F. )
+   oPg:Send()
+   cXMl := oPg:ResponseBody
+// {"code":"06233-030","state":"SP","city":"Osasco","district":"Piratininga","address":"Rua Paula Rodrigues","status":200,"ok":true,"statusText":"ok"}
+   cXMl := XmlTransform( cXMl )
+
+
+   CUF       := pegnodojason( cXMl, 'state":' )
+   cCIDADE   := pegnodojason( cXMl, 'city":' )
+   cBairro   := pegnodojason( cXMl, 'district":' )
+   cENDERECO := pegnodojason( cXMl, 'address":' )
 
 /*
     CUF          := SUBSTR( cXMl , AT( 'state":'   , cXML) + 8 )
     cCIDADE      := SUBSTR( cXMl , AT( 'city":'    , cXML) + 7 )
-    cBairro      := SUBSTR( cXMl , AT( 'district":', cXML) + 11 ) 
+    cBairro      := SUBSTR( cXMl , AT( 'district":', cXML) + 11 )
     cENDERECO    := SUBSTR( cXMl , AT( 'address":' , cXML) + 10 )
     CUF          := SUBSTR( cUF       ,1, AT( '"'   , cUF)       -1 )
     CCIDADE      := SUBSTR( cCIDADE   ,1, AT( '"'   , cCIDADE)   -1 )
@@ -588,59 +592,60 @@ cENDERECO := pegnodojason(cXMl,'address":')
     CENDERECO    := SUBSTR( cENDERECO ,1, AT( '"'   , cENDERECO) -1 )
     */
 
-//  hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
-return .t.
+// hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
+
+   RETURN .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function cepapiawe()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function cepapiawe(cCEP)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function cepapiawe()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION cepapiawe( cCEP )
 
-//https://cep.awesomeapi.com.br/json/05424020
-//https://cep.awesomeapi.com.br/xml/05424020
-//https://cep.awesomeapi.com.br/05424020
+// https://cep.awesomeapi.com.br/json/05424020
+// https://cep.awesomeapi.com.br/xml/05424020
+// https://cep.awesomeapi.com.br/05424020
 
-cURL := "https://cep.awesomeapi.com.br/json/"+cCEP
-oPg  := CreateObject("Msxml2.XMLHTTP.6.0")  //oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
-oPg:Open("GET",cUrl,.F.)
-oPg:Send()
-cXMl := oPg:ResponseBody
-cXMl := XmlTransform(cXMl)
+   cURL := "https://cep.awesomeapi.com.br/json/" + cCEP
+   oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )  // oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
+   oPg:Open( "GET", cUrl, .F. )
+   oPg:Send()
+   cXMl := oPg:ResponseBody
+   cXMl := XmlTransform( cXMl )
 
-IF AT("not_found",cXML) > 0 .OR. AT("nao foi encontrado",cXML) > 0
-   RETURN .F.
-ENDIF
+   IF At( "not_found", cXML ) > 0 .OR. At( "nao foi encontrado", cXML ) > 0
+      RETURN .F.
+   ENDIF
 
 // {"cep":"05424020","address_type":"Rua","address_name":"Professor Carlos Reis","address":"Rua Professor Carlos Reis","state":"SP",
 // "district":"Pinheiros","lat":"-23.57021","lng":"-46.69685","city":"São Paulo","city_ibge":"3550308","ddd":"11"}
 // disponiveis ddd latitude longitude
-//                                    123456789012345
+// 123456789012345
 
 
-CUF        := pegnodojason(cXML,'state":')
-cCIDADE    := pegnodojason(cXML,'city":')
-cBairro    := pegnodojason(cXML,'district":')
-cENDERECO  := pegnodojason(cXML,'address_name":')
-cTIPORUA   := pegnodojason(cXML,'address_type":')
-cIBGE      := pegnodojason(cXML,'city_ibge":')
-cDDD       := pegnodojason(cXML,'ddd":')
-cLATITUDE  := pegnodojason(cXML,'lat":')
-cLONGITUDE := pegnodojason(cXML,'lng":')
+   CUF        := pegnodojason( cXML, 'state":' )
+   cCIDADE    := pegnodojason( cXML, 'city":' )
+   cBairro    := pegnodojason( cXML, 'district":' )
+   cENDERECO  := pegnodojason( cXML, 'address_name":' )
+   cTIPORUA   := pegnodojason( cXML, 'address_type":' )
+   cIBGE      := pegnodojason( cXML, 'city_ibge":' )
+   cDDD       := pegnodojason( cXML, 'ddd":' )
+   cLATITUDE  := pegnodojason( cXML, 'lat":' )
+   cLONGITUDE := pegnodojason( cXML, 'lng":' )
 
 /*
     CUF          := SUBSTR( cXMl , AT( 'state":'        , cXML) +  8 )
     cCIDADE      := SUBSTR( cXMl , AT( 'city":'         , cXML) +  7 )
-    cBairro      := SUBSTR( cXMl , AT( 'district":'     , cXML) + 11 ) 
+    cBairro      := SUBSTR( cXMl , AT( 'district":'     , cXML) + 11 )
     cENDERECO    := SUBSTR( cXMl , AT( 'address_name":' , cXML) + 15 )
     cTIPORUA     := SUBSTR( cXMl , AT( 'address_type":' , cXML) + 15 )
     cIBGE        := SUBSTR( cXMl , AT( 'city_ibge":'    , cXML) + 12 )
@@ -650,32 +655,34 @@ cLONGITUDE := pegnodojason(cXML,'lng":')
     CBAIRRO      := SUBSTR( cBAIRRO   ,1, AT( '"'   , cBAIRRO)   -1 )
     CENDERECO    := SUBSTR( cENDERECO ,1, AT( '"'   , cENDERECO) -1 )
     cTIPORUA     := SUBSTR( cTIPORUA ,1,  AT( '"'   , cTIPORUA)  -1 )
-    cIBGE        := SUBSTR( cIBGE     ,1, AT( '"'   , cIBGE)     -1 )  
-    cDDD         := SUBSTR( cDDD      ,1, AT( '"'   , cDDD)      -1 )    
+    cIBGE        := SUBSTR( cIBGE     ,1, AT( '"'   , cIBGE)     -1 )
+    cDDD         := SUBSTR( cDDD      ,1, AT( '"'   , cDDD)      -1 )
     */
 
-//  hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
-return .t.
+// hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
+
+   RETURN .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function pegnodojason()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function pegnodojason(cTEXTO,cNODO)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function pegnodojason()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION pegnodojason( cTEXTO, cNODO )
 
-cTEXTO := SUBSTR(cTEXTO,AT(cNODO,cTEXTO)+LEN(cNODO)+1)
-CTEXTO := SUBSTR(cTEXTO,1,AT('"',cTEXTO) - 1)
-//ALERT(cTEXTO)
-RETURN cTEXTO
+   cTEXTO := SubStr( cTEXTO, At( cNODO, cTEXTO ) + Len( cNODO ) + 1 )
+   CTEXTO := SubStr( cTEXTO, 1, At( '"', cTEXTO ) - 1 )
+// ALERT(cTEXTO)
+
+   RETURN cTEXTO
 
 
 /*******************************************************************************
@@ -686,22 +693,23 @@ RETURN cTEXTO
  *
  */
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function cepWeb()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION cepWeb(cCEP)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function cepWeb()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION cepWeb( cCEP )
 
-LOCAL oCEP := ViaCEP():New(cCEP)
-RETURN oCEP
+   LOCAL oCEP := ViaCEP():New( cCEP )
+
+   RETURN oCEP
 
 
 /*
@@ -711,18 +719,18 @@ RETURN oCEP
 #include 'hbclass.ch'
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Create Class ViaCEP()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Create Class ViaCEP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 CREATE CLASS ViaCEP
 
    VAR oCep
@@ -734,81 +742,81 @@ CREATE CLASS ViaCEP
    VAR cLocalidade INIT ''
    VAR cUF INIT ''
    VAR cDDD INIT ''
-   METHOD New(cCEP)
+   METHOD New( cCEP )
+
 ENDCLASS
 
 
-METHOD New(cCEP)
+METHOD New( cCEP )
+
+   IF nERRO > 10
+      ? 'Open erro >10'
+      ?
+      RETURN NIL
+   ENDIF
+
+   oHttp := TIPClientHTTP():new( "http://viacep.com.br/ws/" + cCEP + "/piped/" )
+
+   IF !oHttp:open()
+      ? 'open erro'
+      ?
+      nERRO++
+      RETURN NIL
+   ENDIF
+
+   cHtml := oHttp:readAll()
+   oHttp:close()
+
+   IF Empty( cHtml )
+      RETURN NIL
+   ENDIF
+   cHtml := XmlTransform( cHtml )
+   aHtml := hb_ATokens( cHtml, '|' )
+
+   IF Len( aHtml ) < 7
+      RETURN NIL
+   ENDIF
+
+// cep:01001-000|logradouro:Praça da Sé|complemento:lado ímpar|bairro:Sé|localidade:São Paulo|uf:SP|ibge:3550308|gia:1004|ddd:11|siafi:7107
+
+   cCEP         := SubStr( aHtml[ 1 ], At( ':', aHtml[ 1 ] ) + 1 )
+   cLogradouro  := SubStr( aHtml[ 2 ], At( ':', aHtml[ 2 ] ) + 1 )
+   cComplemento := SubStr( aHtml[ 3 ], At( ':', aHtml[ 3 ] ) + 1 )
+   cBairro      := SubStr( aHtml[ 4 ], At( ':', aHtml[ 4 ] ) + 1 )
+   cLocalidade  := SubStr( aHtml[ 5 ], At( ':', aHtml[ 5 ] ) + 1 )
+   cUF          := SubStr( aHtml[ 6 ], At( ':', aHtml[ 6 ] ) + 1 )
+   cIBGE        := SubStr( aHtml[ 7 ], At( ':', aHtml[ 7 ] ) + 1 )
+   cDDD         := SubStr( aHtml[ 9 ], At( ':', aHtml[ 9 ] ) + 1 )
+
+   ::cCEP         := cCEP
+   ::cLogradouro  := cLogradouro
+   ::cComplemento := cComplemento
+   ::cBairro      := cBairro
+   ::cLocalidade  := cLocalidade
+   ::cUF          := cUF
+   ::cIBGE        := cIBGE
+   ::cDDD         := cDDD
+
+   RETURN Self
 
 
-IF nERRO > 10
-   ? 'Open erro >10'
-   ?
-   RETURN NIL
-ENDIF
-
-oHttp := TIPClientHTTP():new("http://viacep.com.br/ws/"+cCEP+"/piped/")
-
-IF !oHttp:open()
-   ? 'open erro'
-   ?
-   nERRO ++
-   RETURN NIL
-ENDIF
-
-cHtml := oHttp:readAll()
-oHttp:close()
-
-if empty(cHtml)
-   RETURN NIL
-endif
-cHtml := XmlTransform(cHtml)
-aHtml := hb_aTokens(cHtml,'|')
-
-IF LEN(aHtml) < 7
-   RETURN NIL
-ENDIF
-
-//cep:01001-000|logradouro:Praça da Sé|complemento:lado ímpar|bairro:Sé|localidade:São Paulo|uf:SP|ibge:3550308|gia:1004|ddd:11|siafi:7107
-
-cCEP         := SUBSTR(aHtml[1],AT(':',aHtml[1])+1)
-cLogradouro  := SUBSTR(aHtml[2],AT(':',aHtml[2])+1)
-cComplemento := SUBSTR(aHtml[3],AT(':',aHtml[3])+1)
-cBairro      := SUBSTR(aHtml[4],AT(':',aHtml[4])+1)
-cLocalidade  := SUBSTR(aHtml[5],AT(':',aHtml[5])+1)
-cUF          := SUBSTR(aHtml[6],AT(':',aHtml[6])+1)
-cIBGE        := SUBSTR(aHtml[7],AT(':',aHtml[7])+1)
-cDDD         := SUBSTR(aHtml[9],AT(':',aHtml[9])+1)
-
-::cCEP         := cCEP
-::cLogradouro  := cLogradouro
-::cComplemento := cComplemento
-::cBairro      := cBairro
-::cLocalidade  := cLocalidade
-::cUF          := cUF
-::cIBGE        := cIBGE
-::cDDD         := cDDD
-
-RETURN Self
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CEPBrasilAberto()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function CEPBrasilAberto(cCEP)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CEPBrasilAberto()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION CEPBrasilAberto( cCEP )
 
 /*
 // https://api.brasilaberto.com/v1/zipcode/01001000
- 
+
 {
   "meta": {
     "currentPage": 1,
@@ -830,55 +838,57 @@ function CEPBrasilAberto(cCEP)
   }
 }
 */
-cURL := "https://api.brasilaberto.com/v1/zipcode/"+cCEP
-oPg  := CreateObject("Msxml2.XMLHTTP.6.0")
-oPg:Open("GET",cUrl,.F.)
-oPg:Send()
-cXMl := oPg:ResponseBody
 
-cXMl := XmlTransform(cXMl)
+   cURL := "https://api.brasilaberto.com/v1/zipcode/" + cCEP
+   oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )
+   oPg:Open( "GET", cUrl, .F. )
+   oPg:Send()
+   cXMl := oPg:ResponseBody
 
-if at('error',cXML) > 0
-   return
-endif
+   cXMl := XmlTransform( cXMl )
+
+   IF At( 'error', cXML ) > 0
+      RETURN
+   ENDIF
 
 
-CUF          := pegnodojason(cXMl,'stateShortname":')
-cCIDADE      := pegnodojason(cXMl,'city":')
-cBairro      := pegnodojason(cXMl,'district":')
-cENDERECO    := pegnodojason(cXMl,'street":')
-cIBGE        := pegnodojason(cXMl,'ibgeId":')
-cComplemento := pegnodojason(cXMl,'complement":')
+   CUF          := pegnodojason( cXMl, 'stateShortname":' )
+   cCIDADE      := pegnodojason( cXMl, 'city":' )
+   cBairro      := pegnodojason( cXMl, 'district":' )
+   cENDERECO    := pegnodojason( cXMl, 'street":' )
+   cIBGE        := pegnodojason( cXMl, 'ibgeId":' )
+   cComplemento := pegnodojason( cXMl, 'complement":' )
 
-//    alert(Cuf)
-//   alert(Ccidade)
-//   alert(Cendereco)
+// alert(Cuf)
+// alert(Ccidade)
+// alert(Cendereco)
 //
-//    "cityId": 1,
-//   "ibgeId": 3550308,
-//cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
+// "cityId": 1,
+// "ibgeId": 3550308,
+// cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
 // hb_memowrit("c"+cCEP+"_01_.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
-return .t.
+
+   RETURN .T.
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CEPOpenCep()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function CEPOpenCep(cCEP)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CEPOpenCep()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION CEPOpenCep( cCEP )
 
 /*
 // https://opencep.com/v1/15050305
- 
+
 {
   "cep": "15050-305",
   "logradouro": "Rua Josina Teixeira de Carvalho",
@@ -889,55 +899,56 @@ function CEPOpenCep(cCEP)
   "ibge": "3549805"
 }
 */
-cURL := "https://opencep.com/v1/"+cCEP
-oPg  := CreateObject("Msxml2.XMLHTTP.6.0")
-oPg:Open("GET",cUrl,.F.)
-oPg:Send()
-cXMl := oPg:ResponseBody
 
-cXMl := XmlTransform(cXMl)
+   cURL := "https://opencep.com/v1/" + cCEP
+   oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )
+   oPg:Open( "GET", cUrl, .F. )
+   oPg:Send()
+   cXMl := oPg:ResponseBody
 
-if at('error',cXML) > 0
-   return
-endif
+   cXMl := XmlTransform( cXMl )
+
+   IF At( 'error', cXML ) > 0
+      RETURN
+   ENDIF
 
 // altd()
-//aqui e necesssario espaco depois dos dois ponto `: `
-CUF          := pegnodojason(cXMl,'"uf": ')
-cCIDADE      := pegnodojason(cXMl,'"localidade": ')
-cBairro      := pegnodojason(cXMl,'bairro": ')
-cENDERECO    := pegnodojason(cXMl,'"logradouro": ')
-cIBGE        := pegnodojason(cXMl,'"ibge": ')
-cComplemento := pegnodojason(cXMl,'"complemento": ')
+// aqui e necesssario espaco depois dos dois ponto `: `
+   CUF          := pegnodojason( cXMl, '"uf": ' )
+   cCIDADE      := pegnodojason( cXMl, '"localidade": ' )
+   cBairro      := pegnodojason( cXMl, 'bairro": ' )
+   cENDERECO    := pegnodojason( cXMl, '"logradouro": ' )
+   cIBGE        := pegnodojason( cXMl, '"ibge": ' )
+   cComplemento := pegnodojason( cXMl, '"complemento": ' )
 
-//   alert(Cuf)
-//   alert(Ccidade)
-//   alert(Cendereco)
-//cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
+// alert(Cuf)
+// alert(Ccidade)
+// alert(Cendereco)
+// cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
 
-//hb_memowrit("c"+cCEP+"_02.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
+// hb_memowrit("c"+cCEP+"_02.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
 
-return .t.
+   RETURN .T.
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CEPBrasilApi()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function CEPBrasilApi(cCEP)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CEPBrasilApi()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION CEPBrasilApi( cCEP )
 
 /*
 // https://brasilapi.com.br/api/cep/v2/01001000
- 
+
 {
   "cep": "01001000",
   "state": "SP",
@@ -948,70 +959,70 @@ function CEPBrasilApi(cCEP)
   "location": {
     "type": "Point",
     "coordinates": {
-      
+
     }
   }
 }
 */
-cURL := "https://brasilapi.com.br/api/cep/v2/"+cCEP
-oPg  := CreateObject("Msxml2.XMLHTTP.6.0")
-oPg:Open("GET",cUrl,.F.)
-oPg:Send()
-cXMl := oPg:ResponseBody
 
-cXMl := XmlTransform(cXMl)
+   cURL := "https://brasilapi.com.br/api/cep/v2/" + cCEP
+   oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )
+   oPg:Open( "GET", cUrl, .F. )
+   oPg:Send()
+   cXMl := oPg:ResponseBody
 
-if at('error',cXML) > 0
-   return
-endif
+   cXMl := XmlTransform( cXMl )
 
-//   altd()
-CUF       := pegnodojason(cXMl,'state":')
-cCIDADE   := pegnodojason(cXMl,'"city":')
-cBairro   := pegnodojason(cXMl,'neighborhood":')
-cENDERECO := pegnodojason(cXMl,'street":')
+   IF At( 'error', cXML ) > 0
+      RETURN
+   ENDIF
 
-//   alert(Cuf)
-//  alert(Ccidade)
-//  alert(Cendereco)
-//cLATITUDE    :=""
-//   cLONGITUDE   :=""
+// altd()
+   CUF       := pegnodojason( cXMl, 'state":' )
+   cCIDADE   := pegnodojason( cXMl, '"city":' )
+   cBairro   := pegnodojason( cXMl, 'neighborhood":' )
+   cENDERECO := pegnodojason( cXMl, 'street":' )
 
-if at('latitude":',cXML) > 0 .AND. at('longitude":',cXML) > 0
-   cLATITUDE  := pegnodojason(cXMl,'latitude":')
-   cLONGITUDE := pegnodojason(cXMl,'longitude":')
-ENDIF
+// alert(Cuf)
+// alert(Ccidade)
+// alert(Cendereco)
+// cLATITUDE    :=""
+// cLONGITUDE   :=""
+
+   IF At( 'latitude":', cXML ) > 0 .AND. At( 'longitude":', cXML ) > 0
+      cLATITUDE  := pegnodojason( cXMl, 'latitude":' )
+      cLONGITUDE := pegnodojason( cXMl, 'longitude":' )
+   ENDIF
 
 
 //
-//     cLONGITUDE   :=""
+// cLONGITUDE   :=""
 // alert(Clatitude)
-//  alert(Clongitude)
-//cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
+// alert(Clongitude)
+// cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
 
 // hb_memowrit("c"+cCEP+"_03.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
 
+   RETURN .T.
 
-return .t.
 
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function OpenCepjason()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function OpenCepjason()
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function OpenCepjason()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION OpenCepjason()
 
 /*
 // https://opencep.com/v1/15050305
- 
+
 {
   "cep": "15050-305",
   "logradouro": "Rua Josina Teixeira de Carvalho",
@@ -1023,53 +1034,55 @@ function OpenCepjason()
 }
 */
 
-local kk
-kk := 1
+   LOCAL kk
 
-mArquivo  := '*.json'
-mListaArq := Directory(mArquivo,"D")
-nFIMARQ   := LEN(mListaArq)
+   kk := 1
 
-For kk := 1 to nFIMARQ
-   cFILECEP := lower(mListaArq[kk,1])
-   cXMl     := memoread(cFILECEP)
-   cXMl     := XmlTransform(cXMl)
+   mArquivo  := '*.json'
+   mListaArq := Directory( mArquivo, "D" )
+   nFIMARQ   := Len( mListaArq )
 
-   ? '  opencep:'+cFILECEP
-   ?
+   FOR kk := 1 TO nFIMARQ
+      cFILECEP := Lower( mListaArq[ kk, 1 ] )
+      cXMl     := MemoRead( cFILECEP )
+      cXMl     := XmlTransform( cXMl )
 
-   cBairro      := ""
-   cCidade      := ""
-   cEndereco    := ""
-   cUF          := ""
-   cIBGE        := ""
-   cComplemento := ""
-   cTIPORUA     := ""
-   cDDD         := ""
-   cLATITUDE    := ""
-   cLONGITUDE   := ""
+      ? '  opencep:' + cFILECEP
+      ?
 
-
-   //aqui e necesssario espaco depois dos dois ponto `: `
-   cCEP         := tirAOUT(pegnodojason(cXMl,'"cep": '))
-   CUF          := pegnodojason(cXMl,'"uf": ')
-   cCIDADE      := pegnodojason(cXMl,'"localidade": ')
-   cBairro      := pegnodojason(cXMl,'bairro": ')
-   cENDERECO    := pegnodojason(cXMl,'"logradouro": ')
-   cIBGE        := pegnodojason(cXMl,'"ibge": ')
-   cComplemento := pegnodojason(cXMl,'"complemento": ')
-
-   //   alert(Cuf)
-   //   alert(Ccidade)
-   //   alert(Cendereco)
-
-   GRAVARUAIMP()
-
-   ferase(cFILECEP)
-next kk
-return .t.
+      cBairro      := ""
+      cCidade      := ""
+      cEndereco    := ""
+      cUF          := ""
+      cIBGE        := ""
+      cComplemento := ""
+      cTIPORUA     := ""
+      cDDD         := ""
+      cLATITUDE    := ""
+      cLONGITUDE   := ""
 
 
+      // aqui e necesssario espaco depois dos dois ponto `: `
+      cCEP         := tirAOUT( pegnodojason( cXMl, '"cep": ' ) )
+      CUF          := pegnodojason( cXMl, '"uf": ' )
+      cCIDADE      := pegnodojason( cXMl, '"localidade": ' )
+      cBairro      := pegnodojason( cXMl, 'bairro": ' )
+      cENDERECO    := pegnodojason( cXMl, '"logradouro": ' )
+      cIBGE        := pegnodojason( cXMl, '"ibge": ' )
+      cComplemento := pegnodojason( cXMl, '"complemento": ' )
 
-*+ EOF: cepwebvia.prg
-*+
+      // alert(Cuf)
+      // alert(Ccidade)
+      // alert(Cendereco)
+
+      GRAVARUAIMP()
+
+      FErase( cFILECEP )
+   NEXT kk
+
+   RETURN .T.
+
+
+
+// + EOF: cepwebvia.prg
+// +

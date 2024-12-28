@@ -1,213 +1,212 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_3b.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:33 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_3b.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:33 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-////#INCLUDE "COMANDO.CH"
-if !MDL("FOPTO_3B -Listagem de Ocorrencias")
-   retu .F.
-endif
+// //#INCLUDE "COMANDO.CH"
+IF !MDL( "FOPTO_3B -Listagem de Ocorrencias" )
+RETU .F.
+ENDIF
 
 PAG  := 1
-DIAX := date()
-cPN  := "PN"+ANOMESW
+DIAX := Date()
+cPN  := "PN" + ANOMESW
 
-if !NETUSE(pes)
-   dbcloseall()
-   retu
-endif
+IF !NETUSE( pes )
+dbCloseAll()
+RETU
+ENDIF
 FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
 INX    := ""
-FILORD(.T.)
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-if valtype(INX) = "N"
-   dbsetorder(INX)
+FILORD( .T. )
+nLASTREC := LastRec()
+zei_fort( nLASTREC,,, 0 )
+IF ValType( INX ) = "N"
+dbSetOrder( INX )
 ELSE
-   ordDestroy("temp")
-   ordcreate(,"temp",inx)
-   ordSetFocus("temp")
+ordDestroy( "temp" )
+ordCreate(, "temp", inx )
+ordSetFocus( "temp" )
 ENDIF
-set filter to &FILTRO
+SET FILTER TO &FILTRO
 
-if !NETUSE(cPN)
-   dbcloseall()
-   retu .F.
-endif
+IF !NETUSE( cPN )
+dbCloseAll()
+RETU .F.
+ENDIF
 
-if !NETUSE("TABFALTA")
-   dbcloseall()
-   retu .F.
-endif
+IF !NETUSE( "TABFALTA" )
+dbCloseAll()
+RETU .F.
+ENDIF
 
-lSINT := MDG("Deseja Resumo Sintetico")
-lFUNC := MDG("Deseja Resumo Por Funcionario")
+lSINT := MDG( "Deseja Resumo Sintetico" )
+lFUNC := MDG( "Deseja Resumo Por Funcionario" )
 
-LISTARUE({| X | FOPTO3B(X)})
+LISTARUE( {| X | FOPTO3B( X ) } )
 
-retu
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function FOPTO3B()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func FOPTO3B
+RETU
 
 
-para COMPARE
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function FOPTO3B()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC FOPTO3B
 
-aCOD := {}
-aQTE := {}
-aNOM := {}
-dbselectar(PES)
-dbgotop()
-while !eof()
-   if &COMPARE
-      VIDEO()
-      PETELA(4)
-      IMPRESSORA()
-      mNUMERO := NUMERO
-      mNOME   := NOME
-      aCODF   := {}
-      aQTEF   := {}
-      aNOMF   := {}
-      dbselectar(cPN)
-      dbgotop()
-      dbseek(str(mNUMERO,8))
-      while mNUMERO = NUMERO .and. !eof()
-         if !empty(COD)
-            //Checagem Geral
-            nPOS := ascan(aCOD,COD)
-            if nPOS = 0
-               aadd(aCOD,COD)
-               aadd(aQTE,{1,0})
-               cCOD := COD
-               dbselectar("TABFALTA")
-               dbgotop()
-               dbseek(cCOD)
-               aadd(aNOM,if(found(),{NOME,APURA,FORMULA},{"","N",""}))
-               nPOS := len(aNOM)
-            else
-               aQTE[nPOS,1] ++
-            endif
-            dbselectar(cPN)
-            if aNOM[nPOS,2] # "N" .and. !empty(aNOM[nPOS,3])
-               eFORMULA := aNOM[nPOS,3]
-               aQTE[nPOS,2] += &eFORMULA.
-            endif
-            //Checagem Total Funcionario
-            nPOS := ascan(aCODF,COD)
-            if nPOS = 0
-               aadd(aCODF,COD)
-               aadd(aQTEF,{1,0})
-               cCOD := COD
-               dbselectar("TABFALTA")
-               dbgotop()
-               dbseek(cCOD)
-               aadd(aNOMF,if(found(),{NOME,APURA,FORMULA},{"","N",""}))
-               nPOS := len(aNOMF)
-            else
-               aQTEF[nPOS,1] ++
-            endif
-            dbselectar(cPN)
-            if aNOMF[nPOS,2] # "N" .and. !empty(aNOMF[nPOS,3])
-               eFORMULA := aNOMF[nPOS,3]
-               aQTEF[nPOS,2] += &eFORMULA.
-            endif
-         endif
-         dbselectar(cPN)
-         dbskip()
-      enddo
-      if lFUNC
-         IMPRESSORA()
-         if len(aCODF) > 0
-            if prow()+len(aCODF) > 50 .or. PAG = 1
-               if PAG # 1
-                  IMPFOL()
-               endif
-               CABEC("Resumo de Ocorrencias","Ocorreu/Quantidade",60,"Codigo",NOMSETOR)
-               @ prow()+ 1,0 say mNUMERO              
-               @ prow(),10   say mNOME                
-               @ prow()+ 1,0 say repl("-",80)         
-            else
-               @ prow()+ 1,0 say repl("=",80)         
-               @ prow()+ 1,0 say mNUMERO              
-               @ prow(),10   say mNOME                
-               @ prow()+ 1,0 say repl("-",80)         
-            endif
-            for X := 1 to len(aCODF)
-               @ prow()+ 1,0 say aCODF[X]                          
-               @ prow(), 3   say aNOMF[X,1]                        
-               @ prow(),54   say aQTEF[X,1] pict "99999999"        
-               if !empty(aQTEF[X,2])
-                  @ prow(),62 say aQTEF[X,2] pict "@E 999,999,999.99"        
-               endif
-            next X
-         endif
+   PARA COMPARE
+
+   aCOD := {}
+   aQTE := {}
+   aNOM := {}
+   dbSelectAr( PES )
+   dbGoTop()
+   WHILE !Eof()
+      IF &COMPARE
          VIDEO()
-      endif
-   endif
-   dbselectar(PES)
-   dbskip()
-enddo
+         PETELA( 4 )
+         IMPRESSORA()
+         mNUMERO := NUMERO
+         mNOME   := NOME
+         aCODF   := {}
+         aQTEF   := {}
+         aNOMF   := {}
+         dbSelectAr( cPN )
+         dbGoTop()
+         dbSeek( Str( mNUMERO, 8 ) )
+         WHILE mNUMERO = NUMERO .AND. !Eof()
+            IF !Empty( COD )
+               // Checagem Geral
+               nPOS := AScan( aCOD, COD )
+               IF nPOS = 0
+                  AAdd( aCOD, COD )
+                  AAdd( aQTE, { 1, 0 } )
+                  cCOD := COD
+                  dbSelectAr( "TABFALTA" )
+                  dbGoTop()
+                  dbSeek( cCOD )
+                  AAdd( aNOM, if( Found(), { NOME, APURA, FORMULA }, { "", "N", "" } ) )
+                  nPOS := Len( aNOM )
+               ELSE
+                  aQTE[ nPOS, 1 ]++
+               ENDIF
+               dbSelectAr( cPN )
+               IF aNOM[ nPOS, 2 ] # "N" .AND. !Empty( aNOM[ nPOS, 3 ] )
+                  eFORMULA := aNOM[ nPOS, 3 ]
+                  aQTE[ nPOS, 2 ] += &eFORMULA.
+               ENDIF
+               // Checagem Total Funcionario
+               nPOS := AScan( aCODF, COD )
+               IF nPOS = 0
+                  AAdd( aCODF, COD )
+                  AAdd( aQTEF, { 1, 0 } )
+                  cCOD := COD
+                  dbSelectAr( "TABFALTA" )
+                  dbGoTop()
+                  dbSeek( cCOD )
+                  AAdd( aNOMF, if( Found(), { NOME, APURA, FORMULA }, { "", "N", "" } ) )
+                  nPOS := Len( aNOMF )
+               ELSE
+                  aQTEF[ nPOS, 1 ]++
+               ENDIF
+               dbSelectAr( cPN )
+               IF aNOMF[ nPOS, 2 ] # "N" .AND. !Empty( aNOMF[ nPOS, 3 ] )
+                  eFORMULA := aNOMF[ nPOS, 3 ]
+                  aQTEF[ nPOS, 2 ] += &eFORMULA.
+               ENDIF
+            ENDIF
+            dbSelectAr( cPN )
+            dbSkip()
+         ENDDO
+         IF lFUNC
+            IMPRESSORA()
+            IF Len( aCODF ) > 0
+               IF PRow() + Len( aCODF ) > 50 .OR. PAG = 1
+                  IF PAG # 1
+                     IMPFOL()
+                  ENDIF
+                  CABEC( "Resumo de Ocorrencias", "Ocorreu/Quantidade", 60, "Codigo", NOMSETOR )
+                  @ PRow() + 1, 0 SAY mNUMERO
+                  @ PRow(), 10   SAY mNOME
+                  @ PRow() + 1, 0 SAY repl( "-", 80 )
+               ELSE
+                  @ PRow() + 1, 0 SAY repl( "=", 80 )
+                  @ PRow() + 1, 0 SAY mNUMERO
+                  @ PRow(), 10   SAY mNOME
+                  @ PRow() + 1, 0 SAY repl( "-", 80 )
+               ENDIF
+               FOR X := 1 TO Len( aCODF )
+                  @ PRow() + 1, 0 SAY aCODF[ X ]
+                  @ PRow(), 3   SAY aNOMF[ X, 1 ]
+                  @ PRow(), 54   SAY aQTEF[ X, 1 ] PICT "99999999"
+                  IF !Empty( aQTEF[ X, 2 ] )
+                     @ PRow(), 62 SAY aQTEF[ X, 2 ] PICT "@E 999,999,999.99"
+                  ENDIF
+               NEXT X
+            ENDIF
+            VIDEO()
+         ENDIF
+      ENDIF
+      dbSelectAr( PES )
+      dbSkip()
+   ENDDO
 
-if lSINT
-   IMPRESSORA()
-   if lFUNC
-      IMPFOL()
-      CABEC("Resumo de Ocorrencias","Ocorreu/Quantidade",60,"Codigo",NOMSETOR)
-   endif
-   for X := 1 to len(aCOD)
-      if prow() > 50 .or. PAG = 1
+   IF lSINT
+      IMPRESSORA()
+      IF lFUNC
          IMPFOL()
-         CABEC("Resumo de Ocorrencias","Ocorreu/Quantidade",60,"Codigo",NOMSETOR)
-      endif
-      @ prow()+ 1,0 say aCOD[X]                          
-      @ prow(), 3   say aNOM[X,1]                        
-      @ prow(),54   say aQTE[X,1] pict "99999999"        
-      if !empty(aQTE[X,2])
-         @ prow(),62 say aQTE[X,2] pict "@E 999,999,999.99"        
-      endif
-   next X
-   if len(aCOD) > 0
-      IMPFOL()
-   endif
-   VIDEO()
-endif
-IMPEND()
+         CABEC( "Resumo de Ocorrencias", "Ocorreu/Quantidade", 60, "Codigo", NOMSETOR )
+      ENDIF
+      FOR X := 1 TO Len( aCOD )
+         IF PRow() > 50 .OR. PAG = 1
+            IMPFOL()
+            CABEC( "Resumo de Ocorrencias", "Ocorreu/Quantidade", 60, "Codigo", NOMSETOR )
+         ENDIF
+         @ PRow() + 1, 0 SAY aCOD[ X ]
+         @ PRow(), 3   SAY aNOM[ X, 1 ]
+         @ PRow(), 54   SAY aQTE[ X, 1 ] PICT "99999999"
+         IF !Empty( aQTE[ X, 2 ] )
+            @ PRow(), 62 SAY aQTE[ X, 2 ] PICT "@E 999,999,999.99"
+         ENDIF
+      NEXT X
+      IF Len( aCOD ) > 0
+         IMPFOL()
+      ENDIF
+      VIDEO()
+   ENDIF
+   IMPEND()
 
 
-*+ EOF: fopto_3b.prg
-*+
+// + EOF: fopto_3b.prg
+// +

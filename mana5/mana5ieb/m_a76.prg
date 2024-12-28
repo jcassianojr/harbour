@@ -1,18 +1,45 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Source Module => J:\ITAESBRA\M_A76.PRG
-*+
-*+    Functions: Function MAMGRVREM()
-*+               Function GRVREMESSA()
-*+               Function GRVREMAVU()
-*+
-*+    Reformatted by Click! 2.03 on Sep-1-2004 at 10:51 am
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_a76.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:46 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Source Module => J:\ITAESBRA\M_A76.PRG
+// +
+// +    Functions: Function MAMGRVREM()
+// +               Function GRVREMESSA()
+// +               Function GRVREMAVU()
+// +
+// +    Reformatted by Click! 2.03 on Sep-1-2004 at 10:51 am
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+
+// Teclas Operacionais
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 
 MDI( " н Nota Fiscal Datilografada" )
 cTRABALHO := "NFDATILO"
@@ -37,62 +64,62 @@ INCLUI   := .T.
 mESTADO    := "  "
 mIESTADUAL := ""
 mLISTA     := 0
-nREF       := 2     //Aceitar Codigos de Saida
+nREF       := 2   // Aceitar Codigos de Saida
 ZESTADO    := OBTER( "MANEMP", ZNUMERO, "ESTADO" )
 mGERACOB   := "S"
 mIMPDUP    := "N"
 
-//Telas de Trabalho
+// Telas de Trabalho
 aMAMTEL := TELAPEG( "ITMM01" )
 aMAMGET := EDITPEG( "ITMM01" )
 aMDETEL := TELAPEG( "MMDE01" )
 aMDEGET := EDITPEG( "MMDE01" )
 
-//Configurao de Trabalho
-priv lFIXA
-priv nACHO
-priv cVIDE
-priv lPBUS
-priv lPIND
-priv mCBAR
-priv mCBARM
-priv cTIPG
-priv aGETS
-priv cCBAS
-priv nIBUS
-priv nIEXI
-priv aIND
-priv nREG
+// Configurao de Trabalho
+PRIV lFIXA
+PRIV nACHO
+PRIV cVIDE
+PRIV lPBUS
+PRIV lPIND
+PRIV mCBAR
+PRIV mCBARM
+PRIV cTIPG
+PRIV aGETS
+PRIV cCBAS
+PRIV nIBUS
+PRIV nIEXI
+PRIV aIND
+PRIV nREG
 mOSTR := 0
-if !CONFARQ( "MM01", "Nota    Emisso F Fornecedor" + spac( 9 ) + "S Ope P S Pag  Valor Total da NF" )
-   retu .F.
-endif
-if !CONFIND( "MM01" )
-   retu .F.
-endif
+IF !CONFARQ( "MM01", "Nota    Emisso F Fornecedor" + spac( 9 ) + "S Ope P S Pag  Valor Total da NF" )
+RETU .F.
+ENDIF
+IF !CONFIND( "MM01" )
+RETU .F.
+ENDIF
 
-//Pegando Cores de Trabalho UTILIZADAS CHAMADAS fMAM()
+// Pegando Cores de Trabalho UTILIZADAS CHAMADAS fMAM()
 CORMAM := CORARR( "MAM" )
 
 cVIDE := 'N'
-while .T.
-   mNUMERO := ULTIMOREG( "MM01", "NUMERO" )
-   mNUMERO ++
-   MDS( 'NЇ Nota Fiscal : ' + space( 30 ) + "NЇ Rem.Trat:" )
-   @ 24, 16 get mNUMERO PICT "99999999"
-   @ 24, 60 get mOSTR
-   if !READCUR()
-      release all like m *
-      retu .F.
-   endif
-   yNRNOTA := mNUMERO
-   mCHAVE  := mNUMERO //Usada Interna achoice nao apagar
-   if !VERSEHA( "MM01", yNRNOTA )
-      exit
-   else
-      ALERTX( "Nota Ja Faturada" )
-   endif
-enddo
+WHILE .T.
+mNUMERO := ULTIMOREG( "MM01", "NUMERO" )
+mNUMERO++
+MDS( 'NЇ Nota Fiscal : ' + Space( 30 ) + "NЇ Rem.Trat:" )
+@ 24, 16 GET mNUMERO PICT "99999999"
+@ 24, 60 GET mOSTR
+IF !READCUR()
+RELEASE ALL LIKE m *
+RETU .F.
+ENDIF
+yNRNOTA := mNUMERO
+mCHAVE  := mNUMERO   // Usada Interna achoice nao apagar
+IF !VERSEHA( "MM01", yNRNOTA )
+EXIT
+ELSE
+ALERTX( "Nota Ja Faturada" )
+ENDIF
+ENDDO
 
 mTIPOCLI   := 'C'
 mOPERACAO  := ""
@@ -107,358 +134,418 @@ mCONTSIM   := "S"
 mSERIE     := "UN"
 mESPECIE   := "NF"
 mMODELO    := "01"
-if mOSTR > 0
-   mAPURA    := "N"
-   mCFONEW   := "5901"
-   mTIPOSERV := "T"
-   mTIPOCLI  := "F"
-   mGERAAE   := "N"
-   PEGACAMPO( "MOSB01", "mOSTR", { "FORNECEDO", "COGNOME" }, { "mFORNECEDO", "mCOGNOME" } )
-endif
+IF mOSTR > 0
+mAPURA    := "N"
+mCFONEW   := "5901"
+mTIPOSERV := "T"
+mTIPOCLI  := "F"
+mGERAAE   := "N"
+PEGACAMPO( "MOSB01", "mOSTR", { "FORNECEDO", "COGNOME" }, { "mFORNECEDO", "mCOGNOME" } )
+ENDIF
 PADRAX( 3, mTRANSPORT, 0, { "MG01", "MG02" }, "NЃmero  Nome" + spac( 38 ) + "Cognome" + spac( 6 ) + "DDD  Telefone", ;
-        "' '+mNUMERO+' '+mNOME+' '+mCOGNOME+' '+mDDD+' '+mTELEFONE", "MAG001", "MAG001", ;
-        { || MAGEN2() },, { || MAGREP() } )
+      "' '+mNUMERO+' '+mNOME+' '+mCOGNOME+' '+mDDD+' '+mTELEFONE", "MAG001", "MAG001", ;
+      {|| MAGEN2() },, {|| MAGREP() } )
 mNUMERO := yNRNOTA
 ARQUSO  := "MB01"
 MAMK01()
 NOVOREG( "MM01", yNRNOTA )
-if mOSTR > 0
-   l5901 := .F.
-   l5920 := .F.
-   mICM  := 0
-   mTOTMER:=0
-   mTOTNF:=0
-   mTOTALPES:=0
-   if USEREDE( "MOSB02", 1, 99 )
-      dbsetorder(2) //str(numero,8)+tipoent (Ordenar Tipo -->Necessario
-                   //Para gerar ordem correta dipi depois
-      dbgotop()
-      dbseek( str( mOSTR, 8 ) )
-      while NUMERO = mOSTR .and. !eof()
-         mCODIGO   := CODIGO
-         mSEQ      := SEQ
-         mUNID     := UNID
-         mQTDE     := QTDE
-         mPESO     := PESO
-         mTIPOENT  := TIPOENT
-         mNOME     := NOME
-         mPRECO    := PRECO
-         mRASTRO   := CHECKRASTRO(RASTRO)
-         mRASTR2   := CHECKRASTRO(RASTR2)
-         mLISTA    := LISTA
-         mCODIPI   := CODIPI
-         mPISCON   := PISCON
-         mREDICM   := REDICM
-         //mOBS      := OBS
-         mINDICE   := INDICE
-         mLINADD01 := space( 45 )
-         mLINADD02 := space( 45 )
-         mLINADD03 := space( 45 )
-         mLINADD04 := space( 45 )
-         mLINADD05 := space( 45 )
-         mLINADD06 := OBS
-         if mTIPOENT = "B"
-            l5920 := .T.
-            mTIPOSERV:="6"
-         endif
-         if mTIPOENT = "T"
-            l5901 := .T.
-         endif
-         if mTIPOENT = "B"
-            mDIPICM   := "I"
-            mDIPIPI   := "I"
-            mCODICM   := "040"
-            mTIPOSERV := "6"
-         else
-            mDIPICM   := "O"
-            mDIPIPI   := "O"
-            mCODICM   := "050"
-            mTIPOSERV := "T"
-         endif
-         mSOMANF   := "S"
-         mCONSUMO  := "N"
-         xCODIGO   := repl( "Z", 24 )   //Forcar Busca
-         xCODIPI   := "__"
-         yCODIGO   := repl( "Z", 24 )   //Forcar Busca
-         xVALORMER := 0                 //Zero Para Recalcular
-         xBASEICM  := 0
-         xBASEIPI  := 0
-         xIPI      := mIPI
-         MAM203()   //PESO
-         NFCOD( .F. )
-         mPRECO := PRECO                //Pegar Sempre o Da Os
-         mUNID  := UNID
-         //Para os calculos
-         mICM      := 0
-         MBASEICM  := 0
-         mVALORICM := 0
-         mIPI      := 0
-         mBASEIPI  := 0
-         mVALORIPI := 0
-         NFBAS()
-         NFBIPI()
-         NFIPI()
-         NFVIPI()
-         NFBICM()
-         NFVICM()
-         //Ajustar
-         mICM      := 0
-         MBASEICM  := 0
-         mVALORICM := 0
-         mIPI      := 0
-         mBASEIPI  := 0
-         mVALORIPI := 0
-         IF mQTDE>0
-            IF mPESO>0
-               if mPRECO>0
-                  NOVOREG( "MM02", str( yNRNOTA, 8 ) + str( mSEQ, 2 ) )
-               ELSE
-                  ALERTX("Item com Preco Zerado "+mCODIGO)
-               ENDIF
-            ELSE
-               ALERTX("Item com Peso Zerado "+mCODIGO)
-            ENDIF
-         ELSE
-            ALERTX("Item com Qtde Zerada "+mCODIGO)
-         ENDIF
-         mTOTMER+=mVALORMER
-         mTOTNF+=mVALORTOT
-         mTOTALPES+=mPESO
-         dbselectar( "MOSB02" )
-         dbskip()
-      enddo
-   endif
-   if l5901 .and. l5920
-      mCFONEW  := "5901"
-      mCFONEWB := "5920"
-      GRAVAMVAR( "MM01", yNRNOTA, "CFONEW", "'5901'" )
-      GRAVAMVAR( "MM01", yNRNOTA, "CFONEWB", "'5920'" )
-   else
-      if l5901
-         mCFONEW := "5901"
-         GRAVAMVAR( "MM01", yNRNOTA, "CFONEW", "'5901'" )
-      endif
-      if l5920
-         mCFONEW := "5920"
-         GRAVAMVAR( "MM01", yNRNOTA, "CFONEW", "'5920'" )
-      endif
-   endif
-   mOPERACAO := OBTER( "MD04", mCFONEW, "CFO", 2 ) + if( empty( mCFONEWB ), "    ", + "/" + OBTER( "MD04", mCFONEWB, "CFO", 2 ) )
-   GRAVAMVAR( "MM01", yNRNOTA, "OPERACAO", "mOPERACAO" )
-   GRAVAMVAR( "MM01", yNRNOTA, "TOTMER", "mTOTMER" )
-   GRAVAMVAR( "MM01", yNRNOTA, "TOTNF", "mTOTNF" )
-   GRAVAMVAR( "MM01", yNRNOTA, "TOTALPES", "mTOTALPES" )
-   IF USEREDE("MM02",1,99)
-      DBGOTOP()
-      DBSEEK(STR(yNRNOTA,8))
-      WHILE yNRNOTA=NUMERO.AND.! EOF()
-         netreclock()
-         FIELD->OPERACAO:=mOPERACAO
-         FIELD->CFONEW:=mCFONEW
-         FIELD->CFONEWB:=mCFONEWB
-         DBUNLOCK()
-         DBSKIP()
-      ENDDO
-      DBCLOSEAREA()
-   ENDIF
-endif
+IF mOSTR > 0
+l5901     := .F.
+l5920     := .F.
+mICM      := 0
+mTOTMER   := 0
+mTOTNF    := 0
+mTOTALPES := 0
+IF USEREDE( "MOSB02", 1, 99 )
+dbSetOrder( 2 )   // str(numero,8)+tipoent (Ordenar Tipo -->Necessario
+// Para gerar ordem correta dipi depois
+dbGoTop()
+dbSeek( Str( mOSTR, 8 ) )
+WHILE NUMERO = mOSTR .AND. !Eof()
+mCODIGO  := CODIGO
+mSEQ     := SEQ
+mUNID    := UNID
+mQTDE    := QTDE
+mPESO    := PESO
+mTIPOENT := TIPOENT
+mNOME    := NOME
+mPRECO   := PRECO
+mRASTRO  := CHECKRASTRO( RASTRO )
+mRASTR2  := CHECKRASTRO( RASTR2 )
+mLISTA   := LISTA
+mCODIPI  := CODIPI
+mPISCON  := PISCON
+mREDICM  := REDICM
+// mOBS      := OBS
+mINDICE   := INDICE
+mLINADD01 := Space( 45 )
+mLINADD02 := Space( 45 )
+mLINADD03 := Space( 45 )
+mLINADD04 := Space( 45 )
+mLINADD05 := Space( 45 )
+mLINADD06 := OBS
+IF mTIPOENT = "B"
+l5920     := .T.
+mTIPOSERV := "6"
+ENDIF
+IF mTIPOENT = "T"
+l5901 := .T.
+ENDIF
+IF mTIPOENT = "B"
+mDIPICM   := "I"
+mDIPIPI   := "I"
+mCODICM   := "040"
+mTIPOSERV := "6"
+ELSE
+mDIPICM   := "O"
+mDIPIPI   := "O"
+mCODICM   := "050"
+mTIPOSERV := "T"
+ENDIF
+mSOMANF   := "S"
+mCONSUMO  := "N"
+xCODIGO   := repl( "Z", 24 )  // Forcar Busca
+xCODIPI   := "__"
+yCODIGO   := repl( "Z", 24 )  // Forcar Busca
+xVALORMER := 0   // Zero Para Recalcular
+xBASEICM  := 0
+xBASEIPI  := 0
+xIPI      := mIPI
+MAM203()   // PESO
+NFCOD( .F. )
+mPRECO := PRECO  // Pegar Sempre o Da Os
+mUNID  := UNID
+// Para os calculos
+mICM      := 0
+MBASEICM  := 0
+mVALORICM := 0
+mIPI      := 0
+mBASEIPI  := 0
+mVALORIPI := 0
+NFBAS()
+NFBIPI()
+NFIPI()
+NFVIPI()
+NFBICM()
+NFVICM()
+// Ajustar
+mICM      := 0
+MBASEICM  := 0
+mVALORICM := 0
+mIPI      := 0
+mBASEIPI  := 0
+mVALORIPI := 0
+IF mQTDE > 0
+IF mPESO > 0
+IF mPRECO > 0
+NOVOREG( "MM02", Str( yNRNOTA, 8 ) + Str( mSEQ, 2 ) )
+ELSE
+ALERTX( "Item com Preco Zerado " + mCODIGO )
+ENDIF
+ELSE
+ALERTX( "Item com Peso Zerado " + mCODIGO )
+ENDIF
+ELSE
+ALERTX( "Item com Qtde Zerada " + mCODIGO )
+ENDIF
+mTOTMER   += mVALORMER
+mTOTNF    += mVALORTOT
+mTOTALPES += mPESO
+dbSelectAr( "MOSB02" )
+dbSkip()
+ENDDO
+ENDIF
+IF l5901 .AND. l5920
+mCFONEW  := "5901"
+mCFONEWB := "5920"
+GRAVAMVAR( "MM01", yNRNOTA, "CFONEW", "'5901'" )
+GRAVAMVAR( "MM01", yNRNOTA, "CFONEWB", "'5920'" )
+ELSE
+IF l5901
+mCFONEW := "5901"
+GRAVAMVAR( "MM01", yNRNOTA, "CFONEW", "'5901'" )
+ENDIF
+IF l5920
+mCFONEW := "5920"
+GRAVAMVAR( "MM01", yNRNOTA, "CFONEW", "'5920'" )
+ENDIF
+ENDIF
+mOPERACAO := OBTER( "MD04", mCFONEW, "CFO", 2 ) + if( Empty( mCFONEWB ), "    ", + "/" + OBTER( "MD04", mCFONEWB, "CFO", 2 ) )
+GRAVAMVAR( "MM01", yNRNOTA, "OPERACAO", "mOPERACAO" )
+GRAVAMVAR( "MM01", yNRNOTA, "TOTMER", "mTOTMER" )
+GRAVAMVAR( "MM01", yNRNOTA, "TOTNF", "mTOTNF" )
+GRAVAMVAR( "MM01", yNRNOTA, "TOTALPES", "mTOTALPES" )
+IF USEREDE( "MM02", 1, 99 )
+dbGoTop()
+dbSeek( Str( yNRNOTA, 8 ) )
+WHILE yNRNOTA = NUMERO .AND. !Eof()
+netreclock()
+FIELD->OPERACAO := mOPERACAO
+FIELD->CFONEW   := mCFONEW
+FIELD->CFONEWB  := mCFONEWB
+dbUnlock()
+dbSkip()
+ENDDO
+dbCloseArea()
+ENDIF
+ENDIF
 
 aMAM1 := { MAMSAY02() }
 cVIDE := "N"
 fMAM( 2, - 1, .T. )
-while MDG( "Deseja Revisar Dados" )
-   aMAM1 := { MAMSAY02() }
-   cVIDE := "N"
-   fMAM( 2, - 1,, .T. )
-enddo
-if !MDG( "Deseja Imprimir Nota Fiscal" )
-   cVIDE := "N"
-   fMAM( 3, - 1,, .T. )
-endif
+WHILE MDG( "Deseja Revisar Dados" )
+aMAM1 := { MAMSAY02() }
+cVIDE := "N"
+fMAM( 2, - 1,, .T. )
+ENDDO
+IF !MDG( "Deseja Imprimir Nota Fiscal" )
+cVIDE := "N"
+fMAM( 3, - 1,, .T. )
+ENDIF
 mDESCFO := OBTER( "MD04", mCFONEW, "NOMENOTA", 2 )
 TIPCAD( mTIPOCLI, "ARQUSO" )
 
-mCFTNEW  := alltrim( mCFONEW )
-mCFTNEWB := alltrim( mCFONEWB )
+mCFTNEW  := AllTrim( mCFONEW )
+mCFTNEWB := AllTrim( mCFONEWB )
 
-if mCFTNEW ="5949".and.mTIPOSERV="6".AND.mTIPOENT="T" //Caso especial
-   MAMGRVREM( yNRNOTA, mFORNECEDO, mTIPOCLI, .T. )
-endif
+IF mCFTNEW = "5949" .AND. mTIPOSERV = "6" .AND. mTIPOENT = "T"  // Caso especial
+MAMGRVREM( yNRNOTA, mFORNECEDO, mTIPOCLI, .T. )
+ENDIF
 
-if mCFTNEW = "5920" .or. mCFTNEW = "5901" .or. mCFTNEW = "5915" .or. ;
-           mCFTNEW = "6920" .or. mCFTNEW = "6901" .or. mCFTNEW = "6915" .or. ;
-           mCFTNEWB = "5920" .or. mCFTNEWB = "5901" .or. mCFTNEWB = "5915" .or. ;
-           mCFTNEWB = "6920" .or. mCFTNEWB = "6901" .or. mCFTNEWB = "6915"
-   MAMGRVREM( yNRNOTA, mFORNECEDO, mTIPOCLI, .T. )
-else
-   GRAVALOG( str( yNRNOTA, 8 ) + "NCF", "REM", "MM02" )
-endif
+IF mCFTNEW = "5920" .OR. mCFTNEW = "5901" .OR. mCFTNEW = "5915" .OR. ;
+         mCFTNEW = "6920" .OR. mCFTNEW = "6901" .OR. mCFTNEW = "6915" .OR. ;
+         mCFTNEWB = "5920" .OR. mCFTNEWB = "5901" .OR. mCFTNEWB = "5915" .OR. ;
+         mCFTNEWB = "6920" .OR. mCFTNEWB = "6901" .OR. mCFTNEWB = "6915"
+MAMGRVREM( yNRNOTA, mFORNECEDO, mTIPOCLI, .T. )
+ELSE
+GRAVALOG( Str( yNRNOTA, 8 ) + "NCF", "REM", "MM02" )
+ENDIF
 
 M_A7I( yNRNOTA, .T., .T. )
 
-retu .T.
+RETU .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MAMGRVREM()
-*+
-*+    Called from ( m_a76.prg    )   1 -
-*+                                   1 - function grvremavu()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MAMGRVREM
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MAMGRVREM()
+// +
+// +    Called from ( m_a76.prg    )   1 -
+// +                                   1 - function grvremavu()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-para mNUMERO, mFORNECEDO, mTIPOCLI, lPERG, cARQ
-if valtype( lPERG ) # "L"
-   lPERG := .F.
-endif
-if valtype( cARQ ) # "C"
-   cARQ := "MM02"
-endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MAMGRVREM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC MAMGRVREM
 
-if lPERG .or. MDG( "Gravar Remessa Trat/Emb MF:" + str( mNUMERO, 8 ) )
-   mCLIENTE := mFORNECEDO
-   while !USEREDE( cARQ, 1, 1 )
-   enddo
-   dbselectar( cARQ )
-   dbgotop()
-   dbseek( str( mNUMERO, 8 ) )
-   while mNUMERO = NUMERO .and. !eof()
-      mCODIGO    := CODIGO
-      mNOME      := NOME
-      mUNIDADE   := UNID
-      mNRNOTAINI := NUMERO
-      mDATAFAT   := DATA
-      mTOTKGINI  := QTDE
-      mTOTKGANT  := QTDE
-      mTOTKGEST  := QTDE
-      mVALORINI  := VALORMER
-      mTIPOENT   := TIPOENT
-      mTIPOSERV  := TIPOSERV
-      mPESOREF   := PESO * CONVUN( QTDE, UNID )
-      mPRECO     := PRECO
-      mCLASSIPI  := CLASSIPI
-      mAVEMBQ    := AVEMBQ
-      mAVEMBC    := AVEMBC
-      mRASTRO    := RASTRO
-      if mTIPOENT = "B" .and. mTIPOCLI = "C"
-         GRVREMESSA( "MR03", padr( mCODIGO, 10 ) + str( mNRNOTAINI, 8 ) )
-      endif
-      if mTIPOENT = "T" .or. mTIPOENT = "B" .and. mTIPOCLI = "F"
-         GRVREMESSA( "MS04", padr( mCODIGO, 24 ) + str( mNRNOTAINI, 8 ) )
-      endif
-      if mTIPOENT = "T"  .and. mTIPOCLI = "F" //Controle Adcional So tratamento
-         GRVREMESSA( "MS07", padr( mCODIGO, 24 ) + str( mNRNOTAINI, 8 ) )
-      endif
-      if mTIPOENT = "C" .and. mTIPOSERV = "T" .and. mTIPOCLI = "F"
-         GRVREMESSA( "MS04", padr( mCODIGO, 24 ) + str( mNRNOTAINI, 8 ) )
-      endif
-      if mTIPOENT = "X"
-         if empty( mCODIGO )
-            GRVREMESSA( "MS04", str( mSEQ, 24 ) + str( mNRNOTAINI, 8 ) )
-         else
-            GRVREMESSA( "MS04", padr( mCODIGO, 24 ) + str( mNRNOTAINI, 8 ) )
-         endif
-      endif
-      if !empty( mAVEMBC ) .and. mAVEMBQ > 0
-         mCODIGO   := mAVEMBC
-         mTOTKGINI := mAVEMBQ
-         mTOTKGANT := mAVEMBQ
-         mTOTKGEST := mAVEMBQ
-         PEGACAMPO( "MR01", "mCODIGO", { "ALLTRIM(NOME)+' '+ALLTRIM(NOM2)", "CODIPI", "UNIDADE", "PESLIQ", "PRECUST" }, ;
-                                         { "cNOME", "mCODIPI", "mUNID", "mPESO", "mPRECO" } )
-         if mTIPOCLI = "F"
-            GRVREMESSA( "MR03", padr( mCODIGO, 10 ) + str( mNRNOTAINI, 8 ) )
-         else
-            GRVREMESSA( "MS04", padr( mCODIGO, 24 ) + str( mNRNOTAINI, 8 ) )
-         endif
-      endif
-      dbselectar( cARQ )
-      dbskip()
-   enddo
-else
-   GRAVALOG( str( mNUMERO, 8 ) + "NAO", "REM", caRQ )
-endif
-retu .T.
+   PARA mNUMERO, mFORNECEDO, mTIPOCLI, lPERG, cARQ
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function GRVREMESSA()
-*+
-*+    Called from ( m_a76.prg    )   7 - function mamgrvrem()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func GRVREMESSA( cARQ, eCHAVE )
+   IF ValType( lPERG ) # "L"
+      lPERG := .F.
+   ENDIF
+   IF ValType( cARQ ) # "C"
+      cARQ := "MM02"
+   ENDIF
 
-mDIGCTR := " "
-while !NOVOREG( cARQ, eCHAVE + mDIGCTR, .F., .F. )
-   if empty( mDIGCTR )
-      mDIGCTR := "A"
-   else
-      nASC    := asc( mDIGCTR )
-      mDIGCTR := chr( nASC + 1 )
-   endif
-enddo
-retu .T.
+   IF lPERG .OR. MDG( "Gravar Remessa Trat/Emb MF:" + Str( mNUMERO, 8 ) )
+      mCLIENTE := mFORNECEDO
+      WHILE !USEREDE( cARQ, 1, 1 )
+      ENDDO
+      dbSelectAr( cARQ )
+      dbGoTop()
+      dbSeek( Str( mNUMERO, 8 ) )
+      WHILE mNUMERO = NUMERO .AND. !Eof()
+         mCODIGO    := CODIGO
+         mNOME      := NOME
+         mUNIDADE   := UNID
+         mNRNOTAINI := NUMERO
+         mDATAFAT   := DATA
+         mTOTKGINI  := QTDE
+         mTOTKGANT  := QTDE
+         mTOTKGEST  := QTDE
+         mVALORINI  := VALORMER
+         mTIPOENT   := TIPOENT
+         mTIPOSERV  := TIPOSERV
+         mPESOREF   := PESO * CONVUN( QTDE, UNID )
+         mPRECO     := PRECO
+         mCLASSIPI  := CLASSIPI
+         mAVEMBQ    := AVEMBQ
+         mAVEMBC    := AVEMBC
+         mRASTRO    := RASTRO
+         IF mTIPOENT = "B" .AND. mTIPOCLI = "C"
+            GRVREMESSA( "MR03", PadR( mCODIGO, 10 ) + Str( mNRNOTAINI, 8 ) )
+         ENDIF
+         IF mTIPOENT = "T" .OR. mTIPOENT = "B" .AND. mTIPOCLI = "F"
+            GRVREMESSA( "MS04", PadR( mCODIGO, 24 ) + Str( mNRNOTAINI, 8 ) )
+         ENDIF
+         IF mTIPOENT = "T" .AND. mTIPOCLI = "F"  // Controle Adcional So tratamento
+            GRVREMESSA( "MS07", PadR( mCODIGO, 24 ) + Str( mNRNOTAINI, 8 ) )
+         ENDIF
+         IF mTIPOENT = "C" .AND. mTIPOSERV = "T" .AND. mTIPOCLI = "F"
+            GRVREMESSA( "MS04", PadR( mCODIGO, 24 ) + Str( mNRNOTAINI, 8 ) )
+         ENDIF
+         IF mTIPOENT = "X"
+            IF Empty( mCODIGO )
+               GRVREMESSA( "MS04", Str( mSEQ, 24 ) + Str( mNRNOTAINI, 8 ) )
+            ELSE
+               GRVREMESSA( "MS04", PadR( mCODIGO, 24 ) + Str( mNRNOTAINI, 8 ) )
+            ENDIF
+         ENDIF
+         IF !Empty( mAVEMBC ) .AND. mAVEMBQ > 0
+            mCODIGO   := mAVEMBC
+            mTOTKGINI := mAVEMBQ
+            mTOTKGANT := mAVEMBQ
+            mTOTKGEST := mAVEMBQ
+            PEGACAMPO( "MR01", "mCODIGO", { "ALLTRIM(NOME)+' '+ALLTRIM(NOM2)", "CODIPI", "UNIDADE", "PESLIQ", "PRECUST" }, ;
+               { "cNOME", "mCODIPI", "mUNID", "mPESO", "mPRECO" } )
+            IF mTIPOCLI = "F"
+               GRVREMESSA( "MR03", PadR( mCODIGO, 10 ) + Str( mNRNOTAINI, 8 ) )
+            ELSE
+               GRVREMESSA( "MS04", PadR( mCODIGO, 24 ) + Str( mNRNOTAINI, 8 ) )
+            ENDIF
+         ENDIF
+         dbSelectAr( cARQ )
+         dbSkip()
+      ENDDO
+   ELSE
+      GRAVALOG( Str( mNUMERO, 8 ) + "NAO", "REM", caRQ )
+   ENDIF
+   RETU .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function GRVREMAVU()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func GRVREMAVU()
-
-MDI( " н Relancar Nota Para Remessas" )
-mNUMERO    := 0
-mFORNECEDO := 0
-mTIPOCLI   := "C"
-mCOGNOME   := ""
-CRIARVARS("MM02")
-CRIARVARS( "MS04" )
-@ 24, 00 get mNUMERO pict "99999999"
-if !READCUR()
-   retu .F.
-endif
-aRETU := PERFEC( { "MM02", "MM01" }, { "M2", "M1" }, { "MM92", "MM91" } )
-cARQ  := aRETU[ 5, 1 ]
-cARQ2 := aRETU[ 5, 2 ]
-
-if PEGACAMPO( cARQ2, "mNUMERO", { "FORNECEDO", "TIPOCLI", "COGNOME" }, { "mFORNECEDO", "mTIPOCLI", "mCOGNOME" } )
-   MAMGRVREM( mNUMERO, mFORNECEDO, mTIPOCLI, .F., cARQ )
-else
-   ALERTX( "Nao achei a Nota" )
-endif
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function GRVREMESSA()
+// +
+// +    Called from ( m_a76.prg    )   7 - function mamgrvrem()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
 
-FUNC CHECKRASTRO(cRASTRO)
-LOCAL cANO,cSUB,nLEN
-//Ano Atual
-IF EMPTY(cRASTRO)
-   RETU cRASTRO
-ENDIF
-nLEN:=LEN(cRASTRO)
-cANO:=StrZero(Year(zdata),4)
-cSUB:=Right(cANO,2)
-IF At("-"+cSUB,cRASTRO)>0
-   cRASTRO:=StrTran(cRASTRO,"-"+cSUB,"/"+cANO)
-ENDIF
-IF At("/"+cSUB,cRASTRO)>0
-   cRASTRO:=StrTran(cRASTRO,"/"+cSUB,"/"+cANO)
-ENDIF
-//Ano Anterior
-cANO:=StrZero(Year(zdata)-1,4)
-cSUB:=Right(cANO,2)
-IF At("-"+cSUB,cRASTRO)>0
-   cRASTRO:=StrTran(cRASTRO,"-"+cSUB,"/"+cANO)
-ENDIF
-IF At("/"+cSUB,cRASTRO)>0
-   cRASTRO:=StrTran(cRASTRO,"/"+cSUB,"/"+cANO)
-ENDIF
-RETU PADR(cRASTRO,nLEN)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function GRVREMESSA()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-*+ EOF: M_A76.PRG
+FUNC GRVREMESSA( cARQ, eCHAVE )
+
+   mDIGCTR := " "
+   WHILE !NOVOREG( cARQ, eCHAVE + mDIGCTR, .F., .F. )
+      IF Empty( mDIGCTR )
+         mDIGCTR := "A"
+      ELSE
+         nASC    := Asc( mDIGCTR )
+         mDIGCTR := Chr( nASC + 1 )
+      ENDIF
+   ENDDO
+   RETU .T.
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function GRVREMAVU()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function GRVREMAVU()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC GRVREMAVU()
+
+   MDI( " н Relancar Nota Para Remessas" )
+   mNUMERO    := 0
+   mFORNECEDO := 0
+   mTIPOCLI   := "C"
+   mCOGNOME   := ""
+   CRIARVARS( "MM02" )
+   CRIARVARS( "MS04" )
+   @ 24, 00 GET mNUMERO PICT "99999999"
+   IF !READCUR()
+      RETU .F.
+   ENDIF
+   aRETU := PERFEC( { "MM02", "MM01" }, { "M2", "M1" }, { "MM92", "MM91" } )
+   cARQ  := aRETU[ 5, 1 ]
+   cARQ2 := aRETU[ 5, 2 ]
+
+   IF PEGACAMPO( cARQ2, "mNUMERO", { "FORNECEDO", "TIPOCLI", "COGNOME" }, { "mFORNECEDO", "mTIPOCLI", "mCOGNOME" } )
+      MAMGRVREM( mNUMERO, mFORNECEDO, mTIPOCLI, .F., cARQ )
+   ELSE
+      ALERTX( "Nao achei a Nota" )
+   ENDIF
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKRASTRO()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC CHECKRASTRO( cRASTRO )
+
+   LOCAL cANO, cSUB, nLEN
+
+// Ano Atual
+   IF Empty( cRASTRO )
+      RETU cRASTRO
+   ENDIF
+   nLEN := Len( cRASTRO )
+   cANO := StrZero( Year( zdata ), 4 )
+   cSUB := Right( cANO, 2 )
+   IF At( "-" + cSUB, cRASTRO ) > 0
+      cRASTRO := StrTran( cRASTRO, "-" + cSUB, "/" + cANO )
+   ENDIF
+   IF At( "/" + cSUB, cRASTRO ) > 0
+      cRASTRO := StrTran( cRASTRO, "/" + cSUB, "/" + cANO )
+   ENDIF
+// Ano Anterior
+   cANO := StrZero( Year( zdata ) - 1, 4 )
+   cSUB := Right( cANO, 2 )
+   IF At( "-" + cSUB, cRASTRO ) > 0
+      cRASTRO := StrTran( cRASTRO, "-" + cSUB, "/" + cANO )
+   ENDIF
+   IF At( "/" + cSUB, cRASTRO ) > 0
+      cRASTRO := StrTran( cRASTRO, "/" + cSUB, "/" + cANO )
+   ENDIF
+   RETU PadR( cRASTRO, nLEN )
+
+// + EOF: M_A76.PRG
+
+// + EOF: m_a76.prg
+// +

@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fores_b2.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:41 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fores_b2.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:41 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -51,33 +51,33 @@
 // :     Documentado 05/13/94 em 15:05                DISK!  vers„o 5.01
 // :*****************************************************************************
 
-////#INCLUDE "COMANDO.CH"
+// //#INCLUDE "COMANDO.CH"
 
-IF !MDL('Listar Planilha de Ferias Completa',0)
-   RETU
+IF !MDL( 'Listar Planilha de Ferias Completa', 0 )
+RETU
 ENDIF
-FILTRA := IF(MDG('Deseja Excluir Periodos ja  baixados'),"NUMERO=VAR3.AND.BAIXADO#'S'","NUMERO=VAR3")
+FILTRA := IF( MDG( 'Deseja Excluir Periodos ja  baixados' ), "NUMERO=VAR3.AND.BAIXADO#'S'", "NUMERO=VAR3" )
 
-if !NETUSE(pes)
-   dbcloseall()
-   retu
-endif
+IF !NETUSE( pes )
+dbCloseAll()
+RETU
+ENDIF
 FILTRO := ''
 INX    := ""
-FILORD(.T.)
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-if valtype(INX) = "N"
-   dbsetorder(INX)
+FILORD( .T. )
+nLASTREC := LastRec()
+zei_fort( nLASTREC,,, 0 )
+IF ValType( INX ) = "N"
+dbSetOrder( INX )
 ELSE
-   ordDestroy("temp")
-   ordcreate(,"temp",inx)
-   ordSetFocus("temp")
+ordDestroy( "temp" )
+ordCreate(, "temp", inx )
+ordSetFocus( "temp" )
 ENDIF
-set filter to &FILTRO
+SET FILTER TO &FILTRO
 
-IF !NETUSE("FO_FER")
-   RETU
+IF !NETUSE( "FO_FER" )
+RETU
 ENDIF
 
 
@@ -87,65 +87,65 @@ FL    := 0
 
 SALTO := 0
 IMPRESSORA()
-DBSELECTAR(PES)
-DBGOTOP()
+dbSelectAr( PES )
+dbGoTop()
 CABB2()
-WHILE !EOF()
-   IF PROW() > 60
-      CABB2()
-   ENDIF
-   CABB22()
-   VAR3 := NUMERO
-   DBSELECTAR("FO_FER")
-   SET FILTER TO &FILTRA
-   DBGOTOP()
-   WHILE !EOF()
-      IF PROW() > 60
-         IMPFOL()
-         CABB2()
-         CABB22()
-         DBSELECTAR("FO_FER")
-      ENDIF
-      @ PROW()+SALTO,0 SAY '|'         
-      SALTO := 1
-      @ PROW(),47  SAY DATFERIAS            
-      @ PROW(),56  SAY DATFERIASF           
-      @ PROW(),64  SAY '|'                  
-      @ PROW(),66  SAY '30'                 
-      @ PROW(),69  SAY '|'                  
-      @ PROW(),72  SAY FALTAS               
-      @ PROW(),76  SAY '|'                  
-      @ PROW(),79  SAY DIASJUS              
-      @ PROW(),82  SAY '|'                  
-      @ PROW(),85  SAY BAIXADO              
-      @ PROW(),87  SAY '|'                  
-      @ PROW(),89  SAY DIASPAGO3            
-      @ PROW(),92  SAY '|'                  
-      @ PROW(),94  SAY DIASGOZA3            
-      @ PROW(),97  SAY '|'                  
-      @ PROW(),98  SAY GOZOU1DE             
-      @ PROW(),107 SAY GOZOU1ATE            
-      @ PROW(),115 SAY '|'                  
-      @ PROW(),116 SAY ABONO1DE             
-      @ PROW(),125 SAY ABONO1ATE            
-      @ PROW(),133 SAY '|'                  
-      @ PROW(),134 SAY GOZOU2DE             
-      @ PROW(),143 SAY GOZOU2ATE            
-      @ PROW(),151 SAY '|'                  
-      @ PROW(),152 SAY PROGRAMA             
-      @ PROW(),161 SAY PROGRAMA1            
-      @ PROW(),169 SAY '|'                  
-      @ PROW(),170 SAY REPL('_',48)         
-      @ PROW(),219 SAY '|'                  
-      DBSKIP()
-   ENDDO
-   @ PROW()+ 1,0 SAY REPL('-',219)         
-   DBSELECTAR(PES)
-   DBSKIP()
+WHILE !Eof()
+IF PRow() > 60
+CABB2()
+ENDIF
+CABB22()
+VAR3 := NUMERO
+dbSelectAr( "FO_FER" )
+SET FILTER TO &FILTRA
+dbGoTop()
+WHILE !Eof()
+IF PRow() > 60
+IMPFOL()
+CABB2()
+CABB22()
+dbSelectAr( "FO_FER" )
+ENDIF
+@ PRow() + SALTO, 0 SAY '|'
+SALTO := 1
+@ PRow(), 47  SAY DATFERIAS
+@ PRow(), 56  SAY DATFERIASF
+@ PRow(), 64  SAY '|'
+@ PRow(), 66  SAY '30'
+@ PRow(), 69  SAY '|'
+@ PRow(), 72  SAY FALTAS
+@ PRow(), 76  SAY '|'
+@ PRow(), 79  SAY DIASJUS
+@ PRow(), 82  SAY '|'
+@ PRow(), 85  SAY BAIXADO
+@ PRow(), 87  SAY '|'
+@ PRow(), 89  SAY DIASPAGO3
+@ PRow(), 92  SAY '|'
+@ PRow(), 94  SAY DIASGOZA3
+@ PRow(), 97  SAY '|'
+@ PRow(), 98  SAY GOZOU1DE
+@ PRow(), 107 SAY GOZOU1ATE
+@ PRow(), 115 SAY '|'
+@ PRow(), 116 SAY ABONO1DE
+@ PRow(), 125 SAY ABONO1ATE
+@ PRow(), 133 SAY '|'
+@ PRow(), 134 SAY GOZOU2DE
+@ PRow(), 143 SAY GOZOU2ATE
+@ PRow(), 151 SAY '|'
+@ PRow(), 152 SAY PROGRAMA
+@ PRow(), 161 SAY PROGRAMA1
+@ PRow(), 169 SAY '|'
+@ PRow(), 170 SAY REPL( '_', 48 )
+@ PRow(), 219 SAY '|'
+dbSkip()
+ENDDO
+@ PRow() + 1, 0 SAY REPL( '-', 219 )
+dbSelectAr( PES )
+dbSkip()
 ENDDO
 IMPFOL()
 VIDEO()
-DBCLOSEALL()
+dbCloseAll()
 IMPEND()
 RETU
 
@@ -157,36 +157,36 @@ RETU
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CABB2()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CABB2()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION CABB2
 
-FL := FL+1
-@ PROW(), 1     SAY IMPSTR(cIMPEXP)                                                        
-@ PROW()+ 1,20  SAY IMPCHR(cIMPTIT)+MSG2                                                   
-@ PROW()+ 1,100 SAY TIME()                                                                 
-@ PROW(),110    SAY 'DATA => '+DTOC(DXDIA)                                                 
-@ PROW(),120    SAY 'FL. '+STRZERO(FL,4)                                                   
-@ PROW()+ 1,0   SAY REPL('-',132)                                                          
-@ PROW()+ 1,20  SAY IMPCHR(cIMPTIT)+'FICHA COMPLETA DE FERIAS'                             
-@ PROW()+ 1,0   SAY REPL('-',131)+IMPSTR(cIMPCOM)                                          
-@ PROW()+ 1,0   SAY '|NRo. |NOME'                                                          
-@ PROW(),37     SAY '|ADMITIDO|PERIODO AQUISICAO|DIAS|FALTAS| JUS | OK |PAGO|GOZA'         
-@ PROW(),97     SAY '|1. FERIAS GOZADAS|ABONO  PECUNIARIO|2. FERIAS GOZADAS|'              
-@ PROW(),152    SAY 'PROGRAMA  FERIAS |OBSERVACOES'                                        
-@ PROW(),219    SAY '|'                                                                    
-@ PROW()+ 1,0   SAY REPL('-',219)                                                          
-RETU
+   FL := FL + 1
+   @ PRow(), 1     SAY IMPSTR( cIMPEXP )
+   @ PRow() + 1, 20  SAY IMPCHR( cIMPTIT ) + MSG2
+   @ PRow() + 1, 100 SAY Time()
+   @ PRow(), 110    SAY 'DATA => ' + DToC( DXDIA )
+   @ PRow(), 120    SAY 'FL. ' + StrZero( FL, 4 )
+   @ PRow() + 1, 0   SAY REPL( '-', 132 )
+   @ PRow() + 1, 20  SAY IMPCHR( cIMPTIT ) + 'FICHA COMPLETA DE FERIAS'
+   @ PRow() + 1, 0   SAY REPL( '-', 131 ) + IMPSTR( cIMPCOM )
+   @ PRow() + 1, 0   SAY '|NRo. |NOME'
+   @ PRow(), 37     SAY '|ADMITIDO|PERIODO AQUISICAO|DIAS|FALTAS| JUS | OK |PAGO|GOZA'
+   @ PRow(), 97     SAY '|1. FERIAS GOZADAS|ABONO  PECUNIARIO|2. FERIAS GOZADAS|'
+   @ PRow(), 152    SAY 'PROGRAMA  FERIAS |OBSERVACOES'
+   @ PRow(), 219    SAY '|'
+   @ PRow() + 1, 0   SAY REPL( '-', 219 )
+   RETU
 
 // !*****************************************************************************
 // !
@@ -196,26 +196,27 @@ RETU
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CABB22()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CABB22()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
 FUNCTION CABB22
 
-DBSELECTAR(PES)
-@ PROW()+ 1,0 SAY '|'+STR(NUMERO,5)+'|'+NOME         
-@ PROW(),37   SAY '|'+DTOC(ADMITIDO)+'|'             
-SALTO := 0
-RETU
+   dbSelectAr( PES )
+   @ PRow() + 1, 0 SAY '|' + Str( NUMERO, 5 ) + '|' + NOME
+   @ PRow(), 37   SAY '|' + DToC( ADMITIDO ) + '|'
+   SALTO := 0
+   RETU
 // : FIM: FORES_B2.PRG
 
-*+ EOF: fores_b2.prg
-*+
+// + EOF: fores_b2.prg
+// +

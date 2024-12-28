@@ -1,161 +1,220 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    DISK51.PRG
-*+
-*+    Funcoes: Function Ext()
-*+             Function Extx()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : disk51.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:41 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function Ext()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func Ext( val_ext, lin, tam1, tam2, tam3 )
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    DISK51.PRG
+// +
+// +    Funcoes: Function Ext()
+// +             Function Extx()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function Ext()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-priv cen
-priv dez
-priv uni
-priv str_ext
-priv ret_ext
-priv p01
-priv p02
-priv p03
-priv p04
-priv p05
-priv tab1
-priv tab2
-priv linha1
-priv linha2
-priv linha3
-cen := { "Cento", "Duzentos", "Trezentos", "Quatrocentos", "Quinhentos", ;
-         "Seiscentos", "Setecentos", "Oitocentos", "Novecentos" }
-dez := { "Dez", "Vinte", "Trinta", "Quarenta", "Cinquenta", "Sessenta", "Setenta", ;
-         "Oitenta", "Noventa" }
-uni := { "Um", "Dois", "Tres", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", ;
-         "Dez", "Onze", "Doze", "Treze", "Quatorze", "Quinze", "Dezesseis", ;
-         "Dezessete", "Dezoito", "Dezenove" }
-str_ext := str( val_ext, 15, 2 )
-ret_ext := ""
-p01     := substr( str_ext, 1, 3 )
-p02     := substr( str_ext, 4, 3 )
-p03     := substr( str_ext, 7, 3 )
-p04     := substr( str_ext, 10, 3 )
-p05     := '0' + substr( str_ext, 14, 2 )
-if val( p01 ) > 0
-   ret_ext += Extx( p01 )
-   ret_ext += if( val( p01 ) > 1, ' Bilhoes', ' Bilhao' )
-   if val( p02 ) = 0 .and. val( p03 ) = 0 .and. val( p04 ) = 0
-      ret_ext += ' de ' + zmoeda02
-   endif
-endif
-if val( p02 ) > 0
-   ret_ext += if( empty( ret_ext ), '', if( val( p03 ) = 0 .and. val( p04 ) = 0, ' e ', ', ' ) )
-   ret_ext += Extx( p02 )
-   ret_ext += if( val( p02 ) > 1, ' Milhoes', ' Milhao' )
-   if val( p03 ) = 0 .and. val( p04 ) = 0
-      ret_ext += ' de ' + zmoeda02
-   endif
-endif
-if val( p03 ) > 0
-   ret_ext += if( empty( ret_ext ), '', if( val( p04 ) = 0 .and. val( p05 ) = 0, ' e ', ', ' ) )
-   ret_ext += Extx( p03 )
-   ret_ext += ' Mil'
-   if val( p04 ) = 0
-      ret_ext += ' ' + zmoeda01
-   endif
-endif
-if val( p04 ) > 0
-   ret_ext += if( empty( ret_ext ), '', if( val( p05 ) = 0, ' e ', ', ' ) )
-   ret_ext += Extx( p04 )
-   ret_ext += if( val( p04 ) > 1, ' ' + zmoeda01, ' ' + zmoeda02 )
-endif
-if val( p05 ) > 0
-   ret_ext += if( empty( ret_ext ), '', ' ' + zmoeda05 + ' ' )
-   ret_ext += Extx( p05 )
-   ret_ext += if( val( p05 ) > 1, ' ' + zmoeda03, ' ' + zmoeda04 )
-endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Ext()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC Ext( val_ext, lin, tam1, tam2, tam3 )
+
+   PRIV cen
+   PRIV dez
+   PRIV uni
+   PRIV str_ext
+   PRIV ret_ext
+   PRIV p01
+   PRIV p02
+   PRIV p03
+   PRIV p04
+   PRIV p05
+   PRIV tab1
+   PRIV tab2
+   PRIV linha1
+   PRIV linha2
+   PRIV linha3
+
+   cen := { "Cento", "Duzentos", "Trezentos", "Quatrocentos", "Quinhentos", ;
+      "Seiscentos", "Setecentos", "Oitocentos", "Novecentos" }
+   dez := { "Dez", "Vinte", "Trinta", "Quarenta", "Cinquenta", "Sessenta", "Setenta", ;
+      "Oitenta", "Noventa" }
+   uni := { "Um", "Dois", "Tres", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", ;
+      "Dez", "Onze", "Doze", "Treze", "Quatorze", "Quinze", "Dezesseis", ;
+      "Dezessete", "Dezoito", "Dezenove" }
+   str_ext := Str( val_ext, 15, 2 )
+   ret_ext := ""
+   p01     := SubStr( str_ext, 1, 3 )
+   p02     := SubStr( str_ext, 4, 3 )
+   p03     := SubStr( str_ext, 7, 3 )
+   p04     := SubStr( str_ext, 10, 3 )
+   p05     := '0' + SubStr( str_ext, 14, 2 )
+   IF Val( p01 ) > 0
+      ret_ext += Extx( p01 )
+      ret_ext += if( Val( p01 ) > 1, ' Bilhoes', ' Bilhao' )
+      IF Val( p02 ) = 0 .AND. Val( p03 ) = 0 .AND. Val( p04 ) = 0
+         ret_ext += ' de ' + zmoeda02
+      ENDIF
+   ENDIF
+   IF Val( p02 ) > 0
+      ret_ext += if( Empty( ret_ext ), '', if( Val( p03 ) = 0 .AND. Val( p04 ) = 0, ' e ', ', ' ) )
+      ret_ext += Extx( p02 )
+      ret_ext += if( Val( p02 ) > 1, ' Milhoes', ' Milhao' )
+      IF Val( p03 ) = 0 .AND. Val( p04 ) = 0
+         ret_ext += ' de ' + zmoeda02
+      ENDIF
+   ENDIF
+   IF Val( p03 ) > 0
+      ret_ext += if( Empty( ret_ext ), '', if( Val( p04 ) = 0 .AND. Val( p05 ) = 0, ' e ', ', ' ) )
+      ret_ext += Extx( p03 )
+      ret_ext += ' Mil'
+      IF Val( p04 ) = 0
+         ret_ext += ' ' + zmoeda01
+      ENDIF
+   ENDIF
+   IF Val( p04 ) > 0
+      ret_ext += if( Empty( ret_ext ), '', if( Val( p05 ) = 0, ' e ', ', ' ) )
+      ret_ext += Extx( p04 )
+      ret_ext += if( Val( p04 ) > 1, ' ' + zmoeda01, ' ' + zmoeda02 )
+   ENDIF
+   IF Val( p05 ) > 0
+      ret_ext += if( Empty( ret_ext ), '', ' ' + zmoeda05 + ' ' )
+      ret_ext += Extx( p05 )
+      ret_ext += if( Val( p05 ) > 1, ' ' + zmoeda03, ' ' + zmoeda04 )
+   ENDIF
 // *** POSICIONADO O EXTENSO DENTRO DAS LINHAS PRE-DETERMINADAS NO FORMULARIO
-ret_ext := alltrim( ret_ext ) + ' '
-ret_ext += ( repl( '*', 240 - len( ret_ext ) ) )
+   ret_ext := AllTrim( ret_ext ) + ' '
+   ret_ext += ( repl( '*', 240 - Len( ret_ext ) ) )
 
-tab1 := tam1
-if substr( ret_ext, tab1, 1 ) <> " " .and. substr( ret_ext, tab1, 1 ) <> "*"
-   if substr( ret_ext, tab1 + 1, 1 ) <> " " .and. substr( ret_ext, tab1 + 1, 1 ) <> "*"
-      while substr( ret_ext, tab1, 1 ) <> " " .and. substr( ret_ext, tab1, 1 ) <> "*"
-         tab1 --
-      enddo
-      tab1 --
-   endif
-else
-   tab1 --
-endif
-linha1 := alltrim( substr( ret_ext, 1, tab1 ) )
-tab2   := tab1 + 2 + tam2
-if substr( ret_ext, tab2, 1 ) <> " " .and. substr( ret_ext, tab2, 1 ) <> "*"
-   if substr( ret_ext, tab2 + 1, 1 ) <> " " .and. substr( ret_ext, tab2 + 1, 1 ) <> "*"
-      while substr( ret_ext, tab2, 1 ) <> " " .and. substr( ret_ext, tab2, 1 ) <> "*"
-         tab2 --
-      enddo
-      tab2 --
-   endif
-else
-   tab2 --
-endif
-linha2 := alltrim( substr( ret_ext, tab1 + 2, ( tab2 - ( tab1 + 2 ) ) + 1 ) )
-linha3 := substr( ret_ext, tab2 + 2, tam3 )
-if lin = 1
-   ret_ext := linha1
-elseif lin = 2
-   ret_ext := linha2
-elseif lin = 3
-   ret_ext := linha3
-else
-   ret_ext := ' '
-endif
+   tab1 := tam1
+   IF SubStr( ret_ext, tab1, 1 ) <> " " .AND. SubStr( ret_ext, tab1, 1 ) <> "*"
+      IF SubStr( ret_ext, tab1 + 1, 1 ) <> " " .AND. SubStr( ret_ext, tab1 + 1, 1 ) <> "*"
+         WHILE SubStr( ret_ext, tab1, 1 ) <> " " .AND. SubStr( ret_ext, tab1, 1 ) <> "*"
+            tab1--
+         ENDDO
+         tab1--
+      ENDIF
+   ELSE
+      tab1--
+   ENDIF
+   linha1 := AllTrim( SubStr( ret_ext, 1, tab1 ) )
+   tab2   := tab1 + 2 + tam2
+   IF SubStr( ret_ext, tab2, 1 ) <> " " .AND. SubStr( ret_ext, tab2, 1 ) <> "*"
+      IF SubStr( ret_ext, tab2 + 1, 1 ) <> " " .AND. SubStr( ret_ext, tab2 + 1, 1 ) <> "*"
+         WHILE SubStr( ret_ext, tab2, 1 ) <> " " .AND. SubStr( ret_ext, tab2, 1 ) <> "*"
+            tab2--
+         ENDDO
+         tab2--
+      ENDIF
+   ELSE
+      tab2--
+   ENDIF
+   linha2 := AllTrim( SubStr( ret_ext, tab1 + 2, ( tab2 - ( tab1 + 2 ) ) + 1 ) )
+   linha3 := SubStr( ret_ext, tab2 + 2, tam3 )
+   IF lin = 1
+      ret_ext := linha1
+   ELSEIF lin = 2
+      ret_ext := linha2
+   ELSEIF lin = 3
+      ret_ext := linha3
+   ELSE
+      ret_ext := ' '
+   ENDIF
 
-retu alltrim( ret_ext )
+   RETU AllTrim( ret_ext )
 
 
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function Extx()
-*+
-*+    Called from ( disk51.prg   )   5 - function ext()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func Extx(pp)           // VERIFICANDO DEZENA E UNIDADES
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function Extx()
+// +
+// +    Called from ( disk51.prg   )   5 - function ext()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-priv retorno
-priv pp01
-priv pp02
-priv pp03
-retorno := ""
-pp01    := val( substr( pp, 1, 1 ) )
-pp02    := val( substr( pp, 2, 1 ) )
-pp03    := val( substr( pp, 3, 1 ) )
-if pp01 > 0
-   retorno := cen[ PP01 ]
-   if pp02 = 0 .and. pp03 = 0
-      if pp01 = 1
-         retorno := "Cem"
-      endif
-   endif
-endif
-if pp02 > 1
-   retorno += if( empty( retorno ), '', ' e ' ) + dez[ PP02 ]
-endif
-if pp02 = 1
-   retorno += if( empty( retorno ), '', ' e ' ) + uni[ 10 + PP03 ]
-endif
-if pp03 > 0 .and. pp02 # 1
-   retorno += if( empty( retorno ), '', ' e ' ) + uni[ PP03 ]
-endif
-retu ( retorno )
 
-*+ EOF: DISK51.PRG
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Extx()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC Extx( pp )   // VERIFICANDO DEZENA E UNIDADES
+
+   PRIV retorno
+   PRIV pp01
+   PRIV pp02
+   PRIV pp03
+
+   retorno := ""
+   pp01    := Val( SubStr( pp, 1, 1 ) )
+   pp02    := Val( SubStr( pp, 2, 1 ) )
+   pp03    := Val( SubStr( pp, 3, 1 ) )
+   IF pp01 > 0
+      retorno := cen[ PP01 ]
+      IF pp02 = 0 .AND. pp03 = 0
+         IF pp01 = 1
+            retorno := "Cem"
+         ENDIF
+      ENDIF
+   ENDIF
+   IF pp02 > 1
+      retorno += if( Empty( retorno ), '', ' e ' ) + dez[ PP02 ]
+   ENDIF
+   IF pp02 = 1
+      retorno += if( Empty( retorno ), '', ' e ' ) + uni[ 10 + PP03 ]
+   ENDIF
+   IF pp03 > 0 .AND. pp02 # 1
+      retorno += if( Empty( retorno ), '', ' e ' ) + uni[ PP03 ]
+   ENDIF
+   RETU ( retorno )
+
+// + EOF: DISK51.PRG
+
+// + EOF: disk51.prg
+// +

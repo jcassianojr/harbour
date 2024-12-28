@@ -1,81 +1,125 @@
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Source Module => J:\ITAESBRA\M_BM4.PRG
-*+
-*+    Reformatted by Click! 2.03 on May-7-2001 at  2:16 pm
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_bm4.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:47 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-//#INCLUDE "COMANDO.CH"
+// +ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
+// +
+// +    Source Module => J:\ITAESBRA\M_BM4.PRG
+// +
+// +    Reformatted by Click! 2.03 on May-7-2001 at  2:16 pm
+// +
+// +ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
 
-function M_bm4
-para cARQPRI, cARQACU, cCARREF, cCABREF
-
-//Modo de Trabalho no Video
-MDI( " Э Imprimir Relatўrio da " + cCABREF )
-
-cVAR     := "ATUAL"
-lACUMULA := .F.
-ARQWORK  := cARQPRI
-MES      := 0
-ANO      := 0
-cCABAUX  := space( 40 )
-PERACU()
-
-FILTRO := 'APURA#"N"'
-FILTRO := RFILORD( cARQPRI, .F., FILTRO )
-
-if !CHECKIMP( 0 )
-   return .F.
-endif
-
-
-MDS( "Aguarde Montando Relatorio" )
-if !USEREDE( ARQWORK, 1, 99 )
-   retu .F.
-endif
-if !empty( FILTRO )
-   set filter to &FILTRO
-endif
-
-IMPRESSORA()
-
-TOT1 := TOT2 := TOT3 := 0.00
-@ prow(), 1      say "ITAESBRA INDUSTRA MECANICA LTDA."
-@ prow() + 1, 23 say cCABREF
-@ prow() + 1, 0  say repl( '-', 78 )
-@ prow() + 1, 0  say 'N.Fis'
-@ prow(), 06     say 'Emiss„o'
-@ prow(), 16     say 'Cliente'
-@ prow(), 34     say 'CFO'
-@ prow(), 42     say 'Vencim.'
-@ prow(), 51     say 'Total Mercador.'
-@ prow(), 64     say 'Total Nota '
-@ prow() + 1, 00 say repl( '-', 78 )
-
-dbgotop()
-while !eof()
-   @ prow() + 1, 00 say NUMERO              pict '99999'
-   @ prow(), 06     say DATA
-   @ prow(), 15     say FORNECEDO           pict '99999'
-   @ prow(), 21     say COGNOME
-   @ prow(), 34     say alltrim( OPERACAO )
-   @ prow(), 42     say DAT01
-   @ prow(), 51     say TOTMER              pict '@E 99999,999.99'
-   @ prow(), 64     say TOTNF               pict '@E 99999,999.99'
-   TOT1 += TOTMER
-   TOT3 += TOTNF
-   dbskip()
-enddo
-@ prow() + 1, 1  say repl( '-', 78 )
-@ prow() + 1, 10 say "Totais Gerais : "
-@ prow(), 51     say TOT1               pict '@E 99999,999.99'
-@ prow(), 64     say TOT3               pict '@E 99999,999.99'
-@ prow() + 1, 1  say repl( '=', 78 )
-dbclosearea()
-IMPFOL()
-VIDEO()
-IMPEND()
+// #INCLUDE "COMANDO.CH"
 
 
-*+ EOF: M_BM4.PRG
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function M_bm4()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION M_bm4
+
+   PARA cARQPRI, cARQACU, cCARREF, cCABREF
+
+// Modo de Trabalho no Video
+   MDI( " Э Imprimir Relatўrio da " + cCABREF )
+
+   cVAR     := "ATUAL"
+   lACUMULA := .F.
+   ARQWORK  := cARQPRI
+   MES      := 0
+   ANO      := 0
+   cCABAUX  := Space( 40 )
+   PERACU()
+
+   FILTRO := 'APURA#"N"'
+   FILTRO := RFILORD( cARQPRI, .F., FILTRO )
+
+   IF !CHECKIMP( 0 )
+      RETURN .F.
+   ENDIF
+
+
+   MDS( "Aguarde Montando Relatorio" )
+   IF !USEREDE( ARQWORK, 1, 99 )
+      RETU .F.
+   ENDIF
+   IF !Empty( FILTRO )
+      SET FILTER TO &FILTRO
+   ENDIF
+
+   IMPRESSORA()
+
+   TOT1 := TOT2 := TOT3 := 0.00
+   @ PRow(), 1    SAY "ITAESBRA INDUSTRA MECANICA LTDA."
+   @ PRow() + 1, 23 SAY cCABREF
+   @ PRow() + 1, 0  SAY repl( '-', 78 )
+   @ PRow() + 1, 0  SAY 'N.Fis'
+   @ PRow(), 06    SAY 'Emiss„o'
+   @ PRow(), 16    SAY 'Cliente'
+   @ PRow(), 34    SAY 'CFO'
+   @ PRow(), 42    SAY 'Vencim.'
+   @ PRow(), 51    SAY 'Total Mercador.'
+   @ PRow(), 64    SAY 'Total Nota '
+   @ PRow() + 1, 00 SAY repl( '-', 78 )
+
+   dbGoTop()
+   WHILE !Eof()
+      @ PRow() + 1, 00 SAY NUMERO            PICT '99999'
+      @ PRow(), 06    SAY DATA
+      @ PRow(), 15    SAY FORNECEDO         PICT '99999'
+      @ PRow(), 21    SAY COGNOME
+      @ PRow(), 34    SAY AllTrim( OPERACAO )
+      @ PRow(), 42    SAY DAT01
+      @ PRow(), 51    SAY TOTMER            PICT '@E 99999,999.99'
+      @ PRow(), 64    SAY TOTNF             PICT '@E 99999,999.99'
+      TOT1 += TOTMER
+      TOT3 += TOTNF
+      dbSkip()
+   ENDDO
+   @ PRow() + 1, 1  SAY repl( '-', 78 )
+   @ PRow() + 1, 10 SAY "Totais Gerais : "
+   @ PRow(), 51    SAY TOT1               PICT '@E 99999,999.99'
+   @ PRow(), 64    SAY TOT3               PICT '@E 99999,999.99'
+   @ PRow() + 1, 1  SAY repl( '=', 78 )
+   dbCloseArea()
+   IMPFOL()
+   VIDEO()
+   IMPEND()
+
+
+// + EOF: M_BM4.PRG
+
+// + EOF: m_bm4.prg
+// +

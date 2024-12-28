@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fo_for.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fo_for.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -46,51 +46,52 @@
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function fo_for()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function fo_for()
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function fo_for()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION fo_for()
 
-CABEX('Imprimir Formul rios')
-PARA FGRUPO
-ZDATA := DXDIA
-GRAPP := 1
-MAT1  := {}
-MAT2  := {}
-IF !netuse("DISKRELA")
-   RETU
-ENDIF
-GRAPT('Carregando Listas Disponiveis')
-GRAPT := LASTREC()
-SET FILTER TO &FGRUPO
-DBGOTOP()
-WHILE !EOF()
-   AADD(MAT1,' '+CODIGO+' -  '+DESCRICAO+' ')
-   AADD(MAT2,CODIGO)
-   GRAPS()
-   DBSKIP()
-ENDDO
-DBCLOSEAREA()
-WHILE .T.
-   CABEX('Imprimir Formul rios')
-   MDS('Tecle enter para listar o formul rio Desejado')
-   ACHEI := ACHOICE(7,02,23,78,MAT1)
-   IF ACHEI = 0
-      EXIT
+   CABEX( 'Imprimir Formul rios' )
+   PARA FGRUPO
+   ZDATA := DXDIA
+   GRAPP := 1
+   MAT1  := {}
+   MAT2  := {}
+   IF !netuse( "DISKRELA" )
+      RETU
    ENDIF
-   FO_RELL(MAT2[ACHEI])
-ENDDO
-RETURN .T.
+   GRAPT( 'Carregando Listas Disponiveis' )
+   GRAPT := LastRec()
+   SET FILTER TO &FGRUPO
+   dbGoTop()
+   WHILE !Eof()
+      AAdd( MAT1, ' ' + CODIGO + ' -  ' + DESCRICAO + ' ' )
+      AAdd( MAT2, CODIGO )
+      GRAPS()
+      dbSkip()
+   ENDDO
+   dbCloseArea()
+   WHILE .T.
+      CABEX( 'Imprimir Formul rios' )
+      MDS( 'Tecle enter para listar o formul rio Desejado' )
+      ACHEI := AChoice( 7, 02, 23, 78, MAT1 )
+      IF ACHEI = 0
+         EXIT
+      ENDIF
+      FO_RELL( MAT2[ ACHEI ] )
+   ENDDO
+
+   RETURN .T.
 // : FIM: FO_FOR.PRG
 
-*+ EOF: fo_for.prg
-*+
+// + EOF: fo_for.prg
+// +

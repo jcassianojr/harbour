@@ -1,3 +1,30 @@
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : xhberr_mode.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:42 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 /*
  * xHarbour default error handler and error functions:
  *    xhb_ErrorSys(), __ErrorBlock(),
@@ -52,13 +79,26 @@
 
 #include "error.ch"
 #include "fileio.ch"
-#INCLUDE "COMMON.CH"
+#include "COMMON.CH"
 
-REQUEST Select, Alias, RecNo, DbFilter, DbRelation, IndexOrd, IndexKey
+REQUEST SELECT, ALIAS, RecNo, DbFilter, DbRelation, IndexOrd, IndexKey
 
-STATIC s_cErrorLog := "error.log"
+STATIC s_cErrorLog       := "error.log"
 STATIC s_lErrorLogAppend := .F.
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function xhb_ErrorLog()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION xhb_ErrorLog( cErrorLog, lErrorLogAppend )
 
    LOCAL aValueOld := { s_cErrorLog, s_lErrorLogAppend }
@@ -72,36 +112,118 @@ FUNCTION xhb_ErrorLog( cErrorLog, lErrorLogAppend )
 
    RETURN aValueOld
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ErrorSys()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION ErrorSys
-*------------------------------------------------------------------------------*
 
-	//ErrorBlock( { | oError | DefError( oError ) } )
-    ErrorBlock( {| oError | xhb_DefError( oError ) } )
+// ------------------------------------------------------------------------------*
 
-RETURN
+// ErrorBlock( { | oError | DefError( oError ) } )
+   ErrorBlock( {| oError | xhb_DefError( oError ) } )
+
+   RETURN
 
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Procedure xhb_ErrorSys()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 PROCEDURE xhb_ErrorSys()
 
    ErrorBlock( {| oError | xhb_DefError( oError ) } )
 
    RETURN
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function err_ModuleName()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION err_ModuleName( oError, n )
+
 
    RETURN iif( __objHasMsg( oError, "MODULENAME" ), oError:ModuleName, ;
       iif( n != NIL, ProcFile( n ), NIL ) )
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function err_ProcName()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION err_ProcName( oError, n )
+
 
    RETURN iif( __objHasMsg( oError, "PROCNAME" ), oError:ProcName, ;
       iif( n != NIL, ProcName( n ), NIL ) )
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function err_ProcLine()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION err_ProcLine( oError, n )
+
 
    RETURN iif( __objHasMsg( oError, "PROCLINE" ), oError:ProcLine, ;
       iif( n != NIL, ProcLine( n ), NIL ) )
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function xhb_DefError()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION xhb_DefError( oError )
 
    LOCAL cMessage
@@ -113,29 +235,29 @@ STATIC FUNCTION xhb_DefError( oError )
    LOCAL n
 
    n := 0
-   WHILE ! Empty( ProcName( ++n ) )
+   WHILE !Empty( ProcName( ++n ) )
       IF ProcName( n ) == ProcName()
          n := 3
          TraceLog( "Error system failure!", err_ProcName( oError, n ), err_ProcLine( oError, n ), err_ModuleName( oError, n ), oError:description )
-         Alert( "Error system failure!;Please correct error handler:;" + err_ProcName( oError, n ) + "(" + hb_ntos( err_ProcLine( oError, n ) ) +  ") in module: " + err_ModuleName( oError, n ) )
+         Alert( "Error system failure!;Please correct error handler:;" + err_ProcName( oError, n ) + "(" + hb_ntos( err_ProcLine( oError, n ) ) + ") in module: " + err_ModuleName( oError, n ) )
          ErrorLevel( 1 )
          QUIT
       ENDIF
    ENDDO
 
-   // By default, division by zero results in zero
+// By default, division by zero results in zero
    IF oError:genCode == EG_ZERODIV
       RETURN 0
    ENDIF
 
-   // By default, retry on RDD lock error failure */
+// By default, retry on RDD lock error failure */
    IF oError:genCode == EG_LOCK .AND. ;
          oError:canRetry
       // oError:tries++
       RETURN .T.
    ENDIF
 
-   // Set NetErr() of there was a database open error
+// Set NetErr() of there was a database open error
    IF oError:genCode == EG_OPEN .AND. ;
          oError:osCode == 32 .AND. ;
          oError:canDefault
@@ -143,20 +265,20 @@ STATIC FUNCTION xhb_DefError( oError )
       RETURN .F.
    ENDIF
 
-   // Set NetErr() if there was a lock error on dbAppend()
+// Set NetErr() if there was a lock error on dbAppend()
    IF oError:genCode == EG_APPENDLOCK .AND. ;
          oError:canDefault
       NetErr( .T. )
       RETURN .F.
    ENDIF
 
-   // Making sure we display the error info!
+// Making sure we display the error info!
    DO WHILE DispCount() > 0
       DispEnd()
    ENDDO
 
    cMessage := ErrorMessage( oError )
-   IF ! Empty( oError:osCode )
+   IF !Empty( oError:osCode )
       cDOSError := "(DOS Error " + hb_ntos( oError:osCode ) + ")"
    ENDIF
 
@@ -165,7 +287,7 @@ STATIC FUNCTION xhb_DefError( oError )
       cMessage += " Arguments: (" + Arguments( oError ) + ")"
    ENDIF
 
-   // Build buttons
+// Build buttons
 
    IF MaxCol() > 0
       aOptions := {}
@@ -195,7 +317,7 @@ STATIC FUNCTION xhb_DefError( oError )
 
       ENDDO
 
-      IF ! Empty( nChoice )
+      IF !Empty( nChoice )
          DO CASE
          CASE aOptions[ nChoice ] == "Break"
             Break( oError )
@@ -207,15 +329,15 @@ STATIC FUNCTION xhb_DefError( oError )
       ENDIF
    ELSE
       IF Empty( oError:osCode )
-         Alert( cMessage + ";" + err_ProcName( oError, 3 ) + "(" + hb_ntos( err_ProcLine( oError, 3 ) ) +  ") in module: " + err_ModuleName( oError, 3 ) )
+         Alert( cMessage + ";" + err_ProcName( oError, 3 ) + "(" + hb_ntos( err_ProcLine( oError, 3 ) ) + ") in module: " + err_ModuleName( oError, 3 ) )
       ELSE
-         Alert( cMessage + ";" + cDOSError + ";" + err_ProcName( oError, 3 ) + "(" + hb_ntos( err_ProcLine( oError, 3 ) ) +  ") in module: " + err_ModuleName( oError, 3 ) )
+         Alert( cMessage + ";" + cDOSError + ";" + err_ProcName( oError, 3 ) + "(" + hb_ntos( err_ProcLine( oError, 3 ) ) + ") in module: " + err_ModuleName( oError, 3 ) )
       ENDIF
    ENDIF
 
-   // "Quit" selected
+// "Quit" selected
 
-   IF ! Empty( oError:osCode )
+   IF !Empty( oError:osCode )
       cMessage += " " + cDOSError
    ENDIF
 
@@ -224,14 +346,14 @@ STATIC FUNCTION xhb_DefError( oError )
    ?
    ? "Error at ...:", err_ProcName( oError, 3 ) + "(" + hb_ntos( err_ProcLine( oError, 3 ) ) + ") in Module:", err_ModuleName( oError, 3 )
    n := 2
-   WHILE ! Empty( ProcName( ++n ) )
+   WHILE !Empty( ProcName( ++n ) )
       ? "Called from :", ProcName( n ) + ;
          "(" + hb_ntos( ProcLine( n ) ) + ") in Module:", ProcFile( n )
    ENDDO
 
-   // For some strange reason, the DOS prompt gets written on the first line
-   // *of* the message instead of on the first line *after* the message after
-   // the program quits, unless the screen has scrolled. - dgh
+// For some strange reason, the DOS prompt gets written on the first line
+// *of* the message instead of on the first line *after* the message after
+// the program quits, unless the screen has scrolled. - dgh
    LogError( oError )
 
    ErrorLevel( 1 )
@@ -242,47 +364,73 @@ STATIC FUNCTION xhb_DefError( oError )
 
 // [vszakats]
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function ErrorMessage()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION ErrorMessage( oError )
 
    LOCAL cMessage
 
-   // start error message
+// start error message
    cMessage := iif( oError:severity > ES_WARNING, "Error", "Warning" ) + " "
 
-   // add subsystem name if available
+// add subsystem name if available
    IF HB_ISSTRING( oError:subsystem )
       cMessage += oError:subsystem()
    ELSE
       cMessage += "???"
    ENDIF
 
-   // add subsystem's error code if available
+// add subsystem's error code if available
    IF HB_ISNUMERIC( oError:subCode )
       cMessage += "/" + hb_ntos( oError:subCode )
    ELSE
       cMessage += "/???"
    ENDIF
 
-   // add error description if available
+// add error description if available
    IF HB_ISSTRING( oError:description )
       cMessage += "  " + oError:description
    ENDIF
 
-   // add either filename or operation
+// add either filename or operation
    DO CASE
-   CASE ! Empty( oError:filename )
+   CASE !Empty( oError:filename )
       cMessage += ": " + oError:filename
-   CASE ! Empty( oError:operation )
+   CASE !Empty( oError:operation )
       cMessage += ": " + oError:operation
    ENDCASE
 
    RETURN cMessage
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function LogError()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION LogError( oErr )
 
    LOCAL cScreen
-   LOCAL cLogFile    := s_cErrorLog       // error log file name
-   LOCAL lAppendLog  := s_lErrorLogAppend // .F. = create a new error log (default) .T. = append to a existing one.
+   LOCAL cLogFile   := s_cErrorLog   // error log file name
+   LOCAL lAppendLog := s_lErrorLogAppend   // .F. = create a new error log (default) .T. = append to a existing one.
    LOCAL nCols
    LOCAL nRows
 
@@ -294,23 +442,23 @@ STATIC FUNCTION LogError( oErr )
    LOCAL nHandle
    LOCAL nBytes
 
-   LOCAL nHandle2   := F_ERROR
-   LOCAL cLogFile2  := "_error.log"
-   LOCAL cBuff      := ""
+   LOCAL nHandle2  := F_ERROR
+   LOCAL cLogFile2 := "_error.log"
+   LOCAL cBuff     := ""
    LOCAL nRead
 
    nCols := MaxCol()
    IF nCols > 0
-      nRows := MaxRow()
+      nRows   := MaxRow()
       cScreen := SaveScreen()
    ENDIF
 
-   // Alert( "An error occured, Information will be ;written to error.log" )
+// Alert( "An error occured, Information will be ;written to error.log" )
 
-   IF ! lAppendLog
+   IF !lAppendLog
       nHandle := FCreate( cLogFile, FC_NORMAL )
    ELSE
-      IF ! hb_FileExists( cLogFile )
+      IF !hb_FileExists( cLogFile )
          nHandle := FCreate( cLogFile, FC_NORMAL )
       ELSE
          nHandle  := FCreate( cLogFile2, FC_NORMAL )
@@ -323,7 +471,7 @@ STATIC FUNCTION LogError( oErr )
       // Force creating error.log in case supplied log file cannot
       // be created for any reason
       cLogFile := "error.log"
-      nHandle := FCreate( cLogFile, FC_NORMAL )
+      nHandle  := FCreate( cLogFile, FC_NORMAL )
    ENDIF
 
    IF nHandle < 3
@@ -332,13 +480,13 @@ STATIC FUNCTION LogError( oErr )
       FWriteLine( nHandle, PadC( " xHarbour Error Log ", 79, "-" ) )
       FWriteLine( nHandle, "" )
 
-      FWriteLine( nHandle, "Date...............: " + DToC( Date() )  )
-      FWriteLine( nHandle, "Time...............: " + Time()          )
+      FWriteLine( nHandle, "Date...............: " + DToC( Date() ) )
+      FWriteLine( nHandle, "Time...............: " + Time() )
 
       FWriteLine( nHandle, "" )
       FWriteLine( nHandle, "Application name...: " + hb_CmdArgArgV() )
       FWriteLine( nHandle, "Workstation name...: " + NetName() )
-      FWriteLine( nHandle, "Available memory...: " + strvalue( Memory( 0 ) )  )
+      FWriteLine( nHandle, "Available memory...: " + strvalue( Memory( 0 ) ) )
       FWriteLine( nHandle, "Current disk.......: " + DiskName() )
       FWriteLine( nHandle, "Current directory..: " + CurDir() )
       FWriteLine( nHandle, "Free disk space....: " + strvalue( DiskSpace() ) )
@@ -469,30 +617,30 @@ STATIC FUNCTION LogError( oErr )
       FWriteLine( nHandle, "" )
 
       hb_WAEval( {||
-         IF hb_IsFunction( "Select" )
-            FWriteLine( nHandle, "Work Area No ......: " + strvalue( Do( "Select" ) ) )
-         ENDIF
-         IF hb_IsFunction( "Alias" )
-            FWriteLine( nHandle, "Alias .............: " + Do( "Alias" ) )
-         ENDIF
-         IF hb_IsFunction( "RecNo" )
-            FWriteLine( nHandle, "Current Recno .....: " + strvalue( Do( "RecNo" ) ) )
-         ENDIF
-         IF hb_IsFunction( "dbFilter" )
-            FWriteLine( nHandle, "Current Filter ....: " + Do( "dbFilter" ) )
-         ENDIF
-         IF hb_IsFunction( "dbRelation" )
-            FWriteLine( nHandle, "Relation Exp. .....: " + Do( "dbRelation" ) )
-         ENDIF
-         IF hb_IsFunction( "IndexOrd" )
-            FWriteLine( nHandle, "Index Order .......: " + strvalue( Do( "IndexOrd" ) ) )
-         ENDIF
-         IF hb_IsFunction( "IndexKey" )
-            FWriteLine( nHandle, "Active Key ........: " + strvalue( Eval( hb_macroBlock( "IndexKey( 0 )" ) ) ) )
-         ENDIF
-         FWriteLine( nHandle, "" )
-         RETURN .T.
-         } )
+      IF hb_IsFunction( "Select" )
+         FWriteLine( nHandle, "Work Area No ......: " + strvalue( Do( "Select" ) ) )
+      ENDIF
+      IF hb_IsFunction( "Alias" )
+         FWriteLine( nHandle, "Alias .............: " + Do( "Alias" ) )
+      ENDIF
+      IF hb_IsFunction( "RecNo" )
+         FWriteLine( nHandle, "Current Recno .....: " + strvalue( Do( "RecNo" ) ) )
+      ENDIF
+      IF hb_IsFunction( "dbFilter" )
+         FWriteLine( nHandle, "Current Filter ....: " + Do( "dbFilter" ) )
+      ENDIF
+      IF hb_IsFunction( "dbRelation" )
+         FWriteLine( nHandle, "Relation Exp. .....: " + Do( "dbRelation" ) )
+      ENDIF
+      IF hb_IsFunction( "IndexOrd" )
+         FWriteLine( nHandle, "Index Order .......: " + strvalue( Do( "IndexOrd" ) ) )
+      ENDIF
+      IF hb_IsFunction( "IndexKey" )
+         FWriteLine( nHandle, "Active Key ........: " + strvalue( Eval( hb_macroBlock( "IndexKey( 0 )" ) ) ) )
+      ENDIF
+      FWriteLine( nHandle, "" )
+      RETURN .T.
+      } )
 
       FWriteLine( nHandle, "" )
       IF nCols > 0
@@ -526,7 +674,7 @@ STATIC FUNCTION LogError( oErr )
       FWriteLine( nHandle, PadR( err_ProcName( oErr, 3 ), 21 ) + " : " + Transform( err_ProcLine( oErr, 3 ), "999,999" ) + " in Module: " + err_ModuleName( oErr, 3 ) )
 
       nCount := 3
-      WHILE ! Empty( ProcName( ++nCount ) )
+      WHILE !Empty( ProcName( ++nCount ) )
          FWriteLine( nHandle, PadR( ProcName( nCount ), 21 ) + " : " + Transform( ProcLine( nCount ), "999,999" ) + " in Module: " + ProcFile( nCount ) )
       ENDDO
 
@@ -580,7 +728,7 @@ STATIC FUNCTION LogError( oErr )
             nRead := FRead( nHandle2, @cBuff, hb_BLen( cBuff ) )
             FWrite( nHandle, cBuff, nRead )
             nBytes -= nRead
-            cBuff := Space( 10 )
+            cBuff  := Space( 10 )
          ENDDO
 
          FClose( nHandle2 )
@@ -596,6 +744,19 @@ STATIC FUNCTION LogError( oErr )
 
    RETURN .F.
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function strvalue()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION strvalue( c, l )
 
    LOCAL cr := ""
@@ -622,13 +783,39 @@ STATIC FUNCTION strvalue( c, l )
 
    RETURN Upper( cr )
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Procedure FWriteLine()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC PROCEDURE FWriteLine( nh, c )
 
    FWrite( nh, c + hb_eol() )
-   // hb_OutDebug( c + hb_eol() )
+// hb_OutDebug( c + hb_eol() )
 
    RETURN
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function Arguments()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION Arguments( oErr )
 
    LOCAL xArg, cArguments := ""
@@ -638,17 +825,44 @@ STATIC FUNCTION Arguments( oErr )
          cArguments += " [" + Str( xArg:__EnumIndex(), 2 ) + "] = Type: " + ValType( xArg )
 
          IF xArg != NIL
-            cArguments +=  " Val: " + hb_CStr( xArg )
+            cArguments += " Val: " + hb_CStr( xArg )
          ENDIF
       NEXT
    ENDIF
 
    RETURN cArguments
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function __ErrorBlock()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION __ErrorBlock()
+
 
    RETURN {| e | __MinimalErrorHandler( e ) }
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Procedure __MinimalErrorHandler()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 PROCEDURE __MinimalErrorHandler( oError )
 
    LOCAL cError
@@ -681,214 +895,231 @@ PROCEDURE __MinimalErrorHandler( oError )
    QUIT
 
    RETURN
-   
-   
-   *+¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
-*+
-*+    Function PS_OS_ERR()
-*+
-*+    Called from ( errorsys.prg )   1 - static function deferror()
-*+
-*+¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
-*+
-function PS_OS_ERR( Arg1 )
 
-do case
-	case Arg1 == 1
-	   return "Numero Invalido da Funcao"
-	case Arg1 == 2
-	   return "Arquivo nao Encontrado"
-	case Arg1 == 3
-	   return "Caminho nao Encontrado"
-	case Arg1 == 4
-	   return "Muitos Arquivos Abertos"
-	case Arg1 == 5
-	   return "Acesso Negado"
-	case Arg1 == 6
-	   return "Referencia Arquivo Invalido"
-	case Arg1 == 7
-	   return "Blocos Memorias Destruidos"
-	case Arg1 == 8
-	   return "Memoria Insuficiente"
-	case Arg1 == 9
-	   return "Erro de Memoria Invalido"
-	case Arg1 == 10
-	   return "Ambiente Invalido"
-	case Arg1 == 11
-	   return "Formato Invalido"
-	case Arg1 == 12
-	   return "Acesso de Codigo Invalido"
-	case Arg1 == 13
-	   return "Data Invalida"
-	case Arg1 == 14
-	   return "Reservado"
-	case Arg1 == 15
-	   return "Drive Invalido"
-	case Arg1 == 16
-	   return "Tentando Remover diretorio Atual"
-	case Arg1 == 17
-	   return "Nao e o mesmo Dispositivo"
-	case Arg1 == 18
-	   return "Sem mais Arquivos"
-	case Arg1 == 19
-	   return "Tentanod Escrever disquete-Travada"
-	case Arg1 == 20
-	   return "Unidade Desconhecido"
-	case Arg1 == 21
-	   return "Unidade nao Preparada"
-	case Arg1 == 22
-	   return "Comando Desconhecido"
-	case Arg1 == 23
-	   return "Data erro (CRC)"
-	case Arg1 == 24
-	   return "Erro no Tamanho Estrutura"
-	case Arg1 == 25
-	   return "Erro de Busca"
-	case Arg1 == 26
-	   return "Media Desconhecido"
-	case Arg1 == 27
-	   return "Setor nao Encontrado"
-	case Arg1 == 28
-	   return "Impressora sem Papel"
-	case Arg1 == 29
-	   return "Erro de Escrita"
-	case Arg1 == 30
-	   return "Erro de Leitura"
-	case Arg1 == 31
-	   return "Falha Geral"
-	case Arg1 == 32
-	   return "Violacao de Compartilhamento"
-	case Arg1 == 33
-	   return "Violacao de Travamento"
-	case Arg1 == 34
-	   return "Mudanca de Disco Errada"
-	case Arg1 == 35
-	   return "FCB nao disponivel"
-	case Arg1 == 36
-	   return "Estouro do buffer de compartilhamento"
-	case Arg1 >= 37 .and. Arg1 <= 49
-	   return "Reservado"
-	case Arg1 == 50
-	   return "Requisicao a Rede Nao Suportada"
-	case Arg1 == 51
-	   return "Computador Remoto nao respondendo"
-	case Arg1 == 52
-	   return "Nome Duplicado na Rede"
-	case Arg1 == 53
-	   return "Nao Encontrado nome na Rede"
-	case Arg1 == 54
-	   return "Rede Ocupada"
-	case Arg1 == 55
-	   return "Dispositivo da rede nao mais disponivel"
-	case Arg1 == 56
-	   return "Comando da Rede BIOS execedeu limite"
-	case Arg1 == 57
-	   return "Erro no Adaptador da Rede"
-	case Arg1 == 58
-	   return "Resposta Incorreta da Rede"
-	case Arg1 == 59
-	   return "Erro Inesperado na Rede"
-	case Arg1 == 60
-	   return "Adaptador Remotor Imcompativel"
-	case Arg1 == 61
-	   return "File Impressora Cheia"
-	case Arg1 == 62
-	   return "Sem espaco para imprimir o arquivo"
-	case Arg1 == 63
-	   return "Arquivo Impressora deletado (sem espaco suficiente)"
-	case Arg1 == 64
-	   return "Nome da Rede deletedo"
-	case Arg1 == 65
-	   return "Acesso Negado"
-	case Arg1 == 66
-	   return "Dispositivo da Rede Incorreto"
-	case Arg1 == 67
-	   return "Nao encontrado nome da Rede"
-	case Arg1 == 68
-	   return "Nome da Rede excede Limites"
-	case Arg1 == 69
-	   return "Sessao da rede BIOS excedeu"
-	case Arg1 == 70
-	   return "Pausa Temporaria"
-	case Arg1 == 71
-	   return "Requisicao a Rede nao aceita"
-	case Arg1 == 72
-	   return "Impressao ou Disco redirecao "
-	case Arg1 >= 73 .and. Arg1 <= 79
-	   return "Reservado"
-	case Arg1 == 80
-	   return "Arquivo ja Existente"
-	case Arg1 == 81
-	   return "Reservado"
-	case Arg1 == 82
-	   return "Nao pode ser criada entrada do diretorio"
-	case Arg1 == 83
-	   return "Falha na INT 24H"
-	case Arg1 == 84
-	   return "Muitas redicionamentos"
-	case Arg1 == 85
-	   return "Redicionamento"
-	case Arg1 == 86
-	   return "Senha Invalida"
-	case Arg1 == 87
-	   return "Parametro Invalido"
-	case Arg1 == 88
-	   return "Falha no Dispositivo da Rede" 
-	case   arg1 == 89
-		return"NENHUM ERRO OCORRIDO!"
-	case  arg1 == 90
-	   return "erro de sistema."
-	case  arg1 == 91
-		   return "Temporizador da tabela do serviço de transbordo."
-	case  arg1 == 92 
-		   return "Temporizador serviço tabela duplicar."
-	case  arg1 == 93 
-		   return "Nenhum item para trabalhar."
-	case  arg1 == 95 
-		   return "chamada de sistema interrompida."
-	case  arg1 == 99
-		   return "Dispositivo em uso."
-	case  arg1 ==100
-		   return "usuário / sistema de limite de abertura do semáforo atingido."
-	case  arg1 ==101
-		   return "Exclusivo semáforo já possuía."
-	case  arg1 ==102
-		   return "DosCloseSem encontrada conjunto de semáforos."
-	case  arg1 ==103
-		   return "Há muitas solicitações de semáforos exclusivos."
-	case  arg1 ==104
-		   return "Operação inválida em tempo de interrupção."
-	case  arg1 ==105
-		   return "proprietário do semáforo anterior encerrado sem libertar semáforo."
-	case arg1 ==106 
-		   return "limite de Semaphore excedido."
-	case  arg1 ==107 
-		   return "Insira o disco rígido B na unidade A."
-	case arg1 ==108 
-		   return "Unidade bloqueado por outro processo."
-	case  arg1 ==109
-		   return "Escreva no tubo com nenhum leitor."
-	case  arg1 ==110
-		   return "Open / Create falhou devido a ordem explícita falhar."
-	case  arg1 ==111
-		   return "Tampão passado para chamada de sistema muito pequeno para armazenar dados de retorno."
-	case  arg1 ==112
-		   return "Não há espaço suficiente no disco. Disco Cheio. Chame o Tecnico."
-	case arg1 ==113
-		   return "Não é possível alocar uma outra estrutura de pesquisa e manusear."
-	case   arg1 ==114
-		   return "Alvo punho em DosDupHandle inválido."
-	case  arg1 ==115
-		   return "Usuário inválido endereço virtual."
-	case  arg1 ==116
-		   return "Erro na gravação de exibição ou o teclado ler."
-	case  arg1 ==117
-		   return "Categoria de DevIOCtl não definido."
-	case  arg1 ==118
-		   return "valor inválido passado para verificar bandeira."
-	case  arg1 ==119
-		   return "Nível quatro motorista não foi encontrado."
-	case  arg1 ==120
-		   return "Função Chamada inválida."   
-endcase
-return "<Outros>"
+
+// +¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
+// +
+// +    Function PS_OS_ERR()
+// +
+// +    Called from ( errorsys.prg )   1 - static function deferror()
+// +
+// +¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
+// +
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function PS_OS_ERR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION PS_OS_ERR( Arg1 )
+
+   DO CASE
+   CASE Arg1 == 1
+      RETURN "Numero Invalido da Funcao"
+   CASE Arg1 == 2
+      RETURN "Arquivo nao Encontrado"
+   CASE Arg1 == 3
+      RETURN "Caminho nao Encontrado"
+   CASE Arg1 == 4
+      RETURN "Muitos Arquivos Abertos"
+   CASE Arg1 == 5
+      RETURN "Acesso Negado"
+   CASE Arg1 == 6
+      RETURN "Referencia Arquivo Invalido"
+   CASE Arg1 == 7
+      RETURN "Blocos Memorias Destruidos"
+   CASE Arg1 == 8
+      RETURN "Memoria Insuficiente"
+   CASE Arg1 == 9
+      RETURN "Erro de Memoria Invalido"
+   CASE Arg1 == 10
+      RETURN "Ambiente Invalido"
+   CASE Arg1 == 11
+      RETURN "Formato Invalido"
+   CASE Arg1 == 12
+      RETURN "Acesso de Codigo Invalido"
+   CASE Arg1 == 13
+      RETURN "Data Invalida"
+   CASE Arg1 == 14
+      RETURN "Reservado"
+   CASE Arg1 == 15
+      RETURN "Drive Invalido"
+   CASE Arg1 == 16
+      RETURN "Tentando Remover diretorio Atual"
+   CASE Arg1 == 17
+      RETURN "Nao e o mesmo Dispositivo"
+   CASE Arg1 == 18
+      RETURN "Sem mais Arquivos"
+   CASE Arg1 == 19
+      RETURN "Tentanod Escrever disquete-Travada"
+   CASE Arg1 == 20
+      RETURN "Unidade Desconhecido"
+   CASE Arg1 == 21
+      RETURN "Unidade nao Preparada"
+   CASE Arg1 == 22
+      RETURN "Comando Desconhecido"
+   CASE Arg1 == 23
+      RETURN "Data erro (CRC)"
+   CASE Arg1 == 24
+      RETURN "Erro no Tamanho Estrutura"
+   CASE Arg1 == 25
+      RETURN "Erro de Busca"
+   CASE Arg1 == 26
+      RETURN "Media Desconhecido"
+   CASE Arg1 == 27
+      RETURN "Setor nao Encontrado"
+   CASE Arg1 == 28
+      RETURN "Impressora sem Papel"
+   CASE Arg1 == 29
+      RETURN "Erro de Escrita"
+   CASE Arg1 == 30
+      RETURN "Erro de Leitura"
+   CASE Arg1 == 31
+      RETURN "Falha Geral"
+   CASE Arg1 == 32
+      RETURN "Violacao de Compartilhamento"
+   CASE Arg1 == 33
+      RETURN "Violacao de Travamento"
+   CASE Arg1 == 34
+      RETURN "Mudanca de Disco Errada"
+   CASE Arg1 == 35
+      RETURN "FCB nao disponivel"
+   CASE Arg1 == 36
+      RETURN "Estouro do buffer de compartilhamento"
+   CASE Arg1 >= 37 .AND. Arg1 <= 49
+      RETURN "Reservado"
+   CASE Arg1 == 50
+      RETURN "Requisicao a Rede Nao Suportada"
+   CASE Arg1 == 51
+      RETURN "Computador Remoto nao respondendo"
+   CASE Arg1 == 52
+      RETURN "Nome Duplicado na Rede"
+   CASE Arg1 == 53
+      RETURN "Nao Encontrado nome na Rede"
+   CASE Arg1 == 54
+      RETURN "Rede Ocupada"
+   CASE Arg1 == 55
+      RETURN "Dispositivo da rede nao mais disponivel"
+   CASE Arg1 == 56
+      RETURN "Comando da Rede BIOS execedeu limite"
+   CASE Arg1 == 57
+      RETURN "Erro no Adaptador da Rede"
+   CASE Arg1 == 58
+      RETURN "Resposta Incorreta da Rede"
+   CASE Arg1 == 59
+      RETURN "Erro Inesperado na Rede"
+   CASE Arg1 == 60
+      RETURN "Adaptador Remotor Imcompativel"
+   CASE Arg1 == 61
+      RETURN "File Impressora Cheia"
+   CASE Arg1 == 62
+      RETURN "Sem espaco para imprimir o arquivo"
+   CASE Arg1 == 63
+      RETURN "Arquivo Impressora deletado (sem espaco suficiente)"
+   CASE Arg1 == 64
+      RETURN "Nome da Rede deletedo"
+   CASE Arg1 == 65
+      RETURN "Acesso Negado"
+   CASE Arg1 == 66
+      RETURN "Dispositivo da Rede Incorreto"
+   CASE Arg1 == 67
+      RETURN "Nao encontrado nome da Rede"
+   CASE Arg1 == 68
+      RETURN "Nome da Rede excede Limites"
+   CASE Arg1 == 69
+      RETURN "Sessao da rede BIOS excedeu"
+   CASE Arg1 == 70
+      RETURN "Pausa Temporaria"
+   CASE Arg1 == 71
+      RETURN "Requisicao a Rede nao aceita"
+   CASE Arg1 == 72
+      RETURN "Impressao ou Disco redirecao "
+   CASE Arg1 >= 73 .AND. Arg1 <= 79
+      RETURN "Reservado"
+   CASE Arg1 == 80
+      RETURN "Arquivo ja Existente"
+   CASE Arg1 == 81
+      RETURN "Reservado"
+   CASE Arg1 == 82
+      RETURN "Nao pode ser criada entrada do diretorio"
+   CASE Arg1 == 83
+      RETURN "Falha na INT 24H"
+   CASE Arg1 == 84
+      RETURN "Muitas redicionamentos"
+   CASE Arg1 == 85
+      RETURN "Redicionamento"
+   CASE Arg1 == 86
+      RETURN "Senha Invalida"
+   CASE Arg1 == 87
+      RETURN "Parametro Invalido"
+   CASE Arg1 == 88
+      RETURN "Falha no Dispositivo da Rede"
+   CASE arg1 == 89
+      RETURN "NENHUM ERRO OCORRIDO!"
+   CASE arg1 == 90
+      RETURN "erro de sistema."
+   CASE arg1 == 91
+      RETURN "Temporizador da tabela do serviço de transbordo."
+   CASE arg1 == 92
+      RETURN "Temporizador serviço tabela duplicar."
+   CASE arg1 == 93
+      RETURN "Nenhum item para trabalhar."
+   CASE arg1 == 95
+      RETURN "chamada de sistema interrompida."
+   CASE arg1 == 99
+      RETURN "Dispositivo em uso."
+   CASE arg1 == 100
+      RETURN "usuário / sistema de limite de abertura do semáforo atingido."
+   CASE arg1 == 101
+      RETURN "Exclusivo semáforo já possuía."
+   CASE arg1 == 102
+      RETURN "DosCloseSem encontrada conjunto de semáforos."
+   CASE arg1 == 103
+      RETURN "Há muitas solicitações de semáforos exclusivos."
+   CASE arg1 == 104
+      RETURN "Operação inválida em tempo de interrupção."
+   CASE arg1 == 105
+      RETURN "proprietário do semáforo anterior encerrado sem libertar semáforo."
+   CASE arg1 == 106
+      RETURN "limite de Semaphore excedido."
+   CASE arg1 == 107
+      RETURN "Insira o disco rígido B na unidade A."
+   CASE arg1 == 108
+      RETURN "Unidade bloqueado por outro processo."
+   CASE arg1 == 109
+      RETURN "Escreva no tubo com nenhum leitor."
+   CASE arg1 == 110
+      RETURN "Open / Create falhou devido a ordem explícita falhar."
+   CASE arg1 == 111
+      RETURN "Tampão passado para chamada de sistema muito pequeno para armazenar dados de retorno."
+   CASE arg1 == 112
+      RETURN "Não há espaço suficiente no disco. Disco Cheio. Chame o Tecnico."
+   CASE arg1 == 113
+      RETURN "Não é possível alocar uma outra estrutura de pesquisa e manusear."
+   CASE arg1 == 114
+      RETURN "Alvo punho em DosDupHandle inválido."
+   CASE arg1 == 115
+      RETURN "Usuário inválido endereço virtual."
+   CASE arg1 == 116
+      RETURN "Erro na gravação de exibição ou o teclado ler."
+   CASE arg1 == 117
+      RETURN "Categoria de DevIOCtl não definido."
+   CASE arg1 == 118
+      RETURN "valor inválido passado para verificar bandeira."
+   CASE arg1 == 119
+      RETURN "Nível quatro motorista não foi encontrado."
+   CASE arg1 == 120
+      RETURN "Função Chamada inválida."
+   ENDCASE
+
+   RETURN "<Outros>"
+
+// + EOF: xhberr_mode.prg
+// +

@@ -1,60 +1,66 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib07.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib07.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CRIARVARS()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func CRIARVARS(ARQWORK,lTIPO,lOPEN)
 
 
-if valtype(lTIPO) <> "L"
-   lTIPO := .T.
-endif
-if valtype(lOPEN) <> "L"
-   lOPEN := .T.
-endif
-if lOPEN
-   if !USEREDE(ARQWORK,1,0)
-      retu
-   endif
-endif
-INITVARS()
-if lTIPO
-   CLRVARS()
-endif
-dbclosearea()
-retu .T.
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CRIARVARS()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC CRIARVARS( ARQWORK, lTIPO, lOPEN )
 
+   IF ValType( lTIPO ) <> "L"
+      lTIPO := .T.
+   ENDIF
+   IF ValType( lOPEN ) <> "L"
+      lOPEN := .T.
+   ENDIF
+   IF lOPEN
+      IF !USEREDE( ARQWORK, 1, 0 )
+         RETU
+      ENDIF
+   ENDIF
+   INITVARS()
+   IF lTIPO
+      CLRVARS()
+   ENDIF
+   dbCloseArea()
+   RETU .T.
+
+
+// + EOF: mlib07.prg
+// +

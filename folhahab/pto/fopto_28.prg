@@ -1,91 +1,92 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_28.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:32 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_28.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:32 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-CABE2('FOPTO_28 - Pre Lan‡amento Valor')
+CABE2( 'FOPTO_28 - Pre Lan‡amento Valor' )
 dINI   := zdataini
 dFIM   := zdatafim
 nCTA   := 0
 nVALOR := 0
-MDS('Digite o Periodo ')
-@ 24,40 get dINI         
-@ 24,50 get dFIM         
-if !READCUR()
-   retu .F.
-endif
-MDS('Digite a Conta e o Valor')
-@ 24,40 get nCTA   pict "99"            
-@ 24,50 get nVALOR pict "999.99"        
-if !READCUR()
-   retu .F.
-endif
-if nCTA < 1 .or. nCTA > 17
-   retu .F.
-endif
-if nVALOR = 0
-   if !MDG("Marcar com valor 0")
-      retu .F.
-   endif
-endif
-cCTA := "CTA"+strzero(nCTA,2)
-cPN  := "PN"+ANOMESW
+MDS( 'Digite o Periodo ' )
+@ 24, 40 GET dINI
+@ 24, 50 GET dFIM
+IF !READCUR()
+RETU .F.
+ENDIF
+MDS( 'Digite a Conta e o Valor' )
+@ 24, 40 GET nCTA   PICT "99"
+@ 24, 50 GET nVALOR PICT "999.99"
+IF !READCUR()
+RETU .F.
+ENDIF
+IF nCTA < 1 .OR. nCTA > 17
+RETU .F.
+ENDIF
+IF nVALOR = 0
+IF !MDG( "Marcar com valor 0" )
+RETU .F.
+ENDIF
+ENDIF
+cCTA := "CTA" + StrZero( nCTA, 2 )
+cPN  := "PN" + ANOMESW
 
-if !NETUSE(PES)
-   retu
-endif
-FILTRO := FILTRO("EMPTY(DEMITIDO)")
-set filter to &FILTRO
+IF !NETUSE( PES )
+RETU
+ENDIF
+FILTRO := FILTRO( "EMPTY(DEMITIDO)" )
+SET FILTER TO &FILTRO
 
-if !netuse(cPN)
-   dbcloseall()
-   retu
-endif
-dbselectar(pes)
-dbgotop()
-while !eof()
-   PETELA(8)
-   NUM := NUMERO
-   dbselectar(cPN)
-   BUSCA := str(NUM,8)+dtos(dINI)
-   dbgotop()
-   if dbseek(BUSCA)
-      while DATA >= dINI .and. DATA <= dFIM .and. !eof()
-         netreclock()
-         field->&cCTA. := nVALOR
-         dbunlock()
-         dbskip()
-      enddo
-   endif
-   dbselectar(pes)
-   dbskip()
-enddo
-dbcloseall()
-return .F.
+IF !netuse( cPN )
+dbCloseAll()
+RETU
+ENDIF
+dbSelectAr( pes )
+dbGoTop()
+WHILE !Eof()
+PETELA( 8 )
+NUM := NUMERO
+dbSelectAr( cPN )
+BUSCA := Str( NUM, 8 ) + DToS( dINI )
+dbGoTop()
+IF dbSeek( BUSCA )
+WHILE DATA >= dINI .AND. DATA <= dFIM .AND. !Eof()
+netreclock()
+field->&cCTA. := nVALOR
+dbUnlock()
+dbSkip()
+ENDDO
+ENDIF
+dbSelectAr( pes )
+dbSkip()
+ENDDO
+dbCloseAll()
+
+   RETURN .F.
 
 
-*+ EOF: fopto_28.prg
-*+
+// + EOF: fopto_28.prg
+// +

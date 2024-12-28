@@ -1,149 +1,182 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib20.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib20.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function ENDCID()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-funcTION ENDCID(cESTADO,cCIDADE,eENDCID,eENDCEP,eENDNUM)
-cARQCEP := space(8)
-cENDCID := &eENDCID.
-cEND    := &eENDCID.
-cCEP    := &eENDCEP.
-cNUM    := &eENDNUM.
-cCIDADE := upper(TIRACE(cCIDADE))
-cARQCEP := "C"+OBTER("MD10",cESTADO+cCIDADE,"CODIBGE")
-if empty(cARQCEP)
-   retu .T.
-endif
-if empty(cENDCID)
-   ENDCIDP(cARQCEP)
-   &eENDCID. := cEND
-   &eENDCEP. := cCEP
-else
-   if ! CHECKCEP(cARQCEP,cEND,cNUM)
-      ENDCIDP(cARQCEP)
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ENDCID()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ENDCID( cESTADO, cCIDADE, eENDCID, eENDCEP, eENDNUM )
+
+   cARQCEP := Space( 8 )
+   cENDCID := &eENDCID.
+   cEND    := &eENDCID.
+   cCEP    := &eENDCEP.
+   cNUM    := &eENDNUM.
+   cCIDADE := Upper( TIRACE( cCIDADE ) )
+   cARQCEP := "C" + OBTER( "MD10", cESTADO + cCIDADE, "CODIBGE" )
+   IF Empty( cARQCEP )
+      RETU .T.
+   ENDIF
+   IF Empty( cENDCID )
+      ENDCIDP( cARQCEP )
       &eENDCID. := cEND
       &eENDCEP. := cCEP
-   else
-      &eENDCEP. := cCEP
-   endif
-endif
-retu .T.
+   ELSE
+      IF !CHECKCEP( cARQCEP, cEND, cNUM )
+         ENDCIDP( cARQCEP )
+         &eENDCID. := cEND
+         &eENDCEP. := cCEP
+      ELSE
+         &eENDCEP. := cCEP
+      ENDIF
+   ENDIF
+   RETU .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+    Function ENDCIDP()
-*+
-*+--------------------------------------------------------------------
-*+
-funcTION ENDCIDP(cARQ)
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ENDCIDP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNCTION ENDCIDP( cARQ )
+
+   LOCAL xTELA := SaveScreen( 00, 00, 24, 79 )
+
+   cCOR := "W/N,N/W,N,N,W/N"
+   PRIV GETLIST := {}
+   PRIV lFIXA
+   PRIV nACHO
+   PRIV cVIDE
+   PRIV lPBUS
+   PRIV lPIND
+   PRIV mCBAR
+   PRIV mCBARM
+   PRIV cTIPG
+   PRIV aGETS
+   PRIV cCBAS
+   PRIV nIBUS
+   PRIV nIEXI
+   PRIV aIND
+   PRIV nREG
+   PRIV PCK     := .F.
+   PRIV mCHAVE
+   PRIV mRUA    := Space( 49 )
+   PRIV mCEP    := Space( 8 )
+   PRIV mLADO   := " "
+   PRIV mNINI   := 0
+   PRIV mNFIM   := 0
+   PRIV mWCHA   := "mRUA"
+   PRIV mCHA    := "RUA"
+
+   IF !CONFARQ( cARQCEP, "RUA" + Space( 40 ) + "CEP     L NoIni NoFin" )
+      RETU .F.
+   ENDIF
+   IF !CONFIND( cARQCEP )
+      RETU .F.
+   ENDIF
+   METBRO( cARQ, { { "RUA", "mRUA" } }, { cCOR, cCOR, cCOR, cCOR, cCOR }, ;
+      {|| RUA + ' ' + CEP }, {|| ALLTRUE() }, ;
+      {|| ALLTRUE() },,, 3,,, {|| eENDCID() }, cEND )
+   RestScreen( 00, 00, 24, 79, xTELA )
+
+   RETURN .T.
 
 
-local xTELA := savescreen(00,00,24,79)
-cCOR := "W/N,N/W,N,N,W/N"
-priv GETLIST := {}
-priv lFIXA
-priv nACHO
-priv cVIDE
-priv lPBUS
-priv lPIND
-priv mCBAR
-priv mCBARM
-priv cTIPG
-priv aGETS
-priv cCBAS
-priv nIBUS
-priv nIEXI
-priv aIND
-priv nREG
-priv PCK     := .F.
-priv mCHAVE
-priv mRUA    := space(49)
-priv mCEP    := space(8)
-priv mLADO   := " "
-priv mNINI   := 0
-priv mNFIM   := 0
-PRIV mWCHA   := "mRUA"
-PRIV mCHA    := "RUA"
 
-if !CONFARQ(cARQCEP,"RUA"+space(40)+"CEP     L NoIni NoFin")
-   retu .F.
-endif
-if !CONFIND(cARQCEP)
-   retu .F.
-endif
-METBRO(cARQ,{{"RUA","mRUA"}},{cCOR,cCOR,cCOR,cCOR,cCOR},;
- {|| RUA+' '+CEP},{|| ALLTRUE()},;
- {|| ALLTRUE()},,,3,,,{|| eENDCID()},cEND)
-restscreen(00,00,24,79,xTELA)
-return .T.
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function eENDCID()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION eENDCID
 
-
-*+--------------------------------------------------------------------
-*+
-*+    Function eENDCID()
-*+
-*+--------------------------------------------------------------------
-*+
-funcTION eENDCID
-cEND := RUA
-cCEP := CEP
-return .T.
-
-
-*+--------------------------------------------------------------------
-*+
-*+    Function CHECKCEP()
-*+
-*+--------------------------------------------------------------------
-*+
-funcTION CHECKCEP(cARQ,cEND,cNUM)
-
-
-local cLADO
-local nNUM
-local lRETU := .F.
-if !USEREDE(cARQ,1,1)
-   retu .F.
-endif
-dbgotop()
-IF dbseek(cEND)
+   cEND := RUA
    cCEP := CEP
-endif
-dbclosearea()
-retu lRETU
 
+   RETURN .T.
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKCEP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION CHECKCEP( cARQ, cEND, cNUM )
+
+   LOCAL cLADO
+   LOCAL nNUM
+   LOCAL lRETU := .F.
+
+   IF !USEREDE( cARQ, 1, 1 )
+      RETU .F.
+   ENDIF
+   dbGoTop()
+   IF dbSeek( cEND )
+      cCEP := CEP
+   ENDIF
+   dbCloseArea()
+   RETU lRETU
+
+
+// + EOF: mlib20.prg
+// +

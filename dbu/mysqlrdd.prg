@@ -1,3 +1,30 @@
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mysqlrdd.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:08 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 /*
  * $Id$
  */
@@ -76,63 +103,117 @@ STATIC s_aConnections := {}
 STATIC oSERVER
 STATIC aSTRUCAMPOS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function DBMYSQLCONNECTION()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION DBMYSQLCONNECTION( cConnString )
 
    LOCAL aParams
-//   LOCAL oServer
+
+// LOCAL oServer
    LOCAL nConn
    LOCAL cHost
    LOCAL cDatabase
    LOCAL cUser
    LOCAL cPassword
 
-   aParams := HB_ATOKENS( cConnString, ";" )
+   aParams := hb_ATokens( cConnString, ";" )
 
-   asize( aParams, 6 )
+   ASize( aParams, 6 )
 
-   cHost     := aParams[1]
-   cDatabase := aParams[2]
-   cUser     := aParams[3]
-   cPassword := aParams[4]
+   cHost     := aParams[ 1 ]
+   cDatabase := aParams[ 2 ]
+   cUser     := aParams[ 3 ]
+   cPassword := aParams[ 4 ]
 
-   oServer := TMySQLServer():New( cHost, cUser, cPassword)
+   oServer := TMySQLServer():New( cHost, cUser, cPassword )
 
    IF oServer:NetErr()
-      alert( oServer:ErrorMsg() )
+      Alert( oServer:ErrorMsg() )
       RETURN 0
    ELSE
       oServer:SelectDB( cDataBase )
-      aadd( s_aConnections, oServer )
-      nConn := len( s_aConnections )
+      AAdd( s_aConnections, oServer )
+      nConn := Len( s_aConnections )
    ENDIF
 
-RETURN nConn
+   RETURN nConn
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function DBMYSTRU()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION DBMYSTRU()
-RETURN aSTRUCAMPOS
 
+   RETURN aSTRUCAMPOS
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function DBMYSQLCLEARCONNECTION()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION DBMYSQLCLEARCONNECTION( nConn )
 
-  // LOCAL oServer
+// LOCAL oServer
 
- //  oServer := s_aConnections[ nConn ]
+// oServer := s_aConnections[ nConn ]
 
    oServer:Destroy()
 
    s_aConnections[ nConn ] := nil
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
 /*
  * non work area methods receive RDD ID as first parameter
  * Methods INIT and EXIT does not have to execute SUPER methods - these is
  * always done by low level USRRDD code
  */
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_INIT()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_INIT( nRDD )
 
    USRRDD_RDDDATA( nRDD )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
 /*
  * methods: NEW and RELEASE receive pointer to work area structure
@@ -141,33 +222,60 @@ RETURN SUCCESS
  * these methods does not have to execute SUPER methods - these is
  * always done by low level USRRDD code
  */
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_NEW()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_NEW( pWA )
 
-   USRRDD_AREADATA( pWA, array( AREA_LEN ) )
+   USRRDD_AREADATA( pWA, Array( AREA_LEN ) )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_OPEN()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_OPEN( nWA, aOpenInfo )
+
    LOCAL aField, oError, lError, cError, nResult
-   LOCAL  oQuery, aStruct, aFieldStruct
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+   LOCAL oQuery, aStruct, aFieldStruct
+   LOCAL aWAData      := USRRDD_AREADATA( nWA )
    LOCAL nFIELDSCOUNT, iFIELDNUM, eTIPODECODE
 
-   if !empty( oServer )
+   IF !Empty( oServer )
       oServer:lAllCols := .F.
-      oQuery := oServer:Query( aOpenInfo[ UR_OI_NAME ] )
-      lError := oQuery:NetErr()
-      cError := oQuery:ErrorMsg()
-   else
+      oQuery           := oServer:Query( aOpenInfo[ UR_OI_NAME ] )
+      lError           := oQuery:NetErr()
+      cError           := oQuery:ErrorMsg()
+   ELSE
       lError := .T.
       cError := "Invalid connection handle"
-   endif
+   ENDIF
 
    IF lError
-      oError := ErrorNew()
+      oError             := ErrorNew()
       oError:GenCode     := EG_OPEN
       oError:SubCode     := 1000
-      oError:Description := HB_LANGERRMSG( EG_OPEN ) + ", " + cError
+      oError:Description := hb_langErrMsg( EG_OPEN ) + ", " + cError
       oError:FileName    := aOpenInfo[ UR_OI_NAME ]
       oError:CanDefault  := .T.
       UR_SUPER_ERROR( nWA, oError )
@@ -177,13 +285,13 @@ STATIC FUNCTION MYSQL_OPEN( nWA, aOpenInfo )
    ENDIF
 
    UR_SUPER_SETFIELDEXTENT( nWA, oQuery:nNumFields )
-   
-   
 
-   /*
+
+
+/*
     aStruct := oQuery:aFieldStruct //Struct()
    FOR EACH aFieldStruct IN aStruct
-   
+
        //posicao dbs_name<>YSQL_FS_NAME e outras sao divergentes  usando oquery>field ja compativerl harbour
        //o tipo e  numerico necessario conversao para tipo C N D M ...
 
@@ -191,285 +299,544 @@ STATIC FUNCTION MYSQL_OPEN( nWA, aOpenInfo )
        aField[ UR_FI_NAME ]    := aFieldStruct[ DBS_NAME ]  //MYSQL_FS_NAME  FieldName( nNum )
        aField[ UR_FI_TYPE ]    := aFieldStruct[ DBS_TYPE ]   //FieldType( nNum )  MYSQL_FS_TYPE
        aField[ UR_FI_TYPEEXT ] := 0
-       aField[ UR_FI_LEN ]     := aFieldStruct[ DBS_LEN ]   //MYSQL_FS_LENGTH FieldLen( nNum ) 
+       aField[ UR_FI_LEN ]     := aFieldStruct[ DBS_LEN ]   //MYSQL_FS_LENGTH FieldLen( nNum )
        aField[ UR_FI_DEC ]     := aFieldStruct[ DBS_DEC ]   //MYSQL_FS_DECIMALS  FieldDec(nnum)
        UR_SUPER_ADDFIELD( nWA, aField )
 
    NEXT
    */
-   
+
    nFIELDSCOUNT := oQuery:nNumFields
-   aSTRUCAMPOS:={}
-   //usando oquery>field ja compativerl dbf fieldtype
-   //posicao difere uf_fi dbs_
-   /*
-   #define UR_FI_SIZE            5    
+   aSTRUCAMPOS  := {}
+// usando oquery>field ja compativerl dbf fieldtype
+// posicao difere uf_fi dbs_
+/*
+   #define UR_FI_SIZE            5
    #define UR_FI_NAME            1      DBS_NAME
-   #define UR_FI_TYPE            2      DBS_TYPE 
+   #define UR_FI_TYPE            2      DBS_TYPE
    #define UR_FI_TYPEEXT         3
-   #define UR_FI_LEN             4      DBS_LEN 
-   #define UR_FI_DEC             5      DBS_DEC 
+   #define UR_FI_LEN             4      DBS_LEN
+   #define UR_FI_DEC             5      DBS_DEC
    #define DBS_NAME        1
    #define DBS_TYPE        2
    #define DBS_LEN         3
    #define DBS_DEC         4
-   
-   
+
+
 #ifndef HB_FT_NONE
 #define HB_FT_NONE            0
-#define HB_FT_STRING          1      "C" 
-#define HB_FT_LOGICAL         2      "L" 
-#define HB_FT_DATE            3      "D" 
-#define HB_FT_LONG            4      "N" 
-#define HB_FT_FLOAT           5      "F" 
-#define HB_FT_INTEGER         6      "I" 
-#define HB_FT_DOUBLE          7      "B" 
-#define HB_FT_TIME            8      "T" 
-#define HB_FT_TIMESTAMP       9      "@" 
-#define HB_FT_MODTIME         10     "=" 
-#define HB_FT_ROWVER          11     "^" 
-#define HB_FT_AUTOINC         12     "+" 
-#define HB_FT_CURRENCY        13     "Y" 
-#define HB_FT_CURDOUBLE       14     "Z" 
-#define HB_FT_VARLENGTH       15     "Q" 
-#define HB_FT_MEMO            16     "M" 
-#define HB_FT_ANY             17     "V" 
-#define HB_FT_IMAGE           18     "P" 
-#define HB_FT_BLOB            19     "W" 
-#define HB_FT_OLE             20     "G" 
+#define HB_FT_STRING          1      "C"
+#define HB_FT_LOGICAL         2      "L"
+#define HB_FT_DATE            3      "D"
+#define HB_FT_LONG            4      "N"
+#define HB_FT_FLOAT           5      "F"
+#define HB_FT_INTEGER         6      "I"
+#define HB_FT_DOUBLE          7      "B"
+#define HB_FT_TIME            8      "T"
+#define HB_FT_TIMESTAMP       9      "@"
+#define HB_FT_MODTIME         10     "="
+#define HB_FT_ROWVER          11     "^"
+#define HB_FT_AUTOINC         12     "+"
+#define HB_FT_CURRENCY        13     "Y"
+#define HB_FT_CURDOUBLE       14     "Z"
+#define HB_FT_VARLENGTH       15     "Q"
+#define HB_FT_MEMO            16     "M"
+#define HB_FT_ANY             17     "V"
+#define HB_FT_IMAGE           18     "P"
+#define HB_FT_BLOB            19     "W"
+#define HB_FT_OLE             20     "G"
 #endif
 */
-   
-   FOR iFIELDNUM:= 1 TO nFIELDSCOUNT
-       eTIPODECODE:=hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( oQUERY:FieldDec( iFIELDNUM )  > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
-       //     aField[ UR_FI_TYPE ]    := hb_Decode( aFieldStruct[ DBS_TYPE ], "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
-        //    aField[ UR_FI_TYPE ]    := hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
-       if empty(eTIPODECODE)
-         eTIPODECODE:=FT_STRING
-       endif
 
-       aField := ARRAY( UR_FI_SIZE )
-       aField[ UR_FI_NAME  ]    := oQUERY:FieldName( iFIELDNUM )
-       aField[ UR_FI_TYPE ]    := eTIPODECODE //oQUERY:FieldType( iFIELDNUM )   
-       aField[ UR_FI_TYPEEXT ] := 0
-       aField[ UR_FI_LEN  ]     := oQUERY:FieldLen( iFIELDNUM )   
-       aField[ UR_FI_DEC  ]     := oQUERY:FieldDec( iFIELDNUM )   
-       UR_SUPER_ADDFIELD( nWA, aField )
-       AADD(aSTRUCAMPOS,{oQUERY:FieldName( iFIELDNUM ),oQUERY:FieldType( iFIELDNUM ),oQUERY:FieldLen( iFIELDNUM ),oQUERY:FieldDec( iFIELDNUM ),eTIPODECODE}) //grava tambem na static pegar via funcao DBMYSTRU()
+   FOR iFIELDNUM := 1 TO nFIELDSCOUNT
+      eTIPODECODE := hb_Decode( oQUERY:FieldType( iFIELDNUM ), "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( oQUERY:FieldDec( iFIELDNUM ) > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+      // aField[ UR_FI_TYPE ]    := hb_Decode( aFieldStruct[ DBS_TYPE ], "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+      // aField[ UR_FI_TYPE ]    := hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+      IF Empty( eTIPODECODE )
+         eTIPODECODE := FT_STRING
+      ENDIF
+
+      aField                  := Array( UR_FI_SIZE )
+      aField[ UR_FI_NAME ]    := oQUERY:FieldName( iFIELDNUM )
+      aField[ UR_FI_TYPE ]    := eTIPODECODE   // oQUERY:FieldType( iFIELDNUM )
+      aField[ UR_FI_TYPEEXT ] := 0
+      aField[ UR_FI_LEN ]     := oQUERY:FieldLen( iFIELDNUM )
+      aField[ UR_FI_DEC ]     := oQUERY:FieldDec( iFIELDNUM )
+      UR_SUPER_ADDFIELD( nWA, aField )
+      AAdd( aSTRUCAMPOS, { oQUERY:FieldName( iFIELDNUM ), oQUERY:FieldType( iFIELDNUM ), oQUERY:FieldLen( iFIELDNUM ), oQUERY:FieldDec( iFIELDNUM ), eTIPODECODE } )  // grava tambem na static pegar via funcao DBMYSTRU()
    NEXT iFIELDNUM
-   
 
-   /* Call SUPER OPEN to finish allocating work area (f.e.: alias settings) */
+
+/* Call SUPER OPEN to finish allocating work area (f.e.: alias settings) */
    nResult := UR_SUPER_OPEN( nWA, aOpenInfo )
 
-RETURN nResult
+   RETURN nResult
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_CLOSE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_CLOSE( nWA )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
    aWAData[ AREA_QUERY ]:Close()
 
-RETURN UR_SUPER_CLOSE( nWA )
+   RETURN UR_SUPER_CLOSE( nWA )
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_GETVALUE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_GETVALUE( nWA, nField, xValue )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   if !empty( aWAData[ AREA_ROW ] )
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+   IF !Empty( aWAData[ AREA_ROW ] )
       xValue := aWAData[ AREA_ROW ]:FieldGet( nField )
-   else
+   ELSE
       xValue := aWAData[ AREA_QUERY ]:FieldGet( nField )
-   endif
+   ENDIF
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_PUTVALUE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_PUTVALUE( nWA, nField, xValue )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   if empty( aWAData[ AREA_ROW ] )
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+   IF Empty( aWAData[ AREA_ROW ] )
       aWAData[ AREA_ROW ] := aWAData[ AREA_QUERY ]:GetRow()
-   endif
+   ENDIF
 
    aWAData[ AREA_ROW ]:FieldPut( nField, xValue )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_SKIP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_SKIP( nWA, nRecords )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   if !empty( aWAData[ AREA_ROW ] )
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+   IF !Empty( aWAData[ AREA_ROW ] )
       MYSQL_FLUSH( nWA )
-   endif
+   ENDIF
 
    aWAData[ AREA_QUERY ]:Skip( nRecords )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_GOTOP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_GOTOP( nWA )
-RETURN MYSQL_GOTO( nWA, 1 )
 
+   RETURN MYSQL_GOTO( nWA, 1 )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_GOBOTTOM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_GOBOTTOM( nWA )
-RETURN MYSQL_GOTO( nWA, -1 )
 
+   RETURN MYSQL_GOTO( nWA, - 1 )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_GOTOID()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_GOTOID( nWA, nRecord )
-RETURN MYSQL_GOTO( nWA, nRecord )
 
+   RETURN MYSQL_GOTO( nWA, nRecord )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_GOTO()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_GOTO( nWA, nRecord )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
-   IF (VALTYPE( nRecord) != "N")          // IF added to prevent error
-     nRecord := 0
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+   IF ( ValType( nRecord ) != "N" )  // IF added to prevent error
+      nRecord := 0
    ENDIF
 
-   if !empty( aWAData[ AREA_ROW ] )
+   IF !Empty( aWAData[ AREA_ROW ] )
       MYSQL_FLUSH( nWA )
-   endif
+   ENDIF
 
-   if nRecord < 0
+   IF nRecord < 0
       nRecord := aWAData[ AREA_QUERY ]:LastRec()
-   elseif nRecord == 0
-      nRecord := aWAData[ AREA_QUERY ]:Recno()
-   endif
+   ELSEIF nRecord == 0
+      nRecord := aWAData[ AREA_QUERY ]:RecNo()
+   ENDIF
 
    aWAData[ AREA_QUERY ]:Goto( nRecord )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_RECCOUNT()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_RECCOUNT( nWA, nRecords )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
    nRecords := aWAData[ AREA_QUERY ]:LastRec()
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_BOF()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_BOF( nWA, lBof )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
    lBof := aWAData[ AREA_QUERY ]:Bof()
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_EOF()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_EOF( nWA, lEof )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
    lEof := aWAData[ AREA_QUERY ]:Eof()
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_RECID()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_RECID( nWA, nRecNo )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
    nRecno := aWAData[ AREA_QUERY ]:RecNo()
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_DELETED()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_DELETED( nWA, lDeleted )
-(nWA)
-   lDeleted := .F.
-RETURN SUCCESS
 
+   ( nWA )
+   lDeleted := .F.
+
+   RETURN SUCCESS
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_FLUSH()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_FLUSH( nWA )
+
    LOCAL oError
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
    LOCAL nRecno
 
-   if aWAData[ AREA_ROW ] != nil
-      if !empty( aWAData[ AREA_APPEND ] )
+   IF aWAData[ AREA_ROW ] != nil
+      IF !Empty( aWAData[ AREA_APPEND ] )
          aWAData[ AREA_QUERY ]:Append( aWAData[ AREA_ROW ] )
-      else
-         nRecno := aWAData[ AREA_QUERY ]:nRecNo
+      ELSE
+         nRecno := aWAData[ AREA_QUERY ] :nRecNo
          aWAData[ AREA_QUERY ]:Update( aWAData[ AREA_ROW ] )
-      endif
+      ENDIF
 
-      IF aWAData[ AREA_QUERY ]:lError
-         oError := ErrorNew()
+      IF aWAData[ AREA_QUERY ] :lError
+         oError             := ErrorNew()
          oError:GenCode     := EG_DATATYPE
          oError:SubCode     := 3000
-         oError:Description := HB_LANGERRMSG( EG_DATATYPE ) + ", " + aWAData[ AREA_QUERY ]:ErrorMsg()
+         oError:Description := hb_langErrMsg( EG_DATATYPE ) + ", " + aWAData[ AREA_QUERY ]:ErrorMsg()
          UR_SUPER_ERROR( nWA, oError )
          RETURN FAILURE
       ENDIF
 
-/*
+   /*
  * The :Refresh() below costs a lot in term of performance.
  * It redo the select to include inserts and updates.
  * It is the only solution I've found so far to simulate dbf behaviour
  */
       aWAData[ AREA_QUERY ]:Refresh( .T., .F. )
 
-      if !empty( aWAData[ AREA_APPEND ] )
+      IF !Empty( aWAData[ AREA_APPEND ] )
          aWAData[ AREA_APPEND ] := .F.
-         nRecno := aWAData[ AREA_QUERY ]:LastRec()
-      endif
+         nRecno                 := aWAData[ AREA_QUERY ]:LastRec()
+      ENDIF
 
       aWAData[ AREA_ROW ] := nil
 
       MYSQL_GOTO( nWA, nRecno )
 
-   endif
+   ENDIF
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_APPEND()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_APPEND( nWA, nRecords )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
-    (nRecords)
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+   ( nRecords )
    aWAData[ AREA_ROW ] := aWAData[ AREA_QUERY ]:GetBlankRow()
 
    aWAData[ AREA_APPEND ] := .T.
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function MYSQL_DELETE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION MYSQL_DELETE( nWA )
+
    LOCAL oError
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
    aWAData[ AREA_ROW ] := aWAData[ AREA_QUERY ]:GetRow()
 
    aWAData[ AREA_QUERY ]:Delete( aWAData[ AREA_ROW ] )
 
-   IF aWAData[ AREA_QUERY ]:lError
-      oError := ErrorNew()
+   IF aWAData[ AREA_QUERY ] :lError
+      oError             := ErrorNew()
       oError:GenCode     := EG_DATATYPE
       oError:SubCode     := 2000
-      oError:Description := HB_LANGERRMSG( EG_DATATYPE ) + ", " + aWAData[ AREA_QUERY ]:ErrorMsg()
+      oError:Description := hb_langErrMsg( EG_DATATYPE ) + ", " + aWAData[ AREA_QUERY ]:ErrorMsg()
       UR_SUPER_ERROR( nWA, oError )
       RETURN FAILURE
    ENDIF
 
    aWAData[ AREA_ROW ] := nil
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
 /*
  * This function have to exist in all RDD and then name have to be in
  * format: <RDDNAME>_GETFUNCTABLE
  */
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MYSQLRDD_GETFUNCTABLE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION MYSQLRDD_GETFUNCTABLE( pFuncCount, pFuncTable, pSuperTable, nRddID )
-   LOCAL cSuperRDD := NIL     /* NO SUPER RDD */
+
+   LOCAL cSuperRDD := NIL /* NO SUPER RDD */
    LOCAL aMyFunc[ UR_METHODCOUNT ]
 
-   aMyFunc[ UR_INIT         ] := ( @MYSQL_INIT()         )
-   aMyFunc[ UR_NEW          ] := ( @MYSQL_NEW()          )
-   aMyFunc[ UR_OPEN         ] := ( @MYSQL_OPEN()         )
-   aMyFunc[ UR_GETVALUE     ] := ( @MYSQL_GETVALUE()     )
-   aMyFunc[ UR_PUTVALUE     ] := ( @MYSQL_PUTVALUE()     )
-   aMyFunc[ UR_SKIP         ] := ( @MYSQL_SKIP()         )
-   aMyFunc[ UR_GOTO         ] := ( @MYSQL_GOTO()         )
-   aMyFunc[ UR_GOTOID       ] := ( @MYSQL_GOTOID()       )
-   aMyFunc[ UR_GOTOP        ] := ( @MYSQL_GOTOP()        )
-   aMyFunc[ UR_GOBOTTOM     ] := ( @MYSQL_GOBOTTOM()     )
-   aMyFunc[ UR_RECNO ]        := ( @MYSQL_RECID() )
-   aMyFunc[ UR_RECCOUNT     ] := ( @MYSQL_RECCOUNT()     )
-   aMyFunc[ UR_RECID        ] := ( @MYSQL_RECID()        )
-   aMyFunc[ UR_BOF          ] := ( @MYSQL_BOF()          )
-   aMyFunc[ UR_EOF          ] := ( @MYSQL_EOF()          )
-   aMyFunc[ UR_DELETED      ] := ( @MYSQL_DELETED()      )
-   aMyFunc[ UR_FLUSH        ] := ( @MYSQL_FLUSH()        )
-   aMyFunc[ UR_APPEND       ] := ( @MYSQL_APPEND()       )
-   aMyFunc[ UR_DELETE       ] := ( @MYSQL_DELETE()       )
-   aMyFunc[ UR_CLOSE        ] := ( @MYSQL_CLOSE()        )
+   aMyFunc[ UR_INIT ]     := ( @MYSQL_INIT() )
+   aMyFunc[ UR_NEW ]      := ( @MYSQL_NEW() )
+   aMyFunc[ UR_OPEN ]     := ( @MYSQL_OPEN() )
+   aMyFunc[ UR_GETVALUE ] := ( @MYSQL_GETVALUE() )
+   aMyFunc[ UR_PUTVALUE ] := ( @MYSQL_PUTVALUE() )
+   aMyFunc[ UR_SKIP ]     := ( @MYSQL_SKIP() )
+   aMyFunc[ UR_GOTO ]     := ( @MYSQL_GOTO() )
+   aMyFunc[ UR_GOTOID ]   := ( @MYSQL_GOTOID() )
+   aMyFunc[ UR_GOTOP ]    := ( @MYSQL_GOTOP() )
+   aMyFunc[ UR_GOBOTTOM ] := ( @MYSQL_GOBOTTOM() )
+   aMyFunc[ UR_RECNO ]    := ( @MYSQL_RECID() )
+   aMyFunc[ UR_RECCOUNT ] := ( @MYSQL_RECCOUNT() )
+   aMyFunc[ UR_RECID ]    := ( @MYSQL_RECID() )
+   aMyFunc[ UR_BOF ]      := ( @MYSQL_BOF() )
+   aMyFunc[ UR_EOF ]      := ( @MYSQL_EOF() )
+   aMyFunc[ UR_DELETED ]  := ( @MYSQL_DELETED() )
+   aMyFunc[ UR_FLUSH ]    := ( @MYSQL_FLUSH() )
+   aMyFunc[ UR_APPEND ]   := ( @MYSQL_APPEND() )
+   aMyFunc[ UR_DELETE ]   := ( @MYSQL_DELETE() )
+   aMyFunc[ UR_CLOSE ]    := ( @MYSQL_CLOSE() )
 
-RETURN USRRDD_GETFUNCTABLE( pFuncCount, pFuncTable, pSuperTable, nRddID, ;
-                            cSuperRDD, aMyFunc )
+   RETURN USRRDD_GETFUNCTABLE( pFuncCount, pFuncTable, pSuperTable, nRddID, ;
+      cSuperRDD, aMyFunc )
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Init Procedure MYSQL_INIT()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 INIT PROC MYSQL_INIT()
+
    rddRegister( "MYSQLRDD", RDT_FULL )
-RETURN
+
+   RETURN
+
+// + EOF: mysqlrdd.prg
+// +

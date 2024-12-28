@@ -1,92 +1,100 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib43.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib43.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
+
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function PADDEL()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func PADDEL(cARQ,eBUSCA,eCOMP1,eCOMP2,nIND)
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function PADDEL()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC PADDEL( cARQ, eBUSCA, eCOMP1, eCOMP2, nIND )
+
+   LOCAL cDBF := Alias()
+
+   WHILE !USEREDE( cARQ, 1, 99 )
+   ENDDO
+   IF ValType( nIND ) = "N"
+      dbSetOrder( nIND )
+   ENDIF
+   dbSeek( eBUSCA )
+   WHILE &eCOMP1. = &eCOMP2. .AND. !Eof()
+      DELEREG(,, .T., .F. )
+   ENDDO
+   dbCloseArea()
+   IF !Empty( cDBF )
+      dbSelectAr( cDBF )
+   ENDIF
+   RETU .T.
 
 
-local cDBF := alias()
-while !USEREDE(cARQ,1,99)
-enddo
-IF VALTYPE(nIND) = "N"
-   DBSETORDER(nIND)
-ENDIF
-dbseek(eBUSCA)
-while &eCOMP1. = &eCOMP2. .and. !eof()
-   DELEREG(,,.T.,.F.)
-enddo
-dbclosearea()
-if !empty(cDBF)
-   dbselectar(cDBF)
-endif
-retu .T.
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function BXITEM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC BXITEM( cARQ, cARQBX, eBUSCA, eCOMP1, eCOMP2 )
+
+   WHILE !USEREDE( cARQ, 1, 99 )
+   ENDDO
+   WHILE !USEREDE( cARQBX, 1, 99 )
+   ENDDO
+   dbSelectAr( cARQ )
+   dbGoTop()
+   dbSeek( eBUSCA )
+   WHILE &eCOMP1. = &eCOMP2. .AND. !Eof()
+      EQUVARS()
+      NOVOOPA( cARQBX, .T., .T. )
+      DELEREG( cARQ,, .T., .F. )
+   ENDDO
+   dbCloseAll()
+   RETU .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function BXITEM()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func BXITEM(cARQ,cARQBX,eBUSCA,eCOMP1,eCOMP2)
-
-
-while !USEREDE(cARQ,1,99)
-enddo
-while !USEREDE(cARQBX,1,99)
-enddo
-dbselectar(cARQ)
-dbgotop()
-dbseek(eBUSCA)
-while &eCOMP1. = &eCOMP2. .and. !eof()
-   EQUVARS()
-   NOVOOPA(cARQBX,.T.,.T.)
-   DELEREG(cARQ,,.T.,.F.)
-enddo
-dbcloseall()
-retu .T.
-
+// + EOF: mlib43.prg
+// +

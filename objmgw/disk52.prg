@@ -1,69 +1,113 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Source Module => DISK52.PRG
-*+
-*+    Functions: Function HELP()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : disk52.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:41 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-#INCLUDE "INKEY.CH"
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Source Module => DISK52.PRG
+// +
+// +    Functions: Function HELP()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function HELP()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func HELP( programa, linha, variavel )  //F1- AJUDA AO USUARIO
-LOCAL aAMBIENTE
+#include "INKEY.CH"
 
-if EMPTY(HELPARQ)
-   ALERTX("HELP: Variavel HelpARQ Em Branco")
-   retu .T.
-endif
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function HELP()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-if programa = "MEMOEDIT" .or. programa = "HELP"
-   retu .T.
-endif
-if type( "HELPDBF" ) = "C" .and. programa # "ERRO" .and. PROGRAMA # "ERRODOS"
-   helppos := helpdbf
-else
-   helppos := programa
-endif
-helppos  := padr( helppos, 8 )
-variavel := padr( variavel, 10 )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function HELP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC HELP( programa, linha, variavel )  // F1- AJUDA AO USUARIO
 
-aAMBIENTE:=SALVAA()
+   LOCAL aAMBIENTE
 
-if ! netuse(HELPARQ)
-   restaa(aAMBIENTE)
-   retu .T.
-endif
-dbgotop()
-if ! dbseek( helppos + variavel )
-   netrecapp()
-   field->dbf   := helppos
-   field->campo := variavel
-   field->dado  := variavel
-endif
-if empty( ARQUIVO )
-   HLP_DESC := DESCRICAO
-else
-   HLP_DESC := hb_memoread(HB_CWD()+ "MAN\" + ARQUIVO )
-endif
-HLP_DADO := DADO
-if empty( HLP_DADO )
-   HLP_DADO := "Nao Cadastrado"
-endif
-if empty( HLP_DESC )
-   HLP_DESC := HLP_DADO
-endif
-dbclosearea()
-MEMOVIEW( HLP_DESC, 02, 00, MAXROW() - 2, MAXCOL(),, HLP_DADO, "W/N,N/W,N,N,N/W" )
-restaa(aAMBIENTE)
-retu .T.
+   IF Empty( HELPARQ )
+      ALERTX( "HELP: Variavel HelpARQ Em Branco" )
+      RETU .T.
+   ENDIF
+
+   IF programa = "MEMOEDIT" .OR. programa = "HELP"
+      RETU .T.
+   ENDIF
+   IF Type( "HELPDBF" ) = "C" .AND. programa # "ERRO" .AND. PROGRAMA # "ERRODOS"
+      helppos := helpdbf
+   ELSE
+      helppos := programa
+   ENDIF
+   helppos  := PadR( helppos, 8 )
+   variavel := PadR( variavel, 10 )
+
+   aAMBIENTE := SALVAA()
+
+   IF !netuse( HELPARQ )
+      restaa( aAMBIENTE )
+      RETU .T.
+   ENDIF
+   dbGoTop()
+   IF !dbSeek( helppos + variavel )
+      netrecapp()
+      field->dbf   := helppos
+      field->campo := variavel
+      field->dado  := variavel
+   ENDIF
+   IF Empty( ARQUIVO )
+      HLP_DESC := DESCRICAO
+   ELSE
+      HLP_DESC := hb_MemoRead( hb_cwd() + "MAN\" + ARQUIVO )
+   ENDIF
+   HLP_DADO := DADO
+   IF Empty( HLP_DADO )
+      HLP_DADO := "Nao Cadastrado"
+   ENDIF
+   IF Empty( HLP_DESC )
+      HLP_DESC := HLP_DADO
+   ENDIF
+   dbCloseArea()
+   MEMOVIEW( HLP_DESC, 02, 00, MaxRow() - 2, MaxCol(),, HLP_DADO, "W/N,N/W,N,N,N/W" )
+   restaa( aAMBIENTE )
+   RETU .T.
 
 
 
 
-*+ EOF: DISK52.PRG
+// + EOF: DISK52.PRG
+
+// + EOF: disk52.prg
+// +

@@ -1,27 +1,30 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : m_am4.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_am4.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:56 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 // :*****************************************************************************
 // :
@@ -49,33 +52,38 @@
 
 
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function m_am4()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function m_am4
-
-PARA cARQ
-IF VALTYPE(cARQ) = "C"
-   ARQWORK := cARQ
-ENDIF
-
-PADRAO(0,1,0,ARQWORK,"N£mero  Descri‡„o",;
- "' '+STR(mNUMMENS,  5)+' '+mDESMENS",;
- "MAM4",,,{|| ULTIMOREG(ARQWORK,"NUMMENS","mNUMMENS")})
+// Teclas Operacionais
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 
 
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function m_am4()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION m_am4
+
+   PARA cARQ
+
+   IF ValType( cARQ ) = "C"
+      ARQWORK := cARQ
+   ENDIF
+
+   PADRAO( 0, 1, 0, ARQWORK, "N£mero  Descri‡„o", ;
+      "' '+STR(mNUMMENS,  5)+' '+mDESMENS", ;
+      "MAM4",,, {|| ULTIMOREG( ARQWORK, "NUMMENS", "mNUMMENS" ) } )
+
+
+
+
+// + EOF: m_am4.prg
+// +

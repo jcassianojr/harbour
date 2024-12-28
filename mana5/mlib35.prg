@@ -1,126 +1,137 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib35.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib35.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function COR()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func COR(cCOR,lOPEN,lSET)
 
-local cCORRET := "W/N,N/W,N,N,N/W"
-IF VALTYPE(lOPEN) # "L"
-   lOPEN := .T.
-ENDIF
-IF VALTYPE(lSET) # "L"
-   lSET := .F.
-ENDIF
-IF lOPEN
-   if !USEREDE("CORES",1,1)
-      IF lSET
-         SETCOLOR(cCORRET)
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function COR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC COR( cCOR, lOPEN, lSET )
+
+   LOCAL cCORRET := "W/N,N/W,N,N,N/W"
+
+   IF ValType( lOPEN ) # "L"
+      lOPEN := .T.
+   ENDIF
+   IF ValType( lSET ) # "L"
+      lSET := .F.
+   ENDIF
+   IF lOPEN
+      IF !USEREDE( "CORES", 1, 1 )
+         IF lSET
+            SetColor( cCORRET )
+         ENDIF
+         RETU cCORRET
       ENDIF
-      retu cCORRET
-   endif
-ELSE
-   dbselectar("CORES")
-ENDIF
-dbgotop()
-if dbseek(cCOR)
-   cCORRET := alltrim(COR1)+","
-   cCORRET += alltrim(COR2)+","
-   cCORRET += alltrim(COR3)+","
-   cCORRET += alltrim(COR4)+","
-   cCORRET += alltrim(COR5)
-endif
-IF lOPEN
-   dbclosearea()
-ENDIF
-IF lSET
-   SETCOLOR(cCORRET)
-ENDIF
-retu cCORRET
+   ELSE
+      dbSelectAr( "CORES" )
+   ENDIF
+   dbGoTop()
+   IF dbSeek( cCOR )
+      cCORRET := AllTrim( COR1 ) + ","
+      cCORRET += AllTrim( COR2 ) + ","
+      cCORRET += AllTrim( COR3 ) + ","
+      cCORRET += AllTrim( COR4 ) + ","
+      cCORRET += AllTrim( COR5 )
+   ENDIF
+   IF lOPEN
+      dbCloseArea()
+   ENDIF
+   IF lSET
+      SetColor( cCORRET )
+   ENDIF
+   RETU cCORRET
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CORARR()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func CORARR(aCOR,aVAR)
 
-local cSTR,cVAR,I
-local aRETU := {}
-local nFIM  := len(aCOR)
-if valtype(aCOR) = "C"
-   cSTR := aCOR
-   nFIM := 7
-   do case
-      case len(aCOR) = 3
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CORARR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC CORARR( aCOR, aVAR )
+
+   LOCAL cSTR, cVAR, I
+   LOCAL aRETU := {}
+   LOCAL nFIM  := Len( aCOR )
+
+   IF ValType( aCOR ) = "C"
+      cSTR := aCOR
+      nFIM := 7
+      DO CASE
+      CASE Len( aCOR ) = 3
          cSTR += "00"
-      case len(aCOR) = 4
+      CASE Len( aCOR ) = 4
          cSTR += "0"
-   endcase
-   ACOR := {cSTR+"1",cSTR+"2",cSTR+"5",cSTR+"6",cSTR+"7",cSTR+"3",cSTR+"4"}
-endif
-if !USEREDE("CORES",1,1)
-   for i := 1 to nFIM
-      IF VALTYPE(aVAR) = "A"
-         cVAR  := aVAR[I]
-         &cVAR := "W/N,N/W,N,N,N/W"
-      ELSE
-         aadd(aRETU,"W/N,N/W,N,N,N/W")
-      ENDIF
-   next i
-else
-   for i := 1 to nFIM
-      IF VALTYPE(aVAR) = "A"
-         cVAR  := aVAR[I]
-         &cVAR := COR(aCOR[I],.F.)
-      ELSE
-         aadd(aRETU,COR(aCOR[I],.F.))
-      ENDIF
-   next i
-   dbclosearea()
-endif
-retu aRETU
+      ENDCASE
+      ACOR := { cSTR + "1", cSTR + "2", cSTR + "5", cSTR + "6", cSTR + "7", cSTR + "3", cSTR + "4" }
+   ENDIF
+   IF !USEREDE( "CORES", 1, 1 )
+      FOR i := 1 TO nFIM
+         IF ValType( aVAR ) = "A"
+            cVAR  := aVAR[ I ]
+            &cVAR := "W/N,N/W,N,N,N/W"
+         ELSE
+            AAdd( aRETU, "W/N,N/W,N,N,N/W" )
+         ENDIF
+      NEXT i
+   ELSE
+      FOR i := 1 TO nFIM
+         IF ValType( aVAR ) = "A"
+            cVAR  := aVAR[ I ]
+            &cVAR := COR( aCOR[ I ], .F. )
+         ELSE
+            AAdd( aRETU, COR( aCOR[ I ], .F. ) )
+         ENDIF
+      NEXT i
+      dbCloseArea()
+   ENDIF
+   RETU aRETU
 
+
+// + EOF: mlib35.prg
+// +

@@ -1,98 +1,107 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib05.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib05.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
+
+// Teclas Operacionais
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MDE()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func MDE(cCODIGO,cMESS,cCOR)
 
-local cDESC := ""
-if valtype(cCOR) # "C"
-   cCOR := "W/N,N/W,N,N,N/W"
-endif
-if valtype(cMESS) # "C"
-   cMESS := ""
-endif
-if USEREDE("MMES",1,1)
-   dbgotop()
-   dbseek(cCODIGO)
-   if found()
-      cMESS := alltrim(MENSAGEM)+cMESS
-      cDESC := DESCRICAO
-   else
-      cMESS := "N„o Cadastrada Mensagem "+cCODIGO
-      cDESC := cMESS
-   endif
-   dbclosearea()
-else
-   retu .T.
-endif
-setcolor(cCOR)
-nKEY := ALERTX(cMESS,{"   OK    ","  Ajuda  "})
-//Pediu Ajuda
-if nKEY = 2
-   MEMOVIEW(cDESC,8,9,15,74,,"Ajuda de Erro")
-endif
-retu .T.
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MDE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC MDE( cCODIGO, cMESS, cCOR )
 
+   LOCAL cDESC := ""
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CALCVAR()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func CALCVAR(mVAR,nRES,nROW,nCOL,cEST)
+   IF ValType( cCOR ) # "C"
+      cCOR := "W/N,N/W,N,N,N/W"
+   ENDIF
+   IF ValType( cMESS ) # "C"
+      cMESS := ""
+   ENDIF
+   IF USEREDE( "MMES", 1, 1 )
+      dbGoTop()
+      dbSeek( cCODIGO )
+      IF Found()
+         cMESS := AllTrim( MENSAGEM ) + cMESS
+         cDESC := DESCRICAO
+      ELSE
+         cMESS := "N„o Cadastrada Mensagem " + cCODIGO
+         cDESC := cMESS
+      ENDIF
+      dbCloseArea()
+   ELSE
+      RETU .T.
+   ENDIF
+   SetColor( cCOR )
+   nKEY := ALERTX( cMESS, { "   OK    ", "  Ajuda  " } )
+// Pediu Ajuda
+   IF nKEY = 2
+      MEMOVIEW( cDESC, 8, 9, 15, 74,, "Ajuda de Erro" )
+   ENDIF
+   RETU .T.
 
 
-&mVAR. := nRES
-if valtype(cEST) = "C"
-   @ nROW,nCOL say &mVAR. pict cEST        
-else
-   @ nROW,nCOL say &mVAR.         
-endif
-retu .T.
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CALCVAR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC CALCVAR( mVAR, nRES, nROW, nCOL, cEST )
+
+   &mVAR. := nRES
+   IF ValType( cEST ) = "C"
+      @ nROW, nCOL SAY &mVAR. PICT cEST
+   ELSE
+      @ nROW, nCOL SAY &mVAR.
+   ENDIF
+   RETU .T.
+
+
+// + EOF: mlib05.prg
+// +

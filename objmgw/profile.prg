@@ -1,435 +1,533 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    PROFILE.PRG
-*+
-*+
-*+  PUBLIC FUNCTIONS:
-*+
-*+  ProfileString( cINIFile, cSection, cKey, cDefault )
-*+  ProfileNum( cINIFile, cSection, cKey, nDefault )
-*+  ProfileDate( cINIFile, cSection, cKey, dDefault )
-*+  ProfileLogical(cINIFile, cSection, cKey, lDefault )
-*+  SetProfile( cINIFile, cSection, cKey, xValue )
-*+
-*+  ProfileString is used to read a string from the specified .INI file.
-*+
-*+  Eg. cSystemPath := ProfileString( "TEST.INI", "System", "Path", "." )
-*+
-*+
-*+  ProfileNum is used to read a numeric value from the specified .INI file,
-*+  including logical values (stored as 0 or 1).
-*+
-*+  Eg. nMaxUsers := ProfileNum( "TEST.INI", "System", "MaxUsers", 20 )
-*+
-*+  ProfileDate is used to read a date value from the specified .INI file.
-*+  ( SetProfile stores dates in the format YYYYMMDD. )
-*+
-*+  Eg. dDownload := ProfileDate( "TEST.INI", "System", "LastDnld", DATE() )
-*+
-*+
-*+  SetProfile is used to store a value of any data type except objects,
-*+  code blocks & arrays in the .INI file.
-*+
-*+  lSuccess := SetProfile( "TEST.INI", "System", "MaxUsers", 20 )
-*+
-*+
-*+  Place REQUEST Profile anywhere in your code, and compile with /N /W.
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : profile.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:42 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    PROFILE.PRG
+// +
+// +
+// +  PUBLIC FUNCTIONS:
+// +
+// +  ProfileString( cINIFile, cSection, cKey, cDefault )
+// +  ProfileNum( cINIFile, cSection, cKey, nDefault )
+// +  ProfileDate( cINIFile, cSection, cKey, dDefault )
+// +  ProfileLogical(cINIFile, cSection, cKey, lDefault )
+// +  SetProfile( cINIFile, cSection, cKey, xValue )
+// +
+// +  ProfileString is used to read a string from the specified .INI file.
+// +
+// +  Eg. cSystemPath := ProfileString( "TEST.INI", "System", "Path", "." )
+// +
+// +
+// +  ProfileNum is used to read a numeric value from the specified .INI file,
+// +  including logical values (stored as 0 or 1).
+// +
+// +  Eg. nMaxUsers := ProfileNum( "TEST.INI", "System", "MaxUsers", 20 )
+// +
+// +  ProfileDate is used to read a date value from the specified .INI file.
+// +  ( SetProfile stores dates in the format YYYYMMDD. )
+// +
+// +  Eg. dDownload := ProfileDate( "TEST.INI", "System", "LastDnld", DATE() )
+// +
+// +
+// +  SetProfile is used to store a value of any data type except objects,
+// +  code blocks & arrays in the .INI file.
+// +
+// +  lSuccess := SetProfile( "TEST.INI", "System", "MaxUsers", 20 )
+// +
+// +
+// +  Place REQUEST Profile anywhere in your code, and compile with /N /W.
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
 #include "FileIO.ch"
 #include "Set.ch"
 
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+  Function ProfileString()
-*+  Parameters: cFile    - The .INI file name to be used
-*+              cSection - The section from which to read
-*+              cKey     - The key value for which to search
-*+              cDefault - The default value if not found (optional)
-*+
-*+     Returns: cString - The string read from the file.
-*+
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ProfileString( cFile, cSection, cKey, cDefault )
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +  Function ProfileString()
+// +  Parameters: cFile    - The .INI file name to be used
+// +              cSection - The section from which to read
+// +              cKey     - The key value for which to search
+// +              cDefault - The default value if not found (optional)
+// +
+// +     Returns: cString - The string read from the file.
+// +
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-local cString       
-local nHandle       
-local cBuffer       
-local nFileLen      
-local nSecPos       
-local cSecBuf       
-local nKeyPos       
-local cChar         
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ProfileString()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ProfileString( cFile, cSection, cKey, cDefault )
 
-if left( cSection, 1 ) <> "["
-   cSection := "[" + cSection
-endif
+   LOCAL cString
+   LOCAL nHandle
+   LOCAL cBuffer
+   LOCAL nFileLen
+   LOCAL nSecPos
+   LOCAL cSecBuf
+   LOCAL nKeyPos
+   LOCAL cChar
 
-if right( cSection, 1 ) <> "]"
-   cSection += "]"
-endif
+   IF Left( cSection, 1 ) <> "["
+      cSection := "[" + cSection
+   ENDIF
 
-if cDefault == NIL
-   cDefault := ""
-endif
+   IF Right( cSection, 1 ) <> "]"
+      cSection += "]"
+   ENDIF
 
-cString := cDefault
+   IF cDefault == NIL
+      cDefault := ""
+   ENDIF
+
+   cString := cDefault
 
 //
 // If no extension is provided for the file, assume .INI.
 //
-if rat( ".", cFile ) == 0
-   cFile := upper( alltrim( cFile ) ) + ".INI"
-endif
+   IF RAt( ".", cFile ) == 0
+      cFile := Upper( AllTrim( cFile ) ) + ".INI"
+   ENDIF
 
-nHandle := fopen( cFile, FO_READ + FO_SHARED )
+   nHandle := FOpen( cFile, FO_READ + FO_SHARED )
 
-if nHandle > 0
-   nFileLen := fseek( nHandle, 0, FS_END )
+   IF nHandle > 0
+      nFileLen := FSeek( nHandle, 0, FS_END )
 
-   fseek( nHandle, 0, FS_SET )
+      FSeek( nHandle, 0, FS_SET )
 
-   cBuffer := space( nFileLen )
+      cBuffer := Space( nFileLen )
 
-   //
-   // Read in the entire file (.INI files should be less than 64K!).
-   //
-   if fread( nHandle, @cBuffer, nFileLen ) == nFileLen
       //
-      // Determine the position in the buffer
-      // of the requested section.
+      // Read in the entire file (.INI files should be less than 64K!).
       //
-      nSecPos := at( cSection, cBuffer )
-
-      if nSecPos > 0
+      IF FRead( nHandle, @cBuffer, nFileLen ) == nFileLen
          //
-         // Extract the section from the buffer.
+         // Determine the position in the buffer
+         // of the requested section.
          //
-         cSecBuf := right( cBuffer, nFileLen - ( nSecPos + len( cSection ) ) -0) //-1
+         nSecPos := At( cSection, cBuffer )
 
-         if ! empty( cSecBuf )
-            nSecPos := at( cKEY+"=", cSecBUF )
-            if nSecPos > 0
-               cSECBUF:=substr(cSECBUF,len(cKEY)+nSecPos+1)
-               nSecPos := at( CHR(13)+CHR(10), cSecBUF )
-               IF nSECPOS=0
-                  nSecPos := at( CHR(10), cSecBUF )
+         IF nSecPos > 0
+            //
+            // Extract the section from the buffer.
+            //
+            cSecBuf := Right( cBuffer, nFileLen - ( nSecPos + Len( cSection ) ) - 0 )   // -1
+
+            IF !Empty( cSecBuf )
+               nSecPos := At( cKEY + "=", cSecBUF )
+               IF nSecPos > 0
+                  cSECBUF := SubStr( cSECBUF, Len( cKEY ) + nSecPos + 1 )
+                  nSecPos := At( Chr( 13 ) + Chr( 10 ), cSecBUF )
+                  IF nSECPOS = 0
+                     nSecPos := At( Chr( 10 ), cSecBUF )
+                  ENDIF
+                  IF nSecPos > 0
+                     cSTRING := SubStr( cSECBUF, 1, nSECPOS - 1 )
+                  ENDIF
                ENDIF
-               if nSecPos > 0
-                  cSTRING:=subStR(cSECBUF,1,nSECPOS-1)
-               endif
-            endif
-         endif
-      endif
-   endif
-   fclose( nHandle )
-endif
+            ENDIF
+         ENDIF
+      ENDIF
+      FClose( nHandle )
+   ENDIF
 
-return cString
+   RETURN cString
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function ProfileNum()
-*+
-*+  This function reads a number from the specified .INI file.
-*+
-*+  Parameters: cFile    - The .INI file name to be used
-*+              cSection - The section from which to read
-*+              cKey     - The key value for which to search
-*+              nDefault - The default value if not found (optional)
-*+
-*+     Returns: nValue - The numeric value read from the file.
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ProfileNum( cFile, cSection, cKey, nDefault )
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function ProfileNum()
+// +
+// +  This function reads a number from the specified .INI file.
+// +
+// +  Parameters: cFile    - The .INI file name to be used
+// +              cSection - The section from which to read
+// +              cKey     - The key value for which to search
+// +              nDefault - The default value if not found (optional)
+// +
+// +     Returns: nValue - The numeric value read from the file.
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-local cValue       
-local cDefault     
-local nValue       
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ProfileNum()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ProfileNum( cFile, cSection, cKey, nDefault )
 
-if nDefault == NIL
-   nDefault := 0
-endif
+   LOCAL cValue
+   LOCAL cDefault
+   LOCAL nValue
 
-nValue   := nDefault
-cDefault := alltrim( str( nDefault ) )
+   IF nDefault == NIL
+      nDefault := 0
+   ENDIF
 
-cValue := ProfileString( cFile, cSection, cKey, cDefault )
+   nValue   := nDefault
+   cDefault := AllTrim( Str( nDefault ) )
 
-if !empty( cValue )
-   nValue := val( cValue )
-endif
+   cValue := ProfileString( cFile, cSection, cKey, cDefault )
 
-return nValue
+   IF !Empty( cValue )
+      nValue := Val( cValue )
+   ENDIF
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function ProfileDate()
-*
-*+  This function reads a date from the specified .INI file.
-*+
-*+  Parameters: cFile    - The .INI file name to be used
-*+              cSection - The section from which to read
-*+              cKey     - The key value for which to search
-*+              dDefault - The default date if not found (optional)
-*+
-*+     Returns: dDate - The date value read from the file.
-*
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ProfileDate( cFile, cSection, cKey, dDefault )
+   RETURN nValue
 
-local cDateFmt     
-local cValue       
-local cDefault     
-local dDate        
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function ProfileDate()
+//
+// +  This function reads a date from the specified .INI file.
+// +
+// +  Parameters: cFile    - The .INI file name to be used
+// +              cSection - The section from which to read
+// +              cKey     - The key value for which to search
+// +              dDefault - The default date if not found (optional)
+// +
+// +     Returns: dDate - The date value read from the file.
+//
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-if valtype( dDefault ) <> "D"
-   dDefault := ctod( "" )
-endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ProfileDate()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ProfileDate( cFile, cSection, cKey, dDefault )
 
-dDate    := dDefault
-cDefault := alltrim( dtos( dDefault ) )
+   LOCAL cDateFmt
+   LOCAL cValue
+   LOCAL cDefault
+   LOCAL dDate
 
-cValue := ProfileString( cFile, cSection, cKey, cDefault )
+   IF ValType( dDefault ) <> "D"
+      dDefault := CToD( "" )
+   ENDIF
 
-if !empty( cValue )
-   //
-   // Try just converting the date as is.
-   //
-   dDate := ctod( cValue )
+   dDate    := dDefault
+   cDefault := AllTrim( DToS( dDefault ) )
 
-   if empty( dDate )
+   cValue := ProfileString( cFile, cSection, cKey, cDefault )
+
+   IF !Empty( cValue )
       //
-      // If that doesn't work, convert
-      // using a standard date format.
+      // Try just converting the date as is.
       //
-      cDateFmt := set( _SET_DATEFORMAT, "mm/dd/yy" )
+      dDate := CToD( cValue )
 
-      dDate := ctod( substr( cValue, 5, 2 ) + "/" + right( cValue, 2 ) + ;
-                     "/" + left( cValue, 4 ) )
+      IF Empty( dDate )
+         //
+         // If that doesn't work, convert
+         // using a standard date format.
+         //
+         cDateFmt := Set( _SET_DATEFORMAT, "mm/dd/yy" )
 
-      set( _SET_DATEFORMAT, cDateFmt )
-   endif
-endif
+         dDate := CToD( SubStr( cValue, 5, 2 ) + "/" + Right( cValue, 2 ) + ;
+            "/" + Left( cValue, 4 ) )
 
-return dDate
+         Set( _SET_DATEFORMAT, cDateFmt )
+      ENDIF
+   ENDIF
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function SetProfile()
-*+  This function writes a value to the .INI file specified.
-*+
-*+  Parameters: cFile    - The .INI file name to be used
-*+              cSection - The section for which to search
-*+              cKey     - The key value for which to search
-*+              xValue   - The new value to be written
-*+
-*+     Returns: .T. if successful, .F. otherwise.
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function SetProfile( cFile, cSection, cKey, xValue )
+   RETURN dDate
 
-local lRetCode      
-local cType         
-local cOldValue    
-local cNewValue     
-local nHandle       
-local cBuffer       
-local nFileLen     
-local nSecStart     
-local nSecEnd       
-local nSecLen       
-local cSecBuf       
-local nKeyStart     
-local nKeyEnd       
-local nKeyLen       
-local lProceed      
-local cChar         
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function SetProfile()
+// +  This function writes a value to the .INI file specified.
+// +
+// +  Parameters: cFile    - The .INI file name to be used
+// +              cSection - The section for which to search
+// +              cKey     - The key value for which to search
+// +              xValue   - The new value to be written
+// +
+// +     Returns: .T. if successful, .F. otherwise.
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-if left( cSection, 1 ) <> "["
-   cSection := "[" + cSection
-endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function SetProfile()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION SetProfile( cFile, cSection, cKey, xValue )
 
-if right( cSection, 1 ) <> "]"
-   cSection += "]"
-endif
+   LOCAL lRetCode
+   LOCAL cType
+   LOCAL cOldValue
+   LOCAL cNewValue
+   LOCAL nHandle
+   LOCAL cBuffer
+   LOCAL nFileLen
+   LOCAL nSecStart
+   LOCAL nSecEnd
+   LOCAL nSecLen
+   LOCAL cSecBuf
+   LOCAL nKeyStart
+   LOCAL nKeyEnd
+   LOCAL nKeyLen
+   LOCAL lProceed
+   LOCAL cChar
+
+   IF Left( cSection, 1 ) <> "["
+      cSection := "[" + cSection
+   ENDIF
+
+   IF Right( cSection, 1 ) <> "]"
+      cSection += "]"
+   ENDIF
 
 //
 // If no extension is provided for the file, assume .INI.
 //
-if rat( ".", cFile ) == 0
-   cFile := upper( alltrim( cFile ) ) + ".INI"
-endif
+   IF RAt( ".", cFile ) == 0
+      cFile := Upper( AllTrim( cFile ) ) + ".INI"
+   ENDIF
 
-lProceed := .F.
-nSecLen  := 0
-cType    := valtype( xValue )
+   lProceed := .F.
+   nSecLen  := 0
+   cType    := ValType( xValue )
 
-do case
-case cType == "C"
-   cNewValue := xValue
+   DO CASE
+   CASE cType == "C"
+      cNewValue := xValue
 
-case cType == "N"
-   cNewValue := alltrim( str( xValue ) )
+   CASE cType == "N"
+      cNewValue := AllTrim( Str( xValue ) )
 
-case cType == "L"
-   cNewValue := if( xValue, "1", "0" )
+   CASE cType == "L"
+      cNewValue := if( xValue, "1", "0" )
 
-case cType == "D"
-   cNewValue := dtos( xValue )
+   CASE cType == "D"
+      cNewValue := DToS( xValue )
 
-otherwise
-   cNewValue := ""
+   OTHERWISE
+      cNewValue := ""
 
-endcase
+   ENDCASE
 
-nHandle := fopen( cFile, FO_READ + FO_EXCLUSIVE )
+   nHandle := FOpen( cFile, FO_READ + FO_EXCLUSIVE )
 
-if ferror() == 2
-   nHandle := fcreate( cFile, 0 )
-endif
+   IF FError() == 2
+      nHandle := FCreate( cFile, 0 )
+   ENDIF
 
-if nHandle > 0
-   nFileLen := fseek( nHandle, 0, FS_END )
+   IF nHandle > 0
+      nFileLen := FSeek( nHandle, 0, FS_END )
 
-   fseek( nHandle, 0, FS_SET )
+      FSeek( nHandle, 0, FS_SET )
 
-   cBuffer := space( nFileLen )
+      cBuffer := Space( nFileLen )
 
-   //
-   // Read in the entire file (.INI files should be less than 64K!).
-   //
-   if fread( nHandle, @cBuffer, nFileLen ) == nFileLen
       //
-      // Determine the position in the buffer
-      // of the requested section.
+      // Read in the entire file (.INI files should be less than 64K!).
       //
-      nSecStart := at( cSection, cBuffer )
+      IF FRead( nHandle, @cBuffer, nFileLen ) == nFileLen
+         //
+         // Determine the position in the buffer
+         // of the requested section.
+         //
+         nSecStart := At( cSection, cBuffer )
 
-      if nSecStart > 0
-         nSecStart += len( cSection ) + 2                   // Length of cSection + CR/LF
+         IF nSecStart > 0
+            nSecStart += Len( cSection ) + 2   // Length of cSection + CR/LF
+
+            //
+            // Extract the section from the buffer.
+            //
+            cSecBuf := Right( cBuffer, nFileLen - nSecStart + 1 )
+
+            IF !Empty( cSecBuf )
+               //
+               // Get the position of the end of the section...
+               //
+               nSecEnd := At( "[", cSecBuf )
+
+               //
+               // ...and extract the section!
+               //
+               IF nSecEnd > 0
+                  cSecBuf := Left( cSecBuf, nSecEnd - 1 )
+               ENDIF
+
+               nSecLen := Len( cSecBuf )
+
+               //
+               // Now find the key within the section.
+               //
+               nKeyStart := At( cKey, cSecBuf )
+
+               IF nKeyStart > 0
+                  //
+                  // Load the return string with the value
+                  // until a carriage return is found.
+                  //
+                  nKeyStart += Len( cKey ) + 1
+                  nKeyEnd   := nKeyStart
+
+                  cOldValue := cChar := ""
+
+                  DO WHILE cChar <> Chr( 13 )
+                     cChar := SubStr( cSecBuf, nKeyEnd, 1 )
+
+                     IF cChar <> Chr( 13 )
+                        cOldValue += cChar
+
+                        ++nKeyEnd
+                     ENDIF
+                  ENDDO
+
+                  //
+                  // Change the old value to the new one.
+                  //
+                  nKeyLen := Len( cOldValue )
+                  cSecBuf := Stuff( cSecBuf, nKeyStart, nKeyLen, cNewValue )
+
+                  lProceed := .T.
+               ELSE
+                  //
+                  // The key was not found - add it now!
+                  //
+                  // cSecBuf := HB_OsNewLine() + cKey + "=" + cNewValue + HB_OsNewLine()
+
+                  cSecBuf := cKey + "=" + cNewValue + hb_osNewLine() + cSecBuf
+
+                  lProceed := .T.
+               ENDIF
+            ENDIF
+         ELSE
+            //
+            // The section was not found - add it now!
+            //
+            // cSecBuf := HB_OsNewLine() + cSection + HB_OsNewLine() + cKey + "=" + ;
+            // cNewValue + HB_OsNewLine()
+
+            cSecBuf := cSection + hb_osNewLine() + cKey + "=" + cNewValue + ;
+               hb_osNewLine() + hb_osNewLine()
+
+            lProceed := .T.
+         ENDIF
+      ENDIF
+
+      IF lProceed
+         //
+         // Update the buffer with the new section.
+         //
+         IF nSecStart == 0
+            nSecStart := Len( cBuffer )
+         ENDIF
+
+         cBuffer := Stuff( cBuffer, nSecStart, nSecLen, cSecBuf )
 
          //
-         // Extract the section from the buffer.
+         // troca existing .INI file.
          //
-         cSecBuf := right( cBuffer, nFileLen - nSecStart + 1 )
+         FClose( nHandle )
 
-         if !empty( cSecBuf )
-            //
-            // Get the position of the end of the section...
-            //
-            nSecEnd := at( "[", cSecBuf )
+         nHandle := FCreate( cFile, 0 )
 
-            //
-            // ...and extract the section!
-            //
-            if nSecEnd > 0
-               cSecBuf := left( cSecBuf, nSecEnd - 1 )
-            endif
+         IF FWrite( nHandle, cBuffer ) == Len( cBuffer )
+            lRetCode := .T.
+         ENDIF
+      ENDIF
 
-            nSecLen := len( cSecBuf )
+      FClose( nHandle )
+   ENDIF
 
-            //
-            // Now find the key within the section.
-            //
-            nKeyStart := at( cKey, cSecBuf )
-
-            if nKeyStart > 0
-               //
-               // Load the return string with the value
-               // until a carriage return is found.
-               //
-               nKeyStart += len( cKey ) + 1
-               nKeyEnd   := nKeyStart
-
-               cOldValue := cChar := ""
-
-               do while cChar <> chr( 13 )
-                  cChar := substr( cSecBuf, nKeyEnd, 1 )
-
-                  if cChar <> chr( 13 )
-                     cOldValue += cChar
-
-                     ++ nKeyEnd
-                  endif
-               enddo
-
-               //
-               // Change the old value to the new one.
-               //
-               nKeyLen := len( cOldValue )
-               cSecBuf := stuff( cSecBuf, nKeyStart, nKeyLen, cNewValue )
-
-               lProceed := .T.
-            else
-               //
-               // The key was not found - add it now!
-               //
-               //cSecBuf := HB_OsNewLine() + cKey + "=" + cNewValue + HB_OsNewLine()
-
-               cSecBuf := cKey + "=" + cNewValue + HB_OsNewLine() + cSecBuf
-
-               lProceed := .T.
-            endif
-         endif
-      else
-         //
-         // The section was not found - add it now!
-         //
-         //cSecBuf := HB_OsNewLine() + cSection + HB_OsNewLine() + cKey + "=" + ;
-         //               cNewValue + HB_OsNewLine()
-
-         cSecBuf := cSection + HB_OsNewLine() + cKey + "=" + cNewValue + ;
-                    HB_OsNewLine() + HB_OsNewLine()
-
-         lProceed := .T.
-      endif
-   endif
-
-   if lProceed
-      //
-      // Update the buffer with the new section.
-      //
-      if nSecStart == 0
-         nSecStart := len( cBuffer )
-      endif
-
-      cBuffer := stuff( cBuffer, nSecStart, nSecLen, cSecBuf )
-
-      //
-      // troca existing .INI file.
-      //
-      fclose( nHandle )
-
-      nHandle := fcreate( cFile, 0 )
-
-      if fwrite( nHandle, cBuffer ) == len( cBuffer )
-         lRetCode := .T.
-      endif
-   endif
-
-   fclose( nHandle )
-endif
-
-return lRetCode
+   RETURN lRetCode
 
 
-*+№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№
-*+
-*+    Function ProfileLogical()
-*+
-*+№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№
-*+
-FUNCTION ProfileLogical(cINIFile, cSection, cKey, lDefault )
-LOCAL cVAL
-cVAL:=ProfileString( cINIFile, cSection, cKey, lDefault )
-RETURN StrLogic(cVAL,lDEFAULT)
+// +№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№
+// +
+// +    Function ProfileLogical()
+// +
+// +№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№
+// +
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ProfileLogical()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ProfileLogical( cINIFile, cSection, cKey, lDefault )
+
+   LOCAL cVAL
+
+   cVAL := ProfileString( cINIFile, cSection, cKey, lDefault )
+
+   RETURN StrLogic( cVAL, lDEFAULT )
+
+// + EOF: profile.prg
+// +

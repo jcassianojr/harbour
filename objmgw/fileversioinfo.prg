@@ -1,67 +1,125 @@
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fileversioinfo.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:42 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 #include "hbwin.ch"
 #include "fileio.ch"
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Procedure Main()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 PROCEDURE Main()
-    LOCAL cFileName := "C:\Windows\System32\kernel32.dll"
-    LOCAL nInfoSize, pInfo, cInfo
-    LOCAL nTranslate, pTranslate
-    LOCAL cSubBlock, pValue, nValueLen
-    LOCAL cCompanyName, cFileDescription, cFileVersion, cProductName, cProductVersion
 
-    // Get the size of the version information
-    nInfoSize := GetFileVersionInfoSize(cFileName, 0)
-   
-    IF nInfoSize == 0
-        ? "Failed to get version info size."
-        RETURN
-    ENDIF
+   LOCAL cFileName    := "C:\Windows\System32\kernel32.dll"
+   LOCAL nInfoSize, pInfo, cInfo
+   LOCAL nTranslate, pTranslate
+   LOCAL cSubBlock, pValue, nValueLen
+   LOCAL cCompanyName, cFileDescription, cFileVersion, cProductName, cProductVersion
 
-    // Allocate memory for the version information
-    pInfo := hb_xgrab(nInfoSize)
+// Get the size of the version information
+   nInfoSize := GetFileVersionInfoSize( cFileName, 0 )
 
-    // Get the version information
-    IF !GetFileVersionInfo(cFileName, 0, nInfoSize, pInfo)
-        ? "Failed to get version info."
-        hb_xfree(pInfo)
-        RETURN
-    ENDIF
+   IF nInfoSize == 0
+      ? "Failed to get version info size."
+      RETURN
+   ENDIF
 
-    // Get the translation info
-    IF !VerQueryValue(pInfo, "\VarFileInfo\Translation", @pTranslate, @nTranslate)
-        ? "Failed to get translation info."
-        hb_xfree(pInfo)
-        RETURN
-    ENDIF
+// Allocate memory for the version information
+   pInfo := hb_xgrab( nInfoSize )
 
-    // Create the sub block string based on the language and code page
-    cSubBlock := "\StringFileInfo\" + ;
-                 hb_NumToHex(hb_BPeek(pTranslate, 1), 4) + ;
-                 hb_NumToHex(hb_BPeek(pTranslate, 3), 4) + "\"
+// Get the version information
+   IF !GetFileVersionInfo( cFileName, 0, nInfoSize, pInfo )
+      ? "Failed to get version info."
+      hb_xfree( pInfo )
+      RETURN
+   ENDIF
 
-    // Retrieve various version information strings
-    cCompanyName := GetVersionString(pInfo, cSubBlock + "CompanyName")
-    cFileDescription := GetVersionString(pInfo, cSubBlock + "FileDescription")
-    cFileVersion := GetVersionString(pInfo, cSubBlock + "FileVersion")
-    cProductName := GetVersionString(pInfo, cSubBlock + "ProductName")
-    cProductVersion := GetVersionString(pInfo, cSubBlock + "ProductVersion")
+// Get the translation info
+   IF !VerQueryValue( pInfo, "\VarFileInfo\Translation", @pTranslate, @nTranslate )
+      ? "Failed to get translation info."
+      hb_xfree( pInfo )
+      RETURN
+   ENDIF
 
-    // Display the retrieved information
-    ? "Company Name:", cCompanyName
-    ? "File Description:", cFileDescription
-    ? "File Version:", cFileVersion
-    ? "Product Name:", cProductName
-    ? "Product Version:", cProductVersion
+// Create the sub block string based on the language and code page
+   cSubBlock := "\StringFileInfo\" + ;
+      hb_NumToHex( hb_BPeek( pTranslate, 1 ), 4 ) + ;
+      hb_NumToHex( hb_BPeek( pTranslate, 3 ), 4 ) + "\"
 
-    // Free the allocated memory
-    hb_xfree(pInfo)
+// Retrieve various version information strings
+   cCompanyName     := GetVersionString( pInfo, cSubBlock + "CompanyName" )
+   cFileDescription := GetVersionString( pInfo, cSubBlock + "FileDescription" )
+   cFileVersion     := GetVersionString( pInfo, cSubBlock + "FileVersion" )
+   cProductName     := GetVersionString( pInfo, cSubBlock + "ProductName" )
+   cProductVersion  := GetVersionString( pInfo, cSubBlock + "ProductVersion" )
 
-RETURN
+// Display the retrieved information
+   ? "Company Name:", cCompanyName
+   ? "File Description:", cFileDescription
+   ? "File Version:", cFileVersion
+   ? "Product Name:", cProductName
+   ? "Product Version:", cProductVersion
 
-FUNCTION GetVersionString(pInfo, cSubBlock)
-    LOCAL pValue, nValueLen, cValue := ""
+// Free the allocated memory
+   hb_xfree( pInfo )
 
-    IF VerQueryValue(pInfo, cSubBlock, @pValue, @nValueLen)
-        cValue := hb_BSubStr(pValue, 1, nValueLen - 1)
-    ENDIF
+   RETURN
 
-RETURN cValue
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function GetVersionString()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION GetVersionString( pInfo, cSubBlock )
+
+   LOCAL pValue, nValueLen, cValue := ""
+
+   IF VerQueryValue( pInfo, cSubBlock, @pValue, @nValueLen )
+      cValue := hb_BSubStr( pValue, 1, nValueLen - 1 )
+   ENDIF
+
+   RETURN cValue
+
+// + EOF: fileversioinfo.prg
+// +

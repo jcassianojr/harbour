@@ -1,141 +1,201 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Source Module => C:\DEVELOP\OBJ\FLIB04.PRG
-*+
-*+               Function INFOR()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : flib04hab.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:42 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-////#INCLUDE "COMANDO.CH"
-#INCLUDE "INKEY.CH"
-#INCLUDE "BOX.CH"
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Source Module => C:\DEVELOP\OBJ\FLIB04.PRG
+// +
+// +               Function INFOR()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function INFOR()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function INFOR          //INDEXAR E EXIBIR INFORMACAO ARQUIVO
-para mARQUIVO, aCHAVE, aINDICE, lCHECA, aTAG, lAPA
-local nERRO,X
-LOCAL cFileAttr  , nFileSize
-LOCAL dCreateDate, nCreateTime
-LOCAL dChangeDate, nChangeTime
-if valtype( lCHECA ) # "L"
-   lCHECA := .F.
-endif
-if valtype( aTAG ) = "U"                //Nao Passada tag
-   aTAG := ""
-endif
-if valtype( lAPA ) # "L"
-   lAPA := .T.
-endif
-if valtype( aCHAVE ) = "C"              //Caracter Vira Array
-   aCHAVE  := { aCHAVE }
-   aINDICE := { aINDICE }
-   aTAG    := { aTAG }
-endif
-for X := 1 to len( aINDICE )
-   mINDICE := aINDICE[ X ]
-   if lCHECA        //Se Tiver o Indice nao Indexa
-      if REDEFILE( mINDICE, ordbagext(), .F. ) 
-         retu .T.
-      endif
-   endif
-   if lAPA
-      IF file( mINDICE + ordbagext() )
-         ferase( mINDICE + ordbagext() )              //Apaga o Indice
-      endif
-      if file( ZDIRE + mINDICE+ ordbagext() )
-         ferase( ZDIRE + mINDICE + ordbagext() )      //Apaga o Indice empresa
-      endif
-      if file( ZDIRN + mINDICE+ ordbagext() )
-         ferase( ZDIRN + mINDICE + ordbagext() )      //Apaga o Indice ANUAL
-      endif
-   endif
-next X
-
-	
-//FileStats( mARQUIVO,@cFileAttr  , @nFileSize  , ;
-//                     @dCreateDate, @nCreateTime, ;
-//                     @dChangeDate, @nChangeTime  )
+// //#INCLUDE "COMANDO.CH"
+#include "INKEY.CH"
+#include "BOX.CH"
 
 
-if ! netuse(mARQUIVO,,.F.,.F.,.T.,.F.,30)
-    //netuse(cARQ,cDRIVER,lSHA,lREAD,lNEW,lINDEX,nTIME )
-   retu .F.
-endif
-HB_dispbox( 6, 0, 23, 78,B_DOUBLE+" ")
-@  7,  3 say spac( 21 ) + "Quadro Informativo do Arquivo" + spac( 26 )
-@ 08,  4 say "Nome" + spac( 12 ) + chr( 16 )
-@ 09,  4 say "Chave" + spac( 11 ) + chr( 16 )
-@ 10,  4 say "Indice" + spac( 10 ) + chr( 16 )
-@ 11,  4 say "TAG   " + spac( 10 ) + chr( 16 )
-@ 12,  4 say "Registros" + spac( 7 ) + chr( 16 )
-@ 13,  4 say "Movimenta??o    " + chr( 16 )
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function INFOR()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-//@ 09,40 SAY  "Attibuto  :"+ STRVAL(cFileAttr)
-//@ 10,40 SAY  "Tamanho   :"+ STRVAL(nFileSize,8)
-//@ 11,40 SAY  "Criado em :"+ STRVAL(dCreateDate)+" "+STRVAL( nCreateTime,5,2 )
-//@ 12,40 SAY  "Modificao :"+ STRVAL(dChangeDate)+" "+STRVAL( nChangeTime,5,2 )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function INFOR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION INFOR  // INDEXAR E EXIBIR INFORMACAO ARQUIVO
 
-@ 24, 00 say chr( 16 ) + "  Aguarde Reorganizando  " + chr( 17 )
-@ 08, 23 say alias()
-@ 12, 23 say str( lastrec(), 7 )
-@ 13, 23 say dtoc( lupdate() )
-pack
-for X := 1 to len( aINDICE )
-   mCHAVE  := aCHAVE[ X ]
-   mINDICE := aINDICE[ X ]
-   mTAG    := aTAG[ X ]
-   if empty( mTAG ) .and. upper( ordbagext() ) = ".CDX"
-      mTAG := mINDICE
-   endif
-   @ 09, 23 say alltrim( mCHAVE )
-   @ 10, 23 say alltrim( mINDICE )
-   @ 11, 23 say alltrim( mTAG )
+   PARA mARQUIVO, aCHAVE, aINDICE, lCHECA, aTAG, lAPA
+   LOCAL nERRO, X
+   LOCAL cFileAttr, nFileSize
+   LOCAL dCreateDate, nCreateTime
+   LOCAL dChangeDate, nChangeTime
 
-   nLASTREC:=LASTREC()
-   zei_fort( nLASTREC,,,0)
-
-   if empty( mTAG )
-      index on &mCHAVE to &mINDICE EVAL ZEI_FORT(nLASTREC,,,1)
-   else
-      index on &mCHAVE tag &mTAG. EVAL ZEI_FORT(nLASTREC,,,1)
-   endif
-next X
-dbclosearea()
-setcolor( "W/N,N/W" )
-@ 06,00 CLEAR
-retu .T.
-
-*+ЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁ
-*+
-*+    Function REDEFILE()
-*+
-*+ЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁ
-*+
-func REDEFILE( cARQ, cEXT, lMES )
-if valtype(Lmes)#"L"
-   lMES:=.T.
-ENDIF
-if at( ".", cEXT ) = 0
-   cEXT := "." + cEXT
-endif
-if ! HB_FILEEXISTS( cARQ + cEXT ) 
-   if ! HB_FILEEXISTS( ZDIRE + cARQ + cEXT )
-      if ! HB_FILEEXISTS( ZDIRN + cARQ + cEXT )
-         if lMES
-             ALERTX( 'REDEFILE Arquivo: ' + cARQ + cEXT + " N∆o Encontrado" )
-         endif  
-         retu .F.
-      endif
-  endif       
-endif
-retu .T.
+   IF ValType( lCHECA ) # "L"
+      lCHECA := .F.
+   ENDIF
+   IF ValType( aTAG ) = "U"  // Nao Passada tag
+      aTAG := ""
+   ENDIF
+   IF ValType( lAPA ) # "L"
+      lAPA := .T.
+   ENDIF
+   IF ValType( aCHAVE ) = "C"  // Caracter Vira Array
+      aCHAVE  := { aCHAVE }
+      aINDICE := { aINDICE }
+      aTAG    := { aTAG }
+   ENDIF
+   FOR X := 1 TO Len( aINDICE )
+      mINDICE := aINDICE[ X ]
+      IF lCHECA  // Se Tiver o Indice nao Indexa
+         IF REDEFILE( mINDICE, ordBagExt(), .F. )
+            RETU .T.
+         ENDIF
+      ENDIF
+      IF lAPA
+         IF File( mINDICE + ordBagExt() )
+            FErase( mINDICE + ordBagExt() )  // Apaga o Indice
+         ENDIF
+         IF File( ZDIRE + mINDICE + ordBagExt() )
+            FErase( ZDIRE + mINDICE + ordBagExt() )  // Apaga o Indice empresa
+         ENDIF
+         IF File( ZDIRN + mINDICE + ordBagExt() )
+            FErase( ZDIRN + mINDICE + ordBagExt() )  // Apaga o Indice ANUAL
+         ENDIF
+      ENDIF
+   NEXT X
 
 
-*+ EOF: FLIB04.PRG
+// FileStats( mARQUIVO,@cFileAttr  , @nFileSize  , ;
+// @dCreateDate, @nCreateTime, ;
+// @dChangeDate, @nChangeTime  )
 
+
+   IF !netuse( mARQUIVO,, .F., .F., .T., .F., 30 )
+      // netuse(cARQ,cDRIVER,lSHA,lREAD,lNEW,lINDEX,nTIME )
+      RETU .F.
+   ENDIF
+   hb_DispBox( 6, 0, 23, 78, B_DOUBLE + " " )
+   @  7, 3 SAY spac( 21 ) + "Quadro Informativo do Arquivo" + spac( 26 )
+   @ 08, 4 SAY "Nome" + spac( 12 ) + Chr( 16 )
+   @ 09, 4 SAY "Chave" + spac( 11 ) + Chr( 16 )
+   @ 10, 4 SAY "Indice" + spac( 10 ) + Chr( 16 )
+   @ 11, 4 SAY "TAG   " + spac( 10 ) + Chr( 16 )
+   @ 12, 4 SAY "Registros" + spac( 7 ) + Chr( 16 )
+   @ 13, 4 SAY "Movimenta??o    " + Chr( 16 )
+
+// @ 09,40 SAY  "Attibuto  :"+ STRVAL(cFileAttr)
+// @ 10,40 SAY  "Tamanho   :"+ STRVAL(nFileSize,8)
+// @ 11,40 SAY  "Criado em :"+ STRVAL(dCreateDate)+" "+STRVAL( nCreateTime,5,2 )
+// @ 12,40 SAY  "Modificao :"+ STRVAL(dChangeDate)+" "+STRVAL( nChangeTime,5,2 )
+
+   @ 24, 00 SAY Chr( 16 ) + "  Aguarde Reorganizando  " + Chr( 17 )
+   @ 08, 23 SAY Alias()
+   @ 12, 23 SAY Str( LastRec(), 7 )
+   @ 13, 23 SAY DToC( LUpdate() )
+   PACK
+   FOR X := 1 TO Len( aINDICE )
+      mCHAVE  := aCHAVE[ X ]
+      mINDICE := aINDICE[ X ]
+      mTAG    := aTAG[ X ]
+      IF Empty( mTAG ) .AND. Upper( ordBagExt() ) = ".CDX"
+         mTAG := mINDICE
+      ENDIF
+      @ 09, 23 SAY AllTrim( mCHAVE )
+      @ 10, 23 SAY AllTrim( mINDICE )
+      @ 11, 23 SAY AllTrim( mTAG )
+
+      nLASTREC := LastRec()
+      zei_fort( nLASTREC,,, 0 )
+
+      IF Empty( mTAG )
+         INDEX ON &mCHAVE TO &mINDICE EVAL ZEI_FORT( nLASTREC,,, 1 )
+      ELSE
+         INDEX ON &mCHAVE TAG &mTAG. EVAL ZEI_FORT( nLASTREC,,, 1 )
+      ENDIF
+   NEXT X
+   dbCloseArea()
+   SetColor( "W/N,N/W" )
+   @ 06, 00 CLEAR
+   RETU .T.
+
+// +ЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁ
+// +
+// +    Function REDEFILE()
+// +
+// +ЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁ
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function REDEFILE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC REDEFILE( cARQ, cEXT, lMES )
+
+   IF ValType( Lmes ) # "L"
+      lMES := .T.
+   ENDIF
+   IF At( ".", cEXT ) = 0
+      cEXT := "." + cEXT
+   ENDIF
+   IF !hb_FileExists( cARQ + cEXT )
+      IF !hb_FileExists( ZDIRE + cARQ + cEXT )
+         IF !hb_FileExists( ZDIRN + cARQ + cEXT )
+            IF lMES
+               ALERTX( 'REDEFILE Arquivo: ' + cARQ + cEXT + " N∆o Encontrado" )
+            ENDIF
+            RETU .F.
+         ENDIF
+      ENDIF
+   ENDIF
+   RETU .T.
+
+
+// + EOF: FLIB04.PRG
+
+// + EOF: flib04hab.prg
+// +

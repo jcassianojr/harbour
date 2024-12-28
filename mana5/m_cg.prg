@@ -1,27 +1,30 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : m_cg.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_cg.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:57 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 // :*****************************************************************************
 // :
@@ -36,25 +39,28 @@
 // :      Documentado 21/09/95 at 07:58                Softec!
 // :*****************************************************************************
 
-//Preparando o Help
+// Preparando o Help
 HELPDBF := "MCG"
 
-MDI(" Ý Ajustando data e Hora do Sistema")
+MDI( " Ý Ajustando data e Hora do Sistema" )
 
 
-TIME := TIME()
-DATA := DATE()
+TIME := Time()
+DATA := Date()
 
-TELASAY("MCG001")
-EDITSAY("MCG001")
+TELASAY( "MCG001" )
+EDITSAY( "MCG001" )
 
 
-//SETTIME(TIME,ISAT())
-//SETDATE(DATA,ISAT())
+// SETTIME(TIME,ISAT())
+// SETDATE(DATA,ISAT())
 
-SETTIME(TIME)
-SETDATE(DATA)
+SETTIME( TIME )
+SETDATE( DATA )
 
 RETU .T.
 
 // : FIM: M_CG.PRG
+
+// + EOF: m_cg.prg
+// +

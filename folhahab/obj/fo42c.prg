@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fo42c.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:44 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fo42c.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:44 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -46,59 +46,59 @@
 
 
 
-CABEX('Modulo consulta registros do cadastro de funcionarios')
-MDS('Tecle [esc] para retornar ao menu principal')
-IF !NETUSE("FO_PSL")
-   RETU
+CABEX( 'Modulo consulta registros do cadastro de funcionarios' )
+MDS( 'Tecle [esc] para retornar ao menu principal' )
+IF !NETUSE( "FO_PSL" )
+RETU
 ENDIF
 FILTRO := ''
 INX    := ""
-FILORD(.T.)
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-if valtype(INX) = "N"
-   dbsetorder(INX)
+FILORD( .T. )
+nLASTREC := LastRec()
+zei_fort( nLASTREC,,, 0 )
+IF ValType( INX ) = "N"
+dbSetOrder( INX )
 ELSE
-   ordDestroy("temp")
-   ordcreate(,"temp",inx)
-   ordSetFocus("temp")
+ordDestroy( "temp" )
+ordCreate(, "temp", inx )
+ordSetFocus( "temp" )
 ENDIF
-set filter to &FILTRO
+SET FILTER TO &FILTRO
 
-DBGOTOP()
-DECLARE CAMPOS[9],TITULO[9],MASCAR[9]
+dbGoTop()
+DECLARE CAMPOS[ 9 ], TITULO[ 9 ], MASCAR[ 9 ]
 NADA := ''
-CAMPOS[1] = 'NUMERO'
-CAMPOS[2] = 'NOME'
-CAMPOS[3] = 'ADMITIDO'
-CAMPOS[4] = 'FUNCAO'
-CAMPOS[5] = 'SALANT'
-CAMPOS[6] = 'SALATU'
-CAMPOS[7] = 'SALPRO'
-CAMPOS[8] = 'TAXA1'
-CAMPOS[9] = 'TAXA2'
+CAMPOS[ 1 ] = 'NUMERO'
+CAMPOS[ 2 ] = 'NOME'
+CAMPOS[ 3 ] = 'ADMITIDO'
+CAMPOS[ 4 ] = 'FUNCAO'
+CAMPOS[ 5 ] = 'SALANT'
+CAMPOS[ 6 ] = 'SALATU'
+CAMPOS[ 7 ] = 'SALPRO'
+CAMPOS[ 8 ] = 'TAXA1'
+CAMPOS[ 9 ] = 'TAXA2'
 
-TITULO[1] = 'CODIGO'
-TITULO[2] = 'NOME DO FUNCIONARIO'
-TITULO[3] = 'DATA ADMISSAO'
-TITULO[4] = 'FUNCAO'
-TITULO[5] = 'SALARIO ANT.'
-TITULO[6] = 'SALARIO PROJ1.'
-TITULO[7] = 'SALARIO PROJ2.'
-TITULO[8] = 'TAXA PROJ1.'
-TITULO[9] = 'TAXA PROJ2.'
+TITULO[ 1 ] = 'CODIGO'
+TITULO[ 2 ] = 'NOME DO FUNCIONARIO'
+TITULO[ 3 ] = 'DATA ADMISSAO'
+TITULO[ 4 ] = 'FUNCAO'
+TITULO[ 5 ] = 'SALARIO ANT.'
+TITULO[ 6 ] = 'SALARIO PROJ1.'
+TITULO[ 7 ] = 'SALARIO PROJ2.'
+TITULO[ 8 ] = 'TAXA PROJ1.'
+TITULO[ 9 ] = 'TAXA PROJ2.'
 
-MASCAR[1] = '99999'
-MASCAR[5] = '999,999,999.99'
-MASCAR[6] = '999,999,999.99'
-MASCAR[7] = '999,999,999.99'
-MASCAR[8] = '999.99%'
-MASCAR[9] = '999.99%'
+MASCAR[ 1 ] = '99999'
+MASCAR[ 5 ] = '999,999,999.99'
+MASCAR[ 6 ] = '999,999,999.99'
+MASCAR[ 7 ] = '999,999,999.99'
+MASCAR[ 8 ] = '999.99%'
+MASCAR[ 9 ] = '999.99%'
 
-DBEDIT(7,4,21,75,CAMPOS,NADA,MASCAR,TITULO)
-DBCLOSEALL()
+dbEdit( 7, 4, 21, 75, CAMPOS, NADA, MASCAR, TITULO )
+dbCloseAll()
 RETU
 // : FIM: FO42C.PRG
 
-*+ EOF: fo42c.prg
-*+
+// + EOF: fo42c.prg
+// +

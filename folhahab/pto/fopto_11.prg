@@ -1,230 +1,230 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_11.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:32 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_11.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:32 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-CABE2('FOPTO_11 - Transferindo e Atualizando dados do Relogio')
-para nTIPO,lPER
-IF VALTYPE(lPER) # "L"
-   lPER := .T.
+CABE2( 'FOPTO_11 - Transferindo e Atualizando dados do Relogio' )
+PARA nTIPO, lPER
+IF ValType( lPER ) # "L"
+lPER := .T.
 ENDIF
-if nTIPO = 0
-   nTIPO := PEGRELOGIO()
-endif
-
-if !NETUSE("foptorel")
-   retu .F.
+IF nTIPO = 0
+nTIPO := PEGRELOGIO()
 ENDIF
-dbgotop()
-if !dbseek(ntipo)
-   dbcloseall()
-   ALERTX("falta configuracao relogio "+str(ntipo))
-   retu .f.
-endif
-cCAMINHO := ALLTRIM(caminho)
-DADO     := alltrim(ARQUIVO)
-cARQ     := alltrim(ARQDEST)
+
+IF !NETUSE( "foptorel" )
+RETU .F.
+ENDIF
+dbGoTop()
+IF !dbSeek( ntipo )
+dbCloseAll()
+ALERTX( "falta configuracao relogio " + Str( ntipo ) )
+RETU .F.
+ENDIF
+cCAMINHO := AllTrim( caminho )
+DADO     := AllTrim( ARQUIVO )
+cARQ     := AllTrim( ARQDEST )
 TIPC     := PROCESSO
-lDIVIDE  := if(HORADEC = "S",.T.,.F.)
+lDIVIDE  := if( HORADEC = "S", .T., .F. )
 TIPD     := ANOREL
-dbcloseall()
+dbCloseAll()
 
 
 DCORTE := zdataini
 DCORTF := zdatafim
-MDS('Digite o periodo ')
-@ 24,40 get DCORTE         
-@ 24,60 get DCORTF         
-if !READCUR()
-   retu .F.
-endif
-
-MDS('Aguarde Carregando Dados do Rel¢gio')
-cPD := PARQDIO(nTIPO)
-//if ! lPER .OR. MDG( "Apagar Importa‡ao Anterior" )
-//   DELETEFILE( ZDIRE + cPD + ".DBF" )
-//   DELETEFILE( ZDIRE + cPD + "." + cRDDEXT )
-//endif
-
-CHECKCRI(cPD,"FO_DIO","STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)")
-
-IF !file(cARQ+".DBF")
-   ALERTX("Falta arquivo de migracao")
-   return
+MDS( 'Digite o periodo ' )
+@ 24, 40 GET DCORTE
+@ 24, 60 GET DCORTF
+IF !READCUR()
+RETU .F.
 ENDIF
 
-if !NETUSE(cARQ,,,,,.F.,)
-   dbcloseall()
-   return
-endif
-zap
-if !FOPTO1101(DADO)
-   dbcloseall()
-   return
-endif
+MDS( 'Aguarde Carregando Dados do Rel¢gio' )
+cPD := PARQDIO( nTIPO )
+// if ! lPER .OR. MDG( "Apagar Importa‡ao Anterior" )
+// DELETEFILE( ZDIRE + cPD + ".DBF" )
+// DELETEFILE( ZDIRE + cPD + "." + cRDDEXT )
+// endif
 
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-DBEVAL({|| netrecdel()},{|| EMPTY(DATA)},{|| zei_fort(nLASTREC,,,1)})
-zei_fort(nLASTREC,,,0)
-DBEVAL({|| netrecdel()},{|| EMPTY(NUMERO)},{|| zei_fort(nLASTREC,,,1)})
-zei_fort(nLASTREC,,,0)
-DBEVAL({|| netrecdel()},{|| EMPTY(HORA)},{|| zei_fort(nLASTREC,,,1)})
-dbclosearea()
-netpack(cARQ)
+CHECKCRI( cPD, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
 
-
-
-
-if !NETUSE(cARQ,,,,,.F.,)
-   dbcloseall()
-   retu .f.
+IF !File( cARQ + ".DBF" )
+ALERTX( "Falta arquivo de migracao" )
+RETURN
 ENDIF
 
-if !netuse(cPD)
-   dbcloseall()
-   retu
-endif
+IF !NETUSE( cARQ,,,,, .F., )
+dbCloseAll()
+RETURN
+ENDIF
+ZAP
+IF !FOPTO1101( DADO )
+dbCloseAll()
+RETURN
+ENDIF
+
+nLASTREC := LastRec()
+zei_fort( nLASTREC,,, 0 )
+dbEval( {|| netrecdel() }, {|| Empty( DATA ) }, {|| zei_fort( nLASTREC,,, 1 ) } )
+zei_fort( nLASTREC,,, 0 )
+dbEval( {|| netrecdel() }, {|| Empty( NUMERO ) }, {|| zei_fort( nLASTREC,,, 1 ) } )
+zei_fort( nLASTREC,,, 0 )
+dbEval( {|| netrecdel() }, {|| Empty( HORA ) }, {|| zei_fort( nLASTREC,,, 1 ) } )
+dbCloseArea()
+netpack( cARQ )
 
 
-MDS('Aguarde Atualizando Dados do Relogio')
-dbselectar(cARQ)
+
+
+IF !NETUSE( cARQ,,,,, .F., )
+dbCloseAll()
+RETU .F.
+ENDIF
+
+IF !netuse( cPD )
+dbCloseAll()
+RETU
+ENDIF
+
+
+MDS( 'Aguarde Atualizando Dados do Relogio' )
+dbSelectAr( cARQ )
 GRAPP := 1
-GRAPT := lastrec()
-GRAPT('AGUARDE ATUALIZANDO DADOS ')
-dbgotop()
-while !eof()
-   NUM := NUMERO
-   DAT := DATA
-   HOR := HORA
-   if valtype(DATA) = "N"
-      if TIPD = "3" .OR. TIPD = "4"
-         DIC := strzero(DAT,8)
-      else
-         DIC := str(DAT,6)
-      endif
-   endif
-   do case
-   case TIPD = "1"
-      DIAX := substr(DIC,1,2)
-      nMES := substr(DIC,3,2)
-      ANO  := substr(DIC,5,2)
-   case TIPD = "2"
-      ANO  := substr(DIC,1,2)
-      nMES := substr(DIC,3,2)
-      DIAX := substr(DIC,5,2)
-   case TIPD = "3"
-      DIAX := substr(DIC,1,2)
-      nMES := substr(DIC,3,2)
-      ANO  := substr(DIC,5,4)
-      DAT  := diax+nmes+substr(DIC,7,2)
-      DAT  := val(DAT)
-   case TIPD = "4"
-      ANO  := substr(DIC,1,4)
-      nMES := substr(DIC,5,2)
-      DIAX := substr(DIC,7,2)
-      DAT  := diax+nmes+substr(DIC,3,2)
-      DAT  := val(DAT)
-   endcase
-   DIX := ctod(DIAX+"/"+nMES+"/"+ANO)
-   if lDIVIDE
-      HOR /= 100
-   endif
-   if HOR < 1
-      HOR += 24
-      DIX --
-   endif
-   BUSCA := str(NUM,8)+dtos(DIX)+str(HORA,5,2)
-   if DIX >= DCORTE .and. DIX <= DCORTF
-      if !empty(DIX) .and. !empty(NUM) .and. !empty(HOR)
-         dbselectar(cPD)
-         dbgotop()
-         if !dbseek(BUSCA)
-            netrecapp()
-            field->NUMERO := NUM
-            field->HORA   := HOR
-            field->DATA   := DIX
-            dbunlock()
-         endif
-      endif
-   endif
-   dbselectar(cARQ)
-   GRAPS()
-   dbskip()
-enddo
-dbcloseall()
+GRAPT := LastRec()
+GRAPT( 'AGUARDE ATUALIZANDO DADOS ' )
+dbGoTop()
+WHILE !Eof()
+NUM := NUMERO
+DAT := DATA
+HOR := HORA
+IF ValType( DATA ) = "N"
+IF TIPD = "3" .OR. TIPD = "4"
+DIC := StrZero( DAT, 8 )
+ELSE
+DIC := Str( DAT, 6 )
+ENDIF
+ENDIF
+DO CASE
+CASE TIPD = "1"
+DIAX := SubStr( DIC, 1, 2 )
+nMES := SubStr( DIC, 3, 2 )
+ANO  := SubStr( DIC, 5, 2 )
+CASE TIPD = "2"
+ANO  := SubStr( DIC, 1, 2 )
+nMES := SubStr( DIC, 3, 2 )
+DIAX := SubStr( DIC, 5, 2 )
+CASE TIPD = "3"
+DIAX := SubStr( DIC, 1, 2 )
+nMES := SubStr( DIC, 3, 2 )
+ANO  := SubStr( DIC, 5, 4 )
+DAT  := diax + nmes + SubStr( DIC, 7, 2 )
+DAT  := Val( DAT )
+CASE TIPD = "4"
+ANO  := SubStr( DIC, 1, 4 )
+nMES := SubStr( DIC, 5, 2 )
+DIAX := SubStr( DIC, 7, 2 )
+DAT  := diax + nmes + SubStr( DIC, 3, 2 )
+DAT  := Val( DAT )
+ENDCASE
+DIX := CToD( DIAX + "/" + nMES + "/" + ANO )
+IF lDIVIDE
+HOR /= 100
+ENDIF
+IF HOR < 1
+HOR += 24
+DIX--
+ENDIF
+BUSCA := Str( NUM, 8 ) + DToS( DIX ) + Str( HORA, 5, 2 )
+IF DIX >= DCORTE .AND. DIX <= DCORTF
+IF !Empty( DIX ) .AND. !Empty( NUM ) .AND. !Empty( HOR )
+dbSelectAr( cPD )
+dbGoTop()
+IF !dbSeek( BUSCA )
+netrecapp()
+field->NUMERO := NUM
+field->HORA   := HOR
+field->DATA   := DIX
+dbUnlock()
+ENDIF
+ENDIF
+ENDIF
+dbSelectAr( cARQ )
+GRAPS()
+dbSkip()
+ENDDO
+dbCloseAll()
 
 
-if nTIPO = 1 .or. nTIPO = 4 .or. nTIPO = 5
-   trocapro(cpd,dcorte,dcortf)
-   IF lPER
-      if MDG("Deseja Transferir Dados Ponto do Mes")
-         FOPTO_12()
-      endif
-   ELSE
-      FOPTO_12(DCORTE,DCORTF)
+IF nTIPO = 1 .OR. nTIPO = 4 .OR. nTIPO = 5
+trocapro( cpd, dcorte, dcortf )
+IF lPER
+IF MDG( "Deseja Transferir Dados Ponto do Mes" )
+FOPTO_12()
+ENDIF
+ELSE
+FOPTO_12( DCORTE, DCORTF )
+ENDIF
+ENDIF
+RETU
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function FOPTO1101()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION FOPTO1101( cORI )
+
+   IF At( ".", cORI ) = 0
+      cORI += ".TXT"
    ENDIF
-endif
-retu
+   IF !hb_FileExists( cORI )
+      ALERTX( "Falta Arquivo: " + cORI )
+      RETU .F.
+   ENDIF
+   nLASTREC := FLINECOUNT( cORI )
+   zei_fort( nLASTREC,,, 0 )
+   DO CASE
+   CASE TIPC = "D"
+      APPEND FROM &cORI. DELIMITED WHILE zei_fort( nLASTREC,,, 1 )
+   CASE TIPC = "S"
+      APPEND FROM &cORI. SDF WHILE zei_fort( nLASTREC,,, 1 )
+   ENDCASE
 
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function FOPTO1101()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function FOPTO1101(cORI)
-
-
-if at(".",cORI) = 0
-   cORI += ".TXT"
-endif
-if !HB_FILEEXISTS(cORI)
-   ALERTX("Falta Arquivo: "+cORI)
-   retu .F.
-endif
-nLASTREC := FLINECOUNT(cORI)
-zei_fort(nLASTREC,,,0)
-do case
-case TIPC = "D"
-   APPEnd from &cORI. DELIMITED while zei_fort(nLASTREC,,,1)
-case TIPC = "S"
-   APPEnd from &cORI. SDF while zei_fort(nLASTREC,,,1)
-endcase
-retuRN .T.
+   RETURN .T.
 
 
 
 
-*+ EOF: fopto_11.prg
-*+
+// + EOF: fopto_11.prg
+// +

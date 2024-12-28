@@ -1,90 +1,96 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib41.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib41.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function VERSEHA()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func VERSEHA(ARQWORK,BUSWORK,cMES1,cMES2,lMES,nIND,nLIN,nCOL,lVAZIO)
 
 
-local RETORNO
-local cMESS   := ""
-local cDBF    := alias()
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function VERSEHA()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC VERSEHA( ARQWORK, BUSWORK, cMES1, cMES2, lMES, nIND, nLIN, nCOL, lVAZIO )
 
-if valtype(lMES) # "L"
-   lMES := .F.
-endif
-if valtype(nIND) # "N"
-   nIND := 1
-endif
-if valtype(lVAZIO) = "L"
-   if lVAZIO
-      if empty(BUSWORK)
-         retu .T.
-      endif
-   endif
-endif
-if !USEREDE(ARQWORK,1,nIND)
-   retu .F.
-endif
-dbgotop()
-RETORNO := dbseek(BUSWORK)
-if valtype(cMES1) = "C" .and. RETORNO
-   cMESS := &cMES1.
-endif
-if valtype(cMES2) = "C" .and. !RETORNO
-   cMESS := &cMES2.
-endif
-dbclosearea()
-if !empty(cMESS)
-   if !RETORNO .and. lMES
-      if left(cMESS,1) # "X"  //Quando comeca com x troca para MDE
-         ALERTX(cMESS)
-      else
-         MDE(substr(cMESS,2))
-      endif
-   endif
-   if valtype(nLIN) = "N"
-      @ nLIN,nCOL say cMESS         
-   else
-      MDS(cMESS)
-   endif
-endif
-if !empty(cDBF)
-   sele &cDBF.
-endif
-retu RETORNO
+   LOCAL RETORNO
+   LOCAL cMESS   := ""
+   LOCAL cDBF    := Alias()
 
+   IF ValType( lMES ) # "L"
+      lMES := .F.
+   ENDIF
+   IF ValType( nIND ) # "N"
+      nIND := 1
+   ENDIF
+   IF ValType( lVAZIO ) = "L"
+      IF lVAZIO
+         IF Empty( BUSWORK )
+            RETU .T.
+         ENDIF
+      ENDIF
+   ENDIF
+   IF !USEREDE( ARQWORK, 1, nIND )
+      RETU .F.
+   ENDIF
+   dbGoTop()
+   RETORNO := dbSeek( BUSWORK )
+   IF ValType( cMES1 ) = "C" .AND. RETORNO
+      cMESS := &cMES1.
+   ENDIF
+   IF ValType( cMES2 ) = "C" .AND. !RETORNO
+      cMESS := &cMES2.
+   ENDIF
+   dbCloseArea()
+   IF !Empty( cMESS )
+      IF !RETORNO .AND. lMES
+         IF Left( cMESS, 1 ) # "X"  // Quando comeca com x troca para MDE
+            ALERTX( cMESS )
+         ELSE
+            MDE( SubStr( cMESS, 2 ) )
+         ENDIF
+      ENDIF
+      IF ValType( nLIN ) = "N"
+         @ nLIN, nCOL SAY cMESS
+      ELSE
+         MDS( cMESS )
+      ENDIF
+   ENDIF
+   IF !Empty( cDBF )
+      SELE &cDBF.
+   ENDIF
+   RETU RETORNO
+
+
+// + EOF: mlib41.prg
+// +

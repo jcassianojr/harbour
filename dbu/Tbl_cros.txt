@@ -1,0 +1,85 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 28-Dez-2024 at 10:08 am
+*+
+*+--------------------------------------------------------------------
+
+dbu.prg
+
+   Tables: USE (cARQ) EXCLUSIVE NEW VIA USOVIA
+           USE (cARQ) SHARED NEW VIA USOVIA
+
+dbuadox.prg
+
+   Tables: DBUseArea(.T.,cORIDRIVER,cARQORI,cTABLE,.T.,.T.)
+           DBUseArea(.T.,"DBFCDX",cDESTINO,"DESTINO",.T.,.F.)
+
+dbucnvmemo.prg
+
+   Tables: USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA (cORIDRIVER) //"DBFNTX" 	via driver antigo
+           USE (cNEWDBF) ALIAS aliasnovo EXCLUSIVE NEW VIA (cDESDRIVER) //abre a copia usa o rdddefauld destino ultimo atribuido
+           USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA (cORIDRIVER) //	via driver antigo utiliza aliasantigo mas o driver defaiult e o destino
+           USE (cNEWDBF) ALIAS aliasnovo EXCLUSIVE NEW VIA (cDESDRIVER) //abre a copia usa o rdddefauld destino ultimo atribuido utiliza aliasnovo
+
+dbuindx.prg
+
+  Indexes: index on &k_exp to &filename eval zei_fort(nLASTREC,,,1)
+           index on &k_exp tag &K_TAG to &filename eval zei_fort(nLASTREC,,,1)
+
+dbulib.prg
+
+   Tables: USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA (cORIDRIVER)
+           USE (cDESTINO) ALIAS DESTINO EXCLUSIVE NEW VIA (cORIDRIVER)
+
+dbumix.prg
+
+   Tables: dbUseArea(.T.,,"SELECT * FROM "+cTABELAX,"ORIGEM")
+           DBUseArea(.T.,"DBFCDX",cDESTINO,"DESTINO",.T.,.F.)
+           DBUseArea(.T.,cORIDRIVER,cARQORI,cTABLE,.T.,.T.)
+           dbUseArea(.T.,,"SELECT * FROM "+cTABELAX,cTABELAX)
+
+dbumy.prg
+
+   Tables: DBUseArea(.T.,"DBFCDX",ctabelaX+"_mysql",,.F.,.F.)
+           dbUseArea(.T.,,cARQORI,"dbffile",,.T.)
+
+dbumyexp.prg
+
+   Tables: dbUseArea(.T.,"MYSQLRDD","SELECT * FROM "+cTABELAX,cTABELAX)
+
+dbuodbc.prg
+
+   Tables: DBUseArea(.T.,cORIDRIVER,cARQORI,cTABLE,.T.,.T.)
+           DBUseArea(.T.,"DBFCDX",cDESTINO,"DESTINO",.T.,.F.)
+
+dbupg.prg
+
+   Tables: DBUseArea(.T.,"DBFCDX",ctabelaX+"_pgsql",,.F.,.F.)
+           dbUseArea(.T.,,cARQORI,"dbffile",,.T.)
+
+dbupgexp.prg
+
+   Tables: dbUseArea(.T.,"PGRDD","SELECT * FROM "+CHR(34)+cTABELAX+CHR(34),cTABELAX)
+
+dbusincdbf.prg
+
+   Tables: USE (cARQORI) ALIAS ORIGEM SHARED NEW VIA (cORIDRIVER)
+           USE (cARQDES) ALIAS DESTINO EXCLUSIVE NEW VIA (cDESDRIVER)
+           USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA (cORIDRIVER)
+           USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA (cORIDRIVER)
+
+dbuutil.prg
+
+   Tables: use &XARQ index &XINX NEW SHARED
+
+mdb2dbf.prg
+
+   Tables: DBUseArea(.T.,,ctabela+"_"+Ctiposql,,.F.,.F.)
+           dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
+           use &cDBFARQ.
+
+sql2dbf.prg
+
+   Tables: DBUseArea(.T.,"DBFCDX",cNewTable,"DESTINO",.T.,.F.)
+           USE (cARQORI) ALIAS ORIGEM SHARED NEW VIA (cORIDRIVER)
+

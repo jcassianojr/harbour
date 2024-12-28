@@ -1,145 +1,153 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib48.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib48.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
+
+// Teclas Operacionais
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CHECKEXI()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func CHECKEXI(cARQ,eBUSCA,cSTR1,cSTR2,cMES,lVAZIO,nPERT,lCOND,nIND,nIND2)
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKEXI()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC CHECKEXI( cARQ, eBUSCA, cSTR1, cSTR2, cMES, lVAZIO, nPERT, lCOND, nIND, nIND2 )
 
-local cBUSCA
-local cDBF    := ALIAS()
-local nINDEXI
+   LOCAL cBUSCA
+   LOCAL cDBF    := Alias()
+   LOCAL nINDEXI
 
-if lastkey() = K_UP .or. lastkey() = K_DOWN
-   retu .T.
-endif
-if valtype(nIND) # "N"  //Indice Busca
-   nIND := 1
-endif
-if valtype(nIND2) # "N"   //Indice Escolha
-   nINDEXI := nIND
-endif
-if valtype(eBUSCA) = "A"
-   cBUSCA := eBUSCA[1]
-   cBUSCA := &cBUSCA.
-else
-   cBUSCA := &eBUSCA.
-endif
-if valtype(lVAZIO) = "L"
-   if lVAZIO
-      if empty(cBUSCA)
-         retu .T.
-      endif
-   endif
-endif
-if valtype(nPERT) # "N"
-   nPERT := 0
-endif
-if !VERSEHA(cARQ,cBUSCA,cSTR1,,.F.,nIND)
-   if valtype(cMES) = "C"
-      MDE(cMES," : "+STRVAL(cBUSCA)+" ")
-   endif
-   do case
-      case nPERT = 0
-         if valtype(eBUSCA) = "A"
-            cBUSCA   := eBUSCA[2]
-            &cBUSCA. := ESCOLHEXI(cARQ,&cBUSCA.,cSTR1,cSTR2,lCOND,nINDEXI)
-         else
-            &eBUSCA. := ESCOLHEXI(cARQ,&eBUSCA.,cSTR1,cSTR2,lCOND,nINDEXI)
-         endif
-   endcase
-endif
-IF !EMPTY(cDBF)
-   DBSELECTAR(cDBF)
-ENDIF
-retu .T.
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function ESCOLHEXI()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func ESCOLHEXI(cARQ,cNOME,cSTR1,cSTR2,lCOND,nIND)
-
-
-local aTABA := {}
-local aTABB := {}
-local nPOS
-if valtype(nIND) # "N"
-   nIND := 1
-endif
-MDS("Aguarde Pesquisando Tabela")
-if !USEREDE(cARQ,1,nIND)
-   retu cNOME
-endif
-dbgotop()
-while !eof()
-   if valtype(lCOND) # "C"
-      aadd(aTABA,&cSTR1.)
-      aadd(aTABB,&cSTR2.)
-   else
-      if &lCOND.
-         aadd(aTABA,&cSTR1.)
-         aadd(aTABB,&cSTR2.)
-      endif
-   endif
-   dbskip()
-enddo
-dbclosearea()
-if !empty(aTABA)
-   nPOS := ascan(aTABB,cNOME)
-   nPOS := if(nPOS > 1,nPOS,1)
-   nPOS := ESCARR(aTABA,4,5,24 - 3,63,nPOS,"Escolha o Item")
-   nPOS := if(nPOS > 1,nPOS,1)
-   if lastkey() = K_ENTER
-      cNOME := aTABB[nPOS]
+   IF LastKey() = K_UP .OR. LastKey() = K_DOWN
+      RETU .T.
    ENDIF
-endif
-retu cNOME
+   IF ValType( nIND ) # "N"  // Indice Busca
+      nIND := 1
+   ENDIF
+   IF ValType( nIND2 ) # "N"   // Indice Escolha
+      nINDEXI := nIND
+   ENDIF
+   IF ValType( eBUSCA ) = "A"
+      cBUSCA := eBUSCA[ 1 ]
+      cBUSCA := &cBUSCA.
+   ELSE
+      cBUSCA := &eBUSCA.
+   ENDIF
+   IF ValType( lVAZIO ) = "L"
+      IF lVAZIO
+         IF Empty( cBUSCA )
+            RETU .T.
+         ENDIF
+      ENDIF
+   ENDIF
+   IF ValType( nPERT ) # "N"
+      nPERT := 0
+   ENDIF
+   IF !VERSEHA( cARQ, cBUSCA, cSTR1,, .F., nIND )
+      IF ValType( cMES ) = "C"
+         MDE( cMES, " : " + STRVAL( cBUSCA ) + " " )
+      ENDIF
+      DO CASE
+      CASE nPERT = 0
+         IF ValType( eBUSCA ) = "A"
+            cBUSCA   := eBUSCA[ 2 ]
+            &cBUSCA. := ESCOLHEXI( cARQ, &cBUSCA., cSTR1, cSTR2, lCOND, nINDEXI )
+         ELSE
+            &eBUSCA. := ESCOLHEXI( cARQ, &eBUSCA., cSTR1, cSTR2, lCOND, nINDEXI )
+         ENDIF
+      ENDCASE
+   ENDIF
+   IF !Empty( cDBF )
+      dbSelectAr( cDBF )
+   ENDIF
+   RETU .T.
 
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ESCOLHEXI()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC ESCOLHEXI( cARQ, cNOME, cSTR1, cSTR2, lCOND, nIND )
+
+   LOCAL aTABA := {}
+   LOCAL aTABB := {}
+   LOCAL nPOS
+
+   IF ValType( nIND ) # "N"
+      nIND := 1
+   ENDIF
+   MDS( "Aguarde Pesquisando Tabela" )
+   IF !USEREDE( cARQ, 1, nIND )
+      RETU cNOME
+   ENDIF
+   dbGoTop()
+   WHILE !Eof()
+      IF ValType( lCOND ) # "C"
+         AAdd( aTABA, &cSTR1. )
+         AAdd( aTABB, &cSTR2. )
+      ELSE
+         IF &lCOND.
+            AAdd( aTABA, &cSTR1. )
+            AAdd( aTABB, &cSTR2. )
+         ENDIF
+      ENDIF
+      dbSkip()
+   ENDDO
+   dbCloseArea()
+   IF !Empty( aTABA )
+      nPOS := AScan( aTABB, cNOME )
+      nPOS := if( nPOS > 1, nPOS, 1 )
+      nPOS := ESCARR( aTABA, 4, 5, 24 - 3, 63, nPOS, "Escolha o Item" )
+      nPOS := if( nPOS > 1, nPOS, 1 )
+      IF LastKey() = K_ENTER
+         cNOME := aTABB[ nPOS ]
+      ENDIF
+   ENDIF
+   RETU cNOME
+
+
+// + EOF: mlib48.prg
+// +

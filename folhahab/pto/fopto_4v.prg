@@ -1,101 +1,101 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_4v.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:33 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_4v.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:33 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-CABE2("FOPTO_4V - Importar Escala de Revezamento")
+CABE2( "FOPTO_4V - Importar Escala de Revezamento" )
 
-cPE := "PE"+ANOMESW
-CHECKCRI(cPE,"FOPTOREV","GRUPO+DTOS(DATA)")
+cPE := "PE" + ANOMESW
+CHECKCRI( cPE, "FOPTOREV", "GRUPO+DTOS(DATA)" )
 
-//cARQ := space( 40 )
-//MDS( "Digite o Nome do Arquivo" )
-//@ 24, 30 get cARQ
-//if !READCUR()
-//   retu .F.
-//endif
-//cARQ := alltrim( cARQ )
-cARQ := win_GetOpenFileName(,"Arquivos de Escala de Revezamento",HB_CWD(),"Arquivos de Escala de Revezamento","*.*",1)
-
-
-if !HB_FILEEXISTS(cARQ)
-   ALERTX("Nao encontrei Arquivo: "+cARQ)
-   retu .F.
-endif
+// cARQ := space( 40 )
+// MDS( "Digite o Nome do Arquivo" )
+// @ 24, 30 get cARQ
+// if !READCUR()
+// retu .F.
+// endif
+// cARQ := alltrim( cARQ )
+cARQ := win_GetOpenFileName(, "Arquivos de Escala de Revezamento", hb_cwd(), "Arquivos de Escala de Revezamento", "*.*", 1 )
 
 
-if !NETUSE(cPE)
-   retu .f.
-endif
-nHANDLE := hb_fopen(cARQ)
-if nHANDLE <= 0
-   ALERTX("Nao Consegui abrir o Arquivo: "+cARQ)
-   dbcloseall()
-   retu .F.
-endif
+IF !hb_FileExists( cARQ )
+ALERTX( "Nao encontrei Arquivo: " + cARQ )
+RETU .F.
+ENDIF
 
 
-LINHA1 := FREADLINE(nHANDLE)
-LINHA  := alltrim(LINHA1)
-while .T.
-   if !empty(LINHA)
-      mGRUPO := substr(LINHA,1,2)
-      dINI   := substr(LINHA,3,6)
-      tDIA   := substr(dINI,1,2)
-      tMES   := substr(dINI,3,2)
-      tANO   := substr(dINI,5,2)
-      dINI   := ctod(tDIA+"/"+tMES+"/"+tANO)
-      mCHAVE := mGRUPO+dtos(dINI)
-      DBGOTOP()
-      IF !DBSEEK(mCHAVE)
-         netrecapp()
-         FIELD->GRUPO := mGRUPO
-         field->DATA  := dINI
-      ELSE
-         netreclock()
-      ENDIF
-      field->cODREV := substr(LINHA,9,2)
-      field->ENTREV := VAL(substr(LINHA,11,4)) / 100
-      field->ALIREV := VAL(substr(LINHA,15,4)) / 100
-      field->ALSREV := VAL(substr(LINHA,19,4)) / 100
-      field->SAIREV := VAL(substr(LINHA,23,4)) / 100
-      field->VIRADA := substr(LINHA,27,2)
-      DBUNLOCK()
-   endif
-   LINHA := alltrim(FREADLINE(nHANDLE))
-   if LINHA = LINHA1
-      exit
-   endif
-   IF LINHA = "__FINAL__"
-      exit
-   endif
-enddo
-fclose(nHANDLE)
-dbcloseall()
+IF !NETUSE( cPE )
+RETU .F.
+ENDIF
+nHANDLE := hb_fopen( cARQ )
+IF nHANDLE <= 0
+ALERTX( "Nao Consegui abrir o Arquivo: " + cARQ )
+dbCloseAll()
+RETU .F.
+ENDIF
 
 
-*+ EOF: fopto_4v.prg
-*+
+LINHA1 := FREADLINE( nHANDLE )
+LINHA  := AllTrim( LINHA1 )
+WHILE .T.
+IF !Empty( LINHA )
+mGRUPO := SubStr( LINHA, 1, 2 )
+dINI   := SubStr( LINHA, 3, 6 )
+tDIA   := SubStr( dINI, 1, 2 )
+tMES   := SubStr( dINI, 3, 2 )
+tANO   := SubStr( dINI, 5, 2 )
+dINI   := CToD( tDIA + "/" + tMES + "/" + tANO )
+mCHAVE := mGRUPO + DToS( dINI )
+dbGoTop()
+IF !dbSeek( mCHAVE )
+netrecapp()
+FIELD->GRUPO := mGRUPO
+field->DATA  := dINI
+ELSE
+netreclock()
+ENDIF
+field->cODREV := SubStr( LINHA, 9, 2 )
+field->ENTREV := Val( SubStr( LINHA, 11, 4 ) ) / 100
+field->ALIREV := Val( SubStr( LINHA, 15, 4 ) ) / 100
+field->ALSREV := Val( SubStr( LINHA, 19, 4 ) ) / 100
+field->SAIREV := Val( SubStr( LINHA, 23, 4 ) ) / 100
+field->VIRADA := SubStr( LINHA, 27, 2 )
+dbUnlock()
+ENDIF
+LINHA := AllTrim( FREADLINE( nHANDLE ) )
+IF LINHA = LINHA1
+EXIT
+ENDIF
+IF LINHA = "__FINAL__"
+EXIT
+ENDIF
+ENDDO
+FClose( nHANDLE )
+dbCloseAll()
+
+
+// + EOF: fopto_4v.prg
+// +

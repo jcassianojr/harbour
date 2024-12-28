@@ -1,223 +1,227 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_48.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:33 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_48.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:33 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-////#INCLUDE "COMANDO.CH"
-#INCLUDE "BOX.CH"
+// Teclas Operacionais
+#include "INKEY.CH"
+// //#INCLUDE "COMANDO.CH"
+#include "BOX.CH"
 
 
 mHORA2 := 0
 
-cPX := "PX"+ANOMESW
+cPX := "PX" + ANOMESW
 
 
-CHECKCRI(cPX,"FO_PDES","STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)")
+CHECKCRI( cPX, "FO_PDES", "STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)" )
 
-PADRAO(cPX,cPX,"' '+STR(mNUMERO,8)+' '+DTOC(mDATA)+' '+STR(mCONTA,2)+' '+STR(mHORAS,6,2)+' '+mOBS","STR(mNUMERO,8)+DTOS(mDATA)+STR(mCONTA,2)",;
- "FOPTO_48 - Creditos Avulsos",;
- "Numero   Data     CT Horas  Obs",;
- {|| iFOPTO48()},{|| tFOPTO48()},{|| gFOPTO48()},{|| ALLTRUE()},,2,,,zTIPVID)
-return .T.
+PADRAO( cPX, cPX, "' '+STR(mNUMERO,8)+' '+DTOC(mDATA)+' '+STR(mCONTA,2)+' '+STR(mHORAS,6,2)+' '+mOBS", "STR(mNUMERO,8)+DTOS(mDATA)+STR(mCONTA,2)", ;
+      "FOPTO_48 - Creditos Avulsos", ;
+      "Numero   Data     CT Horas  Obs", ;
+      {|| iFOPTO48() }, {|| tFOPTO48() }, {|| gFOPTO48() }, {|| ALLTRUE() },, 2,,, zTIPVID )
 
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function iFOPTO48()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function iFOPTO48
+   RETURN .T.
 
 
-MDS("Digite o Numero e a data e Conta")
-@ 24,40 get mNUMERO valid !empty(mNUMERO)                            
-@ 24,50 get mDATA   valid !empty(mDATA)                              
-@ 24,60 get mCONTA  PICT "99"             valid !empty(mCONTA)       
-READCUR()
-mCHAVE := str(mNUMERO,8)+dtos(mDATA)+str(mCONTA,2)
-return .T.
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function iFOPTO48()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION iFOPTO48
+
+   MDS( "Digite o Numero e a data e Conta" )
+   @ 24, 40 GET mNUMERO VALID !Empty( mNUMERO )
+   @ 24, 50 GET mDATA   VALID !Empty( mDATA )
+   @ 24, 60 GET mCONTA  PICT "99"             VALID !Empty( mCONTA )
+   READCUR()
+   mCHAVE := Str( mNUMERO, 8 ) + DToS( mDATA ) + Str( mCONTA, 2 )
+
+   RETURN .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function gFOPTO48()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function gFOPTO48
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function gFOPTO48()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION gFOPTO48
+
+   @  5, 1  SAY mNUMERO PICTURE '99999999'
+   @  5, 10 SAY mDATA
+   @  5, 19 GET mCONTA  PICTURE '99'       VALID !Empty( mCONTA )
+   @  5, 22 GET mHORAS  PICTURE '999.99'   VALID g48A()
+   @  5, 29 GET mHORA2  PICTURE '999.99'   VALID g48B()
+   @  5, 36 GET mOBS    VALID !Empty( mOBS )
+   READCUR()
+
+   RETURN .T.
 
 
-@  5,1  say mNUMERO picture '99999999'                            
-@  5,10 say mDATA                                                 
-@  5,19 get mCONTA  picture '99'       valid !empty(mCONTA)       
-@  5,22 get mHORAS  picture '999.99'   VALID g48A()               
-@  5,29 get mHORA2  picture '999.99'   VALID g48B()               
-@  5,36 get mOBS    VALID !EMPTY(mOBS)                            
-READCUR()
-return .T.
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function g48A()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION g48A()
 
+   IF mHORA2 = 0
+      mHORA2 := bhor( mHORAS )
+      @  5, 29 SAY mHORA2 PICTURE '999.99'
+   ENDIF
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function g48A()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function g48A()
-
-if mHORA2 = 0
-   mHORA2 := bhor(mHORAS)
-   @  5,29 SAY mHORA2 picture '999.99'        
-endif
-return .t.
+   RETURN .T.
 
 // *+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function g48B()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function g48B()
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function g48B()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION g48B()
 
-if mHORAS = 0
-   mHORAS := Chor(mHORA2)
-   @  5,22 SAY mHORAS picture '999.99'        
-endif
-return .t.
+   IF mHORAS = 0
+      mHORAS := Chor( mHORA2 )
+      @  5, 22 SAY mHORAS PICTURE '999.99'
+   ENDIF
 
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function tFOPTO48()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function tFOPTO48
-
-HB_dispbox(3,0,23,79,B_DOUBLE+" ")
-@  4,1 say "Numero   Data     CT Horas Cnv     Obs"         
-return .T.
+   RETURN .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function FOPTO_482()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function FOPTO_482
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function tFOPTO48()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION tFOPTO48
+
+   hb_DispBox( 3, 0, 23, 79, B_DOUBLE + " " )
+   @  4, 1 SAY "Numero   Data     CT Horas Cnv     Obs"
+
+   RETURN .T.
 
 
-CABE2("Lancamento Grupo Creditos Avulso")
-cPX := "PX"+ANOMESW
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function FOPTO_482()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION FOPTO_482
 
-CHECKCRI(cPX,"FO_PDES","STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)")
-CRIARVARS(cPX)
-@ 23,00
-@ 24,00
-@ 24,10 say "Data     CT Horas  Obs"                                               
-@ 24,10 get mDATA                                                                  
-@ 24,19 get mCONTA                   picture '99'       valid !empty(mCONTA)       
-@ 24,22 get mHORAS                   picture '999.99'   valid !empty(mHORAS)       
-@ 24,29 get mOBS                     valid !empty(mOBS)                            
-if !READCUR()
-   return .F.
-endif
+   CABE2( "Lancamento Grupo Creditos Avulso" )
+   cPX := "PX" + ANOMESW
 
-
-if !NETUSE(PES)
-   return
-endif
-FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
-FILTRO := FILTRO(FILTRO)
-set filter to &FILTRO
-
-if !NETUSE(cPX)
-   dbcloseall()
-   retu
-endif
-dbselectar(pes)
-dbgotop()
-while !eof()
-   mNUMERO := NUMERO
-   dbselectar(cPX)
-   dbgotop()
-   IF !dbseek(str(mNUMERO,8)+dtos(mDATA)+str(mCONTA,2))
-      netrecapp()
-   endif
-   REPLVARS()
-   dbselectar(pes)
-   dbskip()
-enddo
-dbcloseall()
-return .T.
+   CHECKCRI( cPX, "FO_PDES", "STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)" )
+   CRIARVARS( cPX )
+   @ 23, 00
+   @ 24, 00
+   @ 24, 10 SAY "Data     CT Horas  Obs"
+   @ 24, 10 GET mDATA
+   @ 24, 19 GET mCONTA                   PICTURE '99'       VALID !Empty( mCONTA )
+   @ 24, 22 GET mHORAS                   PICTURE '999.99'   VALID !Empty( mHORAS )
+   @ 24, 29 GET mOBS                     VALID !Empty( mOBS )
+   IF !READCUR()
+      RETURN .F.
+   ENDIF
 
 
-*+ EOF: fopto_48.prg
-*+
+   IF !NETUSE( PES )
+      RETURN
+   ENDIF
+   FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
+   FILTRO := FILTRO( FILTRO )
+   SET FILTER TO &FILTRO
+
+   IF !NETUSE( cPX )
+      dbCloseAll()
+      RETU
+   ENDIF
+   dbSelectAr( pes )
+   dbGoTop()
+   WHILE !Eof()
+      mNUMERO := NUMERO
+      dbSelectAr( cPX )
+      dbGoTop()
+      IF !dbSeek( Str( mNUMERO, 8 ) + DToS( mDATA ) + Str( mCONTA, 2 ) )
+         netrecapp()
+      ENDIF
+      REPLVARS()
+      dbSelectAr( pes )
+      dbSkip()
+   ENDDO
+   dbCloseAll()
+
+   RETURN .T.
+
+
+// + EOF: fopto_48.prg
+// +

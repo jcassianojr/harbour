@@ -1,2897 +1,3090 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUVIEW.PRG
-*+
-*+    Functions: SET_VIEW()
-*+               Function channel()
-*+               Function bar_menu()
-*+               Function bar_func()
-*+               Function list_array()
-*+               Function set_deflt()
-*+               Function bline()
-*+               Function draw_view()
-*+               Function d_copy()
-*+               Function open_dbf()
-*+               Function dopen_titl()
-*+               Function do_opendbf()
-*+               Function get_ntx()
-*+               Function xopen_titl()
-*+               Function do_openntx()
-*+               Function get_field()
-*+               Function getfield()
-*+               Function fsel_title()
-*+               Function do_fsel()
-*+               Function set_relation()
-*+               Function draw_relat()
-*+               Function get_relation()
-*+               Function disp_relation()
-*+               Function c_search()
-*+               Function ctrl_key()
-*+               Function get_filter()
-*+               Function fltr_title()
-*+               Function getfilter()
-*+               Function do_filter()
-*+               Function clear_dbf()
-*+               Function save_view()
-*+               Function vcrea_titl()
-*+               Function do_creavew()
-*+               Function put_line()
-*+               Function set_from()
-*+               Function vopen_titl()
-*+               Function do_openvew()
-*+               Function get_line()
-*+
-*+    Reformatted by Click! 2.03 on Jun-27-2003 at  6:25 pm
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : dbuview.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:07 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-#INCLUDE "BOX.CH"
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    SET_VIEW()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function SET_VIEW
+#include "BOX.CH"
 
-local saveColor
-private bar_line
-private empty_line
-private ntx
-private field_n
-private el
-private cur_row
-private t_row
-private ch_draw
-private strn
-private is_redraw
-private is_insert
-private horiz_keys
-private prev_area
-private i
 
-saveColor := setcolor( M->color1 )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function SET_VIEW()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION SET_VIEW
 
-DECLARE d_array[ len( M->ntx1 ) ]
+   LOCAL saveColor
+   PRIVATE bar_line
+   PRIVATE empty_line
+   PRIVATE ntx
+   PRIVATE field_n
+   PRIVATE el
+   PRIVATE cur_row
+   PRIVATE t_row
+   PRIVATE ch_draw
+   PRIVATE strn
+   PRIVATE is_redraw
+   PRIVATE is_insert
+   PRIVATE horiz_keys
+   PRIVATE prev_area
+   PRIVATE i
 
-horiz_keys := chr( 4 ) + chr( 19 ) + chr( 1 ) + chr( 6 )
-bar_line   := ""
-empty_line := ""
-prev_area  := 0
-ch_draw    := .F.
+   saveColor := SetColor( M->color1 )
 
-help_code := 1
+   DECLARE d_array[ Len( M->ntx1 ) ]
 
-keystroke := 0
+   horiz_keys := Chr( 4 ) + Chr( 19 ) + Chr( 1 ) + Chr( 6 )
+   bar_line   := ""
+   empty_line := ""
+   prev_area  := 0
+   ch_draw    := .F.
 
-set_deflt()
+   help_code := 1
 
-if .not. empty( M->view_err )
-   error_msg( M->view_err )
-   view_err := ""
+   keystroke := 0
 
-endif
+   set_deflt()
 
-do while .not. q_check()
+   IF ! Empty( M->view_err )
+      error_msg( M->view_err )
+      view_err := ""
 
-   do case
+   ENDIF
 
-   case M->cur_area = 0
-      cur_area := aseek( M->dbf, M->cur_dbf )
+   DO WHILE ! q_check()
 
-      if M->cur_area = 0
+      DO CASE
 
-         for i := 1 to 3
-            store row_a[ M->i ] to cr1[ M->i ], cr2[ M->i ], cr3[ M->i ], ;
-                    cr4[ M->i ], cr5[ M->i ], cr6[ M->i ]
-            store 1 to el1[ M->i ], el2[ M->i ], el3[ M->i ], el4[ M->i ], ;
-                    el5[ M->i ], el6[ M->i ]
+      CASE M->cur_area = 0
+         cur_area := aseek( M->dbf, M->cur_dbf )
 
-         next
+         IF M->cur_area = 0
 
-         cur_dbf  := dbf[ 1 ]
-         cur_area := page := 1
+            FOR i := 1 TO 3
+               STORE row_a[ M->i ] TO cr1[ M->i ], cr2[ M->i ], cr3[ M->i ], ;
+                  cr4[ M->i ], cr5[ M->i ], cr6[ M->i ]
+               STORE 1 TO el1[ M->i ], el2[ M->i ], el3[ M->i ], el4[ M->i ], ;
+                  el5[ M->i ], el6[ M->i ]
 
-         set_deflt()
+            NEXT
 
-      endif
+            cur_dbf  := dbf[ 1 ]
+            cur_area := page := 1
 
-      draw_view( 0 )
-
-   case M->cur_area <> M->prev_area
-      cur_dbf := dbf[ M->cur_area ]
-
-      strn := substr( "123456", M->cur_area, 1 )
-
-      ntx     := "ntx" + strn
-      field_n := "field_n" + strn
-      el      := "el" + strn
-
-      t_row := "cr" + strn
-
-      if M->page > 1 .and. M->prev_area <> 0
-         &el[ M->page ] = &el[ M->page ] + ;
-                 &cur_row[ M->page ] - &t_row[ M->page ]
-
-         &t_row[ M->page ] = &cur_row[ M->page ]
-
-      endif
-
-      cur_row := M->t_row
-
-      prev_area := M->cur_area
-
-   case M->keystroke = 19
-
-      if M->cur_area > 1
-         cur_area := M->cur_area - 1
-
-      endif
-
-      keystroke := 0
-
-   case M->keystroke = 1
-      cur_area  := 1
-      keystroke := 0
-
-   case M->keystroke = 4
-
-      if M->cur_area < 6 .and. .not. empty( M->cur_dbf )
-         cur_area := M->cur_area + 1
-
-         if empty( dbf[ M->cur_area ] )
-            page := 1
             set_deflt()
 
-         endif
-      endif
+         ENDIF
 
-      keystroke := 0
+         draw_view( 0 )
 
-   case M->keystroke = 6
+      CASE M->cur_area <> M->prev_area
+         cur_dbf := dbf[ M->cur_area ]
 
-      if M->cur_area < 6 .and. .not. empty( M->cur_dbf )
-         i := afull( M->dbf )
+         strn := SubStr( "123456", M->cur_area, 1 )
 
-         if M->i < 6 .and. ( M->page = 1 .or. M->cur_area = M->i )
-            cur_area := M->i + 1
+         ntx     := "ntx" + strn
+         field_n := "field_n" + strn
+         el      := "el" + strn
 
-            page := 1
+         t_row := "cr" + strn
+
+         IF M->page > 1 .AND. M->prev_area <> 0
+            &el[ M->page ] = &el[ M->page ] + ;
+               &cur_row[ M->page ] - &t_row[ M->page ]
+
+            &t_row[ M->page ] = &cur_row[ M->page ]
+
+         ENDIF
+
+         cur_row := M->t_row
+
+         prev_area := M->cur_area
+
+      CASE M->keystroke = 19
+
+         IF M->cur_area > 1
+            cur_area := M->cur_area - 1
+
+         ENDIF
+
+         keystroke := 0
+
+      CASE M->keystroke = 1
+         cur_area  := 1
+         keystroke := 0
+
+      CASE M->keystroke = 4
+
+         IF M->cur_area < 6 .AND. ! Empty( M->cur_dbf )
+            cur_area := M->cur_area + 1
+
+            IF Empty( dbf[ M->cur_area ] )
+               page := 1
+               set_deflt()
+
+            ENDIF
+         ENDIF
+
+         keystroke := 0
+
+      CASE M->keystroke = 6
+
+         IF M->cur_area < 6 .AND. ! Empty( M->cur_dbf )
+            i := afull( M->dbf )
+
+            IF M->i < 6 .AND. ( M->page = 1 .OR. M->cur_area = M->i )
+               cur_area := M->i + 1
+
+               page := 1
+               set_deflt()
+
+            ELSE
+               cur_area := M->i
+
+            ENDIF
+
+         ENDIF
+
+         keystroke := 0
+
+      CASE M->keystroke = 18 .OR. M->keystroke = 5
+
+         IF M->page > 1
+            page := M->page - 1
             set_deflt()
 
-         else
-            cur_area := M->i
+         ENDIF
 
-         endif
+         keystroke := 0
 
-      endif
+      CASE M->keystroke = 3 .OR. M->keystroke = 24
 
-      keystroke := 0
+         IF M->page < 3 .AND. ! Empty( M->cur_dbf )
+            page := M->page + 1
+            set_deflt()
 
-   case M->keystroke = 18 .or. M->keystroke = 5
+            &el[ M->page ] = &el[ M->page ] - ;
+               ( &cur_row[ M->page ] - row_a[ M->page ] )
+            &cur_row[ M->page ] = row_a[ M->page ]
 
-      if M->page > 1
-         page := M->page - 1
-         set_deflt()
+         ENDIF
 
-      endif
+         keystroke := 0
 
-      keystroke := 0
+      CASE M->keystroke = 22 .OR. M->keystroke = 13 .OR. ;
+            isdata( M->keystroke ) .OR. ( M->local_func = 2 .AND. ;
+            ( M->local_sel = 1 .OR. M->local_sel = 2 ) ) .OR. ;
+            ( M->local_func = 8 .AND. M->local_sel = 3 )
 
-   case M->keystroke = 3 .or. M->keystroke = 24
+         IF M->local_func <> 0
+            page := M->local_sel
+            set_deflt()
 
-      if M->page < 3 .and. .not. empty( M->cur_dbf )
-         page := M->page + 1
-         set_deflt()
+            keystroke := 22
 
-         &el[ M->page ] = &el[ M->page ] - ;
-                 ( &cur_row[ M->page ] - row_a[ M->page ] )
-         &cur_row[ M->page ] = row_a[ M->page ]
+         ENDIF
 
-      endif
+         IF M->page = 1 .AND. M->n_files < 14
+            is_redraw := M->cur_area < 6 .AND. ( M->keystroke = 22 .OR. ;
+               Empty( M->cur_dbf ) )
 
-      keystroke := 0
+            is_insert := ( M->keystroke = 22 .AND. ;
+               ! Empty( M->cur_dbf ) .AND. M->cur_area < 6 )
 
-   case M->keystroke = 22 .or. M->keystroke = 13 .or. ;
-              isdata( M->keystroke ) .or. ( M->local_func = 2 .and. ;
-              ( M->local_sel = 1 .or. M->local_sel = 2 ) ) .or. ;
-              ( M->local_func = 8 .and. M->local_sel = 3 )
+            IF M->is_redraw
+               draw_view( M->cur_area )
 
-      if M->local_func <> 0
-         page := M->local_sel
-         set_deflt()
+               SetColor( M->color2 )
+               @ row_a[ 1 ], column[ M->cur_area ] + 2 SAY Space( 8 )
+               SetColor( M->color1 )
 
-         keystroke := 22
+            ELSE
+               hi_cur()
 
-      endif
+            ENDIF
 
-      if M->page = 1 .and. M->n_files < 14
-         is_redraw := M->cur_area < 6 .and. ( M->keystroke = 22 .or. ;
-                 empty( M->cur_dbf ) )
+            ch_draw := open_dbf( M->is_insert, .F. )
 
-         is_insert := ( M->keystroke = 22 .and. ;
-                        .not. empty( M->cur_dbf ) .and. M->cur_area < 6 )
+            IF M->ch_draw
+               channel( &ntx, &field_n, &el, &cur_row, ;
+                  M->cur_area, M->cur_area )
 
-         if M->is_redraw
-            draw_view( M->cur_area )
+               cur_dbf := dbf[ M->cur_area ]
 
-            setcolor( M->color2 )
-            @ row_a[  1 ], column[ M->cur_area ] + 2 say space( 8 )
-            setcolor( M->color1 )
+            ELSE
 
-         else
-            hi_cur()
+               IF M->is_redraw
+                  draw_view( 0 )
 
-         endif
+               ELSE
+                  dehi_cur()
 
-         ch_draw := open_dbf( M->is_insert, .F. )
+               ENDIF
+            ENDIF
 
-         if M->ch_draw
-            channel( &ntx, &field_n, &el, &cur_row, ;
-                     M->cur_area, M->cur_area )
+         ELSE
+
+            IF M->page > 1
+               channel( &ntx, &field_n, &el, &cur_row, ;
+                  M->cur_area, M->cur_area )
+
+            ELSE
+               error_msg( "Muitos Arquivos j  abertos" )
+
+            ENDIF
+         ENDIF
+
+         keystroke := 0
+
+      CASE M->keystroke = 7
+
+         IF M->page = 1 .AND. ! Empty( M->cur_dbf )
+            stat_msg( "Fechando o Arquivo" )
+            clear_dbf( M->cur_area, 2 )
+
+            IF M->cur_area = 6
+               ch_draw := .T.
+               channel( &ntx, &field_n, &el, &cur_row, ;
+                  M->cur_area, M->cur_area )
+
+            ELSE
+               draw_view( 0 )
+
+            ENDIF
 
             cur_dbf := dbf[ M->cur_area ]
 
-         else
+            stat_msg( "" )
 
-            if M->is_redraw
-               draw_view( 0 )
+         ELSE
 
-            else
+            IF M->page > 1
+               channel( &ntx, &field_n, &el, &cur_row, ;
+                  M->cur_area, M->cur_area )
+
+            ENDIF
+         ENDIF
+
+         keystroke := 0
+
+      CASE M->local_func = 8 .AND. M->local_sel = 1
+         set_relation()
+         keystroke := 0
+
+      CASE M->local_func = 8 .AND. M->local_sel = 2
+         get_filter()
+         keystroke := 0
+
+      CASE M->local_func = 8 .AND. M->local_sel = 4
+         ABERTURA     := if( rsvp( "Deseja Abertura Exclusiva S/N " ) = "S", .T., .F. )
+         keystroke    := 0
+         m->local_sel := 0
+
+      CASE M->local_func = 8 .AND. M->local_sel = 5
+         IF rsvp( "Deseja Vizualizar Registros Apagados S/N " ) = "S"
+            SET DELE OFF
+         ELSE
+            SET DELE ON
+         ENDIF
+         keystroke    := 0
+         m->local_sel := 0
+
+      CASE M->local_func = 8 .AND. M->local_sel = 6
+         tipodbfesc()
+
+         keystroke    := 0
+         m->local_sel := 0
+
+      CASE M->local_func = 8 .AND. M->local_sel = 7
+
+         pegparexp()
+
+         keystroke    := 0
+         m->local_sel := 0
+
+      CASE M->local_func = 2 .AND. M->local_sel = 3
+         set_from( .T. )
+
+         IF ! Empty( M->view_file ) .AND. M->keystroke = 13
+            cur_area := 0
+            cur_dbf  := ""
+
+         ENDIF
+
+         keystroke := 0
+
+      CASE M->local_func = 4
+         save_view()
+         keystroke := 0
+
+      OTHERWISE
+
+         DO CASE
+
+         CASE M->page = 1
+
+            IF ! key_ready()
+               hi_cur()
+
+               read_key()
+
                dehi_cur()
 
-            endif
-         endif
+            ENDIF
 
-      else
+         CASE M->page = 2
+            d_copy( &ntx )
 
-         if M->page > 1
-            channel( &ntx, &field_n, &el, &cur_row, ;
-                     M->cur_area, M->cur_area )
+            bar_menu( column[ M->cur_area ] + 2, ;
+               column[ M->cur_area ] + 9, M->d_array )
 
-         else
-            error_msg( "Muitos Arquivos j  abertos" )
+         CASE M->page = 3
+            bar_menu( column[ M->cur_area ] + 1, ;
+               column[ M->cur_area ] + 10, &field_n )
 
-         endif
-      endif
+         ENDCASE
 
-      keystroke := 0
+         IF M->keystroke = 27
 
-   case M->keystroke = 7
+            IF rsvp( "Sair para o DOS? (S/N)" ) <> "S"
+               keystroke := 0
+            ENDIF
+         ENDIF
+      ENDCASE
+   ENDDO
 
-      if M->page = 1 .and. .not. empty( M->cur_dbf )
-         stat_msg( "Fechando o Arquivo" )
-         clear_dbf( M->cur_area, 2 )
+   IF M->sysfunc = 3 .AND. M->func_sel = 1 .AND. Empty( M->cur_dbf )
+      draw_view( M->cur_area )
 
-         if M->cur_area = 6
-            ch_draw := .T.
-            channel( &ntx, &field_n, &el, &cur_row, ;
-                     M->cur_area, M->cur_area )
+   ENDIF
 
-         else
-            draw_view( 0 )
+   RETURN
 
-         endif
 
-         cur_dbf := dbf[ M->cur_area ]
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function channel()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION channel
 
-         stat_msg( "" )
+   PARAMETERS ch_ntx, ch_field_n, ch_el, ch_cur_row, n, dbf_num
+   LOCAL saveColor
+   PRIVATE f_n
+   PRIVATE is_ins
+   PRIVATE temp_buff
+   PRIVATE d_item
 
-      else
+   saveColor := SetColor( M->color1 )
 
-         if M->page > 1
-            channel( &ntx, &field_n, &el, &cur_row, ;
-                     M->cur_area, M->cur_area )
+   DO CASE
 
-         endif
-      endif
+   CASE M->ch_draw
+      Scroll( row_a[ 2 ], column[ M->n ], row_x[ 2 ], column[ M->n ] + 11, 0 )
+      Scroll( row_a[ 3 ], column[ M->n ], row_x[ 3 ], column[ M->n ] + 11, 0 )
 
-      keystroke := 0
+      @ row_a[ 1 ], column[ M->n ] + 2 SAY Pad( name( dbf[ M->dbf_num ] ), 8 )
 
-   case M->local_func = 8 .and. M->local_sel = 1
-      set_relation()
-      keystroke := 0
+      IF ! Empty( ch_ntx[ 1 ] )
+         d_copy( M->ch_ntx )
+         list_array( row_a[ 2 ], column[ M->n ] + 2, row_x[ 2 ], column[ M->n ] + 9, ;
+            M->d_array, ch_el[ 2 ] - ( ch_cur_row[ 2 ] - row_a[ 2 ] ) )
 
-   case M->local_func = 8 .and. M->local_sel = 2
-      get_filter()
-      keystroke := 0
+      ENDIF
 
-   case M->local_func = 8 .and. M->local_sel = 4
-      ABERTURA     := if( rsvp( "Deseja Abertura Exclusiva S/N " ) = "S", .T., .F. )
-      keystroke    := 0
-      m->local_sel := 0
+      list_array( row_a[ 3 ], column[ M->n ] + 1, row_x[ 3 ], column[ M->n ] + 10, ;
+         M->ch_field_n, ch_el[ 3 ] - ( ch_cur_row[ 3 ] - row_a[ 3 ] ) )
 
-   case M->local_func = 8 .and. M->local_sel = 5
-      if rsvp( "Deseja Vizualizar Registros Apagados S/N " ) = "S"
-         set dele OFF
-      else
-         set dele on
-      endif
-      keystroke    := 0
-      m->local_sel := 0
+      ch_draw := .F.
 
-   case M->local_func = 8 .and. M->local_sel = 6
-        tipodbfesc()
+   CASE M->keystroke = 22 .OR. M->keystroke = 13 .OR. isdata( M->keystroke )
 
-      keystroke    := 0
-      m->local_sel := 0
+      IF isdata( M->keystroke )
+         KEYBOARD Chr( M->keystroke )
 
-   case M->local_func = 8 .and. M->local_sel = 7
-   
-       pegparexp()
-      
-       keystroke    := 0
-       m->local_sel := 0      
+      ENDIF
 
-   case M->local_func = 2 .and. M->local_sel = 3
-      set_from( .T. )
+      is_ins := ( M->keystroke = 22 )
 
-      if .not. empty( M->view_file ) .and. M->keystroke = 13
-         cur_area := 0
-         cur_dbf  := ""
+      DO CASE
 
-      endif
+      CASE M->page = 2 .AND. ( M->n_files < 14 .OR. ( M->keystroke <> 22 ;
+            .AND. ! Empty( ch_ntx[ ch_el[ 2 ] ] ) ) )
+         temp_buff := SaveScreen( row_a[ 2 ], column[ M->n ] + 1, ;
+            row_x[ 2 ], column[ M->n ] + 11 )
 
-      keystroke := 0
+         IF M->is_ins
 
-   case M->local_func = 4
-      save_view()
-      keystroke := 0
+            IF ch_el[ 2 ] + row_x[ 2 ] - ch_cur_row[ 2 ] = afull( M->ch_ntx )
+               @ row_x[ 2 ], column[ M->n ] + 11 SAY M->more_down
 
-   otherwise
+            ENDIF
 
-      do case
+            IF ch_cur_row[ 2 ] < row_x[ 2 ]
+               Scroll( ch_cur_row[ 2 ], column[ M->n ] + 1, ;
+                  row_x[ 2 ], column[ M->n ] + 10, - 1 )
 
-      case M->page = 1
+            ENDIF
 
-         if .not. key_ready()
-            hi_cur()
+            d_item := Space( 8 )
 
-            read_key()
+         ELSE
+            d_item := Pad( name( ch_ntx[ ch_el[ 2 ] ] ), 8 )
 
-            dehi_cur()
+         ENDIF
 
-         endif
+         SetColor( M->color2 )
+         @ ch_cur_row[ 2 ], column[ M->n ] + 2 SAY M->d_item
+         SetColor( M->color1 )
 
-      case M->page = 2
-         d_copy( &ntx )
+         f_n := get_ntx( ch_cur_row[ 2 ], column[ M->n ] + 2, ;
+            ch_ntx[ ch_el[ 2 ] ], M->is_ins )
 
-         bar_menu( column[ M->cur_area ] + 2, ;
-                   column[ M->cur_area ] + 9, M->d_array )
+         IF ! M->f_n == ch_ntx[ ch_el[ 2 ] ] .AND. ! Empty( M->f_n )
+            need_ntx := .T.
 
-      case M->page = 3
-         bar_menu( column[ M->cur_area ] + 1, ;
-                   column[ M->cur_area ] + 10, &field_n )
+            IF M->is_ins
+               array_ins( M->ch_ntx, ch_el[ 2 ] )
 
-      endcase
+            ENDIF
 
-      if M->keystroke = 27
+            ch_ntx[ ch_el[ 2 ] ] = M->f_n
 
-         if rsvp( "Sair para o DOS? (S/N)" ) <> "S"
-            keystroke := 0
-         endif
-      endif
-   endcase
-enddo
+            IF ch_el[ 2 ] = 1
+               not_target( M->n, .T. )
 
-if M->sysfunc = 3 .and. M->func_sel = 1 .and. empty( M->cur_dbf )
-   draw_view( M->cur_area )
+            ENDIF
 
-endif
+            @ ch_cur_row[ 2 ], column[ M->n ] + 2 ;
+               SAY Pad( name( ch_ntx[ ch_el[ 2 ] ] ), 8 )
 
-return
+         ELSE
+            RestScreen( row_a[ 2 ], column[ M->n ] + 1, ;
+               row_x[ 2 ], column[ M->n ] + 11, M->temp_buff )
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function channel()
-*+
-*+    Called from ( dbuview.prg  )   4 - set_view()
-*+                                   1 - function draw_view()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function channel
+         ENDIF
 
-parameters ch_ntx, ch_field_n, ch_el, ch_cur_row, n, dbf_num
-local saveColor
-private f_n
-private is_ins
-private temp_buff
-private d_item
+      CASE M->page = 3
+         temp_buff := SaveScreen( row_a[ 3 ], column[ M->n ] + 1, ;
+            row_x[ 3 ], column[ M->n ] + 11 )
 
-saveColor := setcolor( M->color1 )
+         IF M->is_ins
 
-do case
+            IF ch_el[ 3 ] + row_x[ 3 ] - ch_cur_row[ 3 ] = afull( M->ch_field_n )
+               @ row_x[ 3 ], column[ M->n ] + 11 SAY M->more_down
 
-case M->ch_draw
-   scroll( row_a[ 2 ], column[ M->n ], row_x[ 2 ], column[ M->n ] + 11, 0 )
-   scroll( row_a[ 3 ], column[ M->n ], row_x[ 3 ], column[ M->n ] + 11, 0 )
+            ENDIF
 
-   @ row_a[  1 ], column[ M->n ] + 2 say pad( name( dbf[ M->dbf_num ] ), 8 )
+            IF ch_cur_row[ 3 ] < row_x[ 3 ]
+               Scroll( ch_cur_row[ 3 ], column[ M->n ] + 1, ;
+                  row_x[ 3 ], column[ M->n ] + 10, - 1 )
 
-   if .not. empty( ch_ntx[ 1 ] )
-      d_copy( M->ch_ntx )
-      list_array( row_a[ 2 ], column[ M->n ] + 2, row_x[ 2 ], column[ M->n ] + 9, ;
-                  M->d_array, ch_el[ 2 ] - ( ch_cur_row[ 2 ] - row_a[ 2 ] ) )
+            ENDIF
 
-   endif
+            d_item := Space( 10 )
 
-   list_array( row_a[ 3 ], column[ M->n ] + 1, row_x[ 3 ], column[ M->n ] + 10, ;
-               M->ch_field_n, ch_el[ 3 ] - ( ch_cur_row[ 3 ] - row_a[ 3 ] ) )
+         ELSE
+            d_item := Pad( ch_field_n[ ch_el[ 3 ] ], 10 )
 
-   ch_draw := .F.
+         ENDIF
 
-case M->keystroke = 22 .or. M->keystroke = 13 .or. isdata( M->keystroke )
+         SetColor( M->color2 )
+         @ ch_cur_row[ 3 ], column[ M->n ] + 1 SAY M->d_item
+         SetColor( M->color1 )
 
-   if isdata( M->keystroke )
-      keyboard chr( M->keystroke )
+         f_n := get_field( ch_cur_row[ 3 ], column[ M->n ] + 1, M->n, ;
+            ch_field_n[ ch_el[ 3 ] ] )
 
-   endif
+         IF ( M->is_ins .OR. ! M->f_n == ch_field_n[ ch_el[ 3 ] ] ) ;
+               .AND. ! Empty( M->f_n )
+            need_field := .T.
 
-   is_ins := ( M->keystroke = 22 )
+            IF M->is_ins
+               array_ins( M->ch_field_n, ch_el[ 3 ] )
 
-   do case
+            ENDIF
 
-   case M->page = 2 .and. ( M->n_files < 14 .or. ( M->keystroke <> 22 ;
-              .and. .not. empty( ch_ntx[ ch_el[ 2 ] ] ) ) )
-      temp_buff := savescreen( row_a[ 2 ], column[ M->n ] + 1, ;
-                               row_x[ 2 ], column[ M->n ] + 11 )
+            ch_field_n[ ch_el[ 3 ] ] = M->f_n
 
-      if M->is_ins
+            @ ch_cur_row[ 3 ], column[ M->n ] + 1 ;
+               SAY Pad( ch_field_n[ ch_el[ 3 ] ], 10 )
 
-         if ch_el[ 2 ] + row_x[ 2 ] - ch_cur_row[ 2 ] = afull( M->ch_ntx )
-            @ row_x[  2 ], column[ M->n ] + 11 say M->more_down
+         ELSE
+            RestScreen( row_a[ 3 ], column[ M->n ] + 1, ;
+               row_x[ 3 ], column[ M->n ] + 11, M->temp_buff )
 
-         endif
+         ENDIF
+      ENDCASE
 
-         if ch_cur_row[ 2 ] < row_x[ 2 ]
-            scroll( ch_cur_row[ 2 ], column[ M->n ] + 1, ;
-                    row_x[ 2 ], column[ M->n ] + 10, - 1 )
+   CASE M->keystroke = 7
 
-         endif
+      DO CASE
 
-         d_item := space( 8 )
-
-      else
-         d_item := pad( name( ch_ntx[ ch_el[ 2 ] ] ), 8 )
-
-      endif
-
-      setcolor( M->color2 )
-      @ ch_cur_row[  2 ], column[ M->n ] + 2 say M->d_item
-      setcolor( M->color1 )
-
-      f_n := get_ntx( ch_cur_row[ 2 ], column[ M->n ] + 2, ;
-                      ch_ntx[ ch_el[ 2 ] ], M->is_ins )
-
-      if .not. M->f_n == ch_ntx[ ch_el[ 2 ] ] .and. .not. empty( M->f_n )
+      CASE M->page = 2 .AND. ! Empty( ch_ntx[ ch_el[ 2 ] ] )
          need_ntx := .T.
 
-         if M->is_ins
-            array_ins( M->ch_ntx, ch_el[ 2 ] )
-
-         endif
-
-         ch_ntx[ ch_el[ 2 ] ] = M->f_n
-
-         if ch_el[ 2 ] = 1
+         IF ch_el[ 2 ] = 1
             not_target( M->n, .T. )
 
-         endif
+         ENDIF
 
-         @ ch_cur_row[  2 ], column[ M->n ] + 2 ;
-                 say pad( name( ch_ntx[ ch_el[ 2 ] ] ), 8 )
+         SELECT ( M->n )
 
-      else
-         restscreen( row_a[ 2 ], column[ M->n ] + 1, ;
-                     row_x[ 2 ], column[ M->n ] + 11, M->temp_buff )
+         CLOSE INDEX
 
-      endif
+         array_del( M->ch_ntx, ch_el[ 2 ] )
 
-   case M->page = 3
-      temp_buff := savescreen( row_a[ 3 ], column[ M->n ] + 1, ;
-                               row_x[ 3 ], column[ M->n ] + 11 )
+         n_files := M->n_files - 1
 
-      if M->is_ins
+         IF ch_cur_row[ 2 ] < row_x[ 2 ]
+            Scroll( ch_cur_row[ 2 ], column[ M->n ] + 1, ;
+               row_x[ 2 ], column[ M->n ] + 9, 1 )
 
-         if ch_el[ 3 ] + row_x[ 3 ] - ch_cur_row[ 3 ] = afull( M->ch_field_n )
-            @ row_x[  3 ], column[ M->n ] + 11 say M->more_down
+         ENDIF
 
-         endif
+         @ row_x[ 2 ], column[ M->n ] + 2 ;
+            SAY Pad( name( ch_ntx[ ch_el[ 2 ] + row_x[ 2 ] - ch_cur_row[ 2 ] ] ), 8 )
 
-         if ch_cur_row[ 3 ] < row_x[ 3 ]
-            scroll( ch_cur_row[ 3 ], column[ M->n ] + 1, ;
-                    row_x[ 3 ], column[ M->n ] + 10, - 1 )
+         IF afull( M->ch_ntx ) - ch_el[ 2 ] = row_x[ 2 ] - ch_cur_row[ 2 ]
+            @ row_x[ 2 ], column[ M->n ] + 11 SAY " "
 
-         endif
+         ENDIF
 
-         d_item := space( 10 )
-
-      else
-         d_item := pad( ch_field_n[ ch_el[ 3 ] ], 10 )
-
-      endif
-
-      setcolor( M->color2 )
-      @ ch_cur_row[  3 ], column[ M->n ] + 1 say M->d_item
-      setcolor( M->color1 )
-
-      f_n := get_field( ch_cur_row[ 3 ], column[ M->n ] + 1, M->n, ;
-                        ch_field_n[ ch_el[ 3 ] ] )
-
-      if ( M->is_ins .or. .not. M->f_n == ch_field_n[ ch_el[ 3 ] ] ) ;
-           .and. .not. empty( M->f_n )
+      CASE M->page = 3 .AND. ! Empty( ch_field_n[ ch_el[ 3 ] ] )
          need_field := .T.
 
-         if M->is_ins
-            array_ins( M->ch_field_n, ch_el[ 3 ] )
-
-         endif
-
-         ch_field_n[ ch_el[ 3 ] ] = M->f_n
-
-         @ ch_cur_row[  3 ], column[ M->n ] + 1 ;
-                 say pad( ch_field_n[ ch_el[ 3 ] ], 10 )
-
-      else
-         restscreen( row_a[ 3 ], column[ M->n ] + 1, ;
-                     row_x[ 3 ], column[ M->n ] + 11, M->temp_buff )
-
-      endif
-   endcase
-
-case M->keystroke = 7
-
-   do case
-
-   case M->page = 2 .and. .not. empty( ch_ntx[ ch_el[ 2 ] ] )
-      need_ntx := .T.
-
-      if ch_el[ 2 ] = 1
-         not_target( M->n, .T. )
-
-      endif
-
-      select( M->n )
-
-      close index
-
-      array_del( M->ch_ntx, ch_el[ 2 ] )
-
-      n_files := M->n_files - 1
-
-      if ch_cur_row[ 2 ] < row_x[ 2 ]
-         scroll( ch_cur_row[ 2 ], column[ M->n ] + 1, ;
-                 row_x[ 2 ], column[ M->n ] + 9, 1 )
-
-      endif
-
-      @ row_x[  2 ], column[ M->n ] + 2 ;
-              say pad( name( ch_ntx[ ch_el[ 2 ] + row_x[ 2 ] - ch_cur_row[ 2 ] ] ), 8 )
-
-      if afull( M->ch_ntx ) - ch_el[ 2 ] = row_x[ 2 ] - ch_cur_row[ 2 ]
-         @ row_x[  2 ], column[ M->n ] + 11 say " "
-
-      endif
-
-   case M->page = 3 .and. .not. empty( ch_field_n[ ch_el[ 3 ] ] )
-      need_field := .T.
-
-      array_del( M->ch_field_n, ch_el[ 3 ] )
-
-      if ch_cur_row[ 3 ] < row_x[ 3 ]
-         scroll( ch_cur_row[ 3 ], column[ M->n ] + 1, ;
-                 row_x[ 3 ], column[ M->n ] + 10, 1 )
-
-      endif
-
-      @ row_x[  3 ], column[ M->n ] + 1 ;
-              say pad( ch_field_n[ ch_el[ 3 ] + row_x[ 3 ] - ch_cur_row[ 3 ] ], 10 )
-
-      if afull( M->ch_field_n ) - ch_el[ 3 ] = row_x[ 3 ] - ch_cur_row[ 3 ]
-         @ row_x[  3 ], column[ M->n ] + 11 say " "
-
-      endif
-   endcase
-endcase
-
-setcolor( saveColor )
-return 0
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function bar_menu()
-*+
-*+    Called from ( dbuview.prg  )   2 - set_view()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function bar_menu
-
-parameters l, r, array
-local saveColor
-private num_d
-private num_full
-private cur_el
-private rel_row
-private x
-private t
-private b
-
-keystroke := nextkey()
-
-if chr( M->keystroke ) $ M->horiz_keys
-   inkey()
-   return 0
-
-endif
-
-t := row_a[ M->page ]
-b := row_x[ M->page ]
-
-num_full := afull( M->array )
-
-num_d := M->num_full
-
-if M->num_d < len( M->array )
-   num_d := M->num_d + 1
-
-   array[ M->num_d ] = " "
-
-endif
-
-x := if( M->r - M->l > 7, 1, 2 )
-
-rel_row := &cur_row[ M->page ] - M->t
-
-saveColor := setcolor( M->color4 )
-achoice( M->t, M->l, M->b, M->r, M->array, .T., ;
-         "bar_func", &el[ M->page ], M->rel_row )
-setcolor( saveColor )
-
-&cur_row[ M->page ] = M->rel_row + M->t
-
-if array[ M->num_d ] == " "
-   array[ M->num_d ] = ""
-
-endif
-
-sysmenu()
-
-return 0
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function bar_func()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function bar_func
-
-parameters mode, bar_el, row
-private ret_code
-
-keystroke := lastkey()
-
-ret_code := 2
-
-&el[ M->page ] = M->bar_el
-rel_row := M->row
-
-if M->error_on
-   error_off()
-
-endif
-
-do case
-
-case M->mode = 0
-   @ M->t, M->r + M->x say if( M->bar_el > M->row + 1, M->more_up, " " )
-   @ M->b, M->r + M->x say if( M->num_full > ;
-           ( M->bar_el + M->b - M->t - M->row ), ;
-           M->more_down, " " )
-
-case M->mode = 1 .or. M->mode = 2
-   ret_code := 0
-
-case M->mode = 3
-
-   do case
-
-   case chr( M->keystroke ) $ M->horiz_keys
-      ret_code := 0
-
-   case M->keystroke = 27
-      ret_code := 0
-
-   case M->keystroke = 13
-      ret_code := 1
-
-   case isdata( M->keystroke )
-      ret_code := 1
-
-   case M->keystroke = 22 .or. M->keystroke = 7
-      ret_code := 1
-
-   case menu_key() <> 0
-      ret_code := 0
-
-   endcase
-
-case M->mode = 4
-   ret_code := 0
-
-endcase
-
-return M->ret_code
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function list_array()
-*+
-*+    Called from ( dbuview.prg  )   2 - function channel()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function list_array
-
-parameters t, l, b, r, array, top_el
-local saveColor
-private bottom_el
-private num_full
-private x
-
-saveColor := setcolor( M->color4 )
-if .not. empty( array[ M->top_el ] )
-   bottom_el := M->top_el + M->b - M->t
+         array_del( M->ch_field_n, ch_el[ 3 ] )
+
+         IF ch_cur_row[ 3 ] < row_x[ 3 ]
+            Scroll( ch_cur_row[ 3 ], column[ M->n ] + 1, ;
+               row_x[ 3 ], column[ M->n ] + 10, 1 )
+
+         ENDIF
+
+         @ row_x[ 3 ], column[ M->n ] + 1 ;
+            SAY Pad( ch_field_n[ ch_el[ 3 ] + row_x[ 3 ] - ch_cur_row[ 3 ] ], 10 )
+
+         IF afull( M->ch_field_n ) - ch_el[ 3 ] = row_x[ 3 ] - ch_cur_row[ 3 ]
+            @ row_x[ 3 ], column[ M->n ] + 11 SAY " "
+
+         ENDIF
+      ENDCASE
+   ENDCASE
+
+   SetColor( saveColor )
+
+   RETURN 0
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function bar_menu()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION bar_menu
+
+   PARAMETERS l, r, array
+   LOCAL saveColor
+   PRIVATE num_d
+   PRIVATE num_full
+   PRIVATE cur_el
+   PRIVATE rel_row
+   PRIVATE x
+   PRIVATE t
+   PRIVATE b
+
+   keystroke := NextKey()
+
+   IF Chr( M->keystroke ) $ M->horiz_keys
+      Inkey()
+      RETURN 0
+
+   ENDIF
+
+   t := row_a[ M->page ]
+   b := row_x[ M->page ]
 
    num_full := afull( M->array )
 
+   num_d := M->num_full
+
+   IF M->num_d < Len( M->array )
+      num_d := M->num_d + 1
+
+      array[ M->num_d ] = " "
+
+   ENDIF
+
    x := if( M->r - M->l > 7, 1, 2 )
 
-   if M->top_el > 1 .and. M->bottom_el = M->num_full + 1
-      array[ M->bottom_el ] = " "
+   rel_row := &cur_row[ M->page ] - M->t
 
-   endif
+   saveColor := SetColor( M->color4 )
+   AChoice( M->t, M->l, M->b, M->r, M->array, .T., ;
+      "bar_func", &el[ M->page ], M->rel_row )
+   SetColor( saveColor )
 
-   achoice( M->t, M->l, M->b, M->r, M->array, .F., "", M->top_el )
-   setcolor( M->color1 )
+   &cur_row[ M->page ] = M->rel_row + M->t
 
-   @ M->t, M->r + M->x say if( M->top_el > 1, M->more_up, " " )
-   @ M->b, M->r + M->x say if( M->bottom_el < M->num_full, M->more_down, " " )
+   IF array[ M->num_d ] == " "
+      array[ M->num_d ] = ""
 
-   if array[ M->bottom_el ] == " "
-      array[ M->bottom_el ] = ""
+   ENDIF
 
-   endif
-endif
+   sysmenu()
 
-setcolor( saveColor )
-return 0
+   RETURN 0
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function set_deflt()
-*+
-*+    Called from ( dbuview.prg  )   7 - set_view()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function set_deflt
 
-if M->page = 2
-   menu_deflt[ 2 ] := menu_deflt[ 3 ] := 2
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function bar_func()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION bar_func
 
-else
-   menu_deflt[ 2 ] := menu_deflt[ 3 ] := 1
+   PARAMETERS mode, bar_el, row
+   PRIVATE ret_code
 
-endif
+   keystroke := LastKey()
 
-return 0
+   ret_code := 2
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function bline()
-*+
-*+    Called from ( dbuview.prg  )   1 - function draw_view()
-*+                                   1 - function set_relation()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function bline
+   &el[ M->page ] = M->bar_el
+   rel_row := M->row
 
-parameters num_slots
-private i
-private k
+   IF M->error_on
+      error_off()
 
-if num_slots < 6
-   num_slots ++
+   ENDIF
 
-endif
+   DO CASE
 
-bar_line   := "------------"
-empty_line := ""
+   CASE M->mode = 0
+      @ M->t, M->r + M->x SAY if( M->bar_el > M->row + 1, M->more_up, " " )
+      @ M->b, M->r + M->x SAY if( M->num_full > ;
+         ( M->bar_el + M->b - M->t - M->row ), ;
+         M->more_down, " " )
 
-k := 1
+   CASE M->mode = 1 .OR. M->mode = 2
+      ret_code := 0
 
-do while M->k < M->num_slots
-   bar_line   := M->bar_line + "б------------"
-   empty_line := M->empty_line + space( 12 ) + "н"
+   CASE M->mode = 3
 
-   k := M->k + 1
+      DO CASE
 
-enddo
+      CASE Chr( M->keystroke ) $ M->horiz_keys
+         ret_code := 0
 
-i := int( ( 80 - len( M->bar_line ) ) / 2 )
+      CASE M->keystroke = 27
+         ret_code := 0
 
-for k := 1 to M->num_slots
-   column[ M->k ] = M->i + ( 13 * ( M->k - 1 ) )
+      CASE M->keystroke = 13
+         ret_code := 1
 
-next
+      CASE isdata( M->keystroke )
+         ret_code := 1
 
-return 0
+      CASE M->keystroke = 22 .OR. M->keystroke = 7
+         ret_code := 1
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function draw_view()
-*+
-*+    Called from ( dbuview.prg  )   5 - set_view()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function draw_view
+      CASE menu_key() <> 0
+         ret_code := 0
 
-parameters blank_area
-private i
-private j
-private ntx
-private field_n
-private el
-private cur_row
-private strnum
+      ENDCASE
 
-i := afull( M->dbf )
+   CASE M->mode = 4
+      ret_code := 0
 
-if M->i < 6 .and. blank_area <> 0
-   i := M->i + 1
+   ENDCASE
 
-endif
+   RETURN M->ret_code
 
-bline( M->i )
-LAYOUT()
 
-@ row_a[  1 ] - 2, 36          say "Arquivos"
-@ row_a[  1 ] - 1, column[ 1 ] say M->bar_line
-@ row_a[  1 ], column[ 1 ]     say M->empty_line
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function list_array()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION list_array
 
-@ row_a[  2 ] - 2, 36          say "Indices"
-@ row_a[  2 ] - 1, column[ 1 ] say M->bar_line
-@ row_a[  2 ], column[ 1 ]     say M->empty_line
-@ row_a[  2 ] + 1, column[ 1 ] say M->empty_line
-@ row_a[  2 ] + 2, column[ 1 ] say M->empty_line
+   PARAMETERS t, l, b, r, array, top_el
+   LOCAL saveColor
+   PRIVATE bottom_el
+   PRIVATE num_full
+   PRIVATE x
 
-@ row_a[  3 ] - 2, 36          say "Campos"
-@ row_a[  3 ] - 1, column[ 1 ] say M->bar_line
+   saveColor := SetColor( M->color4 )
+   IF ! Empty( array[ M->top_el ] )
+      bottom_el := M->top_el + M->b - M->t
 
-for i := row_a[ 3 ] to row_x[ 3 ]
-   @ M->i, column[ 1 ] say M->empty_line
+      num_full := afull( M->array )
 
-next
+      x := if( M->r - M->l > 7, 1, 2 )
 
-i := 1
-j := 1
+      IF M->top_el > 1 .AND. M->bottom_el = M->num_full + 1
+         array[ M->bottom_el ] = " "
 
-do while M->j <= 6
+      ENDIF
 
-   if empty( dbf[ M->i ] )
-      exit
+      AChoice( M->t, M->l, M->b, M->r, M->array, .F., "", M->top_el )
+      SetColor( M->color1 )
 
-   endif
+      @ M->t, M->r + M->x SAY if( M->top_el > 1, M->more_up, " " )
+      @ M->b, M->r + M->x SAY if( M->bottom_el < M->num_full, M->more_down, " " )
 
-   if M->j <> M->blank_area
-      strnum := substr( "123456", M->i, 1 )
+      IF array[ M->bottom_el ] == " "
+         array[ M->bottom_el ] = ""
 
-      ntx     := "ntx" + strnum
-      field_n := "field_n" + strnum
-      el      := "el" + strnum
-      cur_row := "cr" + strnum
+      ENDIF
+   ENDIF
 
-      ch_draw := .T.
-      channel( &ntx, &field_n, &el, &cur_row, M->j, M->i )
+   SetColor( saveColor )
+
+   RETURN 0
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function set_deflt()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION set_deflt
+
+   IF M->page = 2
+      menu_deflt[ 2 ] := menu_deflt[ 3 ] := 2
+
+   ELSE
+      menu_deflt[ 2 ] := menu_deflt[ 3 ] := 1
+
+   ENDIF
+
+   RETURN 0
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function bline()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION bline
+
+   PARAMETERS num_slots
+   PRIVATE i
+   PRIVATE k
+
+   IF num_slots < 6
+      num_slots++
+
+   ENDIF
+
+   bar_line   := "------------"
+   empty_line := ""
+
+   k := 1
+
+   DO WHILE M->k < M->num_slots
+      bar_line   := M->bar_line + "б------------"
+      empty_line := M->empty_line + Space( 12 ) + "н"
+
+      k := M->k + 1
+
+   ENDDO
+
+   i := Int( ( 80 - Len( M->bar_line ) ) / 2 )
+
+   FOR k := 1 TO M->num_slots
+      column[ M->k ] = M->i + ( 13 * ( M->k - 1 ) )
+
+   NEXT
+
+   RETURN 0
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function draw_view()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION draw_view
+
+   PARAMETERS blank_area
+   PRIVATE i
+   PRIVATE j
+   PRIVATE ntx
+   PRIVATE field_n
+   PRIVATE el
+   PRIVATE cur_row
+   PRIVATE strnum
+
+   i := afull( M->dbf )
+
+   IF M->i < 6 .AND. blank_area <> 0
+      i := M->i + 1
+
+   ENDIF
+
+   bline( M->i )
+   LAYOUT()
+
+   @ row_a[ 1 ] - 2, 36        SAY "Arquivos"
+   @ row_a[ 1 ] - 1, column[ 1 ] SAY M->bar_line
+   @ row_a[ 1 ], column[ 1 ]     SAY M->empty_line
+
+   @ row_a[ 2 ] - 2, 36        SAY "Indices"
+   @ row_a[ 2 ] - 1, column[ 1 ] SAY M->bar_line
+   @ row_a[ 2 ], column[ 1 ]     SAY M->empty_line
+   @ row_a[ 2 ] + 1, column[ 1 ]   SAY M->empty_line
+   @ row_a[ 2 ] + 2, column[ 1 ]   SAY M->empty_line
+
+   @ row_a[ 3 ] - 2, 36        SAY "Campos"
+   @ row_a[ 3 ] - 1, column[ 1 ] SAY M->bar_line
+
+   FOR i := row_a[ 3 ] TO row_x[ 3 ]
+      @ M->i, column[ 1 ] SAY M->empty_line
+
+   NEXT
+
+   i := 1
+   j := 1
+
+   DO WHILE M->j <= 6
+
+      IF Empty( dbf[ M->i ] )
+         EXIT
+
+      ENDIF
+
+      IF M->j <> M->blank_area
+         strnum := SubStr( "123456", M->i, 1 )
+
+         ntx     := "ntx" + strnum
+         field_n := "field_n" + strnum
+         el      := "el" + strnum
+         cur_row := "cr" + strnum
+
+         ch_draw := .T.
+         channel( &ntx, &field_n, &el, &cur_row, M->j, M->i )
+
+         i := M->i + 1
+
+      ENDIF
+
+      j := M->j + 1
+
+   ENDDO
+
+   RETURN 0
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function d_copy()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION d_copy
+
+   PARAMETERS array
+   PRIVATE i
+
+   AFill( M->d_array, "" )
+
+   i := 1
+
+   DO WHILE M->i <= Len( M->array )
+
+      IF Empty( array[ M->i ] )
+         EXIT
+
+      ENDIF
+
+      d_array[ M->i ] = name( array[ M->i ] )
 
       i := M->i + 1
 
-   endif
+   ENDDO
 
-   j := M->j + 1
+   RETURN 0
 
-enddo
 
-return 0
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function open_dbf()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION open_dbf
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function d_copy()
-*+
-*+    Called from ( dbuview.prg  )   1 - set_view()
-*+                                   1 - function channel()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function d_copy
+   PARAMETERS is_insert, not_view
+   PRIVATE shift
+   PRIVATE filename
+   PRIVATE a_temp
+   PRIVATE f_row
+   PRIVATE d_col
+   PRIVATE ret_val
+   PRIVATE old_help
 
-parameters array
-private i
+   IF M->n_files >= 14
+      error_msg( "Muitos arquivos j  abertos" )
+      RETURN .F.
 
-afill( M->d_array, "" )
+   ENDIF
 
-i := 1
+   old_help  := M->help_code
+   help_code := 6
 
-do while M->i <= len( M->array )
+   filename := ""
 
-   if empty( array[ M->i ] )
-      exit
+   f_row := cr1[ 1 ]
+   d_col := column[ M->cur_area ] + 2
 
-   endif
+   shift := if( M->is_insert, 1, 0 )
 
-   d_array[ M->i ] = name( array[ M->i ] )
+   SELECT ( M->cur_area )
 
-   i := M->i + 1
+   IF M->not_view
+      filename := M->cur_dbf
+      ret_val  := do_opendbf()
 
-enddo
+   ELSE
+      ret_val := .F.
 
-return 0
+      IF isdata( M->keystroke )
+         KEYBOARD Chr( M->keystroke )
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function open_dbf()
-*+
-*+    Called from ( dbustru.prg  )   1 - modi_stru()
-*+                ( dbuview.prg  )   1 - set_view()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function open_dbf
+         filename := enter_rc( dbf[ M->cur_area ], M->f_row, M->d_col, 64, "@KS8", ;
+            M->color1 )
 
-parameters is_insert, not_view
-private shift
-private filename
-private a_temp
-private f_row
-private d_col
-private ret_val
-private old_help
+         IF ! Empty( M->filename )
 
-if M->n_files >= 14
-   error_msg( "Muitos arquivos j  abertos" )
-   return .F.
+            IF !( RAt( ".", M->filename ) > RAt( hb_ps(), M->filename ) )
+               filename := M->filename + ".dbf"
 
-endif
+            ENDIF
 
-old_help  := M->help_code
-help_code := 6
+            ret_val := do_opendbf()
 
-filename := ""
+            IF ! M->ret_val
+               @ M->f_row, M->d_col SAY Pad( name( M->cur_dbf ), 8 )
 
-f_row := cr1[ 1 ]
-d_col := column[ M->cur_area ] + 2
+            ENDIF
 
-shift := if( M->is_insert, 1, 0 )
+         ELSE
+            @ M->f_row, M->d_col SAY Pad( name( M->cur_dbf ), 8 )
 
-select( M->cur_area )
-
-if M->not_view
-   filename := M->cur_dbf
-   ret_val  := do_opendbf()
-
-else
-   ret_val := .F.
-
-   if isdata( M->keystroke )
-      keyboard chr( M->keystroke )
-
-      filename := enter_rc( dbf[ M->cur_area ], M->f_row, M->d_col, 64, "@KS8", ;
-                            M->color1 )
-
-      if .not. empty( M->filename )
-
-         if .not. ( rat( ".", M->filename ) > rat( hb_ps(), M->filename ) )
-            filename := M->filename + ".dbf"
-
-         endif
-
-         ret_val := do_opendbf()
-
-         if .not. M->ret_val
-            @ M->f_row, M->d_col say pad( name( M->cur_dbf ), 8 )
-
-         endif
-
-      else
-         @ M->f_row, M->d_col say pad( name( M->cur_dbf ), 8 )
-
-      endif
-
-      if menu_key() <> 0
-         keyboard chr( M->keystroke )
-
-      else
-         keystroke := 0
-
-      endif
-
-   else
-      ret_val := filebox( ".dbf", "dbf_list", "dopen_titl", ;
-                          "do_opendbf", .F., 8 ) <> 0
-
-   endif
-endif
-
-if M->ret_val
-   a_temp := "field_n" + substr( "123456", M->cur_area, 1 )
-   all_fields( M->cur_area, &a_temp )
-
-   a_temp := "cr" + substr( "123456", M->cur_area, 1 )
-   &a_temp[ 2 ] = row_a[ 2 ]
-   &a_temp[ 3 ] = row_a[ 3 ]
-
-   a_temp := "el" + substr( "123456", M->cur_area, 1 )
-   afill( &a_temp, 1 )
-
-endif
-
-help_code := M->old_help
-
-return M->ret_val
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function dopen_titl()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function dopen_titl
-
-parameters sysparam
-
-return box_title( M->sysparam, "Abrindo arquivo de Dados..." )
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function do_opendbf()
-*+
-*+    Called from ( dbuview.prg  )   2 - function open_dbf()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function do_opendbf
-
-private done
-
-do case
-
-case empty( M->filename )
-   error_msg( "Arquivo de dados no Selecionado" )
-   done := .F.
-
-case .not. HB_FILEEXISTS( M->filename )
-   error_msg( "No pode ser aberto " + M->filename )
-   done := .F.
-
-case aseek( M->dbf, M->filename ) > 0 .and. ;
-               .not. ( dbf[ M->cur_area ] == M->filename .and. M->shift = 0 )
-   error_msg( "Arquivo de Dados est  aberto em duas areas" )
-   done := .F.
-
-otherwise
-   stat_msg( "Abrindo o arquivo" )
-
-   if .not. empty( dbf[ M->cur_area ] )
-      clear_dbf( M->cur_area, M->shift )
-
-   endif
-
-   n_files := M->n_files + 1
-
-   dbf[ M->cur_area ] = M->filename
-
-   select( M->cur_area )
-   DBUREDE( filename,, ABERTURA )
-   aINDICES:=FILENAMES(tiraext(filename)+"*"+XEXT())
-   IF LEN(aINDICES)>0
-      cNtx        := "ntx" + substr( "123456",M->cur_area, 1 )
-      afill(&cNTX., "" )
-      FOR X=1 TO LEN(aINDICES)
-         IF X<8
-            &cNTX.[X]:=aINDICES[X]
          ENDIF
-      NEXT X
-      IF TIPODBF = 2 .OR. TIPODBF = 4 .OR. TIPODBF = 6 //CDX MDX
-         ORDSETFOCUS(1)
-         dbgotop()
+
+         IF menu_key() <> 0
+            KEYBOARD Chr( M->keystroke )
+
+         ELSE
+            keystroke := 0
+
+         ENDIF
+
+      ELSE
+         ret_val := filebox( ".dbf", "dbf_list", "dopen_titl", ;
+            "do_opendbf", .F., 8 ) <> 0
+
       ENDIF
-  ENDIF
+   ENDIF
 
-   stat_msg( "" )
+   IF M->ret_val
+      a_temp := "field_n" + SubStr( "123456", M->cur_area, 1 )
+      all_fields( M->cur_area, &a_temp )
 
-   done := .T.
+      a_temp := "cr" + SubStr( "123456", M->cur_area, 1 )
+      &a_temp[ 2 ] = row_a[ 2 ]
+      &a_temp[ 3 ] = row_a[ 3 ]
 
-endcase
+      a_temp := "el" + SubStr( "123456", M->cur_area, 1 )
+      AFill( &a_temp, 1 )
 
-return M->done
+   ENDIF
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function get_ntx()
-*+
-*+    Called from ( dbuview.prg  )   1 - function channel()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function get_ntx
+   help_code := M->old_help
 
-parameters d_row, d_col, org_file, is_ins
-private filename
-private old_help
+   RETURN M->ret_val
 
-if M->n_files >= 14
-   error_msg( "Muitos arquivos j  abertos" )
-   return ""
 
-endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function dopen_titl()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION dopen_titl
 
-old_help  := M->help_code
-help_code := 8
+   PARAMETERS sysparam
 
-filename := ""
+   RETURN box_title( M->sysparam, "Abrindo arquivo de Dados..." )
 
-if isdata( M->keystroke )
-   keyboard chr( M->keystroke )
 
-   filename := enter_rc( M->org_file, M->d_row, M->d_col, 64, "@KS8", M->color1 )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_opendbf()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION do_opendbf
 
-   if .not. empty( M->filename )
+   PRIVATE done
 
-      if .not. ( rat( ".", M->filename ) > rat( hb_ps(), M->filename ) )
-         filename += XEXT()
+   DO CASE
 
-      endif
+   CASE Empty( M->filename )
+      error_msg( "Arquivo de dados no Selecionado" )
+      done := .F.
 
-      if .not. do_openntx()
-         filename := ""
+   CASE ! hb_FileExists( M->filename )
+      error_msg( "No pode ser aberto " + M->filename )
+      done := .F.
 
-      endif
-   endif
+   CASE aseek( M->dbf, M->filename ) > 0 .AND. ;
+         !( dbf[ M->cur_area ] == M->filename .AND. M->shift = 0 )
+      error_msg( "Arquivo de Dados est  aberto em duas areas" )
+      done := .F.
 
-   if menu_key() <> 0
-      keyboard chr( M->keystroke )
+   OTHERWISE
+      stat_msg( "Abrindo o arquivo" )
 
-   else
-      keystroke := 0
+      IF ! Empty( dbf[ M->cur_area ] )
+         clear_dbf( M->cur_area, M->shift )
 
-   endif
+      ENDIF
 
-else
-
-   if filebox( XEXT(), "ntx_list", "xopen_titl", "do_openntx", .F., 13 ) = 0
-      filename := ""
-
-   endif
-endif
-
-help_code := M->old_help
-
-return M->filename
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function xopen_titl()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function xopen_titl
-
-parameters sysparam
-
-return box_title( M->sysparam, "Abrindo Arquivo de Indice..." )
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function do_openntx()
-*+
-*+    Called from ( dbuview.prg  )   1 - function get_ntx()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function do_openntx
-
-private done
-
-do case
-
-case empty( M->filename )
-   error_msg( "Arquivo de indice no selecionado" )
-   done := .F.
-
-case .not. HB_FILEEXISTS( M->filename )
-   error_msg( "No pode ser aberto " + M->filename )
-   done := .F.
-
-case dup_ntx( M->filename ) <> 0 .and. ;
-                 ( M->is_ins .or. .not. M->filename == M->org_file )
-   error_msg( "Arquivo de indice j  est  aberto" )
-   done := .F.
-
-otherwise
-
-   if empty( M->org_file ) .or. M->is_ins
       n_files := M->n_files + 1
 
-   endif
+      dbf[ M->cur_area ] = M->filename
 
-   done := .T.
+      SELECT ( M->cur_area )
+      DBUREDE( filename,, ABERTURA )
+      aINDICES := FILENAMES( tiraext( filename ) + "*" + XEXT() )
+      IF Len( aINDICES ) > 0
+         cNtx := "ntx" + SubStr( "123456", M->cur_area, 1 )
+         AFill( &cNTX., "" )
+         FOR X := 1 TO Len( aINDICES )
+            IF X < 8
+               &cNTX.[ X ] := aINDICES[ X ]
+            ENDIF
+         NEXT X
+         IF TIPODBF = 2 .OR. TIPODBF = 4 .OR. TIPODBF = 6  // CDX MDX
+            ordSetFocus( 1 )
+            dbGoTop()
+         ENDIF
+      ENDIF
 
-endcase
+      stat_msg( "" )
 
-return M->done
+      done := .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function get_field()
-*+
-*+    Called from ( dbuview.prg  )   1 - function channel()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function get_field
+   ENDCASE
 
-parameters f_row, d_col, work_area, org_field
-private field_mvar
-private rel_row
-private cur_el
-private okee_dokee
-private fi_disp
-private old_help
+   RETURN M->done
 
-old_help  := M->help_code
-help_code := 2
 
-field_mvar := ""
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function get_ntx()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION get_ntx
 
-select( M->work_area )
+   PARAMETERS d_row, d_col, org_file, is_ins
+   PRIVATE filename
+   PRIVATE old_help
 
-DECLARE field_m[ fcount() ]
-all_fields( M->work_area, M->field_m )
+   IF M->n_files >= 14
+      error_msg( "Muitos arquivos j  abertos" )
+      RETURN ""
 
-if isdata( M->keystroke )
-   keyboard chr( M->keystroke )
+   ENDIF
 
-   field_mvar := enter_rc( M->org_field, M->f_row, M->d_col, 10, "@K!", M->color1 )
+   old_help  := M->help_code
+   help_code := 8
 
-   if .not. empty( M->field_mvar )
+   filename := ""
 
-      if .not. do_fsel()
+   IF isdata( M->keystroke )
+      KEYBOARD Chr( M->keystroke )
+
+      filename := enter_rc( M->org_file, M->d_row, M->d_col, 64, "@KS8", M->color1 )
+
+      IF ! Empty( M->filename )
+
+         IF !( RAt( ".", M->filename ) > RAt( hb_ps(), M->filename ) )
+            filename += XEXT()
+
+         ENDIF
+
+         IF ! do_openntx()
+            filename := ""
+
+         ENDIF
+      ENDIF
+
+      IF menu_key() <> 0
+         KEYBOARD Chr( M->keystroke )
+
+      ELSE
+         keystroke := 0
+
+      ENDIF
+
+   ELSE
+
+      IF filebox( XEXT(), "ntx_list", "xopen_titl", "do_openntx", .F., 13 ) = 0
+         filename := ""
+
+      ENDIF
+   ENDIF
+
+   help_code := M->old_help
+
+   RETURN M->filename
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function xopen_titl()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION xopen_titl
+
+   PARAMETERS sysparam
+
+   RETURN box_title( M->sysparam, "Abrindo Arquivo de Indice..." )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_openntx()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION do_openntx
+
+   PRIVATE done
+
+   DO CASE
+
+   CASE Empty( M->filename )
+      error_msg( "Arquivo de indice no selecionado" )
+      done := .F.
+
+   CASE ! hb_FileExists( M->filename )
+      error_msg( "No pode ser aberto " + M->filename )
+      done := .F.
+
+   CASE dup_ntx( M->filename ) <> 0 .AND. ;
+         ( M->is_ins .OR. ! M->filename == M->org_file )
+      error_msg( "Arquivo de indice j  est  aberto" )
+      done := .F.
+
+   OTHERWISE
+
+      IF Empty( M->org_file ) .OR. M->is_ins
+         n_files := M->n_files + 1
+
+      ENDIF
+
+      done := .T.
+
+   ENDCASE
+
+   RETURN M->done
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function get_field()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION get_field
+
+   PARAMETERS f_row, d_col, work_area, org_field
+   PRIVATE field_mvar
+   PRIVATE rel_row
+   PRIVATE cur_el
+   PRIVATE okee_dokee
+   PRIVATE fi_disp
+   PRIVATE old_help
+
+   old_help  := M->help_code
+   help_code := 2
+
+   field_mvar := ""
+
+   SELECT ( M->work_area )
+
+   DECLARE field_m[ FCount() ]
+   all_fields( M->work_area, M->field_m )
+
+   IF isdata( M->keystroke )
+      KEYBOARD Chr( M->keystroke )
+
+      field_mvar := enter_rc( M->org_field, M->f_row, M->d_col, 10, "@K!", M->color1 )
+
+      IF ! Empty( M->field_mvar )
+
+         IF ! do_fsel()
+            field_mvar := ""
+
+         ENDIF
+
+      ENDIF
+
+      IF menu_key() <> 0
+         KEYBOARD Chr( M->keystroke )
+
+      ELSE
+         keystroke := 0
+
+      ENDIF
+
+   ELSE
+      DECLARE boxarray[ 5 ]
+
+      boxarray[ 1 ] = "fsel_title(sysparam)"
+      boxarray[ 2 ] = "getfield(sysparam)"
+      boxarray[ 3 ] = "ok_button(sysparam)"
+      boxarray[ 4 ] = "can_button(sysparam)"
+      boxarray[ 5 ] = "fieldlist(sysparam)"
+
+      cur_el  := 1
+      rel_row := 0
+
+      okee_dokee := "do_fsel()"
+      fi_disp    := "getfield(3)"
+
+      IF multibox( 7, 17, 5, 5, M->boxarray ) = 0
          field_mvar := ""
 
-      endif
+      ENDIF
+   ENDIF
+
+   help_code := M->old_help
+
+   RETURN M->field_mvar
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function getfield()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION getfield
+
+   PARAMETERS sysparam
+
+   RETURN genfield( M->sysparam, .F. )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function fsel_title()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION fsel_title
 
-   endif
+   PARAMETERS sysparam
 
-   if menu_key() <> 0
-      keyboard chr( M->keystroke )
+   RETURN box_title( M->sysparam, "Arquivo Selecionado..." )
 
-   else
-      keystroke := 0
 
-   endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_fsel()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION do_fsel
 
-else
-   DECLARE boxarray[ 5 ]
-
-   boxarray[ 1 ] = "fsel_title(sysparam)"
-   boxarray[ 2 ] = "getfield(sysparam)"
-   boxarray[ 3 ] = "ok_button(sysparam)"
-   boxarray[ 4 ] = "can_button(sysparam)"
-   boxarray[ 5 ] = "fieldlist(sysparam)"
+   PRIVATE done
 
-   cur_el  := 1
-   rel_row := 0
+   DO CASE
 
-   okee_dokee := "do_fsel()"
-   fi_disp    := "getfield(3)"
+   CASE Empty( M->field_mvar )
+      error_msg( "Nome de campo no selecionado" )
+      done := .F.
 
-   if multibox( 7, 17, 5, 5, M->boxarray ) = 0
-      field_mvar := ""
+   CASE aseek( M->field_m, M->field_mvar ) = 0
+      error_msg( M->field_mvar + " no existe" )
+      done := .F.
 
-   endif
-endif
+   OTHERWISE
+      done := .T.
 
-help_code := M->old_help
+   ENDCASE
 
-return M->field_mvar
+   RETURN M->done
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function getfield()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function getfield
 
-parameters sysparam
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function set_relation()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION set_relation
 
-return genfield( M->sysparam, .F. )
+   LOCAL saveColor
+   PRIVATE c_row
+   PRIVATE c_el
+   PRIVATE rel_buff
+   PRIVATE pos_r
+   PRIVATE width
+   PRIVATE old_help
+   PRIVATE k
+   PRIVATE n_area
+   PRIVATE ls
+   PRIVATE lk
+   PRIVATE lt
+   PRIVATE cNorm
+   PRIVATE cHilite
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function fsel_title()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function fsel_title
+   cNorm     := color7
+   cHilite   := color2
+   saveColor := SetColor( M->cNorm )
 
-parameters sysparam
+   old_help  := M->help_code
+   help_code := 9
 
-return box_title( M->sysparam, "Arquivo Selecionado..." )
+   box_open := .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function do_fsel()
-*+
-*+    Called from ( dbuview.prg  )   1 - function get_field()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function do_fsel
+   IF Empty( M->bar_line )
+      bline( afull( M->dbf ) )
 
-private done
+   ENDIF
 
-do case
+   width := Len( M->bar_line ) - 1
 
-case empty( M->field_mvar )
-   error_msg( "Nome de campo no selecionado" )
-   done := .F.
+   pos_r := column[ 1 ] + M->width
 
-case aseek( M->field_m, M->field_mvar ) = 0
-   error_msg( M->field_mvar + " no existe" )
-   done := .F.
+   rel_buff := SaveScreen( 8, column[ 1 ] - 1, 23, M->pos_r + 1 )
 
-otherwise
-   done := .T.
+   Scroll( 8, column[ 1 ] - 1, 23, M->pos_r + 1, 0 )
+   @  8, column[ 1 ] - 1, 23, M->pos_r + 1 BOX M->frame
 
-endcase
+   @  9, 35        SAY "Relaes"
+   @ 10, column[ 1 ] SAY M->bar_line
 
-return M->done
+   c_row := 11
+   c_el  := 1
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function set_relation()
-*+
-*+    Called from ( dbuview.prg  )   1 - set_view()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function set_relation
+   draw_relat( 1 )
 
-local saveColor
-private c_row
-private c_el
-private rel_buff
-private pos_r
-private width
-private old_help
-private k
-private n_area
-private ls
-private lk
-private lt
-private cNorm
-private cHilite
+   keystroke := 0
 
-cNorm     := color7
-cHilite   := color2
-saveColor := setcolor( M->cNorm )
+   DO WHILE ! q_check()
 
-old_help  := M->help_code
-help_code := 9
+      DO CASE
 
-box_open := .T.
+      CASE M->keystroke = 18
 
-if empty( M->bar_line )
-   bline( afull( M->dbf ) )
+         IF M->c_el > ( ( M->c_row - 11 ) / 2 ) + 1
+            c_el := M->c_el - 5
 
-endif
+            IF M->c_el < ( ( M->c_row - 11 ) / 2 ) + 1
+               c_el := ( ( M->c_row - 11 ) / 2 ) + 1
 
-width := len( M->bar_line ) - 1
+            ENDIF
 
-pos_r := column[ 1 ] + M->width
+            draw_relat( M->c_el - ( ( M->c_row - 11 ) / 2 ) )
 
-rel_buff := savescreen( 8, column[ 1 ] - 1, 23, M->pos_r + 1 )
+         ELSE
 
-scroll( 8, column[ 1 ] - 1, 23, M->pos_r + 1, 0 )
-@  8, column[ 1 ] - 1, 23, M->pos_r + 1 box M->frame
+            IF M->c_el > 1
+               c_el  := 1
+               c_row := 11
 
-@  9, 35          say "Relaes"
-@ 10, column[ 1 ] say M->bar_line
+            ENDIF
+         ENDIF
 
-c_row := 11
-c_el  := 1
+         keystroke := 0
 
-draw_relat( 1 )
+      CASE M->keystroke = 3
+         k := afull( M->k_relate )
 
-keystroke := 0
+         IF M->k < Len( M->k_relate )
+            k := M->k + 1
 
-do while .not. q_check()
+         ENDIF
 
-   do case
+         IF M->c_el < M->k - ( ( 21 - M->c_row ) / 2 )
+            c_el := M->c_el + 5
 
-   case M->keystroke = 18
+            IF M->c_el > M->k - ( ( 21 - M->c_row ) / 2 )
+               c_el := M->k - ( ( 21 - M->c_row ) / 2 )
 
-      if M->c_el > ( ( M->c_row - 11 ) / 2 ) + 1
-         c_el := M->c_el - 5
+            ENDIF
 
-         if M->c_el < ( ( M->c_row - 11 ) / 2 ) + 1
-            c_el := ( ( M->c_row - 11 ) / 2 ) + 1
+            draw_relat( M->c_el - ( ( M->c_row - 11 ) / 2 ) )
 
-         endif
+         ELSE
 
-         draw_relat( M->c_el - ( ( M->c_row - 11 ) / 2 ) )
+            IF M->c_el < M->k
+               c_row := M->c_row + ( ( M->k - M->c_el ) * 2 )
+               c_el  := M->k
 
-      else
+            ENDIF
+         ENDIF
 
-         if M->c_el > 1
-            c_el  := 1
-            c_row := 11
+         keystroke := 0
 
-         endif
-      endif
+      CASE M->keystroke = 22 .OR. isdata( M->keystroke )
 
-      keystroke := 0
+         k := M->c_el + ( ( 21 - M->c_row ) / 2 ) + 1
 
-   case M->keystroke = 3
-      k := afull( M->k_relate )
+         ls := s_relate[ Len( M->s_relate ) ]
+         lk := k_relate[ Len( M->k_relate ) ]
+         lt := t_relate[ Len( M->t_relate ) ]
 
-      if M->k < len( M->k_relate )
-         k := M->k + 1
+         array_ins( M->s_relate, M->c_el )
+         array_ins( M->k_relate, M->c_el )
+         array_ins( M->t_relate, M->c_el )
 
-      endif
+         IF M->c_row < 21
+            Scroll( M->c_row, column[ 1 ], 22, M->pos_r - 1, - 2 )
 
-      if M->c_el < M->k - ( ( 21 - M->c_row ) / 2 )
-         c_el := M->c_el + 5
+         ELSE
+            @ M->c_row + 1, column[ 1 ] SAY Space( M->width )
 
-         if M->c_el > M->k - ( ( 21 - M->c_row ) / 2 )
-            c_el := M->k - ( ( 21 - M->c_row ) / 2 )
+         ENDIF
 
-         endif
+         IF M->k <= Len( M->k_relate )
 
-         draw_relat( M->c_el - ( ( M->c_row - 11 ) / 2 ) )
+            IF ! Empty( k_relate[ M->k ] )
+               @ 22, M->pos_r SAY M->more_down
 
-      else
+            ENDIF
+         ENDIF
 
-         if M->c_el < M->k
-            c_row := M->c_row + ( ( M->k - M->c_el ) * 2 )
-            c_el  := M->k
+         get_relation( M->c_row, M->c_el )
 
-         endif
-      endif
+         IF ! Empty( k_relate[ M->c_el ] )
+            disp_relation( M->c_row, M->c_el, color7 )
 
-      keystroke := 0
+         ELSE
+            STORE "x" TO s_relate[ M->c_el ], ;
+               k_relate[ M->c_el ], t_relate[ M->c_el ]
 
-   case M->keystroke = 22 .or. isdata( M->keystroke )
+            array_del( M->s_relate, M->c_el )
+            array_del( M->k_relate, M->c_el )
+            array_del( M->t_relate, M->c_el )
 
-      k := M->c_el + ( ( 21 - M->c_row ) / 2 ) + 1
+            s_relate[ Len( M->s_relate ) ] = M->ls
+            k_relate[ Len( M->k_relate ) ] = M->lk
+            t_relate[ Len( M->t_relate ) ] = M->lt
 
-      ls := s_relate[ len( M->s_relate ) ]
-      lk := k_relate[ len( M->k_relate ) ]
-      lt := t_relate[ len( M->t_relate ) ]
+            IF M->c_row < 21
+               Scroll( M->c_row, column[ 1 ], 22, M->pos_r - 1, 2 )
 
-      array_ins( M->s_relate, M->c_el )
-      array_ins( M->k_relate, M->c_el )
-      array_ins( M->t_relate, M->c_el )
+            ELSE
+               @ 21, column[ 1 ] SAY Space( M->width )
+               @ 22, column[ 1 ] SAY Space( M->width )
 
-      if M->c_row < 21
-         scroll( M->c_row, column[ 1 ], 22, M->pos_r - 1, - 2 )
+            ENDIF
 
-      else
-         @ M->c_row + 1, column[ 1 ] say space( M->width )
+            disp_relation( 21, M->c_el + ( ( 21 - M->c_row ) / 2 ), color7 )
 
-      endif
+         ENDIF
 
-      if M->k <= len( M->k_relate )
+         IF M->k <= Len( M->k_relate )
 
-         if .not. empty( k_relate[ M->k ] )
-            @ 22, M->pos_r say M->more_down
+            IF Empty( k_relate[ M->k ] )
+               @ 22, M->pos_r SAY " "
 
-         endif
-      endif
+            ENDIF
+         ENDIF
 
-      get_relation( M->c_row, M->c_el )
+         keystroke := 0
 
-      if .not. empty( k_relate[ M->c_el ] )
+      CASE M->keystroke = 13
+         get_relation( M->c_row, M->c_el )
+
          disp_relation( M->c_row, M->c_el, color7 )
 
-      else
-         store "x" to s_relate[ M->c_el ], ;
-                 k_relate[ M->c_el ], t_relate[ M->c_el ]
+         keystroke := 0
+
+      CASE M->keystroke = 7 .AND. ! Empty( k_relate[ M->c_el ] )
+         need_relat := .T.
+
+         n_area := Asc( s_relate[ M->c_el ] ) - Asc( "A" ) + 1
+         SELECT ( M->n_area )
+
+         SET RELATION TO
 
          array_del( M->s_relate, M->c_el )
          array_del( M->k_relate, M->c_el )
          array_del( M->t_relate, M->c_el )
 
-         s_relate[ len( M->s_relate ) ] = M->ls
-         k_relate[ len( M->k_relate ) ] = M->lk
-         t_relate[ len( M->t_relate ) ] = M->lt
+         IF M->c_row < 21
+            Scroll( M->c_row, column[ 1 ], 22, M->pos_r - 1, 2 )
 
-         if M->c_row < 21
-            scroll( M->c_row, column[ 1 ], 22, M->pos_r - 1, 2 )
+         ELSE
+            @ 21, column[ 1 ] SAY Space( M->width )
+            @ 22, column[ 1 ] SAY Space( M->width )
 
-         else
-            @ 21, column[ 1 ] say space( M->width )
-            @ 22, column[ 1 ] say space( M->width )
-
-         endif
+         ENDIF
 
          disp_relation( 21, M->c_el + ( ( 21 - M->c_row ) / 2 ), color7 )
 
-      endif
+         IF M->c_el < Len( M->k_relate ) - ( ( 21 - M->c_row ) / 2 )
 
-      if M->k <= len( M->k_relate )
+            IF Empty( k_relate[ M->c_el + ( ( 21 - M->c_row ) / 2 ) + 1 ] )
+               @ 22, M->pos_r SAY " "
 
-         if empty( k_relate[ M->k ] )
-            @ 22, M->pos_r say " "
+            ENDIF
+         ENDIF
 
-         endif
-      endif
+         keystroke := 0
 
-      keystroke := 0
+      CASE M->keystroke = 5 .AND. M->c_el > 1
+         c_el := M->c_el - 1
 
-   case M->keystroke = 13
-      get_relation( M->c_row, M->c_el )
+         IF M->c_row > 11
+            c_row := M->c_row - 2
 
-      disp_relation( M->c_row, M->c_el, color7 )
+         ELSE
+            Scroll( 11, column[ 1 ], 22, M->pos_r - 1, - 2 )
 
-      keystroke := 0
+            disp_relation( 11, M->c_el, color7 )
 
-   case M->keystroke = 7 .and. .not. empty( k_relate[ M->c_el ] )
-      need_relat := .T.
+            IF M->c_el <= Len( M->k_relate ) - 6
 
-      n_area := asc( s_relate[ M->c_el ] ) - asc( "A" ) + 1
-      select( M->n_area )
+               IF ! Empty( k_relate[ M->c_el + 6 ] )
+                  @ 22, M->pos_r SAY M->more_down
 
-      set relation to
+               ENDIF
+            ENDIF
 
-      array_del( M->s_relate, M->c_el )
-      array_del( M->k_relate, M->c_el )
-      array_del( M->t_relate, M->c_el )
+            IF M->c_el = 1
+               @ 11, M->pos_r SAY " "
 
-      if M->c_row < 21
-         scroll( M->c_row, column[ 1 ], 22, M->pos_r - 1, 2 )
+            ENDIF
+         ENDIF
 
-      else
-         @ 21, column[ 1 ] say space( M->width )
-         @ 22, column[ 1 ] say space( M->width )
+         keystroke := 0
 
-      endif
+      CASE M->keystroke = 24 .AND. ! ;
+            ( Empty( k_relate[ M->c_el ] ) .OR. M->c_el = Len( M->k_relate ) )
+         c_el := M->c_el + 1
 
-      disp_relation( 21, M->c_el + ( ( 21 - M->c_row ) / 2 ), color7 )
+         IF c_row < 22 - 2
+            c_row := M->c_row + 2
 
-      if M->c_el < len( M->k_relate ) - ( ( 21 - M->c_row ) / 2 )
+         ELSE
+            Scroll( 11, column[ 1 ], 22, M->pos_r - 1, 2 )
 
-         if empty( k_relate[ M->c_el + ( ( 21 - M->c_row ) / 2 ) + 1 ] )
-            @ 22, M->pos_r say " "
+            @ 11, M->pos_r SAY M->more_up
 
-         endif
-      endif
+            IF ! Empty( k_relate[ M->c_el ] )
+               disp_relation( 21, M->c_el, color7 )
 
-      keystroke := 0
+            ENDIF
 
-   case M->keystroke = 5 .and. M->c_el > 1
-      c_el := M->c_el - 1
+            IF M->c_el < Len( M->k_relate )
 
-      if M->c_row > 11
-         c_row := M->c_row - 2
+               IF Empty( k_relate[ M->c_el + 1 ] )
+                  @ 22, M->pos_r SAY " "
 
-      else
-         scroll( 11, column[ 1 ], 22, M->pos_r - 1, - 2 )
+               ENDIF
 
-         disp_relation( 11, M->c_el, color7 )
+            ELSE
+               @ 22, M->pos_r SAY " "
 
-         if M->c_el <= len( M->k_relate ) - 6
+            ENDIF
+         ENDIF
 
-            if .not. empty( k_relate[ M->c_el + 6 ] )
-               @ 22, M->pos_r say M->more_down
+         keystroke := 0
 
-            endif
-         endif
+      OTHERWISE
 
-         if M->c_el = 1
-            @ 11, M->pos_r say " "
+         IF ! key_ready()
+            disp_relation( M->c_row, M->c_el, cHilite )
 
-         endif
-      endif
+            SetColor( M->cHilite )
+            @ M->c_row, column[ 1 ] + 2 ;
+               SAY if( Empty( k_relate[ M->c_el ] ), " ", "" )
+            SetColor( M->cNorm )
 
-      keystroke := 0
+            read_key()
 
-   case M->keystroke = 24 .and. .not. ;
-              ( empty( k_relate[ M->c_el ] ) .or. M->c_el = len( M->k_relate ) )
-      c_el := M->c_el + 1
+            disp_relation( M->c_row, M->c_el, cNorm )
 
-      if c_row < 22 - 2
-         c_row := M->c_row + 2
+            @ M->c_row, column[ 1 ] + 2 SAY ""
 
-      else
-         scroll( 11, column[ 1 ], 22, M->pos_r - 1, 2 )
+         ENDIF
+      ENDCASE
+   ENDDO
 
-         @ 11, M->pos_r say M->more_up
+   RestScreen( 8, column[ 1 ] - 1, 23, M->pos_r + 1, M->rel_buff )
 
-         if .not. empty( k_relate[ M->c_el ] )
-            disp_relation( 21, M->c_el, color7 )
+   help_code := M->old_help
 
-         endif
+   box_open := .F.
 
-         if M->c_el < len( M->k_relate )
+   keystroke := 0
+   SetColor( saveColor )
 
-            if empty( k_relate[ M->c_el + 1 ] )
-               @ 22, M->pos_r say " "
+   RETURN 0
 
-            endif
 
-         else
-            @ 22, M->pos_r say " "
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function draw_relat()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION draw_relat
 
-         endif
-      endif
+   PARAMETERS start_el
+   PRIVATE i
 
-      keystroke := 0
+   Scroll( 11, column[ 1 ], 22, M->pos_r, 0 )
 
-   otherwise
+   i := 0
 
-      if .not. key_ready()
-         disp_relation( M->c_row, M->c_el, cHilite )
+   DO WHILE M->i < 6 .AND. M->start_el + M->i <= Len( M->k_relate )
 
-         setcolor( M->cHilite )
-         @ M->c_row, column[ 1 ] + 2 ;
-                 say if( empty( k_relate[ M->c_el ] ), " ", "" )
-         setcolor( M->cNorm )
+      IF Empty( k_relate[ M->start_el + M->i ] )
+         EXIT
 
-         read_key()
+      ENDIF
 
-         disp_relation( M->c_row, M->c_el, cNorm )
+      disp_relation( 11 + ( 2 * M->i ), M->start_el + M->i, color7 )
 
-         @ M->c_row, column[ 1 ] + 2 say ""
+      i := M->i + 1
 
-      endif
-   endcase
-enddo
+   ENDDO
 
-restscreen( 8, column[ 1 ] - 1, 23, M->pos_r + 1, M->rel_buff )
+   IF M->start_el > 1
+      @ 11, M->pos_r SAY M->more_up
 
-help_code := M->old_help
+   ENDIF
 
-box_open := .F.
+   IF M->start_el + M->i <= Len( M->k_relate )
 
-keystroke := 0
-setcolor( saveColor )
-return 0
+      IF ! Empty( k_relate[ M->start_el + M->i ] )
+         @ 22, M->pos_r SAY M->more_down
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function draw_relat()
-*+
-*+    Called from ( dbuview.prg  )   3 - function set_relation()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function draw_relat
+      ENDIF
+   ENDIF
 
-parameters start_el
-private i
+   RETURN 0
 
-scroll( 11, column[ 1 ], 22, M->pos_r, 0 )
 
-i := 0
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function get_relation()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION get_relation
 
-do while M->i < 6 .and. M->start_el + M->i <= len( M->k_relate )
+   PARAMETERS row_n, element
 
-   if empty( k_relate[ M->start_el + M->i ] )
-      exit
+   PRIVATE stroke
+   PRIVATE k_input
+   PRIVATE k_trim
+   PRIVATE s_alias
+   PRIVATE t_alias
+   PRIVATE i
+   PRIVATE j
+   PRIVATE q
+   PRIVATE pos_c
+   PRIVATE ntx_expr
+   PRIVATE k_type
+   PRIVATE ok
 
-   endif
+   IF isdata( M->keystroke )
+      i := c_search( Upper( Chr( M->keystroke ) ), M->dbf, 0, afull( M->dbf ) )
 
-   disp_relation( 11 + ( 2 * M->i ), M->start_el + M->i, color7 )
+      IF SubStr( dbf[ M->i ], 1, 1 ) = Upper( Chr( M->keystroke ) )
+         KEYBOARD Chr( 13 )
 
-   i := M->i + 1
+      ENDIF
 
-enddo
+   ELSE
 
-if M->start_el > 1
-   @ 11, M->pos_r say M->more_up
+      IF Empty( k_relate[ M->element ] )
+         i := 1
 
-endif
+      ELSE
+         i := Asc( s_relate[ M->element ] ) - Asc( "A" ) + 1
 
-if M->start_el + M->i <= len( M->k_relate )
+      ENDIF
+   ENDIF
 
-   if .not. empty( k_relate[ M->start_el + M->i ] )
-      @ 22, M->pos_r say M->more_down
+   j      := 0
+   stroke := 0
 
-   endif
-endif
+   DO WHILE !( M->j > 0 .AND. M->stroke = 13 )
 
-return 0
+      DO CASE
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function get_relation()
-*+
-*+    Called from ( dbuview.prg  )   2 - function set_relation()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function get_relation
+      CASE M->stroke = 13
 
-parameters row_n, element
+         IF M->i < 6
 
-private stroke
-private k_input
-private k_trim
-private s_alias
-private t_alias
-private i
-private j
-private q
-private pos_c
-private ntx_expr
-private k_type
-private ok
+            IF ! Empty( dbf[ M->i + 1 ] )
 
-if isdata( M->keystroke )
-   i := c_search( upper( chr( M->keystroke ) ), M->dbf, 0, afull( M->dbf ) )
+               IF ! Empty( k_relate[ M->element ] )
+                  j := Asc( t_relate[ M->element ] ) - Asc( "A" ) + 1
 
-   if substr( dbf[ M->i ], 1, 1 ) = upper( chr( M->keystroke ) )
-      keyboard chr( 13 )
+               ENDIF
 
-   endif
+               IF M->j <= M->i
+                  j := M->i + 1
 
-else
+               ENDIF
+            ENDIF
+         ENDIF
 
-   if empty( k_relate[ M->element ] )
-      i := 1
+         stroke := 0
 
-   else
-      i := asc( s_relate[ M->element ] ) - asc( "A" ) + 1
+      CASE M->stroke = 4
 
-   endif
-endif
+         IF M->j = 0 .AND. M->i < 6
 
-j      := 0
-stroke := 0
+            IF ! Empty( dbf[ M->i + 1 ] )
+               i := M->i + 1
 
-do while .not. ( M->j > 0 .and. M->stroke = 13 )
+            ENDIF
 
-   do case
+         ELSE
 
-   case M->stroke = 13
+            IF M->j > 0 .AND. M->j < 6
 
-      if M->i < 6
+               IF ! Empty( dbf[ M->j + 1 ] )
+                  j := M->j + 1
 
-         if .not. empty( dbf[ M->i + 1 ] )
+               ENDIF
+            ENDIF
+         ENDIF
 
-            if .not. empty( k_relate[ M->element ] )
-               j := asc( t_relate[ M->element ] ) - asc( "A" ) + 1
+         stroke := 0
 
-            endif
+      CASE M->stroke = 19
 
-            if M->j <= M->i
-               j := M->i + 1
+         IF M->j = 0 .AND. M->i > 1
+            i := M->i - 1
 
-            endif
-         endif
-      endif
+         ELSE
 
-      stroke := 0
+            IF M->j > 0
+               j := M->j - 1
 
-   case M->stroke = 4
+               IF M->j = M->i
+                  j := 0
 
-      if M->j = 0 .and. M->i < 6
+               ENDIF
+            ENDIF
+         ENDIF
 
-         if .not. empty( dbf[ M->i + 1 ] )
-            i := M->i + 1
+         stroke := 0
 
-         endif
+      CASE isdata( M->stroke )
+         q := c_search( Upper( Chr( M->stroke ) ), M->dbf, M->i, afull( M->dbf ) )
 
-      else
+         IF SubStr( dbf[ M->q ], 1, 1 ) = Upper( Chr( M->stroke ) )
 
-         if M->j > 0 .and. M->j < 6
-
-            if .not. empty( dbf[ M->j + 1 ] )
-               j := M->j + 1
-
-            endif
-         endif
-      endif
-
-      stroke := 0
-
-   case M->stroke = 19
-
-      if M->j = 0 .and. M->i > 1
-         i := M->i - 1
-
-      else
-
-         if M->j > 0
-            j := M->j - 1
-
-            if M->j = M->i
-               j := 0
-
-            endif
-         endif
-      endif
-
-      stroke := 0
-
-   case isdata( M->stroke )
-      q := c_search( upper( chr( M->stroke ) ), M->dbf, M->i, afull( M->dbf ) )
-
-      if substr( dbf[ M->q ], 1, 1 ) = upper( chr( M->stroke ) )
-
-         if M->j = 0
-            i := M->q
-            keyboard chr( 13 )
-
-         else
-
-            if M->q > M->i
-               j := M->q
-               keyboard chr( 13 )
-
-            else
-               j := 0
+            IF M->j = 0
                i := M->q
+               KEYBOARD Chr( 13 )
 
-            endif
-         endif
-      endif
+            ELSE
 
-      stroke := 0
+               IF M->q > M->i
+                  j := M->q
+                  KEYBOARD Chr( 13 )
 
-   case M->stroke = 27
-      @ M->row_n, column[ 1 ] say space( M->width )
-      return 0
+               ELSE
+                  j := 0
+                  i := M->q
 
-   otherwise
+               ENDIF
+            ENDIF
+         ENDIF
 
-      if M->j = 0
-         @ M->row_n, column[ 1 ] say space( M->width )
+         stroke := 0
 
-         s_alias := name( dbf[ M->i ] )
+      CASE M->stroke = 27
+         @ M->row_n, column[ 1 ] SAY Space( M->width )
+         RETURN 0
 
-         setcolor( M->color12 )
-         @ M->row_n, column[ M->i ] + 2 say M->s_alias
-         setcolor( M->cNorm )
+      OTHERWISE
 
-      else
-         t_alias := name( dbf[ M->j ] )
+         IF M->j = 0
+            @ M->row_n, column[ 1 ] SAY Space( M->width )
 
-         pos_c := column[ M->i ] + 2 + len( M->s_alias )
+            s_alias := name( dbf[ M->i ] )
 
-         @ M->row_n, M->pos_c say space( M->pos_r - M->pos_c )
+            SetColor( M->color12 )
+            @ M->row_n, column[ M->i ] + 2 SAY M->s_alias
+            SetColor( M->cNorm )
 
-         @ M->row_n, M->pos_c ;
-                 say replicate( "-", column[ M->j ] - M->pos_c + 1 ) + chr( 16 )
+         ELSE
+            t_alias := name( dbf[ M->j ] )
 
-         setcolor( M->color12 )
-         ?? t_alias
-         setcolor( M->cNorm )
+            pos_c := column[ M->i ] + 2 + Len( M->s_alias )
 
-      endif
+            @ M->row_n, M->pos_c SAY Space( M->pos_r - M->pos_c )
 
-      stroke := raw_key()
+            @ M->row_n, M->pos_c ;
+               SAY Replicate( "-", column[ M->j ] - M->pos_c + 1 ) + Chr( 16 )
 
-   endcase
-enddo
+            SetColor( M->color12 )
+            ?? t_alias
+            SetColor( M->cNorm )
 
-setcolor( M->cHilite )
-@ M->row_n, column[ M->i ] + 2 say M->s_alias
-@ M->row_n, column[ M->j ] + 2 say M->t_alias
-setcolor( M->cNorm )
+         ENDIF
 
-select( M->j )
-ntx_expr := ctrl_key()
+         stroke := raw_key()
 
-if empty( M->ntx_expr )
-   k_type := "N"
+      ENDCASE
+   ENDDO
 
-else
-   k_type := type( M->ntx_expr )
+   SetColor( M->cHilite )
+   @ M->row_n, column[ M->i ] + 2 SAY M->s_alias
+   @ M->row_n, column[ M->j ] + 2 SAY M->t_alias
+   SetColor( M->cNorm )
 
-endif
+   SELECT ( M->j )
+   ntx_expr := ctrl_key()
 
-select( M->i )
+   IF Empty( M->ntx_expr )
+      k_type := "N"
 
-k_trim := k_relate[ M->element ]
-ok     := .F.
+   ELSE
+      k_type := Type( M->ntx_expr )
 
-do while .not. M->ok
-   k_trim := enter_rc( M->k_trim, M->row_n + 1, column[ M->i ] + 2, ;
-                       127, "@KS" + ltrim( str( M->pos_r - column[ M->i ] - 2 ) ), ;
-                       M->color1 )
+   ENDIF
 
-   ok := empty( M->k_trim ) .or. type( M->k_trim ) = M->k_type
+   SELECT ( M->i )
 
-   if .not. M->ok
-      error_msg( "Expresso Invalida" )
+   k_trim := k_relate[ M->element ]
+   ok     := .F.
 
-   endif
-enddo
+   DO WHILE ! M->ok
+      k_trim := enter_rc( M->k_trim, M->row_n + 1, column[ M->i ] + 2, ;
+         127, "@KS" + LTrim( Str( M->pos_r - column[ M->i ] - 2 ) ), ;
+         M->color1 )
 
-@ M->row_n + 1, column[ 1 ] say space( M->width )
+      ok := Empty( M->k_trim ) .OR. Type( M->k_trim ) = M->k_type
 
-if empty( M->k_trim )
-   return 0
+      IF ! M->ok
+         error_msg( "Expresso Invalida" )
 
-endif
+      ENDIF
+   ENDDO
 
-need_relat := .T.
+   @ M->row_n + 1, column[ 1 ] SAY Space( M->width )
 
-k_relate[ M->element ] = M->k_trim
-s_relate[ M->element ] = chr( M->i + asc( "A" ) - 1 ) + M->s_alias
-t_relate[ M->element ] = chr( M->j + asc( "A" ) - 1 ) + M->t_alias
+   IF Empty( M->k_trim )
+      RETURN 0
 
-return 0
+   ENDIF
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function disp_relation()
-*+
-*+    Called from ( dbuview.prg  )   8 - function set_relation()
-*+                                   1 - function draw_relat()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function disp_relation
+   need_relat := .T.
 
-parameters disp_row, element, cSpecial
-private j
-private k
+   k_relate[ M->element ] = M->k_trim
+   s_relate[ M->element ] = Chr( M->i + Asc( "A" ) - 1 ) + M->s_alias
+   t_relate[ M->element ] = Chr( M->j + Asc( "A" ) - 1 ) + M->t_alias
 
-if empty( k_relate[ M->element ] )
-   @ M->disp_row, column[ 1 ]     say space( M->width )
-   @ M->disp_row + 1, column[ 1 ] say space( M->width )
-   return 0
+   RETURN 0
 
-endif
 
-j := asc( s_relate[ M->element ] ) - asc( "A" ) + 1
-k := asc( t_relate[ M->element ] ) - asc( "A" ) + 1
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function disp_relation()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION disp_relation
 
-setcolor( M->cSpecial )
-@ M->disp_row, column[ M->j ] + 2 say substr( s_relate[ M->element ], 2 )
-setcolor( M->cNorm )
+   PARAMETERS disp_row, element, cSpecial
+   PRIVATE j
+   PRIVATE k
 
-?? replicate( "-", column[ M->k ] - col() + 1 ) + chr( 16 )
+   IF Empty( k_relate[ M->element ] )
+      @ M->disp_row, column[ 1 ]   SAY Space( M->width )
+      @ M->disp_row + 1, column[ 1 ] SAY Space( M->width )
+      RETURN 0
 
-setcolor( M->cSpecial )
-?? substr( t_relate[ M->element ], 2 )
-setcolor( M->cNorm )
+   ENDIF
 
-@ M->disp_row + 1, column[ M->j ] + 2 ;
-        say pad( k_relate[ M->element ], M->pos_r - column[ M->j ] - 2 )
+   j := Asc( s_relate[ M->element ] ) - Asc( "A" ) + 1
+   k := Asc( t_relate[ M->element ] ) - Asc( "A" ) + 1
 
-return 0
+   SetColor( M->cSpecial )
+   @ M->disp_row, column[ M->j ] + 2 SAY SubStr( s_relate[ M->element ], 2 )
+   SetColor( M->cNorm )
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function c_search()
-*+
-*+    Called from ( dbuview.prg  )   2 - function get_relation()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function c_search
+   ?? Replicate( "-", column[ M->k ] - Col() + 1 ) + Chr( 16 )
 
-parameters c, array, cur_el, num_d
-private chr_el
+   SetColor( M->cSpecial )
+   ?? SubStr( t_relate[ M->element ], 2 )
+   SetColor( M->cNorm )
 
-chr_el := M->cur_el + 1
+   @ M->disp_row + 1, column[ M->j ] + 2 ;
+      SAY Pad( k_relate[ M->element ], M->pos_r - column[ M->j ] - 2 )
 
-do while M->chr_el <= M->num_d
+   RETURN 0
 
-   if upper( substr( array[ M->chr_el ], 1, 1 ) ) = upper( M->c )
-      exit
 
-   endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function c_search()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION c_search
 
-   chr_el := M->chr_el + 1
+   PARAMETERS c, array, cur_el, num_d
+   PRIVATE chr_el
 
-enddo
+   chr_el := M->cur_el + 1
 
-if M->chr_el > M->num_d
-   chr_el := 1
+   DO WHILE M->chr_el <= M->num_d
 
-   do while M->chr_el < M->cur_el .and. ;
-              upper( substr( array[ M->chr_el ], 1, 1 ) ) <> upper( M->c )
+      IF Upper( SubStr( array[ M->chr_el ], 1, 1 ) ) = Upper( M->c )
+         EXIT
+
+      ENDIF
 
       chr_el := M->chr_el + 1
 
-   enddo
-endif
+   ENDDO
 
-return M->chr_el
+   IF M->chr_el > M->num_d
+      chr_el := 1
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function ctrl_key()
-*+
-*+    Called from ( dbuview.prg  )   1 - function get_relation()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ctrl_key
+      DO WHILE M->chr_el < M->cur_el .AND. ;
+            Upper( SubStr( array[ M->chr_el ], 1, 1 ) ) <> Upper( M->c )
 
-private key
-private ntx
+         chr_el := M->chr_el + 1
 
-if M->need_ntx
-   ntx := "ntx" + ltrim( str( select() ) )
+      ENDDO
+   ENDIF
 
-   key := ntx_key( &ntx[ 1 ] )
+   RETURN M->chr_el
 
-else
-   key := indexkey( 0 )
 
-endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ctrl_key()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ctrl_key
 
-return M->key
+   PRIVATE KEY
+   PRIVATE ntx
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function get_filter()
-*+
-*+    Called from ( dbuview.prg  )   1 - set_view()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function get_filter
+   IF M->need_ntx
+      ntx := "ntx" + LTrim( Str( Select() ) )
 
-private k_filter
-private k_trim
-private old_help
+      KEY := ntx_key( &ntx[ 1 ] )
 
-old_help  := M->help_code
-help_code := 7
+   ELSE
+      KEY := IndexKey( 0 )
 
-k_filter := "kf" + substr( "123456", M->cur_area, 1 )
-k_trim   := &k_filter
+   ENDIF
 
-select( M->cur_area )
+   RETURN M->key
 
-hi_cur()
 
-DECLARE boxarray[ 4 ]
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function get_filter()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION get_filter
 
-boxarray[ 1 ] = "fltr_title(sysparam)"
-boxarray[ 2 ] = "getfilter(sysparam)"
-boxarray[ 3 ] = "ok_button(sysparam)"
-boxarray[ 4 ] = "can_button(sysparam)"
+   PRIVATE k_filter
+   PRIVATE k_trim
+   PRIVATE old_help
 
-okee_dokee := "do_filter()"
+   old_help  := M->help_code
+   help_code := 7
 
-multibox( 7, 17, 5, 2, M->boxarray )
+   k_filter := "kf" + SubStr( "123456", M->cur_area, 1 )
+   k_trim   := &k_filter
 
-help_code := M->old_help
+   SELECT ( M->cur_area )
 
-dehi_cur()
+   hi_cur()
 
-return 0
+   DECLARE boxarray[ 4 ]
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function fltr_title()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function fltr_title
+   boxarray[ 1 ] = "fltr_title(sysparam)"
+   boxarray[ 2 ] = "getfilter(sysparam)"
+   boxarray[ 3 ] = "ok_button(sysparam)"
+   boxarray[ 4 ] = "can_button(sysparam)"
 
-parameters sysparam
+   okee_dokee := "do_filter()"
 
-return box_title( M->sysparam, "Setar filtro para " + ;
-                  substr( M->cur_dbf, rat( hb_ps(), M->cur_dbf ) + 1 ) + ;
-                  " para..." )
+   multibox( 7, 17, 5, 2, M->boxarray )
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function getfilter()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function getfilter
+   help_code := M->old_help
 
-parameters sysparam
+   dehi_cur()
 
-return get_k_trim( M->sysparam, "Condio" )
+   RETURN 0
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function do_filter()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function do_filter
 
-private done
-private k_sample
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function fltr_title()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION fltr_title
 
-if empty( M->k_trim )
-   done := .T.
+   PARAMETERS sysparam
 
-   if .not. empty( &k_filter )
-      set filter to
+   RETURN box_title( M->sysparam, "Setar filtro para " + ;
+      SubStr( M->cur_dbf, RAt( hb_ps(), M->cur_dbf ) + 1 ) + ;
+      " para..." )
 
-      &k_filter := ""
 
-   endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function getfilter()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION getfilter
 
-else
+   PARAMETERS sysparam
 
-   if type( M->k_trim ) = "L"
+   RETURN get_k_trim( M->sysparam, "Condio" )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_filter()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION do_filter
+
+   PRIVATE done
+   PRIVATE k_sample
+
+   IF Empty( M->k_trim )
       done := .T.
 
-      if .not. ( &k_filter == M->k_trim )
-         need_filtr := .T.
-         &k_filter  := M->k_trim
+      IF ! Empty( &k_filter )
+         SET FILTER TO
 
-      endif
+         &k_filter := ""
 
-   else
-      done := .F.
-      error_msg( "Filtro precisa ser uma expresso lЂgica" )
+      ENDIF
 
-   endif
-endif
+   ELSE
 
-return M->done
+      IF Type( M->k_trim ) = "L"
+         done := .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function clear_dbf()
-*+
-*+    Called from ( dbuview.prg  )   1 - set_view()
-*+                                   1 - function do_opendbf()
-*+                                   1 - function do_openvew()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function clear_dbf
+         IF !( &k_filter == M->k_trim )
+            need_filtr := .T.
+            &k_filter  := M->k_trim
 
-parameters work_area, shift
-private s_alias
-private c_area
-private temp
-private xtemp
-private i
-private file_name
-private alias_6
-private n_active
+         ENDIF
 
-n_active := afull( M->dbf )
+      ELSE
+         done := .F.
+         error_msg( "Filtro precisa ser uma expresso lЂgica" )
 
-s_alias := name( dbf[ M->work_area ] )
+      ENDIF
+   ENDIF
 
-alias_6 := ""
+   RETURN M->done
 
-temp := "ntx" + substr( "123456", M->work_area, 1 )
 
-do case
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function clear_dbf()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION clear_dbf
 
-case M->shift = 0
-   dbf[ M->work_area ] = ""
+   PARAMETERS work_area, shift
+   PRIVATE s_alias
+   PRIVATE c_area
+   PRIVATE TEMP
+   PRIVATE xtemp
+   PRIVATE i
+   PRIVATE file_name
+   PRIVATE alias_6
+   PRIVATE n_active
 
-   n_files := M->n_files - afull( &temp ) - 1
+   n_active := afull( M->dbf )
 
-case M->shift = 1
+   s_alias := name( dbf[ M->work_area ] )
 
-   if .not. empty( dbf[ 6 ] )
-      alias_6 := name( dbf[ 6 ] )
+   alias_6 := ""
 
-      n_files := M->n_files - afull( M->ntx6 ) - 1
+   TEMP := "ntx" + SubStr( "123456", M->work_area, 1 )
 
-   endif
+   DO CASE
 
-   shift := if( empty( dbf[ M->work_area ] ) .or. M->work_area = 6, 0, 1 )
+   CASE M->shift = 0
+      dbf[ M->work_area ] = ""
 
-   array_ins( M->dbf, M->work_area )
+      n_files := M->n_files - afull( &temp ) - 1
 
-case M->shift = 2
-   array_del( M->dbf, M->work_area )
+   CASE M->shift = 1
 
-   shift := if( empty( dbf[ M->work_area ] ), 0, 2 )
+      IF ! Empty( dbf[ 6 ] )
+         alias_6 := name( dbf[ 6 ] )
 
-   n_files := M->n_files - afull( &temp ) - 1
+         n_files := M->n_files - afull( M->ntx6 ) - 1
 
-endcase
+      ENDIF
 
-i := 1
+      shift := if( Empty( dbf[ M->work_area ] ) .OR. M->work_area = 6, 0, 1 )
 
-do while M->i <= M->n_active
-   c_area := chr( M->i + asc( "A" ) - 1 )
-   select( M->i )
+      array_ins( M->dbf, M->work_area )
 
-   if M->i = M->work_area .or. ( M->i > M->work_area .and. M->shift <> 0 )
-      dbclosearea()
+   CASE M->shift = 2
+      array_del( M->dbf, M->work_area )
 
-   endif
+      shift := if( Empty( dbf[ M->work_area ] ), 0, 2 )
 
-   temp := "kf" + substr( "123456", M->i, 1 )
+      n_files := M->n_files - afull( &temp ) - 1
 
-   if ( ( ( M->s_alias + "->" $ upper( &temp ) ) .or. ;
-          ( M->i = M->work_area .and. .not. empty( &temp ) ) ) ;
-          .and. M->shift <> 1 ) .or. ( .not. empty( M->alias_6 ) .and. ;
-          M->alias_6 + "->" $ upper( &temp ) .and. M->shift = 1 )
+   ENDCASE
 
-      set filter to
-
-      need_filtr := .T.
-
-      &temp := ""
-
-   endif
-
-   i := M->i + 1
-
-enddo
-
-do case
-
-case M->shift = 0
-   temp := "ntx" + substr( "123456", M->work_area, 1 )
-   afill( &temp, "" )
-
-   temp := "field_n" + substr( "123456", M->work_area, 1 )
-   afill( &temp, "" )
-
-   temp  := "kf" + substr( "123456", M->work_area, 1 )
-   &temp := ""
-
-case M->shift = 1
-   need_filtr := .T.
-   need_ntx   := .T.
-
-   i := 6
-
-   do while empty( dbf[ M->i ] )
-      i := M->i - 1
-
-   enddo
-
-   do while M->i > M->work_area
-      temp  := "ntx" + substr( "123456", M->i, 1 )
-      xtemp := "ntx" + substr( "123456", M->i - 1, 1 )
-      acopy( &xtemp, &temp )
-
-      temp  := "field_n" + substr( "123456", M->i, 1 )
-      xtemp := "field_n" + substr( "123456", M->i - 1, 1 )
-      acopy( &xtemp, &temp )
-
-      temp  := "cr" + substr( "123456", M->i, 1 )
-      xtemp := "cr" + substr( "123456", M->i - 1, 1 )
-      acopy( &xtemp, &temp )
-
-      temp  := "el" + substr( "123456", M->i, 1 )
-      xtemp := "el" + substr( "123456", M->i - 1, 1 )
-      acopy( &xtemp, &temp )
-
-      temp  := "kf" + substr( "123456", M->i, 1 )
-      xtemp := "kf" + substr( "123456", M->i - 1, 1 )
-      &temp := &xtemp
-
-      i := M->i - 1
-
-   enddo
-
-   xtemp := substr( "123456", M->i, 1 )
-
-   temp := "ntx" + xtemp
-   afill( &temp, "" )
-
-   temp := "field_n" + xtemp
-   afill( &temp, "" )
-
-   temp  := "kf" + xtemp
-   &temp := ""
-
-   temp := "cr" + xtemp
-   &temp[ 2 ] = row_a[ 2 ]
-   &temp[ 3 ] = row_a[ 3 ]
-
-   temp := "el" + xtemp
-   afill( &temp, 1 )
-
-case M->shift = 2
-   need_filtr := .T.
-   need_ntx   := .T.
-
-   i := M->work_area
-
-   do while M->i < 6 .and. .not. empty( dbf[ M->i ] )
-      temp  := "ntx" + substr( "123456", M->i, 1 )
-      xtemp := "ntx" + substr( "123456", M->i + 1, 1 )
-      acopy( &xtemp, &temp )
-
-      temp  := "field_n" + substr( "123456", M->i, 1 )
-      xtemp := "field_n" + substr( "123456", M->i + 1, 1 )
-      acopy( &xtemp, &temp )
-
-      temp  := "cr" + substr( "123456", M->i, 1 )
-      xtemp := "cr" + substr( "123456", M->i + 1, 1 )
-      acopy( &xtemp, &temp )
-
-      temp  := "el" + substr( "123456", M->i, 1 )
-      xtemp := "el" + substr( "123456", M->i + 1, 1 )
-      acopy( &xtemp, &temp )
-
-      temp  := "kf" + substr( "123456", M->i, 1 )
-      xtemp := "kf" + substr( "123456", M->i + 1, 1 )
-      &temp := &xtemp
-
-      i := M->i + 1
-
-   enddo
-
-   xtemp := substr( "123456", M->i, 1 )
-
-   temp := "ntx" + M->xtemp
-   afill( &temp, "" )
-
-   temp := "field_n" + M->xtemp
-   afill( &temp, "" )
-
-   temp  := "kf" + M->xtemp
-   &temp := ""
-
-   temp := "cr" + M->xtemp
-   &temp[ 2 ] = row_a[ 2 ]
-   &temp[ 3 ] = row_a[ 3 ]
-
-   temp := "el" + M->xtemp
-   afill( &temp, 1 )
-
-endcase
-
-need_field := .T.
-
-c_area := chr( M->work_area + asc( "A" ) - 1 )
-
-i := 1
-
-do while M->i <= len( M->k_relate )
-
-   if empty( k_relate[ M->i ] )
-      exit
-
-   endif
-
-   if ( ( substr( s_relate[ M->i ], 1, 1 ) = M->c_area .or. ;
-          substr( t_relate[ M->i ], 1, 1 ) = M->c_area ) .and. M->shift <> 1 ) .or. ;
-          ( M->shift = 1 .and. substr( t_relate[ M->i ], 1, 1 ) = "F" )
-
-      array_del( M->s_relate, M->i )
-      array_del( M->k_relate, M->i )
-      array_del( M->t_relate, M->i )
-      need_relat := .T.
-
-   else
-
-      if ( M->shift = 2 .and. substr( s_relate[ M->i ], 1, 1 ) > M->c_area ) .or. ;
-           ( M->shift = 1 .and. substr( s_relate[ M->i ], 1, 1 ) >= M->c_area )
-
-         s_relate[ M->i ] = chr( asc( substr( s_relate[ M->i ], 1, 1 ) ) + ;
-                 if( M->shift = 1, 1, - 1 ) ) + ;
-                 substr( s_relate[ M->i ], 2 )
-         need_relat := .T.
-
-      endif
-
-      if ( M->shift = 2 .and. substr( t_relate[ M->i ], 1, 1 ) > M->c_area ) .or. ;
-           ( M->shift = 1 .and. substr( t_relate[ M->i ], 1, 1 ) >= M->c_area )
-
-         t_relate[ M->i ] = chr( asc( substr( t_relate[ M->i ], 1, 1 ) ) + ;
-                 if( M->shift = 1, 1, - 1 ) ) + ;
-                 substr( t_relate[ M->i ], 2 )
-         need_relat := .T.
-
-      endif
-
-      i := M->i + 1
-
-   endif
-enddo
-
-if M->shift <> 0
-   i := 6
-
-   do while M->i >= M->work_area
-
-      if .not. empty( dbf[ M->i ] )
-         c_area := chr( M->i + asc( "A" ) - 1 )
-         select( M->i )
-         file_name := dbf[ M->i ]
-         DBUREDE( file_name,, ABERTURA )
-
-      endif
-
-      i := M->i - 1
-
-   enddo
-endif
-
-return 0
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function save_view()
-*+
-*+    Called from ( dbuview.prg  )   1 - set_view()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function save_view
-
-private filename
-private old_help
-
-old_help  := M->help_code
-help_code := 21
-
-if empty( M->view_file ) .and. .not. empty( dbf[ 1 ] )
-   filename := name( dbf[ 1 ] ) + ".vew"
-
-else
-   filename := M->view_file
-
-endif
-
-filebox( ".vew", "vew_list", "vcrea_titl", "do_creavew", .T., 8 )
-
-help_code := M->old_help
-
-return 0
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function vcrea_titl()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function vcrea_titl
-
-parameters sysparam
-
-return box_title( M->sysparam, "Salvando Viso como..." )
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function do_creavew()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function do_creavew
-
-private i
-private j
-private k
-private m_name
-private l_name
-private add_name
-
-if empty( M->filename )
-   error_msg( "Arquivo de viso no selecionado" )
-   return .F.
-
-endif
-
-select 10
-
-stat_msg( "Criando arquivo de Viso" )
-
-add_name := .not. HB_FILEEXISTS( name( filename ) + ".vew" )
-
-CREATE ddbbuuuu
-
-netrecapp()
-field->field_name := "ITEM_NAME"
-field->field_type := "C"
-field->field_len  := 10
-dbunlock()
-
-netrecapp()
-field->field_name := "CONTENTS"
-field->field_type := "C"
-field->field_len  := 10
-dbunlock()
-
-dbclosearea()
-CREATE &filename from ddbbuuuu
-
-view_file := M->filename
-
-DBUREDE( view_file, "ddbbuuuu", ABERTURA )
-
-Ferase("ddbbuuuu.dbf")
-
-netrecapp()
-field->item_name := "cur_dir"
-dbunlock()
-put_line( cur_dir )
-
-netrecapp()
-field->item_name := "n_files"
-dbunlock()
-put_line( ltrim( str( n_files ) ) )
-
-i := 1
-
-do while i <= 6
-
-   if empty( dbf[ i ] )
-      exit
-
-   endif
-
-   m_name := "kf" + substr( "123456", i, 1 )
-
-   if .not. empty( &m_name )
-      netrecapp()
-      field->item_name := m_name
-      dbunlock()
-      put_line( &m_name )
-
-   endif
-
-   i ++
-
-enddo
-
-i := 1
-
-do while i <= 6
-
-   if empty( dbf[ i ] )
-      exit
-
-   endif
-
-   netrecapp()
-   field->item_name := "dbf"
-   dbunlock()
-   put_line( dbf[ i ] )
-
-   i ++
-
-enddo
-
-l_name := "ntx"
-
-for k := 1 to 2
    i := 1
 
-   do while i <= 6
+   DO WHILE M->i <= M->n_active
+      c_area := Chr( M->i + Asc( "A" ) - 1 )
+      SELECT ( M->i )
 
-      if empty( dbf[ i ] )
-         exit
+      IF M->i = M->work_area .OR. ( M->i > M->work_area .AND. M->shift <> 0 )
+         dbCloseArea()
 
-      endif
+      ENDIF
 
-      m_name := l_name + substr( "123456", i, 1 )
+      TEMP := "kf" + SubStr( "123456", M->i, 1 )
 
-      j := 1
+      IF ( ( ( M->s_alias + "->" $ Upper( &temp ) ) .OR. ;
+            ( M->i = M->work_area .AND. ! Empty( &temp ) ) ) ;
+            .AND. M->shift <> 1 ) .OR. ( ! Empty( M->alias_6 ) .AND. ;
+            M->alias_6 + "->" $ Upper( &temp ) .AND. M->shift = 1 )
 
-      do while j <= len( &m_name )
+         SET FILTER TO
 
-         if empty( &m_name[ j ] )
-            exit
+         need_filtr := .T.
 
-         endif
+         &TEMP := ""
+
+      ENDIF
+
+      i := M->i + 1
+
+   ENDDO
+
+   DO CASE
+
+   CASE M->shift = 0
+      TEMP := "ntx" + SubStr( "123456", M->work_area, 1 )
+      AFill( &temp, "" )
+
+      TEMP := "field_n" + SubStr( "123456", M->work_area, 1 )
+      AFill( &temp, "" )
+
+      TEMP  := "kf" + SubStr( "123456", M->work_area, 1 )
+      &TEMP := ""
+
+   CASE M->shift = 1
+      need_filtr := .T.
+      need_ntx   := .T.
+
+      i := 6
+
+      DO WHILE Empty( dbf[ M->i ] )
+         i := M->i - 1
+
+      ENDDO
+
+      DO WHILE M->i > M->work_area
+         TEMP  := "ntx" + SubStr( "123456", M->i, 1 )
+         xtemp := "ntx" + SubStr( "123456", M->i - 1, 1 )
+         ACopy( &xtemp, &temp )
+
+         TEMP  := "field_n" + SubStr( "123456", M->i, 1 )
+         xtemp := "field_n" + SubStr( "123456", M->i - 1, 1 )
+         ACopy( &xtemp, &temp )
+
+         TEMP  := "cr" + SubStr( "123456", M->i, 1 )
+         xtemp := "cr" + SubStr( "123456", M->i - 1, 1 )
+         ACopy( &xtemp, &temp )
+
+         TEMP  := "el" + SubStr( "123456", M->i, 1 )
+         xtemp := "el" + SubStr( "123456", M->i - 1, 1 )
+         ACopy( &xtemp, &temp )
+
+         TEMP  := "kf" + SubStr( "123456", M->i, 1 )
+         xtemp := "kf" + SubStr( "123456", M->i - 1, 1 )
+         &TEMP := &xtemp
+
+         i := M->i - 1
+
+      ENDDO
+
+      xtemp := SubStr( "123456", M->i, 1 )
+
+      TEMP := "ntx" + xtemp
+      AFill( &temp, "" )
+
+      TEMP := "field_n" + xtemp
+      AFill( &temp, "" )
+
+      TEMP  := "kf" + xtemp
+      &TEMP := ""
+
+      TEMP := "cr" + xtemp
+      &TEMP[ 2 ] = row_a[ 2 ]
+      &TEMP[ 3 ] = row_a[ 3 ]
+
+      TEMP := "el" + xtemp
+      AFill( &temp, 1 )
+
+   CASE M->shift = 2
+      need_filtr := .T.
+      need_ntx   := .T.
+
+      i := M->work_area
+
+      DO WHILE M->i < 6 .AND. ! Empty( dbf[ M->i ] )
+         TEMP  := "ntx" + SubStr( "123456", M->i, 1 )
+         xtemp := "ntx" + SubStr( "123456", M->i + 1, 1 )
+         ACopy( &xtemp, &temp )
+
+         TEMP  := "field_n" + SubStr( "123456", M->i, 1 )
+         xtemp := "field_n" + SubStr( "123456", M->i + 1, 1 )
+         ACopy( &xtemp, &temp )
+
+         TEMP  := "cr" + SubStr( "123456", M->i, 1 )
+         xtemp := "cr" + SubStr( "123456", M->i + 1, 1 )
+         ACopy( &xtemp, &temp )
+
+         TEMP  := "el" + SubStr( "123456", M->i, 1 )
+         xtemp := "el" + SubStr( "123456", M->i + 1, 1 )
+         ACopy( &xtemp, &temp )
+
+         TEMP  := "kf" + SubStr( "123456", M->i, 1 )
+         xtemp := "kf" + SubStr( "123456", M->i + 1, 1 )
+         &TEMP := &xtemp
+
+         i := M->i + 1
+
+      ENDDO
+
+      xtemp := SubStr( "123456", M->i, 1 )
+
+      TEMP := "ntx" + M->xtemp
+      AFill( &temp, "" )
+
+      TEMP := "field_n" + M->xtemp
+      AFill( &temp, "" )
+
+      TEMP  := "kf" + M->xtemp
+      &TEMP := ""
+
+      TEMP := "cr" + M->xtemp
+      &TEMP[ 2 ] = row_a[ 2 ]
+      &TEMP[ 3 ] = row_a[ 3 ]
+
+      TEMP := "el" + M->xtemp
+      AFill( &temp, 1 )
+
+   ENDCASE
+
+   need_field := .T.
+
+   c_area := Chr( M->work_area + Asc( "A" ) - 1 )
+
+   i := 1
+
+   DO WHILE M->i <= Len( M->k_relate )
+
+      IF Empty( k_relate[ M->i ] )
+         EXIT
+
+      ENDIF
+
+      IF ( ( SubStr( s_relate[ M->i ], 1, 1 ) = M->c_area .OR. ;
+            SubStr( t_relate[ M->i ], 1, 1 ) = M->c_area ) .AND. M->shift <> 1 ) .OR. ;
+            ( M->shift = 1 .AND. SubStr( t_relate[ M->i ], 1, 1 ) = "F" )
+
+         array_del( M->s_relate, M->i )
+         array_del( M->k_relate, M->i )
+         array_del( M->t_relate, M->i )
+         need_relat := .T.
+
+      ELSE
+
+         IF ( M->shift = 2 .AND. SubStr( s_relate[ M->i ], 1, 1 ) > M->c_area ) .OR. ;
+               ( M->shift = 1 .AND. SubStr( s_relate[ M->i ], 1, 1 ) >= M->c_area )
+
+            s_relate[ M->i ] = Chr( Asc( SubStr( s_relate[ M->i ], 1, 1 ) ) + ;
+               IF ( M->shift = 1, 1, - 1 ) ) + ;
+               SubStr( s_relate[ M->i ], 2 )
+            need_relat := .T.
+
+         ENDIF
+
+         IF ( M->shift = 2 .AND. SubStr( t_relate[ M->i ], 1, 1 ) > M->c_area ) .OR. ;
+               ( M->shift = 1 .AND. SubStr( t_relate[ M->i ], 1, 1 ) >= M->c_area )
+
+            t_relate[ M->i ] = Chr( Asc( SubStr( t_relate[ M->i ], 1, 1 ) ) + ;
+               IF ( M->shift = 1, 1, - 1 ) ) + ;
+               SubStr( t_relate[ M->i ], 2 )
+            need_relat := .T.
+
+         ENDIF
+
+         i := M->i + 1
+
+      ENDIF
+   ENDDO
+
+   IF M->shift <> 0
+      i := 6
+
+      DO WHILE M->i >= M->work_area
+
+         IF ! Empty( dbf[ M->i ] )
+            c_area := Chr( M->i + Asc( "A" ) - 1 )
+            SELECT ( M->i )
+            file_name := dbf[ M->i ]
+            DBUREDE( file_name,, ABERTURA )
+
+         ENDIF
+
+         i := M->i - 1
+
+      ENDDO
+   ENDIF
+
+   RETURN 0
 
 
-         netrecapp()
-         field->item_name := m_name
-         dbunlock()
-         put_line( &m_name[ j ] )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function save_view()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION save_view
 
-         j ++
+   PRIVATE filename
+   PRIVATE old_help
 
-      enddo
+   old_help  := M->help_code
+   help_code := 21
 
-      i ++
+   IF Empty( M->view_file ) .AND. ! Empty( dbf[ 1 ] )
+      filename := name( dbf[ 1 ] ) + ".vew"
 
-   enddo
+   ELSE
+      filename := M->view_file
 
-   l_name := "field_n"
+   ENDIF
 
-next
+   filebox( ".vew", "vew_list", "vcrea_titl", "do_creavew", .T., 8 )
 
-i := 1
+   help_code := M->old_help
 
-do while i <= 3
-   m_name := substr( "skt", i, 1 ) + "_relate"
-   j      := 1
+   RETURN 0
 
-   do while j <= len( &m_name )
 
-      if empty( &m_name[ j ] )
-         exit
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function vcrea_titl()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION vcrea_titl
 
-      endif
+   PARAMETERS sysparam
 
-      netrecapp()
-      field->item_name := m_name
-      dbunlock()
-      put_line( &m_name[ j ] )
+   RETURN box_title( M->sysparam, "Salvando Viso como..." )
 
-      j ++
 
-   enddo
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_creavew()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION do_creavew
 
-   i ++
+   PRIVATE i
+   PRIVATE j
+   PRIVATE k
+   PRIVATE m_name
+   PRIVATE l_name
+   PRIVATE add_name
 
-enddo
+   IF Empty( M->filename )
+      error_msg( "Arquivo de viso no selecionado" )
+      RETURN .F.
 
-dbclosearea()
+   ENDIF
 
-if at( ".vew", filename ) = len( filename ) - 3 .and. ;
-       HB_FILEEXISTS( name( filename ) + ".vew" ) .and. add_name
+   SELECT 10
 
-   i := afull( vew_list ) + 1
+   stat_msg( "Criando arquivo de Viso" )
 
-   if i <= len( vew_list )
-      vew_list[ i ] = filename
+   add_name := ! hb_FileExists( name( filename ) + ".vew" )
 
-      array_sort( vew_list )
+   CREATE ddbbuuuu
 
-   endif
-endif
-
-stat_msg( "" )
-
-return .T.
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function put_line()
-*+
-*+    Called from ( dbuview.prg  )   6 - function do_creavew()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function put_line
-
-parameters line
-private pos
-netreclock()
-field->contents := line
-dbunlock()
-
-pos := len( contents ) + 1
-
-do while pos <= len( line )
    netrecapp()
-   field->contents := substr( line, pos )
-   dbunlock()
+   field->field_name := "ITEM_NAME"
+   field->field_type := "C"
+   field->field_len  := 10
+   dbUnlock()
 
-   pos += len( contents )
+   netrecapp()
+   field->field_name := "CONTENTS"
+   field->field_type := "C"
+   field->field_len  := 10
+   dbUnlock()
 
-enddo
-
-return 0
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function set_from()
-*+
-*+    Called from ( dbu.prg      )   1 -
-*+                ( dbuview.prg  )   1 - set_view()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function set_from
-
-parameters from_view
-private filename
-private old_help
-
-old_help  := M->help_code
-help_code := 21
-
-filename := M->view_file
-
-if M->from_view
-
-   if filebox( ".vew", "vew_list", "vopen_titl", "do_openvew", .F., 8 ) <> 0
-      keystroke := 13
-
-   endif
-
-else
-   do_openvew()
-
-endif
-
-help_code := M->old_help
-
-return 0
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function vopen_titl()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function vopen_titl
-
-parameters sysparam
-
-return box_title( M->sysparam, "Relendo Viso de..." )
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function do_openvew()
-*+
-*+    Called from ( dbuview.prg  )   1 - function set_from()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function do_openvew
-
-private m_name
-private i
-private done
-
-do case
-
-case empty( M->filename )
-   error_msg( "Viso no selecionado" )
-   done := .F.
-
-case .not. HB_FILEEXISTS( M->filename )
-   error_msg( "No Pude Abrir " + M->filename )
-   done := .F.
-
-otherwise
-   select 10
-
-   DBUREDE( filename, "ddbbuuuu", ABERTURA )
-
-   if .not. ( type( "item_name" ) = "C" .and. type( "contents" ) = "C" )
-      dbclosearea()
-      error_msg( "Invalido arquivo de viso" )
-      return .F.
-
-   endif
+   dbCloseArea()
+   CREATE &filename FROM ddbbuuuu
 
    view_file := M->filename
 
-   need_field := need_ntx := need_relat := need_filtr := .T.
-   stat_msg( "Restaurando Viso" )
+   DBUREDE( view_file, "ddbbuuuu", ABERTURA )
 
-   i := 6
+   FErase( "ddbbuuuu.dbf" )
 
-   do while M->i > 0
+   netrecapp()
+   field->item_name := "cur_dir"
+   dbUnlock()
+   put_line( cur_dir )
 
-      if .not. empty( dbf[ M->i ] )
-         clear_dbf( M->i, 0 )
-
-      endif
-
-      i := M->i - 1
-
-   enddo
-
-   select 10
-
-   cur_dir := get_line()
-   n_files := val( get_line() )
-
-   if trim( item_name ) == "k_filter"
-      netreclock()
-      field->item_name := "kf1"
-      dbunlock()
-      kf1 := get_line()
-
-   else
-
-      do while substr( item_name, 1, 2 ) == "kf"
-         m_name := trim( item_name )
-
-         &m_name := get_line()
-
-      enddo
-   endif
-
-   do while .not. eof()
-      m_name := trim( item_name )
-      i      := 1
-
-      do while trim( item_name ) == m_name
-         &m_name[ i ] = get_line()
-
-         i ++
-
-      enddo
-   enddo
-
-   dbclosearea()
+   netrecapp()
+   field->item_name := "n_files"
+   dbUnlock()
+   put_line( LTrim( Str( n_files ) ) )
 
    i := 1
 
-   do while M->i <= 6
+   DO WHILE i <= 6
 
-      if empty( dbf[ M->i ] )
-         exit
+      IF Empty( dbf[ i ] )
+         EXIT
 
-      endif
+      ENDIF
 
-      select( M->i )
+      m_name := "kf" + SubStr( "123456", i, 1 )
 
-      filename := dbf[ M->i ]
-      DBUREDE( filename,, ABERTURA )
+      IF ! Empty( &m_name )
+         netrecapp()
+         field->item_name := m_name
+         dbUnlock()
+         put_line( &m_name )
 
-      i := M->i + 1
+      ENDIF
 
-   enddo
+      i++
+
+   ENDDO
+
+   i := 1
+
+   DO WHILE i <= 6
+
+      IF Empty( dbf[ i ] )
+         EXIT
+
+      ENDIF
+
+      netrecapp()
+      field->item_name := "dbf"
+      dbUnlock()
+      put_line( dbf[ i ] )
+
+      i++
+
+   ENDDO
+
+   l_name := "ntx"
+
+   FOR k := 1 TO 2
+      i := 1
+
+      DO WHILE i <= 6
+
+         IF Empty( dbf[ i ] )
+            EXIT
+
+         ENDIF
+
+         m_name := l_name + SubStr( "123456", i, 1 )
+
+         j := 1
+
+         DO WHILE j <= Len( &m_name )
+
+            IF Empty( &m_name[ j ] )
+               EXIT
+
+            ENDIF
+
+
+            netrecapp()
+            field->item_name := m_name
+            dbUnlock()
+            put_line( &m_name[ j ] )
+
+            j++
+
+         ENDDO
+
+         i++
+
+      ENDDO
+
+      l_name := "field_n"
+
+   NEXT
+
+   i := 1
+
+   DO WHILE i <= 3
+      m_name := SubStr( "skt", i, 1 ) + "_relate"
+      j      := 1
+
+      DO WHILE j <= Len( &m_name )
+
+         IF Empty( &m_name[ j ] )
+            EXIT
+
+         ENDIF
+
+         netrecapp()
+         field->item_name := m_name
+         dbUnlock()
+         put_line( &m_name[ j ] )
+
+         j++
+
+      ENDDO
+
+      i++
+
+   ENDDO
+
+   dbCloseArea()
+
+   IF At( ".vew", filename ) = Len( filename ) - 3 .AND. ;
+         hb_FileExists( name( filename ) + ".vew" ) .AND. add_name
+
+      i := afull( vew_list ) + 1
+
+      IF i <= Len( vew_list )
+         vew_list[ i ] = filename
+
+         array_sort( vew_list )
+
+      ENDIF
+   ENDIF
 
    stat_msg( "" )
-   done := .T.
 
-endcase
-
-return M->done
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function get_line()
-*+
-*+    Called from ( dbuview.prg  )   5 - function do_openvew()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function get_line
-
-private line
-
-line := trim( contents )
-skip
-
-do while len( trim( item_name ) ) = 0 .and. .not. eof()
-   line += trim( contents )
-   skip
-
-enddo
-
-return line
+   RETURN .T.
 
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function put_line()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION put_line
 
-*+ EOF: DBUVIEW.PRG
+   PARAMETERS line
+   PRIVATE pos
+
+   netreclock()
+   field->contents := line
+   dbUnlock()
+
+   pos := Len( contents ) + 1
+
+   DO WHILE pos <= Len( line )
+      netrecapp()
+      field->contents := SubStr( line, pos )
+      dbUnlock()
+
+      pos += Len( contents )
+
+   ENDDO
+
+   RETURN 0
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function set_from()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION set_from
+
+   PARAMETERS from_view
+   PRIVATE filename
+   PRIVATE old_help
+
+   old_help  := M->help_code
+   help_code := 21
+
+   filename := M->view_file
+
+   IF M->from_view
+
+      IF filebox( ".vew", "vew_list", "vopen_titl", "do_openvew", .F., 8 ) <> 0
+         keystroke := 13
+
+      ENDIF
+
+   ELSE
+      do_openvew()
+
+   ENDIF
+
+   help_code := M->old_help
+
+   RETURN 0
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function vopen_titl()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION vopen_titl
+
+   PARAMETERS sysparam
+
+   RETURN box_title( M->sysparam, "Relendo Viso de..." )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_openvew()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION do_openvew
+
+   PRIVATE m_name
+   PRIVATE i
+   PRIVATE done
+
+   DO CASE
+
+   CASE Empty( M->filename )
+      error_msg( "Viso no selecionado" )
+      done := .F.
+
+   CASE ! hb_FileExists( M->filename )
+      error_msg( "No Pude Abrir " + M->filename )
+      done := .F.
+
+   OTHERWISE
+      SELECT 10
+
+      DBUREDE( filename, "ddbbuuuu", ABERTURA )
+
+      IF !( Type( "item_name" ) = "C" .AND. Type( "contents" ) = "C" )
+         dbCloseArea()
+         error_msg( "Invalido arquivo de viso" )
+         RETURN .F.
+
+      ENDIF
+
+      view_file := M->filename
+
+      need_field := need_ntx := need_relat := need_filtr := .T.
+      stat_msg( "Restaurando Viso" )
+
+      i := 6
+
+      DO WHILE M->i > 0
+
+         IF ! Empty( dbf[ M->i ] )
+            clear_dbf( M->i, 0 )
+
+         ENDIF
+
+         i := M->i - 1
+
+      ENDDO
+
+      SELECT 10
+
+      cur_dir := get_line()
+      n_files := Val( get_line() )
+
+      IF Trim( item_name ) == "k_filter"
+         netreclock()
+         field->item_name := "kf1"
+         dbUnlock()
+         kf1 := get_line()
+
+      ELSE
+
+         DO WHILE SubStr( item_name, 1, 2 ) == "kf"
+            m_name := Trim( item_name )
+
+            &m_name := get_line()
+
+         ENDDO
+      ENDIF
+
+      DO WHILE ! Eof()
+         m_name := Trim( item_name )
+         i      := 1
+
+         DO WHILE Trim( item_name ) == m_name
+            &m_name[ i ] = get_line()
+
+            i++
+
+         ENDDO
+      ENDDO
+
+      dbCloseArea()
+
+      i := 1
+
+      DO WHILE M->i <= 6
+
+         IF Empty( dbf[ M->i ] )
+            EXIT
+
+         ENDIF
+
+         SELECT ( M->i )
+
+         filename := dbf[ M->i ]
+         DBUREDE( filename,, ABERTURA )
+
+         i := M->i + 1
+
+      ENDDO
+
+      stat_msg( "" )
+      done := .T.
+
+   ENDCASE
+
+   RETURN M->done
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function get_line()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION get_line
+
+   PRIVATE line
+
+   line := Trim( contents )
+   SKIP
+
+   DO WHILE Len( Trim( item_name ) ) = 0 .AND. ! Eof()
+      line += Trim( contents )
+      SKIP
+
+   ENDDO
+
+   RETURN line
+
+
+
+
+// + EOF: dbuview.prg
+// +

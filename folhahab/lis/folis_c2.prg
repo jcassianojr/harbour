@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : folis_c2.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:26 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : folis_c2.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:26 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -34,99 +34,100 @@
 // :  Atualizado em: 23/02/99
 // :
 // :*****************************************************************************
-////#INCLUDE "COMANDO.CH"
+// //#INCLUDE "COMANDO.CH"
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function folis_c2()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function folis_c2
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function folis_c2()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION folis_c2
 
-PARA CC
-IF !MDL('Listar Sal rio Vari vel',0)
-   RETU
-ENDIF
+   PARA CC
 
-if !NETUSE(carq)
-   dbcloseall()
-   retu
-endif
-FILTRO := ''
-INX    := ""
-FILORD(.T.)
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-if valtype(INX) = "N"
-   dbsetorder(INX)
-ELSE
-   ordDestroy("temp")
-   ordcreate(,"temp",inx)
-   ordSetFocus("temp")
-ENDIF
-set filter to &FILTRO
-
-IF CC = 0
-   IF !NETUSE("FO_VAR")
+   IF !MDL( 'Listar Sal rio Vari vel', 0 )
       RETU
    ENDIF
-ENDIF
-IF CC = 1
-   IF !NETUSE("FO_VBR")
+
+   IF !NETUSE( carq )
+      dbCloseAll()
       RETU
    ENDIF
-ENDIF
-cSELE2 := ALIAS()
-FILTRA := 'NUMERO=NUM'
-FL     := 0
-SET DEVI TO PRIN
-CABVAR()
-DBSELECTAR(PES)
-DBGOTOP()
-WHILE !EOF()
-   NUM := NUMERO
-   NOM := NOME
-   TOT := 0
-   DBSELECTAR(cSELE2)
-   SET FILTER TO &FILTRA
-   DBGOTOP()
-   WHILE !EOF()
-      IF PROW() > 56
-         IMPFOL()
-         CABVAR()
+   FILTRO := ''
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
+
+   IF CC = 0
+      IF !NETUSE( "FO_VAR" )
+         RETU
       ENDIF
-      @ PROW()+ 1,00 SAY NUM                                               
-      @ PROW(),11    SAY SUBSTR(NOM,1,25)                                  
-      @ PROW(),38    SAY CONTA                                             
-      @ PROW(),45    SAY TIPO                                              
-      @ PROW(),50    SAY NIV13S                                            
-      @ PROW(),54    SAY HORAS            PICT "###.##"                    
-      @ PROW(),62    SAY VALOR            PICT "###,###,###,###.##"        
-      TOT += VALOR
-      DBSELECTAR(cSELE2)
-      DBSKIP()
-   ENDDO
-   IF TOT > 0
-      @ PROW()+ 1,62 SAY TOT          PICT "###,###,###,###.##"        
-      @ PROW()+ 1,00 SAY REPL('-',80)                                  
    ENDIF
-   DBSELECTAR(PES)
-   DBSKIP()
-ENDDO
-DBCLOSEALL()
-@ PROW()+ 1,00 SAY REPL('-',80)         
-IMPFOL()
-VIDEO()
-IMPEND()
-RETU
+   IF CC = 1
+      IF !NETUSE( "FO_VBR" )
+         RETU
+      ENDIF
+   ENDIF
+   cSELE2 := Alias()
+   FILTRA := 'NUMERO=NUM'
+   FL     := 0
+   SET DEVI TO PRIN
+   CABVAR()
+   dbSelectAr( PES )
+   dbGoTop()
+   WHILE !Eof()
+      NUM := NUMERO
+      NOM := NOME
+      TOT := 0
+      dbSelectAr( cSELE2 )
+      SET FILTER TO &FILTRA
+      dbGoTop()
+      WHILE !Eof()
+         IF PRow() > 56
+            IMPFOL()
+            CABVAR()
+         ENDIF
+         @ PRow() + 1, 00 SAY NUM
+         @ PRow(), 11    SAY SubStr( NOM, 1, 25 )
+         @ PRow(), 38    SAY CONTA
+         @ PRow(), 45    SAY TIPO
+         @ PRow(), 50    SAY NIV13S
+         @ PRow(), 54    SAY HORAS            PICT "###.##"
+         @ PRow(), 62    SAY VALOR            PICT "###,###,###,###.##"
+         TOT += VALOR
+         dbSelectAr( cSELE2 )
+         dbSkip()
+      ENDDO
+      IF TOT > 0
+         @ PRow() + 1, 62 SAY TOT          PICT "###,###,###,###.##"
+         @ PRow() + 1, 00 SAY REPL( '-', 80 )
+      ENDIF
+      dbSelectAr( PES )
+      dbSkip()
+   ENDDO
+   dbCloseAll()
+   @ PRow() + 1, 00 SAY REPL( '-', 80 )
+   IMPFOL()
+   VIDEO()
+   IMPEND()
+   RETU
 
 // !*****************************************************************************
 // !
@@ -136,32 +137,33 @@ RETU
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CABVAR()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function CABVAR
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CABVAR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-FL ++
-@ PROW(),00    SAY IMPCHR(cIMPTIT)+MSG2                                                        
-@ PROW()+ 1,50 SAY TIME()                                                                      
-@ PROW(),60    SAY DATE()                                                                      
-@ PROW(),70    SAY 'FL. '+STRZERO(FL,4)                                                        
-@ PROW()+ 1,00 SAY REPL('-',80)                                                                
-@ PROW()+ 1,00 SAY IMPCHR(cIMPTIT)+ACENTO('Sal rio Vari vel')                                  
-@ PROW()+ 1,00 SAY REPL('-',80)                                                                
-@ PROW()+ 1,00 SAY ACENTO("N£mero     Nome"+SPAC(22)+"Conta Tipo N¡vel Horas   Valor")         
-@ PROW()+ 1,00 SAY REPL('-',80)                                                                
-RETU
+FUNCTION CABVAR
+
+   FL++
+   @ PRow(), 00    SAY IMPCHR( cIMPTIT ) + MSG2
+   @ PRow() + 1, 50 SAY Time()
+   @ PRow(), 60    SAY Date()
+   @ PRow(), 70    SAY 'FL. ' + StrZero( FL, 4 )
+   @ PRow() + 1, 00 SAY REPL( '-', 80 )
+   @ PRow() + 1, 00 SAY IMPCHR( cIMPTIT ) + ACENTO( 'Sal rio Vari vel' )
+   @ PRow() + 1, 00 SAY REPL( '-', 80 )
+   @ PRow() + 1, 00 SAY ACENTO( "N£mero     Nome" + SPAC( 22 ) + "Conta Tipo N¡vel Horas   Valor" )
+   @ PRow() + 1, 00 SAY REPL( '-', 80 )
+   RETU
 // : FIM: FOLIS_C2.PRG
 
-*+ EOF: folis_c2.prg
-*+
+// + EOF: folis_c2.prg
+// +

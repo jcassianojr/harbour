@@ -1,81 +1,88 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib21.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib21.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function TIPCAD()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func TIPCAD(cTIP,cVAR,nROW,nCOL,cVA2)
 
 
-local cARQ  := "MA01"
-local cTIT  := ""
-local lRETU := .T.
-if !cTIP $ "CFVTPM"
-   cTIP := ESCOLHETAB("TIPCAD",cTIP,,1)
-endif
-do case
-   case cTIP = "C"
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function TIPCAD()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC TIPCAD( cTIP, cVAR, nROW, nCOL, cVA2 )
+
+   LOCAL cARQ  := "MA01"
+   LOCAL cTIT  := ""
+   LOCAL lRETU := .T.
+
+   IF !cTIP $ "CFVTPM"
+      cTIP := ESCOLHETAB( "TIPCAD", cTIP,, 1 )
+   ENDIF
+   DO CASE
+   CASE cTIP = "C"
       cARQ := "MA01"
       cTIT := "CLIENTE       "
-   case cTIP = "F"
+   CASE cTIP = "F"
       cARQ := "MB01"
       cTIT := "FORNECEDOR    "
-   case cTIP = "V"
+   CASE cTIP = "V"
       cARQ := "MC01"
       cTIT := "VENDEDOR      "
-   case cTIP = "T"
+   CASE cTIP = "T"
       cARQ := "MG01"
       cTIT := "TRANSPORTADORA"
-   case cTIP = "P"
+   CASE cTIP = "P"
       cARQ := "M301"
       cTIT := "PORTO         "
-   case cTIP = "M"
+   CASE cTIP = "M"
       cARQ := "MP03"
       cTIT := "MAO DE OBRA   "
-   otherwise
+   OTHERWISE
       lRETU := .F.
-endcase
-if valtype(nROW) = "N" .and. valtype(nCOL) = "N"
-   @ nROW,nCOL say cTIT         
-endif
-if valtype(cVAR) = "C"
-   &cVAR. := cARQ
-endif
-if valtype(cVA2) = "C"
-   &cVA2. := cTIP
-endif
-retu lRETU
+   ENDCASE
+   IF ValType( nROW ) = "N" .AND. ValType( nCOL ) = "N"
+      @ nROW, nCOL SAY cTIT
+   ENDIF
+   IF ValType( cVAR ) = "C"
+      &cVAR. := cARQ
+   ENDIF
+   IF ValType( cVA2 ) = "C"
+      &cVA2. := cTIP
+   ENDIF
+   RETU lRETU
 
+
+// + EOF: mlib21.prg
+// +

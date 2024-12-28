@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : focg.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : focg.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -34,62 +34,62 @@
 // :  Atualizado em: 28/06/98
 // :
 // :*****************************************************************************
-////#INCLUDE "COMANDO.CH"
+// //#INCLUDE "COMANDO.CH"
 
 
-IF !MDL('Resumo para Compra de Vale Transporte',0)
-   RETU
+IF !MDL( 'Resumo para Compra de Vale Transporte', 0 )
+RETU
 ENDIF
-if !netuse("VTCONTA")
-   retu .f.
-endif
-if !netuse("vtfolha")
-   dbclosearea()
-   retu .f.
-endif
+IF !netuse( "VTCONTA" )
+RETU .F.
+ENDIF
+IF !netuse( "vtfolha" )
+dbCloseArea()
+RETU .F.
+ENDIF
 
 CTLIN := 1
 IMPRESSORA()
-@ PROW(), 0    SAY IMPSTR(cIMPEXP)                                              
-@ PROW(),00    SAY IMPCHR(cIMPTIT)+'Resumo para Compra Vale Transporte'         
-@ PROW()+ 2,60 SAY TIME()                                                       
-@ PROW(),70    SAY DXDIA                                                        
-@ PROW()+ 1,0  SAY REPL('-',80)                                                 
-@ PROW()+ 1,0  SAY 'COD.'                                                       
-@ PROW(), 5    SAY 'DESCR'                                                      
-@ PROW(),50    SAY 'VALOR'                                                      
-@ PROW(),60    SAY 'QUANTIDADE'                                                 
-@ PROW()+ 1,0  SAY REPL('-',80)                                                 
+@ PRow(), 0    SAY IMPSTR( cIMPEXP )
+@ PRow(), 00    SAY IMPCHR( cIMPTIT ) + 'Resumo para Compra Vale Transporte'
+@ PRow() + 2, 60 SAY Time()
+@ PRow(), 70    SAY DXDIA
+@ PRow() + 1, 0  SAY REPL( '-', 80 )
+@ PRow() + 1, 0  SAY 'COD.'
+@ PRow(), 5    SAY 'DESCR'
+@ PRow(), 50    SAY 'VALOR'
+@ PRow(), 60    SAY 'QUANTIDADE'
+@ PRow() + 1, 0  SAY REPL( '-', 80 )
 
-DBSELECTAR("VTCONTA")
-DBGOTOP()
-WHILE !EOF()
-   SOMA   := 0
-   CTX    := CODIGO
-   FILTRO := 'CONTA=CTX'
-   DBSELECTAR("VTFOLHA")
-   SET FILTER TO &FILTRO
-   DBGOTOP()
-   WHILE !EOF()
-      SOMA += HORAS
-      DBSKIP()
-   ENDDO
-   SET FILTER TO
-   SOMA := IF(SOMA # 0,(INT((SOMA+20) / 20) * 20),0)
-   DBSELECTAR("VTCONTA")
-   IF SOMA # 0
-      @ PROW()+ 1,0 SAY CODIGO                            
-      @ PROW(), 5   SAY DESCR                             
-      @ PROW(),50   SAY VALOR  PICT "#,###,###.##"        
-      @ PROW(),60   SAY SOMA   PICT "########"            
-   ENDIF
-   DBSKIP()
+dbSelectAr( "VTCONTA" )
+dbGoTop()
+WHILE !Eof()
+SOMA   := 0
+CTX    := CODIGO
+FILTRO := 'CONTA=CTX'
+dbSelectAr( "VTFOLHA" )
+SET FILTER TO &FILTRO
+dbGoTop()
+WHILE !Eof()
+SOMA += HORAS
+dbSkip()
 ENDDO
-DBCLOSEALL()
+SET FILTER TO
+SOMA := IF( SOMA # 0, ( Int( ( SOMA + 20 ) / 20 ) * 20 ), 0 )
+dbSelectAr( "VTCONTA" )
+IF SOMA # 0
+@ PRow() + 1, 0 SAY CODIGO
+@ PRow(), 5   SAY DESCR
+@ PRow(), 50   SAY VALOR  PICT "#,###,###.##"
+@ PRow(), 60   SAY SOMA   PICT "########"
+ENDIF
+dbSkip()
+ENDDO
+dbCloseAll()
 IMPFOL()
 VIDEO()
 IMPEND()
 RETU .T.
 
-*+ EOF: focg.prg
-*+
+// + EOF: focg.prg
+// +

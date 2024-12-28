@@ -1,790 +1,1000 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Source Module => J:\ITAESBRA\M_A2.PRG
-*+
-*+    Functions: Function MA26()
-*+               Function Ma2lanhor()
-*+               Function MA2MEDSEQ()
-*+               Function MA2MEDSEQC()
-*+               Function MA2CALLED()
-*+               Function MA2MEDPRG()
-*+               Function MA2CHKPRG()
-*+               Function MAS2CHKARQ()
-*+               Function MA2PLTINV()
-*+               Function MA2PLT01()
-*+
-*+    Reformatted by Click! 2.03 on May-29-2003 at  3:16 pm
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_a2.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:46 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MA26()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MA26
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Source Module => J:\ITAESBRA\M_A2.PRG
+// +
+// +    Functions: Function MA26()
+// +               Function Ma2lanhor()
+// +               Function MA2MEDSEQ()
+// +               Function MA2MEDSEQC()
+// +               Function MA2CALLED()
+// +               Function MA2MEDPRG()
+// +               Function MA2CHKPRG()
+// +               Function MAS2CHKARQ()
+// +               Function MA2PLTINV()
+// +               Function MA2PLT01()
+// +
+// +    Reformatted by Click! 2.03 on May-29-2003 at  3:16 pm
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
-dDATA := ZDATA
-MDS( "Qual Data" )
-@ 24, 40 get dDATA
-if !READCUR()
-   retu .F.
-endif
-CRIARVARS( "MS04BX" )
-if !USEREDE( "CRM", 1, 2 )
-   dbcloseall()
-   retu .F.
-endif
-dbselectar( "CRM" )
-dbgotop()
-dbseek( dDATA )
-while dDATA = DATA .and. !eof()
-   if TIPOE = "T"
-      lGRAVOU := .F.
-      for X := 1 to 2
-         xCODIGO    := padr( PRODUTO, 24 )
-         xNRNOTAINI := val( PEDIDO )
-         xNRNOTASAI := if( X = 1, NRNOTA, NRNOTB )
-         xDATASAI   := DATA
-         xTOTKGSAI  := if( X = 1, QTDEA, QTDEB )
-         xCRM       := CRM
-         do case
-         case CRM->GRAVOU = "S"
-            ALERTX( "Crm: " + str( xCRM ) + " Ja Gravado" )
-         case empty( xCODIGO )
-            ALERTX( "Crm: " + str( xCRM ) + " sem Codigo Produto" )
-         case empty( xNRNOTASAI )
-            ALERTX( "Crm: " + str( xCRM ) + " sem numero nota entrada" )
-         case empty( xNRNOTAINI )
-            ALERTX( "Crm: " + str( xCRM ) + " sem numero nota(PEDIDO)" )
-         case empty( xDATASAI )
-            ALERTX( "Crm: " + str( xCRM ) + " sem data" )
-         case empty( xTOTKGSAI )
-            ALERTX( "Crm: " + str( xCRM ) + " sem quantidade" )
-         otherwise
-            if IGUALVARS( "MS04", xCODIGO + str( xNRNOTAINI, 8 ) )
-               mDATASAI   := xDATASAI
-               mNRNOTAINI := xNRNOTAINI
-               mNRNOTASAI := xNRNOTASAI
-               mTOTKGSAI  := xTOTKGSAI
-               mTOTKGEST  := mTOTKGANT - mTOTKGSAI
-               mCRM       := xCRM
-               BAIXAREM( "MS04", "MS04BX", mCODIGO + str( mNRNOTAINI ) )
-               lGRAVOU := .T.
-            else
-               ALERTX( "No Encontrei Nota: " + str( xNRNOTAINI, 8 ) + " Codigo " + xCODIGO )
-            endif
-         endcase
-      next X
-      if lGRAVOU
-         dbselectar( "CRM" )
-         netgrvcam("GRAVOU","S")
-      endif
-   endif
-   dbselectar( "CRM" )
-   dbskip()
-enddo
-dbcloseall()
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MA26()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function Ma2lanhor()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func Ma2lanhor
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MA26()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC MA26
 
-nHORAS := 0.00
-MDI( "Lanar Horas" )
-MDS( "Digite Quantidade Horas" )
-@ 24, 40 get nHORAS
-if !READCUR()
-   retu .F.
-endif
-FILTRO := ''
-FILTRO := RFILORD( "MS01", .F. )
-if !USEREDE( "MS01", 1, 0 )
-   retu .F.
-endif
-if !empty( FILTRO )
-   set filter to &FILTRO
-endif
-dbgotop()
-while !eof()
-   netgrvcam("PCPRGHOR",nHORAS)
-   dbskip()
-enddo
-dbclosearea()
+   dDATA := ZDATA
+   MDS( "Qual Data" )
+   @ 24, 40 GET dDATA
+   IF !READCUR()
+      RETU .F.
+   ENDIF
+   CRIARVARS( "MS04BX" )
+   IF !USEREDE( "CRM", 1, 2 )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+   dbSelectAr( "CRM" )
+   dbGoTop()
+   dbSeek( dDATA )
+   WHILE dDATA = DATA .AND. !Eof()
+      IF TIPOE = "T"
+         lGRAVOU := .F.
+         FOR X := 1 TO 2
+            xCODIGO    := PadR( PRODUTO, 24 )
+            xNRNOTAINI := Val( PEDIDO )
+            xNRNOTASAI := if( X = 1, NRNOTA, NRNOTB )
+            xDATASAI   := DATA
+            xTOTKGSAI  := if( X = 1, QTDEA, QTDEB )
+            xCRM       := CRM
+            DO CASE
+            CASE CRM->GRAVOU = "S"
+               ALERTX( "Crm: " + Str( xCRM ) + " Ja Gravado" )
+            CASE Empty( xCODIGO )
+               ALERTX( "Crm: " + Str( xCRM ) + " sem Codigo Produto" )
+            CASE Empty( xNRNOTASAI )
+               ALERTX( "Crm: " + Str( xCRM ) + " sem numero nota entrada" )
+            CASE Empty( xNRNOTAINI )
+               ALERTX( "Crm: " + Str( xCRM ) + " sem numero nota(PEDIDO)" )
+            CASE Empty( xDATASAI )
+               ALERTX( "Crm: " + Str( xCRM ) + " sem data" )
+            CASE Empty( xTOTKGSAI )
+               ALERTX( "Crm: " + Str( xCRM ) + " sem quantidade" )
+            OTHERWISE
+               IF IGUALVARS( "MS04", xCODIGO + Str( xNRNOTAINI, 8 ) )
+                  mDATASAI   := xDATASAI
+                  mNRNOTAINI := xNRNOTAINI
+                  mNRNOTASAI := xNRNOTASAI
+                  mTOTKGSAI  := xTOTKGSAI
+                  mTOTKGEST  := mTOTKGANT - mTOTKGSAI
+                  mCRM       := xCRM
+                  BAIXAREM( "MS04", "MS04BX", mCODIGO + Str( mNRNOTAINI ) )
+                  lGRAVOU := .T.
+               ELSE
+                  ALERTX( "No Encontrei Nota: " + Str( xNRNOTAINI, 8 ) + " Codigo " + xCODIGO )
+               ENDIF
+            ENDCASE
+         NEXT X
+         IF lGRAVOU
+            dbSelectAr( "CRM" )
+            netgrvcam( "GRAVOU", "S" )
+         ENDIF
+      ENDIF
+      dbSelectAr( "CRM" )
+      dbSkip()
+   ENDDO
+   dbCloseAll()
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MA2MEDSEQ()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MA2MEDSEQ
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function Ma2lanhor()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-MDI( " н Apurar Media Sequencia" )
-if !MDG( "As ApuraЦo Desempenho EstЦo OK" )
-   retu .F.
-endif
-cMEDIA := "M"
-@ 24, 00 say "(M)edia (1)Aux1 (2)Aux2 (I)nt"
-@ 24, 50 get cMEDIA
-if !READCUR()
-   retu .F.
-endif
-aPER   := PEDPER( .T. )
-mMESES := aPER[ 7 ]
-if !aPER[ 5 ]
-   retu .F.
-endif
-if !USEMULT( { { "RDT", 1, 1 }, { "MS06", 1, 1 } } )
-   dbcloseall()
-   retu .F.
-endif
-dbselectar( "MS06" )
-dbgotop()
-while !eof()
-   netreclock()
-   do case
-   case cMEDIA = "M"
-      field->PCHORMED := 0
-   case cMEDIA = "I"
-      field->PCHORAMD := 0
-   case cMEDIA = "1"
-      field->PCHORAX1 := 0
-   case cMEDIA = "2"
-      field->PCHORAX2 := 0
-   endcase
-   dbunlock()
-   dbskip()
-enddo
 
-dbselectar( "RDT" )
-dbgotop()
-while !eof()
-   mCODIGO := alltrim( CODIGO )
-   mSEQ    := SEQ
-   mSSQ    := SSQ
-   mQTD    := 0
-   mHOR    := 0
-   while mSEQ = SEQ .and. mSSQ = SSQ .and. mCODIGO = trim( CODIGO ) .and. !eof()
-      @ 24, 00 say mCODIGO + " " + str( SEQ ) + " " + str( SSQ ) + " " + str( MES ) + " " + str( ANO ) + " " + strzero( recno() )
-      CALCPER( aPER, ANO, MES, { || MA2MEDSEQC() } )
-      dbskip()
-   enddo
-   if mQTD > 0 .and. mHOR > 0
-      dbselectar( "MS06" )
-      dbgotop()
-      if dbseek( padr( mCODIGO, 24 ) + str( mSEQ, 3 ) + str( mSSQ, 3 ) )
-         netreclock()
-         do case
-         case cMEDIA = "M"
-            field->PCHORMED := mQTD / mHOR
-         case cMEDIA = "I"
-            field->PCHORAMD := mQTD / mHOR
-         case cMEDIA = "1"
-            field->PCHORAX1 := mQTD / mHOR
-         case cMEDIA = "2"
-            field->PCHORAX2 := mQTD / mHOR
-         endcase
-         if PCHORMED > 0
-            field->PCHORMEQ := 1 / PCHORMED
-         endif
-         dbunlock()
-      endif
-   endif
-   dbselectar( "RDT" )
-enddo
-dbcloseall()
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Ma2lanhor()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MA2MEDSEQC()
-*+
-*+    Called from ( m_a2.prg     )   1 - function ma2medseq()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MA2MEDSEQC
+FUNC Ma2lanhor
 
-mQTD += PQTDDE
-mHOR += PHORAS
-retu
+   nHORAS := 0.00
+   MDI( "Lanar Horas" )
+   MDS( "Digite Quantidade Horas" )
+   @ 24, 40 GET nHORAS
+   IF !READCUR()
+      RETU .F.
+   ENDIF
+   FILTRO := ''
+   FILTRO := RFILORD( "MS01", .F. )
+   IF !USEREDE( "MS01", 1, 0 )
+      RETU .F.
+   ENDIF
+   IF !Empty( FILTRO )
+      SET FILTER TO &FILTRO
+   ENDIF
+   dbGoTop()
+   WHILE !Eof()
+      netgrvcam( "PCPRGHOR", nHORAS )
+      dbSkip()
+   ENDDO
+   dbCloseArea()
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MA2CALLED()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MA2CALLED
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MA2MEDSEQ()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-MDI( "Calculando Leading-Time" )
-if !USEMULT( { { "MS01", 1, 1 }, { "MS06", 1, 1 } } )
-   retu .F.
-endif
-FILTRO := ''
-FILTRO := RFILORD( "MS01", .F. )
-if !USEREDE( "MS01", 1, 0 )
-   retu .F.
-endif
-if !empty( FILTRO )
-   set filter to &FILTRO
-endif
-dbgotop()
-while !eof()
-   mCODIGO := alltrim( CODIGO )
-   @ 24, 00 say mCODIGO
-   if PCPRGMED > 0 .and. PCPRGHOR > 0
-      mPCPRGMED := PCPRGMED
-      mPCPRGHOR := PCPRGHOR
-      dbselectar( "MS06" )
-      dbseek( mCODIGO )
-      while mCODIGO = alltrim( CODIGO ) .and. !eof()
-         netreclock()
-         if PCHORMEQ > 0
-            field->PCHORDIA := ( 1 / mPCPRGHOR ) * PCHORMEQ
-            field->LEADCALC := mPCPRGMED * PCHORDIA
-            field->PCHORNEC := mPCPRGMED * PCHORMEQ
-            field->LEADARRE := round( LEADCALC + .5, 0 )
-         else
-            field->PCHORDIA := 0
-            field->LEADCALC := 0
-         endif
-         dbunlock()
-         dbskip()
-      enddo
-   endif
-   dbselectar( "MS01" )
-   dbskip()
-enddo
-if !MDG( "Calcular Prz-Dias" )
-   dbcloseall()
-   retu .T.
-endif
-dbselectar( "MS01" )
-dbgotop()
-while !eof()
-   mCODIGO := CODIGO
-   @ 24, 00 say mCODIGO
-   nTOTAL := 0
-   //   nRECNO:=0
-   dbselectar( "MS06" )
-   dbgotop()
-   dbseek( mCODIGO )
-   while alltrim( mCODIGO ) = alltrim( CODIGO ) .and. !eof()
-      nTOTAL += LEADARRE
-      nRECNO := recno()
-      dbskip()
-   enddo
-   dbgotop()
-   dbseek( mCODIGO )
-   while alltrim( mCODIGO ) = alltrim( CODIGO ) .and. !eof()
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MA2MEDSEQ()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MA2MEDSEQ
+
+   MDI( " н Apurar Media Sequencia" )
+   IF !MDG( "As ApuraЦo Desempenho EstЦo OK" )
+      RETU .F.
+   ENDIF
+   cMEDIA := "M"
+   @ 24, 00 SAY "(M)edia (1)Aux1 (2)Aux2 (I)nt"
+   @ 24, 50 GET cMEDIA
+   IF !READCUR()
+      RETU .F.
+   ENDIF
+   aPER   := PEDPER( .T. )
+   mMESES := aPER[ 7 ]
+   IF !aPER[ 5 ]
+      RETU .F.
+   ENDIF
+   IF !USEMULT( { { "RDT", 1, 1 }, { "MS06", 1, 1 } } )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+   dbSelectAr( "MS06" )
+   dbGoTop()
+   WHILE !Eof()
       netreclock()
-      field->LIMTIME := nTOTAL
-      dbunlock()
-      nTOTAL -= LEADARRE
-      if nTOTAL <= 0
-         nTOTAL := 1
-      endif
-      dbskip()
-   enddo
-   dbselectar( "MS01" )
-   dbskip()
-enddo
-dbcloseall()
-retu .T.
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MA2MEDPRG()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MA2MEDPRG( nTIPO )
-
-if !MDG( "As ApuraЦo Entrega EstЦo OK" )
-   retu .F.
-endif
-aPER := PEDPER( .T. )
-if !aPER[ 5 ]
-   retu .F.
-endif
-if nTIPO = 1
-   if !USEMULT( { { "BS5", 1, 2 }, { "MS01", 1, 2 } } )
-      dbcloseall()
-      retu .F.
-   endif
-else
-   if !USEMULT( { { "BS5", 1, 2 }, { "OP01", 1, 2 } } )
-      dbcloseall()
-      retu .F.
-   endif
-endif
-IF nTIPO=1
-   DBSELECTAR("MS01")
-   DBGOTOP()
-   WHILE ! EOF()
-       netgrvcam("PCPRGMED",0)
-       DBSKIP()
-   ENDDO
-ELSE
-   DBSELECTAR("OP01")
-   DBGOTOP()
-   WHILE ! EOF()
-       netreclock()
-       field->VMED := 0
-       field->VMEQ := 0
-       dbunlock()
-       DBSKIP()
-   ENDDO
-ENDIF
-dbselectar( "BS5" )
-dbgotop()
-while !eof()
-   mCODIGO := alltrim( CODIGO )
-   mQTD    := 0
-   while mCODIGO = trim( CODIGO ) .and. !eof()
-      @ 24, 00 say mCODIGO + " " + str( MES ) + " " + str( ANO ) + " " + strzero( recno() )
-      CALCPER( aPER, ANO, MES, { || mQTD := mQTD + QTDDE } )
-      dbskip()
-   enddo
-   if mQTD > 0
-      if nTIPO = 1
-         dbselectar( "MS01" )
-         dbgotop()
-         if dbseek( mCODIGO )
-            netgrvcam("PCPRGMED",mQTD / aPER[ 7 ])
-         endif
-      else
-         dbselectar( "OP01" )
-         dbgotop()
-         if dbseek( mCODIGO )
-            netreclock()
-            field->VMED := mQTD / aPER[ 7 ]                 //QTDE/N Meses
-            field->VMEQ := VMED / 2     //Quinzenal
-            dbunlock()
-         endif
-      endif
-   endif
-   dbselectar( "BS5" )
-enddo
-dbcloseall()
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MA2CHKPRG()
-*+
-*+    Called from ( m_a2.prg     )   1 - function ma2pltinv()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MA2CHKPRG(lSOOP)
-IF VALTYPE(lSOOP)#"L"
-   lSOOP:=.F.
-ENDIF
-
-MDI( "Checando Produto ComposiЦo Sequencia" )
-if !USEMULT( { { "MA01", 1, 1 },{ "MS01", 1, 2 },{ "MS01X", 1, 1 }, { "OP01", 1, 0 } } )
-   retu .F.
-endif
-dbselectar( "MS01" )
-while !eof()
-   netreclock()
-   if empty( PCPRGMED ).AND.EMPTY(ESTQSAL).AND.(EMPTY(ULTIMOFA).OR.(ZDATA-ULTIMOFA)>180)
-      field->ATIVO := "N"
-   ELSE
-      field->ATIVO := "S"
-   endif
-   if empty( CLIPCP )
-      field->CLIPCP := FORNECEDO
-   endif
-   dbunlock()
-   dbskip()
-enddo
-dbselectar( "op01" )
-dbgotop()
-while !eof()
-   mCODIGO := CODIGO
-   mATIVO  := ATIVO
-   mCODIGOINT:=""
-   mNOME:=""
-   mCLIENTE:=CLIENTE
-   mCOGNOME:=COGNOME
-   MDS( mCODIGO )
-   dbselectar( "ms01" )
-   dbgotop()
-   if dbseek( Mcodigo )
-      IF EMPTY(ATIVO)
-         GRAVACAMPO({"ATIVO"},{"'S'"})
-      endif         
-      mCODIGOINT:=CODIGOINT
-      mNOME:=NOME
-      mCLIENTE:=FORNECEDO
-   ENDIF         
-   IF EMPTY(mCODIGOINT).OR.EMPTY(mCLIENTE).OR.EMPTY(mNOME)
-      dbselectar( "ms01X" )
-      dbgotop()
-      if dbseek( Mcodigo )
-         IF EMPTY(mCODIGOINT)
-            mCODIGOINT:=CODIGOINT
-         ENDIF   
-         IF EMPTY(mNOME)
-            mNOME:=NOME
-         ENDIF
-         IF EMPTY(MCLIENTE)
-            mCLIENTE:=FORNECEDO
-         ENDIF   
-      endif
-   ENDIF
-   IF EMPTY(mCOGNOME)
-      dbselectar( "MA01" )
-      dbgotop()
-      if dbseek( MCLIENTE )
-         mCOGNOME:=COGNOME      
-      ENDIF
-   ENDIF
-   dbselectar( "op01" )
-   IF EMPTY(CODIGOINT).AND.! EMPTY(mCODIGOINT)
-      GRAVACAMPO({"CODIGOINT"},{"mCODIGOINT"})
-   ENDIF
-   IF EMPTY(NOME).AND.! EMPTY(mNOME)
-      GRAVACAMPO({"NOME"},{"mNOME"})
-   ENDIF   
-   IF EMPTY(COGNOME).AND.! EMPTY(mCOGNOME)
-      GRAVACAMPO({"COGNOME"},{"mCOGNOME"})
-   ENDIF   
-   IF EMPTY(CLIENTE).AND.! EMPTY(mCLIENTE)
-      GRAVACAMPO({"CLIENTE"},{"mCLIENTE"})
-   ENDIF   
-   dbskip()
-enddo
-dbcloseall()
-IF lSOOP
-   RETU
-ENDIF
-IF MDG("Excluir Composicao Produtos Inativos")
-   MAS2CHKARQ( "MS03" )
-ENDIF
-IF MDG("Excluir Operacoes Produtos Inativos")
-   MAS2CHKARQ( "MS06" )
-ENDIF
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MAS2CHKARQ()
-*+
-*+    Called from ( m_a2.prg     )   2 - function ma2chkprg()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MAS2CHKARQ( cARQ )
-
-IF cARQ="MS06"
-   if !USEMULT( { { "MS01", 1, 2 }, { cARQ, 1, 99 },{"MS06BX",1,99} } )
-      retu .F.
-   endif
-ELSE
-   if !USEMULT( { { "MS01", 1, 2 }, { cARQ, 1, 99 } } )
-      retu .F.
-   endif
-endif
-dbselectar( cARQ )
-INITVARS()
-CLRVARS()
-dbgotop()
-while !eof()
-   mCODIGO := alltrim( CODIGO )
-   MDS( mCODIGO )
-   lTEM := .F.
-   dbselectar( "MS01" )
-   dbgotop()
-   if dbseek( mCODIGO )
-      if ATIVO <> "N"
-         lTEM := .T.
-      endif
-   endif
-   dbselectar( cARQ )
-   while mCODIGO = alltrim( CODIGO ) .and. !eof()
-      if !lTEM
-         IF cARQ="MS06"
-            EQUVARS()
-            NOVOOPA("MS06BX",,,.F.)
-         ENDIF
-         dbselectar( cARQ )
-         netrecdel()
-      endif
-      dbskip()
-   enddo
-enddo
-dbcloseall()
-if userede(Carq,0,99)
-   dbselectar( cARQ )
-   nLASTREC:=LASTREC()
-   zei_fort( nLASTREC,,,0)
-   DBEVAL({|| netrecdel()},{|| EMPTY(CODIGO)}, {|| zei_fort(nLASTREC,,,1)})
-   if cARQ = "MS03"
-      zei_fort( nLASTREC,,,0)
-      DBEVAL({|| netrecdel()},{|| EMPTY(CODCOMP)}, {|| zei_fort(nLASTREC,,,1)})
-   endif
-   pack
-   dbcloseall()
-endif
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MA2PLTINV()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MA2PLTINV
-
-//Checa Itens Ativos sequencia composiao
-IF MDG("Checar Composiao Sequencia")
-   MA2CHKPRG()
-ENDIF
-
-IF MDG("Calcular Preo Inventario MatPrima")
-   CALCINV("M")
-ENDIF
-
-IF MDG("Calcular Preo Inventario Componentes")
-   CALCINV("C")
-ENDIF
-
-IF MDG("Calcular Preo Inventario Produtos")
-   MASCALINV()
-ENDIF
-
-
-if !USEMULT( { { "MS01", 1, 99 }, { "MS06", 1, 99 }, { "MT01", 1, 99 }, { "MU01", 1, 99 }, { "MS03", 1, 99 } } )
-   retu .F.
-endif
-dbselectar( "MS01" )
-MDS()
-dbgotop()
-while !eof()
-   cCODIGO := alltrim( CODIGO )
-   if empty( PLTINV )
-      netgrvcam("PLTINV",PLTINV)
-   endif
-   mPLANTA := PLTINV
-   if mPLANTA > 0
-      @ 24, 00 say CODIGO
-      dbselectar( "MS06" )
-      dbgotop()
-      dbseek( cCODIGO )
-      while cCODIGO = alltrim( CODIGO ) .and. !eof()
-         @ 24, 40 say SEQ
-         @ 24, 44 say SSQ
-         if PLTINV <> mPLANTA
-            netgrvcam("PLTINV",mPLANTA)
-         endif
-         dbskip()
-      enddo
-      dbselectar( "MS03" )
-      dbgotop()
-      dbseek( cCODIGO )
-      while cCODIGO = alltrim( CODIGO ) .and. !eof()
-         if TIPOENT = "C" .or. TIPOENT = "M"
-            @ 24, 40 say CODCOMP
-            cSUBCOD := alltrim( CODCOMP )
-            dbselectar( if( TIPOENT = "C", "MT01", "MU01" ) )
-            dbgotop()
-            if dbseek( cSUBCOD )
-               if PLTINV <> mPLANTA
-                  netgrvcam("PLTINV",mPLANTA)
-               endif
-            endif
-         endif
-         dbselectar( "MS03" )
-         dbskip()
-      enddo
-   endif
-   dbselectar( "MS01" )
-   netgrvcam("VALFATINV",0)
-   dbskip()
-enddo
-MA2PLT01( "MT01" )
-MA2PLT01( "MU01" )
-MA2PLT01( "MS01" )
-MA2PLT01( "MS06" )
-dbcloseall()
-
-IF MDG("Calcular Faturamento Mes")
-   ma2pltfat()
-endif
-retu
-
-func ma2pltfat()
-aDAD := PEGMES( { "M2" } )
-nMES := aDAD[ 1]
-nANO := aDAD[ 2]
-cARQ:= aDAD[5][1]
-
-
-IF ! USEMULT({{"MS01",1,99},{caRQ,1,0}})
-   RETU .F.
-ENDIF
-nLASTREC:=LASTREC()
-zei_fort( nLASTREC,,,0)
-ordDestroy("temp")
-ordcreate(,"temp","TIPOENT+CODIGO")
-ordSetFocus("temp")
-
-
-DBSELECTAR(cARQ)
-DBGOTOP()
-DBSEEK("P") //Acha o Primeiro Produto
-WHILE TIPOENT="P".AND.! EOF()
-   @ 24,00 SAY RECNO()
-   mCODIGO:=CODIGO
-   mVAL:=0
-   WHILE mCODIGO=CODIGO.AND.TIPOENT="P".AND.! EOF()
-     mVAL+=VALORMER
-     DBSELECTAR(cARQ)
-     DBSKIP()
-   ENDDO
-   IF mVAL>0
-      DBSELECTAR("MS01")
-      DBGOTOP()
-      IF DBSEEK(mCODIGO)
-         netgrvcam("VALFATINV",mVAL)
-      ENDIF
-   ENDIF
-   DBSELECTAR(cARQ)
-ENDDO
-dbcloseaLL()
-
-
-MA2PLT02("MS01","FAT")
-MA2PLT02("MS01")
-MA2PLT02("MS06")
-MA2PLT02("MT01")
-MA2PLT02("MU01")
-
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MA2PLT02()
-*+
-*+    Called from ( m_a2.prg     )   2 - function ma2pltinv()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MA2PLT02( cARQ ,cVAL)
-IF VALTYPE(cVAL)#"C"
-   cVAL:="EST"
-ENDIF
-IF ! USEMULT({{cARQ,1,0},{"MSINV",1,99},{"MA01",1,1}})
-   RETU .F.
-ENDIF
-IF cARQ="MS01".AND.cVAL="FAT" //Apaga Competencia
-   DBSELECTAR("MSINV")
-   DBGOTOP()
-   WHILE ! EOF()
-      @ 24,00 SAY RECNO()
-      IF MES=nMES.AND.ANO=nANO
-         netrecdel()
-      ENDIF
-      DBSELECTAR("MSINV")
-     DBSKIP()
-   ENDDO
-ENDIF
-MDS( cARQ )
-dbselectar( cARQ )
-
-nLASTREC:=LASTREC()
-zei_fort( nLASTREC,,,0)
-ordDestroy("temp")
-ordcreate(,"temp","PLTINV")
-ordSetFocus("temp")
-
-
-dbgotop()
-while !eof()
-   @ 24, 10 say CODIGO
-   mVAL:=0
-   mPLTINV:=PLTINV
-   WHILE mPLTINV=PLTINV.AND. ! EOF()
-     IF cVAL="FAT"
-        mVAL+=VALFATINV
-     ELSE
-        IF PLTINV>0.AND.ESTQSAL>0              //Menos 1 Inativo
-           mVAL+=ESTQSAL*VALINV
-        ENDIF
-     ENDIF
-     dbskip()
-   enddo
-   IF mVAL>0
-      mCOGNOME:=""
-      DBSELECTAR("MA01")
-      DBGOTOP()
-      IF DBSEEK(mPLTINV)
-         mCOGNOME:=COGNOME
-      ENDIF
-      DBSELECTAR("MSINV")
-      DBGOTOP()
-      IF ! DBSEEK(STR(mPLTINV,8)+STR(nANO,4)+STR(nMES,2))
-         netrecapp()
-         FIELD->CLIENTE:=mPLTINV
-         FIELD->COGNOME:=mCOGNOME
-         FIELD->MES:=nMES
-         FIELD->ANO:=nANO
-      ELSE
-         netreclock()
-      ENDIF
       DO CASE
-         CASE cARQ="MT01"
-              FIELD->MAT:=mVAL
-         CASE cARQ="MU01"
-              FIELD->COM:=mVAL
-         CASE cARQ="MS01".AND.cVAL="FAT"
-              FIELD->FAT:=mVAL
-         CASE cARQ="MS01"
-              FIELD->EST:=mVAL
-         CASE cARQ="MS06"
-              FIELD->PRO:=mVAL
+      CASE cMEDIA = "M"
+         field->PCHORMED := 0
+      CASE cMEDIA = "I"
+         field->PCHORAMD := 0
+      CASE cMEDIA = "1"
+         field->PCHORAX1 := 0
+      CASE cMEDIA = "2"
+         field->PCHORAX2 := 0
       ENDCASE
-      FIELD->MATCOM:=MAT+COM
-      FIELD->ESP   :=EST+PRO
-      FIELD->TOT   :=MAT+COM+PRO+EST
-      FIELD->MATP:=PERC(MAT,FAT)
-      FIELD->COMP:=PERC(COM,FAT)
-      FIELD->MATCOMP:=PERC(MATCOM,FAT)
-      FIELD->ESTP:=PERC(EST,FAT)
-      FIELD->PROP:=PERC(PRO,FAT)
-      FIELD->ESPP:=PERC(ESP,FAT)
-      FIELD->TOTP:=PERC(TOT,FAT)
-      DBUNLOCK()
+      dbUnlock()
+      dbSkip()
+   ENDDO
+
+   dbSelectAr( "RDT" )
+   dbGoTop()
+   WHILE !Eof()
+      mCODIGO := AllTrim( CODIGO )
+      mSEQ    := SEQ
+      mSSQ    := SSQ
+      mQTD    := 0
+      mHOR    := 0
+      WHILE mSEQ = SEQ .AND. mSSQ = SSQ .AND. mCODIGO = Trim( CODIGO ) .AND. !Eof()
+         @ 24, 00 SAY mCODIGO + " " + Str( SEQ ) + " " + Str( SSQ ) + " " + Str( MES ) + " " + Str( ANO ) + " " + StrZero( RecNo() )
+         CALCPER( aPER, ANO, MES, {|| MA2MEDSEQC() } )
+         dbSkip()
+      ENDDO
+      IF mQTD > 0 .AND. mHOR > 0
+         dbSelectAr( "MS06" )
+         dbGoTop()
+         IF dbSeek( PadR( mCODIGO, 24 ) + Str( mSEQ, 3 ) + Str( mSSQ, 3 ) )
+            netreclock()
+            DO CASE
+            CASE cMEDIA = "M"
+               field->PCHORMED := mQTD / mHOR
+            CASE cMEDIA = "I"
+               field->PCHORAMD := mQTD / mHOR
+            CASE cMEDIA = "1"
+               field->PCHORAX1 := mQTD / mHOR
+            CASE cMEDIA = "2"
+               field->PCHORAX2 := mQTD / mHOR
+            ENDCASE
+            IF PCHORMED > 0
+               field->PCHORMEQ := 1 / PCHORMED
+            ENDIF
+            dbUnlock()
+         ENDIF
+      ENDIF
+      dbSelectAr( "RDT" )
+   ENDDO
+   dbCloseAll()
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MA2MEDSEQC()
+// +
+// +    Called from ( m_a2.prg     )   1 - function ma2medseq()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MA2MEDSEQC()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MA2MEDSEQC
+
+   mQTD += PQTDDE
+   mHOR += PHORAS
+   RETU
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MA2CALLED()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MA2CALLED()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MA2CALLED
+
+   MDI( "Calculando Leading-Time" )
+   IF !USEMULT( { { "MS01", 1, 1 }, { "MS06", 1, 1 } } )
+      RETU .F.
    ENDIF
-   DBSELECTAR(cARQ)
-enddo
-DBCLOSEALL()
+   FILTRO := ''
+   FILTRO := RFILORD( "MS01", .F. )
+   IF !USEREDE( "MS01", 1, 0 )
+      RETU .F.
+   ENDIF
+   IF !Empty( FILTRO )
+      SET FILTER TO &FILTRO
+   ENDIF
+   dbGoTop()
+   WHILE !Eof()
+      mCODIGO := AllTrim( CODIGO )
+      @ 24, 00 SAY mCODIGO
+      IF PCPRGMED > 0 .AND. PCPRGHOR > 0
+         mPCPRGMED := PCPRGMED
+         mPCPRGHOR := PCPRGHOR
+         dbSelectAr( "MS06" )
+         dbSeek( mCODIGO )
+         WHILE mCODIGO = AllTrim( CODIGO ) .AND. !Eof()
+            netreclock()
+            IF PCHORMEQ > 0
+               field->PCHORDIA := ( 1 / mPCPRGHOR ) * PCHORMEQ
+               field->LEADCALC := mPCPRGMED * PCHORDIA
+               field->PCHORNEC := mPCPRGMED * PCHORMEQ
+               field->LEADARRE := Round( LEADCALC + .5, 0 )
+            ELSE
+               field->PCHORDIA := 0
+               field->LEADCALC := 0
+            ENDIF
+            dbUnlock()
+            dbSkip()
+         ENDDO
+      ENDIF
+      dbSelectAr( "MS01" )
+      dbSkip()
+   ENDDO
+   IF !MDG( "Calcular Prz-Dias" )
+      dbCloseAll()
+      RETU .T.
+   ENDIF
+   dbSelectAr( "MS01" )
+   dbGoTop()
+   WHILE !Eof()
+      mCODIGO := CODIGO
+      @ 24, 00 SAY mCODIGO
+      nTOTAL := 0
+      // nRECNO:=0
+      dbSelectAr( "MS06" )
+      dbGoTop()
+      dbSeek( mCODIGO )
+      WHILE AllTrim( mCODIGO ) = AllTrim( CODIGO ) .AND. !Eof()
+         nTOTAL += LEADARRE
+         nRECNO := RecNo()
+         dbSkip()
+      ENDDO
+      dbGoTop()
+      dbSeek( mCODIGO )
+      WHILE AllTrim( mCODIGO ) = AllTrim( CODIGO ) .AND. !Eof()
+         netreclock()
+         field->LIMTIME := nTOTAL
+         dbUnlock()
+         nTOTAL -= LEADARRE
+         IF nTOTAL <= 0
+            nTOTAL := 1
+         ENDIF
+         dbSkip()
+      ENDDO
+      dbSelectAr( "MS01" )
+      dbSkip()
+   ENDDO
+   dbCloseAll()
+   RETU .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MA2PLT01()
-*+
-*+    Called from ( m_a2.prg     )   2 - function ma2pltinv()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func MA2PLT01( cARQ )
-
-MDS( cARQ )
-dbselectar( cARQ )
-dbgotop()
-while !eof()
-   @ 24, 10 say CODIGO
-   if empty( PLTINV )
-      GRAVACAMPO({"PLTINV"},{"-1"})  //Menos 1 Inativo
-   endif
-   dbskip()
-enddo
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MA2MEDPRG()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
 
-*+ EOF: M_A2.PRG
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MA2MEDPRG()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MA2MEDPRG( nTIPO )
+
+   IF !MDG( "As ApuraЦo Entrega EstЦo OK" )
+      RETU .F.
+   ENDIF
+   aPER := PEDPER( .T. )
+   IF !aPER[ 5 ]
+      RETU .F.
+   ENDIF
+   IF nTIPO = 1
+      IF !USEMULT( { { "BS5", 1, 2 }, { "MS01", 1, 2 } } )
+         dbCloseAll()
+         RETU .F.
+      ENDIF
+   ELSE
+      IF !USEMULT( { { "BS5", 1, 2 }, { "OP01", 1, 2 } } )
+         dbCloseAll()
+         RETU .F.
+      ENDIF
+   ENDIF
+   IF nTIPO = 1
+      dbSelectAr( "MS01" )
+      dbGoTop()
+      WHILE !Eof()
+         netgrvcam( "PCPRGMED", 0 )
+         dbSkip()
+      ENDDO
+   ELSE
+      dbSelectAr( "OP01" )
+      dbGoTop()
+      WHILE !Eof()
+         netreclock()
+         field->VMED := 0
+         field->VMEQ := 0
+         dbUnlock()
+         dbSkip()
+      ENDDO
+   ENDIF
+   dbSelectAr( "BS5" )
+   dbGoTop()
+   WHILE !Eof()
+      mCODIGO := AllTrim( CODIGO )
+      mQTD    := 0
+      WHILE mCODIGO = Trim( CODIGO ) .AND. !Eof()
+         @ 24, 00 SAY mCODIGO + " " + Str( MES ) + " " + Str( ANO ) + " " + StrZero( RecNo() )
+         CALCPER( aPER, ANO, MES, {|| mQTD := mQTD + QTDDE } )
+         dbSkip()
+      ENDDO
+      IF mQTD > 0
+         IF nTIPO = 1
+            dbSelectAr( "MS01" )
+            dbGoTop()
+            IF dbSeek( mCODIGO )
+               netgrvcam( "PCPRGMED", mQTD / aPER[ 7 ] )
+            ENDIF
+         ELSE
+            dbSelectAr( "OP01" )
+            dbGoTop()
+            IF dbSeek( mCODIGO )
+               netreclock()
+               field->VMED := mQTD / aPER[ 7 ]   // QTDE/N Meses
+               field->VMEQ := VMED / 2   // Quinzenal
+               dbUnlock()
+            ENDIF
+         ENDIF
+      ENDIF
+      dbSelectAr( "BS5" )
+   ENDDO
+   dbCloseAll()
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MA2CHKPRG()
+// +
+// +    Called from ( m_a2.prg     )   1 - function ma2pltinv()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MA2CHKPRG()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MA2CHKPRG( lSOOP )
+
+   IF ValType( lSOOP ) # "L"
+      lSOOP := .F.
+   ENDIF
+
+   MDI( "Checando Produto ComposiЦo Sequencia" )
+   IF !USEMULT( { { "MA01", 1, 1 }, { "MS01", 1, 2 }, { "MS01X", 1, 1 }, { "OP01", 1, 0 } } )
+      RETU .F.
+   ENDIF
+   dbSelectAr( "MS01" )
+   WHILE !Eof()
+      netreclock()
+      IF Empty( PCPRGMED ) .AND. Empty( ESTQSAL ) .AND. ( Empty( ULTIMOFA ) .OR. ( ZDATA - ULTIMOFA ) > 180 )
+         field->ATIVO := "N"
+      ELSE
+         field->ATIVO := "S"
+      ENDIF
+      IF Empty( CLIPCP )
+         field->CLIPCP := FORNECEDO
+      ENDIF
+      dbUnlock()
+      dbSkip()
+   ENDDO
+   dbSelectAr( "op01" )
+   dbGoTop()
+   WHILE !Eof()
+      mCODIGO    := CODIGO
+      mATIVO     := ATIVO
+      mCODIGOINT := ""
+      mNOME      := ""
+      mCLIENTE   := CLIENTE
+      mCOGNOME   := COGNOME
+      MDS( mCODIGO )
+      dbSelectAr( "ms01" )
+      dbGoTop()
+      IF dbSeek( Mcodigo )
+         IF Empty( ATIVO )
+            GRAVACAMPO( { "ATIVO" }, { "'S'" } )
+         ENDIF
+         mCODIGOINT := CODIGOINT
+         mNOME      := NOME
+         mCLIENTE   := FORNECEDO
+      ENDIF
+      IF Empty( mCODIGOINT ) .OR. Empty( mCLIENTE ) .OR. Empty( mNOME )
+         dbSelectAr( "ms01X" )
+         dbGoTop()
+         IF dbSeek( Mcodigo )
+            IF Empty( mCODIGOINT )
+               mCODIGOINT := CODIGOINT
+            ENDIF
+            IF Empty( mNOME )
+               mNOME := NOME
+            ENDIF
+            IF Empty( MCLIENTE )
+               mCLIENTE := FORNECEDO
+            ENDIF
+         ENDIF
+      ENDIF
+      IF Empty( mCOGNOME )
+         dbSelectAr( "MA01" )
+         dbGoTop()
+         IF dbSeek( MCLIENTE )
+            mCOGNOME := COGNOME
+         ENDIF
+      ENDIF
+      dbSelectAr( "op01" )
+      IF Empty( CODIGOINT ) .AND. !Empty( mCODIGOINT )
+         GRAVACAMPO( { "CODIGOINT" }, { "mCODIGOINT" } )
+      ENDIF
+      IF Empty( NOME ) .AND. !Empty( mNOME )
+         GRAVACAMPO( { "NOME" }, { "mNOME" } )
+      ENDIF
+      IF Empty( COGNOME ) .AND. !Empty( mCOGNOME )
+         GRAVACAMPO( { "COGNOME" }, { "mCOGNOME" } )
+      ENDIF
+      IF Empty( CLIENTE ) .AND. !Empty( mCLIENTE )
+         GRAVACAMPO( { "CLIENTE" }, { "mCLIENTE" } )
+      ENDIF
+      dbSkip()
+   ENDDO
+   dbCloseAll()
+   IF lSOOP
+      RETU
+   ENDIF
+   IF MDG( "Excluir Composicao Produtos Inativos" )
+      MAS2CHKARQ( "MS03" )
+   ENDIF
+   IF MDG( "Excluir Operacoes Produtos Inativos" )
+      MAS2CHKARQ( "MS06" )
+   ENDIF
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MAS2CHKARQ()
+// +
+// +    Called from ( m_a2.prg     )   2 - function ma2chkprg()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MAS2CHKARQ()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MAS2CHKARQ( cARQ )
+
+   IF cARQ = "MS06"
+      IF !USEMULT( { { "MS01", 1, 2 }, { cARQ, 1, 99 }, { "MS06BX", 1, 99 } } )
+         RETU .F.
+      ENDIF
+   ELSE
+      IF !USEMULT( { { "MS01", 1, 2 }, { cARQ, 1, 99 } } )
+         RETU .F.
+      ENDIF
+   ENDIF
+   dbSelectAr( cARQ )
+   INITVARS()
+   CLRVARS()
+   dbGoTop()
+   WHILE !Eof()
+      mCODIGO := AllTrim( CODIGO )
+      MDS( mCODIGO )
+      lTEM := .F.
+      dbSelectAr( "MS01" )
+      dbGoTop()
+      IF dbSeek( mCODIGO )
+         IF ATIVO <> "N"
+            lTEM := .T.
+         ENDIF
+      ENDIF
+      dbSelectAr( cARQ )
+      WHILE mCODIGO = AllTrim( CODIGO ) .AND. !Eof()
+         IF !lTEM
+            IF cARQ = "MS06"
+               EQUVARS()
+               NOVOOPA( "MS06BX",,, .F. )
+            ENDIF
+            dbSelectAr( cARQ )
+            netrecdel()
+         ENDIF
+         dbSkip()
+      ENDDO
+   ENDDO
+   dbCloseAll()
+   IF userede( Carq, 0, 99 )
+      dbSelectAr( cARQ )
+      nLASTREC := LastRec()
+      zei_fort( nLASTREC,,, 0 )
+      dbEval( {|| netrecdel() }, {|| Empty( CODIGO ) }, {|| zei_fort( nLASTREC,,, 1 ) } )
+      IF cARQ = "MS03"
+         zei_fort( nLASTREC,,, 0 )
+         dbEval( {|| netrecdel() }, {|| Empty( CODCOMP ) }, {|| zei_fort( nLASTREC,,, 1 ) } )
+      ENDIF
+      PACK
+      dbCloseAll()
+   ENDIF
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MA2PLTINV()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MA2PLTINV()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MA2PLTINV
+
+// Checa Itens Ativos sequencia composiao
+   IF MDG( "Checar Composiao Sequencia" )
+      MA2CHKPRG()
+   ENDIF
+
+   IF MDG( "Calcular Preo Inventario MatPrima" )
+      CALCINV( "M" )
+   ENDIF
+
+   IF MDG( "Calcular Preo Inventario Componentes" )
+      CALCINV( "C" )
+   ENDIF
+
+   IF MDG( "Calcular Preo Inventario Produtos" )
+      MASCALINV()
+   ENDIF
+
+
+   IF !USEMULT( { { "MS01", 1, 99 }, { "MS06", 1, 99 }, { "MT01", 1, 99 }, { "MU01", 1, 99 }, { "MS03", 1, 99 } } )
+      RETU .F.
+   ENDIF
+   dbSelectAr( "MS01" )
+   MDS()
+   dbGoTop()
+   WHILE !Eof()
+      cCODIGO := AllTrim( CODIGO )
+      IF Empty( PLTINV )
+         netgrvcam( "PLTINV", PLTINV )
+      ENDIF
+      mPLANTA := PLTINV
+      IF mPLANTA > 0
+         @ 24, 00 SAY CODIGO
+         dbSelectAr( "MS06" )
+         dbGoTop()
+         dbSeek( cCODIGO )
+         WHILE cCODIGO = AllTrim( CODIGO ) .AND. !Eof()
+            @ 24, 40 SAY SEQ
+            @ 24, 44 SAY SSQ
+            IF PLTINV <> mPLANTA
+               netgrvcam( "PLTINV", mPLANTA )
+            ENDIF
+            dbSkip()
+         ENDDO
+         dbSelectAr( "MS03" )
+         dbGoTop()
+         dbSeek( cCODIGO )
+         WHILE cCODIGO = AllTrim( CODIGO ) .AND. !Eof()
+            IF TIPOENT = "C" .OR. TIPOENT = "M"
+               @ 24, 40 SAY CODCOMP
+               cSUBCOD := AllTrim( CODCOMP )
+               dbSelectAr( if( TIPOENT = "C", "MT01", "MU01" ) )
+               dbGoTop()
+               IF dbSeek( cSUBCOD )
+                  IF PLTINV <> mPLANTA
+                     netgrvcam( "PLTINV", mPLANTA )
+                  ENDIF
+               ENDIF
+            ENDIF
+            dbSelectAr( "MS03" )
+            dbSkip()
+         ENDDO
+      ENDIF
+      dbSelectAr( "MS01" )
+      netgrvcam( "VALFATINV", 0 )
+      dbSkip()
+   ENDDO
+   MA2PLT01( "MT01" )
+   MA2PLT01( "MU01" )
+   MA2PLT01( "MS01" )
+   MA2PLT01( "MS06" )
+   dbCloseAll()
+
+   IF MDG( "Calcular Faturamento Mes" )
+      ma2pltfat()
+   ENDIF
+   RETU
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ma2pltfat()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC ma2pltfat()
+
+   aDAD := PEGMES( { "M2" } )
+   nMES := aDAD[ 1 ]
+   nANO := aDAD[ 2 ]
+   cARQ := aDAD[ 5, 1 ]
+
+
+   IF !USEMULT( { { "MS01", 1, 99 }, { caRQ, 1, 0 } } )
+      RETU .F.
+   ENDIF
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   ordDestroy( "temp" )
+   ordCreate(, "temp", "TIPOENT+CODIGO" )
+   ordSetFocus( "temp" )
+
+
+   dbSelectAr( cARQ )
+   dbGoTop()
+   dbSeek( "P" )   // Acha o Primeiro Produto
+   WHILE TIPOENT = "P" .AND. !Eof()
+      @ 24, 00 SAY RecNo()
+      mCODIGO := CODIGO
+      mVAL    := 0
+      WHILE mCODIGO = CODIGO .AND. TIPOENT = "P" .AND. !Eof()
+         mVAL += VALORMER
+         dbSelectAr( cARQ )
+         dbSkip()
+      ENDDO
+      IF mVAL > 0
+         dbSelectAr( "MS01" )
+         dbGoTop()
+         IF dbSeek( mCODIGO )
+            netgrvcam( "VALFATINV", mVAL )
+         ENDIF
+      ENDIF
+      dbSelectAr( cARQ )
+   ENDDO
+   dbCloseAll()
+
+
+   MA2PLT02( "MS01", "FAT" )
+   MA2PLT02( "MS01" )
+   MA2PLT02( "MS06" )
+   MA2PLT02( "MT01" )
+   MA2PLT02( "MU01" )
+
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MA2PLT02()
+// +
+// +    Called from ( m_a2.prg     )   2 - function ma2pltinv()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MA2PLT02()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MA2PLT02( cARQ, cVAL )
+
+   IF ValType( cVAL ) # "C"
+      cVAL := "EST"
+   ENDIF
+   IF !USEMULT( { { cARQ, 1, 0 }, { "MSINV", 1, 99 }, { "MA01", 1, 1 } } )
+      RETU .F.
+   ENDIF
+   IF cARQ = "MS01" .AND. cVAL = "FAT"   // Apaga Competencia
+      dbSelectAr( "MSINV" )
+      dbGoTop()
+      WHILE !Eof()
+         @ 24, 00 SAY RecNo()
+         IF MES = nMES .AND. ANO = nANO
+            netrecdel()
+         ENDIF
+         dbSelectAr( "MSINV" )
+         dbSkip()
+      ENDDO
+   ENDIF
+   MDS( cARQ )
+   dbSelectAr( cARQ )
+
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   ordDestroy( "temp" )
+   ordCreate(, "temp", "PLTINV" )
+   ordSetFocus( "temp" )
+
+
+   dbGoTop()
+   WHILE !Eof()
+      @ 24, 10 SAY CODIGO
+      mVAL    := 0
+      mPLTINV := PLTINV
+      WHILE mPLTINV = PLTINV .AND. !Eof()
+         IF cVAL = "FAT"
+            mVAL += VALFATINV
+         ELSE
+            IF PLTINV > 0 .AND. ESTQSAL > 0  // Menos 1 Inativo
+               mVAL += ESTQSAL * VALINV
+            ENDIF
+         ENDIF
+         dbSkip()
+      ENDDO
+      IF mVAL > 0
+         mCOGNOME := ""
+         dbSelectAr( "MA01" )
+         dbGoTop()
+         IF dbSeek( mPLTINV )
+            mCOGNOME := COGNOME
+         ENDIF
+         dbSelectAr( "MSINV" )
+         dbGoTop()
+         IF !dbSeek( Str( mPLTINV, 8 ) + Str( nANO, 4 ) + Str( nMES, 2 ) )
+            netrecapp()
+            FIELD->CLIENTE := mPLTINV
+            FIELD->COGNOME := mCOGNOME
+            FIELD->MES     := nMES
+            FIELD->ANO     := nANO
+         ELSE
+            netreclock()
+         ENDIF
+         DO CASE
+         CASE cARQ = "MT01"
+            FIELD->MAT := mVAL
+         CASE cARQ = "MU01"
+            FIELD->COM := mVAL
+         CASE cARQ = "MS01" .AND. cVAL = "FAT"
+            FIELD->FAT := mVAL
+         CASE cARQ = "MS01"
+            FIELD->EST := mVAL
+         CASE cARQ = "MS06"
+            FIELD->PRO := mVAL
+         ENDCASE
+         FIELD->MATCOM  := MAT + COM
+         FIELD->ESP     := EST + PRO
+         FIELD->TOT     := MAT + COM + PRO + EST
+         FIELD->MATP    := PERC( MAT, FAT )
+         FIELD->COMP    := PERC( COM, FAT )
+         FIELD->MATCOMP := PERC( MATCOM, FAT )
+         FIELD->ESTP    := PERC( EST, FAT )
+         FIELD->PROP    := PERC( PRO, FAT )
+         FIELD->ESPP    := PERC( ESP, FAT )
+         FIELD->TOTP    := PERC( TOT, FAT )
+         dbUnlock()
+      ENDIF
+      dbSelectAr( cARQ )
+   ENDDO
+   dbCloseAll()
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MA2PLT01()
+// +
+// +    Called from ( m_a2.prg     )   2 - function ma2pltinv()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MA2PLT01()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MA2PLT01( cARQ )
+
+   MDS( cARQ )
+   dbSelectAr( cARQ )
+   dbGoTop()
+   WHILE !Eof()
+      @ 24, 10 SAY CODIGO
+      IF Empty( PLTINV )
+         GRAVACAMPO( { "PLTINV" }, { "-1" } )   // Menos 1 Inativo
+      ENDIF
+      dbSkip()
+   ENDDO
+
+
+// + EOF: M_A2.PRG
+
+// + EOF: m_a2.prg
+// +

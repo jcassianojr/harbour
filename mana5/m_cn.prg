@@ -1,27 +1,30 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : m_cn.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_cn.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:57 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 // :*****************************************************************************
 // :
@@ -47,40 +50,44 @@
 // :*****************************************************************************
 
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
+// Teclas Operacionais
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 
-PADRAX(0,,0,{"MANREG","MANREL","MANRE1"},"Posi‡„o Grupo Descri‡„o",;
- "' '+STR(mPOSICAO,  2)+' '+mGRUPO+' '+mDESCRICAO","MCN001","MCN001",;
- ,,{|| MCNREP()})
+PADRAX( 0,, 0, { "MANREG", "MANREL", "MANRE1" }, "Posi‡„o Grupo Descri‡„o", ;
+      "' '+STR(mPOSICAO,  2)+' '+mGRUPO+' '+mDESCRICAO", "MCN001", "MCN001", ;
+      ,, {|| MCNREP() } )
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MCNREP()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MCNREP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNC MCNREP
 
-IF mdg("Deseja Ver Configura‡„o de Lay-out")
-   IF mdg("Relatorios Especificos")
-      ARQREL := "MANREL"
-      ARQRE1 := "MANRE1"
-   ELSE
-      ARQREL := "PADREL"
-      ARQRE1 := "PADRE1"
+   IF mdg( "Deseja Ver Configura‡„o de Lay-out" )
+      IF mdg( "Relatorios Especificos" )
+         ARQREL := "MANREL"
+         ARQRE1 := "MANRE1"
+      ELSE
+         ARQREL := "PADREL"
+         ARQRE1 := "PADRE1"
+      ENDIF
+      mMENU  := mGRUPO
+      mMENU1 := mGRUPO
+      M_CN2( 1 )
    ENDIF
-   mMENU  := mGRUPO
-   mMENU1 := mGRUPO
-   M_CN2(1)
-ENDIF
-RETU .T.
+   RETU .T.
 
+
+// + EOF: m_cn.prg
+// +

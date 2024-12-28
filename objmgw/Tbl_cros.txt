@@ -1,0 +1,25 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 28-Dez-2024 at 10:42 am
+*+
+*+--------------------------------------------------------------------
+
+f_makedb.prg
+
+  Indexes: INDEX ON &cCHAVEDBF TAG &cTAG TO &dbf_name
+
+f_mmopac.prg
+
+   Tables: dbUseArea(.T.,,cARQNOME,,.F.)
+           USE &temp_file
+           USE
+
+flib04hab.prg
+
+  Indexes: INDEX ON &mCHAVE TO &mINDICE EVAL ZEI_FORT(nLASTREC,,,1)
+           INDEX ON &mCHAVE TAG &mTAG. EVAL ZEI_FORT(nLASTREC,,,1)
+
+netdbf.prg
+
+   Tables: dbUseArea(lNEW,cDRIVER,cARQ,,lSHA,lREAD)
+

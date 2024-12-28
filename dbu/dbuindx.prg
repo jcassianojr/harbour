@@ -1,297 +1,362 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUINDX.PRG
-*+
-*+    Functions: make_ntx()
-*+               Function ntx_title()
-*+               Function ntx_getfil()
-*+               Function ntx_done()
-*+               Function ntx_exp()
-*+               Function ntx_tag()
-*+               Function ntx_exist()
-*+               Function do_index()
-*+
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : dbuindx.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:07 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    make_ntx()
-*+
-*+    Called from ( dbu.prg      )   1 -
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function make_ntx
 
-local saveColor
-private filename
-private files
-private fi_disp
-private okee_dokee
-private cur_el
-private rel_row
-private def_ext
-private bcur
-private fi_done
-private el
-private cr
-private ntx
-private k_exp
-private k_tag
 
-cr  := "cr" + substr( "123456", M->cur_area, 1 )
-el  := "el" + substr( "123456", M->cur_area, 1 )
-ntx := "ntx" + substr( "123456", M->cur_area, 1 )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function make_ntx()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION make_ntx
 
-filename := &ntx[ &el[ 2 ] ]
+   LOCAL saveColor
+   PRIVATE filename
+   PRIVATE files
+   PRIVATE fi_disp
+   PRIVATE okee_dokee
+   PRIVATE cur_el
+   PRIVATE rel_row
+   PRIVATE def_ext
+   PRIVATE bcur
+   PRIVATE fi_done
+   PRIVATE el
+   PRIVATE cr
+   PRIVATE ntx
+   PRIVATE k_exp
+   PRIVATE k_tag
 
-saveColor := setcolor( M->color2 )
-@ &cr[  2 ], column[ M->cur_area ] + 2 say pad( name( M->filename ), 8 )
+   cr  := "cr" + SubStr( "123456", M->cur_area, 1 )
+   el  := "el" + SubStr( "123456", M->cur_area, 1 )
+   ntx := "ntx" + SubStr( "123456", M->cur_area, 1 )
 
-select( M->cur_area )
-set filter to
-close index
-need_filtr := .T.
-need_ntx   := .T.
-not_target( select(), .F. )
-select( M->cur_area )
+   filename := &ntx[ &el[ 2 ] ]
 
-cur_el  := 1
-rel_row := 0
-files   := "ntx_list"
-def_ext := XEXT()
+   saveColor := SetColor( M->color2 )
+   @ &cr[ 2 ], column[ M->cur_area ] + 2 SAY Pad( name( M->filename ), 8 )
 
-if .not. empty( M->filename )
-   k_exp := ntx_key( M->filename )
-   bcur  := 4
-else
-   k_exp := ""
-   bcur  := 2
-endif
-k_tag := space( 40 )
+   SELECT ( M->cur_area )
+   SET FILTER TO
+   CLOSE INDEX
+   need_filtr := .T.
+   need_ntx   := .T.
+   not_target( Select(), .F. )
+   SELECT ( M->cur_area )
 
-boxarray := {}
+   cur_el  := 1
+   rel_row := 0
+   files   := "ntx_list"
+   def_ext := XEXT()
 
-aadd( boxarray, "ntx_title(sysparam)" )
-aadd( boxarray, "ntx_getfil(sysparam)" )
-aadd( boxarray, "ntx_exp(sysparam)" )
-if tipodbf = 2 .or. tipodbf = 4 //.or. tipodbf = 6
-   aadd( boxarray, "ntx_tag(sysparam)" )
-endif
-aadd( boxarray, "ok_button(sysparam)" )
-aadd( boxarray, "can_button(sysparam)" )
-aadd( boxarray, "filelist(sysparam)" )
-
-fi_disp    := "ntx_exist()"
-fi_done    := "ntx_done()"
-okee_dokee := "do_index()"
-
-if multibox( 13, 17, 9, M->bcur, M->boxarray ) <> 0 .and. ;
-             aseek( &ntx, M->filename ) = 0
-
-   if M->n_files < 14 .or. .not. empty( &ntx[ &el[ 2 ] ] )
-
-      if empty( &ntx[ &el[ 2 ] ] )
-         n_files := M->n_files + 1
-
-      endif
-
-      &ntx[ &el[ 2 ] ] = M->filename
-
-   endif
-endif
-
-saveColor := setcolor( M->color1 )
-@ &cr[  2 ], column[ M->cur_area ] + 2 say pad( name( &ntx[ &el[ 2 ] ] ), 8 )
-
-setcolor( saveColor )
-return
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function ntx_title()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ntx_title
-
-parameters sysparam
-
-return box_title( M->sysparam, "Indice " + ;
-                  substr( M->cur_dbf, rat( hb_ps(), M->cur_dbf ) + 1 ) + ;
-                  " para..." )
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function ntx_getfil()
-*+
-*+    Called from ( dbuindx.prg  )   1 - function ntx_exist()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ntx_getfil
-
-parameters sysparam
-
-return getfile( M->sysparam, 4 )
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function ntx_done()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ntx_done
-
-private done_ok
-
-done_ok := .not. empty( M->filename )
-
-if M->done_ok
-
-   if file( M->filename ) .and. empty( M->k_exp )
+   IF ! Empty( M->filename )
       k_exp := ntx_key( M->filename )
-      ntx_exp( 3 )
+      bcur  := 4
+   ELSE
+      k_exp := ""
+      bcur  := 2
+   ENDIF
+   k_tag := Space( 40 )
 
-   endif
+   boxarray := {}
 
-   if empty( M->k_exp )
-      keyboard chr( 24 )
+   AAdd( boxarray, "ntx_title(sysparam)" )
+   AAdd( boxarray, "ntx_getfil(sysparam)" )
+   AAdd( boxarray, "ntx_exp(sysparam)" )
+   IF tipodbf = 2 .OR. tipodbf = 4   // .or. tipodbf = 6
+      AAdd( boxarray, "ntx_tag(sysparam)" )
+   ENDIF
+   AAdd( boxarray, "ok_button(sysparam)" )
+   AAdd( boxarray, "can_button(sysparam)" )
+   AAdd( boxarray, "filelist(sysparam)" )
 
-   else
-      to_ok()
+   fi_disp    := "ntx_exist()"
+   fi_done    := "ntx_done()"
+   okee_dokee := "do_index()"
 
-   endif
-endif
+   IF multibox( 13, 17, 9, M->bcur, M->boxarray ) <> 0 .AND. ;
+         aseek( &ntx, M->filename ) = 0
 
-return M->done_ok
+      IF M->n_files < 14 .OR. ! Empty( &ntx[ &el[ 2 ] ] )
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function ntx_exp()
-*+
-*+    Called from ( dbuindx.prg  )   1 - function ntx_done()
-*+                                   1 - function ntx_exist()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ntx_exp
+         IF Empty( &ntx[ &el[ 2 ] ] )
+            n_files := M->n_files + 1
 
-parameters sysparam
+         ENDIF
 
-return get_exp( M->sysparam, "CHAVE  ", 5, "k_exp" )
+         &ntx[ &el[ 2 ] ] = M->filename
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function ntx_tag()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ntx_tag
+      ENDIF
+   ENDIF
 
-parameters sysparam
-return get_exp( M->sysparam, "TAG    ", 6, "k_tag" )
+   saveColor := SetColor( M->color1 )
+   @ &cr[ 2 ], column[ M->cur_area ] + 2 SAY Pad( name( &ntx[ &el[ 2 ] ] ), 8 )
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function ntx_exist()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function ntx_exist
+   SetColor( saveColor )
 
-if empty( M->k_exp )
-   k_exp := ntx_key( M->filename )
-
-endif
-
-ntx_getfil( 3 )
-ntx_exp( 3 )
-
-return 0
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function do_index()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function do_index
-
-private done
-private n_dup
-private new_el
-private add_name
-
-n_dup := dup_ntx( M->filename )
-
-do case
-
-case empty( M->filename )
-   error_msg( "Arquivo de indice no selecionado" )
-   done := .F.
-
-case M->n_dup > 0 .and. M->n_dup <> select()
-   error_msg( "Indice em uso em outro arquivo" )
-   done := .F.
-
-case empty( M->k_exp )
-   error_msg( "Chave de para indexao no fornecida" )
-   done := .F.
-case ( TIPODBF = 2 .or. TIPODBF = 4  ) .and. empty( M->K_TAG )   //OR TIPODBF=6
-   error_msg( "Nome da TAG indexao no fornecida" )
-   done := .F.
-
-case .not. type( M->k_exp ) $ "CND"
-   error_msg( "Expresso chave no e v lida" )
-   done := .F.
-
-otherwise
-   stat_msg( "Criando Arquivo de Indice" )
-   mds("")
-   add_name := .not. HB_FILEEXISTS( name( M->filename ) + XEXT() )
-   
-   nLASTREC:=LASTREC()
-   zei_fort( nLASTREC,,,0)
-   if tipodbf = 1 .or. tipodbf = 3 // .or. tipodbf = 5
-      if left( K_EXP, 1 ) # "<"
-         index on &k_exp to &filename eval zei_fort(nLASTREC,,,1)
-      else
-         K_EXP := substr( K_EXP, 2 )
-         index on &k_exp to &filename eval zei_fort(nLASTREC,,,1)
-      endif
-   else
-      if left( K_EXP, 1 ) # "<"
-         index on &k_exp tag &K_TAG to &filename eval zei_fort(nLASTREC,,,1)
-      else
-         K_EXP := substr( K_EXP, 2 )
-         index on &k_exp tag &K_TAG to &filename eval zei_fort(nLASTREC,,,1)
-      endif
-   endif
-   close index
-
-   if at( lower(XEXT()), lower(M->filename) ) = len( M->filename ) - 3 .and. ;
-          HB_FILEEXISTS( name( M->filename ) + XEXT() ) .and. M->add_name
-
-      new_el := afull( M->ntx_list ) + 1
-
-      if M->new_el <= len( M->ntx_list )
-         ntx_list[ M->new_el ] = M->filename
-         array_sort( M->ntx_list )
-
-      endif
-   endif
-
-   stat_msg( "Arquivo Indexado" )
-   done := .T.
-
-endcase
-
-return M->done
+   RETURN
 
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ntx_title()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ntx_title
 
-*+ EOF: DBUINDX.PRG
+   PARAMETERS sysparam
+
+   RETURN box_title( M->sysparam, "Indice " + ;
+      SubStr( M->cur_dbf, RAt( hb_ps(), M->cur_dbf ) + 1 ) + ;
+      " para..." )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ntx_getfil()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ntx_getfil
+
+   PARAMETERS sysparam
+
+   RETURN getfile( M->sysparam, 4 )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ntx_done()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ntx_done
+
+   PRIVATE done_ok
+
+   done_ok := ! Empty( M->filename )
+
+   IF M->done_ok
+
+      IF File( M->filename ) .AND. Empty( M->k_exp )
+         k_exp := ntx_key( M->filename )
+         ntx_exp( 3 )
+
+      ENDIF
+
+      IF Empty( M->k_exp )
+         KEYBOARD Chr( 24 )
+
+      ELSE
+         to_ok()
+
+      ENDIF
+   ENDIF
+
+   RETURN M->done_ok
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ntx_exp()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ntx_exp
+
+   PARAMETERS sysparam
+
+   RETURN get_exp( M->sysparam, "CHAVE  ", 5, "k_exp" )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ntx_tag()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ntx_tag
+
+   PARAMETERS sysparam
+
+   RETURN get_exp( M->sysparam, "TAG    ", 6, "k_tag" )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ntx_exist()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ntx_exist
+
+   IF Empty( M->k_exp )
+      k_exp := ntx_key( M->filename )
+
+   ENDIF
+
+   ntx_getfil( 3 )
+   ntx_exp( 3 )
+
+   RETURN 0
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_index()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION do_index
+
+   PRIVATE done
+   PRIVATE n_dup
+   PRIVATE new_el
+   PRIVATE add_name
+
+   n_dup := dup_ntx( M->filename )
+
+   DO CASE
+
+   CASE Empty( M->filename )
+      error_msg( "Arquivo de indice no selecionado" )
+      done := .F.
+
+   CASE M->n_dup > 0 .AND. M->n_dup <> SELECT ()
+      error_msg( "Indice em uso em outro arquivo" )
+      done := .F.
+
+   CASE Empty( M->k_exp )
+      error_msg( "Chave de para indexao no fornecida" )
+      done := .F.
+   CASE ( TIPODBF = 2 .OR. TIPODBF = 4 ) .AND. Empty( M->K_TAG )   // OR TIPODBF=6
+      error_msg( "Nome da TAG indexao no fornecida" )
+      done := .F.
+
+   CASE ! Type( M->k_exp ) $ "CND"
+      error_msg( "Expresso chave no e v lida" )
+      done := .F.
+
+   OTHERWISE
+      stat_msg( "Criando Arquivo de Indice" )
+      mds( "" )
+      add_name := ! hb_FileExists( name( M->filename ) + XEXT() )
+
+      nLASTREC := LastRec()
+      zei_fort( nLASTREC,,, 0 )
+      IF tipodbf = 1 .OR. tipodbf = 3  // .or. tipodbf = 5
+         IF Left( K_EXP, 1 ) # "<"
+            INDEX ON &k_exp TO &filename eval zei_fort( nLASTREC,,, 1 )
+         ELSE
+            K_EXP := SubStr( K_EXP, 2 )
+            INDEX ON &k_exp TO &filename eval zei_fort( nLASTREC,,, 1 )
+         ENDIF
+      ELSE
+         IF Left( K_EXP, 1 ) # "<"
+            INDEX ON &k_exp TAG &K_TAG TO &filename eval zei_fort( nLASTREC,,, 1 )
+         ELSE
+            K_EXP := SubStr( K_EXP, 2 )
+            INDEX ON &k_exp TAG &K_TAG TO &filename eval zei_fort( nLASTREC,,, 1 )
+         ENDIF
+      ENDIF
+      CLOSE INDEX
+
+      IF At( Lower( XEXT() ), Lower( M->filename ) ) = Len( M->filename ) - 3 .AND. ;
+            hb_FileExists( name( M->filename ) + XEXT() ) .AND. M->add_name
+
+         new_el := afull( M->ntx_list ) + 1
+
+         IF M->new_el <= Len( M->ntx_list )
+            ntx_list[ M->new_el ] = M->filename
+            array_sort( M->ntx_list )
+
+         ENDIF
+      ENDIF
+
+      stat_msg( "Arquivo Indexado" )
+      done := .T.
+
+   ENDCASE
+
+   RETURN M->done
+
+
+
+
+// + EOF: dbuindx.prg
+// +

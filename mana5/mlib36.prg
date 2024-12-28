@@ -1,85 +1,93 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib36.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib36.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MDI()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func MDI(cMES,lFUN,lMES,cARQ)
 
 
-local pCOR := setcolor()
-if valtype(lFUN) # "L"
-   lFUN := .T.
-endif
-if valtype(lMES) # "L"
-   lMES := .T.
-endif
-setcolor(ZCOR002)
-if valtype(cARQ) # "C"
-   @ 01,00 say padr(cMES,80)         
-else
-   @ 01,00 say padr(cMES+OBTER(zARQ,padr(cARQ,8),trim("DESCRICAO")),80)         
-endif
-if lFUN
-   MDF()
-endif
-if lMES
-   @ 24,00
-endif
-setcolor(pCOR)
-retu .T.
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MDI()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC MDI( cMES, lFUN, lMES, cARQ )
+
+   LOCAL pCOR := SetColor()
+
+   IF ValType( lFUN ) # "L"
+      lFUN := .T.
+   ENDIF
+   IF ValType( lMES ) # "L"
+      lMES := .T.
+   ENDIF
+   SetColor( ZCOR002 )
+   IF ValType( cARQ ) # "C"
+      @ 01, 00 SAY PadR( cMES, 80 )
+   ELSE
+      @ 01, 00 SAY PadR( cMES + OBTER( zARQ, PadR( cARQ, 8 ), Trim( "DESCRICAO" ) ), 80 )
+   ENDIF
+   IF lFUN
+      MDF()
+   ENDIF
+   IF lMES
+      @ 24, 00
+   ENDIF
+   SetColor( pCOR )
+   RETU .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MDF()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func MDF
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MDF()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MDF
+
+   SetColor( ZCOR004 )
+   @ 02, 00 CLEAR TO 24 - 1, 79
+   RETU .T.
 
 
-setcolor(ZCOR004)
-@ 02,00 clear to 24 - 1,79
-retu .T.
-
+// + EOF: mlib36.prg
+// +

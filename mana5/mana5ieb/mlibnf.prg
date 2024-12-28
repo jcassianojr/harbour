@@ -1,391 +1,543 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Source Module => J:\ITAESBRA\MLIBNF.PRG
-*+
-*+    Functions: Function NFCOD()
-*+               Function PEGLOTE()
-*+               Function NFBAS()
-*+               Function NFBICM()
-*+               Function NFBIPI()
-*+               Function NFIPI()
-*+               Function NFVIPI()
-*+               Function NFVICM()
-*+
-*+    Reformatted by Click! 2.03 on Nov-25-2003 at  5:05 pm
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlibnf.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:47 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Source Module => J:\ITAESBRA\MLIBNF.PRG
+// +
+// +    Functions: Function NFCOD()
+// +               Function PEGLOTE()
+// +               Function NFBAS()
+// +               Function NFBICM()
+// +               Function NFBIPI()
+// +               Function NFIPI()
+// +               Function NFVIPI()
+// +               Function NFVICM()
+// +
+// +    Reformatted by Click! 2.03 on Nov-25-2003 at  5:05 pm
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
 // * Traz dados Basicos Conforme Codigo
 // *
 // *
 // *
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function NFCOD()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func NFCOD( lPEGLIS )
-local cDBF := alias()
-IF mTIPOENT = "X" //Nada Faz Quando X
-   RETU .T.
-ENDIF
-if valtype( lPEGLIS ) # "L"
-   lPEGLIS:=.F.
-   IF nREF=2
-      lPEGLIS := .T.
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function NFCOD()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NFCOD()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC NFCOD( lPEGLIS )
+
+   LOCAL cDBF := Alias()
+
+   IF mTIPOENT = "X"   // Nada Faz Quando X
+      RETU .T.
    ENDIF
-endif
-priv cNOME   := ""
-priv cCODIGO := alltrim( mCODIGO )
-priv GETLIST := {}
-if xCODIGO # mCODIGO
-   nLENNOME := len( mNOME )             //Tamanho do Arquivo
-   do case
-   case mTIPOENT = "I"
-       PEGACAMPO( "ME04", "cCODIGO", { "PADR(TRIM(TIPO)+' '+TRIM(MARCA)+' Cap.: '+TRIM(CAPACI)+' Div.: '+TRIM(DIVI),200)" }, { "cNOME"} )
-   case mTIPOENT = "F"
-      PEGACAMPO( "FERRAM", "cCODIGO", { "NOME" }, { "cNOME" } )
-   case mTIPOENT = "O" .or. mTIPOENT = "R"
-      PEGACAMPO( ESTQARQ( mTIPOENT, 1 ), "cCODIGO", { "NOME", "UNIDADE", "REDICM", "CODIPI", "CLASSIPI", "IPI" }, ;
-              { "cNOME", "mUNID", "mREDICM", "mCODIPI", "mCLASSIPI", "mIPI" } )
-   case mTIPOENT = "T"
-      PEGACAMPO( "MP03", "cCODIGO", { "REDICM", "SPACE(45)", "CODIPI", "CLASSIPI", "IPI" }, ;
-                                      { "mREDICM", "mNOME", "mCODIPI", "mCLASSIPI", "mIPI" } )
-      MMTRA("mNOME")
-      mNOME:=PADR("Pedido:"+mNOME,45)
-      cCODIGO := alltrim( OBTER( "MP03", cCODIGO, "SUBPROD",,,,,, "" ) )
-      if !empty( cCODIGO )              //Sub Produto
-         PEGACAMPO( "MQ01", "cCODIGO", { "NOME", "UNIDADE", "PESLIQ", "PRECUST" }, { "cNOME", "mUNID", "mPESO", "mPRECO" } )
-         lPEGLIS:=.F.
-      else
-         cCODIGO := alltrim( mCODIGO )
-         cCODIGO := alltrim( OBTER( "MP03", cCODIGO, "SUBAPL",,,,,, "" ) )
-         if empty( cCODIGO )
-            cCODIGO := alltrim( mCODIGO )
-            cCODIGO := alltrim( OBTER( "MP03", cCODIGO, "APLICACAO",,,,,, "" ) )
-         endif
-         if empty( cCODIGO )
-            cCODIGO := alltrim( mCODIGO )
-         endif
-         while !PEGACAMPO( "MS01", "cCODIGO", { "NOME", "UNID", "PESOUNI" }, { "cNOME", "mUNID", "mPESO" }, 2 )
-            cCODIGO := padr( cCODIGO, 24 )
-            ALERTX( "Aplicao Produto NЦo Encontrado" )
-            @ 24, 00 get cCODIGO
-            READCUR()
-            cCODIGO := alltrim( cCODIGO )
-         enddo
-      endif
-      cNOME += mNOME
-      //Verifica se tem Reducao Especial de ICMS
-      mREDICM  := OBTER( "MM08", mTIPOENT + padr( mCODIGO, 24 ) + str( mFORNECEDO, 8 ), "REDICM",,,,,, mREDICM )
-      mCODITAB := cCODIGO
-      if empty( mPISCON ) .or. INCLUI
-         mPISCON := OBTER("MP03", mCODIGO, "PISCON" )
-      endif
-   case mTIPOENT = "D"
-      cNOME := OBTER( "MI01", cCODIGO, "NOME" )
-   case mTIPOENT = "M" .or. mTIPOENT = "C" .or. mTIPOENT = "S" .or. mTIPOENT = "B"
-      if empty( mPRECO ) .or. INCLUI .and. mTIPOENT = "S" .and. mTIPOENT = "B"
-         mPRECO := OBTER( ESTQARQ( mTIPOENT, 1 ), cCODIGO, "PRECUST" )
-      endif
-      if empty( mPRECO ) .or. INCLUI .and. mTIPOENT = "M" .and. mTIPOENT = "C"
-         mPRECO := OBTER( ESTQARQ( mTIPOENT, 1 ), cCODIGO, "ULTPRC" )
-      endif
-      if empty( mPISCON ) .or. INCLUI
-         mPISCON := OBTER( ESTQARQ( mTIPOENT, 1 ), cCODIGO, "PISCON" )
-      endif
-      if mTIPOENT = "B" .and. ( empty( mPESO ) .or. INCLUI )
-         mPESO := OBTER( "MR01", cCODIGO, "PESLIQ" )
-      endif
-      if mTIPOENT = "S" .and. ( empty( mPESO ) .or. INCLUI )
-         mPESO := OBTER( "MQ01", cCODIGO, "PESLIQ" )
-      endif
-      PEGACAMPO( ESTQARQ( mTIPOENT, 1 ), "cCODIGO", { "ALLTRIM(NOME)+' '+ALLTRIM(NOM2)", "CODIPI", "UNIDADE", "CLASSIPI" }, { "cNOME", "mCODIPI", "mUNID", "mCLASSIPI" } )
-      if mTIPOSERV = "R"
-         mPRECO := round( mPRECO * .52, 4 )
-      endif
-   case mTIPOENT = "P"
-      mINDICE := ""
-      PEGACAMPO( "MS01", "cCODIGO", { "NOME", "CODIPI", "UNID", "INDICE" }, { "cNOME", "mCODIPI", "mUNID", "mINDICE" }, 2 )
-      if empty( mPESO ) .or. INCLUI
-         mPESO := OBTER( "MS01", cCODIGO, "PESOUNI", 2 )
-      endif
-   endcase
-   if mTIPOENT = "P" .or. mTIPOENT = "T"
-      cUNID:=mUNID
-      if empty( mPRECO ) .or. (INCLUI.AND.lPEGLIS)
-         if empty( mLISTA ) .and. mFORNECEDO > 0
-            mLISTA := OBTER( "MA01", mFORNECEDO, "MO02LISTA" )
-         endif
-         IF mTIPOENT="P"
-            aPRC := MS02PRC( cCODIGO, mLISTA, .T., "mUNID", "mCODIPI" )
+   IF ValType( lPEGLIS ) # "L"
+      lPEGLIS := .F.
+      IF nREF = 2
+         lPEGLIS := .T.
+      ENDIF
+   ENDIF
+   PRIV cNOME   := ""
+   PRIV cCODIGO := AllTrim( mCODIGO )
+   PRIV GETLIST := {}
+   IF xCODIGO # mCODIGO
+      nLENNOME := Len( mNOME )   // Tamanho do Arquivo
+      DO CASE
+      CASE mTIPOENT = "I"
+         PEGACAMPO( "ME04", "cCODIGO", { "PADR(TRIM(TIPO)+' '+TRIM(MARCA)+' Cap.: '+TRIM(CAPACI)+' Div.: '+TRIM(DIVI),200)" }, { "cNOME" } )
+      CASE mTIPOENT = "F"
+         PEGACAMPO( "FERRAM", "cCODIGO", { "NOME" }, { "cNOME" } )
+      CASE mTIPOENT = "O" .OR. mTIPOENT = "R"
+         PEGACAMPO( ESTQARQ( mTIPOENT, 1 ), "cCODIGO", { "NOME", "UNIDADE", "REDICM", "CODIPI", "CLASSIPI", "IPI" }, ;
+            { "cNOME", "mUNID", "mREDICM", "mCODIPI", "mCLASSIPI", "mIPI" } )
+      CASE mTIPOENT = "T"
+         PEGACAMPO( "MP03", "cCODIGO", { "REDICM", "SPACE(45)", "CODIPI", "CLASSIPI", "IPI" }, ;
+            { "mREDICM", "mNOME", "mCODIPI", "mCLASSIPI", "mIPI" } )
+         MMTRA( "mNOME" )
+         mNOME   := PadR( "Pedido:" + mNOME, 45 )
+         cCODIGO := AllTrim( OBTER( "MP03", cCODIGO, "SUBPROD",,,,,, "" ) )
+         IF !Empty( cCODIGO )  // Sub Produto
+            PEGACAMPO( "MQ01", "cCODIGO", { "NOME", "UNIDADE", "PESLIQ", "PRECUST" }, { "cNOME", "mUNID", "mPESO", "mPRECO" } )
+            lPEGLIS := .F.
          ELSE
-            aPRC := MS02PRC( cCODIGO, mLISTA, .T.,"cUNID",,,.F.)
-         ENDIF
-         if lPEGLIS
-            mLISTANR:=mLISTA
-            cCODIGO:=PADR(cCODIGO,24)
-            while .T.
-               MDS( "Digite NЇ da Lista de Preo" )
-               @ 24, 40 get mLISTANR PICT "9999999"
-               IF mTIPOENT="T"
-                  @ 24,50 GET cCODIGO
-               ENDIF
+            cCODIGO := AllTrim( mCODIGO )
+            cCODIGO := AllTrim( OBTER( "MP03", cCODIGO, "SUBAPL",,,,,, "" ) )
+            IF Empty( cCODIGO )
+               cCODIGO := AllTrim( mCODIGO )
+               cCODIGO := AllTrim( OBTER( "MP03", cCODIGO, "APLICACAO",,,,,, "" ) )
+            ENDIF
+            IF Empty( cCODIGO )
+               cCODIGO := AllTrim( mCODIGO )
+            ENDIF
+            WHILE !PEGACAMPO( "MS01", "cCODIGO", { "NOME", "UNID", "PESOUNI" }, { "cNOME", "mUNID", "mPESO" }, 2 )
+               cCODIGO := PadR( cCODIGO, 24 )
+               ALERTX( "Aplicao Produto NЦo Encontrado" )
+               @ 24, 00 GET cCODIGO
                READCUR()
-               IF EMPTY(mLISTANR)
-                  EXIT
-               ENDIF
-               IF mTIPOENT="P"
-                  aPRC := MS02PRC( cCODIGO, mLISTANR, .T., "mUNID", "mCODIPI" )
-                  mUNID:=cUNID
-               ELSE
-                  aPRC := MS02PRC( cCODIGO, mLISTANR, .T.,"cUNID")
-               ENDIF
-               if aPRC[ 1 ] > 0
-                  exit
-               endif
-            enddo
-         endif
-         IF aPRC[1]>0
-            if empty( mINDICE )
-               mPRECO := aPRC[ 1 ]
-            else
-               mVALIND := aPRC[ 1 ]
-            endif
-            mDATABASE := aPRC[ 3 ]
+               cCODIGO := AllTrim( cCODIGO )
+            ENDDO
          ENDIF
-      endif
-      if mTIPOSERV = "R" .or. mTIPOSERV = "V" .or. mTIPOSERV = "T"
-         DO CASE
+         cNOME += mNOME
+         // Verifica se tem Reducao Especial de ICMS
+         mREDICM  := OBTER( "MM08", mTIPOENT + PadR( mCODIGO, 24 ) + Str( mFORNECEDO, 8 ), "REDICM",,,,,, mREDICM )
+         mCODITAB := cCODIGO
+         IF Empty( mPISCON ) .OR. INCLUI
+            mPISCON := OBTER( "MP03", mCODIGO, "PISCON" )
+         ENDIF
+      CASE mTIPOENT = "D"
+         cNOME := OBTER( "MI01", cCODIGO, "NOME" )
+      CASE mTIPOENT = "M" .OR. mTIPOENT = "C" .OR. mTIPOENT = "S" .OR. mTIPOENT = "B"
+         IF Empty( mPRECO ) .OR. INCLUI .AND. mTIPOENT = "S" .AND. mTIPOENT = "B"
+            mPRECO := OBTER( ESTQARQ( mTIPOENT, 1 ), cCODIGO, "PRECUST" )
+         ENDIF
+         IF Empty( mPRECO ) .OR. INCLUI .AND. mTIPOENT = "M" .AND. mTIPOENT = "C"
+            mPRECO := OBTER( ESTQARQ( mTIPOENT, 1 ), cCODIGO, "ULTPRC" )
+         ENDIF
+         IF Empty( mPISCON ) .OR. INCLUI
+            mPISCON := OBTER( ESTQARQ( mTIPOENT, 1 ), cCODIGO, "PISCON" )
+         ENDIF
+         IF mTIPOENT = "B" .AND. ( Empty( mPESO ) .OR. INCLUI )
+            mPESO := OBTER( "MR01", cCODIGO, "PESLIQ" )
+         ENDIF
+         IF mTIPOENT = "S" .AND. ( Empty( mPESO ) .OR. INCLUI )
+            mPESO := OBTER( "MQ01", cCODIGO, "PESLIQ" )
+         ENDIF
+         PEGACAMPO( ESTQARQ( mTIPOENT, 1 ), "cCODIGO", { "ALLTRIM(NOME)+' '+ALLTRIM(NOM2)", "CODIPI", "UNIDADE", "CLASSIPI" }, { "cNOME", "mCODIPI", "mUNID", "mCLASSIPI" } )
+         IF mTIPOSERV = "R"
+            mPRECO := Round( mPRECO * .52, 4 )
+         ENDIF
+      CASE mTIPOENT = "P"
+         mINDICE := ""
+         PEGACAMPO( "MS01", "cCODIGO", { "NOME", "CODIPI", "UNID", "INDICE" }, { "cNOME", "mCODIPI", "mUNID", "mINDICE" }, 2 )
+         IF Empty( mPESO ) .OR. INCLUI
+            mPESO := OBTER( "MS01", cCODIGO, "PESOUNI", 2 )
+         ENDIF
+      ENDCASE
+      IF mTIPOENT = "P" .OR. mTIPOENT = "T"
+         cUNID := mUNID
+         IF Empty( mPRECO ) .OR. ( INCLUI .AND. lPEGLIS )
+            IF Empty( mLISTA ) .AND. mFORNECEDO > 0
+               mLISTA := OBTER( "MA01", mFORNECEDO, "MO02LISTA" )
+            ENDIF
+            IF mTIPOENT = "P"
+               aPRC := MS02PRC( cCODIGO, mLISTA, .T., "mUNID", "mCODIPI" )
+            ELSE
+               aPRC := MS02PRC( cCODIGO, mLISTA, .T., "cUNID",,, .F. )
+            ENDIF
+            IF lPEGLIS
+               mLISTANR := mLISTA
+               cCODIGO  := PadR( cCODIGO, 24 )
+               WHILE .T.
+                  MDS( "Digite NЇ da Lista de Preo" )
+                  @ 24, 40 GET mLISTANR PICT "9999999"
+                  IF mTIPOENT = "T"
+                     @ 24, 50 GET cCODIGO
+                  ENDIF
+                  READCUR()
+                  IF Empty( mLISTANR )
+                     EXIT
+                  ENDIF
+                  IF mTIPOENT = "P"
+                     aPRC  := MS02PRC( cCODIGO, mLISTANR, .T., "mUNID", "mCODIPI" )
+                     mUNID := cUNID
+                  ELSE
+                     aPRC := MS02PRC( cCODIGO, mLISTANR, .T., "cUNID" )
+                  ENDIF
+                  IF aPRC[ 1 ] > 0
+                     EXIT
+                  ENDIF
+               ENDDO
+            ENDIF
+            IF aPRC[ 1 ] > 0
+               IF Empty( mINDICE )
+                  mPRECO := aPRC[ 1 ]
+               ELSE
+                  mVALIND := aPRC[ 1 ]
+               ENDIF
+               mDATABASE := aPRC[ 3 ]
+            ENDIF
+         ENDIF
+         IF mTIPOSERV = "R" .OR. mTIPOSERV = "V" .OR. mTIPOSERV = "T"
+            DO CASE
             CASE mTIPOSERV = "R"
-                mPRECO := round( mPRECO * .38, 4 )
+               mPRECO := Round( mPRECO * .38, 4 )
             CASE mTIPOSERV = "V"
-                 mPRECO := round( mPRECO * .52, 4 )
+               mPRECO := Round( mPRECO * .52, 4 )
             CASE mTIPOSERV = "T"
-                mPRECO := round( mPRECO * .3, 4 )
-         endCASE
-         if cUNID = "CT"
-            mUNID  := "PC"
-            mPRECO := round( mPRECO / 100, 4 )
-         endif
-         if cUNID = "ML"
-            mUNID  := "PC"
-            mPRECO := round( mPRECO / 1000, 4 )
-         endif
-         mPRECO:=ROUND(mPRECO,2)
-      endif
-   endif
-   cNOME := alltrim( cNOME )
-   mNOME := substr( cNOME, 1, nLENNOME )
-   if len( cNOME ) > nLENNOME
-      mLINADD01 := substr( cNOME, nLENNOME + 1, 45 )
-      if len( cNOME ) > nLENNOME + 45
-         mLINADD02 := substr( cNOME, nLENNOME + 46, 45 )
-         if len( cNOME ) > nLENNOME + 90
-            mLINADD03 := substr( cNOME, nLENNOME + 91, 45 )
-            if len( cNOME ) > nLENNOME + 135
-               mLINADD04 := substr( cNOME, nLENNOME + 136, 45 )
-            endif
-         endif
-      endif
-   endif
-   if mTIPOENT = "T"
-      mIPI := 0
-   else
-      if !empty( mCODIPI )
-         mIPI := OBTER( "MD03", mCODIPI, "ALIQUOTA" )
-      endif
-   endif
-   if !empty( mCODIPI )
-      CHECKCIPI( mCODIPI, "mIPI", "mCLASSIPI", "mICM", mCFONEW, 2  ,"mDIPIPI","mDIPICM")
-   endif
-   xCODIGO := mCODIGO
-endif
-if !empty( cDBF )
-   sele &cDBF.
-endif
-retu .T.
+               mPRECO := Round( mPRECO * .3, 4 )
+            ENDCASE
+            IF cUNID = "CT"
+               mUNID  := "PC"
+               mPRECO := Round( mPRECO / 100, 4 )
+            ENDIF
+            IF cUNID = "ML"
+               mUNID  := "PC"
+               mPRECO := Round( mPRECO / 1000, 4 )
+            ENDIF
+            mPRECO := Round( mPRECO, 2 )
+         ENDIF
+      ENDIF
+      cNOME := AllTrim( cNOME )
+      mNOME := SubStr( cNOME, 1, nLENNOME )
+      IF Len( cNOME ) > nLENNOME
+         mLINADD01 := SubStr( cNOME, nLENNOME + 1, 45 )
+         IF Len( cNOME ) > nLENNOME + 45
+            mLINADD02 := SubStr( cNOME, nLENNOME + 46, 45 )
+            IF Len( cNOME ) > nLENNOME + 90
+               mLINADD03 := SubStr( cNOME, nLENNOME + 91, 45 )
+               IF Len( cNOME ) > nLENNOME + 135
+                  mLINADD04 := SubStr( cNOME, nLENNOME + 136, 45 )
+               ENDIF
+            ENDIF
+         ENDIF
+      ENDIF
+      IF mTIPOENT = "T"
+         mIPI := 0
+      ELSE
+         IF !Empty( mCODIPI )
+            mIPI := OBTER( "MD03", mCODIPI, "ALIQUOTA" )
+         ENDIF
+      ENDIF
+      IF !Empty( mCODIPI )
+         CHECKCIPI( mCODIPI, "mIPI", "mCLASSIPI", "mICM", mCFONEW, 2, "mDIPIPI", "mDIPICM" )
+      ENDIF
+      xCODIGO := mCODIGO
+   ENDIF
+   IF !Empty( cDBF )
+      SELE &cDBF.
+   ENDIF
+   RETU .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function PEGLOTE()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func PEGLOTE( nTIP, dDATA, cVAR )
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function PEGLOTE()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-local cCHAVE
-cCHAVE := str( ZNUMERO, 5 )
-cCHAVE += strzero( year( dDATA ), 4 )
-cCHAVE += strzero( month( dDATA ), 2 )
-if !USEREDE( "FI_MES", 1, 1 )
-   retu
-endif
-dbgotop()
-if dbseek( cCHAVE )
-   netreclock()
-   if nTIP = 1
-      &cVAR.        := FISEQE + 1
-      field->FISEQE := FISEQE + 1
-      field->FILANE := dDATA
-   endif
-   if nTIP = 5
-      &cVAR.          := FISEQISE + 1
-      field->FISEQISE := FISEQISE + 1
-      field->FILANISE := dDATA
-   endif
-   if nTIP = 6
-      &cVAR.          := FISEQISS + 1
-      field->FISEQISS := FISEQISS + 1
-      field->FILANISS := dDATA
-   endif
-   dbunlock()
-endif
-retu
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function NFBAS()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func NFBAS( nVALFRE, nREDICM, cTIP )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function PEGLOTE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-local nPERICM := 100
-if valtype( cTIP ) # "C"
-   cTIP := "S"
-endif
-if valtype( nVALFRE ) # "N"
-   nVALFRE := 0
-endif
-if valtype( nREDICM ) # "N"
-   nREDICM := 0
-endif
-if nREDICM > 0
-   nPERICM := 100 - nREDICM
-endif
-mVALORMER := round( mQTDE * mPRECO, 2 )
-if xVALORMER # mVALORMER
-   mBASEIPI  := mVALORMER + nVALFRE
-   mVALORIPI := round( mBASEIPI * ( mIPI / 100 ), 2 )
-   if mSOMANF = "S"
+FUNC PEGLOTE( nTIP, dDATA, cVAR )
+
+   LOCAL cCHAVE
+
+   cCHAVE := Str( ZNUMERO, 5 )
+   cCHAVE += StrZero( Year( dDATA ), 4 )
+   cCHAVE += StrZero( Month( dDATA ), 2 )
+   IF !USEREDE( "FI_MES", 1, 1 )
+      RETU
+   ENDIF
+   dbGoTop()
+   IF dbSeek( cCHAVE )
+      netreclock()
+      IF nTIP = 1
+         &cVAR.        := FISEQE + 1
+         field->FISEQE := FISEQE + 1
+         field->FILANE := dDATA
+      ENDIF
+      IF nTIP = 5
+         &cVAR.          := FISEQISE + 1
+         field->FISEQISE := FISEQISE + 1
+         field->FILANISE := dDATA
+      ENDIF
+      IF nTIP = 6
+         &cVAR.          := FISEQISS + 1
+         field->FISEQISS := FISEQISS + 1
+         field->FILANISS := dDATA
+      ENDIF
+      dbUnlock()
+   ENDIF
+   RETU
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function NFBAS()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NFBAS()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC NFBAS( nVALFRE, nREDICM, cTIP )
+
+   LOCAL nPERICM := 100
+
+   IF ValType( cTIP ) # "C"
+      cTIP := "S"
+   ENDIF
+   IF ValType( nVALFRE ) # "N"
+      nVALFRE := 0
+   ENDIF
+   IF ValType( nREDICM ) # "N"
+      nREDICM := 0
+   ENDIF
+   IF nREDICM > 0
+      nPERICM := 100 - nREDICM
+   ENDIF
+   mVALORMER := Round( mQTDE * mPRECO, 2 )
+   IF xVALORMER # mVALORMER
+      mBASEIPI  := mVALORMER + nVALFRE
+      mVALORIPI := Round( mBASEIPI * ( mIPI / 100 ), 2 )
+      IF mSOMANF = "S"
+         mVALORTOT := mVALORMER + mVALORIPI + nVALFRE
+      ELSE
+         mVALORTOT := mVALORMER + nVALFRE
+      ENDIF
+      IF nREDICM > 0
+         IF mCONSUMO = "S"
+            mBASEICM := Round( mVALORTOT * nPERICM / 100, 2 )
+         ELSE
+            mBASEICM := Round( ( mVALORMER + nVALFRE ) * nPERICM / 100, 2 )
+         ENDIF
+      ELSE
+         IF mCONSUMO = "S"
+            mBASEICM := mVALORTOT
+         ELSE
+            mBASEICM := mVALORMER + nVALFRE
+         ENDIF
+      ENDIF
+      xBASEICM  := mBASEICM
+      mVALORICM := Round( mBASEICM * ( mICM / 100 ), 2 )
+      xVALORMER := mVALORMER
+   ENDIF
+   IF Empty( mVALORIPI ) .AND. mIPI > 0
+      mVALORIPI := Round( mBASEIPI * ( mIPI / 100 ), 2 )
+   ENDIF
+   IF Empty( mVALORICM ) .AND. mICM > 0
+      mVALORICM := Round( mBASEICM * ( mICM / 100 ), 2 )
+   ENDIF
+   IF mSOMANF = "S"
       mVALORTOT := mVALORMER + mVALORIPI + nVALFRE
-   else
+   ELSE
       mVALORTOT := mVALORMER + nVALFRE
-   endif
-   if nREDICM > 0
-      if mCONSUMO = "S"
-         mBASEICM := round( mVALORTOT * nPERICM / 100, 2 )
-      else
-         mBASEICM := round( ( mVALORMER + nVALFRE ) * nPERICM / 100, 2 )
-      endif
-   else
-      if mCONSUMO = "S"
-         mBASEICM := mVALORTOT
-      else
-         mBASEICM := mVALORMER + nVALFRE
-      endif
-   endif
-   xBASEICM  := mBASEICM
-   mVALORICM := round( mBASEICM * ( mICM / 100 ), 2 )
-   xVALORMER := mVALORMER
-endif
-if empty( mVALORIPI ) .and. mIPI > 0
-   mVALORIPI := round( mBASEIPI * ( mIPI / 100 ), 2 )
-endif
-if empty( mVALORICM ) .and. mICM > 0
-   mVALORICM := round( mBASEICM * ( mICM / 100 ), 2 )
-endif
-if mSOMANF = "S"
-   mVALORTOT := mVALORMER + mVALORIPI + nVALFRE
-else
-   mVALORTOT := mVALORMER + nVALFRE
-endif
-if cTIP = "S"
-   @ 14, 15 say mVALORMER pict "@E 999,999,999,999.99"
-   @ 18, 15 say mVALORTOT pict "@E 999,999,999,999.99"
-else
-   //   @ 12,15 SAY mVALORMER PICT "@E 999,999,999,999.99"
-   //   @ 17,15 SAY mVALORTOT PICT "@E 999,999,999,999.99"
-endif
-retu .T.
+   ENDIF
+   IF cTIP = "S"
+      @ 14, 15 SAY mVALORMER PICT "@E 999,999,999,999.99"
+      @ 18, 15 SAY mVALORTOT PICT "@E 999,999,999,999.99"
+   ELSE
+      // @ 12,15 SAY mVALORMER PICT "@E 999,999,999,999.99"
+      // @ 17,15 SAY mVALORTOT PICT "@E 999,999,999,999.99"
+   ENDIF
+   RETU .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function NFBICM()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func NFBICM
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function NFBICM()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-if xBASEICM # mBASEICM
-   if mICM > 0
-      mVALORICM := round( mBASEICM * ( mICM / 100 ), 2 )
-   else
-      mVALORICM := 0
-   endif
-   xBASEICM := mBASEICM
-endif
-retu .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function NFBIPI()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func NFBIPI
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NFBICM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-if xBASEIPI # mBASEIPI
-   if mIPI > 0
-      mVALORIPI := round( mBASEIPI * ( mIPI / 100 ), 2 )
-   endif
-   xBASEIPI := mBASEIPI
-endif
-retu .T.
+FUNC NFBICM
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function NFIPI()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func NFIPI()
+   IF xBASEICM # mBASEICM
+      IF mICM > 0
+         mVALORICM := Round( mBASEICM * ( mICM / 100 ), 2 )
+      ELSE
+         mVALORICM := 0
+      ENDIF
+      xBASEICM := mBASEICM
+   ENDIF
+   RETU .T.
 
-if xIPI # mIPI
-   if mIPI > 0
-      mVALORIPI := round( mBASEIPI * ( mIPI / 100 ), 2 )
-   endif
-   xIPI := mIPI
-endif
-retu .T.
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function NFBIPI()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function NFVIPI()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func NFVIPI
 
-if empty( mIPI ) .and. empty( mVALORIPI )
-   mBASEIPI := 0
-endif
-retu .T.
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NFBIPI()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function NFVICM()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-func NFVICM
+FUNC NFBIPI
 
-if empty( mICM ) .and. empty( mVALORICM )
-   mBASEICM := 0
-endif
-retu .T.
+   IF xBASEIPI # mBASEIPI
+      IF mIPI > 0
+         mVALORIPI := Round( mBASEIPI * ( mIPI / 100 ), 2 )
+      ENDIF
+      xBASEIPI := mBASEIPI
+   ENDIF
+   RETU .T.
 
-*+ EOF: MLIBNF.PRG
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function NFIPI()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NFIPI()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC NFIPI()
+
+   IF xIPI # mIPI
+      IF mIPI > 0
+         mVALORIPI := Round( mBASEIPI * ( mIPI / 100 ), 2 )
+      ENDIF
+      xIPI := mIPI
+   ENDIF
+   RETU .T.
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function NFVIPI()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NFVIPI()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC NFVIPI
+
+   IF Empty( mIPI ) .AND. Empty( mVALORIPI )
+      mBASEIPI := 0
+   ENDIF
+   RETU .T.
+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function NFVICM()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NFVICM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC NFVICM
+
+   IF Empty( mICM ) .AND. Empty( mVALORICM )
+      mBASEICM := 0
+   ENDIF
+   RETU .T.
+
+// + EOF: MLIBNF.PRG
+
+// + EOF: mlibnf.prg
+// +

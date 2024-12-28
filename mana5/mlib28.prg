@@ -1,106 +1,114 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib28.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib28.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function ULTIMOREG()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func ULTIMOREG(ARQWORK,FIEWORK,eVAR,lSOMA,nIND,lOPEN)
 
 
-if valtype(lOPEN) # "L"
-   lOPEN := .T.
-endif
-if valtype(nIND) # "N"
-   nIND := 1
-endif
-if valtype(lSOMA) # "L"
-   lSOMA := .T.
-endif
-if type("cVIDE") = "C"
-   if cVIDE = "T"
-      lOPEN := .F.
-   endif
-endif
-if lOPEN
-   if !USEREDE(ARQWORK,1,nIND)
-      retu 0
-   endif
-endif
-dbgobottom()
-RETORNO := &FIEWORK.
-if lOPEN
-   dbclosearea()
-endif
-if valtype(eVAR) = "C"
-   &eVAR. := if(lSOMA,RETORNO := RETORNO+1,RETORNO)
-endif
-retu RETORNO
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ULTIMOREG()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC ULTIMOREG( ARQWORK, FIEWORK, eVAR, lSOMA, nIND, lOPEN )
 
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function ULTIMOITEM()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func ULTIMOITEM(cARQ,eKEY,mCOMP1,mCOMP2,eCAM,eVAR,lSOMA)
-
-
-local nRETU := 0
-if !USEREDE(cARQ,1,1)
-   retu .F.
-endif
-dbgotop()
-dbseek(eKEY)
-while &mCOMP1. = &mCOMP2. .and. !eof()
-   nRETU := &eCAM.
-   dbskip()
-enddo
-dbclosearea()
-if valtype(eVAR) = "C"
-   if valtype(lSOMA) # "L"
+   IF ValType( lOPEN ) # "L"
+      lOPEN := .T.
+   ENDIF
+   IF ValType( nIND ) # "N"
+      nIND := 1
+   ENDIF
+   IF ValType( lSOMA ) # "L"
       lSOMA := .T.
-   endif
-   &eVAR. := if(lSOMA,nRETU := nRETU+1,nRETU)
-endif
-retu nRETU
+   ENDIF
+   IF Type( "cVIDE" ) = "C"
+      IF cVIDE = "T"
+         lOPEN := .F.
+      ENDIF
+   ENDIF
+   IF lOPEN
+      IF !USEREDE( ARQWORK, 1, nIND )
+         RETU 0
+      ENDIF
+   ENDIF
+   dbGoBottom()
+   RETORNO := &FIEWORK.
+   IF lOPEN
+      dbCloseArea()
+   ENDIF
+   IF ValType( eVAR ) = "C"
+      &eVAR. := if( lSOMA, RETORNO := RETORNO + 1, RETORNO )
+   ENDIF
+   RETU RETORNO
 
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ULTIMOITEM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC ULTIMOITEM( cARQ, eKEY, mCOMP1, mCOMP2, eCAM, eVAR, lSOMA )
+
+   LOCAL nRETU := 0
+
+   IF !USEREDE( cARQ, 1, 1 )
+      RETU .F.
+   ENDIF
+   dbGoTop()
+   dbSeek( eKEY )
+   WHILE &mCOMP1. = &mCOMP2. .AND. !Eof()
+      nRETU := &eCAM.
+      dbSkip()
+   ENDDO
+   dbCloseArea()
+   IF ValType( eVAR ) = "C"
+      IF ValType( lSOMA ) # "L"
+         lSOMA := .T.
+      ENDIF
+      &eVAR. := if( lSOMA, nRETU := nRETU + 1, nRETU )
+   ENDIF
+   RETU nRETU
+
+
+// + EOF: mlib28.prg
+// +

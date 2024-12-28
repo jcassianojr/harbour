@@ -1,42 +1,84 @@
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : disk57.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:41 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 #include "hbclass.ch"
 #include "inkey.ch"
 
-function editarq( cfile )
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function editarq()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION editarq( cfile )
 
-//Verificando tamanho do arquivo
-if Filesize( cfile ) > 64000
-   ALERTX( 'Arquivo Muito Grande para ediao' )
-   return .F.
-endif
+// Verificando tamanho do arquivo
+   IF Filesize( cfile ) > 64000
+      ALERTX( 'Arquivo Muito Grande para ediao' )
+      RETURN .F.
+   ENDIF
 
 //
-PRIV GETLIST:={}
+   PRIV GETLIST := {}
 
-//Criando Arquivo Back inicial
-if file( cfile )
-   pospto := at( ".", cfile )
-   bak    := substr( cfile, 1, pospto - 1 ) + '.bak'
-   fileCOPY(cfile,bak)
-endif
+// Criando Arquivo Back inicial
+   IF File( cfile )
+      pospto := At( ".", cfile )
+      bak    := SubStr( cfile, 1, pospto - 1 ) + '.bak'
+      fileCOPY( cfile, bak )
+   ENDIF
 
-if ( empty( cfile ) )
-   cfile := "semnome"
-elseif ( rat( ".", cfile ) <= rat( "\", cfile ) )
-   cfile += ".TXT"
-end
+   IF ( Empty( cfile ) )
+      cfile := "semnome"
+   ELSEIF ( RAt( ".", cfile ) <= RAt( "\", cfile ) )
+      cfile += ".TXT"
+   END
 
-oEditor := HBEditor():New( MemoRead(cFILE), 0, 0, MaxRow(), MaxCol(), .T. )
-   
-   
+   oEditor := HBEditor():New( MemoRead( cFILE ), 0, 0, MaxRow(), MaxCol(), .T. )
 
-//   oEditor:SetColor( "W/B,N/BG" )
+
+
+// oEditor:SetColor( "W/B,N/BG" )
    oEditor:Display()
-   
-   while ( nKey := Inkey( 0 ) ) != K_ESC
+
+   WHILE ( nKey := Inkey( 0 ) ) != K_ESC
       oEditor:Edit( nKey )
       oEditor:Display()
-   end
+   END
 
-return nil
+   RETURN NIL
+
+// + EOF: disk57.prg
+// +

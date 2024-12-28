@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fo1o.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:44 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fo1o.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:44 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // **
 // ** FO1O   .PRG  : Codigos SAT(INSS)
@@ -31,53 +31,54 @@
 // ** Programador  :  Softec Sistemas
 // ** Linguagem    : Clipper 5.x
 
-#INCLUDE "BOX.CH"
+#include "BOX.CH"
 
-PADRAO("FO_CSAT","FO_CSAT","' '+STR(mCODIGO,7)+' '+mDESCRICAO","mCODIGO","C¢digos SAT","C¢digo Descri‡„o",;
- {|| PEGCHAVE("mCODIGO",ULTIMOREG("FO_CSAT","CODIGO",.T.),"Codigo:")},{|| tFO1O()},{|| gFO1O()},{|| FO_FOR("GRUPO='FIRMA'")})
+PADRAO( "FO_CSAT", "FO_CSAT", "' '+STR(mCODIGO,7)+' '+mDESCRICAO", "mCODIGO", "C¢digos SAT", "C¢digo Descri‡„o", ;
+      {|| PEGCHAVE( "mCODIGO", ULTIMOREG( "FO_CSAT", "CODIGO", .T. ), "Codigo:" ) }, {|| tFO1O() }, {|| gFO1O() }, {|| FO_FOR( "GRUPO='FIRMA'" ) } )
 RETU .T.
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function tFO1O()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function tFO1O()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNC tFO1O
 
-HB_DISPBOX(3,0,23,79,B_DOUBLE+" ")
-@  4,1 SAY "C¢digo Descri‡„o"+SPACE(58)+"G TX"         
-RETU .T.
+   hb_DispBox( 3, 0, 23, 79, B_DOUBLE + " " )
+   @  4, 1 SAY "C¢digo Descri‡„o" + Space( 58 ) + "G TX"
+   RETU .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function gFO1O()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function gFO1O()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
 FUNC gFO1O
 
-@  5,1  GET mCODIGO                       
-@  5,10 GET mDESCRICAO PICT "@S65"        
-@  5,76 GET mGRAU                         
-@  5,78 GET mTAXA                         
-READCUR()
-RETU .T.
+   @  5, 1  GET mCODIGO
+   @  5, 10 GET mDESCRICAO PICT "@S65"
+   @  5, 76 GET mGRAU
+   @  5, 78 GET mTAXA
+   READCUR()
+   RETU .T.
 
-*+ EOF: fo1o.prg
-*+
+// + EOF: fo1o.prg
+// +

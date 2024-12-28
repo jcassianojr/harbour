@@ -1,71 +1,146 @@
-Function Dialeto_begin()
-LOCAL cCOMANDO
-cCOMANDO:="BEGIN TRANSACTION"
-  DO CASE
-      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"  
-           cCOMANDO ="BEGIN TRANSACTION"
-      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
-           cCOMANDO ="START TRANSACTION;"
-      CASE cTIPOSQL="FIREBIRD" 
-           cCOMANDO ="SET TRANSACTION"
-      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0 
-           cCOMANDO ="BEGIN TRANSACTION;"
-      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
-           cCOMANDO ="BEGIN;"      
-   ENDCASE
-return cCOMANDO
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : dbudialeto.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:06 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-Function Dialeto_commit()
-LOCAL cCOMANDO
-cCOMANDO:="COMMIT TRANSACTION"
-  DO CASE
-      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"  
-           cCOMANDO ="IF @@TRANCOUNT > 0 COMMIT"
-      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
-           cCOMANDO ="COMMIT;"
-      CASE cTIPOSQL="FIREBIRD" 
-           cCOMANDO ="COMMIT"
-      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0 
-           cCOMANDO ="end transaction"
-      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
-           cCOMANDO ="COMMIT;"      
-   ENDCASE
-return cCOMANDO
 
-Function Dialeto_rollback()
-LOCAL cCOMANDO
-cCOMANDO:="ROLLBACK TRANSACTION"
-  DO CASE
-      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"  
-           cCOMANDO ="IF @@TRANCOUNT > 0 ROLLBACK"
-      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
-           cCOMANDO ="ROLLBACK;"
-      CASE cTIPOSQL="FIREBIRD" 
-           cCOMANDO ="ROLLBACK"
-      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0 
-           cCOMANDO ="ROLLBACK;"
-      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
-           cCOMANDO ="ROLLBACK;"      
-   ENDCASE
-return cCOMANDO
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_begin()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION Dialeto_begin()
 
-//DATE
-//DATETIME
+   LOCAL cCOMANDO
+
+   cCOMANDO := "BEGIN TRANSACTION"
+   DO CASE
+   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+      cCOMANDO := "BEGIN TRANSACTION"
+   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
+      cCOMANDO := "START TRANSACTION;"
+   CASE cTIPOSQL = "FIREBIRD"
+      cCOMANDO := "SET TRANSACTION"
+   CASE cTIPOSQL = "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+      cCOMANDO := "BEGIN TRANSACTION;"
+   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
+      cCOMANDO := "BEGIN;"
+   ENDCASE
+
+   RETURN cCOMANDO
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_commit()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION Dialeto_commit()
+
+   LOCAL cCOMANDO
+
+   cCOMANDO := "COMMIT TRANSACTION"
+   DO CASE
+   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+      cCOMANDO := "IF @@TRANCOUNT > 0 COMMIT"
+   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
+      cCOMANDO := "COMMIT;"
+   CASE cTIPOSQL = "FIREBIRD"
+      cCOMANDO := "COMMIT"
+   CASE cTIPOSQL = "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+      cCOMANDO := "end transaction"
+   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
+      cCOMANDO := "COMMIT;"
+   ENDCASE
+
+   RETURN cCOMANDO
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_rollback()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION Dialeto_rollback()
+
+   LOCAL cCOMANDO
+
+   cCOMANDO := "ROLLBACK TRANSACTION"
+   DO CASE
+   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+      cCOMANDO := "IF @@TRANCOUNT > 0 ROLLBACK"
+   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
+      cCOMANDO := "ROLLBACK;"
+   CASE cTIPOSQL = "FIREBIRD"
+      cCOMANDO := "ROLLBACK"
+   CASE cTIPOSQL = "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+      cCOMANDO := "ROLLBACK;"
+   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
+      cCOMANDO := "ROLLBACK;"
+   ENDCASE
+
+   RETURN cCOMANDO
+
+// DATE
+// DATETIME
 /*
 Function Dialeto_()
 LOCAL cCOMANDO
 cCOMANDO:=""
   DO CASE
-      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"  
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
            cCOMANDO =""
       CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
            cCOMANDO =""
-      CASE cTIPOSQL="FIREBIRD" 
+      CASE cTIPOSQL="FIREBIRD"
            cCOMANDO =""
-      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0 
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0
            cCOMANDO =""
-      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
-           cCOMANDO =""      
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+           cCOMANDO =""
    ENDCASE
 return cCOMANDO
 
@@ -73,67 +148,81 @@ return cCOMANDO
 
 
 
-Function Dialeto_SQL(cSQLCNV)
-     DO CASE
-            Case cTIPOSQL= "SQLITE"
-               //  '"LOWER(%1%)"        ,"LOWER(%1%)"
-               //  '"UPPER(%1%)"        ,"UPPER(%1%)"
-                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "CURRENT_DATE ")
-                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "LEN(", "LENGTH(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "CURRENTDATETIME", " current_timestamp ")
-               // '  {"LEFT(%1%,%2%)"      ,"SUBSTR(%1%,1,%2%)"},;
-               // '        {"DTOS(%1%)"        ,"strftime('%Y%m%d',%1%)"},;
-               // '        {"DAY(%1%)"       ,"cast(strftime('%d',%1) as int)"},;
-               // ''        {"MONTH(%1%)"       ,"cast(strftime('%m',%1) as int)"},;
-               // '        {"YEAR(%1%)"        ,"cast(strftime('%Y',%1) as int)"},;
-               // '        {"REPL(%1%,%2%)"      ,"FORMAT('%.*c',%2%,%1%)"},;
-            Case cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB"
-               //  '"LOWER(%1%)"        ,"LOWER(%1%)"
-               //  '"UPPER(%1%)"        ,"UPPER(%1%)"
-               //  '"LEFT(%1%,%2%)"     ,"LEFT(%1%,%2%)"
-               //  '"DAY(%1%)"         ,"DAY(%1%)"
-               //  '"MONTH(%1%)"       ,"MONTH(%1%)"}
-               //  '"YEAR(%1%)"        ,"YEAR(%1%)"
-                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "SYSDATE()")
-                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPEAT(")
-          //      '        {"DTOS(%1%)"        ,"DATE_FORMAT(%1%,'%Y%m%d')"},;
-            Case cTIPOSQL="PGSQL"   .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
-            //     '"LOWER(%1%)"        ,"LOWER(%1%)"
-            //     '"UPPER(%1%)"        ,"UPPER(%1%)"
-            //     '"LEFT(%1%,%2%)"      ,"LEFT(%1%,%2%)"
-            //     '"CHR(%1%)"         ,"CHR(%1%)"
-                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "CURRENT_DATE ")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "LEN(", "LENGTH(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "DAY(", "EXTRACT('DAY' FROM ")
-                 cSQLCNV = STRTRAN(cSQLCNV, "MONTH(", "EXTRACT('MONTH' FROM ")
-                 cSQLCNV = STRTRAN(cSQLCNV, "YEAR(", "EXTRACT('YEAR' FROM ")
-                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPEAT(")
-            Case cTIPOSQL="MSSQL"  .OR. cTIPOSQL="SQLSERVER"
-                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "GETDATE() ")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "TRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPLICATE(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "SUBSTR(", "SUBSTRING(")
-       //          '  {"STR(%1%,%2%,%3%)"      ,"STR(%1%,%2%,%3%)"},;
-      //           '       {"STR(%1%,%2%)"       ,"STR(%1%,%2%,0)"},;
-      //             '     {"DTOS(%1%)"        ,"CONVERT(char(8), %1%,11)"},;
-      //            '      {"IIF(%1%,%2%,%3%)"     ,"CASE WHEN %1% THEN %2% ELSE %3% END"},;
-            
-      //      Case "ODBC"
-            /*
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_SQL()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION Dialeto_SQL( cSQLCNV )
+
+   DO CASE
+   CASE cTIPOSQL = "SQLITE"
+      // '"LOWER(%1%)"        ,"LOWER(%1%)"
+      // '"UPPER(%1%)"        ,"UPPER(%1%)"
+      cSQLCNV := StrTran( cSQLCNV, "TODAY()", "CURRENT_DATE " )
+      cSQLCNV := StrTran( cSQLCNV, "CHR(", "CHAR(" )
+      cSQLCNV := StrTran( cSQLCNV, "ASC(", "ASCII(" )
+      cSQLCNV := StrTran( cSQLCNV, "TRIM(", "RTRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "ALLTRIM(", "TRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "LEN(", "LENGTH(" )
+      cSQLCNV := StrTran( cSQLCNV, "CURRENTDATETIME", " current_timestamp " )
+      // '  {"LEFT(%1%,%2%)"      ,"SUBSTR(%1%,1,%2%)"},;
+      // '        {"DTOS(%1%)"        ,"strftime('%Y%m%d',%1%)"},;
+      // '        {"DAY(%1%)"       ,"cast(strftime('%d',%1) as int)"},;
+      // ''        {"MONTH(%1%)"       ,"cast(strftime('%m',%1) as int)"},;
+      // '        {"YEAR(%1%)"        ,"cast(strftime('%Y',%1) as int)"},;
+      // '        {"REPL(%1%,%2%)"      ,"FORMAT('%.*c',%2%,%1%)"},;
+   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
+      // '"LOWER(%1%)"        ,"LOWER(%1%)"
+      // '"UPPER(%1%)"        ,"UPPER(%1%)"
+      // '"LEFT(%1%,%2%)"     ,"LEFT(%1%,%2%)"
+      // '"DAY(%1%)"         ,"DAY(%1%)"
+      // '"MONTH(%1%)"       ,"MONTH(%1%)"}
+      // '"YEAR(%1%)"        ,"YEAR(%1%)"
+      cSQLCNV := StrTran( cSQLCNV, "TODAY()", "SYSDATE()" )
+      cSQLCNV := StrTran( cSQLCNV, "CHR(", "CHAR(" )
+      cSQLCNV := StrTran( cSQLCNV, "ASC(", "ASCII(" )
+      cSQLCNV := StrTran( cSQLCNV, "TRIM(", "RTRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "ALLTRIM(", "TRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "REPL(", "REPEAT(" )
+      // '        {"DTOS(%1%)"        ,"DATE_FORMAT(%1%,'%Y%m%d')"},;
+   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
+      // '"LOWER(%1%)"        ,"LOWER(%1%)"
+      // '"UPPER(%1%)"        ,"UPPER(%1%)"
+      // '"LEFT(%1%,%2%)"      ,"LEFT(%1%,%2%)"
+      // '"CHR(%1%)"         ,"CHR(%1%)"
+      cSQLCNV := StrTran( cSQLCNV, "TODAY()", "CURRENT_DATE " )
+      cSQLCNV := StrTran( cSQLCNV, "ASC(", "ASCII(" )
+      cSQLCNV := StrTran( cSQLCNV, "TRIM(", "RTRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "ALLTRIM(", "TRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "LEN(", "LENGTH(" )
+      cSQLCNV := StrTran( cSQLCNV, "DAY(", "EXTRACT('DAY' FROM " )
+      cSQLCNV := StrTran( cSQLCNV, "MONTH(", "EXTRACT('MONTH' FROM " )
+      cSQLCNV := StrTran( cSQLCNV, "YEAR(", "EXTRACT('YEAR' FROM " )
+      cSQLCNV := StrTran( cSQLCNV, "REPL(", "REPEAT(" )
+   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+      cSQLCNV := StrTran( cSQLCNV, "TODAY()", "GETDATE() " )
+      cSQLCNV := StrTran( cSQLCNV, "ASC(", "ASCII(" )
+      cSQLCNV := StrTran( cSQLCNV, "TRIM(", "RTRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "ALLTRIM(", "TRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "REPL(", "REPLICATE(" )
+      cSQLCNV := StrTran( cSQLCNV, "CHR(", "CHAR(" )
+      cSQLCNV := StrTran( cSQLCNV, "SUBSTR(", "SUBSTRING(" )
+      // '  {"STR(%1%,%2%,%3%)"      ,"STR(%1%,%2%,%3%)"},;
+      // '       {"STR(%1%,%2%)"       ,"STR(%1%,%2%,0)"},;
+      // '     {"DTOS(%1%)"        ,"CONVERT(char(8), %1%,11)"},;
+      // '      {"IIF(%1%,%2%,%3%)"     ,"CASE WHEN %1% THEN %2% ELSE %3% END"},;
+
+      // Case "ODBC"
+   /*
         '       {"STR(%1%,%2%,%3%)"      ,"{fn RIGHT({fn SPACE(%2%)}+{fn CONVERT({fn ROUND(%1%,%3%)},SQL_VARCHAR)},%2%)}"},;
         '                {"STR(%1%,%2%)"       ,"{fn RIGHT({fn SPACE(%2%)}+{fn CONVERT({fn ROUND(%1%,0)},SQL_VARCHAR)},%2%)}"},;
          '               {"SUBSTR(%1%,%2%,%3%)"    ,"{fn SUBSTRING(%1%,%2%,%3%)}"},;
@@ -153,12 +242,12 @@ Function Dialeto_SQL(cSQLCNV)
          ''               {"ALLTRIM(%1%)"       ,"{fn LTRIM( {fn RTRIM(%1%) } )}"},;
          '               {"RIGHT(%1%)"       ,"{fn RIGHT(%1%)}"},;
             */
-           
-           // Case "ADS", "ADVANTAGE"
-           
-           
-        //    Case "OLEDB"
-            /*
+
+      // Case "ADS", "ADVANTAGE"
+
+
+      // Case "OLEDB"
+   /*
    '    {"STR(%1%,%2%,%3%)"      ,"{fn RIGHT({fn SPACE(%2%)}+{fn CONVERT({fn ROUND(%1%,%3%)},SQL_VARCHAR)},%2%)}"},;
    '                     {"STR(%1%,%2%)"       ,"{fn RIGHT({fn SPACE(%2%)}+{fn CONVERT({fn ROUND(%1%,0)},SQL_VARCHAR)},%2%)}"},;
    '                     {"SUBSTR(%1%,%2%,%3%)"    ,"{fn SUBSTRING(%1%,%2%,%3%)}"},;
@@ -178,22 +267,26 @@ Function Dialeto_SQL(cSQLCNV)
    '                     {"LEFT(%1%,%2%)"      ,"{fn LEFT(%1%,%2%)}"},;
    '                     {"RIGHT(%1%)"       ,"{fn RIGHT(%1%)}"},;
             */
-            Case cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
-                 cSQLCNV = STRTRAN(cSQLCNV, "TODAY()", "SYSDATE ")
-                 cSQLCNV = STRTRAN(cSQLCNV, "CHR(", "CHAR(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ASC(", "ASCII(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "TRIM(", "RTRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "ALLTRIM(", "LTRIM(RTRIM(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "LEN(", "LENGTH(")
-                 cSQLCNV = STRTRAN(cSQLCNV, "REPL(", "REPLICATE(")
-          //   '  {"LEFT(%1%,%2%)"     ,"SUBSTR(%1%,1,%2%)"},;
-           //  '           {"DTOS(%1%)"        ,"TO_CHAR(%1%,'YYYYMMDD')"},;
-           //  '           {"DAY(%1%)"         ,"TO_NUM(TO_CHAR(%1%,'DD'))"},;
-           //  '           {"MONTH(%1%)"       ,"TO_NUM(TO_CHAR(%1%,'MM'))"},;
-           //  '           {"YEAR(%1%)"        ,"TO_NUM(TO_CHAR(%1%,'YYYY'))"},;
-            
-            Case lMDB .OR. lACCDB
-                 cSQLCNV = STRTRAN(cSQLCNV, "CURRENTDATETIME", " now ")
-   
-     EndCASE
-RETURN cSQLCNV
+   CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
+      cSQLCNV := StrTran( cSQLCNV, "TODAY()", "SYSDATE " )
+      cSQLCNV := StrTran( cSQLCNV, "CHR(", "CHAR(" )
+      cSQLCNV := StrTran( cSQLCNV, "ASC(", "ASCII(" )
+      cSQLCNV := StrTran( cSQLCNV, "TRIM(", "RTRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "ALLTRIM(", "LTRIM(RTRIM(" )
+      cSQLCNV := StrTran( cSQLCNV, "LEN(", "LENGTH(" )
+      cSQLCNV := StrTran( cSQLCNV, "REPL(", "REPLICATE(" )
+      // '  {"LEFT(%1%,%2%)"     ,"SUBSTR(%1%,1,%2%)"},;
+      // '           {"DTOS(%1%)"        ,"TO_CHAR(%1%,'YYYYMMDD')"},;
+      // '           {"DAY(%1%)"         ,"TO_NUM(TO_CHAR(%1%,'DD'))"},;
+      // '           {"MONTH(%1%)"       ,"TO_NUM(TO_CHAR(%1%,'MM'))"},;
+      // '           {"YEAR(%1%)"        ,"TO_NUM(TO_CHAR(%1%,'YYYY'))"},;
+
+   CASE lMDB .OR. lACCDB
+      cSQLCNV := StrTran( cSQLCNV, "CURRENTDATETIME", " now " )
+
+   ENDCASE
+
+   RETURN cSQLCNV
+
+// + EOF: dbudialeto.prg
+// +

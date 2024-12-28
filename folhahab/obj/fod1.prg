@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fod1.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fod1.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -47,70 +47,70 @@
 // :     Documentado 05/13/94 em 14:54                DISK!  vers„o 5.01
 // :*****************************************************************************
 
-#INCLUDE "BOX.CH"
-CABEX('Calcular Adiantamento salarial')
-SET COLOR TO R/GR
-HB_dispbox(8,0,21,79,B_DOUBLE+" ")
-@ 10,3 SAY 'Vocˆ s¢ poder  calcular o ADIANTAMENTO ap¢s    ter   iniciado'         
-@ 12,3 SAY 'o mˆs, caso vocˆ j  tenha iniciado o mˆs   digite  S  para  o'         
-@ 14,3 SAY 'para o cumputador iniciar os c lculos,  caso vocˆ  n„o  tenha'         
-@ 16,3 SAY 'iniciado o mˆs digite N, e inicie o mˆs'                               
+#include "BOX.CH"
+CABEX( 'Calcular Adiantamento salarial' )
+SET COLOR TO R / GR
+hb_DispBox( 8, 0, 21, 79, B_DOUBLE + " " )
+@ 10, 3 SAY 'Vocˆ s¢ poder  calcular o ADIANTAMENTO ap¢s    ter   iniciado'
+@ 12, 3 SAY 'o mˆs, caso vocˆ j  tenha iniciado o mˆs   digite  S  para  o'
+@ 14, 3 SAY 'para o cumputador iniciar os c lculos,  caso vocˆ  n„o  tenha'
+@ 16, 3 SAY 'iniciado o mˆs digite N, e inicie o mˆs'
 SET COLO TO
-IF !MDG('Deseja continuar')
-   IF MDG('Deseja Inciar Agora o Mˆs')
-      FOD7()
-   ELSE
-      RETU
-   ENDIF
-ENDIF
-
-
-MDS('Carregando dados da Conta do Vale.')
-IF !netuse("contas")  //AREDE("CONTAS","CONTAS",0)
-   RETU
-ENDIF
-DBGOTOP()
-if !DBSEEK(41)
-   ALERTX('N„o localizei a conta do vale 41')
-   DBCLOSEALL()
-   RETU
+IF !MDG( 'Deseja continuar' )
+IF MDG( 'Deseja Inciar Agora o Mˆs' )
+FOD7()
 ELSE
-   VAR0 := FATOR
+RETU
 ENDIF
-DBCLOSEALL()
+ENDIF
 
-MDS("Confirme o Fator")
-@ 24,40 GET VAR0         
+
+MDS( 'Carregando dados da Conta do Vale.' )
+IF !netuse( "contas" )  // AREDE("CONTAS","CONTAS",0)
+RETU
+ENDIF
+dbGoTop()
+IF !dbSeek( 41 )
+ALERTX( 'N„o localizei a conta do vale 41' )
+dbCloseAll()
+RETU
+ELSE
+VAR0 := FATOR
+ENDIF
+dbCloseAll()
+
+MDS( "Confirme o Fator" )
+@ 24, 40 GET VAR0
 IF !READCUR()
-   RETU .F.
+RETU .F.
 ENDIF
 
 IF VAR0 = 0
-   ALERTX('Seu fator ‚ zero !!! Descontinuando o Calculo')
-   RETU .F.
+ALERTX( 'Seu fator ‚ zero !!! Descontinuando o Calculo' )
+RETU .F.
 ENDIF
 
 
 IF VAR0 > .5
-   IF ZUSER <> "SUPERVISOR"   //So troca Senha
-      ALERTX("Adiantamento com mais 50% so permitido para o SUPERVISOR")
-      RETU .F.
-   ENDIF
+IF ZUSER <> "SUPERVISOR"   // So troca Senha
+ALERTX( "Adiantamento com mais 50% so permitido para o SUPERVISOR" )
+RETU .F.
+ENDIF
 ENDIF
 
 ARREDONDA := 0.00
-IF MDG('Deseja arredondar')
-   MDS('Digite arredondamento')
-   @ 24,57 GET ARREDONDA PICT '##,###.##'        
-   READCUR()
+IF MDG( 'Deseja arredondar' )
+MDS( 'Digite arredondamento' )
+@ 24, 57 GET ARREDONDA PICT '##,###.##'
+READCUR()
 ENDIF
 
 XA := XB := XC := XD := XE := XF := 1
 FOD1B()
-DBCLOSEALL()
+dbCloseAll()
 RETU
 
 // : FIM: FOD1.PRG
 
-*+ EOF: fod1.prg
-*+
+// + EOF: fod1.prg
+// +

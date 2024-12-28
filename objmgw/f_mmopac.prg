@@ -1,156 +1,201 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function MEMOPACK()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : f_mmopac.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:41 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-*+
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +
+// +    Function MEMOPACK()
+// +
+// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+
+// +
 #include "set.ch"
 #include "dbinfo.ch"
 
-function MEMOPACK( packlist,lMES,lINFO,cUSORDD ) //Array Arquivos se texto convert array
-local counter
-local old_delete
-local real_recs
-local ret_value
-local cARQNOME
-private temp_file
 
-cOLDRDD:=RDDSETDEFAULT()
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MEMOPACK()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION MEMOPACK( packlist, lMES, lINFO, cUSORDD )  // Array Arquivos se texto convert array
 
-if valtype(Packlist)="C"
-   packlist:={packlist} //'funcao trabalha com matriz de arquivos se passar um arquivo cria a matriz com somente ele
-endif
+   LOCAL counter
+   LOCAL old_delete
+   LOCAL real_recs
+   LOCAL ret_value
+   LOCAL cARQNOME
+   PRIVATE temp_file
+
+   cOLDRDD := rddSetDefault()
+
+   IF ValType( Packlist ) = "C"
+      packlist := { packlist }   // 'funcao trabalha com matriz de arquivos se passar um arquivo cria a matriz com somente ele
+   ENDIF
 
 
-ret_value := '0 - OK'
+   ret_value := '0 - OK'
 
-//  Obtem um nome exclusivo de arquivo temporario de base de dados.
-temp_file := TIRAEXT(tmpfile( 'DBF' ))
+// Obtem um nome exclusivo de arquivo temporario de base de dados.
+   temp_file := TIRAEXT( tmpfile( 'DBF' ) )
 
 
-for counter := 1 to len( packlist )
+   FOR counter := 1 TO Len( packlist )
 
-    cARQNOME:=packlist[ counter ]
+      cARQNOME := packlist[ counter ]
 
-    if ! ismemo(cARQNOME,lMES,lINFO) //varre a estrutura para ver ser se tem algum campo memo na f_ismemo
-       exit
-    endif
+      IF !ISMEMO( cARQNOME, lMES, lINFO )  // varre a estrutura para ver ser se tem algum campo memo na f_ismemo
+         EXIT
+      ENDIF
 
-    nVERSAO:=INFOTIPODBF(cARQNOME,lMES) //traz o tipo pelo reader na f_ismemo
-   
-    IF ! (nVERSAO=131 .OR. nVERSAO=245 .or. nVERSAO=139)
-      ret_value := '6 - Nao Possui Memo' + cARQNOME
-      exit
-    endif
+      nVERSAO := INFOTIPODBF( cARQNOME, lMES )  // traz o tipo pelo reader na f_ismemo
 
-	IF EMPTY(cUSORDD)
-		cNTXEXT:=".DBT"    //rddSetDefault("DBTCDX")
-		IF nVERSAO=245
-		   cNTXEXT:=".FPT" //rddSetDefault( "FPTCDX" )
-		ENDIF
-		IF nVERSAO=229
-		   cNTXEXT:=".SMT"  //rddSetDefault( "SMTCDX" )
-		ENDIF
-    else
-	    cNTXEXT:=hb_rddInfo( RDDI_MEMOEXT) //a extensao do rdiinfo memo do destino vem com parametro
-    endif	
+      IF !( nVERSAO = 131 .OR. nVERSAO = 245 .OR. nVERSAO = 139 )
+         ret_value := '6 - Nao Possui Memo' + cARQNOME
+         EXIT
+      ENDIF
 
-   //  Verifica se todos os arquivos do array especificado existem.
-   if .not. HB_FILEEXISTS( cARQNOME + '.DBF' )
-      ret_value := '1 - Arquivo Dados Nao Encontrado ' + cARQNOME
-      exit
-   endif
+      IF Empty( cUSORDD )
+         cNTXEXT := ".DBT"   // rddSetDefault("DBTCDX")
+         IF nVERSAO = 245
+            cNTXEXT := ".FPT"  // rddSetDefault( "FPTCDX" )
+         ENDIF
+         IF nVERSAO = 229
+            cNTXEXT := ".SMT"  // rddSetDefault( "SMTCDX" )
+         ENDIF
+      ELSE
+         cNTXEXT := hb_rddInfo( RDDI_MEMOEXT )   // a extensao do rdiinfo memo do destino vem com parametro
+      ENDIF
 
-      if .not. HB_FILEEXISTS( cARQNOME + cNTXEXT )
-      ret_value := '7 - Arquivo Memoria Nao Encontrado ' + cARQNOME+Cntxext
-      exit
-   endif
+      // Verifica se todos os arquivos do array especificado existem.
+      IF !hb_FileExists( cARQNOME + '.DBF' )
+         ret_value := '1 - Arquivo Dados Nao Encontrado ' + cARQNOME
+         EXIT
+      ENDIF
 
-   //  Abre a base de dados e obtem a contagem de registros.
-   IF EMPTY(cUSORDD)
-	   IF nVERSAO=131
-		  RDDSETDEFAULT("DBFNTX") //rddSetDefault("DBTCDX")
-	   ENDIF
-	   IF nVERSAO=245
-		  RDDSETDEFAULT("DBFCDX") //rddSetDefault( "FPTCDX" )
-	   ENDIF
-	   IF nVERSAO=229
-		  RDDSETDEFAULT("SMTCDX") //rddSetDefault( "SMTCDX" ) SIXCDX
-	   ENDIF
-	   IF nVERSAO=139
-	       ret_value := '8 - driver DBFMDX nao mais disponivel ' 
-	       EXIT
-		  //RDDSETDEFAULT("DBFMDX")
-	   ENDIF
+      IF !hb_FileExists( cARQNOME + cNTXEXT )
+         ret_value := '7 - Arquivo Memoria Nao Encontrado ' + cARQNOME + Cntxext
+         EXIT
+      ENDIF
 
-	   
-	ELSE
-	  RDDSETDEFAULT(cUSORDD)
-    ENDIF	
-	   
-	   
-   
-   
-   DBUSEAREA(.T.,,cARQNOME,,.F.)
-   if ! neterr()
-      pack
+      // Abre a base de dados e obtem a contagem de registros.
+      IF Empty( cUSORDD )
+         IF nVERSAO = 131
+            rddSetDefault( "DBFNTX" )  // rddSetDefault("DBTCDX")
+         ENDIF
+         IF nVERSAO = 245
+            rddSetDefault( "DBFCDX" )  // rddSetDefault( "FPTCDX" )
+         ENDIF
+         IF nVERSAO = 229
+            rddSetDefault( "SMTCDX" )  // rddSetDefault( "SMTCDX" ) SIXCDX
+         ENDIF
+         IF nVERSAO = 139
+            ret_value := '8 - driver DBFMDX nao mais disponivel '
+            EXIT
+            // RDDSETDEFAULT("DBFMDX")
+         ENDIF
 
-      real_recs := lastrec()
 
-      //  Grava o parametro deleted e desativa deleted.
-      //  (Para que os registros excluidos sejam copiados.)
-      old_delete := set( _SET_DELETED, .F. )
+      ELSE
+         rddSetDefault( cUSORDD )
+      ENDIF
 
-      nLASTREC:=LASTREC()
-      //  Copia para o arquivo temporario e o abre.
-      zei_fort( nLASTREC,,,0)
-      COPY to &temp_file WHILE ZEI_FORT(nLASTREC,,,1)
-      
-      use &temp_file
 
-      //  Recupera o parametro deleted original.
-      set( _SET_DELETED, old_delete )
 
-      if lastrec() = real_recs
-         //  Copia com exito se a contagem de registros for a mesma.
-         use
-         if file( temp_file + cNTXEXT )
 
-            //  Remove os arquivos antigos.
-            ferase( cARQNOME + '.dbf' )
-            ferase( cARQNOME + cNTXEXT )
+      dbUseArea( .T.,, cARQNOME,, .F. )
+      IF !NetErr()
+         PACK
 
-            //  Verifica se eles foram removidos.
-            if ( HB_FILEEXISTS( cARQNOME + '.DBF' ) .or. HB_FILEEXISTS( cARQNOME + cNTXEXT ) )
-               //  Se ainda existirem, nao pode mudar seus nomes.
-               ret_value := '2 - Erro Copia Reserva' + cARQNOME
-               exit
-            endif
+         real_recs := LastRec()
 
-            //  Troca nomes dos arqs.temporarios pelos especificados.
-            frename( temp_file + '.DBF', cARQNOME + '.dbf' )
-            frename( temp_file + cNTXEXT, cARQNOME + cNTXEXT )
-            ferase( temp_file + '.DBF' )
-            ferase( temp_file + cNTXEXT )
+         // Grava o parametro deleted e desativa deleted.
+         // (Para que os registros excluidos sejam copiados.)
+         old_delete := Set( _SET_DELETED, .F. )
 
-         else
-            //  O arquivo temporario DBT nao foi encontrado.
-            ret_value := '3 - Falta ' +cNTXEXT +" " + cARQNOME
-            exit
-         endif
-      else
-         //  A base de dados foi copiada de forma incorreta.
-         ret_value := '4 - Checagem Numero Registros' + cARQNOME
-         exit
-      endif
-   else
-       // Arquivo Nao Pode Ser Aberto
-      ret_value := '5 - Nao Pode ser Aberto Exclusivo' + cARQNOME
-      exit
-   endif
-next
-RDDSETDEFAULT(cOLDRDD)
-return ret_value
+         nLASTREC := LastRec()
+         // Copia para o arquivo temporario e o abre.
+         zei_fort( nLASTREC,,, 0 )
+         COPY TO &temp_file WHILE ZEI_FORT( nLASTREC,,, 1 )
 
-*+ EOF: F_MMOPAC.PRG
+         USE &temp_file
+
+         // Recupera o parametro deleted original.
+         Set( _SET_DELETED, old_delete )
+
+         IF LastRec() = real_recs
+            // Copia com exito se a contagem de registros for a mesma.
+            USE
+            IF File( temp_file + cNTXEXT )
+
+               // Remove os arquivos antigos.
+               FErase( cARQNOME + '.dbf' )
+               FErase( cARQNOME + cNTXEXT )
+
+               // Verifica se eles foram removidos.
+               IF ( hb_FileExists( cARQNOME + '.DBF' ) .OR. hb_FileExists( cARQNOME + cNTXEXT ) )
+                  // Se ainda existirem, nao pode mudar seus nomes.
+                  ret_value := '2 - Erro Copia Reserva' + cARQNOME
+                  EXIT
+               ENDIF
+
+               // Troca nomes dos arqs.temporarios pelos especificados.
+               FRename( temp_file + '.DBF', cARQNOME + '.dbf' )
+               FRename( temp_file + cNTXEXT, cARQNOME + cNTXEXT )
+               FErase( temp_file + '.DBF' )
+               FErase( temp_file + cNTXEXT )
+
+            ELSE
+               // O arquivo temporario DBT nao foi encontrado.
+               ret_value := '3 - Falta ' + cNTXEXT + " " + cARQNOME
+               EXIT
+            ENDIF
+         ELSE
+            // A base de dados foi copiada de forma incorreta.
+            ret_value := '4 - Checagem Numero Registros' + cARQNOME
+            EXIT
+         ENDIF
+      ELSE
+         // Arquivo Nao Pode Ser Aberto
+         ret_value := '5 - Nao Pode ser Aberto Exclusivo' + cARQNOME
+         EXIT
+      ENDIF
+   NEXT
+   rddSetDefault( cOLDRDD )
+
+   RETURN ret_value
+
+// + EOF: F_MMOPAC.PRG
+
+// + EOF: f_mmopac.prg
+// +

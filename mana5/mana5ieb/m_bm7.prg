@@ -1,328 +1,358 @@
-*+²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
-*+
-*+    Source Module => J:\ITAESBRA\M_BM7.PRG
-*+
-*+    Reformatted by Click! 2.03 on Oct-1-2003 at 12:39 pm
-*+
-*+²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_bm7.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:47 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
+// +²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
+// +
+// +    Source Module => J:\ITAESBRA\M_BM7.PRG
+// +
+// +    Reformatted by Click! 2.03 on Oct-1-2003 at 12:39 pm
+// +
+// +²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 
 nTIPO   := 1
 mNRNOTA := 0
 MDI( " þ INVOIC ELECTROLUX" )
 MDS( "Digite NF Tipo 1-Fatura/MaoObra 2-RetornoMP 3-Embalagem" )
-@ 24, 60 get mNRNOTA pict "99999999"
-@ 24, 70 get nTIPO   pict "9"
-if !READCUR()
-   retu .F.
-endif
-if nTIPO < 0 .or. nTIPO > 3
-   ALERTX( "Tipo Errado" )
-   retu .F.
-endif
+@ 24, 60 GET mNRNOTA PICT "99999999"
+@ 24, 70 GET nTIPO   PICT "9"
+IF !READCUR()
+RETU .F.
+ENDIF
+IF nTIPO < 0 .OR. nTIPO > 3
+ALERTX( "Tipo Errado" )
+RETU .F.
+ENDIF
 
 CRIARVARS( "MA01" )
 CRIARVARS( "MM01" )
 CRIARVARS( "MM02" )
 
-if !IGUALVARS( "MM01", mNRNOTA )
-   retu .F.
-endif
-if !IGUALVARS( "MA01", mFORNECEDO )
-   retu .F.
-endif
+IF !IGUALVARS( "MM01", mNRNOTA )
+RETU .F.
+ENDIF
+IF !IGUALVARS( "MA01", mFORNECEDO )
+RETU .F.
+ENDIF
 tCGC := OBTER( "MANEMP", ZNUMERO, "CGC" )
-if nTIPO = 1
-   mELE03 := "1  "
-else
-   mELE03 := "2  "
-endif
+IF nTIPO = 1
+mELE03 := "1  "
+ELSE
+mELE03 := "2  "
+ENDIF
 mELE06  := mDATA
 mELE07  := mDATA
-mELE12  := space( 13 )                  //Zerados Nao Necessarios
-mELE13  := space( 13 )
-mCODIGO := space( 13 )
-//mELE12:=mCODIGO
-//mELE13:=mCODIGO
+mELE12  := Space( 13 )  // Zerados Nao Necessarios
+mELE13  := Space( 13 )
+mCODIGO := Space( 13 )
+// mELE12:=mCODIGO
+// mELE13:=mCODIGO
 mELE17 := tCGC
 mELE18 := tCGC
 mELE04 := 9
 mELE26 := "FOB"
 mELE20 := mELE21 := mELE22 := mELE23 := mELE24 := mELE25 := 0
 cTIPO  := "F"
-if nTIPO = 2
-   cTIPO := "R"
-endif
-if nTIPO = 3
-   cTIPO := "E"
-endif
-if empty( mCGCCOMP )
-   mCGCCOMP := mCGC
-endif
+IF nTIPO = 2
+cTIPO := "R"
+ENDIF
+IF nTIPO = 3
+cTIPO := "E"
+ENDIF
+IF Empty( mCGCCOMP )
+mCGCCOMP := mCGC
+ENDIF
 
 
-mCAMINHO := ProfileString( "MANA5.INI", "PATH", "INVOICE",HB_CWD()+"\ARQUIVO" ) + cTIPO + strzero( mNRNOTA, 7 ) + ".TXT" + space( 20 )
-if nTIPO = 2 .and. !empty( mCFONEWB )
-   mCFONEW := mCFONEWB
-endif
+mCAMINHO := ProfileString( "MANA5.INI", "PATH", "INVOICE", hb_cwd() + "\ARQUIVO" ) + cTIPO + StrZero( mNRNOTA, 7 ) + ".TXT" + Space( 20 )
+IF nTIPO = 2 .AND. !Empty( mCFONEWB )
+mCFONEW := mCFONEWB
+ENDIF
 
 TELASAY( "EIN001" )
 EDITSAY( "EIN001" )
-mCAMINHO := strtran( mCAMINHO, " ", "" )
+mCAMINHO := StrTran( mCAMINHO, " ", "" )
 
-set century on
-nHANDLE := fcreate( alltrim( mCAMINHO ) )
-if ferror() # 0
-   ALERTX( "Erro na Cria‡„o do Arquivo" )
-   retu
-endif
-fwrite( nHANDLE, "01" )
-fwrite( nHANDLE, strzero( mNRNOTA, 6 ) )
-fwrite( nHANDLE, padr( mELE03, 3 ) )
-fwrite( nHANDLE, strzero( mELE04, 2 ) )
-fwrite( nHANDLE, dtos( mDATA ) )
-fwrite( nHANDLE, dtos( mELE06 ) )
-fwrite( nHANDLE, dtos( mELE07 ) )
-fwrite( nHANDLE, padr( mPEDIDO, 15 ) )
-fwrite( nHANDLE, padr( mCFONEW, 4 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mCODIGO ) ), 13 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mCLICOMP ) ), 13 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mELE12 ) ), 13 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mELE13 ) ), 13 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mCLIENTR ) ), 13 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( tCGC ) ), 14 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mCGCCOMP ) ), 14 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mELE17 ) ), 14 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mELE18 ) ), 14 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mCGC3 ) ), 14 ) )
-fwrite( nHANDLE, GRVVAL( mELE20, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mELE21, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mELE22, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mELE23, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mELE24, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mELE25, 15, 2 ) )
-fwrite( nHANDLE, padr( mELE26, 3 ) )
-fwrite( nHANDLE, strzero( val( TIRAOUT( mCGCTRANS ) ), 15 ) )                   //Layout 15 e nao 14 padraocgc
-fwrite( nHANDLE, chr( 13 ) + chr( 10 ) )
+SET CENTURY ON
+nHANDLE := FCreate( AllTrim( mCAMINHO ) )
+IF FError() # 0
+ALERTX( "Erro na Cria‡„o do Arquivo" )
+RETU
+ENDIF
+FWrite( nHANDLE, "01" )
+FWrite( nHANDLE, StrZero( mNRNOTA, 6 ) )
+FWrite( nHANDLE, PadR( mELE03, 3 ) )
+FWrite( nHANDLE, StrZero( mELE04, 2 ) )
+FWrite( nHANDLE, DToS( mDATA ) )
+FWrite( nHANDLE, DToS( mELE06 ) )
+FWrite( nHANDLE, DToS( mELE07 ) )
+FWrite( nHANDLE, PadR( mPEDIDO, 15 ) )
+FWrite( nHANDLE, PadR( mCFONEW, 4 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mCODIGO ) ), 13 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mCLICOMP ) ), 13 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mELE12 ) ), 13 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mELE13 ) ), 13 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mCLIENTR ) ), 13 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( tCGC ) ), 14 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mCGCCOMP ) ), 14 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mELE17 ) ), 14 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mELE18 ) ), 14 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mCGC3 ) ), 14 ) )
+FWrite( nHANDLE, GRVVAL( mELE20, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mELE21, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mELE22, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mELE23, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mELE24, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mELE25, 15, 2 ) )
+FWrite( nHANDLE, PadR( mELE26, 3 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mCGCTRANS ) ), 15 ) )   // Layout 15 e nao 14 padraocgc
+FWrite( nHANDLE, Chr( 13 ) + Chr( 10 ) )
 
 aDATAS := { mDAT01, mDAT02, mDAT03, mDAT04, mDAT05, ;
-            mDAT06, mDAT07, mDAT08, mDAT09, mDAT10 }
+      mDAT06, mDAT07, mDAT08, mDAT09, mDAT10 }
 aVALOR := { mVAL01, mVAL02, mVAL03, mVAL04, mVAL05, ;
-            mVAL06, mVAL07, mVAL08, mVAL09, mVAL10 }
-aPER := array( 10 )
-afill( aPER, 0 )
+      mVAL06, mVAL07, mVAL08, mVAL09, mVAL10 }
+aPER := Array( 10 )
+AFill( aPER, 0 )
 
 mBELE06 := 0
-for X := 1 to 10
-   if !empty( aDATAS[ X ] )
-      mBELE06 ++
-   endif
-   if !empty( aVALOR[ X ] )
-      aPER[ X ] := PER2( aVALOR[ X ], mTOTNF, 2 )
-   endif
-next X
+FOR X := 1 TO 10
+IF !Empty( aDATAS[ X ] )
+mBELE06++
+ENDIF
+IF !Empty( aVALOR[ X ] )
+aPER[ X ] := PER2( aVALOR[ X ], mTOTNF, 2 )
+ENDIF
+NEXT X
 
-if nTIPO = 1
-   for x := 1 to 10
-      if !empty( aVALOR[ X ] )
-         mBELE02 := "3  "
-         mBELE03 := "5  "
-         mBELE04 := "1  "
-         mBELE05 := "CD "
-         mBELE07 := aPER[ X ]
-         mBELE08 := aDATAS[ X ]
-         mBELE09 := aVALOR[ X ]
-         TELASAY( "EIN002" )
-         EDITSAY( "EIN002" )
-         fwrite( nHANDLE, "02" )
-         fwrite( nHANDLE, padr( mBELE02, 3 ) )
-         fwrite( nHANDLE, padr( mBELE03, 3 ) )
-         fwrite( nHANDLE, padr( mBELE04, 3 ) )
-         fwrite( nHANDLE, padr( mBELE05, 3 ) )
-         fwrite( nHANDLE, strzero( mBELE06, 3 ) )
-         fwrite( nHANDLE, GRVVAL( mBELE07, 5, 2 ) )
-         fwrite( Nhandle, dtos( mBELE08 ) )
-         fwrite( nHANDLE, GRVVAL( mBELE09, 15, 2 ) )
-         fwrite( nHANDLE, chr( 13 ) + chr( 10 ) )
-      endif
-   next x
-endif
-if !USEREDE( "MM02", 1, 1 )
-   dbcloseall()
-   retu .F.
-endif
-if !USEREDE( "OSCRT", 1, 1 )
-   dbcloseall()
-   retu .F.
-endif
+IF nTIPO = 1
+FOR x := 1 TO 10
+IF !Empty( aVALOR[ X ] )
+mBELE02 := "3  "
+mBELE03 := "5  "
+mBELE04 := "1  "
+mBELE05 := "CD "
+mBELE07 := aPER[ X ]
+mBELE08 := aDATAS[ X ]
+mBELE09 := aVALOR[ X ]
+TELASAY( "EIN002" )
+EDITSAY( "EIN002" )
+FWrite( nHANDLE, "02" )
+FWrite( nHANDLE, PadR( mBELE02, 3 ) )
+FWrite( nHANDLE, PadR( mBELE03, 3 ) )
+FWrite( nHANDLE, PadR( mBELE04, 3 ) )
+FWrite( nHANDLE, PadR( mBELE05, 3 ) )
+FWrite( nHANDLE, StrZero( mBELE06, 3 ) )
+FWrite( nHANDLE, GRVVAL( mBELE07, 5, 2 ) )
+FWrite( Nhandle, DToS( mBELE08 ) )
+FWrite( nHANDLE, GRVVAL( mBELE09, 15, 2 ) )
+FWrite( nHANDLE, Chr( 13 ) + Chr( 10 ) )
+ENDIF
+NEXT x
+ENDIF
+IF !USEREDE( "MM02", 1, 1 )
+dbCloseAll()
+RETU .F.
+ENDIF
+IF !USEREDE( "OSCRT", 1, 1 )
+dbCloseAll()
+RETU .F.
+ENDIF
 
 mDELE02 := 0
 mDELE03 := 0
 mVALRET := 0
 
 mSEQREM := 0
-dbselectar( "MM02" )
-dbgotop()
-dbseek( str( mNRNOTA, 8 ) )
-while NUMERO = mNRNOTA .and. !eof()
-   nVEZES := 1
-   if nTIPO = 2
-      nVEZES := 2
-   endif
-   EQUVARS()
-   for X := 1 to nVEZES
-      lGRAVA  := .T.
-      mOS     := int( OS )
-      mCELE06 := space( 15 )
-      mCELE07 := space( 15 )
-      mCELE04 := space( 15 )
-      mCELE09 := "A  "
-      mCELE13 := mVALORMER
-      mCELE15 := mPRECO
-      IF mTIPOSERV="3"
-         mCODIGO:=PADR(ALLTRIM(mCODIGO)+"*OP901",24)
-      ENDIF
-      if nTIPO = 1
-         dbselectar( "oscrt" )
-         dbgotop()
-         if dbseek( mOS )
-            mCELE06 := CODEAN
-            mCELE07 := CODCLI
-            mCELE04 := PEDIDOCLI
-         endif
-      endif
-      dbselectar( "MM02" )
-      if empty( mCELE04 ) .and. nTIPO = 1
-         mCELE04 := PEDIDOCLI
-      endif
-      if empty( mCELE07 ) .and. nTIPO = 1
-         mCELE07 := mCODIGO
-      endif
-      if mCFONEW = "5124" .or. mCFONEW = "6124" .or. mCFONEW = "5902" .or. mCFONEW = "6902" ;
-                 .or. mCFONEW = "5920" .or. mCFONEW = "6920" .or. mCFONEW = "5921" .or. mCFONEW = "6921"
-         mIPI      := 0
-         mVALORIPI := 0
-         mBASEIPI  := 0
-         mICM      := 0
-         mVALORICM := 0
-         mBASEICM  := 0
-      endif
-      if nTIPO = 2 .or. nTIPO = 3
-         mCELE04 := "999999" + space( 9 )
-         mCELE09 := "E  "
-         mCELE07 := "62093507" + space( 7 )
-      endif
-      if nTIPO = 2
-//         mCODIGO := "62093507" + space( 7 )
-//         mCELE08 := "99900172" + space( 7 )
-         mCODIGO := "99900172" + space( 7 )
-         if X = 1   //1devolucao
-//            mCODIGO   := mCODDEV
-            mCELE07   := mCODDEV
-            mQTDE     := mQTDEDEV
-            mUNID     := UNIDEV
-            mVALORMER := mDEV
-            mPRECO    := mPRCDEV
-         else       //2 devolucao
-//            mCODIGO   := mCODDE2
-            mCELE07   := mCODDE2
-            mQTDE     := mQTDEDE2
-            mUNID     := UNIDE2
-            mVALORMER := mDE2
-            mPRECO    := mPRCDE2
-         endif
-         if mQTDE > 0.AND.EMPTY(mPRECO)
-            mPRECO := round( mVALORMER / mQTDE, 5 )
-         endif
-         mCLASSIPI := ""
-         mCELE13   := mVALORMER
-         mCELE15   := mPRECO
-         if empty( mQTDE )
-            lGRAVA := .F.
-         endif
-      endif
-      if nTIPO = 3
-//         mCODIGO := padr( "FE", 24 )
-          DO CASE
-             CASE mCODIGO="CM"
-                mCODIGO := padr( "80800054", 24 )
-             CASE mCODIGO="1012"
-                mCODIGO := padr( "80800106", 24 )
-             CASE mCODIGO="CG"
-                mCODIGO := padr( "80800055", 24 )
-             otherwise
-                mCODIGO := padr( "80800097", 24 )
-          END CASE
-      endif
-      if lGRAVA
-         mSEQREM++
-         TELASAY( "EIN003" )
-         EDITSAY( "EIN003" )
-         if nTIPO = 2
-            mVALRET += mVALORMER
-         endif
-         fwrite( nHANDLE, "03" )
-         IF nTIPO<>2
-            fwrite( nHANDLE, strzero( mSEQ, 6 ) )
-         ELSE
-            fwrite( nHANDLE, strzero( mSEQREM, 6 ) )
-         ENDIF
-         fwrite( nHANDLE, strzero( mPEDCLIITE, 6 ) )
-         fwrite( nHANDLE, padr( TIRAOUT( mCELE04 ), 15 ) )
-         fwrite( nHANDLE, strzero( val( TIRAOUT( mCLASSIPI ) ), 11 ) )
-         fwrite( nHANDLE, padr( TIRAOUT( mCELE06 ), 14 ) )
-         fwrite( nHANDLE, padr( TIRAOUT( mCELE07 ), 15 ) )
-         fwrite( nHANDLE, padr( TIRAOUT( mCODIGO ), 15 ) )
-         fwrite( nHANDLE, padr( mCELE09, 3 ) )
-         fwrite( nHANDLE, GRVVAL( mQTDE, 11, 3 ) )
-         fwrite( nHANDLE, padr( mUNID, 3 ) )
-         fwrite( nHANDLE, GRVVAL( mVALORMER, 17, 5 ) )
-         fwrite( nHANDLE, GRVVAL( mCELE13, 17, 5 ) )
-         fwrite( nHANDLE, GRVVAL( mPRECO, 17, 5 ) )
-         fwrite( nHANDLE, GRVVAL( mCELE15, 17, 5 ) )
-         fwrite( nHANDLE, GRVVAL( mIPI, 4, 2 ) )
-         fwrite( nHANDLE, GRVVAL( mVALORIPI, 15, 2 ) )
-         fwrite( nHANDLE, GRVVAL( mBASEIPI, 15, 2 ) )
-         fwrite( nHANDLE, GRVVAL( mICM, 4, 2 ) )
-         fwrite( nHANDLE, GRVVAL( mVALORICM, 15, 2 ) )
-         fwrite( nHANDLE, GRVVAL( mBASEICM, 15, 2 ) )
-         fwrite( nHANDLE, chr( 13 ) + chr( 10 ) )
-         mDELE02 ++
-         mDELE03 += CONVUN( mQTDE, mUNID )
-      endif
-      dbselectar( "MM02" )
-   next X
-   dbskip()
-enddo
-dbcloseall()
+dbSelectAr( "MM02" )
+dbGoTop()
+dbSeek( Str( mNRNOTA, 8 ) )
+WHILE NUMERO = mNRNOTA .AND. !Eof()
+nVEZES := 1
+IF nTIPO = 2
+nVEZES := 2
+ENDIF
+EQUVARS()
+FOR X := 1 TO nVEZES
+lGRAVA  := .T.
+mOS     := Int( OS )
+mCELE06 := Space( 15 )
+mCELE07 := Space( 15 )
+mCELE04 := Space( 15 )
+mCELE09 := "A  "
+mCELE13 := mVALORMER
+mCELE15 := mPRECO
+IF mTIPOSERV = "3"
+mCODIGO := PadR( AllTrim( mCODIGO ) + "*OP901", 24 )
+ENDIF
+IF nTIPO = 1
+dbSelectAr( "oscrt" )
+dbGoTop()
+IF dbSeek( mOS )
+mCELE06 := CODEAN
+mCELE07 := CODCLI
+mCELE04 := PEDIDOCLI
+ENDIF
+ENDIF
+dbSelectAr( "MM02" )
+IF Empty( mCELE04 ) .AND. nTIPO = 1
+mCELE04 := PEDIDOCLI
+ENDIF
+IF Empty( mCELE07 ) .AND. nTIPO = 1
+mCELE07 := mCODIGO
+ENDIF
+IF mCFONEW = "5124" .OR. mCFONEW = "6124" .OR. mCFONEW = "5902" .OR. mCFONEW = "6902" ;
+               .OR. mCFONEW = "5920" .OR. mCFONEW = "6920" .OR. mCFONEW = "5921" .OR. mCFONEW = "6921"
+mIPI      := 0
+mVALORIPI := 0
+mBASEIPI  := 0
+mICM      := 0
+mVALORICM := 0
+mBASEICM  := 0
+ENDIF
+IF nTIPO = 2 .OR. nTIPO = 3
+mCELE04 := "999999" + Space( 9 )
+mCELE09 := "E  "
+mCELE07 := "62093507" + Space( 7 )
+ENDIF
+IF nTIPO = 2
+// mCODIGO := "62093507" + space( 7 )
+// mCELE08 := "99900172" + space( 7 )
+mCODIGO := "99900172" + Space( 7 )
+IF X = 1   // 1devolucao
+// mCODIGO   := mCODDEV
+mCELE07   := mCODDEV
+mQTDE     := mQTDEDEV
+mUNID     := UNIDEV
+mVALORMER := mDEV
+mPRECO    := mPRCDEV
+ELSE   // 2 devolucao
+// mCODIGO   := mCODDE2
+mCELE07   := mCODDE2
+mQTDE     := mQTDEDE2
+mUNID     := UNIDE2
+mVALORMER := mDE2
+mPRECO    := mPRCDE2
+ENDIF
+IF mQTDE > 0 .AND. Empty( mPRECO )
+mPRECO := Round( mVALORMER / mQTDE, 5 )
+ENDIF
+mCLASSIPI := ""
+mCELE13   := mVALORMER
+mCELE15   := mPRECO
+IF Empty( mQTDE )
+lGRAVA := .F.
+ENDIF
+ENDIF
+IF nTIPO = 3
+// mCODIGO := padr( "FE", 24 )
+DO CASE
+CASE mCODIGO = "CM"
+mCODIGO := PadR( "80800054", 24 )
+CASE mCODIGO = "1012"
+mCODIGO := PadR( "80800106", 24 )
+CASE mCODIGO = "CG"
+mCODIGO := PadR( "80800055", 24 )
+OTHERWISE
+mCODIGO := PadR( "80800097", 24 )
+END CASE
+ENDIF
+IF lGRAVA
+mSEQREM++
+TELASAY( "EIN003" )
+EDITSAY( "EIN003" )
+IF nTIPO = 2
+mVALRET += mVALORMER
+ENDIF
+FWrite( nHANDLE, "03" )
+IF nTIPO <> 2
+FWrite( nHANDLE, StrZero( mSEQ, 6 ) )
+ELSE
+FWrite( nHANDLE, StrZero( mSEQREM, 6 ) )
+ENDIF
+FWrite( nHANDLE, StrZero( mPEDCLIITE, 6 ) )
+FWrite( nHANDLE, PadR( TIRAOUT( mCELE04 ), 15 ) )
+FWrite( nHANDLE, StrZero( Val( TIRAOUT( mCLASSIPI ) ), 11 ) )
+FWrite( nHANDLE, PadR( TIRAOUT( mCELE06 ), 14 ) )
+FWrite( nHANDLE, PadR( TIRAOUT( mCELE07 ), 15 ) )
+FWrite( nHANDLE, PadR( TIRAOUT( mCODIGO ), 15 ) )
+FWrite( nHANDLE, PadR( mCELE09, 3 ) )
+FWrite( nHANDLE, GRVVAL( mQTDE, 11, 3 ) )
+FWrite( nHANDLE, PadR( mUNID, 3 ) )
+FWrite( nHANDLE, GRVVAL( mVALORMER, 17, 5 ) )
+FWrite( nHANDLE, GRVVAL( mCELE13, 17, 5 ) )
+FWrite( nHANDLE, GRVVAL( mPRECO, 17, 5 ) )
+FWrite( nHANDLE, GRVVAL( mCELE15, 17, 5 ) )
+FWrite( nHANDLE, GRVVAL( mIPI, 4, 2 ) )
+FWrite( nHANDLE, GRVVAL( mVALORIPI, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mBASEIPI, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mICM, 4, 2 ) )
+FWrite( nHANDLE, GRVVAL( mVALORICM, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mBASEICM, 15, 2 ) )
+FWrite( nHANDLE, Chr( 13 ) + Chr( 10 ) )
+mDELE02++
+mDELE03 += CONVUN( mQTDE, mUNID )
+ENDIF
+dbSelectAr( "MM02" )
+NEXT X
+dbSkip()
+ENDDO
+dbCloseAll()
 mDELE05 := mTOTMER
 mDELE06 := 0
 mDELE07 := 0
-if nTIPO = 2 .or. nTIPO = 3
-   mTOTIPI  := 0
-   mTOTICM  := 0
-   mTOTBICM := 0
-   mICM     := 0
-endif
-if nTIPO = 2
-   mTOTMER := mVALRET
-   mDELE05 := mVALRET
-endif
+IF nTIPO = 2 .OR. nTIPO = 3
+mTOTIPI  := 0
+mTOTICM  := 0
+mTOTBICM := 0
+mICM     := 0
+ENDIF
+IF nTIPO = 2
+mTOTMER := mVALRET
+mDELE05 := mVALRET
+ENDIF
 TELASAY( "EIN009" )
 EDITSAY( "EIN009" )
-fwrite( nHANDLE, "09" )
-fwrite( nHANDLE, strzero( mDELE02, 5 ) )
-fwrite( nHANDLE, GRVVAL( mDELE03, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mTOTMER, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mDELE05, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mDELE06, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mDELE07, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mTOTIPI, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mTOTICM, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mTOTBICM, 15, 2 ) )
-fwrite( nHANDLE, GRVVAL( mICM, 5, 2 ) )
-fwrite( nHANDLE, chr( 13 ) + chr( 10 ) )
-fwrite( nHANDLE, chr( 26 ) )
-fclose( nHANDLE )
-set century OFF
+FWrite( nHANDLE, "09" )
+FWrite( nHANDLE, StrZero( mDELE02, 5 ) )
+FWrite( nHANDLE, GRVVAL( mDELE03, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mTOTMER, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mDELE05, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mDELE06, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mDELE07, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mTOTIPI, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mTOTICM, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mTOTBICM, 15, 2 ) )
+FWrite( nHANDLE, GRVVAL( mICM, 5, 2 ) )
+FWrite( nHANDLE, Chr( 13 ) + Chr( 10 ) )
+FWrite( nHANDLE, Chr( 26 ) )
+FClose( nHANDLE )
+SET CENTURY OFF
 
-*+ EOF: M_BM7.PRG
+// + EOF: M_BM7.PRG
+
+// + EOF: m_bm7.prg
+// +

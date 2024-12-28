@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : foao.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : foao.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -37,84 +37,84 @@
 
 
 
-CABEX('Transferir Ocorrencias para Folha')
-IF !NETUSE(PES)   //AREDE(PES,PES,1)
-   RETU
+CABEX( 'Transferir Ocorrencias para Folha' )
+IF !NETUSE( PES )   // AREDE(PES,PES,1)
+RETU
 ENDIF
 
-IF !NETUSE(FOL)   //AREDE(FOL,FOL,0)
-   RETU
+IF !NETUSE( FOL )   // AREDE(FOL,FOL,0)
+RETU
 ENDIF
 
-IF !NETUSE("CONTAS")  //AREDE("CONTAS","CONTAS",1)
-   RETU
+IF !NETUSE( "CONTAS" )  // AREDE("CONTAS","CONTAS",1)
+RETU
 ENDIF
 
-IF !netuse("fo_oco")  //BREDE("FO_OCO",1)
-   RETU
+IF !netuse( "fo_oco" )  // BREDE("FO_OCO",1)
+RETU
 ENDIF
 FILTRO := 'CONTA#0'
-FI     := TRIM(FILTRO)
-FILTRO := FILTRO(FI)
+FI     := Trim( FILTRO )
+FILTRO := FILTRO( FI )
 SET FILTER TO &FILTRO
 XA := XB := XC := XD := XE := XF := 1
-DBSELECTAR("FO_oco")
-DBGOTOP()
-WHILE !EOF()
-   DATAREF := IF(DATARETORN < DATAFIMPAG,DATARETORN,DATAFIMPAG)
-   FIM     := MONTH(DATAREF)
-   INI     := MONTH(DATASAIDA)
-   IF YEAR(DATAREF) >= ANO
-      IF INI <= MES .AND. FIM >= MES
-         DIAS := VALE := SALH := SALM := VAR1 := 0
-         CTR  := NUMERO
-         CTAX := CONTA
-         IF INI = FIM
-            IF MES = FIM
-               DIAS := DAY(DATAREF) - DAY(DATASAIDA)+1
-            ENDIF
-         ELSE
-            IF INI = MES .AND. FIM > MES
-               DATAI := '01/'+STRZERO(INI+1,2)+'/'+STRZERO(ANO,4)
-               DATAI := (CTOD(DATAI)) - 1
-               DIAS  := DAY(DATAI) - DAY(DATASAIDA)+1
-            ENDIF
-            IF INI < MES .AND. FIM > MES
-               DATAI := '01/'+STRZERO(MES+1,2)+'/'+STRZERO(ANO,4)
-               DATAI := (CTOD(DATAI)) - 1
-               DIAS  := DAY(DATAI)
-            ENDIF
-            IF INI < MES .AND. FIM = MES
-               DIAS := DAY(DATAREF)
-            ENDIF
-         ENDIF
-         DBSELECTAR(PES)
-         DBGOTOP()
-         IF DBSEEK(CTR)
-            SALHM()
-            VALE := DIAS * SALM / 30
-            DBSELECTAR("CONTAS")
-            DBGOTOP()
-            IF DBSEEK(CTAX)
-               IF ACEITE # "S" .OR. ZUSER = "SUPERVISOR"
-                  DBSELECTAR(FOL)
-                  GRAVA2(CTAX)
-               ELSE
-                  ALERTX("Inclus„o desta Conta Permitida Somente para o Supervisor")
-               ENDIF
-            ELSE
-               ALERTX("Conta N„o Cadastrada")
-            ENDIF
-         ENDIF
-      ENDIF
-   ENDIF
-   DBSELECTAR("FO_oco")
-   DBSKIP()
+dbSelectAr( "FO_oco" )
+dbGoTop()
+WHILE !Eof()
+DATAREF := IF( DATARETORN < DATAFIMPAG, DATARETORN, DATAFIMPAG )
+FIM     := Month( DATAREF )
+INI     := Month( DATASAIDA )
+IF Year( DATAREF ) >= ANO
+IF INI <= MES .AND. FIM >= MES
+DIAS := VALE := SALH := SALM := VAR1 := 0
+CTR  := NUMERO
+CTAX := CONTA
+IF INI = FIM
+IF MES = FIM
+DIAS := Day( DATAREF ) - Day( DATASAIDA ) + 1
+ENDIF
+ELSE
+IF INI = MES .AND. FIM > MES
+DATAI := '01/' + StrZero( INI + 1, 2 ) + '/' + StrZero( ANO, 4 )
+DATAI := ( CToD( DATAI ) ) - 1
+DIAS  := Day( DATAI ) - Day( DATASAIDA ) + 1
+ENDIF
+IF INI < MES .AND. FIM > MES
+DATAI := '01/' + StrZero( MES + 1, 2 ) + '/' + StrZero( ANO, 4 )
+DATAI := ( CToD( DATAI ) ) - 1
+DIAS  := Day( DATAI )
+ENDIF
+IF INI < MES .AND. FIM = MES
+DIAS := Day( DATAREF )
+ENDIF
+ENDIF
+dbSelectAr( PES )
+dbGoTop()
+IF dbSeek( CTR )
+SALHM()
+VALE := DIAS * SALM / 30
+dbSelectAr( "CONTAS" )
+dbGoTop()
+IF dbSeek( CTAX )
+IF ACEITE # "S" .OR. ZUSER = "SUPERVISOR"
+dbSelectAr( FOL )
+GRAVA2( CTAX )
+ELSE
+ALERTX( "Inclus„o desta Conta Permitida Somente para o Supervisor" )
+ENDIF
+ELSE
+ALERTX( "Conta N„o Cadastrada" )
+ENDIF
+ENDIF
+ENDIF
+ENDIF
+dbSelectAr( "FO_oco" )
+dbSkip()
 ENDDO
-DBCLOSEALL()
+dbCloseAll()
 RETU
 
 // : FIM: FOAO.PRG
 
-*+ EOF: foao.prg
-*+
+// + EOF: foao.prg
+// +

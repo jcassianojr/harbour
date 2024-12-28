@@ -6,17 +6,19 @@
 *+
 *+
 *+
-*+    Sistema   : MANAEXO
+*+     Sistema:
 *+
-*+    Linguagem : Harbour
+*+     Linguagem: Harbour
 *+
-*+    Autor     : Jorge Cassiano
+*+     Autor: jcassiano
 *+
-*+    Copyright (c) 2010, Jorge Cassiano
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
 *+
 *+
 *+
-*+    Documentado em 30-Ago-2011 as 10:55 am
+*+    Documentado em 28-Dez-2024 as  9:58 am
 *+
 *+
 *+
@@ -24,9 +26,11 @@
 *+
 
 
+
 //Teclas Operacionais
 #INCLUDE "INKEY.CH"
 //#INCLUDE "COMANDO.CH"
+
 
 
 *+--------------------------------------------------------------------
@@ -44,6 +48,7 @@
 func CHECKUF(cSIGLA)
 
 
+
 if lastkey() = K_UP .or. lastkey() = K_DOWN
    retu .T.
 endi
@@ -55,6 +60,7 @@ if !VERSEHA("MD05",&cSIGLA.,"'Estado de : '+NOMEEXT")
    &cSIGLA. := ESCOLHEUF(&cSIGLA.)
 endif
 retu .T.
+
 
 
 *+--------------------------------------------------------------------
@@ -70,6 +76,7 @@ retu .T.
 *+
 *+
 func ESCOLHEUF(cUF)
+
 
 
 local aUF1 := {}
@@ -95,3 +102,6 @@ nPOS := if(nPOS > 1,nPOS,1)
 cUF  := aUF2[nPOS]
 retu cUF
 
+
+*+ EOF: mlib03.prg
+*+

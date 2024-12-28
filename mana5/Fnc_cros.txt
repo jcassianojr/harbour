@@ -1,0 +1,4782 @@
+*+--------------------------------------------------------------------
+*+
+*+    Created by Click! on 28-Dez-2024 at  9:58 am
+*+
+*+--------------------------------------------------------------------
+
+&()             <unresolved function>
+
+  Called from ( mlib44.prg   )   1 - function automenu()
+                                 1 - function menufec()
+              ( m_cv.prg     )   1 - function usermdec()
+
+:execute()      <unresolved function>
+
+  Called from ( m_ci.prg     )   3 - function gravapostela()
+
+:open()         <unresolved function>
+
+  Called from ( m_ci.prg     )   1 - function gravapostela()
+
+acento()        <unresolved function>
+
+  Called from ( m_a7a.prg    )  42 - function ma6ger()
+              ( m_b6.prg     )   3 - function mayg02()
+              ( m_bl1.prg    )   1 - function mayg02()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bn2.prg    )   4 - function mayg02()
+              ( m_bo1.prg    )   2 - function mayg02()
+
+acepad()        <unresolved function>
+
+  Called from ( m_a6.prg     )   2 - function ma6ger()
+
+ac_agudo()      <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+ac_circ()       <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+ac_crase()      <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+ac_til()        <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+addmonth()      in hbclipsm.lib
+
+  Called from ( comp1.prg    )   1 - function tempor()
+              ( manb2.prg    )   1 - function pegcamini()
+              ( m_a1.prg     )   1 - function ma101()
+
+agen()          in comp1.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+
+alertx()        <unresolved function>
+
+  Called from ( cnab400r.prg )   4 - 
+              ( mail.prg     )   4 - function mailfix()
+              ( mana5.prg    )   2 - function arqent()
+                                11 - function main()
+              ( manb2.prg    )   1 - function listar1()
+                                 1 - function pegcamini()
+              ( mlib.prg     )   3 - function confind()
+                                 1 - function igualvars()
+                                 1 - function reporvars()
+              ( mlib05.prg   )   1 - function mde()
+              ( mlib08.prg   )   3 - function mpagar()
+              ( mlib10.prg   )   1 - function check5cep()
+              ( mlib11.prg   )   2 - function metbro()
+              ( mlib15.prg   )   2 - function regmov()
+              ( mlib18.prg   )   5 - function regbus()
+              ( mlib24.prg   )   2 - function gravalay()
+                                 1 - function gravamvar()
+              ( mlib25.prg   )   2 - function pegaget()
+              ( mlib26.prg   )   1 - function confarq()
+              ( mlib27.prg   )   2 - function padcgc()
+                                 2 - function padrao()
+              ( mlib29.prg   )   1 - function usechk()
+                                10 - function userede()
+              ( mlib32.prg   )   2 - function checkpar()
+              ( mlib33.prg   )   1 - function checkcipi()
+              ( mlib34.prg   )   6 - function checkcfo()
+                                 2 - function checkesp()
+              ( mlib39.prg   )   1 - function telasay()
+              ( mlib40.prg   )   2 - function padrax()
+              ( mlib41.prg   )   1 - function verseha()
+              ( mlib42.prg   )   1 - function editsay()
+              ( mlib44.prg   )   2 - function automenu()
+                                 1 - function entmnu()
+                                 1 - function menufec()
+              ( mlib45.prg   )   1 - function novoreg()
+                                 1 - function usemult()
+                                 1 - function zaparq()
+              ( mlibc.prg    )   2 - function perc()
+              ( mlibest.prg  )   2 - function grvestoque()
+              ( mlibnf.prg   )   1 - function nfcod()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_a6.prg     )   2 - function ma6ger()
+              ( m_a74.prg    )   2 - function ma6ger()
+              ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   2 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ai1.prg    )   1 - function imai1()
+                                 2 - function mai101()
+              ( m_ak.prg     )   2 - function m_ak()
+              ( m_ak2.prg    )   1 - function mak299()
+                                 2 - function m_ak2()
+              ( m_al.prg     )   1 - function mal01()
+                                 2 - function mal02()
+                                 2 - function m_al()
+              ( m_al3.prg    )   1 - function m_al3()
+              ( m_am.prg     )   2 - function m_am()
+              ( m_am2.prg    )   1 - function mmtra()
+              ( m_am9.prg    )   5 - function mm09des()
+                                 2 - function mm09vol()
+              ( m_an.prg     )   1 - function man01()
+                                 2 - function man02()
+                                 3 - function m_an()
+              ( m_ao.prg     )   2 - function m_ao()
+              ( m_ao0.prg    )   6 - function maocda()
+                                 2 - function maorenum()
+                                 5 - function osprg()
+              ( m_ao2.prg    )   1 - function fmao2()
+                                 2 - function mo02k()
+              ( m_aop.prg    )   1 - function maop01()
+                                 1 - function op02ms06()
+              ( m_aope.prg   )   3 - function maopechk()
+              ( m_aosb.prg   )   1 - function mosbinc02()
+              ( m_as99.prg   )   1 - function gmas5()
+              ( m_au.prg     )   1 - function gmau()
+              ( m_aw.prg     )   1 - function mawdel()
+              ( m_aw0.prg    )   1 - function mawmudfor()
+                                 3 - function m_aw4()
+                                 1 - function m_awrea()
+              ( m_aw2.prg    )   3 - function maw202()
+              ( m_ay.prg     )   5 - function maypos()
+              ( m_ay3.prg    )   4 - function may304()
+                                 1 - function may3pos()
+              ( m_b6.prg     )   1 - function mayg02()
+              ( m_cd.prg     )   1 - function mcb2ins()
+              ( m_ch.prg     )   1 - function senhax()
+              ( m_ci.prg     )   2 - function m_ci()
+              ( m_cn2.prg    )   1 - function cfator()
+                                 1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_cs.prg     )   2 - function atualiza()
+                                 1 - function pegacs()
+              ( m_cv.prg     )   1 - function usermdec()
+              ( m_dc.prg     )   2 - function fmdc()
+                                 2 - function m_dc()
+              ( m_dk.prg     )   1 - function fecretbai()
+              ( m_dp.prg     )   1 - function mdkrep()
+              ( m_drc.prg    )   2 - function m_drc()
+              ( m_du.prg     )   1 - function fmdrc()
+
+alltrue()       <unresolved function>
+
+  Called from ( mlib20.prg   )   2 - function endcidp()
+              ( m_al.prg     )   1 - function maldep()
+              ( m_am2.prg    )   4 - function gmam2()
+              ( m_ao2.prg    )   1 - function fmao2()
+                                 2 - function gmao2()
+              ( m_au.prg     )   1 - function gmau()
+              ( m_aw0.prg    )   3 - function m_aw4()
+              ( m_ay3.prg    )   1 - function may307()
+              ( m_ci.prg     )   1 - function m_ci()
+
+apagareg()      in mlib46.prg
+
+  Called from ( mlib27.prg   )   1 - function fpad()
+              ( mlib40.prg   )   1 - function fpax()
+              ( mmenu.prg    )   1 - function nfvicm()
+              ( m_a12.prg    )   1 - function fma12()
+              ( m_ad2.prg    )   1 - function fmad2()
+              ( m_ak.prg     )   2 - function fmak()
+              ( m_ak2.prg    )   1 - function fmak2()
+              ( m_al.prg     )   3 - function fmal()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_am.prg     )   2 - function fmam()
+              ( m_am2.prg    )   1 - function fmam2()
+              ( m_am9.prg    )   2 - function m9posrep()
+              ( m_an.prg     )   3 - function fman()
+              ( m_an3.prg    )   1 - function man301()
+              ( m_ao.prg     )   1 - function fmao()
+              ( m_ao2.prg    )   3 - function fmao2()
+              ( m_aor.prg    )   1 - function maor01()
+              ( m_au0.prg    )   1 - function baixarem()
+              ( m_aw0.prg    )   1 - function maw403()
+                                 1 - function m_awx1()
+              ( m_aw2.prg    )   1 - function maw202()
+                                 1 - function maw2rep()
+              ( m_cn2.prg    )   1 - function fmcn2()
+              ( m_co2.prg    )   1 - function fmco2()
+              ( m_cs.prg     )   1 - function grvmcs()
+              ( m_dc.prg     )   1 - function fmdc()
+              ( m_dk.prg     )   1 - function fecretbai()
+              ( m_drc.prg    )   1 - function fmdrc()
+
+apgpr2()        in m_aox.prg
+
+  Called from ( m_aox.prg    )   1 - function mosbinc02()
+              ( m_aoz.prg    )   1 - function apgpro()
+
+apgpro()        in m_aox.prg
+
+  Called from ( m_aox.prg    )   5 - function apgpr2()
+
+arqent()        in mana5.prg
+
+  Called from ( mana5.prg    )   6 - function main()
+
+atualiza()      in m_cr.prg
+
+  Called from ( m_cr.prg     )   1 - function gmco2()
+
+automenu()      in mlib44.prg
+
+  Called from ( mana.prg     )  19 - function mailfix()
+              ( manb.prg     )  11 - function pegcamini()
+              ( mand.prg     )   1 - function montotal()
+              ( m_au0.prg    )   1 - function m_au0()
+              ( m_ax.prg     )   1 - function maw2del()
+              ( m_drc.prg    )   1 - function fmdrc()
+
+baixarem()      in m_au0.prg
+
+  Called from ( m_aope.prg   )   1 - function maopr02()
+              ( m_au0.prg    )   1 - function mau301()
+
+bom()           in hbct.lib
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( m_bz.prg     )   1 - function fluxo()
+
+bradesco()      in m_dq.prg
+
+  Called from ( m_dq.prg     )   1 - function m_dq1()
+
+bxitem()        in mlib43.prg
+
+  Called from ( m_aw0.prg    )   2 - function m_awx1()
+
+cabec()         in manb2.prg
+
+  Called from ( manb2.prg    )   1 - function imprime()
+                                 1 - function listar1()
+                                 1 - function listar2()
+                                 1 - function listar3()
+                                 1 - function listar4()
+                                 1 - function listar5()
+
+cabvid()        in mlib30.prg
+
+  Called from ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_cn2.prg    )   1 - function m_cn2()
+
+calcgeokm()     <unresolved function>
+
+  Called from ( mlib04.prg   )   1 - function checkcid()
+              ( m_d1.prg     )   1 - function md1faz()
+
+calcper()       in mlib09.prg
+
+  Called from ( m_aw0.prg    )   1 - function maw6a()
+
+calcvar()       in mlib05.prg
+
+  Called from ( m_ao2.prg    )   1 - function fmao2()
+
+cdia()          <unresolved function>
+
+  Called from ( m_ao0.prg    )   3 - function maocdagrv()
+
+ceiling()       in hbclipsm.lib
+
+  Called from ( m_ao2.prg    )   1 - function fmao2()
+
+cfator()        in m_cn2.prg
+
+  Called from ( m_cn2.prg    )   5 - function gmcn2()
+
+check5cep()     in mlib10.prg
+
+  Called from ( m_d1.prg     )   1 - function md1faz()
+              ( m_dr.prg     )   1 - function gmdr()
+
+checkarq()      in mlibarq.prg
+
+  Called from ( mlib38.prg   )   1 - function gravalog()
+              ( m_ak4.prg    )   1 - function mak3arr()
+              ( m_al3.prg    )   4 - function m_al3()
+              ( m_au4.prg    )   1 - function m_au4()
+
+checkcc()       in mlib.prg
+
+  Called from ( mlib42.prg   )   2 - function editsay()
+              ( m_ak.prg     )   2 - function gmak()
+              ( m_ak3.prg    )   2 - function mak3arr()
+              ( m_au.prg     )   2 - function gmau()
+
+checkcep()      in mlib20.prg
+
+  Called from ( mlib20.prg   )   1 - function endcid()
+
+checkcfo()      in mlib34.prg
+
+  Called from ( m_ak.prg     )   1 - function gmak()
+
+checkcid()      in mlib04.prg
+
+  Called from ( m_dr.prg     )   1 - function gmdr()
+
+checkcipi()     in mlib33.prg
+
+  Called from ( mlibnf.prg   )   1 - function nfcod()
+              ( m_ak2a.prg   )   1 - function mak299()
+              ( m_am2.prg    )   1 - function gmam2()
+              ( m_ao2.prg    )   1 - function gmao2()
+                                 1 - function listap()
+                                 1 - function mo02k()
+              ( m_au.prg     )   1 - function gmau()
+
+checkexi()      in mlib48.prg
+
+  Called from ( mlib.prg     )   1 - function checkcc()
+              ( m_al.prg     )   4 - function gmal()
+              ( m_am2.prg    )   2 - function gmam2()
+              ( m_ao.prg     )   1 - function maxo02()
+              ( m_ao2.prg    )   1 - function gmao2()
+              ( m_ap.prg     )   1 - function m_ap6()
+              ( m_au.prg     )   1 - function gmau()
+
+checkimp()      <unresolved function>
+
+  Called from ( manb2.prg    )   1 - function listar1()
+              ( mliberr.prg  )   1 - function errprinter()
+              ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_b6.prg     )   1 - function mayg02()
+              ( m_bl1.prg    )   1 - function mayg02()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bn1.prg    )   1 - function mayg02()
+              ( m_bn2.prg    )   1 - function mayg02()
+              ( m_bo1.prg    )   1 - function mayg02()
+              ( m_dc.prg     )   2 - function fmdc()
+              ( m_dc3.prg    )   2 - function mdc3a()
+
+checkipi()      in mlib33.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+              ( m_ao2.prg    )   1 - function gmao2()
+              ( m_au.prg     )   1 - function gmau()
+
+checkpar()      in mlib32.prg
+
+  Called from ( m_ak.prg     )   1 - function fmak()
+              ( m_am.prg     )   1 - function fmam()
+
+checkpass()     <unresolved function>
+
+  Called from ( m_ci.prg     )   1 - function m_ci()
+
+checktab()      in mlib01.prg
+
+  Called from ( m_al.prg     )   2 - function gmal()
+              ( m_am2.prg    )   3 - function gmam2()
+              ( m_ao2.prg    )   1 - function gmao2()
+              ( m_ap.prg     )   1 - function m_ap6()
+              ( m_aw.prg     )   1 - function mw08del()
+
+checkuf()       in mlib03.prg
+
+  Called from ( m_dr.prg     )   1 - function gmdr()
+
+chkufcep()      <unresolved function>
+
+  Called from ( m_dr.prg     )   1 - function gmdr()
+
+citibank()      in m_dq.prg
+
+  Called from ( m_dq.prg     )   1 - function m_dq1()
+
+ckempty()       in mlib31.prg
+
+  Called from ( m_ao2.prg    )   2 - function gmao2()
+
+clrvars()       <unresolved function>
+
+  Called from ( cnab400r.prg )   1 - 
+              ( mail.prg     )   1 - function mail()
+              ( mlib07.prg   )   1 - function criarvars()
+              ( mlib11.prg   )   1 - function metbro()
+              ( mlib45.prg   )   1 - function zaparq()
+              ( m_al2b.prg   )   2 - function maldep()
+              ( m_am9.prg    )   2 - function mm09imp()
+                                 1 - function mm09vol()
+              ( m_ao0.prg    )   2 - function osprg()
+              ( m_aop.prg    )   2 - function maop03()
+                                 4 - function maopcalset()
+                                 2 - function m_aop4()
+                                 1 - function m_aop5()
+                                 3 - function op02ms06()
+              ( m_aop3.prg   )   1 - function maop2cal()
+              ( m_aoy.prg    )   1 - function apgpro()
+              ( m_aw0.prg    )   2 - function mw08chk()
+                                 2 - function m_awret()
+              ( m_ayg.prg    )   1 - function may3avl()
+                                 1 - function m_ayg2()
+              ( m_cr.prg     )   2 - function atualiza()
+
+clsbox()        <unresolved function>
+
+  Called from ( mane.prg     )   1 - function manualt()
+
+clscor()        <unresolved function>
+
+  Called from ( mane.prg     )   1 - function manualt()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_dq.prg     )   1 - function m_dq1()
+
+clsrow()        <unresolved function>
+
+  Called from ( mlib18.prg   )   1 - function regbus()
+
+cmes()          <unresolved function>
+
+  Called from ( mlib09.prg   )   1 - function perfec()
+              ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_bo1.prg    )   1 - function mayg02()
+
+cnpjcpfpict()   <unresolved function>
+
+  Called from ( mlib27.prg   )   1 - function padcgc()
+              ( mlib42.prg   )   1 - function editsay()
+
+cnpjcpfval()    <unresolved function>
+
+  Called from ( mlib27.prg   )   1 - function padcgc()
+              ( mlib42.prg   )   1 - function editsay()
+
+confarq()       in mlib26.prg
+
+  Called from ( mlib20.prg   )   1 - function endcidp()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+confind()       in mlib.prg
+
+  Called from ( mlib20.prg   )   1 - function endcidp()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function fmdc()
+                                 1 - function m_dc()
+              ( m_dk.prg     )   1 - function fecretbai()
+              ( m_drc.prg    )   1 - function m_drc()
+
+convtab()       in mlib12.prg
+
+  Called from ( m_au.prg     )   6 - function gmau()
+
+convun()        in mlibc.prg
+
+  Called from ( m_am2.prg    )   2 - function fmam2()
+                                 1 - function mam203()
+                                 1 - function mam204()
+                                 1 - function m_am2()
+              ( m_ao2.prg    )   1 - function fmao2()
+                                 1 - function mao203()
+              ( m_aof.prg    )   1 - function maof03()
+              ( m_aop3.prg   )   4 - function maop2cal()
+              ( m_aos.prg    )   1 - function tiporr()
+              ( m_aox.prg    )   1 - function mosbinc02()
+              ( m_aoy.prg    )   1 - function apgpro()
+              ( m_ay.prg     )   2 - function maypos()
+              ( m_ayg.prg    )   1 - function may3avl()
+              ( m_bo1.prg    )   6 - function mayg02()
+
+cor()           in mlib35.prg
+
+  Called from ( mane.prg     )   4 - function montotal()
+              ( mlib35.prg   )   2 - function corarr()
+              ( m_ao.prg     )   5 - function m_ao()
+              ( m_dq.prg     )   1 - function mdpchavei()
+                                 4 - function m_dq1()
+
+corarr()        in mlib35.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_al2c.prg   )   1 - function m_al2()
+              ( m_al5.prg    )   2 - function m_al5()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_ay3.prg    )   1 - function may303()
+              ( m_ca.prg     )   1 - function fluxo()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+criarvars()     in mlib07.prg
+
+  Called from ( manb.prg     )   3 - function pegcamini()
+              ( manb2.prg    )   4 - function pegcamini()
+              ( mlib09.prg   )   1 - function somaano()
+              ( mlib27.prg   )   1 - function fpad()
+                                 1 - function padrao()
+              ( mlib40.prg   )   1 - function fpax()
+                                 1 - function padrax()
+              ( mlib47.prg   )   1 - function manlista()
+              ( mlibarq.prg  )   2 - function checkarq()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_a74.prg    )   2 - function ma6ger()
+              ( m_a7a.prg    )   2 - function ma6ger()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function fmak()
+                                 3 - function m_ak()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_ake.prg    )   1 - function mak3arr()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_al2c.prg   )   2 - function m_al2()
+              ( m_al3.prg    )   3 - function m_al3()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_am.prg     )   2 - function fmam()
+                                 4 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_am9.prg    )   1 - function m_am9()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   2 - function m_ao()
+              ( m_ao0.prg    )   2 - function maodup()
+              ( m_ao2.prg    )   1 - function fmao2()
+                                 1 - function m_ao2()
+              ( m_aox.prg    )   3 - function mosbinc02()
+              ( m_aoz.prg    )   1 - function apgpro()
+              ( m_ap.prg     )   1 - function m_ap6()
+              ( m_au.prg     )   6 - function mas99()
+              ( m_aw0.prg    )   4 - function maw403()
+                                 2 - function mawretqtd()
+                                 3 - function m_awx1()
+              ( m_ay3.prg    )   1 - function may303()
+                                 4 - function may3avl()
+              ( m_ayg.prg    )   1 - function may3avl()
+                                 1 - function m_ayg2()
+              ( m_bz.prg     )   3 - function fluxo()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co.prg     )   2 - function esp()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_cs.prg     )   1 - function atualiza()
+              ( m_dc.prg     )   1 - function fmdc()
+                                 1 - function m_dc()
+              ( m_dk.prg     )   1 - function fecretbai()
+                                 1 - function m_dk()
+              ( m_dq.prg     )   2 - function m_dq1()
+              ( m_drc.prg    )   2 - function m_drc()
+              ( m_du.prg     )   2 - function fmdrc()
+
+decode()        in hbyaml.lib
+                or xhb.lib
+
+  Called from ( m_ci.prg     )   3 - function gerapostela()
+              ( m_cs.prg     )   1 - function usermdec()
+
+delereg()       in mlib46.prg
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+              ( mlib43.prg   )   1 - function bxitem()
+                                 1 - function paddel()
+              ( mlib46.prg   )   1 - function apagareg()
+              ( m_ak.prg     )   3 - function fmak()
+              ( m_al3.prg    )   4 - function m_al3()
+              ( m_am.prg     )   2 - function fmam()
+              ( m_ao0.prg    )   1 - function maocda()
+                                 5 - function maofixar()
+              ( m_aof.prg    )   1 - function maofdel()
+                                 1 - function maofdelc()
+              ( m_aop.prg    )   1 - function maop03()
+                                 1 - function maopchkseq()
+              ( m_aope.prg   )   1 - function maopechk()
+              ( m_aox.prg    )   1 - function maofdelx()
+                                 2 - function mosbinc02()
+              ( m_aw.prg     )   1 - function mw08cad()
+              ( m_ay.prg     )   2 - function may02()
+              ( m_ayg.prg    )   2 - function mayg02()
+              ( m_du.prg     )   2 - function fmdrc()
+
+deletaarq()     <unresolved function>
+
+  Called from ( mana5.prg    )   3 - function main()
+
+deletefile()    in hbct.lib
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( m_aox.prg    )   1 - function mosbinc02()
+              ( m_dn.prg     )   2 - function mdkrep()
+
+dfiltro()       in mlib.prg
+
+  Called from ( mlib.prg     )   1 - function rfiltro()
+
+digito()        in m_ai1.prg
+
+  Called from ( m_ai1.prg    )   2 - function numdac()
+
+dirfpegdad()    <unresolved function>
+
+  Called from ( m_a6.prg     )   1 - function ma6ger()
+
+dirfreg01()     <unresolved function>
+
+  Called from ( m_a6.prg     )   1 - function ma6ger()
+
+dirfreg02()     <unresolved function>
+
+  Called from ( m_a6.prg     )   1 - function ma6ger()
+
+editarq()       <unresolved function>
+
+  Called from ( manc.prg     )   2 - function montotal()
+
+editget()       in mlib22.prg
+
+  Called from ( mlib11.prg   )   2 - function metbro()
+              ( mlib15.prg   )   1 - function metpag()
+              ( mlib27.prg   )   1 - function fpad()
+              ( mlib40.prg   )   1 - function fpax()
+              ( m_a12.prg    )   1 - function fma12()
+              ( m_ak.prg     )   1 - function fmak()
+              ( m_al.prg     )   1 - function fmal()
+              ( m_am.prg     )   1 - function fmam()
+              ( m_am2.prg    )   1 - function fmam2()
+              ( m_an.prg     )   1 - function fman()
+              ( m_ao.prg     )   1 - function fmao()
+              ( m_ao2.prg    )   1 - function fmao2()
+              ( m_cn2.prg    )   1 - function fmcn2()
+              ( m_co2.prg    )   1 - function fmco2()
+              ( m_dc.prg     )   1 - function fmdc()
+              ( m_drc.prg    )   1 - function fmdrc()
+
+editpeg()       in mlib42.prg
+
+  Called from ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( mlib42.prg   )   1 - function editsay()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_aa.prg     )   3 - function ma6ger()
+              ( m_ai1.prg    )   1 - function checkipva()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ay3.prg    )   1 - function may3avl()
+              ( m_drc.prg    )   1 - function m_drc()
+
+editsay()       in mlib42.prg
+
+  Called from ( mail.prg     )   1 - function mail()
+              ( mana.prg     )   1 - function mabget()
+              ( manemp.prg   )   3 - function gmaz()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function fma12()
+              ( m_a7a.prg    )   2 - function ma6ger()
+              ( m_aa.prg     )   2 - function gmaa()
+                                 1 - function maatela1()
+              ( m_ai1.prg    )   1 - function gmai1()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_ak2.prg    )   1 - function fmak2()
+              ( m_al2c.prg   )   1 - function m_al2()
+              ( m_am.prg     )   1 - function fmam()
+              ( m_am2.prg    )   1 - function mmdev()
+              ( m_an.prg     )   1 - function gman()
+              ( m_ao.prg     )   1 - function fmao()
+              ( m_ao0.prg    )   1 - function maocda()
+              ( m_aox.prg    )   1 - function mosbinc02()
+              ( m_ay3.prg    )   1 - function may303()
+                                 1 - function may3avl()
+              ( m_bz.prg     )   1 - function fluxo()
+              ( m_cg.prg     )   1 - function gmcf()
+              ( m_dc3.prg    )   1 - function m_dc3()
+              ( m_drc.prg    )   1 - function fmdrc()
+                                 1 - function m_drc()
+
+eendcid()       in mlib20.prg
+
+  Called from ( mlib20.prg   )   1 - function endcidp()
+
+emailint()      in mlibmail.prg
+
+  Called from ( mana.prg     )   1 - function mabget()
+              ( m_ao0.prg    )   4 - function osprg()
+              ( m_au.prg     )   1 - function maudel()
+                                 1 - function mauigu()
+                                 4 - function maupe()
+
+encode()        in hbyaml.lib
+
+  Called from ( mana5.prg    )  12 - function main()
+              ( m_aw0.prg    )   1 - function m_aw4()
+              ( m_cs.prg     )   1 - function atualiza()
+                                 1 - function grvmcs()
+                                 1 - function msc102()
+                                 1 - function msc201()
+                                 1 - function msc203()
+                                 1 - function msc205()
+                                 1 - function pegacs()
+                                 1 - function pegmcs()
+                                 1 - function usermcri()
+
+encodepos()     in m_ci.prg
+
+  Called from ( m_ci.prg     )   5 - function gerapostela()
+
+endcid()        in mlib20.prg
+
+  Called from ( m_dr.prg     )   2 - function gmdr()
+
+endcidp()       in mlib20.prg
+
+  Called from ( mlib20.prg   )   2 - function endcid()
+
+entmnu()        in mlib44.prg
+
+  Called from ( mana.prg     )   1 - function mailfix()
+              ( manb.prg     )   1 - function pegcamini()
+              ( manc.prg     )   1 - function montotal()
+              ( mand.prg     )   1 - function montotal()
+              ( mlib44.prg   )   1 - function automenu()
+
+eom()           in hbct.lib
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( m_bz.prg     )   1 - function fluxo()
+
+equvars()       <unresolved function>
+
+  Called from ( mail.prg     )   1 - function mail()
+                                 1 - function maildelete()
+              ( manb2.prg    )   7 - function pegcamini()
+              ( mlib.prg     )   1 - function igualvars()
+              ( mlib09.prg   )   1 - function somaarq()
+              ( mlib11.prg   )   2 - function metbro()
+              ( mlib15.prg   )   1 - function regmov()
+              ( mlib18.prg   )   4 - function regbus()
+              ( mlib43.prg   )   1 - function bxitem()
+              ( mlib46.prg   )   1 - function apagareg()
+              ( mlibarq.prg  )   1 - function checkarq()
+              ( m_a74.prg    )   2 - function ma6ger()
+              ( m_ak.prg     )   1 - function fmak()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_al2b.prg   )   1 - function maldep()
+              ( m_al3.prg    )   4 - function m_al3()
+              ( m_am9.prg    )   1 - function mm09imp()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao0.prg    )   2 - function maodup()
+              ( m_aop.prg    )   3 - function maop03()
+                                 3 - function maopcalset()
+                                 1 - function m_aop4()
+                                 1 - function m_aop5()
+                                 1 - function op02ms06()
+              ( m_aw.prg     )   1 - function maw01()
+              ( m_aw0.prg    )   1 - function mw08chk()
+                                 2 - function m_awret()
+              ( m_ayg.prg    )   1 - function may3avl()
+              ( m_cr.prg     )   1 - function atualiza()
+              ( m_du.prg     )   1 - function fmdrc()
+
+escarr()        <unresolved function>
+
+  Called from ( mane.prg     )   1 - function montotal()
+              ( mlib.prg     )   1 - function numfil()
+                                 1 - function numind()
+                                 1 - function rcampo()
+              ( mlib01.prg   )   1 - function escolhetab()
+              ( mlib03.prg   )   1 - function escolheuf()
+              ( mlib04.prg   )   1 - function escolhecid()
+              ( mlib18.prg   )   1 - function regbus()
+              ( mlib19.prg   )   1 - function escolhelog()
+              ( mlib48.prg   )   1 - function escolhexi()
+              ( m_as99.prg   )   1 - function gmas5()
+              ( m_dc3.prg    )   1 - function m_dc3()
+
+escolhecid()    in mlib04.prg
+
+  Called from ( mlib04.prg   )   1 - function checkcid()
+
+escolhelog()    in mlib19.prg
+
+  Called from ( m_dr.prg     )   1 - function gmdr()
+
+escolhetab()    in mlib01.prg
+
+  Called from ( mlib01.prg   )   2 - function checktab()
+              ( mlib21.prg   )   1 - function tipcad()
+
+escolheuf()     in mlib03.prg
+
+  Called from ( mlib03.prg   )   1 - function checkuf()
+
+escolhexi()     in mlib48.prg
+
+  Called from ( mail.prg     )   1 - function mail()
+              ( mlib48.prg   )   2 - function checkexi()
+              ( m_dk.prg     )   1 - function m_dk()
+
+esp()           in m_cn3.prg
+
+  Called from ( m_cn3.prg    )   1 - function gmcn3()
+
+estqarq()       in mlibest.prg
+
+  Called from ( mlibest.prg  )   2 - function grvestoque()
+                                 1 - function pegoldqtd()
+              ( mlibnf.prg   )   5 - function nfcod()
+              ( m_ak2a.prg   )   1 - function mak299()
+              ( m_am2.prg    )   1 - function gmam2()
+              ( m_aof.prg    )   1 - function maof03()
+              ( m_aox.prg    )   2 - function apgpr2()
+              ( m_ap.prg     )   1 - function m_ap5()
+                                 2 - function m_ap6()
+              ( m_as3.prg    )   3 - function mas302()
+              ( m_au.prg     )   1 - function calcinv()
+              ( m_aw.prg     )   1 - function mw08cad()
+                                 1 - function mw08del()
+              ( m_aw0.prg    )   1 - function maw403()
+                                 1 - function maw6a()
+                                 1 - function mawult01()
+                                 1 - function mw08chk01()
+                                 1 - function m_awrea()
+              ( m_aw2.prg    )   2 - function maw2del()
+              ( m_ay.prg     )   3 - function may01()
+
+ext()           <unresolved function>
+
+  Called from ( m_bn1.prg    )   3 - function mayg02()
+
+fcampo()        in manb2.prg
+
+  Called from ( manb2.prg    )   4 - function imprime()
+
+field()         <unresolved function>
+
+  Called from ( mana.prg     )   1 - function mabget()
+              ( manb2.prg    )   4 - function fcampo()
+                                 2 - function listar1()
+                                 2 - function listar2()
+                                 2 - function listar3()
+                                 2 - function listar4()
+                                 2 - function listar5()
+
+filecopy()      in hbct.lib
+
+  Called from ( mlib38.prg   )   1 - function gravalog()
+              ( m_aop.prg    )   2 - function maopx()
+
+filedate()      in hbct.lib
+
+  Called from ( m_ao0.prg    )   1 - function maocda()
+
+filenames()     <unresolved function>
+
+  Called from ( m_dc3.prg    )   1 - function m_dc3()
+
+filezebrapdf()  <unresolved function>
+
+  Called from ( m_dc3.prg    )   2 - function m_dc3()
+
+fixar()         in mlib38.prg
+
+  Called from ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   2 - function m_ak()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_al3.prg    )   4 - function m_al3()
+              ( m_am.prg     )   2 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   2 - function m_ao()
+              ( m_ao0.prg    )   5 - function maofixar()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_db.prg     )   1 - function m_db()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_dp.prg     )   1 - function mdkrep()
+              ( m_drc.prg    )   1 - function m_drc()
+
+fluxo()         in m_bz.prg
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( m_al4.prg    )   1 - function m_al3()
+
+fma12()         in m_a12.prg
+
+  Called from ( m_a12.prg    )   5 - function m_a12()
+
+fmad2()         in m_ad2.prg
+
+  Called from ( m_ad2.prg    )   5 - function m_ad2()
+
+fmak()          in m_ak.prg
+
+  Called from ( m_ak.prg     )  15 - function m_ak()
+
+fmak2()         in m_ak2.prg
+
+  Called from ( m_ak2.prg    )   5 - function m_ak2()
+
+fmal()          in m_al.prg
+
+  Called from ( m_al.prg     )  15 - function m_al()
+
+fmam()          in m_am.prg
+
+  Called from ( m_am.prg     )  16 - function m_am()
+
+fmam2()         in m_am2.prg
+
+  Called from ( m_am2.prg    )   5 - function m_am2()
+
+fman()          in m_an.prg
+
+  Called from ( m_an.prg     )  16 - function m_an()
+
+fmanual()       in mane.prg
+
+  Called from ( mane.prg     )   2 - function montotal()
+
+fmao()          in m_ao.prg
+
+  Called from ( m_ao.prg     )  15 - function m_ao()
+
+fmao2()         in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   5 - function m_ao2()
+
+fmcn2()         in m_cn2.prg
+
+  Called from ( m_cn2.prg    )   5 - function m_cn2()
+
+fmco2()         in m_co2.prg
+
+  Called from ( m_co2.prg    )  15 - function m_co2()
+
+fmdc()          in m_dc.prg
+
+  Called from ( m_dc.prg     )  17 - function m_dc()
+
+fmdrc()         in m_drc.prg
+
+  Called from ( m_drc.prg    )  17 - function m_drc()
+
+fpad()          in mlib27.prg
+
+  Called from ( mlib27.prg   )   1 - function padarr()
+                                15 - function padrao()
+
+fpax()          in mlib40.prg
+
+  Called from ( mlib40.prg   )  15 - function padrax()
+
+freadline()     <unresolved function>
+
+  Called from ( cnab400r.prg )   1 - 
+              ( m_am9.prg    )   1 - function mm09vol()
+              ( m_ao0.prg    )   1 - function maocda()
+
+freevars()      <unresolved function>
+
+  Called from ( m_cr.prg     )   1 - function atualiza()
+
+geotodec()      <unresolved function>
+
+  Called from ( mlib04.prg   )   4 - function checkcid()
+              ( m_d1.prg     )   4 - function md1faz()
+
+gerapostela()   in m_ci.prg
+
+  Called from ( m_ci.prg     )   2 - function m_ci()
+
+gma51()         in m_a51.prg
+
+  Called from ( m_a51.prg    )   1 - function m_a5j()
+
+gmaa()          in m_aa.prg
+
+  Called from ( m_aa.prg     )   1 - function ma6ger()
+
+gmad2()         in m_ad2.prg
+
+  Called from ( m_ad2.prg    )   1 - function fmad2()
+
+gmai1()         in m_ai1.prg
+
+  Called from ( m_ai1.prg    )   1 - function checkipva()
+
+gmak()          in m_ak.prg
+
+  Called from ( m_ak.prg     )   1 - function fmak()
+
+gmal()          in m_al.prg
+
+  Called from ( m_al.prg     )   1 - function fmal()
+
+gmam2()         in m_am2.prg
+
+  Called from ( m_am2.prg    )   1 - function fmam2()
+
+gman()          in m_an.prg
+
+  Called from ( m_an.prg     )   1 - function fman()
+
+gmao2()         in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   1 - function fmao2()
+
+gmas5()         in m_as5.prg
+
+  Called from ( m_as5.prg    )   1 - function mas302()
+
+gmau()          in m_au.prg
+
+  Called from ( m_au.prg     )   1 - function mas99()
+
+gmau4()         in m_au4.prg
+
+  Called from ( m_au4.prg    )   1 - function m_au4()
+
+gmaz()          in manemp.prg
+
+  Called from ( manemp.prg   )   1 - function manualt()
+
+gmca()          in m_ca.prg
+
+  Called from ( m_ca.prg     )   1 - function fluxo()
+
+gmce()          in m_ce.prg
+
+  Called from ( m_ce.prg     )   1 - function mcd01()
+
+gmcf()          in m_cf.prg
+
+  Called from ( m_cf.prg     )   1 - function gmce()
+
+gmcm()          in m_cm.prg
+
+  Called from ( m_cm.prg     )   1 - function gravapostela()
+
+gmcn2()         in m_cn2.prg
+
+  Called from ( m_cn2.prg    )   1 - function fmcn2()
+
+gmcn3()         in m_cn3.prg
+
+  Called from ( m_cn3.prg    )   1 - function mcn201()
+
+gmco2()         in m_co2.prg
+
+  Called from ( m_co2.prg    )   1 - function fmco2()
+
+gmdc()          in m_dc.prg
+
+  Called from ( m_dc.prg     )   1 - function fmdc()
+
+gmdd()          in m_dd.prg
+
+  Called from ( m_dd.prg     )   1 - function mdc3a()
+
+gmdr()          in m_dr.prg
+
+  Called from ( m_dr.prg     )   1 - function itau()
+
+gravacampo()    <unresolved function>
+
+  Called from ( mlib24.prg   )   1 - function gravalay()
+              ( mlibest.prg  )   1 - function grvestoque()
+              ( m_am9.prg    )   1 - function mm09lote()
+              ( m_aop3.prg   )   2 - function maop2cal()
+              ( m_aope.prg   )   1 - function maopechk()
+              ( m_aw0.prg    )   2 - function mw08chk01()
+              ( m_ayg.prg    )   1 - function may3avl()
+                                 1 - function m_ayg2()
+
+gravalay()      in mlib24.prg
+
+  Called from ( mlib24.prg   )   1 - function gravamvar()
+              ( mlib38.prg   )   1 - function gravalog()
+              ( mlibest.prg  )   1 - function grvestoque()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ay.prg     )   2 - function may05()
+              ( m_ay3.prg    )   8 - function may304()
+              ( m_bz.prg     )   2 - function fluxo()
+
+gravalog()      in mlib38.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( mlib.prg     )   1 - function reporvars()
+              ( mlib11.prg   )   3 - function metbro()
+              ( mlib38.prg   )   1 - function fixar()
+              ( mlib44.prg   )   1 - function entmnu()
+                                 1 - function menufec()
+              ( mlib45.prg   )   1 - function novoreg()
+              ( mlib46.prg   )   1 - function delereg()
+              ( m_au.prg     )   4 - function mauk02()
+              ( m_ay3.prg    )   8 - function may304()
+
+gravamvar()     in mlib24.prg
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( m_ak2.prg    )   1 - function fmak2()
+              ( m_aof.prg    )   3 - function maof03()
+              ( m_aox.prg    )   1 - function apgpr2()
+              ( m_aw.prg     )   1 - function maw03()
+                                 1 - function mw08del()
+              ( m_aw0.prg    )   1 - function maw402()
+                                 1 - function maw6a()
+                                 1 - function mawretqtd()
+              ( m_aw2.prg    )   1 - function maw2del()
+                                 1 - function maw2rep()
+              ( m_ay.prg     )   2 - function maypos()
+              ( m_ay3.prg    )   1 - function may3pos()
+
+gravapostela()  in m_ci.prg
+
+  Called from ( m_ci.prg     )   3 - function gerapostela()
+
+gravavar2()     in mlib23.prg
+
+  Called from ( m_aw0.prg    )   2 - function maw403()
+
+gravavars()     in mlib23.prg
+
+  Called from ( mlib23.prg   )   1 - function gravavar2()
+                                 5 - function pegacampo()
+
+grvestoque()    in mlibest.prg
+
+  Called from ( mlibest.prg  )   1 - function mak2k05()
+                                 1 - function mam2k05()
+
+grvmcs()        in m_cs.prg
+
+  Called from ( m_cs.prg     )   1 - function msc101()
+                                 1 - function msc102()
+                                 1 - function msc201()
+                                 1 - function msc203()
+                                 7 - function msc204()
+                                 1 - function msc205()
+                                 2 - function msc206()
+
+grvval()        <unresolved function>
+
+  Called from ( m_am9.prg    )   3 - function mm09des()
+
+hb_alert()      in harbour.lib
+
+  Called from ( m_db.prg     )   1 - function mdt()
+
+hb_atokens()    in harbour.lib
+
+  Called from ( m_dp.prg     )   1 - function mdpchavei()
+
+hb_curdrive()   in harbour.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+hb_cwd()        in harbour.lib
+
+  Called from ( mlib38.prg   )   1 - function gravalog()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ci.prg     )   4 - function gerapostela()
+              ( m_dc3.prg    )   2 - function m_dc3()
+              ( m_dp.prg     )   1 - function mdkrep()
+
+hb_diskspace()  in harbour.lib
+
+  Called from ( m_dn.prg     )   2 - function mdkrep()
+
+hb_dispbox()    in harbour.lib
+
+  Called from ( manb.prg     )   1 - function pegcamini()
+              ( mlib.prg     )   2 - function rfilord()
+                                 3 - function rfiltro()
+              ( mlib11.prg   )   1 - function metbro()
+              ( mlib17.prg   )   1 - function pegbus()
+              ( mlib22.prg   )   1 - function editget()
+              ( mlib30.prg   )   1 - function cabvid()
+              ( mlib32.prg   )   1 - function checkpar()
+              ( mlib37.prg   )   1 - function marcar()
+              ( mlib39.prg   )   5 - function telasay()
+              ( mlib42.prg   )   5 - function editsay()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function gmad2()
+                                 1 - function m_ad2()
+              ( m_ak.prg     )   1 - function tmak()
+              ( m_ak2.prg    )   1 - function mak2a()
+                                 1 - function m_ak2()
+              ( m_am.prg     )   2 - function fmam()
+                                 1 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+                                 1 - function tmam2()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao2.prg    )   2 - function gmao2()
+                                 1 - function m_ao2()
+                                 1 - function tmao2()
+              ( m_as5.prg    )   1 - function tmas5()
+              ( m_ca.prg     )   4 - function mca01()
+              ( m_cd.prg     )   1 - function mcb2ins()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_dq.prg     )   2 - function mdpchavei()
+              ( m_drc.prg    )   1 - function m_drc()
+              ( m_du.prg     )   1 - function fmdrc()
+
+hb_fileexists() in harbour.lib
+                or hbrtl.lib
+
+  Called from ( mana5.prg    )   1 - function main()
+
+hb_fopen()      in hbcommon.lib
+
+  Called from ( cnab400r.prg )   1 - 
+              ( m_am9.prg    )   1 - function mm09vol()
+              ( m_ao0.prg    )   1 - function maocda()
+
+hb_idlestate()  in harbour.lib
+                or hbrtl.lib
+
+  Called from ( mana5.prg    )   2 - function main()
+
+hb_keyclear()   in harbour.lib
+
+  Called from ( m_ay3.prg    )   1 - function may3pos()
+
+hb_keyput()     in harbour.lib
+
+  Called from ( m_ay3.prg    )   1 - function may3pos()
+
+hb_langselect() in harbour.lib
+                or hbrtl.lib
+
+  Called from ( mana5.prg    )   1 - function main()
+
+hb_memoread()   in harbour.lib
+
+  Called from ( m_dc3.prg    )   1 - function mdc3a()
+              ( m_dn.prg     )   1 - function mdkrep()
+
+hb_memowrit()   in harbour.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+hb_run()        in harbour.lib
+
+  Called from ( mlib44.prg   )   1 - function automenu()
+
+hb_sha256()     in harbour.lib
+                or hbrtl.lib
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( m_ci.prg     )   1 - function gerapostela()
+                                 1 - function m_ci()
+
+hb_version()    in harbour.lib
+
+  Called from ( m_ci.prg     )   1 - function gerapostela()
+
+help()          <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+hotinkey()      <unresolved function>
+
+  Called from ( mlib11.prg   )   2 - function metbro()
+              ( mlib14.prg   )   1 - function metnvi()
+              ( mlib15.prg   )   1 - function metpag()
+              ( mlib30.prg   )   1 - function achmou()
+              ( m_ca.prg     )   1 - function mca01()
+              ( m_dn.prg     )   1 - function mdkrep()
+
+igualvars()     in mlib.prg
+
+  Called from ( mlib27.prg   )   1 - function fpad()
+              ( mlib40.prg   )   1 - function fpax()
+              ( mlib47.prg   )   1 - function imprel()
+              ( mlibarq.prg  )   1 - function checkarq()
+              ( m_a12.prg    )   1 - function fma12()
+              ( m_a7a.prg    )   2 - function ma6ger()
+              ( m_ad2.prg    )   1 - function fmad2()
+              ( m_ak.prg     )   1 - function fmak()
+              ( m_ak2.prg    )   1 - function fmak2()
+              ( m_al.prg     )   1 - function fmal()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_am.prg     )   1 - function fmam()
+              ( m_am2.prg    )   1 - function fmam2()
+              ( m_an.prg     )   1 - function fman()
+              ( m_ao.prg     )   1 - function fmao()
+              ( m_ao2.prg    )   1 - function fmao2()
+              ( m_aw0.prg    )   1 - function maw403()
+                                 1 - function mawretqtd()
+                                 1 - function m_awx1()
+              ( m_aw2.prg    )   1 - function maw202()
+                                 1 - function maw2rep()
+              ( m_cn2.prg    )   1 - function fmcn2()
+              ( m_co2.prg    )   1 - function fmco2()
+              ( m_dc.prg     )   1 - function fmdc()
+              ( m_dk.prg     )   1 - function fecretbai()
+                                 1 - function m_dk()
+              ( m_dq.prg     )   1 - function m_dq1()
+              ( m_drc.prg    )   1 - function fmdrc()
+
+ima54()         in m_a50.prg
+
+  Called from ( m_a50.prg    )   1 - function m_a54()
+
+imai1()         in m_ai1.prg
+
+  Called from ( m_ai1.prg    )   1 - function checkipva()
+
+imau2()         in m_au0.prg
+
+  Called from ( m_au.prg     )   1 - function maukey()
+
+imau3()         in m_au0.prg
+
+  Called from ( m_au.prg     )   2 - function maukey()
+
+imca()          in m_ca.prg
+
+  Called from ( m_ca.prg     )   1 - function fluxo()
+
+imp()           in mlib.prg
+
+  Called from ( m_a7a.prg    )   3 - function ma6ger()
+              ( m_bl1.prg    )   2 - function mayg02()
+              ( m_bl2.prg    )   2 - function mayg02()
+              ( m_bn2.prg    )   2 - function mayg02()
+              ( m_bo1.prg    )   2 - function mayg02()
+
+imparq()        <unresolved function>
+
+  Called from ( mane.prg     )   1 - function fmanual()
+
+impchr()        <unresolved function>
+
+  Called from ( m_bl1.prg    )   6 - function mayg02()
+              ( m_bl2.prg    )   6 - function mayg02()
+              ( m_bn1.prg    )   5 - function mayg02()
+              ( m_bn2.prg    )   6 - function mayg02()
+              ( m_bo1.prg    )  12 - function mayg02()
+              ( m_dq.prg     )  12 - function bradesco()
+                                12 - function citibank()
+                                13 - function itau()
+                                12 - function nacional()
+                                10 - function noroeste()
+
+impend()        <unresolved function>
+
+  Called from ( mlib47.prg   )   1 - function imprel()
+              ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_b6.prg     )   1 - function mayg02()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bo1.prg    )   1 - function mayg02()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_dc3.prg    )   1 - function mdc3a()
+
+impfol()        <unresolved function>
+
+  Called from ( manb2.prg    )   2 - function listar1()
+              ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_b6.prg     )   1 - function mayg02()
+              ( m_bl1.prg    )   1 - function mayg02()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bn2.prg    )   1 - function mayg02()
+              ( m_dq.prg     )   1 - function m_dq1()
+
+imphp()         <unresolved function>
+
+  Called from ( manb.prg     )   1 - function pegcamini()
+
+impressora()    <unresolved function>
+
+  Called from ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_b6.prg     )   1 - function mayg02()
+              ( m_bo1.prg    )   1 - function mayg02()
+              ( m_dc3.prg    )   1 - function mdc3a()
+
+initvars()      <unresolved function>
+
+  Called from ( cnab400r.prg )   1 - 
+              ( mail.prg     )   1 - function mail()
+                                 1 - function maildelete()
+              ( mlib07.prg   )   1 - function criarvars()
+              ( mlib45.prg   )   1 - function zaparq()
+              ( m_al2b.prg   )   2 - function maldep()
+              ( m_am9.prg    )   2 - function mm09imp()
+                                 1 - function mm09vol()
+              ( m_ao0.prg    )   2 - function osprg()
+              ( m_aop.prg    )   2 - function maop03()
+                                 4 - function maopcalset()
+                                 2 - function m_aop4()
+                                 1 - function m_aop5()
+                                 3 - function op02ms06()
+              ( m_aop3.prg   )   1 - function maop2cal()
+              ( m_aoy.prg    )   1 - function apgpro()
+              ( m_aw0.prg    )   2 - function mw08chk()
+                                 2 - function m_awret()
+              ( m_ayg.prg    )   1 - function may3avl()
+                                 1 - function m_ayg2()
+              ( m_cr.prg     )   2 - function atualiza()
+
+itau()          in m_dq.prg
+
+  Called from ( m_dq.prg     )   1 - function m_dq1()
+
+lermouse()      <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+              ( mlib14.prg   )   1 - function metnvi()
+              ( mlib15.prg   )   1 - function metpag()
+              ( mlib30.prg   )   1 - function achmou()
+              ( m_ca.prg     )   1 - function mca01()
+              ( m_dn.prg     )   1 - function mdkrep()
+
+listap()        in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   2 - function gmao2()
+
+listar1()       in manb2.prg
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+
+localarq()      in mlib29.prg
+
+  Called from ( mlib29.prg   )   1 - function userede()
+              ( m_db.prg     )   1 - function m_db()
+              ( m_dp.prg     )   1 - function mdkrep()
+
+m9posigu()      in m_am9.prg
+
+  Called from ( m_am9.prg    )   1 - function m_am9()
+
+m9posrep()      in m_am9.prg
+
+  Called from ( m_am9.prg    )   1 - function m_am9()
+
+ma1igu()        in m_a1.prg
+
+  Called from ( m_a1.prg     )   1 - function m_a70()
+
+ma2chkprg()     <unresolved function>
+
+  Called from ( m_aop3.prg   )   1 - function maop2cal()
+
+ma6rep()        in m_a6.prg
+
+  Called from ( m_a6.prg     )   1 - function ma6jur()
+
+maatela1()      in m_aa.prg
+
+  Called from ( m_aa.prg     )   1 - function gmaa()
+
+mabget()        in mana.prg
+
+  Called from ( mana.prg     )   1 - function mailfix()
+
+mad5rep()       in m_ad5.prg
+
+  Called from ( m_ad5.prg    )   2 - function m_ad5()
+
+madpos()        in m_ad.prg
+
+  Called from ( m_ad.prg     )   1 - function m_ad()
+
+mae01()         in m_ae0.prg
+
+  Called from ( m_ae0.prg    )   1 - function m_ae()
+
+magen2()        in m_ag.prg
+
+  Called from ( m_ag.prg     )   1 - function mae01()
+
+magrep()        in m_ag.prg
+
+  Called from ( m_ag.prg     )   1 - function mae01()
+
+mai101()        in m_ai1.prg
+
+  Called from ( m_ai1.prg    )   1 - function gmai1()
+
+mail()          in mail.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+
+maildelete()    in mail.prg
+
+  Called from ( mail.prg     )   1 - function maildelcod()
+                                 1 - function maildeldata()
+                                 1 - function maildelusr()
+
+mailfix()       in mail.prg
+
+  Called from ( mail.prg     )   1 - function maildelete()
+              ( m_al3.prg    )   1 - function m_al3()
+
+mak2k05()       in mlibest.prg
+
+  Called from ( m_ak.prg     )   1 - function fmak()
+              ( m_aw0.prg    )   1 - function maw403()
+                                 2 - function mawretqtd()
+              ( m_ay.prg     )   1 - function maydel()
+                                 5 - function maypos()
+              ( m_ay3.prg    )   1 - function may304()
+              ( m_ayg.prg    )   1 - function m_ayg2()
+
+mak2k06()       in mlibest.prg
+
+  Called from ( m_ak.prg     )   1 - function fmak()
+              ( m_ay.prg     )   1 - function maydel()
+                                 2 - function maypos()
+
+mak3arr()       in m_ak3.prg
+
+  Called from ( m_ak3.prg    )   1 - function mak299()
+
+makevar()       <unresolved function>
+
+  Called from ( mlib.prg     )   1 - function rfiltro()
+
+make_empty()    <unresolved function>
+
+  Called from ( mlib.prg     )   1 - function obter()
+
+makk01()        in m_ak.prg
+
+  Called from ( m_ak.prg     )   1 - function gmak()
+
+mal01()         in m_al.prg
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( m_al.prg     )   6 - function gmal()
+                                 1 - function m_al()
+
+mal02()         in m_al.prg
+
+  Called from ( m_al.prg     )   1 - function gmal()
+
+mal03()         in m_al.prg
+
+  Called from ( m_al.prg     )   2 - function fmal()
+
+maldep()        in m_al.prg
+
+  Called from ( m_al.prg     )   1 - function gmal()
+
+mam201()        in m_am2.prg
+
+  Called from ( m_ak2.prg    )   1 - function fmak2()
+              ( m_am2.prg    )   1 - function fmam2()
+
+mam202()        in m_am2.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+
+mam203()        in m_am2.prg
+
+  Called from ( m_am2.prg    )   4 - function gmam2()
+
+mam204()        in m_am2.prg
+
+  Called from ( m_am2.prg    )   4 - function fmam2()
+                                 2 - function m_am2()
+
+mam2k05()       in mlibest.prg
+
+  Called from ( m_ay.prg     )   1 - function maydel()
+                                 7 - function maypos()
+              ( m_ay3.prg    )   2 - function may304()
+              ( m_ayg.prg    )   1 - function may3avl()
+
+mam2k06()       in mlibest.prg
+
+  Called from ( m_ay.prg     )   1 - function maydel()
+                                 2 - function maypos()
+
+mamk01()        in m_am.prg
+
+  Called from ( m_am.prg     )   1 - function fmam()
+
+man01()         in m_an.prg
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( m_an.prg     )   1 - function fman()
+                                 1 - function m_an()
+
+man02()         in m_an.prg
+
+  Called from ( m_an.prg     )   1 - function gman()
+
+man03()         in m_an.prg
+
+  Called from ( m_an.prg     )   2 - function fman()
+
+man301()        in m_an3.prg
+
+  Called from ( m_an3.prg    )   1 - function m_an3()
+
+mana()          <unresolved function>
+
+  Called from ( mmenu.prg    )   1 - function nfvicm()
+
+manb()          <unresolved function>
+
+  Called from ( mmenu.prg    )   1 - function nfvicm()
+
+manb1()         <unresolved function>
+
+  Called from ( manb.prg     )   1 - function pegcamini()
+
+manb2()         <unresolved function>
+
+  Called from ( mlib47.prg   )   1 - function imprel()
+              ( m_cn2.prg    )   1 - function m_cn2()
+
+manc()          <unresolved function>
+
+  Called from ( mmenu.prg    )   1 - function nfvicm()
+
+mand()          <unresolved function>
+
+  Called from ( mmenu.prg    )   1 - function nfvicm()
+
+mane()          <unresolved function>
+
+  Called from ( mmenu.prg    )   1 - function nfvicm()
+
+manemp()        <unresolved function>
+
+  Called from ( mana.prg     )   1 - function mailfix()
+
+manlista()      in mlib47.prg
+
+  Called from ( mlib14.prg   )   1 - function metnvi()
+              ( mlib15.prg   )   1 - function metpag()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+
+manualt()       in mane.prg
+
+  Called from ( mane.prg     )   1 - function fmanual()
+                                 1 - function montotal()
+
+mao203()        in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   3 - function gmao2()
+
+mao204()        in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   1 - function gmao2()
+
+maoacpos()      in m_aoac.prg
+
+  Called from ( m_aoac.prg   )   1 - function mao204()
+
+maocdagrv()     in m_ao0.prg
+
+  Called from ( m_ao0.prg    )   3 - function maocda()
+
+maof01()        in m_aof.prg
+
+  Called from ( m_aof.prg    )   1 - function moaciins()
+
+maof03()        in m_aof.prg
+
+  Called from ( m_ao2.prg    )   3 - function fmao2()
+              ( m_aof.prg    )   1 - function moaciins()
+              ( m_aox.prg    )   1 - function mosbinc02()
+
+maof03a()       in m_aof.prg
+
+  Called from ( m_aof.prg    )   1 - function maof03()
+
+maof04()        in m_aof.prg
+
+  Called from ( m_aof.prg    )   1 - function maof01()
+
+maofdel()       in m_aof.prg
+
+  Called from ( m_ao0.prg    )   1 - function maofixar()
+              ( m_ao2.prg    )   2 - function fmao2()
+              ( m_aof.prg    )   1 - function moaciins()
+
+maofdelc()      in m_aof.prg
+
+  Called from ( m_aof.prg    )   6 - function maofdel()
+
+maofdelx()      in m_aox.prg
+
+  Called from ( m_aox.prg    )   4 - function mosbinc02()
+
+maofixar()      in m_ao0.prg
+
+  Called from ( m_ao0.prg    )   1 - function osprg()
+
+maohor()        in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   1 - function gmao2()
+
+maohor2()       in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   1 - function gmao2()
+
+maohor3()       in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   1 - function gmao2()
+
+maoita01()      in comp2.prg
+
+  Called from ( m_ao0.prg    )   1 - function osprg()
+              ( m_du.prg     )   1 - function fmdrc()
+
+maop01()        in m_aop.prg
+
+  Called from ( m_aop.prg    )   1 - function m_aop()
+
+maop02()        in m_aop.prg
+
+  Called from ( m_aop.prg    )   1 - function maop01()
+                                 2 - function maop03()
+                                 1 - function op02ms06()
+
+maop03()        in m_aop.prg
+
+  Called from ( m_aop.prg    )   1 - function maopcalset()
+                                 1 - function m_aop()
+              ( m_aop2.prg   )   1 - function maop2cal()
+              ( m_aop3.prg   )   1 - function maop2cal()
+
+maop04()        in m_aop.prg
+
+  Called from ( m_aop.prg    )   1 - function maop01()
+                                 1 - function maop03()
+                                 1 - function op02ms06()
+
+maop2cal()      in m_aop2.prg
+
+  Called from ( m_aop.prg    )   1 - function maopx()
+              ( m_aop2.prg   )   1 - function op02ms06()
+
+maopchkseq()    in m_aop.prg
+
+  Called from ( m_aop.prg    )   1 - function m_aop()
+
+maopechk()      in m_aope.prg
+
+  Called from ( m_aope.prg   )   1 - function maop2cal()
+
+maoped()        in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   1 - function fmao2()
+                                 6 - function gmao2()
+                                 2 - function listap()
+                                 1 - function mo02k()
+
+maopr01()       in m_aope.prg
+
+  Called from ( m_aope.prg   )   1 - function maoprep()
+
+maopr02()       in m_aope.prg
+
+  Called from ( m_aope.prg   )   1 - function maope01()
+                                 1 - function maoprep()
+
+maoprep()       in m_aope.prg
+
+  Called from ( m_aope.prg   )   1 - function maop2cal()
+
+maor01()        in m_aor.prg
+
+  Called from ( m_aor.prg    )   1 - function m_aor()
+
+maox01()        in m_aox.prg
+
+  Called from ( m_aox.prg    )   3 - function mosbinc02()
+
+maoz01()        in m_aoz.prg
+
+  Called from ( m_aoz.prg    )   6 - function apgpro()
+
+maoz02()        in m_aoz.prg
+
+  Called from ( m_aoz.prg    )   3 - function apgpro()
+
+map01()         in m_ap.prg
+
+  Called from ( m_ap.prg     )   1 - function m_ap()
+
+mapclass01()    in m_ap.prg
+
+  Called from ( m_ap.prg     )   4 - function mapclass()
+
+marcar()        in mlib37.prg
+
+  Called from ( mane.prg     )   1 - function montotal()
+              ( mlib.prg     )   1 - function montatab()
+              ( mlib27.prg   )   1 - function padarr()
+                                 1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_ak3.prg    )   1 - function mak3arr()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_an.prg     )   2 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+marcar1()       in mlib37.prg
+
+  Called from ( mane.prg     )   1 - function montotal()
+              ( mlib.prg     )   1 - function montatab()
+              ( mlib27.prg   )   1 - function padarr()
+                                 1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_ak3.prg    )   1 - function mak3arr()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_an.prg     )   2 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+mas99()         in m_as99.prg
+
+  Called from ( m_as99.prg   )   1 - function gmas5()
+
+masdel()        in m_as.prg
+
+  Called from ( m_as.prg     )   1 - function mapclass01()
+
+masposrep()     in m_as.prg
+
+  Called from ( m_as.prg     )   1 - function mapclass01()
+
+mau301()        in m_au0.prg
+
+  Called from ( m_au.prg     )   1 - function maukey()
+              ( m_au0.prg    )   1 - function maubx()
+
+maudel()        in m_au.prg
+
+  Called from ( m_au.prg     )   1 - function mas99()
+
+mauigu()        in m_au.prg
+
+  Called from ( m_au.prg     )   1 - function mas99()
+
+mauk01()        in m_au.prg
+
+  Called from ( m_au.prg     )   5 - function gmau()
+
+mauk02()        in m_au.prg
+
+  Called from ( m_au.prg     )   3 - function gmau()
+
+maukey()        in m_au.prg
+
+  Called from ( m_au.prg     )   1 - function mas99()
+
+maukeyrod()     in m_au.prg
+
+  Called from ( m_au.prg     )   1 - function mas99()
+
+maupe()         in m_au.prg
+
+  Called from ( m_au.prg     )   1 - function gmau()
+                                 1 - function maudel()
+
+maw01()         in m_aw.prg
+
+  Called from ( m_aw.prg     )   1 - function m_aw()
+
+maw03()         in m_aw.prg
+
+  Called from ( m_aw.prg     )   1 - function m_aw()
+
+maw2del()       in m_aw2.prg
+
+  Called from ( m_aw2.prg    )   1 - function mawmudfor()
+
+maw2inc()       in m_aw2.prg
+
+  Called from ( m_aw2.prg    )   1 - function mawmudfor()
+
+maw2rep()       in m_aw2.prg
+
+  Called from ( m_aw2.prg    )   1 - function mawmudfor()
+
+maw301()        in m_aw2.prg
+
+  Called from ( m_aw2.prg    )   1 - function maw2rep()
+
+maw3rep()       in m_aw2.prg
+
+  Called from ( m_aw2.prg    )   1 - function maw2rep()
+
+maw402()        in m_aw0.prg
+
+  Called from ( m_aw0.prg    )   3 - function m_aw4()
+
+maw601()        in m_aw0.prg
+
+  Called from ( m_aw0.prg    )   1 - function maw6()
+                                 1 - function maw602()
+
+maw602()        in m_aw0.prg
+
+  Called from ( m_aw0.prg    )   3 - function maw6()
+
+maw8()          in m_aw0.prg
+
+  Called from ( m_aw.prg     )   1 - function m_aw()
+
+mawdel()        in m_aw.prg
+
+  Called from ( m_aw.prg     )   1 - function m_aw()
+
+mawposig()      in m_aw.prg
+
+  Called from ( m_aw.prg     )   1 - function m_aw()
+
+mawult01()      in m_aw0.prg
+
+  Called from ( m_aw0.prg    )   5 - function mawult()
+
+mawultprc()     in m_aw0.prg
+
+  Called from ( m_aw0.prg    )   2 - function maw403()
+                                 2 - function mw08chk01()
+              ( m_aw2.prg    )   1 - function maw2del()
+
+max3inc()       in m_ax.prg
+
+  Called from ( m_ax.prg     )   1 - function max3rep()
+
+max3rep()       in m_ax.prg
+
+  Called from ( m_ax.prg     )   1 - function m_ax3()
+
+max6inc()       in m_ax.prg
+
+  Called from ( m_ax.prg     )   1 - function max6rep()
+
+max6rep()       in m_ax.prg
+
+  Called from ( m_ax.prg     )   1 - function m_ax6()
+
+may02()         in m_ay.prg
+
+  Called from ( m_aoz.prg    )   3 - function maoz02()
+              ( m_ay.prg     )   5 - function maypos()
+              ( m_ay3.prg    )   2 - function may304()
+
+may04()         in m_ay.prg
+
+  Called from ( m_aw0.prg    )   1 - function maw7()
+              ( m_ay.prg     )   1 - function maypos()
+
+may05()         in m_ay.prg
+
+  Called from ( m_ay.prg     )   2 - function maydel()
+                                 2 - function maypos()
+              ( m_ayg.prg    )   1 - function m_ayg2()
+
+may304()        in m_ay3.prg
+
+  Called from ( m_ay3.prg    )   2 - function may3pos()
+
+may3iinc()      in m_ay3.prg
+
+  Called from ( m_ay3.prg    )   1 - function may3pos()
+
+may3pos()       in m_ay3.prg
+
+  Called from ( m_ay3.prg    )   1 - function may303()
+                                 1 - function may3avl()
+                                 1 - function m_ay3()
+
+maydel()        in m_ay.prg
+
+  Called from ( m_ay.prg     )   1 - function m_ay()
+
+mayg01()        in m_ayg.prg
+
+  Called from ( m_ay.prg     )   6 - function may02()
+              ( m_ayg.prg    )   3 - function mayg02()
+
+mayg02()        in m_ayg.prg
+
+  Called from ( m_ay.prg     )   1 - function maypos()
+
+mayigu()        in m_ay.prg
+
+  Called from ( m_ay.prg     )   1 - function m_ay()
+
+maypos()        in m_ay.prg
+
+  Called from ( m_ay.prg     )   1 - function m_ay()
+
+mca01()         in m_ca.prg
+
+  Called from ( m_ca.prg     )   5 - function gmca()
+
+mcb2ins()       in m_cb2.prg
+
+  Called from ( m_cb2.prg    )   1 - function mcbk02()
+
+mcb2tec()       in m_cb2.prg
+
+  Called from ( m_cb2.prg    )   1 - function mcbk02()
+
+mcben2()        in m_cb.prg
+
+  Called from ( m_cb.prg     )   1 - function mca01()
+
+mcbtec()        in m_cb.prg
+
+  Called from ( m_cb.prg     )   1 - function mca01()
+
+mcd01()         in m_cd.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( m_cd.prg     )   1 - function mcb2ins()
+
+mciant()        in m_ci.prg
+
+  Called from ( m_ci.prg     )   1 - function m_ci()
+
+mciigu()        in m_ci.prg
+
+  Called from ( m_ci.prg     )   1 - function m_ci()
+
+mciins()        in m_ci.prg
+
+  Called from ( m_ci.prg     )   1 - function m_ci()
+
+mcn201()        in m_cn2.prg
+
+  Called from ( m_cn2.prg    )   6 - function gmcn2()
+
+mcnrep()        in m_cn.prg
+
+  Called from ( m_cn.prg     )   1 - function gmcm()
+
+md1faz()        in m_d1.prg
+
+  Called from ( m_d1.prg     )  30 - function usermdec()
+
+mdc3a()         in m_dc3.prg
+
+  Called from ( m_dc3.prg    )   1 - function m_dc3()
+
+mdck01()        in m_dc.prg
+
+  Called from ( m_dc.prg     )   1 - function gmdc()
+
+mdck02()        in m_dc.prg
+
+  Called from ( m_dc.prg     )   1 - function gmdc()
+
+mde()           in mlib05.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( mlib01.prg   )   1 - function checktab()
+              ( mlib03.prg   )   1 - function checkuf()
+              ( mlib04.prg   )   1 - function checkcid()
+              ( mlib41.prg   )   1 - function verseha()
+              ( mlib48.prg   )   1 - function checkexi()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_ao2.prg    )   1 - function listap()
+                                 1 - function m_ao2()
+
+mdf()           in mlib36.prg
+
+  Called from ( mlib14.prg   )   1 - function metnvi()
+              ( mlib36.prg   )   1 - function mdi()
+              ( m_dq.prg     )   1 - function mdpchavei()
+
+mdg()           <unresolved function>
+
+  Called from ( cnab400r.prg )   2 - 
+              ( mail.prg     )   1 - function mail()
+              ( manb2.prg    )   4 - function pegcamini()
+              ( manc.prg     )   4 - function montotal()
+              ( mlib02.prg   )   2 - function teclaf11()
+              ( mlib09.prg   )   1 - function pegmes()
+                                 3 - function perfec()
+                                 3 - function somaano()
+              ( mlib11.prg   )   2 - function metbro()
+              ( mlib15.prg   )   1 - function metpag()
+              ( mlib18.prg   )   2 - function regbus()
+              ( mlib27.prg   )   1 - function fpad()
+                                 1 - function padarr()
+                                 2 - function padrao()
+              ( mlib29.prg   )   1 - function usechk()
+                                 1 - function userede()
+              ( mlib31.prg   )   1 - function ckempty()
+              ( mlib32.prg   )   1 - function checkpar()
+              ( mlib33.prg   )   1 - function checkipi()
+              ( mlib34.prg   )   2 - function checkcfo()
+              ( mlib40.prg   )   1 - function fpax()
+                                 2 - function padrax()
+              ( mlib46.prg   )   1 - function apagareg()
+              ( mlib47.prg   )   1 - function manlista()
+              ( mlibest.prg  )   1 - function zeraest()
+              ( mlibnf.prg   )   1 - function nfcod()
+              ( mmenu.prg    )   1 - function nfvicm()
+              ( m_a1.prg     )   1 - function ma1igu()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_a74.prg    )   1 - function ma6ger()
+              ( m_ad.prg     )   1 - function madpos()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ad5.prg    )   1 - function mad5rep()
+              ( m_ae0.prg    )   3 - function mae01()
+              ( m_ae3.prg    )   1 - function mae01()
+              ( m_ag.prg     )   2 - function magrep()
+              ( m_ak.prg     )   1 - function fmak()
+                                 2 - function m_ak()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_ak3.prg    )   1 - function mak3arr()
+              ( m_ake.prg    )   1 - function mak3arr()
+              ( m_al.prg     )   1 - function fmal()
+                                 2 - function m_al()
+              ( m_al3.prg    )   2 - function m_al3()
+              ( m_al4.prg    )   1 - function m_al3()
+              ( m_am.prg     )   2 - function fmam()
+                                 2 - function m_am()
+              ( m_am9.prg    )   1 - function mm09des()
+                                 1 - function mm09lote()
+              ( m_an.prg     )   1 - function fman()
+                                 3 - function m_an()
+              ( m_ao.prg     )   2 - function m_ao()
+              ( m_ao0.prg    )   5 - function maocda()
+                                 4 - function osprg()
+              ( m_ao2.prg    )   1 - function mao203()
+              ( m_aof.prg    )   1 - function maof01()
+              ( m_aop.prg    )   1 - function maop01()
+                                 1 - function maop03()
+                                 1 - function maopzervol()
+              ( m_aop2.prg   )   3 - function op02ms06()
+              ( m_aop3.prg   )   1 - function maop2cal()
+              ( m_aoz.prg    )   3 - function apgpro()
+              ( m_ap.prg     )   1 - function map01()
+                                 1 - function mpins()
+              ( m_as.prg     )   2 - function masdel()
+                                 2 - function masposrep()
+              ( m_aw.prg     )   1 - function m_aw()
+              ( m_aw0.prg    )   1 - function maw403()
+                                 4 - function maw6()
+                                 1 - function maw7()
+                                 2 - function mawmudfor()
+                                 2 - function mawretqtd()
+                                 5 - function mawult()
+                                 1 - function m_awrea()
+                                 1 - function m_awret()
+              ( m_aw2.prg    )   1 - function maw202()
+                                 1 - function maw2rep()
+              ( m_ay.prg     )   1 - function maydel()
+                                 1 - function maypos()
+              ( m_ay3.prg    )   1 - function may3avl()
+                                 1 - function may3pos()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bo1.prg    )   2 - function mayg02()
+              ( m_ci.prg     )   2 - function m_ci()
+              ( m_cn.prg     )   2 - function mcnrep()
+              ( m_cn2.prg    )   2 - function gmcn2()
+                                 2 - function m_cn2()
+              ( m_co2.prg    )   2 - function m_co2()
+              ( m_cr.prg     )   1 - function gmco2()
+              ( m_cs.prg     )   9 - function atualiza()
+              ( m_cv.prg     )   5 - function usermdec()
+              ( m_db.prg     )   4 - function m_db()
+              ( m_dc.prg     )   2 - function fmdc()
+                                 2 - function m_dc()
+              ( m_dk.prg     )   1 - function fecretbai()
+              ( m_dm.prg     )   1 - function mdkrep()
+              ( m_dp.prg     )   4 - function mdkrep()
+              ( m_dq.prg     )   1 - function m_dq1()
+              ( m_drc.prg    )   2 - function m_drc()
+              ( m_du.prg     )   1 - function fmdrc()
+
+mdi()           in mlib36.prg
+
+  Called from ( cnab400r.prg )   1 - 
+              ( mana.prg     )   1 - function mailfix()
+              ( manb.prg     )   1 - function pegcamini()
+              ( manc.prg     )   1 - function montotal()
+              ( mand.prg     )   1 - function montotal()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( mlib44.prg   )   1 - function automenu()
+                                 1 - function menufec()
+              ( mmenu.prg    )   1 - function nfvicm()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_a6.prg     )   1 - function ma6ger()
+              ( m_a74.prg    )   1 - function ma6ger()
+              ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ae3.prg    )   1 - function mae01()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_ak2a.prg   )   1 - function mak299()
+              ( m_ake.prg    )   1 - function mak3arr()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_al2b.prg   )   1 - function maldep()
+              ( m_al2c.prg   )   1 - function m_al2()
+              ( m_al3.prg    )   1 - function m_al3()
+              ( m_al4.prg    )   1 - function m_al3()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_am9.prg    )   1 - function mm09imp()
+                                 1 - function mm09vol()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao0.prg    )   3 - function maocda()
+                                 1 - function maodup()
+                                 1 - function maorecli()
+                                 1 - function maorenum()
+                                 1 - function maozercli()
+                                 1 - function osprg()
+                                 1 - function prgtrcplt()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_aop.prg    )   1 - function maopcalset()
+                                 1 - function maopzervol()
+              ( m_aop2.prg   )   1 - function op02ms06()
+              ( m_aop3.prg   )   1 - function maop2cal()
+              ( m_aos.prg    )   1 - function tiporr()
+              ( m_aox.prg    )   1 - function mosbinc02()
+              ( m_aoy.prg    )   1 - function apgpro()
+              ( m_aoz.prg    )   1 - function apgpro()
+              ( m_ap.prg     )   1 - function m_ap5()
+              ( m_as.prg     )   1 - function mascalinv()
+              ( m_au.prg     )   1 - function calcinv()
+              ( m_aw0.prg    )   1 - function maw403()
+                                 1 - function mawmudfor()
+                                 1 - function mawretqtd()
+                                 1 - function mw08chk()
+                                 1 - function m_awrea()
+                                 1 - function m_awret()
+              ( m_ayg.prg    )   1 - function may3avl()
+                                 1 - function m_ayg2()
+              ( m_b6.prg     )   1 - function mayg02()
+              ( m_bl1.prg    )   1 - function mayg02()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bn1.prg    )   1 - function mayg02()
+              ( m_bn2.prg    )   1 - function mayg02()
+              ( m_bo.prg     )   1 - function mayg02()
+              ( m_bo1.prg    )   1 - function mayg02()
+              ( m_cg.prg     )   1 - function gmcf()
+              ( m_ci.prg     )   1 - function m_ci()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_cp.prg     )   1 - function gmco2()
+              ( m_cq.prg     )   1 - function gmco2()
+              ( m_cs.prg     )   1 - function atualiza()
+              ( m_cv.prg     )   1 - function usermdec()
+              ( m_d1.prg     )   1 - function usermdec()
+              ( m_db.prg     )   1 - function m_db()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_dc3.prg    )   1 - function m_dc3()
+              ( m_dk.prg     )   1 - function fecretbai()
+              ( m_dn.prg     )   1 - function mdkrep()
+              ( m_dq.prg     )   2 - function mdpchavei()
+              ( m_drc.prg    )   1 - function m_drc()
+              ( m_du.prg     )   1 - function fmdrc()
+              ( m_dw.prg     )   1 - function fmdrc()
+
+mdkrep()        in m_dm.prg
+
+  Called from ( m_dm.prg     )   1 - function fecretbai()
+
+mdpchavei()     in m_dp.prg
+
+  Called from ( m_dp.prg     )   2 - function mdkrep()
+
+mdr01()         in m_dr.prg
+
+  Called from ( m_dr.prg     )   2 - function gmdr()
+
+mds()           <unresolved function>
+
+  Called from ( mail.prg     )   1 - function mail()
+                                 1 - function maildelcod()
+                                 1 - function maildeldata()
+                                 1 - function maildelete()
+                                 1 - function maildelusr()
+              ( mana5.prg    )   2 - function main()
+              ( manb2.prg    )   5 - function pegcamini()
+              ( mane.prg     )   2 - function fmanual()
+                                 1 - function manualt()
+                                 1 - function montotal()
+              ( mlib.prg     )   1 - function checkcc()
+                                 1 - function dfiltro()
+                                 1 - function mudadata()
+              ( mlib01.prg   )   1 - function escolhetab()
+              ( mlib04.prg   )   1 - function checkcid()
+                                 1 - function escolhecid()
+              ( mlib09.prg   )   2 - function pedper()
+                                 2 - function pegmes()
+                                 1 - function somaarq()
+              ( mlib10.prg   )   1 - function veruf()
+              ( mlib11.prg   )   3 - function metbro()
+              ( mlib14.prg   )   1 - function metnvi()
+              ( mlib18.prg   )   2 - function regbus()
+              ( mlib27.prg   )   1 - function padcgc()
+              ( mlib29.prg   )   1 - function usechk()
+                                 1 - function userede()
+              ( mlib32.prg   )   1 - function checkpar()
+              ( mlib33.prg   )   1 - function checkcipi()
+              ( mlib34.prg   )   1 - function checkcfo()
+              ( mlib38.prg   )   2 - function fixar()
+              ( mlib40.prg   )   5 - function padrax()
+              ( mlib41.prg   )   1 - function verseha()
+              ( mlib45.prg   )   1 - function novoope()
+                                 1 - function zaparq()
+              ( mlib48.prg   )   1 - function escolhexi()
+              ( mlibarq.prg  )   1 - function checkarq()
+              ( mlibest.prg  )   1 - function zeraest()
+              ( mlibnf.prg   )   1 - function nfcod()
+              ( m_a12.prg    )   6 - function m_a12()
+              ( m_a50.prg    )   1 - function m_a54()
+              ( m_a74.prg    )   1 - function ma6ger()
+              ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_ad2.prg    )  12 - function m_ad2()
+                                 2 - function recalc()
+              ( m_ae3.prg    )   2 - function mae01()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ak.prg     )   1 - function fmak()
+                                 5 - function m_ak()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_ak2.prg    )   6 - function m_ak2()
+              ( m_ak3.prg    )   2 - function mak3arr()
+              ( m_ake.prg    )   3 - function mak3arr()
+              ( m_al.prg     )   1 - function fmal()
+                                 6 - function m_al()
+              ( m_al2b.prg   )   3 - function maldep()
+              ( m_al2c.prg   )   1 - function m_al2()
+              ( m_al3.prg    )   1 - function m_al3()
+              ( m_am.prg     )   1 - function fmam()
+                                 6 - function m_am()
+              ( m_am2.prg    )   6 - function m_am2()
+              ( m_am9.prg    )   1 - function mm09des()
+              ( m_an.prg     )   1 - function fman()
+                                 6 - function m_an()
+              ( m_ao.prg     )   6 - function m_ao()
+              ( m_ao0.prg    )   1 - function maodup()
+                                 1 - function maofixar()
+                                 1 - function maorecli()
+                                 1 - function maorenum()
+                                 2 - function maozercli()
+                                 1 - function osprg()
+              ( m_ao2.prg    )   1 - function fmao2()
+                                 7 - function m_ao2()
+              ( m_aoac.prg   )   1 - function mao204()
+              ( m_aof.prg    )   5 - function maof03()
+                                 3 - function maofdel()
+              ( m_aop.prg    )   1 - function maop03()
+                                 1 - function m_aop4()
+                                 1 - function m_aop5()
+                                 1 - function opsexmkpos()
+              ( m_aop2.prg   )   1 - function maop2cal()
+                                 1 - function op02ms06()
+              ( m_aope.prg   )   1 - function maopechk()
+                                 1 - function pe01inc()
+              ( m_aox.prg    )   1 - function apgpr2()
+                                 1 - function apgpro()
+                                 2 - function mosbinc02()
+              ( m_aoy.prg    )   3 - function apgpro()
+              ( m_aoz.prg    )   2 - function apgpro()
+              ( m_ap.prg     )   1 - function m_ap6()
+              ( m_as.prg     )   1 - function mascalinv()
+              ( m_au.prg     )   1 - function calcinv()
+              ( m_au0.prg    )   1 - function imau3()
+              ( m_au4.prg    )   1 - function m_au4()
+              ( m_aw.prg     )   1 - function mw08del()
+              ( m_aw0.prg    )   1 - function maw7()
+                                 1 - function mawmudfor()
+                                 1 - function m_awret()
+                                 1 - function m_awx()
+              ( m_aw2.prg    )   1 - function maw2inc()
+              ( m_ay.prg     )   4 - function may99()
+              ( m_ay3.prg    )   3 - function may304()
+                                 1 - function may307()
+              ( m_ayg.prg    )   2 - function may3avl()
+                                 1 - function m_ayg2()
+              ( m_ch.prg     )   1 - function senhax()
+              ( m_ci.prg     )   2 - function m_ci()
+              ( m_cn2.prg    )   4 - function m_cn2()
+              ( m_co2.prg    )   6 - function m_co2()
+              ( m_cp.prg     )   1 - function gmco2()
+              ( m_cq.prg     )   1 - function gmco2()
+              ( m_cr.prg     )   1 - function atualiza()
+              ( m_cs.prg     )  10 - function atualiza()
+                                 1 - function msc204()
+                                 1 - function msc206()
+              ( m_dc.prg     )   1 - function fmdc()
+                                 6 - function m_dc()
+              ( m_dn.prg     )   1 - function mdkrep()
+              ( m_dp.prg     )   2 - function mdkrep()
+              ( m_drc.prg    )   1 - function m_drc()
+              ( m_du.prg     )   2 - function fmdrc()
+              ( m_dw.prg     )   3 - function fmdrc()
+
+mdt()           in m_db.prg
+
+  Called from ( mail.prg     )   1 - function mail()
+              ( mana5.prg    )   1 - function main()
+              ( mlib29.prg   )   1 - function usechk()
+
+memopack()      <unresolved function>
+
+  Called from ( mail.prg     )   2 - function mailfix()
+
+memoview()      <unresolved function>
+
+  Called from ( mlib05.prg   )   1 - function mde()
+
+mesano()        in mlib09.prg
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( m_a74.prg    )   1 - function ma6ger()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ake.prg    )   1 - function mak3arr()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_aosb.prg   )   1 - function m_aosb()
+              ( m_aw.prg     )   1 - function m_aw()
+              ( m_aw0.prg    )   1 - function mawretqtd()
+                                 1 - function m_awret()
+              ( m_ax.prg     )   1 - function m_ax6()
+              ( m_ay3.prg    )   1 - function m_ay3()
+              ( m_bl2.prg    )   1 - function mayg02()
+
+metbro()        in mlib11.prg
+
+  Called from ( mlib20.prg   )   1 - function endcidp()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_drc.prg    )   1 - function m_drc()
+
+metint()        in mlib13.prg
+
+  Called from ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+metnvi()        in mlib14.prg
+
+  Called from ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+metpag()        in mlib15.prg
+
+  Called from ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+mmdev()         in m_am2.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+              ( m_ao2.prg    )   1 - function gmao2()
+
+mmenu()         <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+mmes()          <unresolved function>
+
+  Called from ( mlib09.prg   )   1 - function pegmes()
+                                 2 - function perfec()
+
+mmtra()         in m_am2.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+
+mo02k()         in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   3 - function gmao2()
+
+moaciins()      in m_aoac.prg
+
+  Called from ( m_aoac.prg   )   1 - function maoacpos()
+
+montatab()      in mlib.prg
+
+  Called from ( m_drc.prg    )   1 - function m_drc()
+
+mosbinc02()     in m_aosb.prg
+
+  Called from ( m_aosb.prg   )   1 - function mosbrep()
+
+mosbrep()       in m_aosb.prg
+
+  Called from ( m_aosb.prg   )   1 - function m_aosb()
+
+mpagar()        in mlib08.prg
+
+  Called from ( m_ak.prg     )   1 - function fmak()
+              ( m_am.prg     )   1 - function fmam()
+
+mpins()         in m_ap.prg
+
+  Called from ( m_ap.prg     )   1 - function eti()
+                                 1 - function map01()
+                                 1 - function m_ap6()
+
+ms02prc()       in comp2.prg
+
+  Called from ( mlibnf.prg   )   2 - function nfcod()
+              ( m_ao2.prg    )   1 - function mo02k()
+
+msc101()        in m_cs.prg
+
+  Called from ( m_cs.prg     )   1 - function atualiza()
+
+msc102()        in m_cs.prg
+
+  Called from ( m_cs.prg     )   1 - function atualiza()
+
+msc201()        in m_cs.prg
+
+  Called from ( m_cs.prg     )   2 - function atualiza()
+
+msc203()        in m_cs.prg
+
+  Called from ( m_cs.prg     )   2 - function atualiza()
+
+msc204()        in m_cs.prg
+
+  Called from ( m_cs.prg     )   1 - function atualiza()
+
+msc205()        in m_cs.prg
+
+  Called from ( m_cs.prg     )   1 - function atualiza()
+
+msc206()        in m_cs.prg
+
+  Called from ( m_cs.prg     )   1 - function atualiza()
+
+mudadata()      in mlib.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+
+mvinfoconftela( <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+mw08chk()       in m_aw0.prg
+
+  Called from ( m_aw0.prg    )   1 - function m_awrea()
+
+mw08chk01()     in m_aw0.prg
+
+  Called from ( m_aw.prg     )   1 - function maw01()
+              ( m_aw0.prg    )   1 - function mw08chk()
+
+m_a1()          <unresolved function>
+
+  Called from ( mana.prg     )   1 - function mailfix()
+
+m_a12()         in m_a12.prg
+
+  Called from ( m_a1.prg     )   1 - function ma1igu()
+
+m_a4()          in comp2.prg
+
+  Called from ( mana.prg     )   1 - function mailfix()
+
+m_a7i()         in comp2.prg
+
+  Called from ( m_am.prg     )   1 - function fmam()
+
+m_aa()          <unresolved function>
+
+  Called from ( mana.prg     )   1 - function mailfix()
+
+m_ad()          in m_ad.prg
+
+  Called from ( mana.prg     )   1 - function mailfix()
+
+m_ad2()         in m_ad2.prg
+
+  Called from ( m_ad.prg     )   1 - function madpos()
+
+m_ad5()         in m_ad5.prg
+
+  Called from ( m_ad.prg     )   2 - function madpos()
+
+m_ak2()         in m_ak2.prg
+
+  Called from ( m_ak.prg     )   1 - function fmak()
+
+m_am2()         in m_am2.prg
+
+  Called from ( m_am.prg     )   1 - function fmam()
+
+m_ao2()         in m_ao2.prg
+
+  Called from ( m_ao.prg     )   1 - function fmao()
+
+m_aop3()        <unresolved function>
+
+  Called from ( m_aop.prg    )   1 - function maopx()
+
+m_aop4()        in m_aop.prg
+
+  Called from ( m_aop.prg    )   1 - function maopzervol()
+
+m_aop4grv()     in m_aop.prg
+
+  Called from ( m_aop.prg    )   5 - function m_aop4()
+
+m_aoy()         <unresolved function>
+
+  Called from ( m_ae3.prg    )   1 - function mae01()
+              ( m_aoz.prg    )   1 - function apgpro()
+
+m_as()          <unresolved function>
+
+  Called from ( mana.prg     )   1 - function mailfix()
+
+m_as99()        <unresolved function>
+
+  Called from ( m_au.prg     )   1 - function maukey()
+
+m_au0()         in m_au0.prg
+
+  Called from ( mana.prg     )   4 - function mailfix()
+
+m_au4()         in m_au4.prg
+
+  Called from ( m_au.prg     )   1 - function maukey()
+
+m_av()          in comp2.prg
+
+  Called from ( mana.prg     )   1 - function mailfix()
+
+m_aw2()         <unresolved function>
+
+  Called from ( m_aw.prg     )   1 - function maw01()
+
+m_awx1()        in m_aw0.prg
+
+  Called from ( m_aw0.prg    )   1 - function m_awx()
+              ( m_ay.prg     )   1 - function may04()
+
+m_ax()          <unresolved function>
+
+  Called from ( mana.prg     )   1 - function mailfix()
+
+m_bo1()         <unresolved function>
+
+  Called from ( m_bo.prg     )   3 - function mayg02()
+
+m_ca()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_cb()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+              ( m_co.prg     )   1 - function esp()
+
+m_cb2()         <unresolved function>
+
+  Called from ( m_cb.prg     )   1 - function mca01()
+
+m_cd()          <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( manc.prg     )   1 - function montotal()
+
+m_ce()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_cf()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_cg()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_ch()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_ci()          in m_ci.prg
+
+  Called from ( mana5.prg    )   2 - function main()
+              ( manc.prg     )   1 - function montotal()
+
+m_cm()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_cn()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_cn2()         in m_cn2.prg
+
+  Called from ( manb1.prg    )   1 - function pegcamini()
+              ( mlib47.prg   )   1 - function manlista()
+              ( m_cn.prg     )   1 - function mcnrep()
+
+m_cn3()         <unresolved function>
+
+  Called from ( m_cn2.prg    )   1 - function gmcn2()
+
+m_co()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_co2()         in m_co2.prg
+
+  Called from ( m_cb.prg     )   1 - function mcben2()
+              ( m_drc.prg    )   1 - function fmdrc()
+
+m_cp()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_cq()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_cr()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_cs()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_cv()          <unresolved function>
+
+  Called from ( manc.prg     )   1 - function montotal()
+
+m_d1()          <unresolved function>
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_d2()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_d3()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_d4()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_d5()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_d6()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_d7()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_db()          in m_db.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+              ( mlib29.prg   )   1 - function userede()
+              ( mlibarq.prg  )   1 - function checkarq()
+              ( mliberr.prg  )   1 - function errindex()
+              ( m_am9.prg    )   1 - function mm09lote()
+              ( m_aop.prg    )   1 - function maopx()
+              ( m_cb.prg     )   1 - function mcbtec()
+              ( m_cb2.prg    )   1 - function mcb2tec()
+
+m_dd()          <unresolved function>
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dk()          in m_dk.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dm()          <unresolved function>
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dp()          <unresolved function>
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dq()          <unresolved function>
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dq1()         in m_dq.prg
+
+  Called from ( m_dq.prg     )   1 - function mdpchavei()
+
+m_dr()          <unresolved function>
+
+  Called from ( m_drc.prg    )   1 - function fmdrc()
+
+m_drc()         in m_drc.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dt()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_du()          <unresolved function>
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dv()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dw()          <unresolved function>
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dx()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dy()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+m_dz()          in comp2.prg
+
+  Called from ( mand.prg     )   1 - function montotal()
+
+nacional()      in m_dq.prg
+
+  Called from ( m_dq.prg     )   1 - function m_dq1()
+
+netgrvcam()     <unresolved function>
+
+  Called from ( mail.prg     )   4 - function mailfix()
+              ( manb2.prg    )   1 - function listar1()
+                                 1 - function pegcamini()
+              ( m_a74.prg    )   2 - function ma6ger()
+              ( m_ae3.prg    )   2 - function mae01()
+              ( m_ai4.prg    )   2 - function m_ai4()
+              ( m_ak2a.prg   )   3 - function mak299()
+              ( m_ao0.prg    )   1 - function maorecli()
+                                 2 - function maorenum()
+                                 1 - function maozercli()
+                                 1 - function prgtrcplt()
+              ( m_aop.prg    )   2 - function maopvmes01()
+              ( m_aope.prg   )   2 - function maopechk()
+              ( m_aox.prg    )   1 - function apgpro()
+              ( m_ap.prg     )   1 - function mapclass()
+              ( m_aw0.prg    )   1 - function maw601()
+                                 1 - function maw8()
+                                 1 - function mawmudfor()
+                                 1 - function mawult01()
+                                 1 - function mw08chk()
+              ( m_ayg.prg    )   1 - function mayg02()
+              ( m_d1.prg     )   1 - function md1chek01()
+                                 1 - function md1faz()
+              ( m_du.prg     )   1 - function fmdrc()
+
+netrecapp()     <unresolved function>
+
+  Called from ( cnab400r.prg )   1 - 
+              ( mail.prg     )   1 - function mail()
+                                 1 - function maildelete()
+              ( mlib11.prg   )   1 - function metbro()
+              ( mlib24.prg   )   2 - function gravalay()
+              ( mlib45.prg   )   1 - function novoopa()
+                                 1 - function novoope()
+                                 1 - function novoreg()
+              ( mlibest.prg  )   1 - function grvestoque()
+              ( mlibmail.prg )   1 - function emailint()
+              ( m_ae3.prg    )   3 - function mae01()
+              ( m_ao0.prg    )   1 - function maocdagrv()
+              ( m_aop.prg    )   2 - function maopcalset()
+              ( m_aop3.prg   )   1 - function maop2cal()
+              ( m_aos.prg    )   1 - function tiporr()
+              ( m_aox.prg    )   1 - function mosbinc02()
+              ( m_aoy.prg    )   1 - function apgpro()
+              ( m_aw0.prg    )   1 - function mw08chk01()
+              ( m_ay3.prg    )   1 - function may3avl()
+              ( m_ayg.prg    )   1 - function mayg01()
+              ( m_dp.prg     )   1 - function mdkrep()
+              ( m_dw.prg     )   3 - function fmdrc()
+
+netrecdel()     <unresolved function>
+
+  Called from ( mail.prg     )   1 - function mail()
+                                 1 - function maildelete()
+                                 4 - function mailfix()
+              ( mlib46.prg   )   1 - function delereg()
+              ( m_ae3.prg    )   2 - function mae01()
+              ( m_aos.prg    )   2 - function tiporr()
+              ( m_aw0.prg    )   2 - function m_awret()
+              ( m_aw2.prg    )   1 - function maw2del()
+              ( m_cv.prg     )   4 - function usermdec()
+              ( m_db.prg     )   1 - function m_db()
+              ( m_dw.prg     )   3 - function fmdrc()
+
+netreclock()    in xhb.lib
+
+  Called from ( mail.prg     )   1 - function mail()
+              ( manb2.prg    )   2 - function pegcamini()
+              ( mlib11.prg   )   3 - function metbro()
+              ( mlib24.prg   )   1 - function gravalay()
+              ( mlibest.prg  )   2 - function grvestoque()
+                                 1 - function zeraest()
+              ( mlibnf.prg   )   1 - function peglote()
+              ( m_ad2.prg    )   1 - function recalc()
+              ( m_ak.prg     )   1 - function fmak()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   1 - function fmam()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao0.prg    )   1 - function maocdagrv()
+                                 2 - function osprg()
+              ( m_aoac.prg   )   1 - function mao204()
+              ( m_aop.prg    )   1 - function maop01()
+                                 4 - function maop03()
+                                 2 - function maopcalset()
+                                 1 - function maopx()
+                                 1 - function maopzervol()
+                                 1 - function op02ms06()
+                                 1 - function opsexmkpos()
+              ( m_aop2.prg   )   2 - function maop2cal()
+              ( m_aop3.prg   )   1 - function maop2cal()
+              ( m_aope.prg   )   2 - function maopechk()
+              ( m_ap.prg     )   1 - function m_ap5()
+              ( m_as.prg     )   2 - function mascalinv()
+              ( m_au.prg     )   1 - function calcinv()
+                                 3 - function maupe()
+              ( m_au4.prg    )   1 - function m_au4()
+              ( m_aw0.prg    )   1 - function maw8()
+                                 1 - function mawult01()
+                                 1 - function mawultprc()
+                                 1 - function mw08chk()
+                                 1 - function m_awrea()
+              ( m_ay.prg     )   3 - function may02()
+                                 2 - function may04()
+                                 2 - function maypos()
+              ( m_ay3.prg    )   4 - function may304()
+              ( m_ci.prg     )   2 - function gerapostela()
+                                 1 - function m_ci()
+
+netregosok()    <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+nfbas()         in mlibnf.prg
+
+  Called from ( m_ak2.prg    )   1 - function fmak2()
+              ( m_am2.prg    )   8 - function gmam2()
+
+nfbicm()        in mlibnf.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+
+nfbipi()        in mlibnf.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+
+nfcod()         in mlibnf.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+
+nfipi()         in mlibnf.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+
+nfvicm()        in mlibnf.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+
+nfvipi()        in mlibnf.prg
+
+  Called from ( m_am2.prg    )   1 - function gmam2()
+
+nivelar()       in m_ai1.prg
+
+  Called from ( m_ai1.prg    )   2 - function gmai1()
+                                 1 - function imai1()
+
+nnetstaid()     in mana5.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+
+nnetwhoami()    <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+nobreak()       <unresolved function>
+
+  Called from ( mane.prg     )   2 - function fmanual()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_al.prg     )   1 - function gmal()
+                                 1 - function m_al()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+noroeste()      in m_dq.prg
+
+  Called from ( m_dq.prg     )   1 - function m_dq1()
+
+notep()         in comp1.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+
+novoopa()       in mlib45.prg
+
+  Called from ( manb2.prg    )   5 - function pegcamini()
+              ( mlib09.prg   )   1 - function somaarq()
+              ( mlib43.prg   )   1 - function bxitem()
+              ( mlibarq.prg  )   1 - function checkarq()
+              ( m_a74.prg    )   2 - function ma6ger()
+              ( m_ake.prg    )   2 - function mak3arr()
+              ( m_al3.prg    )   4 - function m_al3()
+              ( m_am9.prg    )   1 - function mm09imp()
+                                 1 - function mm09vol()
+              ( m_ao0.prg    )   2 - function maodup()
+                                 2 - function osprg()
+              ( m_aop.prg    )   1 - function m_aop4grv()
+                                 1 - function m_aop5()
+              ( m_aw0.prg    )   1 - function maw601()
+                                 2 - function m_awret()
+              ( m_ayg.prg    )   1 - function may3avl()
+                                 1 - function m_ayg2()
+
+novoope()       in mlib45.prg
+
+  Called from ( m_ak.prg     )   2 - function fmak()
+              ( m_al2b.prg   )   2 - function maldep()
+              ( m_al2c.prg   )   2 - function m_al2()
+              ( m_am.prg     )   2 - function fmam()
+              ( m_aof.prg    )   6 - function maof03()
+              ( m_aop.prg    )   1 - function maop01()
+                                 1 - function op02ms06()
+              ( m_aoz.prg    )   1 - function maoz01()
+              ( m_cr.prg     )   1 - function atualiza()
+              ( m_du.prg     )   1 - function fmdrc()
+
+novoreg()       in mlib45.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( mlib13.prg   )   1 - function metint()
+              ( mlib27.prg   )   1 - function fpad()
+              ( mlib40.prg   )   1 - function fpax()
+              ( mlibarq.prg  )   1 - function checkarq()
+              ( m_a12.prg    )   1 - function fma12()
+              ( m_ad2.prg    )   1 - function fmad2()
+              ( m_ak.prg     )   1 - function fmak()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_ak2.prg    )   1 - function fmak2()
+              ( m_ak3.prg    )   1 - function mak3arr()
+              ( m_al.prg     )   4 - function fmal()
+              ( m_al5.prg    )   2 - function m_al5()
+              ( m_am.prg     )   1 - function fmam()
+              ( m_am2.prg    )   1 - function fmam2()
+              ( m_am9.prg    )   1 - function m9posrep()
+              ( m_an.prg     )   4 - function fman()
+              ( m_an3.prg    )   1 - function man301()
+              ( m_ao.prg     )   1 - function fmao()
+              ( m_ao2.prg    )   3 - function fmao2()
+              ( m_aof.prg    )   5 - function maof03()
+              ( m_aope.prg   )   1 - function maopr02()
+              ( m_aor.prg    )   1 - function maor01()
+              ( m_au0.prg    )   1 - function baixarem()
+              ( m_aw0.prg    )   3 - function maw403()
+                                 1 - function mawretqtd()
+                                 1 - function m_awx1()
+              ( m_aw2.prg    )   1 - function maw202()
+                                 1 - function maw2rep()
+              ( m_ay.prg     )   1 - function maypos()
+              ( m_cn2.prg    )   1 - function fmcn2()
+              ( m_co2.prg    )   1 - function fmco2()
+              ( m_cs.prg     )   1 - function grvmcs()
+              ( m_dc.prg     )   1 - function fmdc()
+              ( m_dk.prg     )   1 - function fecretbai()
+              ( m_drc.prg    )   1 - function fmdrc()
+
+numdac()        in m_ai1.prg
+
+  Called from ( m_ai1.prg    )   1 - function gmai1()
+
+numfil()        in mlib.prg
+
+  Called from ( m_dc.prg     )   1 - function fmdc()
+                                 1 - function mdck02()
+
+numind()        in mlib.prg
+
+  Called from ( manb2.prg    )   6 - function pegcamini()
+              ( mlib11.prg   )   2 - function metbro()
+              ( mlib14.prg   )   1 - function metnvi()
+              ( mlib15.prg   )   2 - function metpag()
+              ( mlib27.prg   )   1 - function padarr()
+                                 2 - function padrao()
+              ( mlib40.prg   )   2 - function padrax()
+              ( m_a12.prg    )   2 - function m_a12()
+              ( m_ad2.prg    )   2 - function m_ad2()
+              ( m_ak.prg     )   2 - function m_ak()
+              ( m_ak2.prg    )   2 - function m_ak2()
+              ( m_ak3.prg    )   1 - function mak3arr()
+              ( m_al.prg     )   2 - function m_al()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_am.prg     )   2 - function m_am()
+              ( m_am2.prg    )   2 - function m_am2()
+              ( m_an.prg     )   3 - function m_an()
+              ( m_ao.prg     )   2 - function m_ao()
+              ( m_ao2.prg    )   2 - function m_ao2()
+              ( m_bl1.prg    )   1 - function mayg02()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bn1.prg    )   1 - function mayg02()
+              ( m_bn2.prg    )   1 - function mayg02()
+              ( m_cb.prg     )   1 - function mcbk01()
+                                 1 - function mcbk02()
+              ( m_cn2.prg    )   1 - function mcn201()
+                                 2 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function fmdc()
+                                 1 - function mdck01()
+                                 2 - function m_dc()
+              ( m_dq.prg     )   1 - function mdpchavei()
+              ( m_drc.prg    )   2 - function m_drc()
+
+numred()        in m_ai1.prg
+
+  Called from ( m_ai1.prg    )   1 - function gmai1()
+
+obter()         in mlib.prg
+
+  Called from ( mana.prg     )   1 - function mailfix()
+              ( mana5.prg    )  13 - function main()
+              ( manb.prg     )   1 - function pegcamini()
+              ( manb2.prg    )   2 - function pegcamini()
+              ( mlib.prg     )   2 - function checkcc()
+              ( mlib10.prg   )   6 - function check5cep()
+              ( mlib12.prg   )   1 - function convtab()
+              ( mlib20.prg   )   1 - function endcid()
+              ( mlib33.prg   )   1 - function checkcipi()
+              ( mlib34.prg   )   6 - function checkcfo()
+              ( mlib36.prg   )   1 - function mdi()
+              ( mlibnf.prg   )  12 - function nfcod()
+              ( m_a12.prg    )   2 - function ma1202()
+              ( m_ag.prg     )   1 - function checkipva()
+              ( m_ak.prg     )   3 - function fmak()
+                                 1 - function makk01()
+                                 1 - function m_ak()
+              ( m_am.prg     )   3 - function fmam()
+                                 2 - function mamk01()
+                                 1 - function m_am()
+              ( m_am9.prg    )   1 - function m9posrep()
+                                 1 - function mm09des()
+                                 1 - function m_am9()
+              ( m_ao.prg     )   2 - function mao03x()
+                                 4 - function maxo01()
+                                 1 - function maxo02()
+              ( m_ao0.prg    )   1 - function osprg()
+              ( m_ao2.prg    )   1 - function gmao2()
+                                 1 - function mao203()
+                                 1 - function mo02k()
+              ( m_aope.prg   )   1 - function maopechk()
+              ( m_aox.prg    )   1 - function apgpr2()
+              ( m_ap.prg     )   1 - function eti02()
+                                 1 - function msi01()
+                                 1 - function msi02()
+              ( m_as3.prg    )   6 - function mas302()
+              ( m_au.prg     )   1 - function mas99()
+              ( m_aw.prg     )   1 - function maw03()
+              ( m_aw0.prg    )   1 - function maw402()
+                                 1 - function maw403()
+                                 1 - function maw7()
+                                 1 - function mawretqtd()
+                                 1 - function mw08chk()
+                                 1 - function mw08chk01()
+                                 1 - function m_aw4()
+              ( m_ax.prg     )  12 - function pegval()
+                                 4 - function pegvalb()
+              ( m_ay.prg     )   4 - function may01()
+              ( m_ay3.prg    )   1 - function may303()
+                                 1 - function may304()
+              ( m_dc.prg     )   2 - function fmdc()
+              ( m_dc3.prg    )   2 - function m_dc3()
+
+oconn:close()   <unresolved function>
+
+  Called from ( m_ci.prg     )   1 - function gravapostela()
+
+opcao()         <unresolved function>
+
+  Called from ( mana.prg     )   3 - function mailfix()
+              ( manb.prg     )   6 - function pegcamini()
+              ( manb2.prg    )   1 - function listar1()
+                                 2 - function pegcamini()
+              ( manc.prg     )   3 - function montotal()
+              ( mand.prg     )   3 - function montotal()
+              ( mlib44.prg   )   1 - function automenu()
+                                 7 - function menufec()
+              ( mmenu.prg    )   6 - function nfvicm()
+              ( m_bo.prg     )   3 - function mayg02()
+              ( m_cn3.prg    )  14 - function gmcn3()
+              ( m_dq.prg     )   5 - function mdpchavei()
+
+opsexmkpos()    in m_aop.prg
+
+  Called from ( m_aop.prg    )   1 - function opsexmk()
+
+orsdes:close()  <unresolved function>
+
+  Called from ( m_ci.prg     )   1 - function gravapostela()
+
+orsdes:fields() <unresolved function>
+
+  Called from ( m_ci.prg     )   1 - function gravapostela()
+
+orsdes:open()   <unresolved function>
+
+  Called from ( m_ci.prg     )   1 - function gravapostela()
+
+otb:addcolumn() <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+
+otb:down()      <unresolved function>
+
+  Called from ( mlib11.prg   )   2 - function metbro()
+
+otb:gobottom()  <unresolved function>
+
+  Called from ( mlib11.prg   )   2 - function metbro()
+
+otb:gotop()     <unresolved function>
+
+  Called from ( mlib11.prg   )   5 - function metbro()
+
+otb:left()      <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+
+otb:pagedown()  <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+
+otb:pageup()    <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+
+otb:refreshall( <unresolved function>
+
+  Called from ( mlib11.prg   )   6 - function metbro()
+
+otb:refreshcurr <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+
+otb:right()     <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+
+otb:stabilize() <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+
+otb:up()        <unresolved function>
+
+  Called from ( mlib11.prg   )   2 - function metbro()
+
+pad3mont()      in mlib27.prg
+
+  Called from ( mlib27.prg   )   2 - function fpad()
+                                 1 - function padarr()
+                                 1 - function padrao()
+
+pad3tot()       in mlib27.prg
+
+  Called from ( mlib27.prg   )   1 - function padrao()
+
+padarr()        in mlib27.prg
+
+  Called from ( m_a50.prg    )   1 - function ma5x02()
+                                 1 - function m_a54()
+              ( m_a6.prg     )   1 - function ma6rep()
+              ( m_ad5.prg    )   1 - function mad5rep()
+              ( m_ae0.prg    )   3 - function mae01()
+              ( m_ag.prg     )   2 - function magrep()
+              ( m_aoac.prg   )   1 - function maoacpos()
+              ( m_aof.prg    )   1 - function maof01()
+              ( m_aop.prg    )   1 - function maop01()
+              ( m_aope.prg   )   1 - function maoprep()
+              ( m_aosb.prg   )   1 - function mosbrep()
+              ( m_ap.prg     )   1 - function map01()
+                                 1 - function mpins()
+              ( m_as.prg     )   2 - function masposrep()
+              ( m_as3.prg    )   1 - function mascalinv()
+              ( m_au.prg     )   3 - function maukey()
+              ( m_au4.prg    )   1 - function m_au4()
+              ( m_aw0.prg    )   2 - function m_aw4()
+              ( m_aw2.prg    )   1 - function maw2rep()
+                                 1 - function mawmudfor()
+              ( m_ax.prg     )   1 - function max3rep()
+                                 1 - function max6rep()
+              ( m_ay3.prg    )   1 - function may3pos()
+              ( m_cb2.prg    )   1 - function mcbk02()
+              ( m_cn3.prg    )   1 - function mcn201()
+              ( m_cp.prg     )   1 - function gmco2()
+              ( m_cq.prg     )   1 - function gmco2()
+              ( m_dm.prg     )   1 - function mdkrep()
+
+padcgc()        in mlib27.prg
+
+  Called from ( mana.prg     )   1 - function macr()
+                                 1 - function mailfix()
+              ( m_aa.prg     )   1 - function ma6ger()
+
+paddel()        in mlib43.prg
+
+  Called from ( m_a1.prg     )   1 - function m_a70()
+              ( m_a6.prg     )   1 - function ma6jur()
+              ( m_ad.prg     )   1 - function m_ad()
+              ( m_ae0.prg    )   1 - function m_ae()
+              ( m_ag.prg     )   1 - function mae01()
+              ( m_am.prg     )   1 - function fmam()
+              ( m_ao.prg     )   1 - function fmao()
+              ( m_aop.prg    )   1 - function maop01()
+                                 1 - function m_aop()
+              ( m_aope.prg   )   1 - function maop2cal()
+              ( m_aosb.prg   )   1 - function m_aosb()
+              ( m_ap.prg     )   1 - function eti()
+                                 1 - function m_ap()
+              ( m_as.prg     )   2 - function masdel()
+              ( m_au.prg     )   3 - function maudel()
+              ( m_aw.prg     )   3 - function mw08del()
+              ( m_ax.prg     )   1 - function m_ax3()
+                                 1 - function m_ax6()
+              ( m_cb.prg     )   1 - function mca01()
+              ( m_cn2.prg    )   1 - function fmcn2()
+              ( m_dm.prg     )   1 - function fecretbai()
+
+padrao()        in mlib27.prg
+
+  Called from ( cnab400r.prg )   1 - 
+              ( comp1.prg    )   1 - function agen()
+                                 1 - function notep()
+                                 1 - function tele()
+              ( mana.prg     )   1 - function macr()
+                                 2 - function mailfix()
+              ( manc.prg     )   7 - function montotal()
+              ( mand.prg     )   5 - function montotal()
+              ( manemp.prg   )   1 - function manualt()
+              ( m_a50.prg    )   1 - function ma5x01()
+                                 1 - function ma5x02()
+                                 1 - function m_a51()
+                                 1 - function m_a54()
+                                 1 - function m_a5j()
+              ( m_a51.prg    )   1 - function m_a5j()
+              ( m_a6.prg     )   1 - function ma6fis()
+                                 1 - function ma6rep()
+              ( m_aa.prg     )   1 - function ma6ger()
+              ( m_ad.prg     )  10 - function madpos()
+              ( m_ad5.prg    )   1 - function mad5rep()
+              ( m_ae0.prg    )   3 - function mae01()
+              ( m_ag.prg     )   2 - function magrep()
+              ( m_ai1.prg    )   1 - function checkipva()
+              ( m_ak0.prg    )   1 - function mak3()
+                                 1 - function m_ak5b()
+              ( m_ak3.prg    )   1 - function mak299()
+              ( m_ak4.prg    )   1 - function mak3arr()
+              ( m_al2b.prg   )   1 - function m_al2()
+              ( m_am4.prg    )   1 - function m_am4()
+              ( m_am7.prg    )   1 - function m_am7()
+              ( m_am9.prg    )   1 - function m_am9()
+              ( m_ao0.prg    )   1 - function maofo3()
+                                 1 - function maofp()
+              ( m_aoac.prg   )   1 - function maoacpos()
+              ( m_aof.prg    )   1 - function maof01()
+              ( m_aop.prg    )   1 - function maop01()
+                                 1 - function opsexmk()
+              ( m_aope.prg   )   1 - function maope01()
+                                 1 - function maoprep()
+              ( m_aosb.prg   )   1 - function mosbrep()
+              ( m_ap.prg     )   1 - function map01()
+                                 1 - function mpins()
+              ( m_as.prg     )   2 - function masposrep()
+              ( m_as3.prg    )   1 - function mascalinv()
+              ( m_as5.prg    )   1 - function mas302()
+              ( m_au.prg     )   1 - function mas99()
+                                 3 - function maukey()
+              ( m_au0.prg    )   2 - function maubx()
+              ( m_au4.prg    )   1 - function m_au4()
+              ( m_aw0.prg    )   1 - function m_aw3()
+                                 3 - function m_aw4()
+              ( m_aw2.prg    )   1 - function maw2rep()
+                                 1 - function mawmudfor()
+              ( m_ax.prg     )   1 - function max3rep()
+                                 1 - function max6rep()
+                                 2 - function padult()
+              ( m_ay.prg     )   2 - function may99()
+              ( m_ay3.prg    )   1 - function may3pos()
+              ( m_ca.prg     )   1 - function fluxo()
+              ( m_cb2.prg    )   1 - function mcbk02()
+              ( m_ce.prg     )   1 - function mcd01()
+              ( m_ch.prg     )   1 - function gmcf()
+              ( m_cm.prg     )   1 - function gravapostela()
+              ( m_cn3.prg    )   1 - function mcn201()
+              ( m_cp.prg     )   1 - function gmco2()
+              ( m_cq.prg     )   1 - function gmco2()
+              ( m_cr.prg     )   1 - function gmco2()
+              ( m_cs.prg     )   9 - function atualiza()
+              ( m_dd.prg     )   1 - function mdc3a()
+              ( m_dm.prg     )   1 - function mdkrep()
+              ( m_dr.prg     )   1 - function itau()
+
+padraolib()     in mlib27.prg
+
+  Called from ( mlib27.prg   )   2 - function fpad()
+              ( mlib40.prg   )   2 - function fpax()
+
+padrax()        in mlib40.prg
+
+  Called from ( m_a1.prg     )   1 - function m_a70()
+              ( m_a6.prg     )   1 - function ma6jur()
+              ( m_ad.prg     )   1 - function m_ad()
+              ( m_ad5.prg    )   1 - function m_ad5()
+              ( m_ae0.prg    )   1 - function m_ae()
+              ( m_ag.prg     )   1 - function mae01()
+              ( m_an3.prg    )   1 - function m_an3()
+              ( m_aoac.prg   )   1 - function mao204()
+              ( m_aof.prg    )   1 - function moaciins()
+              ( m_aop.prg    )   1 - function m_aop()
+              ( m_aope.prg   )   1 - function maop2cal()
+              ( m_aor.prg    )   1 - function m_aor()
+              ( m_aosb.prg   )   1 - function m_aosb()
+              ( m_ap.prg     )   1 - function eti()
+                                 1 - function m_ap()
+              ( m_as.prg     )   1 - function mapclass01()
+              ( m_aw.prg     )   1 - function m_aw()
+              ( m_ax.prg     )   1 - function m_ax3()
+                                 1 - function m_ax6()
+              ( m_ay.prg     )   1 - function m_ay()
+              ( m_ay3.prg    )   1 - function m_ay3()
+              ( m_cb.prg     )   1 - function mca01()
+              ( m_cf.prg     )   1 - function gmce()
+              ( m_ci.prg     )   1 - function m_ci()
+              ( m_cn.prg     )   1 - function gmcm()
+              ( m_dm.prg     )   1 - function fecretbai()
+
+padult()        in m_ax.prg
+
+  Called from ( m_ap.prg     )   1 - function map8()
+              ( m_ax.prg     )   1 - function max03()
+                                 1 - function max04()
+                                 1 - function m_ax5()
+
+pdipi()         in mlib33.prg
+
+  Called from ( m_ak2.prg    )   1 - function fmak2()
+              ( m_am2.prg    )   1 - function fmam2()
+
+pe01inc()       in m_aope.prg
+
+  Called from ( m_aope.prg   )   1 - function maoprep()
+
+pedper()        in mlib09.prg
+
+  Called from ( mlib09.prg   )   1 - function perfec()
+                                 2 - function somaano()
+              ( m_aw0.prg    )   1 - function maw6a()
+
+pegacampo()     in mlib23.prg
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( mlib02.prg   )   3 - function teclaf11()
+              ( mlib27.prg   )   1 - function padcgc()
+              ( mlib44.prg   )   1 - function menufec()
+              ( mlibnf.prg   )   7 - function nfcod()
+              ( m_ak.prg     )   1 - function makk01()
+              ( m_ak2.prg    )   4 - function fmak2()
+              ( m_ak2a.prg   )   1 - function mak299()
+              ( m_al.prg     )   2 - function maldep()
+              ( m_am.prg     )   2 - function fmam()
+                                 2 - function mamk01()
+              ( m_am2.prg    )   1 - function mam202()
+              ( m_ao.prg     )   2 - function maxo01()
+              ( m_ao2.prg    )   2 - function fmao2()
+                                 2 - function listap()
+                                 1 - function mao204()
+                                 2 - function mo02k()
+              ( m_aof.prg    )   3 - function maof03()
+                                 1 - function maof03a()
+              ( m_au.prg     )   1 - function gmau()
+                                 2 - function maukey()
+              ( m_au0.prg    )   1 - function imau3()
+              ( m_aw.prg     )   1 - function maw02()
+                                 1 - function maw02b()
+              ( m_aw0.prg    )   7 - function maw401()
+              ( m_aw2.prg    )   6 - function maw201()
+                                 3 - function maw202()
+              ( m_ay.prg     )   1 - function may03()
+              ( m_ay3.prg    )   1 - function may305()
+                                 1 - function may306()
+
+pegacs()        in m_cs.prg
+
+  Called from ( manb2.prg    )   2 - function pegcamini()
+              ( mlib27.prg   )   1 - function padraolib()
+              ( mlib44.prg   )   1 - function automenu()
+                                 1 - function menufec()
+              ( m_ch.prg     )   1 - function senhax()
+              ( m_cn2.prg    )   2 - function fmcn2()
+
+pegaget()       in mlib25.prg
+
+  Called from ( mlib26.prg   )   1 - function confarq()
+
+pegapass()      <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( m_ci.prg     )   2 - function m_ci()
+
+pegbus()        in mlib17.prg
+
+  Called from ( mlib11.prg   )   2 - function metbro()
+              ( mlib13.prg   )   1 - function metint()
+              ( mlib14.prg   )   1 - function metnvi()
+              ( mlib15.prg   )   1 - function metpag()
+              ( mlib27.prg   )   2 - function fpad()
+                                 1 - function padrao()
+              ( mlib40.prg   )   2 - function fpax()
+                                 1 - function padrax()
+              ( m_a12.prg    )   2 - function fma12()
+                                 1 - function m_a12()
+              ( m_ad2.prg    )   2 - function fmad2()
+                                 1 - function m_ad2()
+              ( m_ak.prg     )   2 - function fmak()
+                                 1 - function m_ak()
+              ( m_ak2.prg    )   2 - function fmak2()
+                                 2 - function m_ak2()
+              ( m_al.prg     )   2 - function fmal()
+                                 1 - function m_al()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_am.prg     )   2 - function fmam()
+                                 1 - function m_am()
+              ( m_am2.prg    )   1 - function fmam2()
+                                 1 - function m_am2()
+              ( m_an.prg     )   2 - function fman()
+                                 1 - function m_an()
+              ( m_ao.prg     )   2 - function fmao()
+                                 1 - function m_ao()
+              ( m_ao2.prg    )   1 - function fmao2()
+                                 2 - function m_ao2()
+              ( m_cn2.prg    )   2 - function fmcn2()
+                                 1 - function m_cn2()
+              ( m_co2.prg    )   2 - function fmco2()
+                                 1 - function m_co2()
+              ( m_dc.prg     )   4 - function fmdc()
+                                 1 - function m_dc()
+              ( m_dk.prg     )   1 - function fecretbai()
+              ( m_drc.prg    )   2 - function fmdrc()
+                                 1 - function m_drc()
+
+peglay()        in mlib24.prg
+
+  Called from ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_aw0.prg    )   2 - function maw403()
+              ( m_bz.prg     )   2 - function fluxo()
+
+peglote()       in mlibnf.prg
+
+  Called from ( m_am9.prg    )   1 - function mm09imp()
+                                 1 - function mm09vol()
+
+pegmcs()        in m_cs.prg
+
+  Called from ( m_cs.prg     )   1 - function msc101()
+                                 1 - function msc102()
+                                 1 - function msc201()
+                                 1 - function msc203()
+                                 7 - function msc204()
+                                 1 - function msc205()
+                                 2 - function msc206()
+
+pegmes()        in mlib09.prg
+
+  Called from ( mlib09.prg   )   1 - function mesano()
+                                 1 - function perfec()
+              ( m_ae3.prg    )   1 - function mae01()
+              ( m_ai4.prg    )   3 - function m_ai4()
+              ( m_ak2a.prg   )   2 - function mak299()
+              ( m_ak4.prg    )   1 - function mak3arr()
+              ( m_al3.prg    )   1 - function m_al3()
+              ( m_au4.prg    )   1 - function m_au4()
+              ( m_aw0.prg    )   1 - function maw6()
+              ( m_ayg.prg    )   1 - function may3avl()
+
+pegoldqtd()     in mlibest.prg
+
+  Called from ( mlibest.prg  )   1 - function mak2k06()
+                                 1 - function mam2k06()
+
+per2()          in mlibc.prg
+
+  Called from ( m_ao2.prg    )   6 - function listap()
+                                 3 - function mo02k()
+
+perfec()        in mlib09.prg
+
+  Called from ( m_am9.prg    )   2 - function mm09des()
+                                 2 - function mm09imp()
+                                 2 - function mm09lote()
+                                 1 - function mm09vol()
+              ( m_aop.prg    )   1 - function m_aop5()
+              ( m_aw0.prg    )   1 - function maw8()
+
+pesob()         in m_am.prg
+
+  Called from ( m_am.prg     )   1 - function fmam()
+
+pict()          <unresolved function>
+
+  Called from ( mlib27.prg   )   1 - function padcgc()
+              ( mlib42.prg   )   1 - function editsay()
+
+preind()        in comp2.prg
+
+  Called from ( m_ao2.prg    )   1 - function gmao2()
+              ( m_bo1.prg    )   1 - function mayg02()
+
+profilestring() <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function pegcamini()
+              ( mlib38.prg   )   3 - function gravalog()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ci.prg     )   4 - function gerapostela()
+              ( m_dc3.prg    )   2 - function m_dc3()
+
+rangerepl()     in hbct.lib
+
+  Called from ( mlib.prg     )   1 - function imp()
+
+rcampo()        in mlib.prg
+
+  Called from ( mlib.prg     )   1 - function rfilord()
+                                 1 - function rfiltro()
+              ( m_cn2.prg    )   1 - function gmcn2()
+
+readcur()       <unresolved function>
+
+  Called from ( cnab400r.prg )   1 - 
+              ( mail.prg     )   1 - function maildelcod()
+                                 1 - function maildeldata()
+                                 1 - function maildelusr()
+              ( mana5.prg    )   2 - function main()
+              ( manb2.prg    )   1 - function listar1()
+                                 2 - function pegcamini()
+              ( mlib.prg     )   1 - function mudadata()
+                                 2 - function rfiltro()
+              ( mlib09.prg   )   1 - function pedper()
+                                 1 - function pegmes()
+              ( mlib17.prg   )   1 - function pegbus()
+              ( mlib22.prg   )   1 - function editget()
+              ( mlib27.prg   )   1 - function padcgc()
+              ( mlib32.prg   )   2 - function checkpar()
+              ( mlib42.prg   )   2 - function editsay()
+              ( mlibnf.prg   )   2 - function nfcod()
+              ( m_a50.prg    )   1 - function m_a54()
+              ( m_a51.prg    )   1 - function gma51()
+              ( m_a74.prg    )   1 - function ma6ger()
+              ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_ad2.prg    )   1 - function gmad2()
+              ( m_ae3.prg    )   1 - function mae01()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ai1.prg    )   2 - function gmai1()
+              ( m_ak.prg     )   1 - function gmak()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_ak2.prg    )   1 - function mak2a()
+              ( m_ak3.prg    )   1 - function mak3arr()
+              ( m_al.prg     )   1 - function fmal()
+                                 1 - function gmal()
+                                 1 - function m_al()
+              ( m_al2b.prg   )   2 - function maldep()
+              ( m_al2c.prg   )   1 - function m_al2()
+              ( m_am.prg     )   3 - function fmam()
+              ( m_am2.prg    )   1 - function gmam2()
+              ( m_am9.prg    )   1 - function m9posrep()
+                                 1 - function mm09des()
+                                 1 - function mm09vol()
+              ( m_an.prg     )   1 - function fman()
+                                 1 - function m_an()
+              ( m_ao0.prg    )   1 - function maocda()
+                                 3 - function maocdagrv()
+                                 1 - function maodup()
+                                 1 - function maorecli()
+                                 1 - function maorenum()
+                                 1 - function maozercli()
+                                 2 - function osprg()
+                                 1 - function prgtrcplt()
+              ( m_ao2.prg    )   4 - function gmao2()
+              ( m_aop.prg    )   1 - function maopcalset()
+                                 1 - function maopzervol()
+                                 1 - function opsexmkpos()
+              ( m_aop2.prg   )   1 - function op02ms06()
+              ( m_aop3.prg   )   1 - function maop2cal()
+              ( m_aope.prg   )   1 - function pe01inc()
+              ( m_aos.prg    )   1 - function tiporr()
+              ( m_aox.prg    )   1 - function mosbinc02()
+              ( m_ap.prg     )   1 - function m_ap5()
+                                 1 - function m_ap6()
+              ( m_as.prg     )   1 - function mascalinv()
+              ( m_as5.prg    )   1 - function gmas5()
+              ( m_au.prg     )   1 - function calcinv()
+                                 3 - function gmau()
+              ( m_au0.prg    )   1 - function imau3()
+              ( m_au4.prg    )   2 - function gmau4()
+              ( m_aw.prg     )   1 - function mw08del()
+              ( m_aw0.prg    )   1 - function maw403()
+                                 2 - function maw7()
+                                 1 - function mawmudfor()
+                                 2 - function mawretqtd()
+                                 1 - function m_awrea()
+                                 1 - function m_awret()
+                                 1 - function m_awx()
+              ( m_aw2.prg    )   1 - function maw2inc()
+              ( m_ayg.prg    )   1 - function may3avl()
+                                 2 - function m_ayg2()
+              ( m_bl1.prg    )   1 - function mayg02()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bn1.prg    )   1 - function mayg02()
+              ( m_bn2.prg    )   1 - function mayg02()
+              ( m_ca.prg     )   1 - function gmca()
+              ( m_cd.prg     )   1 - function mcb2ins()
+              ( m_ce.prg     )   1 - function gmce()
+              ( m_cf.prg     )   1 - function gmcf()
+              ( m_cm.prg     )   1 - function gmcm()
+              ( m_cn2.prg    )   9 - function gmcn2()
+              ( m_cn3.prg    )   2 - function gmcn3()
+              ( m_co2.prg    )   1 - function gmco2()
+              ( m_cp.prg     )   1 - function gmco2()
+              ( m_cq.prg     )   1 - function gmco2()
+              ( m_cs.prg     )   1 - function atualiza()
+                                 1 - function msc101()
+                                 1 - function msc102()
+                                 1 - function msc201()
+                                 1 - function msc203()
+                                 1 - function msc204()
+                                 1 - function msc205()
+                                 1 - function msc206()
+              ( m_dc.prg     )   1 - function fmdc()
+                                 1 - function gmdc()
+              ( m_dc3.prg    )   2 - function m_dc3()
+              ( m_dd.prg     )   1 - function gmdd()
+              ( m_dp.prg     )   1 - function mdkrep()
+              ( m_dq.prg     )   1 - function mdpchavei()
+                                 3 - function m_dq1()
+              ( m_dr.prg     )   1 - function gmdr()
+              ( m_du.prg     )   1 - function fmdrc()
+
+recalc()        in m_ad2.prg
+
+  Called from ( m_ad2.prg    )   2 - function m_ad2()
+
+regbus()        in mlib18.prg
+
+  Called from ( mlib14.prg   )   1 - function metnvi()
+              ( mlib15.prg   )   1 - function metpag()
+              ( mlib27.prg   )   2 - function padrao()
+              ( mlib40.prg   )   2 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+regmov()        in mlib15.prg
+
+  Called from ( mlib15.prg   )   7 - function metpag()
+
+repl()          <unresolved function>
+
+  Called from ( mana5.prg    )   3 - function main()
+              ( manemp.prg   )   1 - function gmaz()
+              ( mlib.prg     )   3 - function rfiltro()
+              ( mlib10.prg   )   1 - function vercep()
+              ( mlib30.prg   )   2 - function achmou()
+              ( mlib37.prg   )   1 - function marcar()
+                                 1 - function marcar1()
+              ( m_ai1.prg    )   1 - function numdac()
+              ( m_ak.prg     )   7 - function tmak()
+              ( m_al.prg     )   1 - function gmal()
+                                 1 - function m_al()
+              ( m_al4.prg    )   5 - function m_al3()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao0.prg    )   1 - function maocda()
+                                 1 - function osprg()
+              ( m_b6.prg     )  35 - function mayg02()
+              ( m_bl1.prg    )   3 - function mayg02()
+              ( m_bl2.prg    )   3 - function mayg02()
+              ( m_bn2.prg    )   3 - function mayg02()
+              ( m_bo1.prg    )   5 - function mayg02()
+
+replvars()      <unresolved function>
+
+  Called from ( cnab400r.prg )   1 - 
+              ( mail.prg     )   1 - function mail()
+                                 1 - function maildelete()
+              ( mlib.prg     )   1 - function reporvars()
+              ( mlib11.prg   )   3 - function metbro()
+              ( mlib45.prg   )   1 - function novoopa()
+                                 1 - function novoope()
+                                 1 - function novoreg()
+              ( m_ak.prg     )   1 - function fmak()
+              ( m_am.prg     )   1 - function fmam()
+              ( m_aop.prg    )   1 - function maop01()
+                                 3 - function maop03()
+                                 2 - function maopcalset()
+                                 1 - function op02ms06()
+              ( m_aos.prg    )   1 - function tiporr()
+              ( m_aoy.prg    )   1 - function apgpro()
+              ( m_aw0.prg    )   1 - function mw08chk01()
+              ( m_ay3.prg    )   1 - function may3avl()
+              ( m_cr.prg     )   1 - function atualiza()
+
+reporvars()     in mlib.prg
+
+  Called from ( mlib27.prg   )   1 - function fpad()
+              ( mlib40.prg   )   1 - function fpax()
+              ( m_a12.prg    )   1 - function fma12()
+              ( m_ad2.prg    )   1 - function fmad2()
+              ( m_ak.prg     )   1 - function fmak()
+              ( m_ak2.prg    )   1 - function fmak2()
+              ( m_al.prg     )   1 - function fmal()
+              ( m_am.prg     )   1 - function fmam()
+              ( m_am2.prg    )   1 - function fmam2()
+              ( m_an.prg     )   1 - function fman()
+              ( m_ao.prg     )   1 - function fmao()
+              ( m_ao2.prg    )   1 - function fmao2()
+              ( m_aope.prg   )   1 - function maopr02()
+              ( m_aor.prg    )   1 - function maor01()
+              ( m_au0.prg    )   1 - function baixarem()
+              ( m_cn2.prg    )   1 - function fmcn2()
+              ( m_co2.prg    )   1 - function fmco2()
+              ( m_dc.prg     )   1 - function fmdc()
+              ( m_drc.prg    )   1 - function fmdrc()
+
+restaa()        <unresolved function>
+
+  Called from ( comp1.prg    )   1 - function agen()
+                                 1 - function notep()
+                                 1 - function tele()
+
+rfilord()       in mlib.prg
+
+  Called from ( manb2.prg    )   5 - function pegcamini()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( mlibest.prg  )   1 - function zeraest()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_an.prg     )   2 - function m_an()
+              ( m_aop.prg    )   1 - function maopcalset()
+              ( m_aop2.prg   )   1 - function maop2cal()
+              ( m_aop3.prg   )   1 - function maop2cal()
+              ( m_b6.prg     )   1 - function mayg02()
+              ( m_bl1.prg    )   1 - function mayg02()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bn1.prg    )   1 - function mayg02()
+              ( m_bn2.prg    )   1 - function mayg02()
+              ( m_bo1.prg    )   1 - function mayg02()
+              ( m_cv.prg     )   1 - function usermdec()
+              ( m_db.prg     )   1 - function m_db()
+              ( m_dc.prg     )   2 - function fmdc()
+              ( m_dp.prg     )   1 - function mdkrep()
+              ( m_dq.prg     )   1 - function m_dq1()
+              ( m_du.prg     )   1 - function fmdrc()
+
+rfiltro()       in mlib.prg
+
+  Called from ( mlib.prg     )   1 - function rfilord()
+
+salvaa()        <unresolved function>
+
+  Called from ( comp1.prg    )   1 - function agen()
+                                 1 - function notep()
+                                 1 - function tele()
+
+scrollbardispla <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib30.prg   )   1 - function cabvid()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   2 - function m_a12()
+              ( m_ad2.prg    )   2 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   2 - function m_ak2()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   2 - function m_am()
+              ( m_am2.prg    )   2 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   2 - function m_ao()
+              ( m_ao2.prg    )   2 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   2 - function m_co2()
+              ( m_dc.prg     )   2 - function m_dc()
+              ( m_drc.prg    )   2 - function m_drc()
+
+scrollbarnew()  <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_ad2.prg    )   1 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao2.prg    )   1 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+scrollbarupdate <unresolved function>
+
+  Called from ( mlib11.prg   )   1 - function metbro()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib30.prg   )   1 - function achmou()
+                                 1 - function cabvid()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   2 - function m_a12()
+              ( m_ad2.prg    )   2 - function m_ad2()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak2.prg    )   2 - function m_ak2()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_am.prg     )   2 - function m_am()
+              ( m_am2.prg    )   2 - function m_am2()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   2 - function m_ao()
+              ( m_ao2.prg    )   2 - function m_ao2()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   2 - function m_co2()
+              ( m_dc.prg     )   2 - function m_dc()
+              ( m_drc.prg    )   2 - function m_drc()
+
+senhax()        in m_ch.prg
+
+  Called from ( m_aa.prg     )   1 - function ma6ger()
+              ( m_as.prg     )   2 - function mapclass01()
+              ( m_au.prg     )   5 - function mas99()
+              ( m_ay3.prg    )   1 - function may3avl()
+                                 1 - function m_ay3()
+              ( m_dc3.prg    )   1 - function m_dc3()
+
+setdate()       in hbct.lib
+                or hbnf.lib
+
+  Called from ( m_cg.prg     )   1 - function gmcf()
+
+settime()       in hbct.lib
+                or hbnf.lib
+
+  Called from ( m_cg.prg     )   1 - function gmcf()
+
+showadoerror()  <unresolved function>
+
+  Called from ( m_ci.prg     )   2 - function gravapostela()
+
+somaano()       in mlib09.prg
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( mlib09.prg   )   2 - function perfec()
+              ( m_dk.prg     )   1 - function m_dk()
+
+somaarq()       in mlib09.prg
+
+  Called from ( mlib09.prg   )   8 - function somaano()
+
+sonumerox()     <unresolved function>
+
+  Called from ( comp1.prg    )   1 - function sonumero()
+
+sqlite3_errcode in hbsqlit3.lib
+
+  Called from ( mlib38.prg   )   1 - function gravalog()
+
+sqlite3_errmsg( in hbsqlit3.lib
+
+  Called from ( mlib38.prg   )   1 - function gravalog()
+
+sqlite3_exec()  in hbsqlit3.lib
+
+  Called from ( mlib38.prg   )   1 - function gravalog()
+
+sqlite3_open()  in hbsqlit3.lib
+
+  Called from ( mlib38.prg   )   1 - function gravalog()
+
+stod()          in harbour.lib
+                or hbnf.lib
+
+  Called from ( m_ao0.prg    )   2 - function maocda()
+
+strtohex()      in xhb.lib
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( m_ci.prg     )   1 - function gerapostela()
+                                 1 - function m_ci()
+
+strval()        <unresolved function>
+
+  Called from ( mana.prg     )   3 - function mabget()
+              ( mlib02.prg   )   2 - function teclaf11()
+              ( mlib24.prg   )   1 - function gravamvar()
+              ( mlib27.prg   )   2 - function padcgc()
+              ( mlib38.prg   )   1 - function gravalog()
+              ( mlib45.prg   )   2 - function novoope()
+              ( mlib48.prg   )   1 - function checkexi()
+              ( m_ag.prg     )   1 - function mae01()
+                                 2 - function magrep()
+
+teclas()        <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+
+telapeg()       in mlib39.prg
+
+  Called from ( mlib27.prg   )   1 - function padrao()
+              ( mlib39.prg   )   1 - function telasay()
+              ( mlib40.prg   )   1 - function padrax()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_aa.prg     )   2 - function ma6ger()
+              ( m_ak.prg     )   1 - function m_ak()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_al5.prg    )   2 - function m_al5()
+              ( m_am.prg     )   1 - function m_am()
+              ( m_an.prg     )   1 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_au.prg     )   1 - function mas99()
+              ( m_ay3.prg    )   1 - function may3avl()
+              ( m_cn2.prg    )   1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_dc.prg     )   1 - function m_dc()
+              ( m_drc.prg    )   1 - function m_drc()
+
+telasay()       in mlib39.prg
+
+  Called from ( mail.prg     )   1 - function mail()
+              ( manemp.prg   )   2 - function gmaz()
+              ( mlib27.prg   )   1 - function padrao()
+              ( mlib40.prg   )   1 - function padrax()
+              ( mlib42.prg   )   1 - function editsay()
+              ( m_a12.prg    )   1 - function fma12()
+              ( m_a7a.prg    )   2 - function ma6ger()
+              ( m_aa.prg     )   2 - function gmaa()
+                                 1 - function maatela1()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_ak2.prg    )   1 - function fmak2()
+              ( m_al.prg     )   1 - function fmal()
+                                 1 - function m_al()
+              ( m_al2c.prg   )   1 - function m_al2()
+              ( m_am.prg     )   1 - function fmam()
+                                 1 - function m_am()
+              ( m_am2.prg    )   1 - function mmdev()
+              ( m_an.prg     )   1 - function fman()
+                                 1 - function m_an()
+              ( m_ao.prg     )   1 - function fmao()
+                                 1 - function m_ao()
+              ( m_ao0.prg    )   1 - function maocda()
+              ( m_aox.prg    )   1 - function mosbinc02()
+              ( m_au.prg     )   1 - function mas99()
+              ( m_ay3.prg    )   1 - function may303()
+                                 1 - function may3avl()
+              ( m_bz.prg     )   1 - function fluxo()
+              ( m_cg.prg     )   1 - function gmcf()
+              ( m_cn2.prg    )   1 - function fmcn2()
+              ( m_co2.prg    )   1 - function fmco2()
+                                 1 - function m_co2()
+              ( m_dc.prg     )   1 - function fmdc()
+                                 1 - function m_dc()
+              ( m_dc3.prg    )   1 - function m_dc3()
+              ( m_dn.prg     )   1 - function mdkrep()
+              ( m_drc.prg    )   1 - function fmdrc()
+                                 1 - function m_drc()
+
+tele()          in comp1.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+
+timevalid()     in hbct.lib
+
+  Called from ( comp1.prg    )   1 - function tempor()
+
+tipcad()        in mlib21.prg
+
+  Called from ( m_ak.prg     )   1 - function fmak()
+                                 2 - function gmak()
+                                 1 - function tmak()
+              ( m_al.prg     )   1 - function fmal()
+                                 2 - function gmal()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_am.prg     )   1 - function fmam()
+                                 1 - function mamk01()
+
+tipocampo()     in m_dp.prg
+
+  Called from ( m_dp.prg     )   1 - function mdkrep()
+
+tiporr()        in m_aor.prg
+
+  Called from ( m_aof.prg    )   2 - function maof03()
+                                 4 - function maofdel()
+              ( m_aox.prg    )   5 - function mosbinc02()
+              ( m_aoz.prg    )   1 - function maoz01()
+              ( m_ay.prg     )   1 - function maypos()
+              ( m_ay3.prg    )   6 - function may304()
+
+tirace()        <unresolved function>
+
+  Called from ( mlib04.prg   )   2 - function checkcid()
+              ( mlib20.prg   )   1 - function endcid()
+              ( m_am9.prg    )   5 - function mm09des()
+              ( m_aop.prg    )   1 - function maopcalset()
+              ( m_d1.prg     )   1 - function md1faz()
+
+tiraout()       <unresolved function>
+
+  Called from ( mlib10.prg   )   1 - function check5cep()
+              ( m_am9.prg    )   6 - function mm09des()
+              ( m_ao0.prg    )   1 - function maocdagrv()
+
+tmak()          in m_ak.prg
+
+  Called from ( m_ak.prg     )   1 - function fmak()
+                                 1 - function m_ak()
+
+tmam2()         in m_am2.prg
+
+  Called from ( m_am2.prg    )   1 - function fmam2()
+
+tmao2()         in m_ao2.prg
+
+  Called from ( m_ao2.prg    )   1 - function fmao2()
+
+tmas5()         in m_as5.prg
+
+  Called from ( m_as5.prg    )   1 - function mas302()
+
+tmpfile()       <unresolved function>
+
+  Called from ( manb2.prg    )   1 - function pegcamini()
+              ( m_aox.prg    )   1 - function mosbinc02()
+
+ultimoitem()    in mlib28.prg
+
+  Called from ( m_aoac.prg   )   1 - function moaciins()
+              ( m_aope.prg   )   2 - function pe01inc()
+              ( m_aosb.prg   )   1 - function mosbinc02()
+              ( m_aw2.prg    )   1 - function maw2inc()
+              ( m_ax.prg     )   1 - function max3inc()
+                                 1 - function max6inc()
+              ( m_ay3.prg    )   1 - function may3iinc()
+
+ultimoreg()     in mlib28.prg
+
+  Called from ( mlib27.prg   )   1 - function padcgc()
+              ( m_a1.prg     )   1 - function m_a70()
+              ( m_a50.prg    )   1 - function ma5x01()
+                                 1 - function m_a5j()
+              ( m_a6.prg     )   1 - function ma6jur()
+              ( m_a74.prg    )   1 - function ma6ger()
+              ( m_ak0.prg    )   1 - function m_ak5a()
+              ( m_ak4.prg    )   1 - function mak3arr()
+              ( m_am.prg     )   1 - function fmam()
+              ( m_am4.prg    )   1 - function m_am4()
+              ( m_am7.prg    )   1 - function m_am7()
+              ( m_am9.prg    )   1 - function m_am9()
+              ( m_ao.prg     )   1 - function fmao()
+              ( m_ao0.prg    )   1 - function maofp()
+              ( m_aoac.prg   )   1 - function mao204()
+              ( m_aop.prg    )   1 - function m_aop()
+              ( m_aope.prg   )   1 - function maop2cal()
+              ( m_aosb.prg   )   1 - function m_aosb()
+              ( m_aw0.prg    )   1 - function maw403()
+                                 1 - function mawretqtd()
+              ( m_ax.prg     )   1 - function padult()
+              ( m_ay.prg     )   1 - function m_ay()
+              ( m_ay3.prg    )   1 - function m_ay3()
+              ( m_dr.prg     )   1 - function mdrins()
+              ( m_drc.prg    )   1 - function fmdrc()
+
+usechk()        in mlib29.prg
+
+  Called from ( mana5.prg    )   1 - function arqent()
+              ( manb2.prg    )   1 - function pegcamini()
+              ( mlib26.prg   )   1 - function confarq()
+              ( mlib29.prg   )   3 - function userede()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ake.prg    )   2 - function mak3arr()
+              ( m_aox.prg    )   3 - function mosbinc02()
+              ( m_cd.prg     )   1 - function mcb2ins()
+                                 1 - function mcd01()
+              ( m_ci.prg     )   1 - function gerapostela()
+              ( m_cr.prg     )   1 - function atualiza()
+              ( m_cv.prg     )   5 - function usermdec()
+              ( m_db.prg     )   4 - function m_db()
+              ( m_dw.prg     )   2 - function fmdrc()
+
+usemult()       in mlib45.prg
+
+  Called from ( mail.prg     )   1 - function maildelete()
+              ( mlibmail.prg )   1 - function emailint()
+              ( m_a74.prg    )   2 - function ma6ger()
+              ( m_ae3.prg    )   2 - function mae01()
+              ( m_ai4.prg    )   1 - function m_ai4()
+              ( m_ak2a.prg   )   1 - function mak299()
+              ( m_al2b.prg   )   1 - function maldep()
+              ( m_am2.prg    )   1 - function mmtra()
+              ( m_am9.prg    )   1 - function mm09des()
+                                 1 - function mm09imp()
+                                 1 - function mm09vol()
+              ( m_ao0.prg    )   1 - function maodup()
+                                 1 - function maofixar()
+                                 1 - function maorenum()
+                                 1 - function osprg()
+              ( m_aoac.prg   )   1 - function mao204()
+              ( m_aop.prg    )   1 - function maop01()
+                                 1 - function maop03()
+                                 1 - function maopcalset()
+                                 1 - function maopx()
+                                 1 - function m_aop4()
+                                 1 - function m_aop5()
+                                 1 - function op02ms06()
+              ( m_aop2.prg   )   1 - function maop2cal()
+              ( m_aop3.prg   )   6 - function maop2cal()
+              ( m_aope.prg   )   1 - function maopechk()
+              ( m_aos.prg    )   1 - function tiporr()
+              ( m_aox.prg    )   1 - function apgpr2()
+                                 2 - function mosbinc02()
+              ( m_ap.prg     )   1 - function mapclass()
+              ( m_as.prg     )   1 - function mascalinv()
+              ( m_au.prg     )   1 - function maupe()
+              ( m_aw.prg     )   1 - function maw01()
+              ( m_aw0.prg    )   1 - function maw8()
+                                 1 - function mawult01()
+                                 1 - function mw08chk()
+                                 1 - function m_awrea()
+                                 1 - function m_awret()
+              ( m_ayg.prg    )   1 - function may3avl()
+                                 1 - function m_ayg2()
+              ( m_bo1.prg    )   1 - function mayg02()
+              ( m_du.prg     )   1 - function fmdrc()
+
+userede()       in mlib29.prg
+
+  Called from ( cnab400r.prg )   1 - 
+              ( mail.prg     )   4 - function mail()
+                                 2 - function mailfix()
+              ( mana.prg     )   1 - function mailfix()
+              ( mana5.prg    )   1 - function main()
+              ( manb.prg     )   1 - function pegcamini()
+              ( manb2.prg    )  14 - function pegcamini()
+              ( manc.prg     )   1 - function montotal()
+              ( mand.prg     )   1 - function montotal()
+              ( mane.prg     )   1 - function montotal()
+              ( mlib.prg     )   1 - function confind()
+                                 1 - function igualvars()
+                                 1 - function imp()
+                                 1 - function montatab()
+                                 1 - function numind()
+                                 1 - function obter()
+                                 1 - function reporvars()
+                                 2 - function rfilord()
+              ( mlib01.prg   )   1 - function escolhetab()
+              ( mlib03.prg   )   1 - function escolheuf()
+              ( mlib04.prg   )   1 - function checkcid()
+                                 1 - function escolhecid()
+              ( mlib05.prg   )   1 - function mde()
+              ( mlib07.prg   )   1 - function criarvars()
+              ( mlib08.prg   )   1 - function mpagar()
+              ( mlib09.prg   )   1 - function somaarq()
+              ( mlib10.prg   )   1 - function veruf()
+              ( mlib11.prg   )   1 - function metbro()
+              ( mlib15.prg   )   1 - function regmov()
+              ( mlib18.prg   )   3 - function regbus()
+              ( mlib20.prg   )   1 - function checkcep()
+              ( mlib23.prg   )   1 - function pegacampo()
+              ( mlib24.prg   )   1 - function gravalay()
+                                 1 - function peglay()
+              ( mlib25.prg   )   1 - function pegaget()
+              ( mlib27.prg   )   1 - function padarr()
+                                 1 - function padrao()
+              ( mlib28.prg   )   1 - function ultimoitem()
+                                 1 - function ultimoreg()
+              ( mlib33.prg   )   1 - function checkcipi()
+                                 1 - function pdipi()
+              ( mlib34.prg   )   2 - function checkesp()
+              ( mlib35.prg   )   1 - function cor()
+                                 1 - function corarr()
+              ( mlib38.prg   )   1 - function fixar()
+              ( mlib39.prg   )   1 - function telapeg()
+              ( mlib40.prg   )   1 - function padrax()
+              ( mlib41.prg   )   1 - function verseha()
+              ( mlib42.prg   )   1 - function editpeg()
+              ( mlib43.prg   )   2 - function bxitem()
+                                 1 - function paddel()
+              ( mlib44.prg   )   1 - function automenu()
+              ( mlib45.prg   )   1 - function novoreg()
+                                 1 - function usemult()
+                                 1 - function zaparq()
+              ( mlib46.prg   )   1 - function apagareg()
+              ( mlib48.prg   )   1 - function escolhexi()
+              ( mlibarq.prg  )   2 - function checkarq()
+              ( mlibest.prg  )   2 - function grvestoque()
+                                 1 - function pegoldqtd()
+                                 1 - function zeraest()
+              ( mlibnf.prg   )   1 - function peglote()
+              ( m_a12.prg    )   1 - function m_a12()
+              ( m_a6.prg     )   1 - function darf()
+                                 3 - function ma6ger()
+              ( m_ad2.prg    )   1 - function m_ad2()
+                                 1 - function recalc()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ag.prg     )   1 - function checkipva()
+                                 1 - function magen2()
+              ( m_ak.prg     )   2 - function fmak()
+                                 1 - function m_ak()
+              ( m_ak2.prg    )   1 - function m_ak2()
+              ( m_ak3.prg    )   1 - function mak3arr()
+              ( m_ake.prg    )   2 - function mak3arr()
+              ( m_al.prg     )   1 - function m_al()
+              ( m_al2c.prg   )   1 - function m_al2()
+              ( m_al3.prg    )  10 - function m_al3()
+              ( m_am.prg     )   2 - function fmam()
+                                 1 - function m_am()
+              ( m_am2.prg    )   1 - function m_am2()
+              ( m_am9.prg    )   1 - function mm09lote()
+              ( m_an.prg     )   2 - function m_an()
+              ( m_ao.prg     )   1 - function m_ao()
+              ( m_ao0.prg    )   1 - function maocda()
+                                 1 - function maorecli()
+                                 1 - function maozercli()
+                                 1 - function prgtrcplt()
+              ( m_ao2.prg    )   1 - function fmao2()
+                                 2 - function listap()
+                                 1 - function m_ao2()
+              ( m_aof.prg    )   3 - function maof03()
+                                 1 - function maofdel()
+                                 1 - function maofdelc()
+              ( m_aop.prg    )   1 - function maopchkseq()
+                                 1 - function maopvmes01()
+                                 1 - function maopzervol()
+                                 1 - function opsexmkpos()
+              ( m_aox.prg    )   1 - function apgpr2()
+                                 1 - function apgpro()
+                                 1 - function maofdelx()
+                                 1 - function maox01()
+                                 1 - function mosbinc02()
+              ( m_aoy.prg    )   3 - function apgpro()
+              ( m_aoz.prg    )   1 - function apgpro()
+                                 1 - function maoz02()
+              ( m_ap.prg     )   1 - function m_ap5()
+              ( m_as99.prg   )   1 - function gmas5()
+              ( m_au.prg     )   1 - function calcinv()
+              ( m_au4.prg    )   1 - function m_au4()
+              ( m_aw.prg     )   1 - function mw08cad()
+              ( m_aw0.prg    )   1 - function maw401()
+                                 2 - function maw6()
+                                 2 - function maw602()
+                                 1 - function maw6a()
+                                 1 - function mawmudfor()
+                                 1 - function mawultprc()
+                                 1 - function mw08chk01()
+              ( m_aw2.prg    )   1 - function maw2del()
+              ( m_ay.prg     )   3 - function may02()
+                                 1 - function may04()
+                                 1 - function may05()
+                                 5 - function maypos()
+              ( m_ay3.prg    )   1 - function may302()
+                                 4 - function may304()
+                                 1 - function may3avl()
+              ( m_ayg.prg    )   1 - function may3avl()
+                                 2 - function mayg02()
+              ( m_b6.prg     )   3 - function mayg02()
+              ( m_bl1.prg    )   1 - function mayg02()
+              ( m_bl2.prg    )   1 - function mayg02()
+              ( m_bn1.prg    )   2 - function mayg02()
+              ( m_bn2.prg    )   1 - function mayg02()
+              ( m_bz.prg     )   2 - function fluxo()
+              ( m_ci.prg     )   2 - function gerapostela()
+                                 1 - function m_ci()
+              ( m_cn2.prg    )   2 - function gmcn2()
+                                 1 - function m_cn2()
+              ( m_co2.prg    )   1 - function m_co2()
+              ( m_cr.prg     )   1 - function atualiza()
+                                 1 - function gmco2()
+              ( m_cv.prg     )   2 - function usermdec()
+              ( m_d1.prg     )   2 - function md1faz()
+              ( m_dc.prg     )   5 - function fmdc()
+                                 1 - function m_dc()
+              ( m_dp.prg     )   5 - function mdkrep()
+              ( m_dq.prg     )   1 - function m_dq1()
+              ( m_dr.prg     )   1 - function itau()
+              ( m_drc.prg    )   1 - function m_drc()
+              ( m_dw.prg     )   2 - function fmdrc()
+
+usermcri()      in m_cs.prg
+
+  Called from ( mlib44.prg   )   1 - function entmnu()
+              ( m_cs.prg     )   2 - function msc101()
+
+valcgc()        <unresolved function>
+
+  Called from ( m_am9.prg    )   1 - function mm09des()
+
+valcpf()        <unresolved function>
+
+  Called from ( m_am9.prg    )   1 - function mm09des()
+
+validaplaca()   <unresolved function>
+
+  Called from ( m_am.prg     )   1 - function fmam()
+
+vercep()        in mlib10.prg
+
+  Called from ( m_dr.prg     )   1 - function gmdr()
+
+verddd()        in mlib10.prg
+
+  Called from ( m_dr.prg     )   1 - function gmdr()
+
+verseha()       in mlib41.prg
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( mlib01.prg   )   1 - function checktab()
+              ( mlib03.prg   )   1 - function checkuf()
+              ( mlib04.prg   )   1 - function checkcid()
+              ( mlib10.prg   )   2 - function check5cep()
+              ( mlib13.prg   )   1 - function metint()
+              ( mlib33.prg   )   1 - function checkipi()
+                                 1 - function checkun()
+              ( mlib34.prg   )   1 - function checkcfo()
+              ( mlib44.prg   )   1 - function entmnu()
+              ( mlib48.prg   )   1 - function checkexi()
+              ( m_a74.prg    )   2 - function ma6ger()
+              ( m_ai1.prg    )   1 - function imai1()
+                                 1 - function mai101()
+              ( m_ak.prg     )   1 - function gmak()
+              ( m_al.prg     )   1 - function fmal()
+              ( m_al5.prg    )   1 - function m_al5()
+              ( m_an.prg     )   1 - function fman()
+              ( m_ao0.prg    )   2 - function maorenum()
+              ( m_ao2.prg    )   1 - function gmao2()
+              ( m_aope.prg   )   1 - function maopr02()
+              ( m_au0.prg    )   1 - function baixarem()
+              ( m_aw.prg     )   1 - function mw08cad()
+              ( m_ay3.prg    )   1 - function may304()
+                                 1 - function may307()
+              ( m_bz.prg     )   2 - function fluxo()
+              ( m_cs.prg     )   1 - function atualiza()
+                                 1 - function pegacs()
+                                 1 - function pegmcs()
+
+vertxt()        <unresolved function>
+
+  Called from ( mane.prg     )   1 - function fmanual()
+
+video()         in hbct.lib
+
+  Called from ( m_a7a.prg    )   1 - function ma6ger()
+              ( m_b6.prg     )   1 - function mayg02()
+              ( m_bo1.prg    )   1 - function mayg02()
+              ( m_dc3.prg    )   1 - function mdc3a()
+
+wapi_shellexecu in hbwin.lib
+
+  Called from ( m_dc3.prg    )   2 - function m_dc3()
+
+win_getopenfile in hbwin.lib
+
+  Called from ( m_dc3.prg    )   1 - function m_dc3()
+
+win_getsavefile in hbwin.lib
+
+  Called from ( m_dp.prg     )   1 - function mdkrep()
+
+win_olecreateob in hbwin.lib
+
+  Called from ( m_ci.prg     )   3 - function gravapostela()
+
+win_osis2000()  in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osis2003()  in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osis7()     in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osis8()     in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osis95()    in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osis98()    in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osis9x()    in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osisme()    in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osisnt()    in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osisnt351() in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osisnt4()   in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osistsclien in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osisvista() in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+win_osisxp()    in hbwin.lib
+
+  Called from ( m_dn.prg     )   1 - function mdkrep()
+
+woy()           in hbmisc.lib
+                or hbnf.lib
+
+  Called from ( m_dc3.prg    )   1 - function mdc3a()
+
+xdecdat()       <unresolved function>
+
+  Called from ( mana5.prg    )   1 - function main()
+              ( m_ci.prg     )   1 - function mciigu()
+
+xdecode()       <unresolved function>
+
+  Called from ( mana5.prg    )   3 - function main()
+              ( m_ci.prg     )   3 - function mciigu()
+
+xencode()       <unresolved function>
+
+  Called from ( m_ci.prg     )   4 - function mciant()
+                                 1 - function mciins()
+                                 2 - function m_ci()
+
+zaparq()        in mlib45.prg
+
+  Called from ( manb2.prg    )   2 - function pegcamini()
+              ( mlib09.prg   )   1 - function somaano()
+              ( m_ao0.prg    )   2 - function ofzer()
+              ( m_aox.prg    )   2 - function mosbinc02()
+              ( m_aoz.prg    )   2 - function apgpro()
+              ( m_bz.prg     )   1 - function fluxo()
+
+zei_fort()      <unresolved function>
+
+  Called from ( mail.prg     )  16 - function mailfix()
+              ( mana5.prg    )   3 - function arqent()
+              ( manb2.prg    )   2 - function listar1()
+                                 1 - function pegcamini()
+              ( m_a6.prg     )   1 - function ma6ger()
+              ( m_ae3.prg    )   8 - function mae01()
+              ( m_af6.prg    )   1 - function mae01()
+              ( m_af8.prg    )   1 - function mae01()
+              ( m_af9.prg    )   1 - function mae01()
+              ( m_afa.prg    )   1 - function mae01()
+              ( m_ak2a.prg   )   1 - function mak299()
+              ( m_al3.prg    )   1 - function m_al3()
+              ( m_am9.prg    )   1 - function mm09imp()
+                                 1 - function mm09lote()
+              ( m_ao0.prg    )   4 - function maorenum()
+                                 2 - function prgtrcplt()
+              ( m_aop.prg    )   4 - function maopvmes01()
+                                 1 - function m_aop5()
+              ( m_aos.prg    )   5 - function tiporr()
+              ( m_aox.prg    )   3 - function mosbinc02()
+              ( m_aw.prg     )   1 - function mw08cad()
+              ( m_aw0.prg    )   1 - function maw6()
+                                 1 - function maw602()
+                                 2 - function mawmudfor()
+                                 1 - function mw08chk()
+              ( m_cr.prg     )   2 - function atualiza()
+              ( m_cv.prg     )   2 - function usermdec()
+              ( m_db.prg     )  11 - function m_db()
+              ( m_dp.prg     )   4 - function mdkrep()
+
+__setcentury()  <unresolved function>
+
+  Called from ( mana5.prg    )   4 - function main()

@@ -1,198 +1,258 @@
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Source Module => J:\ITAESBRA\M_BM9.PRG
-*+
-*+    Reformatted by Click! 2.03 on May-7-2001 at  2:16 pm
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_bm9.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:47 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-//#INCLUDE "COMANDO.CH"
+// +ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
+// +
+// +    Source Module => J:\ITAESBRA\M_BM9.PRG
+// +
+// +    Reformatted by Click! 2.03 on May-7-2001 at  2:16 pm
+// +
+// +ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
 
-function m_bm9
-para cARQPRI
-MDI( "Resumo Checagem de Cabec rios Itens")
-if !CHECKIMP( 0 )
-   retu .F.
-endif
+// #INCLUDE "COMANDO.CH"
 
-CTLIN    := 80
 
-IF cARQPRI="MM01"
-   aRETU   := PERFEC( {"MM01","MM02"}, {"M1", "M2" }, { "MM91", "MM92" } )
-ELSE
-   aRETU   := PERFEC( {"MK01","MK02"}, {"K1", "K2" }, { "MK91", "MK92" } )
-ENDIF
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function m_bm9()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION m_bm9
 
-nMESUSO := aRETU[ 1 ]
-nANOUSO := aRETU[ 2 ]
-cCAB    := aRETU[ 7 ]
-ARQWORK1 :=aRETU[ 5, 1 ]
-ARQWORK2 :=aRETU[ 5, 2 ]
+   PARA cARQPRI
 
-IF ! USEMULT({{ARQWORK1, 1, 99 },{ARQWORK2, 1, 99 }})
-   retu .F.
-endif
-
-mds("Valores")
-IMPRESSORA()
-dbselectar( ARQWORK2 )
-nLASTREC:=LASTREC()
-dbgotop()
-while !eof()
-   xNUMERO := if( cARQPRI = "MM01", NUMERO, NRNOTA )
-   xFORNECEDO:=FORNECEDO
-   nTOTMER := nTOTIPI := nTOTNF := 0
-   while xNUMERO = if( cARQPRI = "MM01", NUMERO, NRNOTA ).AND.IF( cARQPRI = "MM01",.T.,xFORNECEDO=FORNECEDO) .and. !eof()
-      nTOTMER += VALORMER
-      nTOTIPI += VALORIPI
-      nTOTNF  += VALORTOT
-      VIDEO()
-      ZEI_FORT(nLASTREC)
-      IMPRESSORA()
-      dbskip()
-   enddo
-   m_BM9CAB()
-   dbselectar( ARQWORK1 )
-   dbgotop()
-   IF ! dbseek( IF(cARQPRI="MK01",STR(xNUMERO,8)+STR(xFORNECEDO,5),xNUMERO) )
-      m_BM9CAB()
-      @ CTLIN,  0 say "Nota Fiscal n„o Encontrada -> " + str( xNUMERO, 8 )
-      CTLIN ++
-      VIDEO()
-      IF MDG("NF n„o Encontrada -> " + str( xNUMERO, 8 )+" Apagar")
-         netrecdel()
-      ENDIF
-      IMPRESSORA()
-   else
-      if round( nTOTMER, 2 ) # round( TOTMER, 2 ) .or. ;
-                round( nTOTIPI, 2 ) # round( TOTIPI, 2 ) .or. ;
-                round( nTOTNF, 2 ) # round( TOTNF, 2 )
-         m_BM9CAB()
-         @ CTLIN,  0 say str( xNUMERO, 8 ) + " Cabecario"
-         @ CTLIN, 20 say TOTMER                           pict "@E 999,999,999.99"
-         @ CTLIN, 40 say TOTIPI                           pict "@E 999,999,999.99"
-         @ CTLIN, 60 say TOTNF                            pict "@E 999,999,999.99"
-         CTLIN ++
-         @ CTLIN,  0 say str( xNUMERO, 8 ) + " Itens    "
-         @ CTLIN, 20 say nTOTMER                          pict "@E 999,999,999.99"
-         @ CTLIN, 40 say nTOTIPI                          pict "@E 999,999,999.99"
-         @ CTLIN, 60 say nTOTNF                           pict "@E 999,999,999.99"
-         CTLIN ++
-      endif
-   endif
-   dbselectar( ARQWORK2 )
-enddo
-VIDEO()
-MDS( "Fixando Apura‡„o" )
-IMPRESSORA()
-dbselectar( ARQWORK1 )
-nLASTREC:=LASTREC()
-dbgotop()
-while !eof()
-   yAPURA  := APURA
-   mCOD:="" //Vazio Padrao para apura N
-   xNUMERO := if( cARQPRI = "MM01", NUMERO, NRNOTA )
-   xFORNECEDO=FORNECEDO
-   yESPECIE := ESPECIE
-   nTOTNF   := 0
-   IF cARQPRI="MK01"
-       IF yAPURA="S"
-          IF EMPTY(COD) //Tenta Itens NF
-             mCOD:=LEFT(OBTER("MK02",xNUMERO,"CODDEP",4),3)
-              IF ! EMPTY(mCOD)
-                 GRAVACAMPO("COD","mCOD",,,.F. )
-              ENDIF
-              IF EMPTY(COD) //Tenta Cadastro Fornecedor
-                 mCOD:=LEFT(OBTER("MB01",FORNECEDO,"CTACONTB"),3)
-                 IF ! EMPTY(mCOD)
-                    GRAVACAMPO("COD","mCOD",,,.F. )
-                 ENDIF
-              ENDIF
-           ELSE
-              mCOD:=COD           //Pega o Codigo Gravado
-          ENDIF
-       ELSE
-          GRAVACAMPO("COD","SPACE(3)",,,.F.)
-       ENDIF
+   MDI( "Resumo Checagem de Cabec rios Itens" )
+   IF !CHECKIMP( 0 )
+      RETU .F.
    ENDIF
 
-   dbselectar( ARQWORK2 )
-   dbgotop()
-   IF cARQPRI="MM01"
-      dbseek( str( xNUMERO, 8 ) )
+   CTLIN := 80
+
+   IF cARQPRI = "MM01"
+      aRETU := PERFEC( { "MM01", "MM02" }, { "M1", "M2" }, { "MM91", "MM92" } )
    ELSE
-      dbseek( str( xNUMERO, 8 )+STR(xFORNECEDO,5) )
+      aRETU := PERFEC( { "MK01", "MK02" }, { "K1", "K2" }, { "MK91", "MK92" } )
    ENDIF
-   while if( cARQPRI = "MM01", NUMERO, NRNOTA ) = xNUMERO.AND.IF( cARQPRI = "MM01",.T.,xFORNECEDO=FORNECEDO) .and. ! eof()
-      if APURA # yAPURA
-         gravacampo("APURA","yAPURA",,,.F. )
-         m_bm9cab()
-         @ CTLIN,  0 say "Nota Fiscal " + str( xNUMERO, 8 ) + " Sequencia " + str( IF(CARQPRI="MK01",ITEM,SEQ), 3 ) + " Erro apura Fixado"
-         CTLIN ++
-      endif
-      if FORNECEDO # xFORNECEDO
-         gravacampo("FORNECEDO","xFORNECEDO",,,.F. )
-         m_bm9cab()
-         @ CTLIN,  0 say "Nota Fiscal " + str( xNUMERO, 8 ) + " Sequencia " + str( IF(CARQPRI="MK01",ITEM,SEQ), 3 ) + " Erro No.Cli/Fornecedo Fixado"
-         CTLIN ++
-      endif
-      IF cARQPRI<>"MK01"
-         IF ESPECIE # yESPECIE
-            gravacampo("ESPECIE","yESPECIE",,,.F. )
-            m_bm9cab()
-            @ CTLIN,  0 say "Nota Fiscal " + str( xNUMERO, 8 ) + " Sequencia " + str( IF(CARQPRI="MK01",ITEM,SEQ), 3 ) + " Erro especie Fixado"
-            CTLIN ++
-         ENDIF
-      ENDIF
-      IF cARQPRI="MK01"
-          IF yAPURA="S".AND.EMPTY(CODDEP)
-             IF ! EMPTY(mCOD)
-                GRAVACAMPO("CODDEP","mCOD",,,.F. )
-             ELSE
-                IF TIPOENT $ 'MCORPS'
-                   mCODDEP:=LEFT(OBTER(ESTQARQ(TIPOENT,1),CODIGO,"CTACONTB"),3)
-                   IF ! EMPTY(mCODDEP)
-                      GRAVACAMPO("CODDEP","mCODDEP",,,.F.)
-                   ENDIF
-                ENDIF
-             ENDIF
-          ENDIF
-          IF yAPURA="N"
-             GRAVACAMPO("CODDEP","SPACE(3)",,,.F. )
-          ENDIF
-      ENDIF
-      IF CFONEW="5101".OR.CFONEW="6101".or.CFONEW="5102".OR.CFONEW="6102"
-         IF TIPOSERV<>"1"
-            m_bm9cab()
-            @ CTLIN,  0 say "Nota Fiscal " + str( xNUMERO, 8 ) + " Sequencia " + str( IF(CARQPRI="MK01",ITEM,SEQ), 3 ) +" "+CFONEW+" Servico "+TIPOSERV
-            CTLIN++
-         ENDIF
-      ENDIF
-      IF CFONEW="5124".OR.CFONEW="6124"
-         IF TIPOSERV<>"3"
-            m_BM9CAB()
-            @ CTLIN,  0 say "Nota Fiscal " + str( xNUMERO, 8 ) + " Sequencia " + str( IF(CARQPRI="MK01",ITEM,SEQ), 3 ) +" "+CFONEW+" Servico "+TIPOSERV
-            CTLIN++
-         ENDIF
-      ENDIF
-      dbskip()
-   enddo
-   dbselectar( ARQWORK1 )
-   dbskip()
-   VIDEO()
-   ZEI_FORT(nLASTREC)
+
+   nMESUSO  := aRETU[ 1 ]
+   nANOUSO  := aRETU[ 2 ]
+   cCAB     := aRETU[ 7 ]
+   ARQWORK1 := aRETU[ 5, 1 ]
+   ARQWORK2 := aRETU[ 5, 2 ]
+
+   IF !USEMULT( { { ARQWORK1, 1, 99 }, { ARQWORK2, 1, 99 } } )
+      RETU .F.
+   ENDIF
+
+   mds( "Valores" )
    IMPRESSORA()
-enddo
-IMPFOL()
-VIDEO()
-dbcloseall()
-IMPEND()
+   dbSelectAr( ARQWORK2 )
+   nLASTREC := LastRec()
+   dbGoTop()
+   WHILE !Eof()
+      xNUMERO    := if( cARQPRI = "MM01", NUMERO, NRNOTA )
+      xFORNECEDO := FORNECEDO
+      nTOTMER    := nTOTIPI := nTOTNF := 0
+      WHILE xNUMERO = if( cARQPRI = "MM01", NUMERO, NRNOTA ) .AND. IF( cARQPRI = "MM01", .T., xFORNECEDO = FORNECEDO ) .AND. !Eof()
+         nTOTMER += VALORMER
+         nTOTIPI += VALORIPI
+         nTOTNF  += VALORTOT
+         VIDEO()
+         ZEI_FORT( nLASTREC )
+         IMPRESSORA()
+         dbSkip()
+      ENDDO
+      m_BM9CAB()
+      dbSelectAr( ARQWORK1 )
+      dbGoTop()
+      IF !dbSeek( IF( cARQPRI = "MK01", Str( xNUMERO, 8 ) + Str( xFORNECEDO, 5 ), xNUMERO ) )
+         m_BM9CAB()
+         @ CTLIN, 0 SAY "Nota Fiscal n„o Encontrada -> " + Str( xNUMERO, 8 )
+         CTLIN++
+         VIDEO()
+         IF MDG( "NF n„o Encontrada -> " + Str( xNUMERO, 8 ) + " Apagar" )
+            netrecdel()
+         ENDIF
+         IMPRESSORA()
+      ELSE
+         IF Round( nTOTMER, 2 ) # Round( TOTMER, 2 ) .OR. ;
+               Round( nTOTIPI, 2 ) # Round( TOTIPI, 2 ) .OR. ;
+               Round( nTOTNF, 2 ) # Round( TOTNF, 2 )
+            m_BM9CAB()
+            @ CTLIN, 0  SAY Str( xNUMERO, 8 ) + " Cabecario"
+            @ CTLIN, 20 SAY TOTMER                      PICT "@E 999,999,999.99"
+            @ CTLIN, 40 SAY TOTIPI                      PICT "@E 999,999,999.99"
+            @ CTLIN, 60 SAY TOTNF                       PICT "@E 999,999,999.99"
+            CTLIN++
+            @ CTLIN, 0  SAY Str( xNUMERO, 8 ) + " Itens    "
+            @ CTLIN, 20 SAY nTOTMER                     PICT "@E 999,999,999.99"
+            @ CTLIN, 40 SAY nTOTIPI                     PICT "@E 999,999,999.99"
+            @ CTLIN, 60 SAY nTOTNF                      PICT "@E 999,999,999.99"
+            CTLIN++
+         ENDIF
+      ENDIF
+      dbSelectAr( ARQWORK2 )
+   ENDDO
+   VIDEO()
+   MDS( "Fixando Apura‡„o" )
+   IMPRESSORA()
+   dbSelectAr( ARQWORK1 )
+   nLASTREC := LastRec()
+   dbGoTop()
+   WHILE !Eof()
+      yAPURA     := APURA
+      mCOD       := ""   // Vazio Padrao para apura N
+      xNUMERO    := if( cARQPRI = "MM01", NUMERO, NRNOTA )
+      xFORNECEDO := FORNECEDO
+      yESPECIE   := ESPECIE
+      nTOTNF     := 0
+      IF cARQPRI = "MK01"
+         IF yAPURA = "S"
+            IF Empty( COD )  // Tenta Itens NF
+               mCOD := Left( OBTER( "MK02", xNUMERO, "CODDEP", 4 ), 3 )
+               IF !Empty( mCOD )
+                  GRAVACAMPO( "COD", "mCOD",,, .F. )
+               ENDIF
+               IF Empty( COD )   // Tenta Cadastro Fornecedor
+                  mCOD := Left( OBTER( "MB01", FORNECEDO, "CTACONTB" ), 3 )
+                  IF !Empty( mCOD )
+                     GRAVACAMPO( "COD", "mCOD",,, .F. )
+                  ENDIF
+               ENDIF
+            ELSE
+               mCOD := COD   // Pega o Codigo Gravado
+            ENDIF
+         ELSE
+            GRAVACAMPO( "COD", "SPACE(3)",,, .F. )
+         ENDIF
+      ENDIF
+
+      dbSelectAr( ARQWORK2 )
+      dbGoTop()
+      IF cARQPRI = "MM01"
+         dbSeek( Str( xNUMERO, 8 ) )
+      ELSE
+         dbSeek( Str( xNUMERO, 8 ) + Str( xFORNECEDO, 5 ) )
+      ENDIF
+      WHILE if( cARQPRI = "MM01", NUMERO, NRNOTA ) = xNUMERO .AND. IF( cARQPRI = "MM01", .T., xFORNECEDO = FORNECEDO ) .AND. !Eof()
+         IF APURA # yAPURA
+            gravacampo( "APURA", "yAPURA",,, .F. )
+            m_bm9cab()
+            @ CTLIN, 0 SAY "Nota Fiscal " + Str( xNUMERO, 8 ) + " Sequencia " + Str( IF( CARQPRI = "MK01", ITEM, SEQ ), 3 ) + " Erro apura Fixado"
+            CTLIN++
+         ENDIF
+         IF FORNECEDO # xFORNECEDO
+            gravacampo( "FORNECEDO", "xFORNECEDO",,, .F. )
+            m_bm9cab()
+            @ CTLIN, 0 SAY "Nota Fiscal " + Str( xNUMERO, 8 ) + " Sequencia " + Str( IF( CARQPRI = "MK01", ITEM, SEQ ), 3 ) + " Erro No.Cli/Fornecedo Fixado"
+            CTLIN++
+         ENDIF
+         IF cARQPRI <> "MK01"
+            IF ESPECIE # yESPECIE
+               gravacampo( "ESPECIE", "yESPECIE",,, .F. )
+               m_bm9cab()
+               @ CTLIN, 0 SAY "Nota Fiscal " + Str( xNUMERO, 8 ) + " Sequencia " + Str( IF( CARQPRI = "MK01", ITEM, SEQ ), 3 ) + " Erro especie Fixado"
+               CTLIN++
+            ENDIF
+         ENDIF
+         IF cARQPRI = "MK01"
+            IF yAPURA = "S" .AND. Empty( CODDEP )
+               IF !Empty( mCOD )
+                  GRAVACAMPO( "CODDEP", "mCOD",,, .F. )
+               ELSE
+                  IF TIPOENT $ 'MCORPS'
+                     mCODDEP := Left( OBTER( ESTQARQ( TIPOENT, 1 ), CODIGO, "CTACONTB" ), 3 )
+                     IF !Empty( mCODDEP )
+                        GRAVACAMPO( "CODDEP", "mCODDEP",,, .F. )
+                     ENDIF
+                  ENDIF
+               ENDIF
+            ENDIF
+            IF yAPURA = "N"
+               GRAVACAMPO( "CODDEP", "SPACE(3)",,, .F. )
+            ENDIF
+         ENDIF
+         IF CFONEW = "5101" .OR. CFONEW = "6101" .OR. CFONEW = "5102" .OR. CFONEW = "6102"
+            IF TIPOSERV <> "1"
+               m_bm9cab()
+               @ CTLIN, 0 SAY "Nota Fiscal " + Str( xNUMERO, 8 ) + " Sequencia " + Str( IF( CARQPRI = "MK01", ITEM, SEQ ), 3 ) + " " + CFONEW + " Servico " + TIPOSERV
+               CTLIN++
+            ENDIF
+         ENDIF
+         IF CFONEW = "5124" .OR. CFONEW = "6124"
+            IF TIPOSERV <> "3"
+               m_BM9CAB()
+               @ CTLIN, 0 SAY "Nota Fiscal " + Str( xNUMERO, 8 ) + " Sequencia " + Str( IF( CARQPRI = "MK01", ITEM, SEQ ), 3 ) + " " + CFONEW + " Servico " + TIPOSERV
+               CTLIN++
+            ENDIF
+         ENDIF
+         dbSkip()
+      ENDDO
+      dbSelectAr( ARQWORK1 )
+      dbSkip()
+      VIDEO()
+      ZEI_FORT( nLASTREC )
+      IMPRESSORA()
+   ENDDO
+   IMPFOL()
+   VIDEO()
+   dbCloseAll()
+   IMPEND()
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function m_BM9CAB()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
 FUNC m_BM9CAB()
-if CTLIN > 50
-   @  0,  0 say "Checagem itens Cabecarios Nota Fiscal"
-   @  1,  0 say repl( "=", 80 )
-   CTLIN := 2
-endif
 
-*+ EOF: M_BM9.PRG
+   IF CTLIN > 50
+      @  0, 0 SAY "Checagem itens Cabecarios Nota Fiscal"
+      @  1, 0 SAY repl( "=", 80 )
+      CTLIN := 2
+   ENDIF
+
+// + EOF: M_BM9.PRG
+
+// + EOF: m_bm9.prg
+// +

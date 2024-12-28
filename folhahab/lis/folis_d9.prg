@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : folis_d9.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:26 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : folis_d9.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:26 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -35,55 +35,55 @@
 // :
 // :*****************************************************************************
 
-IF !NETUSE(PES)
-   RETU .F.
+IF !NETUSE( PES )
+RETU .F.
 ENDIF
 
-IF !NETUSE("FORAIS")
-   DBCLOSEALL()
-   RETU .F.
+IF !NETUSE( "FORAIS" )
+dbCloseAll()
+RETU .F.
 ENDIF
 
-dbselectar(pes)
-DBGOTOP()
-WHILE !EOF()
-   mNUMERO := NUMERO
-   PETELA(8)
-   netreclock()
-   CHECKMOTDEM()
-   CorrigeFo_pes()
-   DBSELECTAR("FORAIS")
-   DBGOTOP()
-   IF !DBSEEK(STR(nANOUSO,4)+STR(mNUMERO,8))
-      netrecapp()
-      FIELD->NUMERO := CTR
-      FIELD->ANO    := ANOUSO
-   ELSE
-      netreclock()
-   ENDIF
-   IF EMPTY(RAISVINC)
-      FIELD->RAISVINC := "10"
-   ENDIF
-   IF RAISVINC == "1 "
-      FIELD->RAISVINC := "10"
-   ENDIF
-   IF EMPTY(TIPOADM)
-      FIELD->TIPOADM := "2"
-   ENDIF
-   IF EMPTY(ALVARA)
-      FIELD->ALVARA := "N"
-   ENDIF
-   IF EMPTY(DEMITIDO)
-      FIELD->RAISDEM := "00"
-   ENDIF
-   dbselectar(pes)
-   IF EMPTY(MOTIVO)
-      FIELD->MOTIVO := OBTER("FO_RCAU",,FORAIS->RAISDEM,"CODIGO",2)
-   ENDIF
-   dbunlock()
-   DBSKIP()
+dbSelectAr( pes )
+dbGoTop()
+WHILE !Eof()
+mNUMERO := NUMERO
+PETELA( 8 )
+netreclock()
+CHECKMOTDEM()
+CorrigeFo_pes()
+dbSelectAr( "FORAIS" )
+dbGoTop()
+IF !dbSeek( Str( nANOUSO, 4 ) + Str( mNUMERO, 8 ) )
+netrecapp()
+FIELD->NUMERO := CTR
+FIELD->ANO    := ANOUSO
+ELSE
+netreclock()
+ENDIF
+IF Empty( RAISVINC )
+FIELD->RAISVINC := "10"
+ENDIF
+IF RAISVINC == "1 "
+FIELD->RAISVINC := "10"
+ENDIF
+IF Empty( TIPOADM )
+FIELD->TIPOADM := "2"
+ENDIF
+IF Empty( ALVARA )
+FIELD->ALVARA := "N"
+ENDIF
+IF Empty( DEMITIDO )
+FIELD->RAISDEM := "00"
+ENDIF
+dbSelectAr( pes )
+IF Empty( MOTIVO )
+FIELD->MOTIVO := OBTER( "FO_RCAU",, FORAIS->RAISDEM, "CODIGO", 2 )
+ENDIF
+dbUnlock()
+dbSkip()
 ENDDO
-DBCLOSEALL()
+dbCloseAll()
 
-*+ EOF: folis_d9.prg
-*+
+// + EOF: folis_d9.prg
+// +

@@ -1,123 +1,123 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_3h.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:33 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_3h.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:33 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-////#INCLUDE "COMANDO.CH"
+// //#INCLUDE "COMANDO.CH"
 
-if !MDL('FOPTO_3H - Passagens Funcionario/Hora por dia')
-   retu
-endif
+IF !MDL( 'FOPTO_3H - Passagens Funcionario/Hora por dia' )
+RETU
+ENDIF
 CTLIN := 80
 cPA   := PARQDIO()
 
-if !NETUSE("FIRMA")
-   retu
-endif
-dbgotop()
-dbseek(NREMP)
+IF !NETUSE( "FIRMA" )
+RETU
+ENDIF
+dbGoTop()
+dbSeek( NREMP )
 
 
-if !NETUSE(PES)
-   dbcloseall()
-   retu
-endif
+IF !NETUSE( PES )
+dbCloseAll()
+RETU
+ENDIF
 FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MES))'
-FILTRO := FILTRO(FILTRO)
-if !empty(FILTRO)
-   set filter to &FILTRO
-endif
+FILTRO := FILTRO( FILTRO )
+IF !Empty( FILTRO )
+SET FILTER TO &FILTRO
+ENDIF
 
 
-//sele 3
-if !NETUSE(cPA)
-   dbcloseall()
-   retu
-endif
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-ordDestroy("temp")
-Ordcreate(,"temp","DATA")
-ordSetFocus("temp")
+// sele 3
+IF !NETUSE( cPA )
+dbCloseAll()
+RETU
+ENDIF
+nLASTREC := LastRec()
+zei_fort( nLASTREC,,, 0 )
+ordDestroy( "temp" )
+ordCreate(, "temp", "DATA" )
+ordSetFocus( "temp" )
 
 
 IMPRESSORA()
-dbselectar(cPA)   //sele 3
-dbgotop()
-while !eof()
-   REF := 0
-   dbselectar(cPA)
-   mDATA := DATA
-   while mDATA = DATA .and. !eof()
-      if CTLIN > 55
-         dbselectar("FIRMA")
-         @  0,0  say repl('=',79)                                                    
-         @  1,0  say "FOLHA DE PONTO - "+alltrim(RAZAO)                              
-         @  1,56 say "CGC:"+CGC                                                      
-         @  2,0  say "End: "+ENDERECO+" - "+BAIRRO+" - "+CIDADE+" - "+ESTADO         
-         @  3,0  say "Funcionario"                                                   
-         @  3,50 say "Hora"                                                          
-         @  4,0  say repl('-',79)                                                    
-         CTLIN := 5
-         dbselectar(cPA)
-      endif
-      mNUMERO := NUMERO
-      mHORA   := HORA
-      dbselectar(PES)
-      dbgotop()
-      dbseek(mNUMERO)
-      if found()
-         @ CTLIN,0  say mNUMERO         
-         @ CTLIN,10 say NOME            
-         @ CTLIN,50 say mHORA           
-         CTLIN ++
-         dbselectar(cPA)
-         REF ++
-      endif
-      dbselectar(cPA)
-      dbskip()
-   enddo
-   if REF > 0
-      @ CTLIN,0 say repl('-',79)         
-      CTLIN ++
-      @ CTLIN,00 say "Total Dia:"         
-      @ CTLIN,12 say mDATA                
-      @ CTLIN,50 say str(REF)             
-      CTLIN ++
-      @ CTLIN,0 say repl('=',79)         
-      CTLIN ++
-   endif
-enddo
-if CTLIN # 80
-   IMPFOL()
-endif
-dbcloseall()
+dbSelectAr( cPA )   // sele 3
+dbGoTop()
+WHILE !Eof()
+REF := 0
+dbSelectAr( cPA )
+mDATA := DATA
+WHILE mDATA = DATA .AND. !Eof()
+IF CTLIN > 55
+dbSelectAr( "FIRMA" )
+@  0, 0  SAY repl( '=', 79 )
+@  1, 0  SAY "FOLHA DE PONTO - " + AllTrim( RAZAO )
+@  1, 56 SAY "CGC:" + CGC
+@  2, 0  SAY "End: " + ENDERECO + " - " + BAIRRO + " - " + CIDADE + " - " + ESTADO
+@  3, 0  SAY "Funcionario"
+@  3, 50 SAY "Hora"
+@  4, 0  SAY repl( '-', 79 )
+CTLIN := 5
+dbSelectAr( cPA )
+ENDIF
+mNUMERO := NUMERO
+mHORA   := HORA
+dbSelectAr( PES )
+dbGoTop()
+dbSeek( mNUMERO )
+IF Found()
+@ CTLIN, 0  SAY mNUMERO
+@ CTLIN, 10 SAY NOME
+@ CTLIN, 50 SAY mHORA
+CTLIN++
+dbSelectAr( cPA )
+REF++
+ENDIF
+dbSelectAr( cPA )
+dbSkip()
+ENDDO
+IF REF > 0
+@ CTLIN, 0 SAY repl( '-', 79 )
+CTLIN++
+@ CTLIN, 00 SAY "Total Dia:"
+@ CTLIN, 12 SAY mDATA
+@ CTLIN, 50 SAY Str( REF )
+CTLIN++
+@ CTLIN, 0 SAY repl( '=', 79 )
+CTLIN++
+ENDIF
+ENDDO
+IF CTLIN # 80
+IMPFOL()
+ENDIF
+dbCloseAll()
 IMPEND()
-retu
+RETU
 
 
-*+ EOF: fopto_3h.prg
-*+
+// + EOF: fopto_3h.prg
+// +

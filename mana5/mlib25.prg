@@ -1,76 +1,82 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib25.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib25.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 
 // *****************
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function PEGAGET()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func PEGAGET(cARQ)
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function PEGAGET()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC PEGAGET( cARQ )
+
+   aGETS := {}
+   IF !USEREDE( HELPARQ, 1, 2 )
+      RETU .F.
+   ENDIF
+   dbGoTop()
+   dbSeek( PadR( cARQ, 8 ) + Str( 0, 3 ) )
+   IF Found()
+      WHILE DBF = cARQ .AND. !Eof()
+         IF !Empty( SEQ )
+            DO CASE
+            CASE Type( "CONDICAO" ) = "C" .AND. Type( "PRECOND" ) = "C"
+               AAdd( aGETS, { DADO, CAMPO, CONDICAO, PRECOND } )
+            CASE Type( "CONDICAO" ) = "C"
+               AAdd( aGETS, { DADO, CAMPO, CONDICAO } )
+            OTHERWISE
+               AAdd( aGETS, { DADO, CAMPO } )
+            ENDCASE
+         ENDIF
+         dbSkip()
+      ENDDO
+   ELSE
+      dbCloseArea()
+      ALERTX( "Falta Configura‡„o dos Campos para o Edit" )
+      RETU .F.
+   ENDIF
+   dbCloseArea()
+   IF Len( aGETS ) = 0
+      ALERTX( "Falta Configura‡„o para o modo Edit" )
+      RETU .F.
+   ENDIF
+   RETU .T.
 
 
-aGETS := {}
-if !USEREDE(HELPARQ,1,2)
-   retu .F.
-endif
-dbgotop()
-dbseek(padr(cARQ,8)+str(0,3))
-if found()
-   while DBF = cARQ .and. !eof()
-      if !empty(SEQ)
-         do case
-            case type("CONDICAO") = "C" .and. type("PRECOND") = "C"
-               aadd(aGETS,{DADO,CAMPO,CONDICAO,PRECOND})
-            case type("CONDICAO") = "C"
-               aadd(aGETS,{DADO,CAMPO,CONDICAO})
-            otherwise
-               aadd(aGETS,{DADO,CAMPO})
-         endcase
-      endif
-      dbskip()
-   enddo
-else
-   dbclosearea()
-   ALERTX("Falta Configura‡„o dos Campos para o Edit")
-   retu .F.
-endif
-dbclosearea()
-if len(aGETS) = 0
-   ALERTX("Falta Configura‡„o para o modo Edit")
-   retu .F.
-endif
-retu .T.
-
+// + EOF: mlib25.prg
+// +

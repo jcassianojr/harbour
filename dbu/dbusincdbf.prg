@@ -1,174 +1,246 @@
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : dbusincdbf.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:07 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 #include "dbinfo.ch"
 
-**************************
-function dBUsincdbf()
+// *************************
 
-aAMBIENTE:=SALVAA()
-nOLDTIPO=TIPODBF
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function dBUsincdbf()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION dBUsincdbf()
 
-alertX("escolha origem")
-tipodbfesc()
-nORITIPO:=TIPODBF
-cORIDRIVER:=RDDNOME(TIPODBF)
-cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
+   aAMBIENTE := SALVAA()
+   nOLDTIPO  := TIPODBF
 
-alertX("escolha destino")
-tipodbfesc()
-nDESTIPO:=TIPODBF
-cDESDRIVER:=RDDNOME(TIPODBF)
-cARQDES:=win_GetOpenFileName(, "Arquivos de Destino",HB_CWD(), "Arquivos de Destino", "*.dbf", 1 )
-lAPAGA:=MDG("Apagar Dados do Arquivo de Destino")
-lREPL :=.F.
-IF lAPAGA
-   IF ! MDG("Deseja Realmente apagar dados da destino")
-      lAPAGA:=.F.
-   ENDIF
-ENDIF
-IF ! lAPAGA
-    lREPL :=MDG("Complentar campos em Branco")
-ENDIF 
- 
-MDT("Fazendo copia de reserva: "+"old_"+cARQDES)
-filecopy(cARQDES ,trocaext(cARQDES,"_old.dbf"))
-	 
-MDT("abrindo arquivo de origen: "+cARQORI)
-USE (cARQORI) ALIAS ORIGEM SHARED NEW VIA  (cORIDRIVER) 
+   alertX( "escolha origem" )
+   tipodbfesc()
+   nORITIPO   := TIPODBF
+   cORIDRIVER := RDDNOME( TIPODBF )
+   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
 
-MDT("abrindo arquivo de destino: "+cARQDES)
-USE (cARQDES) ALIAS DESTINO EXCLUSIVE NEW VIA (cDESDRIVER) 
-
-MDT("Importando registros para: "+cARQDES)
-DBSELECTAR("ORIGEM")
-INITVARS()
-CLRVARS()
-
-DBSELECTAR("DESTINO")
-INITVARS()
-CLRVARS()
-IF lAPAGA
-   ZAP
-ENDIF
-dbsetorder(1)
-cCHAVE:=INDEXKEY()
-
-DBSELECTAR("ORIGEM")
-nLASTREC := lastrec()
-zei_fort(nLASTREC,,,0)
-DBGOTOP()
-WHILE ! EOF()
-   EQUVARS()
-   xBUSCA:=&CCHAVE.
-   DBSELECTAR("DESTINO")
-   dbgotop()
-   IF .NOT. DBSEEK(xBUSCA)
-      dbappend()
-      REPLVARS( .T. , .T.)
-   ELSE
-      IF lREPL
-         REPLVARS( .T. , .T.) 
-      ENDIF   
-   ENDIF
-   DBSELECTAR("ORIGEM")
-   DBSKIP()
-   ZEI_FORT(nLASTREC,,,1)
-ENDDO
-FREEVARS()
-DBCLOSEALL()
-	
-RDDNOME(nOLDTIPO) //retorna tipo anterior
-RESTAA(aAMBIENTE)
-alertX("sincronizado")
-
-
-*************************
-function sortdbf()
-LOCAL aCAMPOS
-
-aAMBIENTE:=SALVAA()
-nOLDTIPO=TIPODBF
-cSORTED:=SPACE(60)
-
-alertX("escolha origem")
-tipodbfesc()
-nORITIPO:=TIPODBF
-cORIDRIVER:=RDDNOME(TIPODBF)
-cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
-
-alertX("escolha destino")
-tipodbfesc()
-nDESTIPO:=TIPODBF
-cDESDRIVER:=RDDNOME(TIPODBF)
-cARQDES:=trocaext(cARQORI,"_sorted.dbf")
-
-@ MAXROW(),0 SAY "Campos (,)"
-@ MAXROW(),COL()+1 GET cSORTED
-READ
-IF AT("INDEXKEY",cSORTED)>0
-   //aCAMPOS:=HB_ATOKENS(INDEXKEY(),"+") criar funcao para pegar so o nome removendo assim ctod str outros
-ELSE
-   aCAMPOS:=HB_ATOKENS(cSORTED,",")
-ENDIF   
- 
-MDT("Fazendo copia de destino: "+"sortet_"+cARQORI)
-filecopy(cARQORI ,cARQDES)
-
-MDT("abrindo arquivo de origem: "+cARQORI)
-USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER) 
-
-mdt("Ordenando por: "+cSORTED)
-//__dbSort( cToFileName, aFields, bFor, bWhile, nNext, nRecord, lRest, cRDD     , nConnection, cCodePage )
-__dbSort( cARQDES      , aCAMPOS,     ,       ,      ,        ,      ,cDESDRIVER,            ,           )
-
-
-RDDNOME(nOLDTIPO) //retorna tipo anterior
-RESTAA(aAMBIENTE)
-alertX("sincronizado")
-
-
-*************************
-function limparegdupdbf()
-
-aAMBIENTE:=SALVAA()
-nOLDTIPO=TIPODBF
-
-alertX("escolha origem")
-tipodbfesc()
-nORITIPO:=TIPODBF
-cORIDRIVER:=RDDNOME(TIPODBF)
-cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
-
-lPACK:=MDG("Fazer pack(remove registros marcados para apagar) apos a checagem")
- 
-MDT("Fazendo copia de reserva: "+"old_"+cARQORI)
-filecopy(cARQORI ,trocaext(cARQORI,"_old.dbf"))
-	 
-MDT("abrindo arquivo de origem: "+cARQORI)
-USE (cARQORI) ALIAS ORIGEM EXCLUSIVE NEW VIA  (cORIDRIVER) 
-
-MDT("Limpando Registro Duplicados: ")
-DBSELECTAR("ORIGEM")
-dbsetorder(1)
-cCHAVE   :=INDEXKEY()
-nLASTREC := lastrec()
-zei_fort(nLASTREC,,,0)
-DBGOTOP()
-WHILE ! EOF()
-   xCHAVEANTERIOR:=&CCHAVE.
-   DBSKIP()
-   ZEI_FORT(nLASTREC,,,1)
-   IF ! EOF()
-      xCHAVEATUAL:=&CCHAVE.
-      IF xCHAVEANTERIOR==xCHAVEATUAL
-         dbdelete()
+   alertX( "escolha destino" )
+   tipodbfesc()
+   nDESTIPO   := TIPODBF
+   cDESDRIVER := RDDNOME( TIPODBF )
+   cARQDES    := win_GetOpenFileName(, "Arquivos de Destino", hb_cwd(), "Arquivos de Destino", "*.dbf", 1 )
+   lAPAGA     := MDG( "Apagar Dados do Arquivo de Destino" )
+   lREPL      := .F.
+   IF lAPAGA
+      IF !MDG( "Deseja Realmente apagar dados da destino" )
+         lAPAGA := .F.
       ENDIF
    ENDIF
-ENDDO
-MDT("Fazendo pack(removendo registros marcados para apagar)")
-IF lPACK
-   PACK
-ENDIF
-DBCLOSEALL()
-	
-RDDNOME(nOLDTIPO) //retorna tipo anterior
-RESTAA(aAMBIENTE)
-alertX("chaves duplicadas removidas")
+   IF !lAPAGA
+      lREPL := MDG( "Complentar campos em Branco" )
+   ENDIF
+
+   MDT( "Fazendo copia de reserva: " + "old_" + cARQDES )
+   filecopy( cARQDES, trocaext( cARQDES, "_old.dbf" ) )
+
+   MDT( "abrindo arquivo de origen: " + cARQORI )
+   USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
+
+   MDT( "abrindo arquivo de destino: " + cARQDES )
+   USE ( cARQDES ) ALIAS DESTINO EXCLUSIVE NEW VIA ( cDESDRIVER )
+
+   MDT( "Importando registros para: " + cARQDES )
+   dbSelectAr( "ORIGEM" )
+   INITVARS()
+   CLRVARS()
+
+   dbSelectAr( "DESTINO" )
+   INITVARS()
+   CLRVARS()
+   IF lAPAGA
+      ZAP
+   ENDIF
+   dbSetOrder( 1 )
+   cCHAVE := IndexKey()
+
+   dbSelectAr( "ORIGEM" )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   dbGoTop()
+   WHILE !Eof()
+      EQUVARS()
+      xBUSCA := &CCHAVE.
+      dbSelectAr( "DESTINO" )
+      dbGoTop()
+      IF ! dbSeek( xBUSCA )
+         dbAppend()
+         REPLVARS( .T., .T. )
+      ELSE
+         IF lREPL
+            REPLVARS( .T., .T. )
+         ENDIF
+      ENDIF
+      dbSelectAr( "ORIGEM" )
+      dbSkip()
+      ZEI_FORT( nLASTREC,,, 1 )
+   ENDDO
+   FREEVARS()
+   dbCloseAll()
+
+   RDDNOME( nOLDTIPO )   // retorna tipo anterior
+   RESTAA( aAMBIENTE )
+   alertX( "sincronizado" )
+
+
+// ************************
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function sortdbf()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNCTION sortdbf()
+
+   LOCAL aCAMPOS
+
+   aAMBIENTE := SALVAA()
+   nOLDTIPO  := TIPODBF
+   cSORTED   := Space( 60 )
+
+   alertX( "escolha origem" )
+   tipodbfesc()
+   nORITIPO   := TIPODBF
+   cORIDRIVER := RDDNOME( TIPODBF )
+   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+
+   alertX( "escolha destino" )
+   tipodbfesc()
+   nDESTIPO   := TIPODBF
+   cDESDRIVER := RDDNOME( TIPODBF )
+   cARQDES    := trocaext( cARQORI, "_sorted.dbf" )
+
+   @ MaxRow(), 0      SAY "Campos (,)"
+   @ MaxRow(), Col() + 1 GET cSORTED
+   READ
+   IF At( "INDEXKEY", cSORTED ) > 0
+      // aCAMPOS:=HB_ATOKENS(INDEXKEY(),"+") criar funcao para pegar so o nome removendo assim ctod str outros
+   ELSE
+      aCAMPOS := hb_ATokens( cSORTED, "," )
+   ENDIF
+
+   MDT( "Fazendo copia de destino: " + "sortet_" + cARQORI )
+   filecopy( cARQORI, cARQDES )
+
+   MDT( "abrindo arquivo de origem: " + cARQORI )
+   USE ( cARQORI ) ALIAS ORIGEM EXCLUSIVE NEW VIA ( cORIDRIVER )
+
+   mdt( "Ordenando por: " + cSORTED )
+// __dbSort( cToFileName, aFields, bFor, bWhile, nNext, nRecord, lRest, cRDD     , nConnection, cCodePage )
+   __dbSort( cARQDES, aCAMPOS,,,,,, cDESDRIVER,, )
+
+
+   RDDNOME( nOLDTIPO )   // retorna tipo anterior
+   RESTAA( aAMBIENTE )
+   alertX( "sincronizado" )
+
+
+// ************************
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function limparegdupdbf()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNCTION limparegdupdbf()
+
+   aAMBIENTE := SALVAA()
+   nOLDTIPO  := TIPODBF
+
+   alertX( "escolha origem" )
+   tipodbfesc()
+   nORITIPO   := TIPODBF
+   cORIDRIVER := RDDNOME( TIPODBF )
+   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+
+   lPACK := MDG( "Fazer pack(remove registros marcados para apagar) apos a checagem" )
+
+   MDT( "Fazendo copia de reserva: " + "old_" + cARQORI )
+   filecopy( cARQORI, trocaext( cARQORI, "_old.dbf" ) )
+
+   MDT( "abrindo arquivo de origem: " + cARQORI )
+   USE ( cARQORI ) ALIAS ORIGEM EXCLUSIVE NEW VIA ( cORIDRIVER )
+
+   MDT( "Limpando Registro Duplicados: " )
+   dbSelectAr( "ORIGEM" )
+   dbSetOrder( 1 )
+   cCHAVE   := IndexKey()
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   dbGoTop()
+   WHILE !Eof()
+      xCHAVEANTERIOR := &CCHAVE.
+      dbSkip()
+      ZEI_FORT( nLASTREC,,, 1 )
+      IF !Eof()
+         xCHAVEATUAL := &CCHAVE.
+         IF xCHAVEANTERIOR == xCHAVEATUAL
+            dbDelete()
+         ENDIF
+      ENDIF
+   ENDDO
+   MDT( "Fazendo pack(removendo registros marcados para apagar)" )
+   IF lPACK
+      PACK
+   ENDIF
+   dbCloseAll()
+
+   RDDNOME( nOLDTIPO )   // retorna tipo anterior
+   RESTAA( aAMBIENTE )
+   alertX( "chaves duplicadas removidas" )
+
+// + EOF: dbusincdbf.prg
+// +

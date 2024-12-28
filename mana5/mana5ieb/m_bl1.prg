@@ -1,19 +1,46 @@
-*+²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
-*+
-*+    Source Module => J:\ITAESBRA\M_BL1.PRG
-*+
-*+    Reformatted by Click! 2.03 on Jun-11-2002 at  4:29 pm
-*+
-*+²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_bl1.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:47 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-//#INCLUDE "COMANDO.CH"
+// +²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
+// +
+// +    Source Module => J:\ITAESBRA\M_BL1.PRG
+// +
+// +    Reformatted by Click! 2.03 on Jun-11-2002 at  4:29 pm
+// +
+// +²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 
-//Modo de Trabalho no Video
+// #INCLUDE "COMANDO.CH"
+
+// Modo de Trabalho no Video
 MDI( " þ Imprimir Contas a Pagar por Data de Vencimento " )
 
-if !CHECKIMP( 0 )
-   retu .F.
-endif
+IF !CHECKIMP( 0 )
+RETU .F.
+ENDIF
 cEMP   := IMP( "ZEMP" )
 nCOPIA := 1
 
@@ -22,95 +49,98 @@ FILTRO := RFILORD( "ML01", .F. )
 
 nIND := NUMIND( "ML01" )
 
-lCOM := MDG("Comprimido" )
-lCAB := MDG("Cabe‡ario" )
-lDIA := MDG("Total do Dia")
+lCOM := MDG( "Comprimido" )
+lCAB := MDG( "Cabe‡ario" )
+lDIA := MDG( "Total do Dia" )
 MDS( "Digite N?de Copias" )
-@ 24, 40 get nCOPIA
+@ 24, 40 GET nCOPIA
 READCUR()
 
-if !USEREDE( "ML01", 1, 1 )
-   retu
-endif
-if !empty( FILTRO )
-   set filter to &FILTRO
-endif
+IF !USEREDE( "ML01", 1, 1 )
+RETU
+ENDIF
+IF !Empty( FILTRO )
+SET FILTER TO &FILTRO
+ENDIF
 IMPRESSORA()
-for X := 1 to NCOPIA
-   CTLIN   := 80
-   TOT1    := TOT2 := 0.00
-   ZPAGINA := 0
+FOR X := 1 TO NCOPIA
+CTLIN   := 80
+TOT1    := TOT2 := 0.00
+ZPAGINA := 0
 
-   if Lcom
-      @  0,  0 say IMPSTR( aCHR[ 1 ] )
-   endif
+IF Lcom
+@  0, 0 SAY IMPSTR( aCHR[ 1 ] )
+ENDIF
 
-   dbgotop()
-   while !eof()
-      DAT  := VENCIMENT
-      TOT1 := 0
-      while DAT = VENCIMENT .and. !eof()
-         if CTLIN > 55
-            if lCAB
-               ZPAGINA ++
-               @  0,  0  say cEMP
-               @  1, 01  say 'M_BL1'
-               @  1, 20  say 'CONTAS A PAGAR POR DATA DE VENCIMENTO'
-               @  1, 80  say time()
-               @  1, 90  say 'Emitida em: ' + dtoc( ZDATA )
-               @  1, 110 say ACENTO( '    P gina: ' ) + str( ZPAGINA, 2 )
-               @  2,  0  say repl( '-', 132 )
-               @ 03, 01  say ' NUMERO '
-               @ 03, 14  say 'EMISSAO'
-               @ 03, 25  say 'FORNECEDOR'
-               @ 03, 45  say 'VENCERA' // 45
-               @ 03, 55  say ' VALOR TITULO ' //57
-               @ 03, 71  say 'COD' //NOVO
-               @ 03, 76  say 'BCO'
-               @ 03, 80  say 'OBSERVACAO:'
-               @ 04,  0  say repl( '-', 132 )
-               CTLIN := 5
-            else
-               CTLIN := 1
-            endif
-         endif
-         @ CTLIN, 01 say NRNOTA pict '99999999'
-         if !empty( TIPFAT )
-            @ CTLIN, 09 say '-' + TIPFAT
-         endif
-         @ CTLIN, 14 say DATA
-         @ CTLIN, 25 say strzero( FORNECEDO, 5 )
-         @ CTLIN, 31 say COGNOME
-         @ CTLIN, 45 say VENCIMENT
-         @ CTLIN, 55 say VALATUAL                pict '999,999,999.99'
-         @ CTLIN, 71 say COD
-         @ CTLIN, 82 say BANCO
-         @ CTLIN, 86 say left( OBS1, 40 )
-         TOT1 += VALATUAL
-         TOT2 += VALATUAL
-         CTLIN ++
-         dbskip()
-      enddo
-      if TOT1 > 0.and.lDIA
-         @ CTLIN,  0 say repl( '-', 132 )
-         CTLIN ++
-         @ CTLIN, 58 say TOT1           pict '999,999,999.99'
-         @ CTLIN, 76 say 'Total do Dia'
-         CTLIN ++
-         @ CTLIN,  0 say repl( '-', 132 )
-         CTLIN ++
-      endif
-   enddo
-   if TOT2 > 0
-      CTLIN ++
-      @ CTLIN, 58 say TOT2           pict '999,999,999.99'
-      @ CTLIN, 76 say 'Total Geral '
-      CTLIN ++
-   endif
-next X
-dbcloseall()
+dbGoTop()
+WHILE !Eof()
+DAT  := VENCIMENT
+TOT1 := 0
+WHILE DAT = VENCIMENT .AND. !Eof()
+IF CTLIN > 55
+IF lCAB
+ZPAGINA++
+@  0, 0   SAY cEMP
+@  1, 01  SAY 'M_BL1'
+@  1, 20  SAY 'CONTAS A PAGAR POR DATA DE VENCIMENTO'
+@  1, 80  SAY Time()
+@  1, 90  SAY 'Emitida em: ' + DToC( ZDATA )
+@  1, 110 SAY ACENTO( '    P gina: ' ) + Str( ZPAGINA, 2 )
+@  2, 0   SAY repl( '-', 132 )
+@ 03, 01  SAY ' NUMERO '
+@ 03, 14  SAY 'EMISSAO'
+@ 03, 25  SAY 'FORNECEDOR'
+@ 03, 45  SAY 'VENCERA' // 45
+@ 03, 55  SAY ' VALOR TITULO ' // 57
+@ 03, 71  SAY 'COD' // NOVO
+@ 03, 76  SAY 'BCO'
+@ 03, 80  SAY 'OBSERVACAO:'
+@ 04, 0   SAY repl( '-', 132 )
+CTLIN := 5
+ELSE
+CTLIN := 1
+ENDIF
+ENDIF
+@ CTLIN, 01 SAY NRNOTA PICT '99999999'
+IF !Empty( TIPFAT )
+@ CTLIN, 09 SAY '-' + TIPFAT
+ENDIF
+@ CTLIN, 14 SAY DATA
+@ CTLIN, 25 SAY StrZero( FORNECEDO, 5 )
+@ CTLIN, 31 SAY COGNOME
+@ CTLIN, 45 SAY VENCIMENT
+@ CTLIN, 55 SAY VALATUAL             PICT '999,999,999.99'
+@ CTLIN, 71 SAY COD
+@ CTLIN, 82 SAY BANCO
+@ CTLIN, 86 SAY Left( OBS1, 40 )
+TOT1 += VALATUAL
+TOT2 += VALATUAL
+CTLIN++
+dbSkip()
+ENDDO
+IF TOT1 > 0 .AND. lDIA
+@ CTLIN, 0 SAY repl( '-', 132 )
+CTLIN++
+@ CTLIN, 58 SAY TOT1           PICT '999,999,999.99'
+@ CTLIN, 76 SAY 'Total do Dia'
+CTLIN++
+@ CTLIN, 0 SAY repl( '-', 132 )
+CTLIN++
+ENDIF
+ENDDO
+IF TOT2 > 0
+CTLIN++
+@ CTLIN, 58 SAY TOT2           PICT '999,999,999.99'
+@ CTLIN, 76 SAY 'Total Geral '
+CTLIN++
+ENDIF
+NEXT X
+dbCloseAll()
 IMPFOL()
 VIDEO()
 IMPEND()
 
-*+ EOF: M_BL1.PRG
+// + EOF: M_BL1.PRG
+
+// + EOF: m_bl1.prg
+// +

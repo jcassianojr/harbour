@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : foaa.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : foaa.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -46,36 +46,36 @@
 // :     Documentado 05/13/94 em 14:54                DISK!  vers„o 5.01
 // :*****************************************************************************
 
-#INCLUDE "BOX.CH"
+#include "BOX.CH"
 
 IF ZUSER <> "SUPERVISOR"
-   ALERTX("Acesso Permitido Somente Para o Supervisor")
-   RETU
+ALERTX( "Acesso Permitido Somente Para o Supervisor" )
+RETU
 ENDIF
 
 
-CABEX('Cadastro Sequencia de Lancamento pre-progamados')
+CABEX( 'Cadastro Sequencia de Lancamento pre-progamados' )
 PCK := .F.
-IF !NETUSE("FO_LAN")  //BREDE("FO_LAN",0)
-   RETU
+IF !NETUSE( "FO_LAN" )  // BREDE("FO_LAN",0)
+RETU
 ENDIF
-DBGOTOP()
-DECLARE CAMPOS[1]
-CAMPOS[1] = "' '+STR(CONTA,3)+' '+STR(VALOR,10,2)+' '+SUBSTR(GRUPO,1,60)"
+dbGoTop()
+DECLARE CAMPOS[ 1 ]
+CAMPOS[ 1 ] = "' '+STR(CONTA,3)+' '+STR(VALOR,10,2)+' '+SUBSTR(GRUPO,1,60)"
 IF !NSHOW1()
-   RETU
+RETU
 ENDIF
 SET COLOR TO
-@ 08,00 CLEAR
-HB_DISPBOX(8,0,23,79,B_DOUBLE+" ")
-@  9,2 SAY "Cta    Valor"+SPAC(6)+"Grupo"         
-@ 10,0 SAY '+'+REPL('-',78)+'Ý'                   
+@ 08, 00 CLEAR
+hb_DispBox( 8, 0, 23, 79, B_DOUBLE + " " )
+@  9, 2 SAY "Cta    Valor" + SPAC( 6 ) + "Grupo"
+@ 10, 0 SAY '+' + REPL( '-', 78 ) + 'Ý'
 hb_keyClear()
-//CLEAR TYPEAHEAD
+// CLEAR TYPEAHEAD
 KEYBOARD " "
-DBEDIT(11,1,22,78,CAMPOS,"CADSEQ",.T.,"","","","","")
-DBCLOSEALL()
-NETPACK("FO_LAN",PCK)
+dbEdit( 11, 1, 22, 78, CAMPOS, "CADSEQ", .T., "", "", "", "", "" )
+dbCloseAll()
+NETPACK( "FO_LAN", PCK )
 RETU
 
 // !*****************************************************************************
@@ -86,52 +86,53 @@ RETU
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CADSEQ()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CADSEQ()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNC CADSEQ
 
-PARAMETERS MODO
-KEY := LASTKEY()
-DO CASE
-CASE KEY = 27
-   RETU (0)
-CASE KEY = 13
-   NETRECLOCK()
-   @ ROW(),03 GET CONTA                    
-   @ ROW(),07 GET VALOR                    
-   @ ROW(),18 GET GRUPO PICT "@S60"        
-   READCUR()
-   DBUNLOCK()
-   RETU (1)
-CASE KEY = 22 .OR. MODO = 3
-   MD()
-   NETRECAPP()
-   @ 24,03 GET CONTA                    
-   @ 24,07 GET VALOR                    
-   @ 24,18 GET GRUPO PICT "@S60"        
-   READCUR()
-   DBUNLOCK()
-   MD()
-   RETU (2)
-CASE KEY = 7
-   DELEREC()
-   RETU (2)
-OTHERWISE
-   RETU (1)
-ENDCASE
-RETU (1)
+   PARAMETERS MODO
+
+   KEY := LastKey()
+   DO CASE
+   CASE KEY = 27
+      RETU ( 0 )
+   CASE KEY = 13
+      NETRECLOCK()
+      @ Row(), 03 GET CONTA
+      @ Row(), 07 GET VALOR
+      @ Row(), 18 GET GRUPO PICT "@S60"
+      READCUR()
+      dbUnlock()
+      RETU ( 1 )
+   CASE KEY = 22 .OR. MODO = 3
+      MD()
+      NETRECAPP()
+      @ 24, 03 GET CONTA
+      @ 24, 07 GET VALOR
+      @ 24, 18 GET GRUPO PICT "@S60"
+      READCUR()
+      dbUnlock()
+      MD()
+      RETU ( 2 )
+   CASE KEY = 7
+      DELEREC()
+      RETU ( 2 )
+   OTHERWISE
+      RETU ( 1 )
+   ENDCASE
+   RETU ( 1 )
 
 // : FIM: FOAA.PRG
 
-*+ EOF: foaa.prg
-*+
+// + EOF: foaa.prg
+// +

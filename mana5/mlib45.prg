@@ -1,178 +1,231 @@
-*+--------------------------------------------------------------------
-*+
-*+    Programa  : mlib45.prg
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2021, Jorge Cassiano
-*+
-*+    Documentado em 13/03/2O21
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib45.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-#INCLUDE "INKEY.CH"
+
+#include "INKEY.CH"
 
 
-*+--------------------------------------------------------------------
-*+
-*+    Function ZAPARQ()
-*+
-*+--------------------------------------------------------------------
-*+
-funcTION ZAPARQ(aARQ)
-local W
-if valtype(aARQ) # "A"
-   ALERTX("Parametro ZAPARQ n„o ‚ Matriz")
-   return .F.
-endif
-for W := 1 to len(aARQ)
-   MDS("Zerando Arquivo: "+aARQ[W,1])
-   while ! USEREDE(aARQ[W,1],0,99)
-   enddo
-   zap
-   dbsetorder(1)
-   if aARQ[W,2]
-      dbclosearea()
-   endif
-   if aARQ[W,3]
-      INITVARS()
-      CLRVARS()
-   endif
-next W
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ZAPARQ()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ZAPARQ( aARQ )
+
+   LOCAL W
+
+   IF ValType( aARQ ) # "A"
+      ALERTX( "Parametro ZAPARQ n„o ‚ Matriz" )
+      RETURN .F.
+   ENDIF
+   FOR W := 1 TO Len( aARQ )
+      MDS( "Zerando Arquivo: " + aARQ[ W, 1 ] )
+      WHILE !USEREDE( aARQ[ W, 1 ], 0, 99 )
+      ENDDO
+      ZAP
+      dbSetOrder( 1 )
+      IF aARQ[ W, 2 ]
+         dbCloseArea()
+      ENDIF
+      IF aARQ[ W, 3 ]
+         INITVARS()
+         CLRVARS()
+      ENDIF
+   NEXT W
 
 
-*+--------------------------------------------------------------------
-*+
-*+    Function NOVOREG()
-*+
-*+--------------------------------------------------------------------
-*+
-function NOVOREG(cARQ,eCHAVE,lMES,lLOG,nIND)
-local RETORNO := .F.
-if valtype(lMES) # "L"
-   lMES := .T.
-endif
-if valtype(lLOG) # "L"
-   lLOG := .T.
-endif
-if !USEREDE(cARQ,1,99)
-   retuRN .F.
-endif
-IF VALTYPE(nIND) = "N"
-   DBSETORDER(nIND)
-ENDIF
-dbgotop()
-if !dbseek(eCHAVE)
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NOVOREG()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNCTION NOVOREG( cARQ, eCHAVE, lMES, lLOG, nIND )
+
+   LOCAL RETORNO := .F.
+
+   IF ValType( lMES ) # "L"
+      lMES := .T.
+   ENDIF
+   IF ValType( lLOG ) # "L"
+      lLOG := .T.
+   ENDIF
+   IF !USEREDE( cARQ, 1, 99 )
+      RETURN .F.
+   ENDIF
+   IF ValType( nIND ) = "N"
+      dbSetOrder( nIND )
+   ENDIF
+   dbGoTop()
+   IF !dbSeek( eCHAVE )
+      netrecapp()
+      REPLVARS()
+      RETORNO := .T.
+   ENDIF
+   dbUnlock()
+   dbCommit()
+   dbCloseArea()
+   IF !RETORNO .AND. lMES
+      ALERTX( "Registro ja cadastrado com esta chave" )
+   ENDIF
+   IF lLOG
+      gravalog( eCHAVE, "INS", cARQ )
+   ENDIF
+
+   RETURN RETORNO
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function USEMULT()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION USEMULT( aARQ )
+
+   LOCAL W
+
+   IF ValType( aARQ ) # "A"
+      ALERTX( "Parametro USEMULT nAo E Matriz" )
+      RETURN .F.
+   ENDIF
+   FOR W := 1 TO Len( aARQ )
+      IF !USEREDE( aARQ[ W, 1 ], aARQ[ W, 2 ], aARQ[ W, 3 ] )
+         dbCloseAll()
+         RETURN .F.
+      ENDIF
+      IF aARQ[ W, 3 ] = 99
+         dbSetOrder( 1 )
+      ENDIF
+   NEXT W
+
+   RETURN .T.
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NOVOOPE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION NOVOOPE( cARQ, eCHAVE )
+
+   IF ValType( cARQ ) = "C"
+      dbSelectAr( cARQ )
+   ENDIF
+   dbGoTop()
+   IF !dbSeek( eCHAVE )
+      netrecapp()
+      REPLVARS()
+   ELSE
+      MDS( "Registro ja Cadastrado: " + STRVAL( cARQ ) + STRVAL( eCHAVE ) )
+      RETURN .F.
+   ENDIF
+
+   RETURN .T.
+
+// Arquivo,Lock
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NOVOOPA()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION NOVOOPA( cARQ, lUNL, lREP, lCHECK )
+
+   IF ValType( lUNL ) # "L"
+      lUNL := .T.
+   ENDIF
+   IF ValType( lREP ) # "L"
+      lREP := .T.
+   ENDIF
+   IF ValType( lCHECK ) # "L"
+      lCHECK := .T.
+   ENDIF
+   IF ValType( cARQ ) = "C"
+      dbSelectAr( cARQ )
+   ENDIF
    netrecapp()
-   REPLVARS()
-   RETORNO := .T.
-endif
-dbunlock()
-dbcommit()
-dbclosearea()
-if !RETORNO .and. lMES
-   ALERTX("Registro ja cadastrado com esta chave")
-endif
-if lLOG
-   gravalog(eCHAVE,"INS",cARQ)
-endif
-retuRN RETORNO
+   IF lREP
+      REPLVARS( lCHECK )
+   ENDIF
+   IF lUNL
+      dbUnlock()
+   ENDIF
 
+   RETURN .T.
 
-*+--------------------------------------------------------------------
-*+
-*+    Function USEMULT()
-*+
-*+--------------------------------------------------------------------
-*+
-function USEMULT(aARQ)
-local W
-if valtype(aARQ) # "A"
-   ALERTX("Parametro USEMULT nAo E Matriz")
-   retuRN .F.
-endif
-for W := 1 to len(aARQ)
-   if !USEREDE(aARQ[W,1],aARQ[W,2],aARQ[W,3])
-      dbcloseall()
-      retuRN .F.
-   endif
-   if aARQ[W,3] = 99
-      dbsetorder(1)
-   endif
-next W
-retuRN .T.
-
-
-*+--------------------------------------------------------------------
-*+
-*+    Function NOVOOPE()
-*+
-*+--------------------------------------------------------------------
-*+
-funcTION NOVOOPE(cARQ,eCHAVE)
-
-
-if valtype(cARQ) = "C"
-   dbselectar(cARQ)
-endif
-dbgotop()
-if !dbseek(eCHAVE)
-   netrecapp()
-   REPLVARS()
-else
-   MDS("Registro ja Cadastrado: "+STRVAL(cARQ)+STRVAL(eCHAVE))
-   retuRN .F.
-endif
-retuRN .T.
-
-//Arquivo,Lock
-
-*+--------------------------------------------------------------------
-*+
-*+    Function NOVOOPA()
-*+
-*+--------------------------------------------------------------------
-*+
-funcTION NOVOOPA(cARQ,lUNL,lREP,lCHECK)
-
-if valtype(lUNL) # "L"
-   lUNL := .T.
-endif
-if valtype(lREP) # "L"
-   lREP := .T.
-endif
-if valtype(lCHECK) # "L"
-   lCHECK := .T.
-endif
-if valtype(cARQ) = "C"
-   dbselectar(cARQ)
-endif
-netrecapp()
-if lREP
-   REPLVARS(lCHECK)
-endif
-if lUNL
-   dbunlock()
-endif
-retuRN .T.
-
-*+--------------------------------------------------------------------
-*+
-*+    Function ntxtmp()
-*+
-*+--------------------------------------------------------------------
-*+
-//function ntxtmp
-//local carq
-//cARQ := TMPFILE(cRDDEXT)
-//caRQ := substr(cARQ,1,at(".",cARQ) - 1)
-//return carq
+// function ntxtmp
+// local carq
+// cARQ := TMPFILE(cRDDEXT)
+// caRQ := substr(cARQ,1,at(".",cARQ) - 1)
+// return carq
 
 
 
+
+// + EOF: mlib45.prg
+// +

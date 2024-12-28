@@ -1,27 +1,30 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : m_ce.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_ce.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:57 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 // :*****************************************************************************
 // :
@@ -59,36 +62,40 @@
 
 
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
+// Teclas Operacionais
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 // #INCLUDE "FILEGET.CH"
 
 
 
-PADRAO(0,1,0,"MANAMAN","Descri��o","' '+mDESCRICAO","MCE","MCE001",{|| gMCE()})
+PADRAO( 0, 1, 0, "MANAMAN", "Descri��o", "' '+mDESCRICAO", "MCE", "MCE001", {|| gMCE() } )
 
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function gMCE()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function gMCE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNC gMCE
 
 // Get nas Menvars
-SETCOLOR(PAD002)
-@  4,2 GET mDESCRICAO                                 
-// @  6,2 GET mARQUIVO FILE CAMINHO ZDIRP+"MAN\"         
-READCUR()
-RETU .T.
+   SetColor( PAD002 )
+   @  4, 2 GET mDESCRICAO
+// @  6,2 GET mARQUIVO FILE CAMINHO ZDIRP+"MAN\"
+   READCUR()
+   RETU .T.
 
+
+// + EOF: m_ce.prg
+// +

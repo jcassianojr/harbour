@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : foa3.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : foa3.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -56,98 +56,99 @@
 // :     Documentado 05/13/94 em 14:54                DISK!  vers„o 5.01
 // :*****************************************************************************
 
-#INCLUDE "BOX.CH"
+#include "BOX.CH"
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function foa3()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function foa3
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function foa3()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION foa3
 
-PARA CC
-CABEX('Entrada de Dados Pre Selecionada')
+   PARA CC
 
-XA := XB := XC := XD := XE := XF := CTR := SEL := 0
+   CABEX( 'Entrada de Dados Pre Selecionada' )
 
-IF !NETUSE(PES)   //AREDE(PES,PES,0)
-   RETU
-ENDIF
-FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MES.AND.YEAR(DEMITIDO)>=ANO))'
-FI     := TRIM(FILTRO)
-FILTRO := FILTRO(FI)
-SET FILTER TO &FILTRO
+   XA := XB := XC := XD := XE := XF := CTR := SEL := 0
 
-MDS('Qual Sele‡„o (0-9)')
-@ 24,40 GET SEL PICT '#' RANGE 0,9       
-READCUR()
-FILTRA := "SELECAO="+STR(SEL,1)
+   IF !NETUSE( PES )   // AREDE(PES,PES,0)
+      RETU
+   ENDIF
+   FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MES.AND.YEAR(DEMITIDO)>=ANO))'
+   FI     := Trim( FILTRO )
+   FILTRO := FILTRO( FI )
+   SET FILTER TO &FILTRO
 
-IF !ARQUSAR(CC)
-   DBCLOSEALL()
-   RETU .F.
-ENDIF
-cSELE2 := ALIAS()
+   MDS( 'Qual Sele‡„o (0-9)' )
+   @ 24, 40 GET SEL PICT '#' RANGE 0, 9
+   READCUR()
+   FILTRA := "SELECAO=" + Str( SEL, 1 )
 
-IF !netuse("CONTAS")  //AREDE("CONTAS","CONTAS",0)
-   DBCLOSEALL()
-   RETU .F.
-ENDIF
-SET FILTER TO &FILTRA
+   IF !ARQUSAR( CC )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+   cSELE2 := Alias()
 
-DBSELECTAR(PES)
-DBGOTOP()
-WHILE !EOF()
-   PETELA(7)
-   CTR := NUMERO
-   DBSELECTAR("CONTAS")
-   DBGOTOP()
-   WHILE !EOF()
-      XB      := TIPO
-      CTCONTA := CODIGO
-      HB_dispbox(12,8,16,71,B_DOUBLE+" ")
-      @ 12,16 SAY "-"+REPL('-',37)+"-"                                                       
-      @ 16,16 SAY "-"+REPL('-',37)+"-"                                                       
-      @ 13,10 SAY "Conta Ý Descrimina‡„o"+SPAC(23)+"Ý Valor/Horas"                           
-      @ 14,08 SAY 'Ç'+REPL('-',7)+"+"+REPL('-',37)+"+"+REPL('-',16)+'¶'                      
-      @ 15,16 SAY "Ý"+SPAC(37)+"Ý"                                                           
-      @ 15,11 SAY CODIGO                                                PICTURE "###"        
-      @ 15,18 SAY DESCR                                                                      
-      IF ACEITE # "S" .OR. ZUSER = "SUPERVISOR"
-         DBSELECTAR(cSELE2)
-         VALE := VALCTA(CTR,CTCONTA)
-         HORA := IF(FOUND(),HORAS,0)
-         IF XB = 1 .OR. XB = 3 .OR. XB = 4
-            @ 15,56 GET HORA PICT '###.##'        
+   IF !netuse( "CONTAS" )  // AREDE("CONTAS","CONTAS",0)
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+   SET FILTER TO &FILTRA
+
+   dbSelectAr( PES )
+   dbGoTop()
+   WHILE !Eof()
+      PETELA( 7 )
+      CTR := NUMERO
+      dbSelectAr( "CONTAS" )
+      dbGoTop()
+      WHILE !Eof()
+         XB      := TIPO
+         CTCONTA := CODIGO
+         hb_DispBox( 12, 8, 16, 71, B_DOUBLE + " " )
+         @ 12, 16 SAY "-" + REPL( '-', 37 ) + "-"
+         @ 16, 16 SAY "-" + REPL( '-', 37 ) + "-"
+         @ 13, 10 SAY "Conta Ý Descrimina‡„o" + SPAC( 23 ) + "Ý Valor/Horas"
+         @ 14, 08 SAY 'Ç' + REPL( '-', 7 ) + "+" + REPL( '-', 37 ) + "+" + REPL( '-', 16 ) + '¶'
+         @ 15, 16 SAY "Ý" + SPAC( 37 ) + "Ý"
+         @ 15, 11 SAY CODIGO                                                PICTURE "###"
+         @ 15, 18 SAY DESCR
+         IF ACEITE # "S" .OR. ZUSER = "SUPERVISOR"
+            dbSelectAr( cSELE2 )
+            VALE := VALCTA( CTR, CTCONTA )
+            HORA := IF( Found(), HORAS, 0 )
+            IF XB = 1 .OR. XB = 3 .OR. XB = 4
+               @ 15, 56 GET HORA PICT '###.##'
+            ELSE
+               @ 15, 56 GET VALE PICT '###,###,###.##'
+            ENDIF
+            READCUR()
+            GRAVA2( CTCONTA )
+            IF XB = 1 .OR. XB = 3 .OR. XB = 4
+               REPL HORAS WITH HORA
+            ENDIF
          ELSE
-            @ 15,56 GET VALE PICT '###,###,###.##'        
+            ALERTX( "Inclus„o desta Conta Permitida Somente para o Supervisor" )
          ENDIF
-         READCUR()
-         GRAVA2(CTCONTA)
-         IF XB = 1 .OR. XB = 3 .OR. XB = 4
-            REPL HORAS WITH HORA
-         ENDIF
-      ELSE
-         ALERTX("Inclus„o desta Conta Permitida Somente para o Supervisor")
-      ENDIF
-      DBSELECTAR("CONTAS")
-      DBSKIP()
+         dbSelectAr( "CONTAS" )
+         dbSkip()
+      ENDDO
+      dbSelectAr( PES )
+      dbSkip()
    ENDDO
-   DBSELECTAR(PES)
-   DBSKIP()
-ENDDO
-DBSELECTAR(cSELE2)
-FODZER()
-DBCLOSEALL()
-RETU
+   dbSelectAr( cSELE2 )
+   FODZER()
+   dbCloseAll()
+   RETU
 // : FIM: FOA3.PRG
 
-*+ EOF: foa3.prg
-*+
+// + EOF: foa3.prg
+// +

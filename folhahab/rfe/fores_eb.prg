@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fores_eb.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:41 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fores_eb.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:41 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // :*****************************************************************************
 // :
@@ -39,46 +39,46 @@
 // :     Documentado 05/13/94 em 15:05                DISK!  vers„o 5.01
 // :*****************************************************************************
 
-////#INCLUDE "COMANDO.CH"
+// //#INCLUDE "COMANDO.CH"
 
 EMITIDO := DATFERIASF - 16
-MDS('Confirme Data de Emissao')
-@ 24,40 GET EMITIDO         
+MDS( 'Confirme Data de Emissao' )
+@ 24, 40 GET EMITIDO
 READCUR()
 IMPRESSORA()
 FOR X := 1 TO COP
-   @ PROW()+ 1,0  SAY IMPCHR(cIMPTIT)+'SOLICITACAO DE ABONO PECUNIARIO DE FERIAS'                                                                           
-   @ PROW()+ 1,20 SAY IMPSTR(cIMPCOM)+'Paragrafo 1. artigo 143 da C.L.T., com as alteracoes do Dec. Lei nro. 1535 de 13/04/1977'+IMPSTR(cIMPEXP)            
-   @ PROW()+ 1,0  SAY REPL('=',80)                                                                                                                          
-   @ PROW()+ 2,0  SAY 'Local: '+CID1+','+EST1+'-'+DTOC(EMITIDO)                                                                                             
-   @ PROW()+ 2,0  SAY 'Firma '+MSG2                                                                                                                         
-   @ PROW()+ 1,0  SAY 'Endereco '+ENDER1+'-'+BAI1+'-'+CID1+'-'+EST1                                                                                         
-   @ PROW()+ 2,0  SAY 'Prezado(s) Senhor(es),'                                                                                                              
-   @ PROW()+ 2,0  SAY IMPSTR(cIMPCOM)                                                                                                                       
-   @ PROW(), 0    SAY 'O infra assinado,  funcionario dessa firma, vem  respeitosamente, requerer lhe seja concedido um terco  do periodo de  suas'         
-   @ PROW()+ 1,0  SAY 'ferias, a  quem tem  direito, em abono pecuniario, ficando a  criterio da firma a designacao da data da epoca da concessao,'         
-   @ PROW()+ 1,0  SAY 'tudo de acordo com a Consolidacao das Leis do Trabalho'                                                                              
-   @ PROW()+ 1,0  SAY 'Relativas ao periodo aquisitivo de '+DTOC(DATFERIAS)+' a '+DTOC(DATFERIASF)                                                          
-   @ PROW()+ 1,0  SAY 'Favor dar o ciente na copia deste.'+IMPSTR(cIMPEXP)                                                                                  
-   @ PROW()+ 1,0  SAY REPL('=',80)                                                                                                                          
-   DBSELECTAR(PES)
-   @ PROW()+ 1,0  SAY 'Numero: '+STR(NUMERO)+' Nome: '+NOME                                                                                                                                           
-   @ PROW()+ 1,0  SAY 'CTPS: '+IF(left(TIRAOUT(CPF),7) = PROFIS,CPF,PROFIS+"-"+SERIE+"/"+CTPSUF) //CTPS digital com os primeiros 7 dígitos do CPF e o campo Série, com os 4 dígitos restantes         
-   @ PROW()+ 1,0  SAY REPL('=',80)                                                                                                                                                                    
-   @ PROW()+ 1,0  SAY 'Atenciosamente'                                                                                                                                                                
-   @ PROW(),39    SAY 'Ciente em     /    /    '                                                                                                                                                      
-   @ PROW()+ 3,0  SAY REPL('-',30)                                                                                                                                                                    
-   @ PROW(),39    SAY REPL('-',30)                                                                                                                                                                    
-   @ PROW()+ 1,10 SAY 'Empregado'                                                                                                                                                                     
-   @ PROW(),49    SAY 'Empregador'                                                                                                                                                                    
-   @ PROW()+ 2,0  SAY REPL('=',80)                                                                                                                                                                    
-   IMPFOL()
-   DBSELECTAR("FO_FER")
+@ PRow() + 1, 0  SAY IMPCHR( cIMPTIT ) + 'SOLICITACAO DE ABONO PECUNIARIO DE FERIAS'
+@ PRow() + 1, 20 SAY IMPSTR( cIMPCOM ) + 'Paragrafo 1. artigo 143 da C.L.T., com as alteracoes do Dec. Lei nro. 1535 de 13/04/1977' + IMPSTR( cIMPEXP )
+@ PRow() + 1, 0  SAY REPL( '=', 80 )
+@ PRow() + 2, 0  SAY 'Local: ' + CID1 + ',' + EST1 + '-' + DToC( EMITIDO )
+@ PRow() + 2, 0  SAY 'Firma ' + MSG2
+@ PRow() + 1, 0  SAY 'Endereco ' + ENDER1 + '-' + BAI1 + '-' + CID1 + '-' + EST1
+@ PRow() + 2, 0  SAY 'Prezado(s) Senhor(es),'
+@ PRow() + 2, 0  SAY IMPSTR( cIMPCOM )
+@ PRow(), 0    SAY 'O infra assinado,  funcionario dessa firma, vem  respeitosamente, requerer lhe seja concedido um terco  do periodo de  suas'
+@ PRow() + 1, 0  SAY 'ferias, a  quem tem  direito, em abono pecuniario, ficando a  criterio da firma a designacao da data da epoca da concessao,'
+@ PRow() + 1, 0  SAY 'tudo de acordo com a Consolidacao das Leis do Trabalho'
+@ PRow() + 1, 0  SAY 'Relativas ao periodo aquisitivo de ' + DToC( DATFERIAS ) + ' a ' + DToC( DATFERIASF )
+@ PRow() + 1, 0  SAY 'Favor dar o ciente na copia deste.' + IMPSTR( cIMPEXP )
+@ PRow() + 1, 0  SAY REPL( '=', 80 )
+dbSelectAr( PES )
+@ PRow() + 1, 0  SAY 'Numero: ' + Str( NUMERO ) + ' Nome: ' + NOME
+@ PRow() + 1, 0  SAY 'CTPS: ' + IF( Left( TIRAOUT( CPF ), 7 ) = PROFIS, CPF, PROFIS + "-" + SERIE + "/" + CTPSUF ) // CTPS digital com os primeiros 7 dígitos do CPF e o campo Série, com os 4 dígitos restantes
+@ PRow() + 1, 0  SAY REPL( '=', 80 )
+@ PRow() + 1, 0  SAY 'Atenciosamente'
+@ PRow(), 39    SAY 'Ciente em     /    /    '
+@ PRow() + 3, 0  SAY REPL( '-', 30 )
+@ PRow(), 39    SAY REPL( '-', 30 )
+@ PRow() + 1, 10 SAY 'Empregado'
+@ PRow(), 49    SAY 'Empregador'
+@ PRow() + 2, 0  SAY REPL( '=', 80 )
+IMPFOL()
+dbSelectAr( "FO_FER" )
 NEXT X
 VIDEO()
 IMPEND()
 RETU
 // : FIM: FORES_EB.PRG
 
-*+ EOF: fores_eb.prg
-*+
+// + EOF: fores_eb.prg
+// +

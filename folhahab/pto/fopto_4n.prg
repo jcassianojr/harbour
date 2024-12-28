@@ -1,107 +1,107 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_4n.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:33 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_4n.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:33 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-CABE2("FOPTO_4N - Importar Ferias Folha")
+CABE2( "FOPTO_4N - Importar Ferias Folha" )
 
-cPO := "PO"+ANOMESW   //ANOWORK + strzero( MES, 2 )
-CHECKCRI(cPO,"FO_POCO","STR(NUMERO,8)+DTOS(OCOINI)")
+cPO := "PO" + ANOMESW   // ANOWORK + strzero( MES, 2 )
+CHECKCRI( cPO, "FO_POCO", "STR(NUMERO,8)+DTOS(OCOINI)" )
 
 DATAINI := zdataini
 DATAFIM := zdatafim
-MDS('Digite as Datas Iniciais e Finais')
-@ 24,40 get DATAINI         
-@ 24,50 get DATAFIM         
-if !READCUR()
-   retu .F.
-endif
+MDS( 'Digite as Datas Iniciais e Finais' )
+@ 24, 40 GET DATAINI
+@ 24, 50 GET DATAFIM
+IF !READCUR()
+RETU .F.
+ENDIF
 
 
-if !NETUSE("FO_FER")
-   dbcloseall()
-   retu
-endif
+IF !NETUSE( "FO_FER" )
+dbCloseAll()
+RETU
+ENDIF
 
-if !NETUSE(cPO)   //AREDE( cPO, cPO, 1 )
-   dbcloseall()
-   retu .F.
-endif
+IF !NETUSE( cPO )   // AREDE( cPO, cPO, 1 )
+dbCloseAll()
+RETU .F.
+ENDIF
 
-dbselectar("FO_FER")
-dbgotop()
-while !eof()
-   if (GOZOU1DE >= DATAINI .and. GOZOU1DE <= DATAFIM) .or. ;
-               (GOZOU2DE >= DATAINI .and. GOZOU2DE <= DATAFIM) .or. ;
-               (GOZOU1ATE >= DATAINI .and. GOZOU1ATE <= DATAFIM .and. !empty(GOZOU1ATE)) .or. ;
-               (GOZOU2ATE >= DATAINI .and. GOZOU2ATE <= DATAFIM .and. !empty(GOZOU2ATE))
-      @ 24,26 say NUMERO             
-      @ 24,33 say NOME               
-      @ 24,64 say DATFERIAS          
-      @ 24,74 say DATFERIASF         
-      if (GOZOU1DE >= DATAINI .and. GOZOU1DE <= DATAFIM) .or. ;
-                  (GOZOU1ATE >= DATAINI .and. GOZOU1ATE <= DATAFIM .and. !empty(GOZOU1ATE))
-         mCHAVE := str(NUMERO,8)+dtos(GOZOU1DE)
-         dbselectar(cPO)
-         dbgotop()
-         if !dbseek(mCHAVE)
-            netrecapp()
-            field->NUMERO := FO_FER->NUMERO
-            field->OCOINI := FO_FER->GOZOU1DE
-         else
-            netreclock()
-         endif
-         field->OCOFIM := FO_FER->GOZOU1ATE
-         field->OCOCOD := "FN"
-         dbunlock()
-         dbselectar("FO_FER")
-      endif
-      if (GOZOU2DE >= DATAINI .and. GOZOU2DE <= DATAFIM) .or. ;
-                  (GOZOU2ATE >= DATAINI .and. GOZOU2ATE <= DATAFIM .and. !empty(GOZOU2ATE))
-         mCHAVE := str(NUMERO,8)+dtos(GOZOU2DE)
-         dbselectar(cPO)
-         dbgotop()
-         if !dbseek(mCHAVE)
-            netrecapp()
-            field->NUMERO := FO_FER->NUMERO
-            field->OCOINI := FO_FER->GOZOU2DE
-         else
-            netreclock()
-         endif
-         field->OCOFIM := FO_FER->GOZOU2ATE
-         field->OCOCOD := "FN"
-         dbunlock()
-         dbselectar("FO_FER")
-      endif
-   endif
-   dbselectar("FO_FER")
-   dbskip()
-enddo
-dbcloseall()
+dbSelectAr( "FO_FER" )
+dbGoTop()
+WHILE !Eof()
+IF ( GOZOU1DE >= DATAINI .AND. GOZOU1DE <= DATAFIM ) .OR. ;
+            ( GOZOU2DE >= DATAINI .AND. GOZOU2DE <= DATAFIM ) .OR. ;
+            ( GOZOU1ATE >= DATAINI .AND. GOZOU1ATE <= DATAFIM .AND. !Empty( GOZOU1ATE ) ) .OR. ;
+            ( GOZOU2ATE >= DATAINI .AND. GOZOU2ATE <= DATAFIM .AND. !Empty( GOZOU2ATE ) )
+@ 24, 26 SAY NUMERO
+@ 24, 33 SAY NOME
+@ 24, 64 SAY DATFERIAS
+@ 24, 74 SAY DATFERIASF
+IF ( GOZOU1DE >= DATAINI .AND. GOZOU1DE <= DATAFIM ) .OR. ;
+               ( GOZOU1ATE >= DATAINI .AND. GOZOU1ATE <= DATAFIM .AND. !Empty( GOZOU1ATE ) )
+mCHAVE := Str( NUMERO, 8 ) + DToS( GOZOU1DE )
+dbSelectAr( cPO )
+dbGoTop()
+IF !dbSeek( mCHAVE )
+netrecapp()
+field->NUMERO := FO_FER->NUMERO
+field->OCOINI := FO_FER->GOZOU1DE
+ELSE
+netreclock()
+ENDIF
+field->OCOFIM := FO_FER->GOZOU1ATE
+field->OCOCOD := "FN"
+dbUnlock()
+dbSelectAr( "FO_FER" )
+ENDIF
+IF ( GOZOU2DE >= DATAINI .AND. GOZOU2DE <= DATAFIM ) .OR. ;
+               ( GOZOU2ATE >= DATAINI .AND. GOZOU2ATE <= DATAFIM .AND. !Empty( GOZOU2ATE ) )
+mCHAVE := Str( NUMERO, 8 ) + DToS( GOZOU2DE )
+dbSelectAr( cPO )
+dbGoTop()
+IF !dbSeek( mCHAVE )
+netrecapp()
+field->NUMERO := FO_FER->NUMERO
+field->OCOINI := FO_FER->GOZOU2DE
+ELSE
+netreclock()
+ENDIF
+field->OCOFIM := FO_FER->GOZOU2ATE
+field->OCOCOD := "FN"
+dbUnlock()
+dbSelectAr( "FO_FER" )
+ENDIF
+ENDIF
+dbSelectAr( "FO_FER" )
+dbSkip()
+ENDDO
+dbCloseAll()
 
 
-*+ EOF: fopto_4n.prg
-*+
+// + EOF: fopto_4n.prg
+// +

@@ -1,34 +1,64 @@
-MDI(" Ý Ajuste Dipam ")
-aRETU := PERFEC( { "MM06" }, { "M6" }, { "MM96" } )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_dv.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:47 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
+MDI( " Ý Ajuste Dipam " )
+aRETU    := PERFEC( { "MM06" }, { "M6" }, { "MM96" } )
 cARQUIVO := aRETU[ 5, 1 ]
-IF ! USEREDE(ALLTRIM(cARQUIVO),1,99)
-   RETU
+IF !USEREDE( AllTrim( cARQUIVO ), 1, 99 )
+RETU
 ENDIF
-IF ! USEREDE("MD04",1,99)
-   DBCLOSEALL()
-   RETU .F.
+IF !USEREDE( "MD04", 1, 99 )
+dbCloseAll()
+RETU .F.
 ENDIF
-DBSELECTAR(ALLTRIM(cARQUIVO))
-DBGOTOP()
-WHILE ! EOF()
-   @ 24,60 SAY NUMERO
-   IF EMPTY(DIPAM)
-      nINDICE:=2
-      mDOPER:=DCFONEW
-      IF EMPTY(mDOPER)
-         mDOPER:=DOPER
-         nINDICE=3
-      ENDIF
-      DBSELECTAR("MD04")
-      DBSETORDER(nINDICE)
-      DBGOTOP()
-      DBSEEK(mDOPER)
-      mDIPAM:=IF(FOUND(),DIPAM,"  ")
-      DBSELECTAR(ALLTRIM(cARQUIVO))
-      IF ! EMPTY(mDIPAM)
-         NETGRVCAM("DIPAM",mDIPAM)
-      ENDIF
-   ENDIF
-   DBSKIP()
+dbSelectAr( AllTrim( cARQUIVO ) )
+dbGoTop()
+WHILE !Eof()
+@ 24, 60 SAY NUMERO
+IF Empty( DIPAM )
+nINDICE := 2
+mDOPER  := DCFONEW
+IF Empty( mDOPER )
+mDOPER  := DOPER
+nINDICE := 3
+ENDIF
+dbSelectAr( "MD04" )
+dbSetOrder( nINDICE )
+dbGoTop()
+dbSeek( mDOPER )
+mDIPAM := IF( Found(), DIPAM, "  " )
+dbSelectAr( AllTrim( cARQUIVO ) )
+IF !Empty( mDIPAM )
+NETGRVCAM( "DIPAM", mDIPAM )
+ENDIF
+ENDIF
+dbSkip()
 ENDDO
-DBCLOSEAREA()
+dbCloseArea()
+
+// + EOF: m_dv.prg
+// +

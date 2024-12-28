@@ -1,61 +1,62 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : recuproc.prg
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : recuproc.prg
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-#INCLUDE "INKEY.CH"
+#include "INKEY.CH"
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CABE2()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function CABE2(TITULO)  //CABECARIO PARA OS MENUS
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CABE2()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION CABE2( TITULO )  // CABECARIO PARA OS MENUS
 
-SETCOLOR("N/W")
-@ 06,04 CLEA TO 06,74
-@ 06,06 SAY TITULO         
-SETCOLOR("W/N,N/W")
-RETU (.T.)
+   SetColor( "N/W" )
+   @ 06, 04 CLEA TO 06, 74
+   @ 06, 06 SAY TITULO
+   SetColor( "W/N,N/W" )
+   RETU ( .T. )
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CABE3()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function CABE3(TITULO,QT)   //CABECARIO PARA OS MENUS
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CABE3()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-SETCOLOR("W/N")
-@ 04,01 CLEA TO 04,78
-@ 06,01 CLEA TO 06,78
-@ 08,00 CLEA
-SETCOLOR("N/W")
-@ 04,04 CLEA TO 04,74
-@ 04,04 SAY TITULO         
-SETCOLOR("+GR/BG")
-@ 08,21 CLEA TO QT,58
-@ 08,21 TO QT,58 DOUB
-RETU (.T.)
+FUNCTION CABE3( TITULO, QT )   // CABECARIO PARA OS MENUS
+
+   SetColor( "W/N" )
+   @ 04, 01 CLEA TO 04, 78
+   @ 06, 01 CLEA TO 06, 78
+   @ 08, 00 CLEA
+   SetColor( "N/W" )
+   @ 04, 04 CLEA TO 04, 74
+   @ 04, 04 SAY TITULO
+   SetColor( "+GR/BG" )
+   @ 08, 21 CLEA TO QT, 58
+   @ 08, 21 TO QT, 58 DOUB
+   RETU ( .T. )
 
 
 // !*****************************************************************************
@@ -66,29 +67,31 @@ RETU (.T.)
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function NSHOW()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION NSHOW  //AVISA QUE O ARQUIVO ESTA VAZIO
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function NSHOW()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-SETCOLOR("W/N")
-@  8,0 CLEAR
-SETCOLOR("+W/BR")
-@  9,0 TO 11,79 DOUB
-SETCOLOR("N/W")
-@ 10,1 SAY SPAC(33)+'Arquivo vazio'+SPAC(32)         
-SETCOLOR("+W/BR")
-INKEY(0)
-RETURN .T.
+FUNCTION NSHOW  // AVISA QUE O ARQUIVO ESTA VAZIO
+
+   SetColor( "W/N" )
+   @  8, 0 CLEAR
+   SetColor( "+W/BR" )
+   @  9, 0 TO 11, 79 DOUB
+   SetColor( "N/W" )
+   @ 10, 1 SAY SPAC( 33 ) + 'Arquivo vazio' + SPAC( 32 )
+   SetColor( "+W/BR" )
+   Inkey( 0 )
+
+   RETURN .T.
 
 
 // !*****************************************************************************
@@ -99,30 +102,30 @@ RETURN .T.
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function ARQ()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function ARQ(NOMEARQ)   //VERIFICA A EXISTENCIA DE UM ARQUIVO
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ARQ()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ARQ( NOMEARQ )   // VERIFICA A EXISTENCIA DE UM ARQUIVO
 
-IF NOMEARQ = SPAC(25)
-   MDT("NOME DO ARQUIVO NAO PODE SER VAZIO")
-   RETU (.F.)
-ENDIF
-memvar->NOMEARX := ALLTRIM(NOMEARQ)+'.DBF'
-IF !file(memvar->NOMEARX)
-   MDT("ESTE ARQUIVO NAO EXISTE - VERIFIQUE !")
-   RETU (.F.)
-ENDIF
-RETU (.T.)
+   IF NOMEARQ = SPAC( 25 )
+      MDT( "NOME DO ARQUIVO NAO PODE SER VAZIO" )
+      RETU ( .F. )
+   ENDIF
+   memvar->NOMEARX := AllTrim( NOMEARQ ) + '.DBF'
+   IF !File( memvar->NOMEARX )
+      MDT( "ESTE ARQUIVO NAO EXISTE - VERIFIQUE !" )
+      RETU ( .F. )
+   ENDIF
+   RETU ( .T. )
 
 
 
@@ -138,75 +141,79 @@ RETU (.T.)
 // !
 // !*****************************************************************************
 
-function NSHOW1   //VERIFICA SE O ARQUIVO ESTA VAZIO ANTES DO DBEDIT
+FUNCTION NSHOW1   // VERIFICA SE O ARQUIVO ESTA VAZIO ANTES DO DBEDIT
 
-IF EOF()
-   //CLEAR TYPEAHEAD
-   hb_keyClear()
-   NSHOW()
-   IF LASTKEY() = 13
-      NETRECAPP()
-      KEYBOARD CHR(22)
-   ELSE
-      RETU (.F.)
+   IF Eof()
+      // CLEAR TYPEAHEAD
+      hb_keyClear()
+      NSHOW()
+      IF LastKey() = 13
+         NETRECAPP()
+         KEYBOARD Chr( 22 )
+      ELSE
+         RETU ( .F. )
+      ENDIF
    ENDIF
-ENDIF
-RETU (.T.)
+   RETU ( .T. )
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MDI()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function MDI(cVAR)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MDI()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-CABE2(cVAR)
-RETU .T.
+FUNCTION MDI( cVAR )
 
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function COR()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function COR
-
-RETU .T.
+   CABE2( cVAR )
+   RETU .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CABEX()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-function CABEX(cVAR)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function COR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-CABE2(cVAR)
-RETURN .T.
+FUNCTION COR
+
+   RETU .T.
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CABEX()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNCTION CABEX( cVAR )
+
+   CABE2( cVAR )
+
+   RETURN .T.
 
 
 
-*+ FIM : recuproc.prg
-*+
+// + FIM : recuproc.prg
+// +

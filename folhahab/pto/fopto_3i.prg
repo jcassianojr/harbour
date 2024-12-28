@@ -1,193 +1,194 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_3i.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:33 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_3i.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:33 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-////#INCLUDE "COMANDO.CH"
+// //#INCLUDE "COMANDO.CH"
 
 dINI := dFIM := ZDATA
-MDS('Qual Periodo')
-@ 24,20 get dINI         
-@ 24,30 get dFIM         
-if !READCUR()
-   retu .F.
-endif
+MDS( 'Qual Periodo' )
+@ 24, 20 GET dINI
+@ 24, 30 GET dFIM
+IF !READCUR()
+RETU .F.
+ENDIF
 
-if !CHECKIMP(0)
-   retu .F.
-endif
+IF !CHECKIMP( 0 )
+RETU .F.
+ENDIF
 
 ARQ     := {}
-nINIANO := year(dINI)
-nFIMANO := year(dFIM)
-for J := nINIANO to nFIMANO
-   PATH1 := '\FOLHA\EMP'+ANOSTR(J)+strzero(NREMP,3)+'\'+spac(20)
-   MDS('Confirme localiza‡„o Arquivos de:'+str(J,4))
-   @ 24,45 get PATH1         
-   if !READCUR()
-      retu .F.
-   endif
-   PATH1 := alltrim(PATH1)
-   do case
-   case nINIANO = nFIMANO
-      nMESINI := month(dINI)
-      nMESFIM := month(dFIM)
-   case nINIANO = J
-      nMESINI := month(dINI)
-      nMESFIM := 12
-   case nFIMANO = J
-      nMESINI := 1
-      nMESFIM := month(dFIM)
-   endcase
-   for W := nMESINI to nMESFIM
-      cARQ := PATH1+"PN"+ANOSTR(J)+strzero(W,2)
-      if !INFOR(cARQ,"STR(NUMERO,8)+DTOS(DATA)",cARQ,.T.)
-         retu .F.
-      endif
-      aadd(ARQ,{cARQ,J,W})
-   next W
-next J
+nINIANO := Year( dINI )
+nFIMANO := Year( dFIM )
+FOR J := nINIANO TO nFIMANO
+PATH1 := '\FOLHA\EMP' + ANOSTR( J ) + StrZero( NREMP, 3 ) + '\' + spac( 20 )
+MDS( 'Confirme localiza‡„o Arquivos de:' + Str( J, 4 ) )
+@ 24, 45 GET PATH1
+IF !READCUR()
+RETU .F.
+ENDIF
+PATH1 := AllTrim( PATH1 )
+DO CASE
+CASE nINIANO = nFIMANO
+nMESINI := Month( dINI )
+nMESFIM := Month( dFIM )
+CASE nINIANO = J
+nMESINI := Month( dINI )
+nMESFIM := 12
+CASE nFIMANO = J
+nMESINI := 1
+nMESFIM := Month( dFIM )
+ENDCASE
+FOR W := nMESINI TO nMESFIM
+cARQ := PATH1 + "PN" + ANOSTR( J ) + StrZero( W, 2 )
+IF !INFOR( cARQ, "STR(NUMERO,8)+DTOS(DATA)", cARQ, .T. )
+RETU .F.
+ENDIF
+AAdd( ARQ, { cARQ, J, W } )
+NEXT W
+NEXT J
 
-if !netuse("tabfalta")
-   dbcloseall()
-   retu .F.
-endif
+IF !netuse( "tabfalta" )
+dbCloseAll()
+RETU .F.
+ENDIF
 
-if !NETUSE(pes)
-   dbcloseall()
-   retu
-endif
+IF !NETUSE( pes )
+dbCloseAll()
+RETU
+ENDIF
 FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
 INX    := ""
-FILORD(.T.)
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-if valtype(INX) = "N"
-   dbsetorder(INX)
+FILORD( .T. )
+nLASTREC := LastRec()
+zei_fort( nLASTREC,,, 0 )
+IF ValType( INX ) = "N"
+dbSetOrder( INX )
 ELSE
-   ordDestroy("temp")
-   ordcreate(,"temp",inx)
-   ordSetFocus("temp")
+ordDestroy( "temp" )
+ordCreate(, "temp", inx )
+ordSetFocus( "temp" )
 ENDIF
-set filter to &FILTRO
+SET FILTER TO &FILTRO
 
-LISTARUE({| X | FOPTO3I(X)})
+LISTARUE( {| X | FOPTO3I( X ) } )
 
-retu
+RETU
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function FOPTO3I()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func FOPTO3I
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function FOPTO3I()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC FOPTO3I
 
-local cARQUSO
-para COMPARE
-dbselectar(PES)
-dbgotop()
-while !eof()
-   if &COMPARE
-      mNUMERO := NUMERO
-      mNOME   := NOME
-      CTLIN   := 80
-      for W := 1 to len(ARQ)
-         VIDEO()
-         cARQUSO := ARQ[W,1]
-         if !netuse(cARQUSO)
+   LOCAL cARQUSO
+   PARA COMPARE
+
+   dbSelectAr( PES )
+   dbGoTop()
+   WHILE !Eof()
+      IF &COMPARE
+         mNUMERO := NUMERO
+         mNOME   := NOME
+         CTLIN   := 80
+         FOR W := 1 TO Len( ARQ )
             VIDEO()
-            dbcloseall()
-            retu .F.
-         endif
-         IMPRESSORA()
-         dbgotop()
-         dbseek(str(mNUMERO,8))
-         while mNUMERO = NUMERO .and. !eof()
-            if !empty(COD)
-               if CTLIN > 50
-                  @  0,0  say "Ficha Frequencia"         
-                  @  1,0  say mNUMERO                    
-                  @  1,10 say mNOME                      
-                  if !empty(NOMSETOR)
-                     @  2,00 say NOMSETOR         
-                     CTLIN := 3
-                  else
-                     CTLIN := 2
-                  endif
-               endif
-               CTLIN ++
-               @ CTLIN,0  say DATA         
-               @ CTLIN,10 say COD          
-               mCOD := COD
-               if !empty(mCOD)
-                  dbselectar("TABFALTA")
-                  dbgotop()
-                  IF dbseek(mCOD)
-                     @ CTLIN,13 say NOME         
-                  endif
-                  dbselectar(Carquso)
-               endif
-            endif
-            dbselectar(Carquso)
-            dbskip()
-         enddo
-      next W
-      dbselectar(Carquso)
-      dbclosearea()
-   endif
-   dbselectar(PES)
-   dbskip()
-enddo
+            cARQUSO := ARQ[ W, 1 ]
+            IF !netuse( cARQUSO )
+               VIDEO()
+               dbCloseAll()
+               RETU .F.
+            ENDIF
+            IMPRESSORA()
+            dbGoTop()
+            dbSeek( Str( mNUMERO, 8 ) )
+            WHILE mNUMERO = NUMERO .AND. !Eof()
+               IF !Empty( COD )
+                  IF CTLIN > 50
+                     @  0, 0  SAY "Ficha Frequencia"
+                     @  1, 0  SAY mNUMERO
+                     @  1, 10 SAY mNOME
+                     IF !Empty( NOMSETOR )
+                        @  2, 00 SAY NOMSETOR
+                        CTLIN := 3
+                     ELSE
+                        CTLIN := 2
+                     ENDIF
+                  ENDIF
+                  CTLIN++
+                  @ CTLIN, 0  SAY DATA
+                  @ CTLIN, 10 SAY COD
+                  mCOD := COD
+                  IF !Empty( mCOD )
+                     dbSelectAr( "TABFALTA" )
+                     dbGoTop()
+                     IF dbSeek( mCOD )
+                        @ CTLIN, 13 SAY NOME
+                     ENDIF
+                     dbSelectAr( Carquso )
+                  ENDIF
+               ENDIF
+               dbSelectAr( Carquso )
+               dbSkip()
+            ENDDO
+         NEXT W
+         dbSelectAr( Carquso )
+         dbCloseArea()
+      ENDIF
+      dbSelectAr( PES )
+      dbSkip()
+   ENDDO
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function ANOSTR()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func ANOSTR(XANO)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ANOSTR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC ANOSTR( XANO )
+
+   RETU SubStr( StrZero( XANO, 4 ), 3, 2 )
 
 
-retu substr(strzero(XANO,4),3,2)
-
-
-*+ EOF: fopto_3i.prg
-*+
+// + EOF: fopto_3i.prg
+// +

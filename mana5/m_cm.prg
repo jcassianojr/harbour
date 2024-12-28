@@ -1,27 +1,30 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : m_cm.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_cm.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:57 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 // :*****************************************************************************
 // :
@@ -49,40 +52,44 @@
 
 
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
+// Teclas Operacionais
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 // #INCLUDE "MEMOGET.CH"
 
 
 
-PADRAO(0,1,0,"MMES","Codigo Utilizacao",;
- "' '+mCODIGO+' '+mUSO","MCM","MCM001",{|| gMCM()})
+PADRAO( 0, 1, 0, "MMES", "Codigo Utilizacao", ;
+      "' '+mCODIGO+' '+mUSO", "MCM", "MCM001", {|| gMCM() } )
 
 
 
-//Get Nas Mvars
+// Get Nas Mvars
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function gMCM()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function gMCM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNC gMCM
 
-SETCOLOR(PAD002)
-@  5,2 GET mCODIGO                                                      
-@  8,2 GET mUSO                                                         
-@ 11,2 GET mMENSAGEM                                                    
-// @ 14,2 GET mDESCRICAO MEMO coord {15,09,21,72} boxcolor MCFN003         
-READCUR()
-mDESCRICAO := STRTRAN(mDESCRICAO,CHR(141)+CHR(10),CHR(13)+CHR(10))
-RETU .T.
+   SetColor( PAD002 )
+   @  5, 2 GET mCODIGO
+   @  8, 2 GET mUSO
+   @ 11, 2 GET mMENSAGEM
+// @ 14,2 GET mDESCRICAO MEMO coord {15,09,21,72} boxcolor MCFN003
+   READCUR()
+   mDESCRICAO := StrTran( mDESCRICAO, Chr( 141 ) + Chr( 10 ), Chr( 13 ) + Chr( 10 ) )
+   RETU .T.
 
+
+// + EOF: m_cm.prg
+// +

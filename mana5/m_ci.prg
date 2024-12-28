@@ -1,24 +1,49 @@
 *+--------------------------------------------------------------------
 *+
-*+    Programa  : m_ci cadastro de usuarios
 *+
-*+    Sistema   : MANAEXO
 *+
-*+    Linguagem : Harbour
+*+    Programa  : m_ci.prg
 *+
-*+    Autor     : Jorge Cassiano
 *+
-*+    Copyright (c) 2021, Jorge Cassiano
 *+
-*+    Documentado em 13-03-2021
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 28-Dez-2024 as  9:57 am
+*+
+*+
 *+
 *+--------------------------------------------------------------------
 *+
 
+
 #include "adordd.ch"
 #include "try.ch"
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function m_ci()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 function m_ci(ntipo)
+
 MDI("Usuarios e Senhas de Acesso")
 if nTIPO = 1
    while .T.
@@ -37,8 +62,8 @@ if nTIPO = 1
          netreclock()
          field->SENHA   := XENCODE(mSENHA)
          field->DATATRO := ZDATA+90
-         IF ! EMPTY(ZUSER) .AND. ! EMPTY(mSENHA)
-               FIELD->CHAVEH:=StrToHex(hb_SHA256(ALLTRIM(zuser)+alltrim(mSENHA), .t.))
+         IF !EMPTY(ZUSER) .AND. !EMPTY(mSENHA)
+            FIELD->CHAVEH := StrToHex(hb_SHA256(ALLTRIM(zuser)+alltrim(mSENHA),.t.))
          ENDIF
          dbunlock()
       endif
@@ -46,44 +71,60 @@ if nTIPO = 1
    endif
 else
    IF ZSUPER
-      PADRAX(0, ,0,{"MUSER"},"Usuario Equivalencia","' '+XDECODE(mUSUARIO)+' '+XDECODE(mEQUIVALE)","MCI001","MCI001",,,;
+      PADRAX(0,,0,{"MUSER"},"Usuario Equivalencia","' '+XDECODE(mUSUARIO)+' '+XDECODE(mEQUIVALE)","MCI001","MCI001",,,;
        ,"MCIINS","MCI",{|| MCIIGU()},,{|| MCIANT()},{|| MCIINS()})
-	   
-   //    loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
-	   
-	   IF MDG("Gerar postela chave para Muser mana5")
-	      gerapostela(1)
-	   endif
-       
-       	IF MDG("Gerar postela chave para Muser folha")
-	      gerapostela(2)
-	   endif
-       
+
+      //    loledb:=mdg("User sim=oledb(32b) nao=accdb(64b)")
+
+      IF MDG("Gerar postela chave para Muser mana5")
+         gerapostela(1)
+      endif
+
+      IF MDG("Gerar postela chave para Muser folha")
+         gerapostela(2)
+      endif
+
    ELSE
       ALERTX("Somente Administrador")
    ENDIF
 endif
 
 
+
 *+--------------------------------------------------------------------
+*+
+*+
 *+
 *+    Function MCIINS()
 *+
+*+
+*+
 *+--------------------------------------------------------------------
 *+
+*+
+*+
 function MCIINS
+
 mUSUARIO := XENCODE(mUSUARIO)
 mCHAVE   := mUSUARIO
 return .T.
 
 
+
 *+--------------------------------------------------------------------
+*+
+*+
 *+
 *+    Function MCIIGU()
 *+
+*+
+*+
 *+--------------------------------------------------------------------
 *+
+*+
+*+
 function MCIIGU
+
 mUSUARIO  := padr(XDECODE(mUSUARIO),10)
 mEQUIVALE := padr(XDECODE(mEQUIVALE),8)
 mSENHA    := padr(XDECODE(mSENHA),8)
@@ -91,13 +132,21 @@ mVALIDADE := XDECDAT(mVALIDADE)
 return .T.
 
 
+
 *+--------------------------------------------------------------------
+*+
+*+
 *+
 *+    Function MCIANT()
 *+
+*+
+*+
 *+--------------------------------------------------------------------
 *+
+*+
+*+
 function MCIANT
+
 mUSUARIO  := XENCODE(mUSUARIO)
 mEQUIVALE := XENCODE(mEQUIVALE)
 mSENHA    := XENCODE(mSENHA)
@@ -106,255 +155,282 @@ mCHAVE    := mUSUARIO
 return .T.
 
 
+
 *+--------------------------------------------------------------------
 *+
-*+    Function encodpos() gera postela para login windows usa outra charset
+*+
+*+
+*+    Function ENCODEPOS()
+*+
+*+
 *+
 *+--------------------------------------------------------------------
 *+
-FUNCTION ENCODEPOS (in_string,nPOS,lGRAVA)
+*+
+*+
+FUNCTION ENCODEPOS(in_string,nPOS,lGRAVA)
+
 # define ADJVAL  30
-LOCAL counter := in_len := 0, next_char := out_string := ''
+LOCAL counter := in_len := 0,next_char := out_string := ''
 IF in_string != NIL
-    in_string := ALLTRIM(UPPER(in_string))
-    in_len := LEN(in_string)
-    FOR counter = 1 TO in_len
-         next_char = SUBSTR(in_string, counter * -1, 1)
-         nCHAR:=0
-         IF iSDIGIT(next_char) .OR. ISALPHA(next_char) .OR.  next_char $ '-+_!@#$%^&*., ?' //next_char == '.'.OR. next_char == '_' .OR.     ISDIGIT(next_char) .OR. ISALPHA(next_char)   
-             nCHAR:= (ASC(next_char) + ADJVAL) * 2
-             out_string := out_string +    CHR(nCHAR)
-         ENDIF
-		 IF lGRAVA
-			cCAMPO:="POSTEL"+STRZERO(counter+NPOS,2)
-			field->&cCAMPO.:=nCHAR
-		 ELSE
-            AADD(aCHAVE,nCHAR)		 
-		 ENDIF	
-    NEXT
+   in_string := ALLTRIM(UPPER(in_string))
+   in_len    := LEN(in_string)
+   FOR counter := 1 TO in_len
+      next_char := SUBSTR(in_string,counter * - 1,1)
+      nCHAR     := 0
+      IF iSDIGIT(next_char) .OR. ISALPHA(next_char) .OR. next_char $ '-+_!@#$%^&*., ?'  //next_char == '.'.OR. next_char == '_' .OR.     ISDIGIT(next_char) .OR. ISALPHA(next_char)
+         nCHAR      := (ASC(next_char)+ADJVAL) * 2
+         out_string := out_string+CHR(nCHAR)
+      ENDIF
+      IF lGRAVA
+         cCAMPO          := "POSTEL"+STRZERO(counter+NPOS,2)
+         field->&cCAMPO. := nCHAR
+      ELSE
+         AADD(aCHAVE,nCHAR)
+      ENDIF
+   NEXT
 ENDIF
 RETURN out_string
 
+
 *+--------------------------------------------------------------------
 *+
-*+    Function gerapostela() gera postela para login windows usa outra charset
+*+
+*+
+*+    Function gerapostela()
+*+
+*+
 *+
 *+--------------------------------------------------------------------
+*+
+*+
 *+
 function gerapostela(nARQ)
+
 LOCAL cARQMUSER
 LOCAL lOPEN
 LOCAL cCHAVEV
-cCAMWRPT:=ProfileString( "MANA5.INI", "PATH", "WRPT", HB_CWD())
-cCAMCONT:=ProfileString( "MANA5.INI", "PATH", "CONTROLE", HB_CWD())
-cCAMSYSU:=ProfileString( "MANA5.INI", "PATH", "SYSUSER", HB_CWD())
+cCAMWRPT := ProfileString("MANA5.INI","PATH","WRPT",HB_CWD())
+cCAMCONT := ProfileString("MANA5.INI","PATH","CONTROLE",HB_CWD())
+cCAMSYSU := ProfileString("MANA5.INI","PATH","SYSUSER",HB_CWD())
 
-if nARQ=1
-  if at(".MDB",UPPER(cCAMWRPT))>0 .OR. at(".MDB",UPPER(cCAMCONT))>0 .OR.  at(".MDB",UPPER(cCAMSYSU))>0 
-     loledb:=hb_Version( HB_VERSION_BITWIDTH )<>64 //mdg("User sim=oledb(32b) nao=accdb(64b)")
-  endif   
+if nARQ = 1
+   if at(".MDB",UPPER(cCAMWRPT)) > 0 .OR. at(".MDB",UPPER(cCAMCONT)) > 0 .OR. at(".MDB",UPPER(cCAMSYSU)) > 0
+      loledb := hb_Version(HB_VERSION_BITWIDTH) <> 64   //mdg("User sim=oledb(32b) nao=accdb(64b)")
+   endif
 endif
 
-lOPEN:=.F.
-IF nARQ=1
-   lOPEN:=USEREDE("MUSER",1,99)
+lOPEN := .F.
+IF nARQ = 1
+   lOPEN := USEREDE("MUSER",1,99)
 ENDIF
-IF nARQ=2
-   cARQMUSER:=ProfileString( "MANA5.INI", "PATH", "MUSERFOLHA", HB_CWD())+"MUSER"
-   lOPEN:=USECHK(cARQMUSER,,.T.)
+IF nARQ = 2
+   cARQMUSER := ProfileString("MANA5.INI","PATH","MUSERFOLHA",HB_CWD())+"MUSER"
+   lOPEN     := USECHK(cARQMUSER,,.T.)
 ENDIF
 
 
 
 if lOPEN
-	dbsetorder(1) //
-	dbgotop()
-	while ! eof()
-	    netreclock()
-		cUSUARIO:=DECODE(FIELD->USUARIO)
-		ENCODEPOS(cUSUARIO,0,.t.)       //senha comeca na 0+1 postel1
-		cSENHA:=DECODE(FIELD->SENHA)
-		ENCODEPOS(cSENHA,10,.t.)       //senha comeca na 10+1 postel11
-        IF ! EMPTY(cUSUARIO) .AND. ! EMPTY(cSENHA)
-           cCHAVEH:=StrToHex(hb_SHA256(ALLTRIM(cUSUARIO)+alltrim(cSENHA), .t.))
-           FIELD->CHAVEH:=cCHAVEH
-        ENDIF
-		
-		aCHAVE:={}
-		cCHAVEUSR:=""
-		ENCODEPOS(cUSUARIO,0,.F.)
-		FOR X:=1 TO LEN(aCHAVE)
-			cCHAVEUSR+=STRZERO(aCHAVE[X],3) 
-		NEXT X
-		
-		aCHAVE:={}
-		cSENHAUSR:=""
-		ENCODEPOS(cSENHA,0,.F.)
-		FOR X:=1 TO LEN(aCHAVE)
-			cSENHAUSR+=STRZERO(aCHAVE[X],3) 
-		NEXT X
+   dbsetorder(1)  //
+   dbgotop()
+   while !eof()
+      netreclock()
+      cUSUARIO := DECODE(FIELD->USUARIO)
+      ENCODEPOS(cUSUARIO,0,.t.)   //senha comeca na 0+1 postel1
+      cSENHA := DECODE(FIELD->SENHA)
+      ENCODEPOS(cSENHA,10,.t.)  //senha comeca na 10+1 postel11
+      IF !EMPTY(cUSUARIO) .AND. !EMPTY(cSENHA)
+         cCHAVEH       := StrToHex(hb_SHA256(ALLTRIM(cUSUARIO)+alltrim(cSENHA),.t.))
+         FIELD->CHAVEH := cCHAVEH
+      ENDIF
 
-        IF nARQ=1 //so processa muser do mana5
-    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMWRPT)   //vb wrpt.usuario
-            IF ! EMPTY(cCHAVEV)
-               FIELD->CHAVEWW:=cCHAVEV
-            ENDIF
-    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMCONT)  //vb controle.usuario
-            IF ! EMPTY(cCHAVEV)
-               FIELD->CHAVEWC:=cCHAVEV
-            ENDIF
-    		cCHAVEV:=gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMSYSU)  //vb usersys.usuario
-             IF ! EMPTY(cCHAVEV)
-               FIELD->CHAVEWS:=cCHAVEV
-            ENDIF           
-		endif
-		DBUNLOCK()
-	   dbskip()
-	enddo
-    dbcloseall()
+      aCHAVE    := {}
+      cCHAVEUSR := ""
+      ENCODEPOS(cUSUARIO,0,.F.)
+      FOR X := 1 TO LEN(aCHAVE)
+         cCHAVEUSR += STRZERO(aCHAVE[X],3)
+      NEXT X
+
+      aCHAVE    := {}
+      cSENHAUSR := ""
+      ENCODEPOS(cSENHA,0,.F.)
+      FOR X := 1 TO LEN(aCHAVE)
+         cSENHAUSR += STRZERO(aCHAVE[X],3)
+      NEXT X
+
+      IF nARQ = 1   //so processa muser do mana5
+         cCHAVEV := gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMWRPT)   //vb wrpt.usuario
+         IF !EMPTY(cCHAVEV)
+            FIELD->CHAVEWW := cCHAVEV
+         ENDIF
+         cCHAVEV := gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMCONT)   //vb controle.usuario
+         IF !EMPTY(cCHAVEV)
+            FIELD->CHAVEWC := cCHAVEV
+         ENDIF
+         cCHAVEV := gravaposTELA(cUSUARIO,cCHAVEUSR,cSENHAUSR,cCHAVEH,cCAMSYSU)   //vb usersys.usuario
+         IF !EMPTY(cCHAVEV)
+            FIELD->CHAVEWS := cCHAVEV
+         ENDIF
+      endif
+      DBUNLOCK()
+      dbskip()
+   enddo
+   dbcloseall()
 ENDIF
 
-IF nARQ=2 //nao processa para muserM MUSERB da folha
-   return 
+IF nARQ = 2   //nao processa para muserM MUSERB da folha
+   return
 ENDIF
 
-for z:=1 to 2
-	if USEREDE(IF(Z=1,"MUSERW","MUSERB"),1,99)
-		dbsetorder(1)
-		dbgotop()
-		while ! eof()
-		    netreclock()
-			cCONTROLE:=DECODE(FIELD->CONTROLE) //cGRU+StrZero(nPOS,3)+zUSER
-			cSISTEMA:=SUBSTR(cCONTROLE,1,3)
-			cPOS    :=SUBSTR(cCONTROLE,4,3)
-			cUSUARIO:=SUBSTR(cCONTROLE,7)
-			IF cSISTEMA ="RH0"
-				cSISTEMA:=SUBSTR(cCONTROLE,1,2)
-				cPOS    :=SUBSTR(cCONTROLE,3,3)
-				cUSUARIO:=SUBSTR(cCONTROLE,6)
-			ENDIF
-			FIELD->ITEMENU:=cSISTEMA
-			FIELD->POSICAO:=VAL(cPOS)
-			aCHAVE:={}
-			cCHAVEARR:=""
-			ENCODEPOS(cUSUARIO,0,.F.)
-			FOR X:=1 TO LEN(aCHAVE)
-				cCHAVEARR+=STRZERO(aCHAVE[X],3) 
-			NEXT X
-			FIELD->POSTELA:=cCHAVEARR
-			dbunlock()
-		   dbskip()
-		enddo
-        dbcloseall()
-	ENDIF
+for z := 1 to 2
+   if USEREDE(IF(Z = 1,"MUSERW","MUSERB"),1,99)
+      dbsetorder(1)
+      dbgotop()
+      while !eof()
+         netreclock()
+         cCONTROLE := DECODE(FIELD->CONTROLE)   //cGRU+StrZero(nPOS,3)+zUSER
+         cSISTEMA  := SUBSTR(cCONTROLE,1,3)
+         cPOS      := SUBSTR(cCONTROLE,4,3)
+         cUSUARIO  := SUBSTR(cCONTROLE,7)
+         IF cSISTEMA = "RH0"
+            cSISTEMA := SUBSTR(cCONTROLE,1,2)
+            cPOS     := SUBSTR(cCONTROLE,3,3)
+            cUSUARIO := SUBSTR(cCONTROLE,6)
+         ENDIF
+         FIELD->ITEMENU := cSISTEMA
+         FIELD->POSICAO := VAL(cPOS)
+         aCHAVE         := {}
+         cCHAVEARR      := ""
+         ENCODEPOS(cUSUARIO,0,.F.)
+         FOR X := 1 TO LEN(aCHAVE)
+            cCHAVEARR += STRZERO(aCHAVE[X],3)
+         NEXT X
+         FIELD->POSTELA := cCHAVEARR
+         dbunlock()
+         dbskip()
+      enddo
+      dbcloseall()
+   ENDIF
 NEXT Z
 return .t.
 
-*+--------------------------------------------------------------------
-*+
-*+    Function gravaposTELA() gera postela para login windows usa outra charset nos mdb
-*+
-*+--------------------------------------------------------------------
-*+
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function gravaposTELA()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 function gravaposTELA(cUSUARIO,cPOSTELAa,cPOSTELAB,cCHAVEH,cCAMBASE)
+
 LOCAL cCHAVEV
 LOCAL cConn
-cCHAVEV:=""
-cConn  :=""
+cCHAVEV := ""
+cConn   := ""
 
-if at(".MDB",upper(cCAMBASE))>0
-    if loledb
-       cConn:="Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
-    else
-       cConn:="Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None" //64 bit ace oledb
-    endif
+if at(".MDB",upper(cCAMBASE)) > 0
+   if loledb
+      cConn := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"   //32 bit jet oledb
+   else
+      cConn := "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //64 bit ace oledb
+   endif
 ENDIF
 
-if at(".SQLITE",upper(cCAMBASE))>0
-   cConn:="Driver={SQLite3 ODBC Driver};Database=" + cCAMBASE + ";"
+if at(".SQLITE",upper(cCAMBASE)) > 0
+   cConn := "Driver={SQLite3 ODBC Driver};Database="+cCAMBASE+";"
 ENDIF
 
 IF EMPTY(cConn)
    return .f.
 endif
-        
+
 try
-   oConn:=WIN_OLECreateObject( "ADODB.Connection" )
-   with object oConn
-      :ConnectionString:=cConn
-      :Open()
-   END  //end do with
+oConn := WIN_OLECreateObject("ADODB.Connection")
+with object oConn
+:ConnectionString := cConn
+:Open()
+END   //end do with
 catch oErr
-   ShowAdoError(oERR,oCoNn)   
-   return ""
+ShowAdoError(oERR,oCoNn)
+return ""
 end
 
-oRSDES:= WIN_OLECreateObject('ADODB.RecordSet')
+oRSDES                := WIN_OLECreateObject('ADODB.RecordSet')
 oRSDES:CursorLocation := 3
 
-oComm:=WIN_OLECreateObject( "ADODB.Command" )
+oComm := WIN_OLECreateObject("ADODB.Command")
 
 
-  cCOMANDO = "SELECT * FROM USUARIO WHERE USUARIO = '"+cUSUARIO+"' ;"
+cCOMANDO := "SELECT * FROM USUARIO WHERE USUARIO = '"+cUSUARIO+"' ;"
 
-      TRY
-        oRSDES:Open(cCOMANDO, oConN, adOpenDynamic, adLockOptimistic )
-      CATCH oERR
-        ShowADOError(oERR,oConn,cCOMANDO)          
-      END
-      If .NOT. oRSDES:EOF 
-         cCHAVEV:=oRSDES:fields("CHAVEV"):value  
-      //   ALERT(cCHAVEV)
-      ELSE   
-      //---->inclusao do usuario com max do id    
-      //   cCOMANDO = "INSERT INTO USUARIO (USUARIO)"
-      //   cCOMANDO+= " VALUES ('"+cUSUARIO+"') ;"
-    //    with object oComm
-     //         :CommandText:=cCOMANDO
-     //         :CommandType:=adCmdText
-     //         :ActiveConnection:=oConn
-     //         :Execute()
-    //     end
-      EndIf
-      oRSDES:Close()
+TRY
+oRSDES:Open(cCOMANDO,oConN,adOpenDynamic,adLockOptimistic)
+CATCH oERR
+ShowADOError(oERR,oConn,cCOMANDO)
+END
+If .NOT. oRSDES:EOF
+   cCHAVEV := oRSDES:fields("CHAVEV") :value
+   //   ALERT(cCHAVEV)
+ELSE
+   //---->inclusao do usuario com max do id
+   //   cCOMANDO = "INSERT INTO USUARIO (USUARIO)"
+   //   cCOMANDO+= " VALUES ('"+cUSUARIO+"') ;"
+   //    with object oComm
+   //         :CommandText:=cCOMANDO
+   //         :CommandType:=adCmdText
+   //         :ActiveConnection:=oConn
+   //         :Execute()
+   //     end
+EndIf
+oRSDES:Close()
 
-if ! empty(cPOSTELAA)
-    cCOMANDO:="UPDATE USUARIO SET POSTELAA = '"+cPOSTELAA+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
-    try
-        with object oComm
-             :CommandText:=cCOMANDO
-             :CommandType:=adCmdText
-             :ActiveConnection:=oConn
-             :Execute()
-        end
-    end	
-endif    		
-
-if ! empty(cPOSTELAB)
-  cCOMANDO:="UPDATE USUARIO SET POSTELAB = '"+cPOSTELAB+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
-  try
-      with object oComm
-           :CommandText:=cCOMANDO
-           :CommandType:=adCmdText
-           :ActiveConnection:=oConn
-           :Execute()
-      end
-  end	
+if !empty(cPOSTELAA)
+   cCOMANDO := "UPDATE USUARIO SET POSTELAA = '"+cPOSTELAA+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+   try
+   with object oComm
+   :CommandText      := cCOMANDO
+   :CommandType      := adCmdText
+   :ActiveConnection := oConn
+   :Execute()
+end
+end
 endif
 
-if ! empty(cCHAVEH)
-  cCOMANDO:="UPDATE USUARIO SET CHAVEH = '"+cCHAVEH+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
-  try
-      with object oComm
-          :CommandText:=cCOMANDO
-          :CommandType:=adCmdText
-          :ActiveConnection:=oConn
-          :Execute()
-      end
-  end
-endif  	
+if !empty(cPOSTELAB)
+   cCOMANDO := "UPDATE USUARIO SET POSTELAB = '"+cPOSTELAB+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+   try
+   with object oComm
+   :CommandText      := cCOMANDO
+   :CommandType      := adCmdText
+   :ActiveConnection := oConn
+   :Execute()
+end
+end
+endif
+
+if !empty(cCHAVEH)
+   cCOMANDO := "UPDATE USUARIO SET CHAVEH = '"+cCHAVEH+"'  WHERE USUARIO = '"+cUSUARIO+"' ;"
+   try
+   with object oComm
+   :CommandText      := cCOMANDO
+   :CommandType      := adCmdText
+   :ActiveConnection := oConn
+   :Execute()
+end
+end
+endif
 
 oConn:Close()
-oConn:=NIL		
+oConn := NIL
 RETURN cCHAVEV
+
+*+ EOF: m_ci.prg
+*+

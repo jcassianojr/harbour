@@ -1,62 +1,62 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_2y.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:32 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_2y.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:32 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-CABE2('FOPTO_2Y - Exclusao Demitidos')
-cPN := "PN"+ANOMESW
+CABE2( 'FOPTO_2Y - Exclusao Demitidos' )
+cPN := "PN" + ANOMESW
 
 
 
-IF !NETUSE(PES)
-   RETU
+IF !NETUSE( PES )
+RETU
 ENDIF
 
-IF !NETUSE(cPN)
-   DBCLOSEALL()
-   RETU
+IF !NETUSE( cPN )
+dbCloseAll()
+RETU
 ENDIF
-DBSELECTAR(PES)
-WHILE !EOF()
-   IF !EMPTY(DEMITIDO)
-      PETELA(8)
-      mNUMERO := NUMERO
-      mDATA   := DEMITIDO
-      mDATA ++
-      DBSELECTAR(cPN)
-      DBGOTOP()
-      DBSEEK(STR(mNUMERO,8)+DTOS(mDATA))
-      WHILE mNUMERO = NUMERO .AND. !EOF()
-         netrecdel()
-         DBSKIP()
-      ENDDO
-   ENDIF
-   DBSELECTAR(PES)
-   DBSKIP()
+dbSelectAr( PES )
+WHILE !Eof()
+IF !Empty( DEMITIDO )
+PETELA( 8 )
+mNUMERO := NUMERO
+mDATA   := DEMITIDO
+mDATA++
+dbSelectAr( cPN )
+dbGoTop()
+dbSeek( Str( mNUMERO, 8 ) + DToS( mDATA ) )
+WHILE mNUMERO = NUMERO .AND. !Eof()
+netrecdel()
+dbSkip()
 ENDDO
-DBCLOSEALL()
+ENDIF
+dbSelectAr( PES )
+dbSkip()
+ENDDO
+dbCloseAll()
 
-*+ EOF: fopto_2y.prg
-*+
+// + EOF: fopto_2y.prg
+// +

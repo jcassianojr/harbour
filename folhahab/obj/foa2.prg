@@ -1,153 +1,153 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : foa2.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : foa2.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-#INCLUDE "BOX.CH"
+#include "BOX.CH"
 
-CABEX('Entrada de Dados Para Folha')
-para CX,CY
+CABEX( 'Entrada de Dados Para Folha' )
+PARA CX, CY
 
 OPCAO1 := 'S'
 XA     := XB := XC := XD := XE := XF := CTR := CTCONTA := 0
 
-CW := if(MDG('Deseja Confirmar os Valores'),1,0)
+CW := if( MDG( 'Deseja Confirmar os Valores' ), 1, 0 )
 
-if !NETUSE(PES)
-   dbcloseall()
-   retu .F.
-endif
-FILTRO := "EMPTY(DEMITIDO)"   //.AND.(EMPTY(SITUACAO).OR.SITUACAO='P')"
-FI     := trim(FILTRO)
-FILTRO := FILTRO(FI)
-set filter to &FILTRO
+IF !NETUSE( PES )
+dbCloseAll()
+RETU .F.
+ENDIF
+FILTRO := "EMPTY(DEMITIDO)"   // .AND.(EMPTY(SITUACAO).OR.SITUACAO='P')"
+FI     := Trim( FILTRO )
+FILTRO := FILTRO( FI )
+SET FILTER TO &FILTRO
 
-if !ARQUSAR(CX)
-   dbcloseall()
-   retu .F.
-endif
-cSELE2 := ALIAS()
+IF !ARQUSAR( CX )
+dbCloseAll()
+RETU .F.
+ENDIF
+cSELE2 := Alias()
 
 
-if !NETUSE("CONTAS")
-   dbcloseall()
-   retu .F.
-endif
+IF !NETUSE( "CONTAS" )
+dbCloseAll()
+RETU .F.
+ENDIF
 
-if CY = 1
-   CC := PEGRELCTA("")
-   X  := 0
-endif
+IF CY = 1
+CC := PEGRELCTA( "" )
+X  := 0
+ENDIF
 
-while OPCAO1 = 'S'
-   @ 07,00 clea
-   if CY = 0
-      MDS('NUMERO DA CONTA ------->')
-      @ 24,57 get CTCONTA pict '#####'        
-      READCUR()
-   endif
-   if CY = 1
-      X ++
-      if X = 16
-         OPCAO1 := 'N'
-         loop
-      endif
-      CTCONTA := CC[X]
-      if CTCONTA = 0
-         OPCAO1 := 'N'
-         loop
-      endif
-   endif
-   // ** (LOCALIZANDO A CONTA )
-   DBSELECTAR("CONTAS")
-   dbgotop()
-   if dbseek(CTCONTA)
-      if ACEITE # "S" .or. ZUSER = "SUPERVISOR"
-         HORA := VALE := 0
-         XB   := TIPO
-         HB_dispbox(12,8,16,71,B_DOUBLE+" ")
-         @ 12,16 say "-"+repl('-',37)+"-"                                                       
-         @ 16,16 say "-"+repl('-',37)+"-"                                                       
-         @ 13,10 say "Conta Ý Descrimina‡„o"+spac(23)+"Ý Valor/Horas"                           
-         @ 14,08 say 'Ç'+repl('-',7)+"+"+repl('-',37)+"+"+repl('-',16)+'¶'                      
-         @ 15,16 say "Ý"+spac(37)+"Ý"                                                           
-         @ 15,11 say CODIGO                                                picture "###"        
-         @ 15,18 say DESCR                                                                      
-         if XB = 1 .or. XB = 3 .or. XB = 4
-            @ 15,56 get HORA pict '###.##'        
-         else
-            @ 15,56 get VALE pict '###,###,###.##'        
-         endif
-         READCUR()
-         if VALE # 0 .or. HORA # 0
-            DBSELECTAR(PES)
-            dbgotop()
-            while !eof()
-               PETELA(7)
-               IF !EMPTy(SITUACAO)
-                  ALERTX(SITUACAO+'-'+CHECKTAB("SITU"+SITUACAO,,,"Situacao nao Cadastrado",2))
-               ENDIF
-               CTR := NUMERO
-               if CW = 1 .OR. !EMPTy(SITUACAO)
-                  DBSELECTAR(cSELE2)
-                  VALE := VALCTA(CTR,CTCONTA)
-                  HORA := if(found(),HORAS,0)
-                  if XB = 1 .or. XB = 3 .or. XB = 4
-                     @ 15,56 get HORA pict '###.##'        
-                     READCUR()
-                  else
-                     @ 15,56 get VALE pict '###,###,###.##'        
-                     READCUR()
-                  endif
-               endif
-               GRAVA2(CTCONTA)
-               if XB = 1 .or. XB = 3 .or. XB = 4
-                  field->HORAS := HORA
-               endif
-               DBSELECTAR(PES)
-               dbskip()
-            enddo
-         endif
-      else
-         ALERTX("Inclus„o desta Conta Permitida Somente para o Supervisor")
-      endif
-   else
-      ALERTX("Conta n„o Cadastrada")
-   endif
-   if CY = 0
-      @  7,00 clear
-      MDS('Deseja Continuar (S/N)=>')
-      @ 24,57 get OPCAO1         
-      READCUR()
-   endif
-enddo
-DBSELECTAR(cSELE2)
+WHILE OPCAO1 = 'S'
+@ 07, 00 clea
+IF CY = 0
+MDS( 'NUMERO DA CONTA ------->' )
+@ 24, 57 GET CTCONTA PICT '#####'
+READCUR()
+ENDIF
+IF CY = 1
+X++
+IF X = 16
+OPCAO1 := 'N'
+LOOP
+ENDIF
+CTCONTA := CC[ X ]
+IF CTCONTA = 0
+OPCAO1 := 'N'
+LOOP
+ENDIF
+ENDIF
+// ** (LOCALIZANDO A CONTA )
+dbSelectAr( "CONTAS" )
+dbGoTop()
+IF dbSeek( CTCONTA )
+IF ACEITE # "S" .OR. ZUSER = "SUPERVISOR"
+HORA := VALE := 0
+XB   := TIPO
+hb_DispBox( 12, 8, 16, 71, B_DOUBLE + " " )
+@ 12, 16 SAY "-" + repl( '-', 37 ) + "-"
+@ 16, 16 SAY "-" + repl( '-', 37 ) + "-"
+@ 13, 10 SAY "Conta Ý Descrimina‡„o" + spac( 23 ) + "Ý Valor/Horas"
+@ 14, 08 SAY 'Ç' + repl( '-', 7 ) + "+" + repl( '-', 37 ) + "+" + repl( '-', 16 ) + '¶'
+@ 15, 16 SAY "Ý" + spac( 37 ) + "Ý"
+@ 15, 11 SAY CODIGO                                                PICTURE "###"
+@ 15, 18 SAY DESCR
+IF XB = 1 .OR. XB = 3 .OR. XB = 4
+@ 15, 56 GET HORA PICT '###.##'
+ELSE
+@ 15, 56 GET VALE PICT '###,###,###.##'
+ENDIF
+READCUR()
+IF VALE # 0 .OR. HORA # 0
+dbSelectAr( PES )
+dbGoTop()
+WHILE !Eof()
+PETELA( 7 )
+IF !Empty( SITUACAO )
+ALERTX( SITUACAO + '-' + CHECKTAB( "SITU" + SITUACAO,,, "Situacao nao Cadastrado", 2 ) )
+ENDIF
+CTR := NUMERO
+IF CW = 1 .OR. !Empty( SITUACAO )
+dbSelectAr( cSELE2 )
+VALE := VALCTA( CTR, CTCONTA )
+HORA := if( Found(), HORAS, 0 )
+IF XB = 1 .OR. XB = 3 .OR. XB = 4
+@ 15, 56 GET HORA PICT '###.##'
+READCUR()
+ELSE
+@ 15, 56 GET VALE PICT '###,###,###.##'
+READCUR()
+ENDIF
+ENDIF
+GRAVA2( CTCONTA )
+IF XB = 1 .OR. XB = 3 .OR. XB = 4
+field->HORAS := HORA
+ENDIF
+dbSelectAr( PES )
+dbSkip()
+ENDDO
+ENDIF
+ELSE
+ALERTX( "Inclus„o desta Conta Permitida Somente para o Supervisor" )
+ENDIF
+ELSE
+ALERTX( "Conta n„o Cadastrada" )
+ENDIF
+IF CY = 0
+@  7, 00 clear
+MDS( 'Deseja Continuar (S/N)=>' )
+@ 24, 57 GET OPCAO1
+READCUR()
+ENDIF
+ENDDO
+dbSelectAr( cSELE2 )
 FODZER()
-dbcloseall()
-retu
+dbCloseAll()
+RETU
 
 
-*+ EOF: foa2.prg
-*+
+// + EOF: foa2.prg
+// +

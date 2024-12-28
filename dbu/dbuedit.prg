@@ -1,1097 +1,1202 @@
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUEDIT.PRG
-*+
-*+    Functions:  browse()
-*+               Function xmemo()
-*+               Static Function tog_insert()
-*+               Static Function show_insert()
-*+               Static Function statline()
-*+               Static Function move_ptr()
-*+               Function movp_title()
-*+               Function movp_exp()
-*+               Function do_seek()
-*+               Function do_goto()
-*+               Function do_locate()
-*+               Function do_skip()
-*+               Static Function EmptyFile()
-*+               Static Function DoGet()
-*+               Static Function ExitKey()
-*+               Static Function FreshOrder()
-*+               Static Function Skipped()
-*+
-*+    Reformatted by Click! 2.03 on Jun-27-2003 at  6:24 pm
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : dbuedit.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:06 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-#INCLUDE "BOX.CH"
+
+#include "BOX.CH"
 #include "inkey.ch"
 #include "memoedit.ch"
 
 
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Punction browse()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-function browse
 
-local i
-local j
-local nHelpSave
-local cNtx
-local cFieldArray
-local cFieldName
-local nWa
-local cMemo
-local oB
-local nRec
-local cBrowseBuf
-local nPrimeArea
-local nHsepRow
-local cEditField
-local bAlias
-local cAlias
-local nCType
-local cHead
-local lMore
-local lCanAppend
-local cMemoBuff
-local aMoveExp
-local cPrimeDbf
-local nColorSave
-local lAppend
-local lGotKey
-local lKillAppend
-local bColBlock
-memvar keystroke
-memvar help_code
-memvar func_sel
-memvar cur_area
-memvar cur_dbf
-memvar field_list
-memvar frame
-memvar curs_on
-memvar cur_ntx
-memvar ntx1
-memvar dbf
-memvar local_func
-memvar box_open
-memvar color1
-memvar color7
-memvar color8
-memvar color9
-
-nCType  := setcursor( 0 )
-curs_on := .f.
-
-nHelpSave := help_code
-
-cBrowseBuf := savescreen( 8, 0, MaxRow()-1, MaxCol() )
-
-aMoveExp := array( 4 )
-afill( aMoveExp, "" )
-
-nHsepRow := 11
-
-if ( func_sel == 1 )
-   nPrimeArea  := cur_area
-   cFieldArray := "field_n" + substr( "123456", cur_area, 1 )
-   cNtx        := "ntx" + substr( "123456", cur_area, 1 )
-   cur_ntx     := &cNtx[ 1 ]
-   cPrimeDbf   := substr( cur_dbf,  Rat(hb_ps(), cur_dbf ) + 1 )
-   lCanAppend  := .T.
-else
-   nPrimeArea  := 1
-   cFieldArray := "field_list"
-   cur_ntx     := ntx1[ 1 ]
-   cPrimeDbf   := substr( dbf[ 1 ],  Rat(hb_ps(), dbf[ 1 ] ) + 1 )
-   lCanAppend  := .F.
-
-   if ( "->" $ field_list[ afull( field_list ) ] )
-      nHsepRow := 12
-   end
-end
-
-bAlias := &( "{|i| if('->' $" + cFieldArray + "[i], Substr(" + ;
-             cFieldArray + "[i], 1, At('->'," + cFieldArray + ;
-             "[i]) - 1), '')}" )
-
-select( nPrimeArea )
-if ( eof() )
-   go top
-end
-
-lAppend := .F.
-nRec    := 0
-
-nColorSave := setcolor( color7 )
-oB         := tbrowsedb( 10, 1,  MaxRow()-1, MaxCol()-1 )
-
-oB:headSep   := "-С-"
-oB:colSep    := " Э "
-oB:footSep   := "-П-"
-oB:skipBlock := { | x | Skipped( x, lAppend ) }
-
-j := len( &cFieldArray )
-for i := 1 to j
-   if ( empty( &cFieldArray[ i ] ) )
-      exit
-   end
-
-   cEditField := &cFieldArray[ i ]
-   if ( "->" $ cEditField )
-      cAlias     := substr( cEditField, 1, at( "->", cEditField ) + 1 )
-      cFieldName := substr( cEditField, at( "->", cEditField ) + 2 )
-      cHead      := cAlias + ";" + cFieldName
-      nWa        := select( cAlias )
-   else
-      cAlias     := ""
-      cFieldName := cHead := cEditField
-      nWa        := select()
-   end
-
-   if ( valtype( &cEditField ) == "M" )
-      bColBlock := &( "{|| '  <Memo>  '}" )
-   else
-      bColBlock := fieldwblock( cFieldName, nWa )
-   end
-
-   oB:addColumn( tbcolumnnew( cHead, bColBlock ) )
-next
-
-stat_msg( "" )
-scroll( 8, 0, MaxRow()-1, MaxCol(), 0 )
-HB_dispbox( 8, 0, MaxRow()-1, MaxCol(),frame)
-@ nHsepRow,  0 say "Ж"         
-@ nHsepRow, 79 say "µ"         
-
-cAlias      := ""
-lKillAppend := .f.
-if ( ( lastrec() == 0 ) .and. lCanAppend )
-   keystroke := K_DOWN
-   lGotKey   := .t.
-else
-   lGotKey := .f.
-end
-
-lMore := .t.
-while ( lMore )
-   if ( !lGotKey )
-      while ( !oB:stabilize() )
-         if ( ( keystroke := inkey() ) != 0 )
-            lGotKey := .t.
-            exit
-         end
-      end
-   end
-
-   if ( !lGotKey )
-      if ( oB:hitBottom .and. lCanAppend )
-         if ( !lAppend .or. recno() != lastrec() + 1 )
-            if ( lAppend )
-               oB:refreshCurrent()
-               while ( !oB:stabilize() ) 
-               end
-               go bottom
-            else
-               lAppend := .t.
-               setcursor( 1 )
-               curs_on := .t.
-            end
-
-            oB:down()
-            while ( !oB:stabilize() ) 
-            end
-            oB:colorRect( { oB:rowPos, 1, oB:rowPos, oB:colCount }, { 2, 2 } )
-         end
-      end
-
-      cAlias := eval( bAlias, oB:colPos )
-      statline( oB, lAppend, cAlias )
-
-      while ( !oB:stabilize() ) 
-      end
-
-      keystroke := inkey( 0 )
-   else
-      lGotKey := .f.
-   end
-
-   do case
-   case keystroke == K_DOWN
-      if ( lAppend )
-         oB:hitBottom := .t.
-      else
-         oB:down()
-      end
-
-   case keystroke == K_UP
-      if ( lAppend )
-         lKillAppend := .t.
-      else
-         oB:up()
-      end
-
-   case keystroke == K_PGDN
-      if ( lAppend )
-         oB:hitBottom := .t.
-      else
-         oB:pageDown()
-      end
-
-   case keystroke == K_PGUP
-      if ( lAppend )
-         lKillAppend := .t.
-      else
-         oB:pageUp()
-      end
-
-   case keystroke == K_CTRL_PGUP
-      if ( lAppend )
-         lKillAppend := .t.
-      else
-         oB:goTop()
-      end
-
-   case keystroke == K_CTRL_PGDN
-      if ( lAppend )
-         lKillAppend := .t.
-      else
-         oB:goBottom()
-      end
-
-   case keystroke == K_RIGHT
-      oB:right()
-
-   case keystroke == K_LEFT
-      oB:left()
-
-   case keystroke == K_HOME
-      oB:home()
-
-   case keystroke == K_END
-      oB:end()
-
-   case keystroke == K_CTRL_LEFT
-      oB:panLeft()
-
-   case keystroke == K_CTRL_RIGHT
-      oB:panRight()
-
-   case keystroke == K_CTRL_HOME
-      oB:panHome()
-
-   case keystroke == K_CTRL_END
-      oB:panEnd()
-
-   case keystroke == K_DEL
-      while ( !oB:stabilize() ) 
-      end
-      cAlias := eval( bAlias, oB:colPos )
-      if ( !empty( cAlias ) )
-         select( cAlias )
-      end
-
-      if ( recno() != lastrec() + 1 )
-         if deleted()
-            recall
-         else
-            netrecdel()
-         end
-      end
-
-      select( nPrimeArea )
-
-   case keystroke == K_INS
-      tog_insert()
-
-   case keystroke == K_ENTER .or. ;
-              keystroke == K_ALT_INS .or. ;
-              keystroke == K_ALT_O .or. ;
-              keystroke == K_ALT_P .or. ;
-              keystroke == K_ALT_G .or. ;
-              keystroke == K_ALT_K .or. ;
-              keystroke == K_ALT_L .or. ;
-              keystroke == K_ALT_B .or. ;
-              keystroke == K_ALT_N .or. ;
-              keystroke == K_ALT_M
-
-      while ( !oB:stabilize() ) 
-      end
-      cAlias := eval( bAlias, oB:colPos )
-
-      if ( !empty( cAlias ) )
-         select( cAlias )
-      end
-
-      if ( !lAppend .and. ( recno() == lastrec() + 1 ) )
-         select( nPrimeArea )
-         loop
-      end
-
-      select( nPrimeArea )
-
-      oB:hitTop := .f.
-      Statline( oB, lAppend, cAlias )
-      while ( !oB:stabilize() ) 
-      end
-
-      cEditField := &cFieldArray[ oB:colPos ]
-
-      setcursor( 1 )
-      curs_on := .t.
-
-      if keystroke == K_ALT_INS
-         XALTINS()
-      endif
-
-      if ( type( cEditField ) == "M" )
-         help_code := 19
-         box_open  := .t.
-
-         cMemoBuff := savescreen( 08, 00, maxrow(), maxcol()-1 )
-
-         setcolor( color8 )
-         scroll( 08, 00, maxrow(), maxcol()-1, 0 )
-         HB_dispbox( 8, 0, MaxRow()-1, MaxCol(),frame)
-         @ 24, 01 say 'Linha:' + spac( 5 ) + 'Coluna:'         
-         @ 24, 40 say 'Ctrl+W -> Grava, ESC -> Anula '         
-
-         setcolor( color9 )
-         @ 08, ( ( 76 - len( cEditField ) ) / 2 ) say "  " + cEditField + "  "         
-
-         setcolor( color8 )
-         //cMemo := memoedit( &cEditField, 09, 01, 22, 78, .T., "xmemo" )
-         cMemo := MemoEdit(&cEditField, 11, 11, MaxRow()-3, 68,.T.,"xmemo")
-
-         if lastkey() == K_CTRL_END
-
-            if ( lAppend .and. eof() )
-               netrecapp()
-            end
-
-            netreclock()
-            field->&cEditField := cMemo
-            dbunlock()
-
-            oB:refreshCurrent()
-
-            keystroke := K_RIGHT
-            lGotKey   := .t.
-         else
-            keystroke := 0
-         end
-
-                  
-         RestScreen(08, 00, MaxRow(), maxcol()-1, cMemoBuff)
-         
-         box_open := .F.
-      else
-         setcolor( color1 )
-         keystroke := DoGet( oB, lAppend, cAlias )
-         lGotKey   := ( keystroke != 0 )
-      end
-
-      if ( !lAppend )
-         setcursor( 0 )
-         curs_on := .f.
-      end
-
-      help_code := nHelpSave
-      setcolor( color7 )
-
-      //Control+Ins - Capturando
-   case keystroke == K_CTRL_INS
-      while ( !oB:stabilize() ) 
-      end
-      cAlias := eval( bAlias, oB:colPos )
-      if ( !empty( cAlias ) )
-         select( cAlias )
-      end
-      if ( !lAppend .and. ( recno() == lastrec() + 1 ) )
-         select( nPrimeArea )
-         loop
-      end
-      select( nPrimeArea )
-      oB:hitTop := .f.
-      Statline( oB, lAppend, cAlias )
-      while ( !oB:stabilize() ) 
-      end
-      cEditField := &cFieldArray[ oB:colPos ]
-      READVAR    := &cEditField
-   otherwise
-      if ( isdata( keystroke ) )
-         keyboard chr( K_ENTER ) + chr( keystroke )
-      else
-         //Chama Leityra da Tecla
-         sysmenu()
-
-         do case
-         case q_check()
-            lMore := .f.
-
-         case local_func == 7
-            nRec := recno()
-            move_ptr( aMoveExp, cPrimeDbf )
-
-            if ( nRec != recno() )
-               if ( lAppend )
-                  lKillAppend := .t.
-               else
-                  FreshOrder( oB )
-               end
-            end
-         end
-      end
-   end
-
-   if ( lKillAppend )
-      lKillAppend := .f.
-      lAppend     := .f.
-
-      FreshOrder( oB )
-      setcursor( 0 )
-      curs_on := .f.
-   end
-end
-
-restscreen( 8, 0, MaxRow()-1, MaxCol(), cBrowseBuf )
-setcolor( nColorSave )
-setcursor( nCType )
-curs_on := ( nCType != 0 )
-stat_msg( "" )
-
-return
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Function xmemo()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-func xmemo( mmode, line, col )
-
-local nRet
-memvar keystroke
-memvar local_func
-setcolor( color9 )
-@ 24, 07 say line pict '####'        
-@ 24, 19 say col  pict '####'        
-setcolor( color8 )
-
-nRet := 0
-
-if mmode <> ME_IDLE
-   keystroke := lastkey()
-   sysmenu()
-
-   do case
-   case keystroke == K_ALT_INS
-      XALTINS()
-   case keystroke == K_INS
-      tog_insert()
-      nRet := ME_IGNORE
-
-   case keystroke == K_ESC
-      if mmode == ME_UNKEYX
-         if rsvp( "Ok. Abandonar Mudan‡as? (S/N)" ) <> "S"
-            nRet := ME_IGNORE
-         end
-      end
-   end
-end
-
-return ( nRet )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Static Function tog_insert()
-*+
-*+    Called from ( dbuedit.prg  )   1 - browse()
-*+                                   1 - function xmemo()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-static func tog_insert
-
-local nCType
-
-readinsert( !readinsert() )
-nCType := setcursor( 0 )
-show_insert()
-setcursor( nCType )
-
-return ( 0 )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Static Function show_insert()
-*+
-*+    Called from ( dbuedit.prg  )   1 - static function tog_insert()
-*+                                   1 - static function statline()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-static func show_insert
-
-local nColorSave
-
-nColorSave := setcolor( color7 )
-@  9,  4 say if( readinsert(), "<Inserindo>", "           " )         
-setcolor( nColorSave )
-
-return ( 0 )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Static Function statline()
-*+
-*+    Called from ( dbuedit.prg  )   3 - browse()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-static func statline( oB, lAppend, cAlias )
-
-local cColorSave
-local cCurrAlias
-local lNoFilter
-local nWaSave
-local nCType
-
-nCType := setcursor( 0 )
-
-nWaSave := select()
-if ( !empty( cAlias ) )
-   select( cAlias )
-end
-
-cColorSave := setcolor( color7 )
-
-show_insert()
-
-lNoFilter := empty( &( "kf" + substr( "123456", select(), 1 ) ) )
-@  9, 16 say if( lNoFilter, "        ", "<Filtro>" )         
-
-@  9, 41 say if( empty( cAlias ), space( 10 ), Lpad( cAlias + "->", 10 ) ) ;         
-        + "Reg :"
-
-if ( EmptyFile() .and. .not. lAppend )
-   @  9, 57 say "<nada>              "         
-elseif ( eof() )
-   @  9, 28 say "         "                                               
-   @  9, 57 say "            " + if( lAppend, "<novo>", "<fim>" )         
-else
-   @  9, 28 say if( deleted(), "<Apagado>", "         " )                                        
-   @  9, 57 say pad( ltrim( str( recno() ) ) + "/" + ltrim( str( lastrec() ) ), 15 ) + ;         
-           if( oB:hitTop, " <Ini>", if( oB:hitBottom, " <fim>", "      " ) )
-end
-
-setcolor( cColorSave )
-select( nWaSave )
-setcursor( nCType )
-
-return ( 0 )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Static Function move_ptr()
-*+
-*+    Called from ( dbuedit.prg  )   1 - browse()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-static func move_ptr( aMoveExp, cPrimeDbf )
-
-local nHelpSave
-local aBox
-memvar okee_dokee
-memvar k_trim
-memvar movp_sel
-memvar titl_str
-memvar exp_label
-memvar help_code
-memvar local_sel
-memvar ntx_expr
-private okee_dokee
-private k_trim
-private movp_sel
-private titl_str
-private exp_label
-private ntx_expr
-
-nHelpSave := help_code
-
-movp_sel := local_sel
-
-k_trim := aMoveExp[ movp_sel ]
-
-aBox := array( 4 )
-
-aBox[ 1 ] := "movp_title(sysparam)"
-aBox[ 2 ] := "movp_exp(sysparam)"
-aBox[ 3 ] := "ok_button(sysparam)"
-aBox[ 4 ] := "can_button(sysparam)"
-
-do case
-case movp_sel == 1
-   okee_dokee := "do_seek()"
-   titl_str   := "Busca no Arquivo " + cPrimeDbf + "..."
-   exp_label  := "Express„o"
-   ntx_expr   := indexkey( 0 )
-   help_code  := 13
-
-case movp_sel == 2
-   okee_dokee := "do_goto()"
-   titl_str   := "Mover pontos no arquivo " + cPrimeDbf + " para..."
-   exp_label  := "Registro#"
-   help_code  := 14
-
-case movp_sel == 3
-   okee_dokee := "do_locate()"
-   titl_str   := "Localizando no arquivo " + cPrimeDbf + "..."
-   exp_label  := "Express„o"
-   help_code  := 10
-
-case movp_sel == 4
-   okee_dokee := "do_skip()"
-   titl_str   := "Pulando registro no arquivo " + cPrimeDbf + "..."
-   exp_label  := "NЈmero"
-   help_code  := 20
-end
-
-set key K_INS to tog_insert
-multibox( 14, 17, 5, 2, aBox )
-set key K_INS to
-
-aMoveExp[ movp_sel ] := k_trim
-
-help_code := nHelpSave
-
-return ( 0 )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Function movp_title()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-func movp_title( sysparam )
-
-memvar titl_str
-return ( box_title( sysparam, titl_str ) )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Function movp_exp()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-func movp_exp( sysparam )
-
-memvar exp_label
-return ( get_k_trim( sysparam, exp_label ) )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Function do_seek()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-func do_seek
-
-local lDone
-local nRec
-local cSeekType
-memvar k_trim
-memvar ntx_expr
-
-lDone := .F.
-
-if empty( k_trim )
-   error_msg( "Express„o n„o entrada" )
-else
-   stat_msg( "Procurando.." )
-
-   nRec := recno()
-
-   cSeekType := type( ntx_expr )
-
-   do case
-   case cSeekType == "C"
-      seek k_trim
-
-   case cSeekType == "N"
-      seek val( k_trim )
-
-   case cSeekType == "D"
-      seek ctod( k_trim )
-   end
-
-   if found()
-      stat_msg( "Encontrado" )
-      lDone := .T.
-   else
-      error_msg( "N„o Encontrado" )
-      goto nRec
-   end
-end
-
-return ( lDone )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Function do_goto()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-func do_goto
-
-local lDone
-local nWhich
-memvar k_trim
-
-lDone  := .F.
-nWhich := val( k_trim )
-
-do case
-case empty( k_trim )
-   error_msg( "NЈmero de Registro n„o fornecido" )
-
-case .not. substr( ltrim( k_trim ), 1, 1 ) $ "-+1234567890"
-   error_msg( "NЈmero de Registro n„o ‚ num‚rico" )
-
-case nWhich <= 0 .or. nWhich > lastrec()
-   error_msg( "Registro fora de faixa" )
-
-otherwise
-   goto nWhich
-   lDone := .T.
-
-end
-
-return ( lDone )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Function do_locate()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-func do_locate
-
-local lDone
-local nRec
-memvar k_trim
-
-lDone := .F.
-
-do case
-case empty( k_trim )
-   error_msg( "Express„o n„o forencida" )
-
-case type( k_trim ) <> "L"
-   error_msg( "Express„o tipo deve ser Lўgica" )
-
-otherwise
-   nRec := recno()
-   stat_msg( "Procurando.." )
-
-   if &k_trim
-      skip
-   end
-
-   locate for &k_trim while .T.
-
-   if found()
-      stat_msg( "Achado" )
-      lDone := .T.
-
-   else
-      error_msg( "N„o Achado" )
-      goto nRec
-   end
-end
-
-return ( lDone )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Function do_skip()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-func do_skip
-
-local lDone
-local nSkip
-memvar k_trim
-
-lDone := .F.
-nSkip := val( k_trim )
-
-do case
-case empty( k_trim )
-   error_msg( "Forne‡a o nЈmero de saltos" )
-
-case .not. substr( ltrim( k_trim ), 1, 1 ) $ "-+1234567890"
-   error_msg( "Saltos n„o ‚ um valor nЈmerico" )
-
-case nSkip == 0
-   error_msg( "Salto com valor zero" )
-
-otherwise
-   lDone := .T.
-
-   skip nSkip
-
-   if eof()
-      go bottom
-   end
-
-   if bof()
-      go top
-   end
-end
-
-return ( lDone )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Static Function EmptyFile()
-*+
-*+    Called from ( dbuedit.prg  )   1 - static function statline()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-static func EmptyFile()
-
-if ( lastrec() == 0 )
-   return ( .t. )
-end
-
-if ( ( eof() .or. recno() == lastrec() + 1 ) .and. bof() )
-   return ( .t. )
-end
-
-return ( .f. )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Static Function DoGet()
-*+
-*+    Called from ( dbuedit.prg  )   1 -  browse()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-static func DoGet( oB, lAppend, cAlias )
-
-local lExitSave
-local oCol
-local oGet
-local nKey
-local cExpr
-local xEval
-local lFresh
-local nWaSave
-
-lExitSave := set( _SET_EXIT, .t. )
-nWaSave   := select()
-if ( !empty( cAlias ) )
-   select( cAlias )
-end
-
-set key K_INS to tog_insert
-xkey_clear()
-
-cExpr := indexkey( 0 )
-if ( !empty( cExpr ) )
-   xEval := &cExpr
-end
-
-oCol := oB:getColumn( oB:colPos )
-
-mGetVar := eval( oCol:block )
-
-if type( "mGetVar" ) = "C"
-   do case
-   case keystroke == K_ALT_O 
-      XPOSESQ( "", 0, "mGetVar" )
-   case keystroke == K_ALT_P 
-      XPOSDIR( "", 0, "mGetVar" )
-   case keystroke == K_ALT_G 
-      XCENTER( "", 0, "mGetVar" )
-   case keystroke == K_ALT_K 
-      TIRACE( mGetVar )
-   case keystroke == K_ALT_L 
-      XEXPAND( "", 0, "mGetVar" )
-   case keystroke == K_ALT_B 
-      XCAPFIRS( "", 0, "mGetVar" )
-   case keystroke == K_ALT_N 
-      CONVMINI( mGetVar )
-   case keystroke == K_ALT_M 
-      CONVMAIS( mGetVar )
-   endcase
-endif
-
-//Verifica se mGetVar e caracter e com string maior 78 da um pict @S
-if type( "mGetVar" ) = "C" .and. len( mGetVar ) > MaxCol()-1
-   oGet := getnew( row(), col(), ;
-                   { | x | if( pcount() == 0, mGetVar, mGetVar := x ) }, ;
-                   "mGetVar", "@S"+hb_ntos( MaxCol()-1 ) )
-else
-   oGet := getnew( row(), col(), ;
-                   { | x | if( pcount() == 0, mGetVar, mGetVar := x ) }, ;
-                   "mGetVar" )
-endif
-lFresh := .f.
-
-if ( readmodal( { oGet } ) )
-   if ( lAppend .and. recno() == lastrec() + 1 )
-      netrecapp()
-   end
-
-   eval( oCol:block, mGetVar )
-
-   if ( !empty( cExpr ) .and. !lAppend )
-      if ( xEval != &cExpr )
-         lFresh := .t.
-      end
-   end
-end
-
-select( nWaSave )
-if ( lFresh )
-   FreshOrder( oB )
-
-   nKey := 0
-else
-   oB:refreshCurrent()
-
-   nKey := ExitKey( lAppend )
-end
-
-if ( lAppend )
-   oB:colorRect( { oB:rowPos, 1, oB:rowPos, oB:colCount }, { 2, 2 } )
-end
-
-set( _SET_EXIT, lExitSave )
-set key K_INS to
-xkey_norm()
-
-return ( nKey )
-
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Static Function ExitKey()
-*+
-*+    Called from ( dbuedit.prg  )   1 - static function doget()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-static func ExitKey( lAppend )
-
-memvar keystroke
-
-keystroke := lastkey()
-if ( keystroke == K_PGDN )
-   if ( lAppend )
-      keystroke := 0
-   else
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function browse()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION browse
+
+   LOCAL i
+   LOCAL j
+   LOCAL nHelpSave
+   LOCAL cNtx
+   LOCAL cFieldArray
+   LOCAL cFieldName
+   LOCAL nWa
+   LOCAL cMemo
+   LOCAL oB
+   LOCAL nRec
+   LOCAL cBrowseBuf
+   LOCAL nPrimeArea
+   LOCAL nHsepRow
+   LOCAL cEditField
+   LOCAL bAlias
+   LOCAL cAlias
+   LOCAL nCType
+   LOCAL cHead
+   LOCAL lMore
+   LOCAL lCanAppend
+   LOCAL cMemoBuff
+   LOCAL aMoveExp
+   LOCAL cPrimeDbf
+   LOCAL nColorSave
+   LOCAL lAppend
+   LOCAL lGotKey
+   LOCAL lKillAppend
+   LOCAL bColBlock
+   MEMVAR keystroke
+   MEMVAR help_code
+   MEMVAR func_sel
+   MEMVAR cur_area
+   MEMVAR cur_dbf
+   MEMVAR field_list
+   MEMVAR frame
+   MEMVAR curs_on
+   MEMVAR cur_ntx
+   MEMVAR ntx1
+   MEMVAR dbf
+   MEMVAR local_func
+   MEMVAR box_open
+   MEMVAR color1
+   MEMVAR color7
+   MEMVAR color8
+   MEMVAR color9
+
+   nCType  := SetCursor( 0 )
+   curs_on := .F.
+
+   nHelpSave := help_code
+
+   cBrowseBuf := SaveScreen( 8, 0, MaxRow() - 1, MaxCol() )
+
+   aMoveExp := Array( 4 )
+   AFill( aMoveExp, "" )
+
+   nHsepRow := 11
+
+   IF ( func_sel == 1 )
+      nPrimeArea  := cur_area
+      cFieldArray := "field_n" + SubStr( "123456", cur_area, 1 )
+      cNtx        := "ntx" + SubStr( "123456", cur_area, 1 )
+      cur_ntx     := &cNtx[ 1 ]
+      cPrimeDbf   := SubStr( cur_dbf, RAt( hb_ps(), cur_dbf ) + 1 )
+      lCanAppend  := .T.
+   ELSE
+      nPrimeArea  := 1
+      cFieldArray := "field_list"
+      cur_ntx     := ntx1[ 1 ]
+      cPrimeDbf   := SubStr( dbf[ 1 ], RAt( hb_ps(), dbf[ 1 ] ) + 1 )
+      lCanAppend  := .F.
+
+      IF ( "->" $ field_list[ afull( field_list ) ] )
+         nHsepRow := 12
+      END
+   END
+
+   bAlias := &( "{|i| if('->' $" + cFieldArray + "[i], Substr(" + ;
+      cFieldArray + "[i], 1, At('->'," + cFieldArray + ;
+      "[i]) - 1), '')}" )
+
+   SELECT ( nPrimeArea )
+   IF ( Eof() )
+      GO TOP
+   END
+
+   lAppend := .F.
+   nRec    := 0
+
+   nColorSave := SetColor( color7 )
+   oB         := TBrowseDB( 10, 1, MaxRow() - 1, MaxCol() - 1 )
+
+   oB:headSep   := "-С-"
+   oB:colSep    := " Э "
+   oB:footSep   := "-П-"
+   oB:skipBlock := {| x | Skipped( x, lAppend ) }
+
+   j := Len( &cFieldArray )
+   FOR i := 1 TO j
+      IF ( Empty( &cFieldArray[ i ] ) )
+         EXIT
+      END
+
+      cEditField := &cFieldArray[ i ]
+      IF ( "->" $ cEditField )
+         cAlias     := SubStr( cEditField, 1, At( "->", cEditField ) + 1 )
+         cFieldName := SubStr( cEditField, At( "->", cEditField ) + 2 )
+         cHead      := cAlias + ";" + cFieldName
+         nWa        := SELECT ( cAlias )
+      ELSE
+         cAlias     := ""
+         cFieldName := cHead := cEditField
+         nWa        := SELECT ()
+      END
+
+      IF ( ValType( &cEditField ) == "M" )
+         bColBlock := &( "{|| '  <Memo>  '}" )
+      ELSE
+         bColBlock := FieldWBlock( cFieldName, nWa )
+      END
+
+      oB:addColumn( TBColumnNew( cHead, bColBlock ) )
+   NEXT
+
+   stat_msg( "" )
+   Scroll( 8, 0, MaxRow() - 1, MaxCol(), 0 )
+   hb_DispBox( 8, 0, MaxRow() - 1, MaxCol(), frame )
+   @ nHsepRow, 0  SAY "Ж"
+   @ nHsepRow, 79 SAY "µ"
+
+   cAlias      := ""
+   lKillAppend := .F.
+   IF ( ( LastRec() == 0 ) .AND. lCanAppend )
       keystroke := K_DOWN
-   end
+      lGotKey   := .T.
+   ELSE
+      lGotKey := .F.
+   END
 
-elseif ( keystroke == K_PGUP )
-   if ( lAppend )
+   lMore := .T.
+   WHILE ( lMore )
+      IF ( !lGotKey )
+         WHILE ( !oB:stabilize() )
+            IF ( ( keystroke := Inkey() ) != 0 )
+               lGotKey := .T.
+               EXIT
+            END
+         END
+      END
+
+      IF ( !lGotKey )
+         IF ( oB:hitBottom .AND. lCanAppend )
+            IF ( !lAppend .OR. RecNo() != LastRec() + 1 )
+               IF ( lAppend )
+                  oB:refreshCurrent()
+                  WHILE ( !oB:stabilize() )
+                  END
+                  GO BOTTOM
+               ELSE
+                  lAppend := .T.
+                  SetCursor( 1 )
+                  curs_on := .T.
+               END
+
+               oB:down()
+               WHILE ( !oB:stabilize() )
+               END
+               oB:colorRect( { oB:rowPos, 1, oB:rowPos, oB:colCount }, { 2, 2 } )
+            END
+         END
+
+         cAlias := Eval( bAlias, oB:colPos )
+         statline( oB, lAppend, cAlias )
+
+         WHILE ( !oB:stabilize() )
+         END
+
+         keystroke := Inkey( 0 )
+      ELSE
+         lGotKey := .F.
+      END
+
+      DO CASE
+      CASE keystroke == K_DOWN
+         IF ( lAppend )
+            oB:hitBottom := .T.
+         ELSE
+            oB:down()
+         END
+
+      CASE keystroke == K_UP
+         IF ( lAppend )
+            lKillAppend := .T.
+         ELSE
+            oB:up()
+         END
+
+      CASE keystroke == K_PGDN
+         IF ( lAppend )
+            oB:hitBottom := .T.
+         ELSE
+            oB:pageDown()
+         END
+
+      CASE keystroke == K_PGUP
+         IF ( lAppend )
+            lKillAppend := .T.
+         ELSE
+            oB:pageUp()
+         END
+
+      CASE keystroke == K_CTRL_PGUP
+         IF ( lAppend )
+            lKillAppend := .T.
+         ELSE
+            oB:goTop()
+         END
+
+      CASE keystroke == K_CTRL_PGDN
+         IF ( lAppend )
+            lKillAppend := .T.
+         ELSE
+            oB:goBottom()
+         END
+
+      CASE keystroke == K_RIGHT
+         oB:Right()
+
+      CASE keystroke == K_LEFT
+         oB:Left()
+
+      CASE keystroke == K_HOME
+         oB:home()
+
+      CASE keystroke == K_END
+         oB:end()
+
+      CASE keystroke == K_CTRL_LEFT
+         oB:panLeft()
+
+      CASE keystroke == K_CTRL_RIGHT
+         oB:panRight()
+
+      CASE keystroke == K_CTRL_HOME
+         oB:panHome()
+
+      CASE keystroke == K_CTRL_END
+         oB:panEnd()
+
+      CASE keystroke == K_DEL
+         WHILE ( !oB:stabilize() )
+         END
+         cAlias := Eval( bAlias, oB:colPos )
+         IF ( !Empty( cAlias ) )
+            SELECT ( cAlias )
+         END
+
+         IF ( RecNo() != LastRec() + 1 )
+            IF Deleted()
+               RECALL
+            ELSE
+               netrecdel()
+            END
+         END
+
+         SELECT ( nPrimeArea )
+
+      CASE keystroke == K_INS
+         tog_insert()
+
+      CASE keystroke == K_ENTER .OR. ;
+            keystroke == K_ALT_INS .OR. ;
+            keystroke == K_ALT_O .OR. ;
+            keystroke == K_ALT_P .OR. ;
+            keystroke == K_ALT_G .OR. ;
+            keystroke == K_ALT_K .OR. ;
+            keystroke == K_ALT_L .OR. ;
+            keystroke == K_ALT_B .OR. ;
+            keystroke == K_ALT_N .OR. ;
+            keystroke == K_ALT_M
+
+         WHILE ( !oB:stabilize() )
+         END
+         cAlias := Eval( bAlias, oB:colPos )
+
+         IF ( !Empty( cAlias ) )
+            SELECT ( cAlias )
+         END
+
+         IF ( !lAppend .AND. ( RecNo() == LastRec() + 1 ) )
+            SELECT ( nPrimeArea )
+            LOOP
+         END
+
+         SELECT ( nPrimeArea )
+
+         oB:hitTop := .F.
+         Statline( oB, lAppend, cAlias )
+         WHILE ( !oB:stabilize() )
+         END
+
+         cEditField := &cFieldArray[ oB:colPos ]
+
+         SetCursor( 1 )
+         curs_on := .T.
+
+         IF keystroke == K_ALT_INS
+            XALTINS()
+         ENDIF
+
+         IF ( Type( cEditField ) == "M" )
+            help_code := 19
+            box_open  := .T.
+
+            cMemoBuff := SaveScreen( 08, 00, MaxRow(), MaxCol() - 1 )
+
+            SetColor( color8 )
+            Scroll( 08, 00, MaxRow(), MaxCol() - 1, 0 )
+            hb_DispBox( 8, 0, MaxRow() - 1, MaxCol(), frame )
+            @ 24, 01 SAY 'Linha:' + spac( 5 ) + 'Coluna:'
+            @ 24, 40 SAY 'Ctrl+W -> Grava, ESC -> Anula '
+
+            SetColor( color9 )
+            @ 08, ( ( 76 - Len( cEditField ) ) / 2 ) SAY "  " + cEditField + "  "
+
+            SetColor( color8 )
+            // cMemo := memoedit( &cEditField, 09, 01, 22, 78, .T., "xmemo" )
+            cMemo := MemoEdit( &cEditField, 11, 11, MaxRow() - 3, 68, .T., "xmemo" )
+
+            IF LastKey() == K_CTRL_END
+
+               IF ( lAppend .AND. Eof() )
+                  netrecapp()
+               END
+
+               netreclock()
+               field->&cEditField := cMemo
+               dbUnlock()
+
+               oB:refreshCurrent()
+
+               keystroke := K_RIGHT
+               lGotKey   := .T.
+            ELSE
+               keystroke := 0
+            END
+
+
+            RestScreen( 08, 00, MaxRow(), MaxCol() - 1, cMemoBuff )
+
+            box_open := .F.
+         ELSE
+            SetColor( color1 )
+            keystroke := DoGet( oB, lAppend, cAlias )
+            lGotKey   := ( keystroke != 0 )
+         END
+
+         IF ( !lAppend )
+            SetCursor( 0 )
+            curs_on := .F.
+         END
+
+         help_code := nHelpSave
+         SetColor( color7 )
+
+         // Control+Ins - Capturando
+      CASE keystroke == K_CTRL_INS
+         WHILE ( !oB:stabilize() )
+         END
+         cAlias := Eval( bAlias, oB:colPos )
+         IF ( !Empty( cAlias ) )
+            SELECT ( cAlias )
+         END
+         IF ( !lAppend .AND. ( RecNo() == LastRec() + 1 ) )
+            SELECT ( nPrimeArea )
+            LOOP
+         END
+         SELECT ( nPrimeArea )
+         oB:hitTop := .F.
+         Statline( oB, lAppend, cAlias )
+         WHILE ( !oB:stabilize() )
+         END
+         cEditField := &cFieldArray[ oB:colPos ]
+         READVAR    := &cEditField
+      OTHERWISE
+         IF ( isdata( keystroke ) )
+            KEYBOARD Chr( K_ENTER ) + Chr( keystroke )
+         ELSE
+            // Chama Leityra da Tecla
+            sysmenu()
+
+            DO CASE
+            CASE q_check()
+               lMore := .F.
+
+            CASE local_func == 7
+               nRec := RecNo()
+               move_ptr( aMoveExp, cPrimeDbf )
+
+               IF ( nRec != RecNo() )
+                  IF ( lAppend )
+                     lKillAppend := .T.
+                  ELSE
+                     FreshOrder( oB )
+                  END
+               END
+            END
+         END
+      END
+
+      IF ( lKillAppend )
+         lKillAppend := .F.
+         lAppend     := .F.
+
+         FreshOrder( oB )
+         SetCursor( 0 )
+         curs_on := .F.
+      END
+   END
+
+   RestScreen( 8, 0, MaxRow() - 1, MaxCol(), cBrowseBuf )
+   SetColor( nColorSave )
+   SetCursor( nCType )
+   curs_on := ( nCType != 0 )
+   stat_msg( "" )
+
+   RETURN
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function xmemo()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC xmemo( mmode, line, col )
+
+   LOCAL nRet
+   MEMVAR keystroke
+   MEMVAR local_func
+
+   SetColor( color9 )
+   @ 24, 07 SAY line PICT '####'
+   @ 24, 19 SAY col  PICT '####'
+   SetColor( color8 )
+
+   nRet := 0
+
+   IF mmode <> ME_IDLE
+      keystroke := LastKey()
+      sysmenu()
+
+      DO CASE
+      CASE keystroke == K_ALT_INS
+         XALTINS()
+      CASE keystroke == K_INS
+         tog_insert()
+         nRet := ME_IGNORE
+
+      CASE keystroke == K_ESC
+         IF mmode == ME_UNKEYX
+            IF rsvp( "Ok. Abandonar Mudan‡as? (S/N)" ) <> "S"
+               nRet := ME_IGNORE
+            END
+         END
+      END
+   END
+
+   RETURN ( nRet )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function tog_insert()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+STATIC FUNC tog_insert
+
+   LOCAL nCType
+
+   ReadInsert( !ReadInsert() )
+   nCType := SetCursor( 0 )
+   show_insert()
+   SetCursor( nCType )
+
+   RETURN ( 0 )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function show_insert()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+STATIC FUNC show_insert
+
+   LOCAL nColorSave
+
+   nColorSave := SetColor( color7 )
+   @  9, 4 SAY if( ReadInsert(), "<Inserindo>", "           " )
+   SetColor( nColorSave )
+
+   RETURN ( 0 )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function statline()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+STATIC FUNC statline( oB, lAppend, cAlias )
+
+   LOCAL cColorSave
+   LOCAL cCurrAlias
+   LOCAL lNoFilter
+   LOCAL nWaSave
+   LOCAL nCType
+
+   nCType := SetCursor( 0 )
+
+   nWaSave := SELECT ()
+   IF ( !Empty( cAlias ) )
+      SELECT ( cAlias )
+   END
+
+   cColorSave := SetColor( color7 )
+
+   show_insert()
+
+   lNoFilter := Empty( &( "kf" + SubStr( "123456", Select(), 1 ) ) )
+   @  9, 16 SAY if( lNoFilter, "        ", "<Filtro>" )
+
+   @  9, 41 SAY if( Empty( cAlias ), Space( 10 ), Lpad( cAlias + "->", 10 ) ) ;
+      +"Reg :"
+
+   IF ( EmptyFile() .AND. ! lAppend )
+      @  9, 57 SAY "<nada>              "
+   ELSEIF ( Eof() )
+      @  9, 28 SAY "         "
+      @  9, 57 SAY "            " + if( lAppend, "<novo>", "<fim>" )
+   ELSE
+      @  9, 28 SAY if( Deleted(), "<Apagado>", "         " )
+      @  9, 57 SAY Pad( LTrim( Str( RecNo() ) ) + "/" + LTrim( Str( LastRec() ) ), 15 ) + ;
+         IF ( oB:hitTop, " <Ini>", if( oB:hitBottom, " <fim>", "      " ) )
+   END
+
+   SetColor( cColorSave )
+   SELECT ( nWaSave )
+   SetCursor( nCType )
+
+   RETURN ( 0 )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function move_ptr()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+STATIC FUNC move_ptr( aMoveExp, cPrimeDbf )
+
+   LOCAL nHelpSave
+   LOCAL aBox
+   MEMVAR okee_dokee
+   MEMVAR k_trim
+   MEMVAR movp_sel
+   MEMVAR titl_str
+   MEMVAR exp_label
+   MEMVAR help_code
+   MEMVAR local_sel
+   MEMVAR ntx_expr
+   PRIVATE okee_dokee
+   PRIVATE k_trim
+   PRIVATE movp_sel
+   PRIVATE titl_str
+   PRIVATE exp_label
+   PRIVATE ntx_expr
+
+   nHelpSave := help_code
+
+   movp_sel := local_sel
+
+   k_trim := aMoveExp[ movp_sel ]
+
+   aBox := Array( 4 )
+
+   aBox[ 1 ] := "movp_title(sysparam)"
+   aBox[ 2 ] := "movp_exp(sysparam)"
+   aBox[ 3 ] := "ok_button(sysparam)"
+   aBox[ 4 ] := "can_button(sysparam)"
+
+   DO CASE
+   CASE movp_sel == 1
+      okee_dokee := "do_seek()"
+      titl_str   := "Busca no Arquivo " + cPrimeDbf + "..."
+      exp_label  := "Express„o"
+      ntx_expr   := IndexKey( 0 )
+      help_code  := 13
+
+   CASE movp_sel == 2
+      okee_dokee := "do_goto()"
+      titl_str   := "Mover pontos no arquivo " + cPrimeDbf + " para..."
+      exp_label  := "Registro#"
+      help_code  := 14
+
+   CASE movp_sel == 3
+      okee_dokee := "do_locate()"
+      titl_str   := "Localizando no arquivo " + cPrimeDbf + "..."
+      exp_label  := "Express„o"
+      help_code  := 10
+
+   CASE movp_sel == 4
+      okee_dokee := "do_skip()"
+      titl_str   := "Pulando registro no arquivo " + cPrimeDbf + "..."
+      exp_label  := "NЈmero"
+      help_code  := 20
+   END
+
+   SET KEY K_INS TO tog_insert
+   multibox( 14, 17, 5, 2, aBox )
+   SET KEY K_INS TO
+
+   aMoveExp[ movp_sel ] := k_trim
+
+   help_code := nHelpSave
+
+   RETURN ( 0 )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function movp_title()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC movp_title( sysparam )
+
+   MEMVAR titl_str
+
+   RETURN ( box_title( sysparam, titl_str ) )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function movp_exp()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC movp_exp( sysparam )
+
+   MEMVAR exp_label
+
+   RETURN ( get_k_trim( sysparam, exp_label ) )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_seek()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC do_seek
+
+   LOCAL lDone
+   LOCAL nRec
+   LOCAL cSeekType
+   MEMVAR k_trim
+   MEMVAR ntx_expr
+
+   lDone := .F.
+
+   IF Empty( k_trim )
+      error_msg( "Express„o n„o entrada" )
+   ELSE
+      stat_msg( "Procurando.." )
+
+      nRec := RecNo()
+
+      cSeekType := Type( ntx_expr )
+
+      DO CASE
+      CASE cSeekType == "C"
+         SEEK k_trim
+
+      CASE cSeekType == "N"
+         SEEK Val( k_trim )
+
+      CASE cSeekType == "D"
+         SEEK CToD( k_trim )
+      END
+
+      IF Found()
+         stat_msg( "Encontrado" )
+         lDone := .T.
+      ELSE
+         error_msg( "N„o Encontrado" )
+         GOTO nRec
+      END
+   END
+
+   RETURN ( lDone )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_goto()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC do_goto
+
+   LOCAL lDone
+   LOCAL nWhich
+   MEMVAR k_trim
+
+   lDone  := .F.
+   nWhich := Val( k_trim )
+
+   DO CASE
+   CASE Empty( k_trim )
+      error_msg( "NЈmero de Registro n„o fornecido" )
+
+   CASE ! SubStr( LTrim( k_trim ), 1, 1 ) $ "-+1234567890"
+      error_msg( "NЈmero de Registro n„o ‚ num‚rico" )
+
+   CASE nWhich <= 0 .OR. nWhich > LastRec()
+      error_msg( "Registro fora de faixa" )
+
+   OTHERWISE
+      GOTO nWhich
+      lDone := .T.
+
+   END
+
+   RETURN ( lDone )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_locate()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC do_locate
+
+   LOCAL lDone
+   LOCAL nRec
+   MEMVAR k_trim
+
+   lDone := .F.
+
+   DO CASE
+   CASE Empty( k_trim )
+      error_msg( "Express„o n„o forencida" )
+
+   CASE Type( k_trim ) <> "L"
+      error_msg( "Express„o tipo deve ser Lўgica" )
+
+   OTHERWISE
+      nRec := RecNo()
+      stat_msg( "Procurando.." )
+
+      IF &k_trim
+         SKIP
+      END
+
+      LOCATE FOR &k_trim WHILE .T.
+
+      IF Found()
+         stat_msg( "Achado" )
+         lDone := .T.
+
+      ELSE
+         error_msg( "N„o Achado" )
+         GOTO nRec
+      END
+   END
+
+   RETURN ( lDone )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_skip()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC do_skip
+
+   LOCAL lDone
+   LOCAL nSkip
+   MEMVAR k_trim
+
+   lDone := .F.
+   nSkip := Val( k_trim )
+
+   DO CASE
+   CASE Empty( k_trim )
+      error_msg( "Forne‡a o nЈmero de saltos" )
+
+   CASE ! SubStr( LTrim( k_trim ), 1, 1 ) $ "-+1234567890"
+      error_msg( "Saltos n„o ‚ um valor nЈmerico" )
+
+   CASE nSkip == 0
+      error_msg( "Salto com valor zero" )
+
+   OTHERWISE
+      lDone := .T.
+
+      SKIP nSkip
+
+      IF Eof()
+         GO BOTTOM
+      END
+
+      IF Bof()
+         GO TOP
+      END
+   END
+
+   RETURN ( lDone )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function EmptyFile()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+STATIC FUNC EmptyFile()
+
+   IF ( LastRec() == 0 )
+      RETURN ( .T. )
+   END
+
+   IF ( ( Eof() .OR. RecNo() == LastRec() + 1 ) .AND. Bof() )
+      RETURN ( .T. )
+   END
+
+   RETURN ( .F. )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function DoGet()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+STATIC FUNC DoGet( oB, lAppend, cAlias )
+
+   LOCAL lExitSave
+   LOCAL oCol
+   LOCAL oGet
+   LOCAL nKey
+   LOCAL cExpr
+   LOCAL xEval
+   LOCAL lFresh
+   LOCAL nWaSave
+
+   lExitSave := Set( _SET_EXIT, .T. )
+   nWaSave   := SELECT ()
+   IF ( !Empty( cAlias ) )
+      SELECT ( cAlias )
+   END
+
+   SET KEY K_INS TO tog_insert
+   xkey_clear()
+
+   cExpr := IndexKey( 0 )
+   IF ( !Empty( cExpr ) )
+      xEval := &cExpr
+   END
+
+   oCol := oB:getColumn( oB:colPos )
+
+   mGetVar := Eval( oCol:block )
+
+   IF Type( "mGetVar" ) = "C"
+      DO CASE
+      CASE keystroke == K_ALT_O
+         XPOSESQ( "", 0, "mGetVar" )
+      CASE keystroke == K_ALT_P
+         XPOSDIR( "", 0, "mGetVar" )
+      CASE keystroke == K_ALT_G
+         XCENTER( "", 0, "mGetVar" )
+      CASE keystroke == K_ALT_K
+         TIRACE( mGetVar )
+      CASE keystroke == K_ALT_L
+         XEXPAND( "", 0, "mGetVar" )
+      CASE keystroke == K_ALT_B
+         XCAPFIRS( "", 0, "mGetVar" )
+      CASE keystroke == K_ALT_N
+         CONVMINI( mGetVar )
+      CASE keystroke == K_ALT_M
+         CONVMAIS( mGetVar )
+      ENDCASE
+   ENDIF
+
+// Verifica se mGetVar e caracter e com string maior 78 da um pict @S
+   IF Type( "mGetVar" ) = "C" .AND. Len( mGetVar ) > MaxCol() - 1
+      oGet := GetNew( Row(), Col(), ;
+         {| x | if( PCount() == 0, mGetVar, mGetVar := x ) }, ;
+         "mGetVar", "@S" + hb_ntos( MaxCol() - 1 ) )
+   ELSE
+      oGet := GetNew( Row(), Col(), ;
+         {| x | if( PCount() == 0, mGetVar, mGetVar := x ) }, ;
+         "mGetVar" )
+   ENDIF
+   lFresh := .F.
+
+   IF ( ReadModal( { oGet } ) )
+      IF ( lAppend .AND. RecNo() == LastRec() + 1 )
+         netrecapp()
+      END
+
+      Eval( oCol:block, mGetVar )
+
+      IF ( !Empty( cExpr ) .AND. !lAppend )
+         IF ( xEval != &cExpr )
+            lFresh := .T.
+         END
+      END
+   END
+
+   SELECT ( nWaSave )
+   IF ( lFresh )
+      FreshOrder( oB )
+
+      nKey := 0
+   ELSE
+      oB:refreshCurrent()
+
+      nKey := ExitKey( lAppend )
+   END
+
+   IF ( lAppend )
+      oB:colorRect( { oB:rowPos, 1, oB:rowPos, oB:colCount }, { 2, 2 } )
+   END
+
+   Set( _SET_EXIT, lExitSave )
+   SET KEY K_INS TO
+   xkey_norm()
+
+   RETURN ( nKey )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function ExitKey()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+STATIC FUNC ExitKey( lAppend )
+
+   MEMVAR keystroke
+
+   keystroke := LastKey()
+   IF ( keystroke == K_PGDN )
+      IF ( lAppend )
+         keystroke := 0
+      ELSE
+         keystroke := K_DOWN
+      END
+
+   ELSEIF ( keystroke == K_PGUP )
+      IF ( lAppend )
+         keystroke := 0
+      ELSE
+         keystroke := K_UP
+      END
+
+   ELSEIF ( keystroke == K_ENTER .OR. isdata( keystroke ) )
+      keystroke := K_RIGHT
+
+   ELSEIF ( keystroke != K_UP .AND. keystroke != K_DOWN .AND. menu_key() == 0 )
       keystroke := 0
-   else
-      keystroke := K_UP
-   end
+   END
 
-elseif ( keystroke == K_ENTER .or. isdata( keystroke ) )
-   keystroke := K_RIGHT
+   RETURN ( keystroke )
 
-elseif ( keystroke != K_UP .and. keystroke != K_DOWN .and. menu_key() == 0 )
-   keystroke := 0
-end
 
-return ( keystroke )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function FreshOrder()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+STATIC FUNC FreshOrder( oB )
 
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Static Function FreshOrder()
-*+
-*+    Called from ( dbuedit.prg  )   2 -  browse()
-*+                                   1 - static function doget()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-static func FreshOrder( oB )
+   LOCAL nRec
 
-local nRec
+   nRec := RecNo()
+   oB:refreshAll()
 
-nRec := recno()
-oB:refreshAll()
+   WHILE ( !oB:stabilize() )
+   END
 
-while ( !oB:stabilize() ) 
-end
+   IF ( nRec != LastRec() + 1 )
+      WHILE ( RecNo() != nRec )
+         oB:up()
+         WHILE ( !oB:stabilize() )
+         END
+      END
+   END
 
-if ( nRec != lastrec() + 1 )
-   while ( recno() != nRec )
-      oB:up()
-      while ( !oB:stabilize() ) 
-      end
-   end
-end
+   RETURN ( NIL )
 
-return ( NIL )
 
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Static Function Skipped()
-*+
-*+    Called from ( dbuedit.prg  )   1 -  browse()
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-static func Skipped( nRequest, lAppend )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function Skipped()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+STATIC FUNC Skipped( nRequest, lAppend )
 
-local nCount
+   LOCAL nCount
 
-nCount := 0
-if ( lastrec() != 0 )
-   if ( nRequest == 0 )
-      skip 0
+   nCount := 0
+   IF ( LastRec() != 0 )
+      IF ( nRequest == 0 )
+         SKIP 0
 
-   elseif ( nRequest > 0 .and. recno() != lastrec() + 1 )
-      while ( nCount < nRequest )
-         skip 1
-         if ( eof() )
-            if ( lAppend )
-               nCount ++
-            else
-               skip - 1
-            end
+      ELSEIF ( nRequest > 0 .AND. RecNo() != LastRec() + 1 )
+         WHILE ( nCount < nRequest )
+            SKIP 1
+            IF ( Eof() )
+               IF ( lAppend )
+                  nCount++
+               ELSE
+                  SKIP - 1
+               END
 
-            exit
-         end
+               EXIT
+            END
 
-         nCount ++
-      end
+            nCount++
+         END
 
-   elseif ( nRequest < 0 )
-      while ( nCount > nRequest )
-         skip - 1
-         if ( bof() )
-            exit
-         end
+      ELSEIF ( nRequest < 0 )
+         WHILE ( nCount > nRequest )
+            SKIP - 1
+            IF ( Bof() )
+               EXIT
+            END
 
-         nCount --
-      end
-   end
-end
+            nCount--
+         END
+      END
+   END
 
-return ( nCount ) 
+   RETURN ( nCount ) 
 
-*+ EOF: DBUEDIT.PRG
+
+// + EOF: dbuedit.prg
+// +

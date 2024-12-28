@@ -1,3 +1,30 @@
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : pgrdd.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:08 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 /*
  * $Id$
  */
@@ -76,50 +103,90 @@ STATIC s_aConnections := {}
 STATIC oSERVER
 STATIC aSTRUCAMPOS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function DBPGCONNECTION()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION DBPGCONNECTION( cConnString )
 
    LOCAL aParams
- //  LOCAL oServer
+
+// LOCAL oServer
    LOCAL nConn
 
-   aParams := HB_ATOKENS( cConnString, ";" )
+   aParams := hb_ATokens( cConnString, ";" )
 
-   asize( aParams, 6 )
+   ASize( aParams, 6 )
 
-   oServer := TPQServer():New( aParams[1], aParams[2], aParams[3], aParams[4], aParams[5], aParams[6] )
+   oServer := TPQServer():New( aParams[ 1 ], aParams[ 2 ], aParams[ 3 ], aParams[ 4 ], aParams[ 5 ], aParams[ 6 ] )
 
    IF oServer:NetErr()
-      alert( oServer:ErrorMsg() )
+      Alert( oServer:ErrorMsg() )
       RETURN FAILURE
    ELSE
-      aadd( s_aConnections, oServer )
-      nConn := len( s_aConnections )
+      AAdd( s_aConnections, oServer )
+      nConn := Len( s_aConnections )
    ENDIF
-     
-RETURN nConn
 
+   RETURN nConn
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function DBPGCLEARCONNECTION()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION DBPGCLEARCONNECTION( nConn )
 
-//   LOCAL oServer
+// LOCAL oServer
 
-  // oServer := s_aConnections[ nConn ]
+// oServer := s_aConnections[ nConn ]
 
    oServer:Close()
 
    s_aConnections[ nConn ] := nil
 
-RETURN SUCCESS
-   
+   RETURN SUCCESS
+
 /*
  * non work area methods receive RDD ID as first parameter
  * Methods INIT and EXIT does not have to execute SUPER methods - these is
  * always done by low level USRRDD code
  */
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_INIT()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_INIT( nRDD )
 
    USRRDD_RDDDATA( nRDD )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
 /*
  * methods: NEW and RELEASE receive pointer to work area structure
@@ -128,40 +195,68 @@ RETURN SUCCESS
  * these methods does not have to execute SUPER methods - these is
  * always done by low level USRRDD code
  */
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_NEW()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_NEW( pWA )
 
-   USRRDD_AREADATA( pWA, array( AREA_LEN ) )
+   USRRDD_AREADATA( pWA, Array( AREA_LEN ) )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_OPEN()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_OPEN( nWA, aOpenInfo )
+
    LOCAL aField, oError, lError, cError, nResult
    LOCAL oQuery, aStruct, aFieldStruct
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
-//   LOCAL oSERVER
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+// LOCAL oSERVER
    LOCAL nFIELDSCOUNT, iFIELDNUM, eTIPODECODE
 
    lError := .F.
 
-   if !empty( aOpenInfo[ UR_OI_CONNECT ] ) .and. aOpenInfo[ UR_OI_CONNECT ] <= len( s_aConnections )
+   IF !Empty( aOpenInfo[ UR_OI_CONNECT ] ) .AND. aOpenInfo[ UR_OI_CONNECT ] <= Len( s_aConnections )
       oServer := s_aConnections[ aOpenInfo[ UR_OI_CONNECT ] ]
-   endif
+   ENDIF
 
-   if !empty( oServer )
+   IF !Empty( oServer )
       oServer:lAllCols := .F.
-      oQuery := oServer:Query( aOpenInfo[ UR_OI_NAME ] )
-      lError := oQuery:NetErr()
-      cError := oQuery:ErrorMsg()
-   else
-      lError := .T. 
+      oQuery           := oServer:Query( aOpenInfo[ UR_OI_NAME ] )
+      lError           := oQuery:NetErr()
+      cError           := oQuery:ErrorMsg()
+   ELSE
+      lError := .T.
       cError := "Invalid connection handle"
-   endif
+   ENDIF
 
    IF lError
-      oError := ErrorNew()
+      oError             := ErrorNew()
       oError:GenCode     := EG_OPEN
       oError:SubCode     := 1000
-      oError:Description := HB_LANGERRMSG( EG_OPEN ) + ", " + cError
+      oError:Description := hb_langErrMsg( EG_OPEN ) + ", " + cError
       oError:FileName    := aOpenInfo[ UR_OI_NAME ]
       oError:CanDefault  := .T.
       UR_SUPER_ERROR( nWA, oError )
@@ -169,10 +264,10 @@ STATIC FUNCTION PG_OPEN( nWA, aOpenInfo )
    ELSE
       aWAData[ AREA_QUERY ] := oQuery
    ENDIF
-     
+
    UR_SUPER_SETFIELDEXTENT( nWA, oQuery:nFields )
 
-   /*
+/*
    aStruct := oQuery:Struct()
 
    FOR EACH aFieldStruct IN aStruct
@@ -187,236 +282,493 @@ STATIC FUNCTION PG_OPEN( nWA, aOpenInfo )
 
    NEXT
    */
-   
-    nFIELDSCOUNT := oQuery:FCOUNT() //oQuery:nNumFields oQuery:nFields
-   aSTRUCAMPOS:={}
 
-   FOR iFIELDNUM:= 1 TO nFIELDSCOUNT
-       eTIPODECODE:=hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( oQUERY:FieldDec( iFIELDNUM )  > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
-       //     aField[ UR_FI_TYPE ]    := hb_Decode( aFieldStruct[ DBS_TYPE ], "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
-        //    aField[ UR_FI_TYPE ]    := hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
-       if empty(eTIPODECODE)
-         eTIPODECODE:=FT_STRING
-       endif
+   nFIELDSCOUNT := oQuery:FCount()   // oQuery:nNumFields oQuery:nFields
+   aSTRUCAMPOS  := {}
 
-       aField := ARRAY( UR_FI_SIZE )
-       aField[ UR_FI_NAME  ]    := oQUERY:FieldName( iFIELDNUM )
-       aField[ UR_FI_TYPE ]    := eTIPODECODE //oQUERY:FieldType( iFIELDNUM )   
-       aField[ UR_FI_TYPEEXT ] := 0
-       aField[ UR_FI_LEN  ]     := oQUERY:FieldLen( iFIELDNUM )   
-       aField[ UR_FI_DEC  ]     := oQUERY:FieldDec( iFIELDNUM )   
-       UR_SUPER_ADDFIELD( nWA, aField )
-       AADD(aSTRUCAMPOS,{oQUERY:FieldName( iFIELDNUM ),oQUERY:FieldType( iFIELDNUM ),oQUERY:FieldLen( iFIELDNUM ),oQUERY:FieldDec( iFIELDNUM ),eTIPODECODE}) //grava tambem na static pegar via funcao DBMYSTRU()
+   FOR iFIELDNUM := 1 TO nFIELDSCOUNT
+      eTIPODECODE := hb_Decode( oQUERY:FieldType( iFIELDNUM ), "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( oQUERY:FieldDec( iFIELDNUM ) > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+      // aField[ UR_FI_TYPE ]    := hb_Decode( aFieldStruct[ DBS_TYPE ], "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+      // aField[ UR_FI_TYPE ]    := hb_Decode( oQUERY:FieldType( iFIELDNUM ) , "C", HB_FT_STRING, "L", HB_FT_LOGICAL, "M", HB_FT_MEMO, "D", HB_FT_DATE, "N", iif( aFieldStruct[ DBS_DEC ] > 0, HB_FT_DOUBLE, HB_FT_INTEGER ) )
+      IF Empty( eTIPODECODE )
+         eTIPODECODE := FT_STRING
+      ENDIF
+
+      aField                  := Array( UR_FI_SIZE )
+      aField[ UR_FI_NAME ]    := oQUERY:FieldName( iFIELDNUM )
+      aField[ UR_FI_TYPE ]    := eTIPODECODE   // oQUERY:FieldType( iFIELDNUM )
+      aField[ UR_FI_TYPEEXT ] := 0
+      aField[ UR_FI_LEN ]     := oQUERY:FieldLen( iFIELDNUM )
+      aField[ UR_FI_DEC ]     := oQUERY:FieldDec( iFIELDNUM )
+      UR_SUPER_ADDFIELD( nWA, aField )
+      AAdd( aSTRUCAMPOS, { oQUERY:FieldName( iFIELDNUM ), oQUERY:FieldType( iFIELDNUM ), oQUERY:FieldLen( iFIELDNUM ), oQUERY:FieldDec( iFIELDNUM ), eTIPODECODE } )  // grava tambem na static pegar via funcao DBMYSTRU()
    NEXT iFIELDNUM
 
-   /* Call SUPER OPEN to finish allocating work area (f.e.: alias settings) */
+/* Call SUPER OPEN to finish allocating work area (f.e.: alias settings) */
    nResult := UR_SUPER_OPEN( nWA, aOpenInfo )
 
-RETURN nResult
+   RETURN nResult
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_CLOSE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_CLOSE( nWA )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
    aWAData[ AREA_QUERY ]:Close()
 
-RETURN UR_SUPER_CLOSE( nWA )
+   RETURN UR_SUPER_CLOSE( nWA )
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_GETVALUE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_GETVALUE( nWA, nField, xValue )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
-  
-   if !empty( aWAData[ AREA_ROW ] )
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+   IF !Empty( aWAData[ AREA_ROW ] )
       xValue := aWAData[ AREA_ROW ]:FieldGet( nField )
-   else
-      xValue := aWAData[ AREA_QUERY ]:FieldGet( nField )    
-   endif
+   ELSE
+      xValue := aWAData[ AREA_QUERY ]:FieldGet( nField )
+   ENDIF
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_PUTVALUE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_PUTVALUE( nWA, nField, xValue )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   if empty( aWAData[ AREA_ROW ] )
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+   IF Empty( aWAData[ AREA_ROW ] )
       aWAData[ AREA_ROW ] := aWAData[ AREA_QUERY ]:GetRow()
-   endif
+   ENDIF
 
    aWAData[ AREA_ROW ]:FieldPut( nField, xValue )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_SKIP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_SKIP( nWA, nRecords )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   if !empty( aWAData[ AREA_ROW ] )
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+   IF !Empty( aWAData[ AREA_ROW ] )
       PG_FLUSH( nWA )
-   endif
+   ENDIF
 
    aWAData[ AREA_QUERY ]:Skip( nRecords )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_GOTOP()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_GOTOP( nWA )
-RETURN PG_GOTO( nWA, 1 )
 
+   RETURN PG_GOTO( nWA, 1 )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_GOBOTTOM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_GOBOTTOM( nWA )
-RETURN PG_GOTO( nWA, -1 )
 
+   RETURN PG_GOTO( nWA, - 1 )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_GOTOID()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_GOTOID( nWA, nRecord )
-RETURN PG_GOTO( nWA, nRecord )
 
+   RETURN PG_GOTO( nWA, nRecord )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_GOTO()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_GOTO( nWA, nRecord )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   if !empty( aWAData[ AREA_ROW ] )
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
+   IF !Empty( aWAData[ AREA_ROW ] )
       PG_FLUSH( nWA )
-   endif
+   ENDIF
 
-   if nRecord < 0
-      nRecord := aWAData[ AREA_QUERY ]:nLastRec
-   elseif nRecord == 0
-      nRecord := aWAData[ AREA_QUERY ]:nRecno
-   endif
+   IF nRecord < 0
+      nRecord := aWAData[ AREA_QUERY ] :nLastRec
+   ELSEIF nRecord == 0
+      nRecord := aWAData[ AREA_QUERY ] :nRecno
+   ENDIF
 
    aWAData[ AREA_QUERY ]:Goto( nRecord )
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_RECCOUNT()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_RECCOUNT( nWA, nRecords )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   nRecords := aWAData[ AREA_QUERY ]:nLastRec
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
-RETURN SUCCESS
+   nRecords := aWAData[ AREA_QUERY ] :nLastRec
 
+   RETURN SUCCESS
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_BOF()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_BOF( nWA, lBof )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   lBof := aWAData[ AREA_QUERY ]:lBof
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
-RETURN SUCCESS
+   lBof := aWAData[ AREA_QUERY ] :lBof
 
+   RETURN SUCCESS
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_EOF()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_EOF( nWA, lEof )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   lEof := aWAData[ AREA_QUERY ]:lEof
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
-RETURN SUCCESS
+   lEof := aWAData[ AREA_QUERY ] :lEof
 
+   RETURN SUCCESS
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_RECID()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_RECID( nWA, nRecNo )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
 
-   nRecno := aWAData[ AREA_QUERY ]:nRecNo
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
-RETURN SUCCESS
+   nRecno := aWAData[ AREA_QUERY ] :nRecNo
 
+   RETURN SUCCESS
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_DELETED()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_DELETED( nWA, lDeleted )
-   lDeleted := .F.
-RETURN SUCCESS
 
+   lDeleted := .F.
+
+   RETURN SUCCESS
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_FLUSH()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_FLUSH( nWA )
+
    LOCAL oError
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
    LOCAL nRecno
 
-   if aWAData[ AREA_ROW ] != nil
-      if !empty( aWAData[ AREA_APPEND ] )
+   IF aWAData[ AREA_ROW ] != nil
+      IF !Empty( aWAData[ AREA_APPEND ] )
          aWAData[ AREA_QUERY ]:Append( aWAData[ AREA_ROW ] )
-      else
-         nRecno := aWAData[ AREA_QUERY ]:nRecNo
+      ELSE
+         nRecno := aWAData[ AREA_QUERY ] :nRecNo
          aWAData[ AREA_QUERY ]:Update( aWAData[ AREA_ROW ] )
-      endif
+      ENDIF
 
-      IF aWAData[ AREA_QUERY ]:lError
-         oError := ErrorNew()
+      IF aWAData[ AREA_QUERY ] :lError
+         oError             := ErrorNew()
          oError:GenCode     := EG_DATATYPE
          oError:SubCode     := 3000
-         oError:Description := HB_LANGERRMSG( EG_DATATYPE ) + ", " + aWAData[ AREA_QUERY ]:ErrorMsg() 
+         oError:Description := hb_langErrMsg( EG_DATATYPE ) + ", " + aWAData[ AREA_QUERY ]:ErrorMsg()
          UR_SUPER_ERROR( nWA, oError )
          RETURN FAILURE
       ENDIF
 
-/*
- * The :Refresh() below costs a lot in term of performance. 
+   /*
+ * The :Refresh() below costs a lot in term of performance.
  * It redo the select to include inserts and updates.
  * It is the only solution I've found so far to simulate dbf behaviour
  */
       aWAData[ AREA_QUERY ]:Refresh( .T., .F. )
 
-      if !empty( aWAData[ AREA_APPEND ] )
+      IF !Empty( aWAData[ AREA_APPEND ] )
          aWAData[ AREA_APPEND ] := .F.
-         nRecno := aWAData[ AREA_QUERY ]:nLastRec
-      endif
+         nRecno                 := aWAData[ AREA_QUERY ] :nLastRec
+      ENDIF
 
       aWAData[ AREA_ROW ] := nil
 
       PG_GOTO( nWA, nRecno )
 
-   endif
+   ENDIF
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_APPEND()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_APPEND( nWA, nRecords )
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
+
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
 
    aWAData[ AREA_ROW ] := aWAData[ AREA_QUERY ]:GetBlankRow()
 
    aWAData[ AREA_APPEND ] := .T.
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Static Function PG_DELETE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 STATIC FUNCTION PG_DELETE( nWA )
+
    LOCAL oError
-   LOCAL aWAData   := USRRDD_AREADATA( nWA )
- 
+   LOCAL aWAData := USRRDD_AREADATA( nWA )
+
    aWAData[ AREA_ROW ] := aWAData[ AREA_QUERY ]:GetRow()
 
    aWAData[ AREA_QUERY ]:Delete( aWAData[ AREA_ROW ] )
 
-   IF aWAData[ AREA_QUERY ]:lError
-      oError := ErrorNew()
+   IF aWAData[ AREA_QUERY ] :lError
+      oError             := ErrorNew()
       oError:GenCode     := EG_DATATYPE
       oError:SubCode     := 2000
-      oError:Description := HB_LANGERRMSG( EG_DATATYPE ) + ", " + aWAData[ AREA_QUERY ]:ErrorMsg() 
+      oError:Description := hb_langErrMsg( EG_DATATYPE ) + ", " + aWAData[ AREA_QUERY ]:ErrorMsg()
       UR_SUPER_ERROR( nWA, oError )
       RETURN FAILURE
    ENDIF
-     
+
    aWAData[ AREA_ROW ] := nil
 
-RETURN SUCCESS
+   RETURN SUCCESS
 
 /*
  * This function have to exist in all RDD and then name have to be in
  * format: <RDDNAME>_GETFUNCTABLE
  */
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function PGRDD_GETFUNCTABLE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION PGRDD_GETFUNCTABLE( pFuncCount, pFuncTable, pSuperTable, nRddID )
-   LOCAL cSuperRDD := NIL     /* NO SUPER RDD */
+
+   LOCAL cSuperRDD := NIL /* NO SUPER RDD */
    LOCAL aMyFunc[ UR_METHODCOUNT ]
 
-   aMyFunc[ UR_INIT         ] := ( @PG_INIT()         )
-   aMyFunc[ UR_NEW          ] := ( @PG_NEW()          )
-   aMyFunc[ UR_OPEN         ] := ( @PG_OPEN()         )
-   aMyFunc[ UR_GETVALUE     ] := ( @PG_GETVALUE()     )
-   aMyFunc[ UR_PUTVALUE     ] := ( @PG_PUTVALUE()     )
-   aMyFunc[ UR_SKIP         ] := ( @PG_SKIP()         )
-   aMyFunc[ UR_GOTO         ] := ( @PG_GOTO()         )
-   aMyFunc[ UR_GOTOID       ] := ( @PG_GOTOID()       )
-   aMyFunc[ UR_GOTOP        ] := ( @PG_GOTOP()        )
-   aMyFunc[ UR_GOBOTTOM     ] := ( @PG_GOBOTTOM()     )
-   aMyFunc[ UR_RECCOUNT     ] := ( @PG_RECCOUNT()     )
-   aMyFunc[ UR_RECID        ] := ( @PG_RECID()        )
-   aMyFunc[ UR_BOF          ] := ( @PG_BOF()          )
-   aMyFunc[ UR_EOF          ] := ( @PG_EOF()          )
-   aMyFunc[ UR_DELETED      ] := ( @PG_DELETED()      )
-   aMyFunc[ UR_FLUSH        ] := ( @PG_FLUSH()        )
-   aMyFunc[ UR_APPEND       ] := ( @PG_APPEND()       )
-   aMyFunc[ UR_DELETE       ] := ( @PG_DELETE()       )
-   aMyFunc[ UR_CLOSE        ] := ( @PG_CLOSE()        )
+   aMyFunc[ UR_INIT ]     := ( @PG_INIT() )
+   aMyFunc[ UR_NEW ]      := ( @PG_NEW() )
+   aMyFunc[ UR_OPEN ]     := ( @PG_OPEN() )
+   aMyFunc[ UR_GETVALUE ] := ( @PG_GETVALUE() )
+   aMyFunc[ UR_PUTVALUE ] := ( @PG_PUTVALUE() )
+   aMyFunc[ UR_SKIP ]     := ( @PG_SKIP() )
+   aMyFunc[ UR_GOTO ]     := ( @PG_GOTO() )
+   aMyFunc[ UR_GOTOID ]   := ( @PG_GOTOID() )
+   aMyFunc[ UR_GOTOP ]    := ( @PG_GOTOP() )
+   aMyFunc[ UR_GOBOTTOM ] := ( @PG_GOBOTTOM() )
+   aMyFunc[ UR_RECCOUNT ] := ( @PG_RECCOUNT() )
+   aMyFunc[ UR_RECID ]    := ( @PG_RECID() )
+   aMyFunc[ UR_BOF ]      := ( @PG_BOF() )
+   aMyFunc[ UR_EOF ]      := ( @PG_EOF() )
+   aMyFunc[ UR_DELETED ]  := ( @PG_DELETED() )
+   aMyFunc[ UR_FLUSH ]    := ( @PG_FLUSH() )
+   aMyFunc[ UR_APPEND ]   := ( @PG_APPEND() )
+   aMyFunc[ UR_DELETE ]   := ( @PG_DELETE() )
+   aMyFunc[ UR_CLOSE ]    := ( @PG_CLOSE() )
 
-RETURN USRRDD_GETFUNCTABLE( pFuncCount, pFuncTable, pSuperTable, nRddID, ;
-                            cSuperRDD, aMyFunc )
+   RETURN USRRDD_GETFUNCTABLE( pFuncCount, pFuncTable, pSuperTable, nRddID, ;
+      cSuperRDD, aMyFunc )
 
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Init Procedure PG_INIT()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 INIT PROC PG_INIT()
+
    rddRegister( "PGRDD", RDT_FULL )
-RETURN
+
+   RETURN
 
 
+
+// + EOF: pgrdd.prg
+// +

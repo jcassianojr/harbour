@@ -1,78 +1,84 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : m_af9.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_af9.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:56 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-MDI("Criar Arquivo BCN->COBSCAD.DBF")
-CAMINHO := ProfileString( "MANA5.INI", "PATH", "COBBCN",HB_CWD()+"\COBBCN" )+SPACE(40)//
-//CAMINHO := "\COBBCN\"+SPACE(40)
-MDS("Digite o Caminho")
-@ 24,30 GET CAMINHO         
+
+MDI( "Criar Arquivo BCN->COBSCAD.DBF" )
+CAMINHO := ProfileString( "MANA5.INI", "PATH", "COBBCN", hb_cwd() + "\COBBCN" ) + Space( 40 )  //
+// CAMINHO := "\COBBCN\"+SPACE(40)
+MDS( "Digite o Caminho" )
+@ 24, 30 GET CAMINHO
 IF !READCUR()
-   RETU .F.
+RETU .F.
 ENDIF
 
-aLAYG1 := PEGLAY("MEXPOR1","MAF901")
+aLAYG1 := PEGLAY( "MEXPOR1", "MAF901" )
 
 FILTRO  := ''
-FILTRO  := RFILORD("MA01",.F.)
-CAMINHO := ALLTRIM(CAMINHO)+"COBSACAD"
-IF ! file(CAMINHO+".DBF")
-   ALERTX("N„o Encontrei Arquivo "+CAMINHO)
-   RETU .F.
+FILTRO  := RFILORD( "MA01", .F. )
+CAMINHO := AllTrim( CAMINHO ) + "COBSACAD"
+IF !File( CAMINHO + ".DBF" )
+ALERTX( "N„o Encontrei Arquivo " + CAMINHO )
+RETU .F.
 ENDIF
-IF !USECHK(CAMINHO,,.T.)
-   RETU .F.
+IF !USECHK( CAMINHO,, .T. )
+RETU .F.
 ENDIF
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-ordDestroy("temp")
-ordcreate(,"temp","CGC_CPF")
-ordSetFocus("temp")
+nLASTREC := LastRec()
+zei_fort( nLASTREC,,, 0 )
+ordDestroy( "temp" )
+ordCreate(, "temp", "CGC_CPF" )
+ordSetFocus( "temp" )
 
 
-IF !USEREDE("MA01",1,1)
-   DBCLOSEALL()
-   RETU .F.
+IF !USEREDE( "MA01", 1, 1 )
+dbCloseAll()
+RETU .F.
 ENDIF
-IF !EMPTY(FILTRO)
-   SET FILTER TO &FILTRO
+IF !Empty( FILTRO )
+SET FILTER TO &FILTRO
 ENDIF
-DBGOTOP()
-WHILE !EOF()
-   mNOMESAC  := LEFT(NOME,40)
-   mTPINSSAC := IF(PESSOA = "J",2,1)
-   cCGCTEMP  := STRTRAN(STRTRAN(STRTRAN(CGC,"-",""),"/",""),".","")
-   mCGCCPFS  := IF(PESSOA = "J",cCGCTEMP,"000"+cCGCTEMP)
-   mENDERECO := LEFT(ENDERECO,40)
-   mBAIRRO   := LEFT(BAIRRO,15)
-   mCEP      := STRTRAN(CEP,"-","")
-   mCIDADE   := LEFT(CIDADE,15)
-   mUF       := ESTADO
-   mDDD      := DDD
-   mTELEFONE := STRTRAN(STRTRAN(STRTRAN(TELEFONE,"-",""),"/",""),".","")
-   GRAVALAY(aLAY1,"COBSACAD",,.F.,mCGCCPFS,.T.)
-   DBSELECTAR("MA01")
-   DBSKIP()
+dbGoTop()
+WHILE !Eof()
+mNOMESAC  := Left( NOME, 40 )
+mTPINSSAC := IF( PESSOA = "J", 2, 1 )
+cCGCTEMP  := StrTran( StrTran( StrTran( CGC, "-", "" ), "/", "" ), ".", "" )
+mCGCCPFS  := IF( PESSOA = "J", cCGCTEMP, "000" + cCGCTEMP )
+mENDERECO := Left( ENDERECO, 40 )
+mBAIRRO   := Left( BAIRRO, 15 )
+mCEP      := StrTran( CEP, "-", "" )
+mCIDADE   := Left( CIDADE, 15 )
+mUF       := ESTADO
+mDDD      := DDD
+mTELEFONE := StrTran( StrTran( StrTran( TELEFONE, "-", "" ), "/", "" ), ".", "" )
+GRAVALAY( aLAY1, "COBSACAD",, .F., mCGCCPFS, .T. )
+dbSelectAr( "MA01" )
+dbSkip()
 ENDDO
-DBCLOSEALL()
+dbCloseAll()
+
+// + EOF: m_af9.prg
+// +

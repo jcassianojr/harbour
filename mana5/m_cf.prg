@@ -1,27 +1,30 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : m_cf.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_cf.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:57 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 
 // :*****************************************************************************
@@ -46,45 +49,49 @@
 // :*****************************************************************************
 
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
+// Teclas Operacionais
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 // #INCLUDE "MEMOGET.CH"
 // #INCLUDE "FILEGET.CH"
 
 
 
-PADRAX(0,,0,{HELPARQ},"Posi��o Variavel   Arquivo Descri��o",;
- "' '+mDBF+' '+mCAMPO+' '+mARQUIVO+' '+mDADO","MCF001",{|| gMCF()},,,;
- ,,"MCF",,,,,,"")
+PADRAX( 0,, 0, { HELPARQ }, "Posi��o Variavel   Arquivo Descri��o", ;
+      "' '+mDBF+' '+mCAMPO+' '+mARQUIVO+' '+mDADO", "MCF001", {|| gMCF() },,, ;
+      ,, "MCF",,,,,, "" )
 
 
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function gMCF()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function gMCF()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNC gMCF
 
 // Get nas Menvars
-SETCOLOR(CORPAX[1])
-@  4,30 GET mDBF                                                                        
-@  6,30 GET mCAMPO                                                                      
-@  6,63 GET mSEQ                                                   PICTURE '999'        
-// @  8,30 GET mDESCRICAO MEMO coord {12,00,24,79} boxcolor CORMCF[6]                      
-// @ 10,30 GET mARQUIVO FILE CAMINHO ZDIRP+"MAN\"                                          
-@ 13,2  GET mDADO                                                                       
-@ 16,2  GET mPRELAN                                                                     
-@ 18,02 GET mCONDICAO                                                                   
-READCUR()
-RETU .T.
+   SetColor( CORPAX[ 1 ] )
+   @  4, 30 GET mDBF
+   @  6, 30 GET mCAMPO
+   @  6, 63 GET mSEQ   PICTURE '999'
+// @  8,30 GET mDESCRICAO MEMO coord {12,00,24,79} boxcolor CORMCF[6]
+// @ 10,30 GET mARQUIVO FILE CAMINHO ZDIRP+"MAN\"
+   @ 13, 2  GET mDADO
+   @ 16, 2  GET mPRELAN
+   @ 18, 02 GET mCONDICAO
+   READCUR()
+   RETU .T.
+
+// + EOF: m_cf.prg
+// +

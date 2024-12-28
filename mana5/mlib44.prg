@@ -1,193 +1,203 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib44.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib44.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-//Teclas Operacionais
-#INCLUDE "INKEY.CH"
-//#INCLUDE "COMANDO.CH"
+
+// Teclas Operacionais
+#include "INKEY.CH"
+// #INCLUDE "COMANDO.CH"
 
 //
-//chamar aplicativos externos use #
-//exemplo #edit
+// chamar aplicativos externos use #
+// exemplo #edit
 //
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function AUTOMENU()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func AUTOMENU(cDESC,cITEM,nMES,cARQMENU)
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function AUTOMENU()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC AUTOMENU( cDESC, cITEM, nMES, cARQMENU )
 
-priv aMENUPROMPTS := {}
-priv aITEM        := {}
-priv W
-priv KEY
-if valtype(nMES) # "N"
-   nMES := 0
-endif
-if valtype(cARQMENU) # "C"
-   cARQMENU := "MANOPT"
-endif
+   PRIV aMENUPROMPTS := {}
+   PRIV aITEM        := {}
+   PRIV W
+   PRIV KEY
 
-if USEREDE(cARQMENU,1,1)
-   dbgotop()
-   dbseek(cITEM)
-   while ITEMENU = cITEM .and. !eof()
-      if POSICAO > 0 .and. POSICAO < 34
-         aadd(aITEM,{LINHA,COLUNA,LEFT(DESCP,25),TECLA,DESCM,alltrim(EXECUTAR)})
-      endif
-      dbskip()
-   enddo
-   dbclosearea()
-endif
-if empty(aITEM)
-   ALERTX("Menu de Acesso "+cITEM+" Vazio")
-   retu
-endif
+   IF ValType( nMES ) # "N"
+      nMES := 0
+   ENDIF
+   IF ValType( cARQMENU ) # "C"
+      cARQMENU := "MANOPT"
+   ENDIF
 
-while .T.
-   MDI(cDESC)
-   setcolor(ZCOR008)
-   for W := 1 to len(aITEM)
-      OPCAO(aITEM[W,1],aITEM[W,2],aITEM[W,3],aITEM[W,4],aITEM[W,5])
-   next W
-   KEY := menu(1,nMES)
-   if KEY = 0
-      retu
-   endif
-   if KEY > 0
-      DO CASE
+   IF USEREDE( cARQMENU, 1, 1 )
+      dbGoTop()
+      dbSeek( cITEM )
+      WHILE ITEMENU = cITEM .AND. !Eof()
+         IF POSICAO > 0 .AND. POSICAO < 34
+            AAdd( aITEM, { LINHA, COLUNA, Left( DESCP, 25 ), TECLA, DESCM, AllTrim( EXECUTAR ) } )
+         ENDIF
+         dbSkip()
+      ENDDO
+      dbCloseArea()
+   ENDIF
+   IF Empty( aITEM )
+      ALERTX( "Menu de Acesso " + cITEM + " Vazio" )
+      RETU
+   ENDIF
+
+   WHILE .T.
+      MDI( cDESC )
+      SetColor( ZCOR008 )
+      FOR W := 1 TO Len( aITEM )
+         OPCAO( aITEM[ W, 1 ], aITEM[ W, 2 ], aITEM[ W, 3 ], aITEM[ W, 4 ], aITEM[ W, 5 ] )
+      NEXT W
+      KEY := menu( 1, nMES )
+      IF KEY = 0
+         RETU
+      ENDIF
+      IF KEY > 0
+         DO CASE
          CASE cARQMENU = "MANSUB"
-            if !PEGACS("S",cITEM+strZERO(KEY,3)+ZUSER,.T.,cITEM+" "+STR(KEY)+" Voce n„o tem acesso, Verifique com o Supervisor")
-               loop
-            endif
-         otherwise
-            if !ENTMNU(cITEM,KEY)
-               loop
-            endif
-      ENDCASE
-      cVAR := ALLTRIM(aITEM[KEY,6])
-      IF LEFT(cVAR,1) = "#"
-         cVAR := SUBSTR(cVAR,2)
-         hb_run(cVAR)
-      ELSE
-         IF EMPTY(cVAR)
-            ALERTX("NÆo Disponivel/NÆo Configurada")
-            loop
+            IF !PEGACS( "S", cITEM + StrZero( KEY, 3 ) + ZUSER, .T., cITEM + " " + Str( KEY ) + " Voce n„o tem acesso, Verifique com o Supervisor" )
+               LOOP
+            ENDIF
+         OTHERWISE
+            IF !ENTMNU( cITEM, KEY )
+               LOOP
+            ENDIF
+         ENDCASE
+         cVAR := AllTrim( aITEM[ KEY, 6 ] )
+         IF Left( cVAR, 1 ) = "#"
+            cVAR := SubStr( cVAR, 2 )
+            hb_run( cVAR )
          ELSE
-            cVAR := &("{||"+cVAR+"}")
-            eval(cVAR)
+            IF Empty( cVAR )
+               ALERTX( "NÆo Disponivel/NÆo Configurada" )
+               LOOP
+            ELSE
+               cVAR := &( "{||" + cVAR + "}" )
+               Eval( cVAR )
+            ENDIF
          ENDIF
       ENDIF
-   endif
-enddo
+   ENDDO
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MENUFEC()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func MENUFEC
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MENUFEC()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-para cARQ
-priv cSTR
-priv aITEM := {"","","","","","",""}
-PEGACAMPO("MANFEC","cARQ",{"STRDES","OPER01","OPER02","OPER03","OPER04","OPER05","OPER06","OPER07"},;
- {"cSTR","aITEM[1]","aITEM[2]","aITEM[3]","aITEM[4]","aITEM[5]","aITEM[6]","aITEM[7]"})
-while .T.
-   MDI(" Ý ",,,cARQ)
-   setcolor(ZCOR008)
-   OPCAO(03,04," &A - Atual        ",65)
-   OPCAO(04,04," &B - Baixados     ",66)
-   OPCAO(05,04," &C - Mˆs Fechado  ",67)
-   OPCAO(06,04," &D - Fechar o Mˆs ",68)
-   OPCAO(07,04," &E - Acumulado    ",69)
-   OPCAO(08,04," &F - Acumular     ",70)
-   OPCAO(09,04," &G - Volta Baixa  ",71)
-   KEY := menu(1,0)
-   if KEY = 0
-      retu
-   endif
-   if KEY > 0
-      if !PEGACS("F",str(KEY,1)+cARQ+ZUSER,.T.,cARQ+" Fechamento - Voce n„o tem acesso, Verifique com o Supervisor")
-         loop
-      endif
-      gravalog(str(KEY),"MNF",cARQ)
-      cVAR := ALLTRIM(aITEM[KEY])
-      IF EMPTY(cVAR)
-         ALERTX("NÆo Disponivel/NÆo Configurada")
-         loop
-      ELSE
-         cVAR := &("{||"+cVAR+"}")
-         eval(cVAR)
+FUNC MENUFEC
+
+   PARA cARQ
+   PRIV cSTR
+   PRIV aITEM := { "", "", "", "", "", "", "" }
+
+   PEGACAMPO( "MANFEC", "cARQ", { "STRDES", "OPER01", "OPER02", "OPER03", "OPER04", "OPER05", "OPER06", "OPER07" }, ;
+      { "cSTR", "aITEM[1]", "aITEM[2]", "aITEM[3]", "aITEM[4]", "aITEM[5]", "aITEM[6]", "aITEM[7]" } )
+   WHILE .T.
+      MDI( " Ý ",,, cARQ )
+      SetColor( ZCOR008 )
+      OPCAO( 03, 04, " &A - Atual        ", 65 )
+      OPCAO( 04, 04, " &B - Baixados     ", 66 )
+      OPCAO( 05, 04, " &C - Mˆs Fechado  ", 67 )
+      OPCAO( 06, 04, " &D - Fechar o Mˆs ", 68 )
+      OPCAO( 07, 04, " &E - Acumulado    ", 69 )
+      OPCAO( 08, 04, " &F - Acumular     ", 70 )
+      OPCAO( 09, 04, " &G - Volta Baixa  ", 71 )
+      KEY := menu( 1, 0 )
+      IF KEY = 0
+         RETU
       ENDIF
-   endif
-enddo
+      IF KEY > 0
+         IF !PEGACS( "F", Str( KEY, 1 ) + cARQ + ZUSER, .T., cARQ + " Fechamento - Voce n„o tem acesso, Verifique com o Supervisor" )
+            LOOP
+         ENDIF
+         gravalog( Str( KEY ), "MNF", cARQ )
+         cVAR := AllTrim( aITEM[ KEY ] )
+         IF Empty( cVAR )
+            ALERTX( "NÆo Disponivel/NÆo Configurada" )
+            LOOP
+         ELSE
+            cVAR := &( "{||" + cVAR + "}" )
+            Eval( cVAR )
+         ENDIF
+      ENDIF
+   ENDDO
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function ENTMNU()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func ENTMNU(cKEY,nPOS)
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ENTMNU()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC ENTMNU( cKEY, nPOS )
+
+   IF nPOS <= 0
+      RETU .F.
+   ENDIF
+   IF !ZSUPER
+      IF !VERSEHA( "MUSERM", USERMCRI( ZUSER, cKEY, nPOS ) )
+         ALERTX( cKEY + " " + Str( nPOS ) + "Voce n„o tem acesso, Verifique com o Supervisor" )
+         RETU .F.
+      ENDIF
+   ENDIF
+   gravalog( cKEY, "MNU", Str( nPOS ) )
+   RETU .T.
 
 
-if nPOS <= 0
-   retu .F.
-endif
-if !ZSUPER
-   if !VERSEHA("MUSERM",USERMCRI(ZUSER,cKEY,nPOS))
-      ALERTX(cKEY+" "+STR(nPOS)+"Voce n„o tem acesso, Verifique com o Supervisor")
-      retu .F.
-   endif
-endif
-gravalog(cKEY,"MNU",str(nPOS))
-retu .T.
-
+// + EOF: mlib44.prg
+// +

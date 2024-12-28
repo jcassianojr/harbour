@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fo7alib.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:45 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fo7alib.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:45 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // ! usado em fo7a
 // ! usado em folis_d1
@@ -35,31 +35,31 @@
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CHECKFGTS()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION CHECKFGTS(dFGTS)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKFGTS()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION CHECKFGTS( dFGTS )
 
-IF EMPTY(dFGTS)
-   MDS(OBTER("FO_TAB",,"FGTS2    ","DESCRI"))
-ELSE
-   ALERTX("Data FGTS em branco")
-ENDIF
-IF FGTS >= ADMITIDO
-   MDS(OBTER("FO_TAB",,"FGTS1    ","DESCRI"))
-else
-   ALERTX("Data FGTS menor que admissao")
-ENDIF
-RETU .T.
+   IF Empty( dFGTS )
+      MDS( OBTER( "FO_TAB",, "FGTS2    ", "DESCRI" ) )
+   ELSE
+      ALERTX( "Data FGTS em branco" )
+   ENDIF
+   IF FGTS >= ADMITIDO
+      MDS( OBTER( "FO_TAB",, "FGTS1    ", "DESCRI" ) )
+   ELSE
+      ALERTX( "Data FGTS menor que admissao" )
+   ENDIF
+   RETU .T.
 
 // !*****************************************************************************
 // !
@@ -68,22 +68,24 @@ RETU .T.
 // !*****************************************************************************
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CHECKCTPS()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKCTPS()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
 FUNCTION CHECKCTPS()
 
-FIELD->PROFIS := STRZERO(VAL(PROFIS),7)
-RETU .T.
+   FIELD->PROFIS := StrZero( Val( PROFIS ), 7 )
+
+   RETU .T.
 
 // !*****************************************************************************
 // !
@@ -91,22 +93,24 @@ RETU .T.
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CHECKSERIE()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKSERIE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
 FUNCTION CHECKSERIE()
 
-FIELD->SERIE := STRZERO(VAL(SERIE),5)
-RETU .T.
+   FIELD->SERIE := StrZero( Val( SERIE ), 5 )
+
+   RETU .T.
 
 
 
@@ -116,63 +120,66 @@ RETU .T.
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CHECKMOTDEM()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKMOTDEM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
 FUNCTION CHECKMOTDEM()
 
-if empty(motivo)
-   return .t.   //nao checa mas retorna true pois pode estar sendo usado no get when
-endif
-IF EMPTY(RAISDEM)   //todos busca motivo mais o campo de retorno e diferente
-   RAISDEM := OBTER("FO_RCAU","",MOTIVO,"RAIS")
-ENDIF
-IF EMPTY(FGTSMOT)
-   FGTSMOT := OBTER("FO_RCAU","",motivo,"CODGRE")
-ENDIF
-IF EMPTY(PGFGTS)
-   PGFGTS := OBTER("FO_RCAU","",motivo,"PAGAFGTS")
-ENDIF
-IF EMPTY(MOTIVODEM)
-   MOTIVODEM := OBTER("FO_RCAU","",MOTIVO,"CAGED")
-ENDIF
-RETURN .T.
-
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CHECKSEXO()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION CHECKSEXO(cNOMESEXO,cSEXO,lGRAVA)
-
-nPOSNOMESEXO := AT(" ",cNOMESEXO) > 0
-IF nPOSNOMESEXO > 0
-   cNOMESEXO := SUBSTR(cNOMESEXO,1,nPOSNOMESEXO - 1)
-ENDIF
-IF EMPTY(cSEXO)   //quando nao for no when checar no modulo antes de chamar para melhorar performace
-   CSEXO := OBTER("NOMESEXO","",cNOMESEXO,"CLASSIFICA")
-   IF lGRAVA
-      SEXO := cSEXO
+   IF Empty( motivo )
+      RETURN .T.   // nao checa mas retorna true pois pode estar sendo usado no get when
    ENDIF
-ENDIF
-RETURN cSEXO  //usar alltrue no when
+   IF Empty( RAISDEM )   // todos busca motivo mais o campo de retorno e diferente
+      RAISDEM := OBTER( "FO_RCAU", "", MOTIVO, "RAIS" )
+   ENDIF
+   IF Empty( FGTSMOT )
+      FGTSMOT := OBTER( "FO_RCAU", "", motivo, "CODGRE" )
+   ENDIF
+   IF Empty( PGFGTS )
+      PGFGTS := OBTER( "FO_RCAU", "", motivo, "PAGAFGTS" )
+   ENDIF
+   IF Empty( MOTIVODEM )
+      MOTIVODEM := OBTER( "FO_RCAU", "", MOTIVO, "CAGED" )
+   ENDIF
+
+   RETURN .T.
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKSEXO()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION CHECKSEXO( cNOMESEXO, cSEXO, lGRAVA )
+
+   nPOSNOMESEXO := At( " ", cNOMESEXO ) > 0
+   IF nPOSNOMESEXO > 0
+      cNOMESEXO := SubStr( cNOMESEXO, 1, nPOSNOMESEXO - 1 )
+   ENDIF
+   IF Empty( cSEXO )   // quando nao for no when checar no modulo antes de chamar para melhorar performace
+      CSEXO := OBTER( "NOMESEXO", "", cNOMESEXO, "CLASSIFICA" )
+      IF lGRAVA
+         SEXO := cSEXO
+      ENDIF
+   ENDIF
+
+   RETURN cSEXO  // usar alltrue no when
 
 // !*****************************************************************************
 // !
@@ -180,80 +187,83 @@ RETURN cSEXO  //usar alltrue no when
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CHECKADM()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CHECKADM()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNC CHECKADM()
 
-IF ADMITIDO - NASC > 5110 .AND. !EMPTY(NASC)
+   IF ADMITIDO - NASC > 5110 .AND. !Empty( NASC )
+      RETU .T.
+   ENDIF
+   ALERTX( "Funcionario Menor de 14 anos ???" )
+   PRIV GETLIST := {}
+   MDS( "Confirme Data Nascimento " )
+   @ 24, 40 GET NASC
+   READCUR()
    RETU .T.
-ENDIF
-ALERTX("Funcionario Menor de 14 anos ???")
-PRIV GETLIST := {}
-MDS("Confirme Data Nascimento ")
-@ 24,40 GET NASC         
-READCUR()
-RETU .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function FOSFAMQTDE()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION FOSFAMQTDE(mNUMERO,cTIPO)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function FOSFAMQTDE()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-LOCAL nQTDE  := 0
-LOCAL cALIAS := ALIAS()
-IF !NETUSE("FOSFAM")
-   RETURN .F.
-ENDIF
-IF VALTYPE(cTIPO) <> "C"
-   cTIPO := "I"
-ENDIF
-dbgotop()
-dbseek(STR(mNUMERO,8))
-while mNUMERO = NUMERO .AND. !EOF()
-   IF cTIPO = "I"
-      IF FIELD->IRRF <> "N"
-         nQTDE ++
-      ENDIF
+FUNCTION FOSFAMQTDE( mNUMERO, cTIPO )
+
+   LOCAL nQTDE  := 0
+   LOCAL cALIAS := Alias()
+
+   IF !NETUSE( "FOSFAM" )
+      RETURN .F.
    ENDIF
-   IF cTIPO = "S"
-      IF EMPTY(BAIXA) .and. ZDATA - FOSFAM->NASCTO > 5114
-         netreclock()
-         FOSFAM->BAIXA  := NASCTO+5114  //"S" //14anos*365 +4 dias anos Bissestos
-         FOSFAM->SALFAM := "N"
-         dbunlock()
-      ENDIF
-      IF EMPTY(FOSFAM->BAIXA) .OR. FOSFAM->SALFAM <> "N"
-         nQTDE ++
-      ENDIF
+   IF ValType( cTIPO ) <> "C"
+      cTIPO := "I"
    ENDIF
-   dbskip()
-enddo
-DBCLOSEAREA()
-IF !EMPTY(cALIAS)
-   DBSELECTAR(cALIAS)
-ENDIF
-RETURN nQTDE
+   dbGoTop()
+   dbSeek( Str( mNUMERO, 8 ) )
+   WHILE mNUMERO = NUMERO .AND. !Eof()
+      IF cTIPO = "I"
+         IF FIELD->IRRF <> "N"
+            nQTDE++
+         ENDIF
+      ENDIF
+      IF cTIPO = "S"
+         IF Empty( BAIXA ) .AND. ZDATA - FOSFAM->NASCTO > 5114
+            netreclock()
+            FOSFAM->BAIXA  := NASCTO + 5114  // "S" //14anos*365 +4 dias anos Bissestos
+            FOSFAM->SALFAM := "N"
+            dbUnlock()
+         ENDIF
+         IF Empty( FOSFAM->BAIXA ) .OR. FOSFAM->SALFAM <> "N"
+            nQTDE++
+         ENDIF
+      ENDIF
+      dbSkip()
+   ENDDO
+   dbCloseArea()
+   IF !Empty( cALIAS )
+      dbSelectAr( cALIAS )
+   ENDIF
+
+   RETURN nQTDE
 
 
-*+ EOF: fo7alib.prg
-*+
+// + EOF: fo7alib.prg
+// +

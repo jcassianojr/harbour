@@ -1,29 +1,29 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : flib17.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:44 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : flib17.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:44 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 // !*****************************************************************************
 // !
@@ -33,37 +33,37 @@
 // !
 // !*****************************************************************************
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function ULTIMOREG()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCtion ULTIMOREG(ARQWORK,FIEWORK,lSOMA)
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function ULTIMOREG()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION ULTIMOREG( ARQWORK, FIEWORK, lSOMA )
 
-if valtype(lSOMA) # "L"
-   lSOMA := .F.
-endif
-IF !NETUSE(ARQWORK)
-   RETU
-ENDIF
-DBGOBOTTOM()
-RETORNO := &FIEWORK.
-DBCLOSEALL()
-IF lSOMA .AND. VALTYPE(RETORNO) = "N"
-   RETORNO ++
-ENDIF
-RETU RETORNO
+   IF ValType( lSOMA ) # "L"
+      lSOMA := .F.
+   ENDIF
+   IF !NETUSE( ARQWORK )
+      RETU
+   ENDIF
+   dbGoBottom()
+   RETORNO := &FIEWORK.
+   dbCloseAll()
+   IF lSOMA .AND. ValType( RETORNO ) = "N"
+      RETORNO++
+   ENDIF
+   RETU RETORNO
 
 
 
-//{|| PEGCHAVE("m",ULTIMOREG(cARQ,cCAMPO,.T.),":")}
+// {|| PEGCHAVE("m",ULTIMOREG(cARQ,cCAMPO,.T.),":")}
 
-*+ EOF: flib17.prg
-*+
+// + EOF: flib17.prg
+// +

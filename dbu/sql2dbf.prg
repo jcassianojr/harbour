@@ -1,636 +1,891 @@
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : sql2dbf.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:08 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 #include "dbstruct.ch"
-#INCLUDE "BOX.CH"
+#include "BOX.CH"
 #include "dbinfo.ch"
-#INCLUDE "hbVER.CH"
+#include "hbVER.CH"
 
 #require "hbsqlit3"
 #require "hbmemio"
 
-Function sqlitemenu()
-public oDB := nil
-public oDB1 := nil
-private cTableName := ''
-private cNewTable := ''
-private lOpened := .f.
 
-loledb=hb_Version( HB_VERSION_BITWIDTH )<>64
-lMDB    :=.F.
-lACCDB  :=.F.
-cTIPOSQL:="SQLITE"
-aAMBIENTE:=SALVAA()
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function sqlitemenu()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION sqlitemenu()
 
-WHILE .T.
-    HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-    OPCAO(  4, 24, "&Criar base sqllite        ", 67 ) //c 
-    OPCAO(  5, 24, "&VACUUM (PACK)             ", 86 ) //V 
-    OPCAO(  6, 24, "&Importar  DBF             ", 73 ) //I 
-    OPCAO(  7, 24, "&Exportar  DBF             ", 69 ) //E 
-    OPCAO(  8, 24, "&Tabelas                   ", 84 ) //T
-    OPCAO(  9, 24, "&Apagar Tabela             ", 65 ) //A 
-    OPCAO( 10, 24, "Exportar &Formatos         ", 70 ) //F    
-    KEY := menu( 1, 0 )
-    DO CASE
-       CASE KEY=1
-            createSqlitedb()
-       CASE KEY=2
-             IF selectdb()
-               sqlitepack(odb)
-            endif      
-       CASE KEY=3
-              IF selectdb()
-                nOLDTIPO:=TIPODBF
-                alertX("escolha origem")
-                tipodbfesc()
-                nORITIPO:=TIPODBF
-                cORIDRIVER:=RDDNOME(TIPODBF)
-                cARQORI:=win_GetOpenFileName(, "Arquivos de Origem",HB_CWD(), "Arquivos de Origem", "*.dbf", 1 )
-                IF FILE (cARQORI)
-                   export2sql(odb,cARQORI)
-                   RDDNOME(nOLDTIPO) //retorna tipo anterior
-                ENDIF   
-            endif     
-       CASE KEY=4
-            IF selectdb()
-               exportadbf(odb,1)  
-            endif       
-       CASE KEY=5
-             IF selectdb()
-               SqliteTables(odb)
-            endif
-       CASE KEY=6
-             IF selectdb()
-                SqliteTables(odb)
-                sqllitedeltable(odb)
-            endif
-       CASE KEY=7
-            IF selectdb()
-               exportadbf(odb,2)  
-            endif                   
-       OTHERWISE
-            RETURN
-    ENDCASE
-ENDDO
+   PUBLIC oDB         := nil
+   PUBLIC oDB1        := nil
+   PRIVATE cTableName := ''
+   PRIVATE cNewTable  := ''
+   PRIVATE lOpened    := .F.
 
-RESTAA(aAMBIENTE)
-layout()
-return NIL
+   loledb    := hb_Version( HB_VERSION_BITWIDTH ) <> 64
+   lMDB      := .F.
+   lACCDB    := .F.
+   cTIPOSQL  := "SQLITE"
+   aAMBIENTE := SALVAA()
 
+   WHILE .T.
+      hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
+      OPCAO( 4, 24, "&Criar base sqllite        ", 67 )   // c
+      OPCAO( 5, 24, "&VACUUM (PACK)             ", 86 )   // V
+      OPCAO( 6, 24, "&Importar  DBF             ", 73 )   // I
+      OPCAO( 7, 24, "&Exportar  DBF             ", 69 )   // E
+      OPCAO( 8, 24, "&Tabelas                   ", 84 )   // T
+      OPCAO( 9, 24, "&Apagar Tabela             ", 65 )   // A
+      OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F
+      KEY := menu( 1, 0 )
+      DO CASE
+      CASE KEY = 1
+         createSqlitedb()
+      CASE KEY = 2
+         IF selectdb()
+            sqlitepack( odb )
+         ENDIF
+      CASE KEY = 3
+         IF selectdb()
+            nOLDTIPO := TIPODBF
+            alertX( "escolha origem" )
+            tipodbfesc()
+            nORITIPO   := TIPODBF
+            cORIDRIVER := RDDNOME( TIPODBF )
+            cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+            IF File( cARQORI )
+               export2sql( odb, cARQORI )
+               RDDNOME( nOLDTIPO )   // retorna tipo anterior
+            ENDIF
+         ENDIF
+      CASE KEY = 4
+         IF selectdb()
+            exportadbf( odb, 1 )
+         ENDIF
+      CASE KEY = 5
+         IF selectdb()
+            SqliteTables( odb )
+         ENDIF
+      CASE KEY = 6
+         IF selectdb()
+            SqliteTables( odb )
+            sqllitedeltable( odb )
+         ENDIF
+      CASE KEY = 7
+         IF selectdb()
+            exportadbf( odb, 2 )
+         ENDIF
+      OTHERWISE
+         RETURN
+      ENDCASE
+   ENDDO
 
-function sqllitedeltable(db)
-IF .NOT. MDG("Apagar Tabela"+cTABELAX)  
-   return .f.
-ENDIF
-IF sqlite3_exec( db, "DROP TABLE  "+cTABELAX) == SQLITE_OK
-    MDT(Ctabelax+" Excluida" )
-ENDIF
-return .t.
+   RESTAA( aAMBIENTE )
+   layout()
 
-
-function exportadbf(db,ntipo)
-LOCAL cTABELAEXP
-IF nTIPO=2
-  LCOPIANAT:=.f. //MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
-  tDOC:=pegtipodoc() // .t. Inclui dbf se for nativa
-  pegparexp() 
-  lDOCCAB  :=.F.
-  lDOCDAD  :=.F.
-  lDOCRECNO:=.F.
-  cSUBTIPO :=" "
-ENDIF  
-IF MDG("Todas(SIM) Escolher Nao")
-    aTable := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
-     if len( aTable ) == 0
-        msgstop( 'No Tables in the DB', 'DBF<-->SQLite Exporter' )
-        return nil
-     endif
-     for i := 1 to len( aTable )
-        MDT( aTable[ i, 1 ])
-        Export2dbf(DB,aTable[ i, 1 ],ntipo)
-     next i
- else
-    cTABELAEXP:=SQLITETABLES(DB)
-    IF ! EMPTY(cTABELAEXP)
-       Export2dbf(DB,cTABELAEXP,Ntipo)
-    ENDIF
- endif    
- return nil
+   RETURN NIL
 
 
-function C2SQL(Value)
-local cValue := ""
-local cdate := ""
-if valtype(value) == "C" .and. len(alltrim(value)) > 0
-   value := strtran(value,"'","''")
-endif
-do case
-   case Valtype(Value) == "N"
-      cValue := AllTrim(Str(Value))
-   case Valtype(Value) == "D"
-      if !Empty(Value)
-         cdate := dtos(value)
-         cValue := "'"+substr(cDate,1,4)+"-"+substr(cDate,5,2)+"-"+substr(cDate,7,2)+"'"
-      else
-         cValue := "''"
-      endif
-   case Valtype(Value) $ "CM"
-      IF Empty( Value)
-         cValue="''"
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function sqllitedeltable()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION sqllitedeltable( db )
+
+   IF ! MDG( "Apagar Tabela" + cTABELAX )
+      RETURN .F.
+   ENDIF
+   IF sqlite3_exec( db, "DROP TABLE  " + cTABELAX ) == SQLITE_OK
+      MDT( Ctabelax + " Excluida" )
+   ENDIF
+
+   RETURN .T.
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function exportadbf()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION exportadbf( db, ntipo )
+
+   LOCAL cTABELAEXP
+
+   IF nTIPO = 2
+      LCOPIANAT := .F.   // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
+      tDOC      := pegtipodoc()  // .t. Inclui dbf se for nativa
+      pegparexp()
+      lDOCCAB   := .F.
+      lDOCDAD   := .F.
+      lDOCRECNO := .F.
+      cSUBTIPO  := " "
+   ENDIF
+   IF MDG( "Todas(SIM) Escolher Nao" )
+      aTable := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
+      IF Len( aTable ) == 0
+         msgstop( 'No Tables in the DB', 'DBF<-->SQLite Exporter' )
+         RETURN NIL
+      ENDIF
+      FOR i := 1 TO Len( aTable )
+         MDT( aTable[ i, 1 ] )
+         Export2dbf( DB, aTable[ i, 1 ], ntipo )
+      NEXT i
+   ELSE
+      cTABELAEXP := SQLITETABLES( DB )
+      IF !Empty( cTABELAEXP )
+         Export2dbf( DB, cTABELAEXP, Ntipo )
+      ENDIF
+   ENDIF
+
+   RETURN NIL
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function C2SQL()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION C2SQL( Value )
+
+   LOCAL cValue := ""
+   LOCAL cdate  := ""
+
+   IF ValType( value ) == "C" .AND. Len( AllTrim( value ) ) > 0
+      value := StrTran( value, "'", "''" )
+   ENDIF
+   DO CASE
+   CASE ValType( Value ) == "N"
+      cValue := AllTrim( Str( Value ) )
+   CASE ValType( Value ) == "D"
+      IF !Empty( Value )
+         cdate  := DToS( value )
+         cValue := "'" + SubStr( cDate, 1, 4 ) + "-" + SubStr( cDate, 5, 2 ) + "-" + SubStr( cDate, 7, 2 ) + "'"
       ELSE
-         //troca caracteres ',() usados pelo sql language
-         cVALUE := STRTRAN(cVALUE,"'"," ")
-         cVALUE := STRTRAN(cVALUE,","," ")    
-         cVALUE := STRTRAN(cVALUE,"("," ") 
-         cVALUE := STRTRAN(cVALUE,")"," ")
-         cVALUE := ALLTRIM(cVALUE)
+         cValue := "''"
+      ENDIF
+   CASE ValType( Value ) $ "CM"
+      IF Empty( Value )
+         cValue := "''"
+      ELSE
+         // troca caracteres ',() usados pelo sql language
+         cVALUE := StrTran( cVALUE, "'", " " )
+         cVALUE := StrTran( cVALUE, ",", " " )
+         cVALUE := StrTran( cVALUE, "(", " " )
+         cVALUE := StrTran( cVALUE, ")", " " )
+         cVALUE := AllTrim( cVALUE )
          cValue := "'" + value + "'"
       ENDIF
-   case Valtype(Value) == "L"
-      cValue := AllTrim(Str(iif(Value == .F., 0, 1)))
-   otherwise
-      cValue := "''"       // NOTE: Here we lose values we cannot convert
-endcase
-return cValue
+   CASE ValType( Value ) == "L"
+      cValue := AllTrim( Str( iif( Value == .F., 0, 1 ) ) )
+   OTHERWISE
+      cValue := "''"   // NOTE: Here we lose values we cannot convert
+   ENDCASE
+
+   RETURN cValue
 
 
-function sqltablestru(dbo1,qstr)
-local table := {}
-local stmt
-local currow := nil
-local tablearr := {}
-local rowarr := {}
-local typesarr := {}
-local cdate := ""
-local current := ""
-local i := 0
-local j := 0
-local type1 := ""
-if empty(dbo1)
-   msgstop("Database Connection Error!")
-   return tablearr
-endif
-table := sqlite3_get_table(dbo1,qstr)
-if sqlite3_errcode(dbo1) > 0 // error
-   msgstop(sqlite3_errmsg(dbo1)+" Query is : "+qstr)
-   return nil
-endif
-stmt := sqlite3_prepare(dbo1,qstr)
-IF ! Empty( stmt )
-   for i := 1 to sqlite3_column_count( stmt )
-      type1 := upper(alltrim(sqlite3_column_decltype( stmt,i)))
-      do case
-         case type1 == "INTEGER" .or. type1 == "REAL" .or. type1 == "FLOAT" .or. type1 == "DOUBLE" .OR. type1 == "INT" .OR. type1 == "SMALLINT"
-            aadd(typesarr,"N")
-         case type1 == "DATE" .or. type1 == "DATETIME" .or. type1 == "TIMESTAMP"
-            aadd(typesarr,"D")
-         case type1 == "BOOL"
-            aadd(typesarr,"L")
-         otherwise
-            aadd(typesarr,"C")
-      endcase
-   next i
-endif
-sqlite3_reset( stmt )
-if len(table) > 1
-   asize(tablearr,0)
-   for i := 2 to len(table)
-      rowarr := table[i]
-      for j := 1 to len(rowarr)
-         do case
-            case typesarr[j] == "D"
-               cDate := substr(rowarr[j],1,4)+substr(rowarr[j],6,2)+substr(rowarr[j],9,2)
-               rowarr[j] := stod(cDate)
-            case typesarr[j] == "N"
-               rowarr[j] := val(rowarr[j])
-            case typesarr[j] == "L"
-               if val(rowarr[j]) == 1
-                  rowarr[j] := .t.
-               else
-                  rowarr[j] := .f.
-               endif
-         endcase
-      next j
-      aadd(tablearr,aclone(rowarr))
-   next i
-endif
-return tablearr
 
-function sqlitepack(db)
-IF ! Empty( db )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function sqltablestru()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION sqltablestru( dbo1, qstr )
+
+   LOCAL table    := {}
+   LOCAL stmt
+   LOCAL currow   := nil
+   LOCAL tablearr := {}
+   LOCAL rowarr   := {}
+   LOCAL typesarr := {}
+   LOCAL cdate    := ""
+   LOCAL current  := ""
+   LOCAL i        := 0
+   LOCAL j        := 0
+   LOCAL type1    := ""
+
+   IF Empty( dbo1 )
+      msgstop( "Database Connection Error!" )
+      RETURN tablearr
+   ENDIF
+   table := sqlite3_get_table( dbo1, qstr )
+   IF sqlite3_errcode( dbo1 ) > 0  // error
+      msgstop( sqlite3_errmsg( dbo1 ) + " Query is : " + qstr )
+      RETURN NIL
+   ENDIF
+   stmt := sqlite3_prepare( dbo1, qstr )
+   IF !Empty( stmt )
+      FOR i := 1 TO sqlite3_column_count( stmt )
+         type1 := Upper( AllTrim( sqlite3_column_decltype( stmt, i ) ) )
+         DO CASE
+         CASE type1 == "INTEGER" .OR. type1 == "REAL" .OR. type1 == "FLOAT" .OR. type1 == "DOUBLE" .OR. type1 == "INT" .OR. type1 == "SMALLINT"
+            AAdd( typesarr, "N" )
+         CASE type1 == "DATE" .OR. type1 == "DATETIME" .OR. type1 == "TIMESTAMP"
+            AAdd( typesarr, "D" )
+         CASE type1 == "BOOL"
+            AAdd( typesarr, "L" )
+         OTHERWISE
+            AAdd( typesarr, "C" )
+         ENDCASE
+      NEXT i
+   ENDIF
+   sqlite3_reset( stmt )
+   IF Len( table ) > 1
+      ASize( tablearr, 0 )
+      FOR i := 2 TO Len( table )
+         rowarr := table[ i ]
+         FOR j := 1 TO Len( rowarr )
+            DO CASE
+            CASE typesarr[ j ] == "D"
+               cDate       := SubStr( rowarr[ j ], 1, 4 ) + SubStr( rowarr[ j ], 6, 2 ) + SubStr( rowarr[ j ], 9, 2 )
+               rowarr[ j ] := SToD( cDate )
+            CASE typesarr[ j ] == "N"
+               rowarr[ j ] := Val( rowarr[ j ] )
+            CASE typesarr[ j ] == "L"
+               IF Val( rowarr[ j ] ) == 1
+                  rowarr[ j ] := .T.
+               ELSE
+                  rowarr[ j ] := .F.
+               ENDIF
+            ENDCASE
+         NEXT j
+         AAdd( tablearr, AClone( rowarr ) )
+      NEXT i
+   ENDIF
+
+   RETURN tablearr
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function sqlitepack()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION sqlitepack( db )
+
+   IF !Empty( db )
       IF sqlite3_exec( db, "VACUUM" ) == SQLITE_OK
-        MDT("VACUUM PACK - Done")
-         //sqlite3_sleep( 3000 )
+         MDT( "VACUUM PACK - Done" )
+         // sqlite3_sleep( 3000 )
       ENDIF
-ENDIF
-return .t.   
+   ENDIF
 
-function selectdb
-   local cFileName := ''
-   local cDBName := ''
-   local nSlash := 0
-   local nDot := 0
-   local lRETU := .F.
-   
-   
-   cFileName:=win_GetOpenFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
-    { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
-      { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
-      { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
-   
-   if len( alltrim( cFileName ) ) > 0
-      cDBName := tiraext(cFileName)
-      oDB := Connect2DB( cFileName, .f. )
-      if oDB == Nil
+   RETURN .T.
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function selectdb()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION selectdb
+
+   LOCAL cFileName := ''
+   LOCAL cDBName   := ''
+   LOCAL nSlash    := 0
+   LOCAL nDot      := 0
+   LOCAL lRETU     := .F.
+
+   cFileName := win_GetOpenFileName(, "SQLite Files", hb_cwd(), "SQLite", ;
+      { { 'SQLite', '*.sqlite' }, { 'SQLite db', '*.DB' }, ;
+      { 'SQLite3', '*.sqlite3' }, { 'SQLite db3', '*.DB3' }, ;
+      { 'SQLite Fossil', '*.fossil' }, { 'All Files', '*.*' } }, 1 )
+
+   IF Len( AllTrim( cFileName ) ) > 0
+      cDBName := tiraext( cFileName )
+      oDB     := Connect2DB( cFileName, .F. )
+      IF oDB == Nil
          msgstop( 'Not a valid SQLite file.', 'SQLite File Selection' )
-         return .f.
-      else 
-          lRETU:=.T.
-      //    MDT(" is Connected! Version: "+cFILENAME) //+ valtostr(sqlite3_libversion_number())
-          
-          mdt(cFILENAME+ "Version library = " + sqlite3_libversion()  + ;
-         "number version library = " + LTRIM(STR( sqlite3_libversion_number() )) )
+         RETURN .F.
+      ELSE
+         lRETU := .T.
+         // MDT(" is Connected! Version: "+cFILENAME) //+ valtostr(sqlite3_libversion_number())
 
-      endif
-   else
+         mdt( cFILENAME + "Version library = " + sqlite3_libversion() + ;
+            "number version library = " + LTrim( Str( sqlite3_libversion_number() ) ) )
+
+      ENDIF
+   ELSE
       msgstop( 'You have to select a SQLite File!', 'SQLite File Selection' )
-      return lRETU
-   endif   
-return lRETU
+      RETURN lRETU
+   ENDIF
+
+   RETURN lRETU
 
 
- FUNCTION SqliteTables(DB)
-*---------------------------------------------------------------------------
-* Shows all tables inside the database
-*---------------------------------------------------------------------------
- LOCAL aResult, nChoices,I,aRETU
- LOCAL aAMBIENTE
- nChoices:=0
- aAMBIENTE:=SALVAA()
- aRESULT:={}
 
-  * Show all tables inside database
-  aRETU := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
-  
-  for i := 1 to len( aRETU )
-        AADD(aRESULT,aRETU[ i, 1 ])
-next i
-  
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function SqliteTables()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION SqliteTables( DB )
 
-  IF LEN(aResult)>0
-     HB_dispbox( 3, 22, 22, 55, B_DOUBLE+" ")
-     nChoices := ACHOICE( 4,23,21,54, aResult)
-  ENDIF   
+// ---------------------------------------------------------------------------
+// Shows all tables inside the database
+// ---------------------------------------------------------------------------
+   LOCAL aResult, nChoices, I, aRETU
+   LOCAL aAMBIENTE
+   nChoices  := 0
+   aAMBIENTE := SALVAA()
+   aRESULT   := {}
 
-RESTAA(aAMBIENTE)
+// Show all tables inside database
+   aRETU := sqltablestru( DB, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" )
 
-RETURN( IIF( nChoices > 0, aResult[ nChoices ], "") )
-
-
-FUNCTION connect2db(dbname,lCreate)
-local dbo1 := sqlite3_open(dbname,lCreate)
-IF Empty( dbo1 )
-   alertx("Database could not be connected!")
-   RETURN nil
-ENDIF
-RETURN dbo1
+   FOR i := 1 TO Len( aRETU )
+      AAdd( aRESULT, aRETU[ i, 1 ] )
+   NEXT i
 
 
-function createSqlitedb
-   local cFileName := ''
-   local cDBName := ''
-   local nSlash := 0
-   local nDot := 0
-   
-   
-   cFileName:=win_GetsaveFileName(, "SQLite Files",HB_CWD(), "SQLite", ;
-    { { 'SQLite', '*.sqlite' },{ 'SQLite db', '*.DB' } , ;
-      { 'SQLite3', '*.sqlite3' },{ 'SQLite db3', '*.DB3' } , ;
-      { 'SQLite Fossil', '*.fossil' } , { 'All Files', '*.*' }} , 1 )
-   
-    
-   if len( alltrim( cFileName ) ) == 0
+   IF Len( aResult ) > 0
+      hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
+      nChoices := AChoice( 4, 23, 21, 54, aResult )
+   ENDIF
+
+   RESTAA( aAMBIENTE )
+
+   RETURN ( iif( nChoices > 0, aResult[ nChoices ], "" ) )
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function connect2db()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION connect2db( dbname, lCreate )
+
+   LOCAL dbo1 := sqlite3_open( dbname, lCreate )
+
+   IF Empty( dbo1 )
+      alertx( "Database could not be connected!" )
+      RETURN NIL
+   ENDIF
+
+   RETURN dbo1
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function createSqlitedb()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION createSqlitedb
+
+   LOCAL cFileName := ''
+   LOCAL cDBName   := ''
+   LOCAL nSlash    := 0
+   LOCAL nDot      := 0
+
+   cFileName := win_GetsaveFileName(, "SQLite Files", hb_cwd(), "SQLite", ;
+      { { 'SQLite', '*.sqlite' }, { 'SQLite db', '*.DB' }, ;
+      { 'SQLite3', '*.sqlite3' }, { 'SQLite db3', '*.DB3' }, ;
+      { 'SQLite Fossil', '*.fossil' }, { 'All Files', '*.*' } }, 1 )
+
+
+   IF Len( AllTrim( cFileName ) ) == 0
       msgstop( 'File name can not be empty!', 'DBF2SQLite Exporter' )
-      return nil
-   endif   
-   if at( '.', cFileName ) == 0
+      RETURN NIL
+   ENDIF
+   IF At( '.', cFileName ) == 0
       cFileName := cFileName + '.sqlite'
-   endif
-   if file(cFileName)
-      alertx("Arquivo ja existe")
-      return
-   endif
-   cDBName := tiraext(cFileName)
-   oDB := Connect2DB( cFileName, .t. )
-   if oDB == Nil
+   ENDIF
+   IF File( cFileName )
+      alertx( "Arquivo ja existe" )
+      RETURN
+   ENDIF
+   cDBName := tiraext( cFileName )
+   oDB     := Connect2DB( cFileName, .T. )
+   IF oDB == Nil
       msgstop( 'Not a valid SQLite file.', 'SQLite File Selection' )
-      return nil
-   else
-       mdt(cDBName + " is Connected!")
-   endif
-return nil
+      RETURN NIL
+   ELSE
+      mdt( cDBName + " is Connected!" )
+   ENDIF
 
-function export2dbf(ODB1,cNEWTABLE,Ntipo)
-   local aTable := {}
-   local aTable1 := {}
-   local cSQLTable := {}
-   local aStruct := {}
-   local cType := ''
-   local cFieldName := ''
-   local cFieldType := ''
-   local nFieldLength := ''
-   local nFieldDec := ''
-   local nLength := 0
-   local aRecord := {}
-   local cINDEXNAME := ""
-   local i, j
-   if len( alltrim( cNewTable ) ) == 0
+   RETURN NIL
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function export2dbf()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION export2dbf( ODB1, cNEWTABLE, Ntipo )
+
+   LOCAL aTable       := {}
+   LOCAL aTable1      := {}
+   LOCAL cSQLTable    := {}
+   LOCAL aStruct      := {}
+   LOCAL cType        := ''
+   LOCAL cFieldName   := ''
+   LOCAL cFieldType   := ''
+   LOCAL nFieldLength := ''
+   LOCAL nFieldDec    := ''
+   LOCAL nLength      := 0
+   LOCAL aRecord      := {}
+   LOCAL cINDEXNAME   := ""
+   LOCAL i, j
+
+   IF Len( AllTrim( cNewTable ) ) == 0
       msgstop( 'You have to select a DBF to export', 'DBF<-->SQLite Exporter' )
-      return nil
-   endif
-   if len(cNEWTABLE)>0 
-      cSQLTable := cNEWTABLE 
-      aTable := sqltablestru( oDB1, 'PRAGMA table_info( ' + c2sql( cSQLTable ) + ')' )
-      if len( aTable ) == 0
-         msgstop( 'This is an empty table!' ) 
-         return nil
-      endif
-      for i := 1 to len( aTable )
-          //table info colunas
-         //cid, name, type, "notnull", dflt_value, pk
+      RETURN NIL
+   ENDIF
+   IF Len( cNEWTABLE ) > 0
+      cSQLTable := cNEWTABLE
+      aTable    := sqltablestru( oDB1, 'PRAGMA table_info( ' + c2sql( cSQLTable ) + ')' )
+      IF Len( aTable ) == 0
+         msgstop( 'This is an empty table!' )
+         RETURN NIL
+      ENDIF
+      FOR i := 1 TO Len( aTable )
+         // table info colunas
+         // cid, name, type, "notnull", dflt_value, pk
          // 1    2     3      4           5         6
-         cFieldType := upper( alltrim( aTable[ i, 3 ] ) ) 
-         cFieldName := alltrim( aTable[ i, 2 ] )
+         cFieldType   := Upper( AllTrim( aTable[ i, 3 ] ) )
+         cFieldName   := AllTrim( aTable[ i, 2 ] )
          nFieldLength := 0
-         nFieldDec := 0
-        
-        
-        aTMP:= geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)
-        
-        
-        
-        IF aTMP[DBS_LEN]=0 .OR. aTMP[DBS_LEN]=250 //text geracampo volta 250 tentando ajustar o valor mais proximo
+         nFieldDec    := 0
+
+
+         aTMP := geracampodbf( cFieldName, cFieldType, nFieldLength, nFieldDec )
+
+
+
+         IF aTMP[ DBS_LEN ] = 0 .OR. aTMP[ DBS_LEN ] = 250   // text geracampo volta 250 tentando ajustar o valor mais proximo
             aTable1 := sqltablestru( oDB1, 'select max( length( ' + cFieldName + ' ) ) from ' + c2sql( cSQLTable ) )
-           if len( aTable1 ) > 0
-              aTMP[DBS_LEN] := val( alltrim( aTable1[ 1, 1 ] ) )
-           endif
-        ENDIF    
+            IF Len( aTable1 ) > 0
+               aTMP[ DBS_LEN ] := Val( AllTrim( aTable1[ 1, 1 ] ) )
+            ENDIF
+         ENDIF
 
-         aadd( aStruct,aTMP)
-         //aadd( aStruct, { cFieldName, cFieldType, nFieldLength, nFieldDec } )
-      next i
-      if len( aStruct ) > 0
-         //cNEWARQ:=cNEWTABLE+"_exp"
-         if ntipo=1
-           dbcreate( cNewTable, aStruct,"DBFCDX" )
-           DBUseArea( .T. , "DBFCDX" , cNewTable, "DESTINO" , .T. , .F. ) 
-         else
-           dbCreate( "mem:destino", aStruct, , .T., "DESTINO" )
-         endif  
+         AAdd( aStruct, aTMP )
+         // aadd( aStruct, { cFieldName, cFieldType, nFieldLength, nFieldDec } )
+      NEXT i
+      IF Len( aStruct ) > 0
+         // cNEWARQ:=cNEWTABLE+"_exp"
+         IF ntipo = 1
+            dbCreate( cNewTable, aStruct, "DBFCDX" )
+            dbUseArea( .T., "DBFCDX", cNewTable, "DESTINO", .T., .F. )
+         ELSE
+            dbCreate( "mem:destino", aStruct,, .T., "DESTINO" )
+         ENDIF
 
-         //use &cNewTable
-         if .not. used()
+         // use &cNewTable
+         IF ! Used()
             msgstop( 'DBF File Creation error!', 'DBF<-->SQLite Exporter' )
-            return nil
-         endif
-         aTable := sqltablestru( oDB1, 'select * from ' + c2sql( cSQLTable ) )
-         nLASTREC:= len( aTable )
-         zei_fort( nLASTREC,,,0)
-         for i := 1 to nLASTREC
-             zei_fort(nLASTREC,,,1)
-            netrecapp() //append blank
+            RETURN NIL
+         ENDIF
+         aTable   := sqltablestru( oDB1, 'select * from ' + c2sql( cSQLTable ) )
+         nLASTREC := Len( aTable )
+         zei_fort( nLASTREC,,, 0 )
+         FOR i := 1 TO nLASTREC
+            zei_fort( nLASTREC,,, 1 )
+            netrecapp()  // append blank
             aRecord := aTable[ i ]
-            for j := 1 to len( aRecord )
-               cFieldName := Left( aStruct[ j, 1 ], 10 ) //dbf nome maximo dez caracteres
-               replace &cFieldName with aRecord[ j ]
-            next j
-         next i
-         dbcommit()
-         dbunlock()
-         mdt( "Successfully exported"+ cNEWTABLE )
-         
-         IF nTIPO=2
-           cDESTINO:=cSQLTable+"_sqlite"+zEXPOREXT
-           MDT(cDESTINO)
-           dbselectar("DESTINO")
-           nLASTREC:=   lastrec() 
-           zei_fort( nLASTREC,,,0)
-           dbgotop()
-           multidocg(lDOCCAB,lDOCDAD,lDOCRECNO,cSUBTIPO,TIRAEXT(cDESTINO),aStruct)
-        ENDIF
-         
-         dbcloseall() //close all
-         IF nTIPO=2
+            FOR j := 1 TO Len( aRecord )
+               cFieldName := Left( aStruct[ j, 1 ], 10 )   // dbf nome maximo dez caracteres
+               REPLACE &cFieldName WITH aRecord[ j ]
+            NEXT j
+         NEXT i
+         dbCommit()
+         dbUnlock()
+         mdt( "Successfully exported" + cNEWTABLE )
+
+         IF nTIPO = 2
+            cDESTINO := cSQLTable + "_sqlite" + zEXPOREXT
+            MDT( cDESTINO )
+            dbSelectAr( "DESTINO" )
+            nLASTREC := LastRec()
+            zei_fort( nLASTREC,,, 0 )
+            dbGoTop()
+            multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, TIRAEXT( cDESTINO ), aStruct )
+         ENDIF
+
+         dbCloseAll()  // close all
+         IF nTIPO = 2
             dbDrop( "mem:destino" )
          ENDIF
          cNewTable := ''
-      endif
-   else
+      ENDIF
+   ELSE
       msgstop( 'You have to select a Table to export!', 'DBF<-->SQLite Exporter' )
-      return nil
-   endif
-return nil
+      RETURN NIL
+   ENDIF
 
-function miscsql(dbo1,qstr)
-if empty(dbo1)
-   msgstop("Database Connection Error!")
-   return .f.
-endif
-sqlite3_exec(dbo1,qstr)
-if sqlite3_errcode(dbo1) > 0 // error
-   msgstop(sqlite3_errmsg(dbo1)+" Query is : "+qstr)
-   return .f.
-endif
-return .t.
+   RETURN NIL
 
-Function export2sql(odb,cDBFFILE)
-   local aStruct := {}, i,j, mFldNm, mFldtype, mFldLen, mFldDec, mSql
-   local totrec, nrec,nIndexes
-   
-   if oDB == nil
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function miscsql()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION miscsql( dbo1, qstr )
+
+   IF Empty( dbo1 )
+      msgstop( "Database Connection Error!" )
+      RETURN .F.
+   ENDIF
+   sqlite3_exec( dbo1, qstr )
+   IF sqlite3_errcode( dbo1 ) > 0  // error
+      msgstop( sqlite3_errmsg( dbo1 ) + " Query is : " + qstr )
+      RETURN .F.
+   ENDIF
+
+   RETURN .T.
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function export2sql()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION export2sql( odb, cDBFFILE )
+
+   LOCAL aStruct := {}, i, j, mFldNm, mFldtype, mFldLen, mFldDec, mSql
+   LOCAL totrec, nrec, nIndexes
+
+   IF oDB == nil
       msgstop( "No Connection to SQLite DB! Try to create a new SQLite DB or select an existing SQLite DB", 'DBF->SQLite Exporter' )
-      return nil
-   endif
-      
-    IF .NOT. FILE(cDBFFILE)  
-        return nil
-    ENDIF
-      
-      
-    cTablename := TIRAEXT(cDBFFILE)
-//    use &cTablename.
- 
-    USE (cARQORI) ALIAS ORIGEM SHARED NEW VIA  (cORIDRIVER) 
- //  USE (cDBFFILE)  SHARED NEW //VIA  (cORIDRIVER)       
+      RETURN NIL
+   ENDIF
 
-   aStruct = DbStruct()
-   
-   //criado funcao para usar tambem no dbudoc
-   
-   mSQL:=SqliteCreateTable(cTablename,aStruct,"SQLITE")
+   IF ! File( cDBFFILE )
+      RETURN NIL
+   ENDIF
 
 
-   if !miscsql( oDB, mSql )
+   cTablename := TIRAEXT( cDBFFILE )
+// use &cTablename.
+
+   USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
+// USE (cDBFFILE)  SHARED NEW //VIA  (cORIDRIVER)
+
+   aStruct := dbStruct()
+
+// criado funcao para usar tambem no dbudoc
+
+   mSQL := SqliteCreateTable( cTablename, aStruct, "SQLITE" )
+
+
+   IF !miscsql( oDB, mSql )
       alertx( 'Table Creation Error!', 'DBF2SQLite' )
-      return nil
-   endif
+      RETURN NIL
+   ENDIF
 
-  
-   nIndexes  :=  dbORDERINFO( DBOI_ORDERCOUNT )
-   FOR j = 1 TO  nIndexes
-      //CREATE INDEX idx_student_name ON Students (name); 
-      cINDEXNAME := dbORDERINFO( DBOI_NAME , ,  j )
-      cINDEXNAME := StrTran(cINDEXNAME, "-", "_"  )  //Tracos nao aceitos trocando por undescore
-       msql:="create index " + cINDEXNAME + " on " + cTablename + " ( "+MDPCHAVEI(dbORDERINFO( DBOI_EXPRESSION , ,  j )) + " ) ;"
-       //DbOrderInfo( <nDefine> , <cIndexFile> , <nOrder_or_cIndexName> , <xNewSetting> ) -> xCurrentSetting
-       //AAdd( aNtxNames ,  dbORDERINFO( DBOI_NAME , ,  j )+" - "+dbORDERINFO( DBOI_EXPRESSION , ,  j ) )
-       if ! miscsql( oDB, mSql )
-          MemoWrit("sql"+StrZero( j, 2 , 0 ) +".txt",msql)
-       endif
+
+   nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
+   FOR j := 1 TO nIndexes
+      // CREATE INDEX idx_student_name ON Students (name);
+      cINDEXNAME := dbOrderInfo( DBOI_NAME,, j )
+      cINDEXNAME := StrTran( cINDEXNAME, "-", "_" )  // Tracos nao aceitos trocando por undescore
+      msql       := "create index " + cINDEXNAME + " on " + cTablename + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION,, j ) ) + " ) ;"
+      // DbOrderInfo( <nDefine> , <cIndexFile> , <nOrder_or_cIndexName> , <xNewSetting> ) -> xCurrentSetting
+      // AAdd( aNtxNames ,  dbORDERINFO( DBOI_NAME , ,  j )+" - "+dbORDERINFO( DBOI_EXPRESSION , ,  j ) )
+      IF !miscsql( oDB, mSql )
+         MemoWrit( "sql" + StrZero( j, 2, 0 ) + ".txt", msql )
+      ENDIF
    NEXT j
 
 
-   nLASTREC:=   reccount() //NetRegCount(cOLDDBF)
-   zei_fort( nLASTREC,,,0)
-   DBGOTOP()
-   if !miscsql( oDB, 'begin transaction' )
-      return nil
-   endif
-   do while !eof()
-      zei_fort(nLASTREC,,,1)
-
-      mSql := "INSERT INTO "+cTablename+" VALUES "
-      msql := msql + "("
-      for i := 1 to len(aStruct)
-         mFldNm := aStruct[i, DBS_NAME]
-         if i > 1
-            mSql += ", "
-         endif
-         mSql += c2sql(&mFldNm)
-      next
-      mSql += ")"
-      if .not. miscsql( oDB, mSql)
-      	 alertx("Problem in Query: "+mSql)
-         return nil
-      endif
-      dbskip()
-   enddo
-   if !miscsql( oDB, 'end transaction' )
-      return nil
-   endif
-   dbcloseall()
-return nil
-
-
-
-
-FUNCTION MDPCHAVEI(cICHAVE)  //Cria string campo1,campo2,... para create index em sql
-LOCAL nPOS
-LOCAL cCHAVE
-LOCAL cTMPCHV
-LOCAL aICampos
-LOCAL I
-cCHAVE:=""
-aicampos:=hb_atokens(cICHAVE,"+")
-FOR I=1 TO LEN(aICampos)
-    cTMPCHV:=aICampos[I]
-    nPOS:=AT("(",cTMPCHV)
-    IF nPOS>=0
-       cTMPCHV:=SUBSTR(cTMPCHV,nPOS+1)
-    ENDIF
-    nPOS:=AT("(",cTMPCHV)
-    IF nPOS>0
-       cTMPCHV:=SUBSTR(cTMPCHV,nPOS+1)
-    ENDIF
-    nPOS:=AT(")",cTMPCHV)
-    IF nPOS>0
-       cTMPCHV:=SUBSTR(cTMPCHV,1,nPOS-1)
-    ENDIF
-    nPOS:=AT(",",cTMPCHV)
-    IF nPOS>0
-       cTMPCHV:=SUBSTR(cTMPCHV,1,nPOS-1)
-    ENDIF
-    cCHAVE+=cTMPCHV
-    IF I<>LEN(aICAMPOS)
-       cCHAVE+=","
-    ENDIF
-NEXT I
-return cCHAVE
-
-function SqliteCreateTable(cTablename,aStruct,cTIPOSQL)
-LOCAL mSQL
-LOCAL i
-if valtype(cTIPOSQL)<>"C"
-   cTIPOSQL="SQLITE"
-ENDIF
- 
-   msql:=""
-   IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" //postgree e case sensitive deixando em maisuclav
-      cTABLENAME:=UPPER(cTABLENAME)
+   nLASTREC := RecCount()  // NetRegCount(cOLDDBF)
+   zei_fort( nLASTREC,,, 0 )
+   dbGoTop()
+   IF !miscsql( oDB, 'begin transaction' )
+      RETURN NIL
    ENDIF
-   IF cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
-      mSql := "CREATE TABLE "+cTablename+" ("
-   ELSE
-       mSql := "CREATE TABLE IF NOT EXISTS "+cTablename+" ("
-   endif    
+   DO WHILE !Eof()
+      zei_fort( nLASTREC,,, 1 )
 
-   for i := 1 to len(aStruct)
-      mFldNm := aStruct[i, DBS_NAME]
-      mFldType := aStruct[i, DBS_TYPE]
-      mFldLen := aStruct[i, DBS_LEN]
-      mFldDec := aStruct[i, DBS_DEC]
-
-      if i > 1
-         mSql += ", "
-      endif
-      IF cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" //postgreSQL e case sensitive deixando em maisuclas
-         mFldnm:=UPPER(mFldnm)
+      mSql := "INSERT INTO " + cTablename + " VALUES "
+      msql := msql + "("
+      FOR i := 1 TO Len( aStruct )
+         mFldNm := aStruct[ i, DBS_NAME ]
+         IF i > 1
+            mSql += ", "
+         ENDIF
+         mSql += c2sql( &mFldNm )
+      NEXT
+      mSql += ")"
+      IF ! miscsql( oDB, mSql )
+         alertx( "Problem in Query: " + mSql )
+         RETURN NIL
       ENDIF
-      mSql += alltrim(mFldnm)+" "
+      dbSkip()
+   ENDDO
+   IF !miscsql( oDB, 'end transaction' )
+      RETURN NIL
+   ENDIF
+   dbCloseAll()
 
-      do case
-          //
-          //  C  == Caracter
-          //
-          Case mFldType = "C" .AND. (cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI")
-              mSql += "VARCHAR2 ("+LTRIM(STR(mFldLen))+")"
-          case mFldType = "C" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" ;
-               .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL".OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
-             mSql += "VARCHAR("+LTRIM(STR(mFldLen))+")"
-          Case mFldType = "C" .AND. cTIPOSQL="SQLITE"   
-               mSql += "TEXT "
-          case mFldType = "C"
-             mSql += "CHAR("+LTRIM(STR(mFldLen))+")"  
+   RETURN NIL
+
+
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MDPCHAVEI()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION MDPCHAVEI( cICHAVE )   // Cria string campo1,campo2,... para create index em sql
+
+   LOCAL nPOS
+   LOCAL cCHAVE
+   LOCAL cTMPCHV
+   LOCAL aICampos
+   LOCAL I
+
+   cCHAVE   := ""
+   aicampos := hb_ATokens( cICHAVE, "+" )
+   FOR I := 1 TO Len( aICampos )
+      cTMPCHV := aICampos[ I ]
+      nPOS    := At( "(", cTMPCHV )
+      IF nPOS >= 0
+         cTMPCHV := SubStr( cTMPCHV, nPOS + 1 )
+      ENDIF
+      nPOS := At( "(", cTMPCHV )
+      IF nPOS > 0
+         cTMPCHV := SubStr( cTMPCHV, nPOS + 1 )
+      ENDIF
+      nPOS := At( ")", cTMPCHV )
+      IF nPOS > 0
+         cTMPCHV := SubStr( cTMPCHV, 1, nPOS - 1 )
+      ENDIF
+      nPOS := At( ",", cTMPCHV )
+      IF nPOS > 0
+         cTMPCHV := SubStr( cTMPCHV, 1, nPOS - 1 )
+      ENDIF
+      cCHAVE += cTMPCHV
+      IF I <> Len( aICAMPOS )
+         cCHAVE += ","
+      ENDIF
+   NEXT I
+
+   RETURN cCHAVE
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function SqliteCreateTable()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
+
+   LOCAL mSQL
+   LOCAL i
+
+   IF ValType( cTIPOSQL ) <> "C"
+      cTIPOSQL := "SQLITE"
+   ENDIF
+
+   msql := ""
+   IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"  // postgree e case sensitive deixando em maisuclav
+      cTABLENAME := Upper( cTABLENAME )
+   ENDIF
+   IF cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64"
+      mSql := "CREATE TABLE " + cTablename + " ("
+   ELSE
+      mSql := "CREATE TABLE IF NOT EXISTS " + cTablename + " ("
+   ENDIF
+
+   FOR i := 1 TO Len( aStruct )
+      mFldNm   := aStruct[ i, DBS_NAME ]
+      mFldType := aStruct[ i, DBS_TYPE ]
+      mFldLen  := aStruct[ i, DBS_LEN ]
+      mFldDec  := aStruct[ i, DBS_DEC ]
+
+      IF i > 1
+         mSql += ", "
+      ENDIF
+      IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"   // postgreSQL e case sensitive deixando em maisuclas
+         mFldnm := Upper( mFldnm )
+      ENDIF
+      mSql += AllTrim( mFldnm ) + " "
+
+      DO CASE
+         //
+         // C  == Caracter
+         //
+      CASE mFldType = "C" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
+         mSql += "VARCHAR2 (" + LTrim( Str( mFldLen ) ) + ")"
+      CASE mFldType = "C" .AND. ( cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64" ;
+            .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"
+      CASE mFldType = "C" .AND. cTIPOSQL = "SQLITE"
+         mSql += "TEXT "
+      CASE mFldType = "C"
+         mSql += "CHAR(" + LTrim( Str( mFldLen ) ) + ")"
          //
          //
-         //V = Varchar and Varchar (Binary)    
-         Case mFldType = "V" .AND. (cTIPOSQL="SQLITE"  .or. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" ) 
-              if mFldDec > 0
-                mSql +=  "TEXT(" + hb_ntos(mFldDec) + ")"
-             else
-                mSql += "TEXT "
-             endif   
-         Case mFldType = "V" .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")  
-              mSql += "VARCHAR(" + hb_ntos(mFldDec) + ")"
-              
+         // V = Varchar and Varchar (Binary)
+      CASE mFldType = "V" .AND. ( cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         IF mFldDec > 0
+            mSql += "TEXT(" + hb_ntos( mFldDec ) + ")"
+         ELSE
+            mSql += "TEXT "
+         ENDIF
+      CASE mFldType = "V" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "VARCHAR(" + hb_ntos( mFldDec ) + ")"
+
          //
          // D = date  @= datetime
-         //     
-         case mFldType = "D" .AND. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
-            mSql += "TIMESTAMP"
-            
-         case mFldType = "D"  .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  ;
-                                                        .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
-             mSql += "DATETIME"
-        case mFldType = "D"
-             mSql += "DATE" 
+         //
+      CASE mFldType = "D" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "TIMESTAMP"
+
+      CASE mFldType = "D" .AND. ( cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" ;
+            .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "DATETIME"
+      CASE mFldType = "D"
+         mSql += "DATE"
          //
          // T - TIME
-         //   
-          case mFldType = "T" .AND. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" .OR. cTIPOSQL="FIREBIRD" )
-            mSql += "TIMESTAMP"
-          case mFldType = "T"
-             mSql += "DATETIME"
-             
-             
+         //
+      CASE mFldType = "T" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "FIREBIRD" )
+         mSql += "TIMESTAMP"
+      CASE mFldType = "T"
+         mSql += "DATETIME"
+
+
          //
          // N = NUMERIC
          // Inteiro
@@ -639,177 +894,181 @@ ENDIF
          // com decimais
          // Numerico ->FLOAT DOUBLE NUMERIC
          //
-        case mFldType = "N" .AND.  (cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI")
-              if mFldDec > 0
-                mSql += "NUMBER("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
-             else
-                mSql += "NUMBER("+hb_ntos(mFldLen)+")"
-             endif
-        
-        case mFldType = "N" .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL".OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL"  )
-             if mFldDec > 0
-                mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
-             else
-                IF mFldLen<=9
-                    DO CASE
-                       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
-                            mSQL += "INTEGER"
-                       OTHERWISE
-                            mSql += "INT"  //INTEGER("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
-                    ENDCASE        
-                ELSE
-                    DO CASE
-                       OTHERWISE
-                            mSql += "BIGINT"  //"bigint("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
-                    ENdCASE            
-                ENDIF    
-             endif  
-             
-         case mFldType = "N"  .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .OR. cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64")
-             if mFldDec > 0
-                mSql += "DOUBLE"
-             else
-                mSql += "LONG"
-             endif       
-          case mFldType = "N" .AND. cTIPOSQL="SQLITE"
-             if mFldDec > 0
-                mSql += "FLOAT"
-             else
-                mSql += "INTEGER"
-             endif
-             
-         case mFldType = "N" .AND. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="FIREBIRD")
-             if mFldDec > 0
-                mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
-             else
-                IF mFldLen<=9
-                    mSql += "INTEGER("+hb_ntos(mFldLen)+")"
-                ELSE
-                    mSql += "bigint("+hb_ntos(mFldLen)+")"
-                ENDIF    
-             endif  
-          //
-          // F= float 
-          // 
-          case (mFldType = "F" .or. mFldType = "Y") .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  ; 
-                                                       .OR. cTIPOSQL="ACCDB".OR. cTIPOSQL="ACCDB64")     
-               mSql += "DOUBLE"
-         Case mFldType = "F" .AND. cTIPOSQL="SQLITE"   
-               mSql += "REAL " 
-          case mFldType = "F" .and. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB")
-                mSql += "FLOAT("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"     
-          case mFldType = "F" .and. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL")
-                mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"  
-         case mFldType = "F" .and. (cTIPOSQL="FIREBIRD" )
-                mSql += "DECIMAL("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"           
-          case mFldType = "F" 
-                mSql += "FLOAT"
+      CASE mFldType = "N" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
+         IF mFldDec > 0
+            mSql += "NUMBER(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+         ELSE
+            mSql += "NUMBER(" + hb_ntos( mFldLen ) + ")"
+         ENDIF
+
+      CASE mFldType = "N" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         IF mFldDec > 0
+            mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+         ELSE
+            IF mFldLen <= 9
+               DO CASE
+               CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
+                  mSQL += "INTEGER"
+               OTHERWISE
+                  mSql += "INT"  // INTEGER("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+               ENDCASE
+            ELSE
+               DO CASE
+               OTHERWISE
+                  mSql += "BIGINT"   // "bigint("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+               ENDCASE
+            ENDIF
+         ENDIF
+
+      CASE mFldType = "N" .AND. ( cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64" )
+         IF mFldDec > 0
+            mSql += "DOUBLE"
+         ELSE
+            mSql += "LONG"
+         ENDIF
+      CASE mFldType = "N" .AND. cTIPOSQL = "SQLITE"
+         IF mFldDec > 0
+            mSql += "FLOAT"
+         ELSE
+            mSql += "INTEGER"
+         ENDIF
+
+      CASE mFldType = "N" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "FIREBIRD" )
+         IF mFldDec > 0
+            mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+         ELSE
+            IF mFldLen <= 9
+               mSql += "INTEGER(" + hb_ntos( mFldLen ) + ")"
+            ELSE
+               mSql += "bigint(" + hb_ntos( mFldLen ) + ")"
+            ENDIF
+         ENDIF
          //
-          // Y= CURRENCY MOEDA
-          //        
-          Case mFldType = "Y" .AND. cTIPOSQL="SQLITE"  
-             if mFldDec > 0
-                mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"
-             else
-                mSql += "NUMERIC("+hb_ntos(mFldLen)+")"
-             endif
-          case mFldType = "Y" .and. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL")
-                mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"          
-          case mFldType = "Y"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
-               mSql += "MONEY "   
-          case mFldType = "Y" .and. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" .OR. cTIPOSQL="FIREBIRD")
-                mSql += "DECIMAL("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"                  
-          
-          case  mFldType = "Y"
-                mSql += "FLOAT"      
-          //
-          //I = integer LONG
-          //   
-          case mFldType = "I" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .OR. cTIPOSQL="ACCDB"  .OR. cTIPOSQL="ACCDB64")    
-             mSql += "LONG"
-          case mFldType = "I"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB")   
-              mSql += "INT"
-          case mFldType = "I"
-             mSql += "INTEGER"
+         // F= float
+         //
+      CASE ( mFldType = "F" .OR. mFldType = "Y" ) .AND. ( cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" ;
+            .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64" )
+         mSql += "DOUBLE"
+      CASE mFldType = "F" .AND. cTIPOSQL = "SQLITE"
+         mSql += "REAL "
+      CASE mFldType = "F" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "FLOAT(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "F" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "F" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "DECIMAL(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "F"
+         mSql += "FLOAT"
+         //
+         // Y= CURRENCY MOEDA
+         //
+      CASE mFldType = "Y" .AND. cTIPOSQL = "SQLITE"
+         IF mFldDec > 0
+            mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+         ELSE
+            mSql += "NUMERIC(" + hb_ntos( mFldLen ) + ")"
+         ENDIF
+      CASE mFldType = "Y" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "Y" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "MONEY "
+      CASE mFldType = "Y" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "FIREBIRD" )
+         mSql += "DECIMAL(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+
+      CASE mFldType = "Y"
+         mSql += "FLOAT"
+         //
+         // I = integer LONG
+         //
+      CASE mFldType = "I" .AND. ( cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64" )
+         mSql += "LONG"
+      CASE mFldType = "I" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "INT"
+      CASE mFldType = "I"
+         mSql += "INTEGER"
          //
          // B double
-         //    
-          case mFldType = "B"
-             mSql += "DOUBLE"
-         case mFldType = "B"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")  
-               mSql += "FLOAT" 
-          case mFldType = "B" .and. (cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB")
-                mSql += "DOUBLE("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"    
-         case mFldType = "B" .and. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL")
-                mSql += "NUMERIC("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"                 
-           case mFldType = "Y" .and. (cTIPOSQL="FIREBIRD")
-                mSql += "DECIMAL("+hb_ntos(mFldLen)+","+hb_ntos(mFldDec)+")"       
-          //
-          // L = logico boleano bit
-          // 
-          case mFldType = "L" .AND.  (cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI")
-             mSql += "NUMBER (1)" 
-         case mFldType = "L" .AND. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" .OR. cTIPOSQL="SQLITE" .OR. cTIPOSQL="FIREBIRD")
-             mSql += "BOOLEAN"
-         case mFldType = "L" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" ;
-                                   .OR. cTIPOSQL="ACCDDB" .OR. cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
-             mSql += "BIT"       
-          case mFldType = "L"
-             mSql += "BOOL"   
-          //
-          // M= memo TEXT LONGTEXT
-          //   
-          case mFldType = "M" .AND.  (cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI")
-              mSql += "CLOB"
-          case mFldType = "M" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="PGSQL".OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
-             mSql += "TEXT" 
-          case mFldType = "M" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" ;
-                                      .OR. cTIPOSQL="ACCDB".OR. cTIPOSQL="ACCDB64")
-             mSql += "LONGTEXT"
-          case mFldType = "M" .AND.  (cTIPOSQL="FIREBIRD")
-              mSql += "BLOB SUB_TYPE 1"   
-          case mFldType = "M"
-             mSql += "TEXT"
-          //
-          // G = blob LONGBINARY
-          //   
-          case mFldType = "G" .AND. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
-            mSql += "BYTEA"
-           case mFldType = "G" .AND. ( cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER")
-             mSql += "VARBINARY"  
-           case mFldType = "G" .AND. (cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64".OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64" ;
-                                     .OR. cTIPOSQL="ACCDB".OR. cTIPOSQL="ACCDB64")
-             mSql += "LONGBINARY" 
-        case mFldType = "G"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER") 
-             Sql += "IMAGE"
-          case mFldType = "M" .AND.  (cTIPOSQL="FIREBIRD")
-              mSql += "BLOB SUB_TYPE 0"            
-        case mFldType = "G"
-             mSql += "BLOB"
-               
-         * Q = Varbinary 
-          Case mFldType = "Q" .AND. cTIPOSQL="SQLITE"   
-               mSql += "BLOB " 
-          case mFldType = "Q"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER" .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" )     
-               mSql += "VARBINARY("+hb_ntos(mFldLen)+")"
-         case mFldType = "Q" .AND. (cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64".OR. cTIPOSQL="POSTGRESQL" )
-            mSql += "BYTEA"
-          case mFldType = "Q" .AND.  (cTIPOSQL="FIREBIRD")
-              mSql += "BLOB SUB_TYPE 0"    
-          * W = Blob
-          Case mFldType = "W" .AND. (cTIPOSQL="SQLITE"  .OR. cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64" .OR. cTIPOSQL="MARIADB" ) 
-               mSql += "BLOB " 
-          case mFldType = "W"  .AND. (cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER") 
-             Sql += "IMAGE"
-           case mFldType = "W" .AND.  (cTIPOSQL="FIREBIRD")
-              mSql += "BLOB SUB_TYPE 0"          
-          //
-          // invalido
-          //   
-          otherwise
-             alertx("Invalid Field Type: "+mFldType)
-             return ""
-      endcase
-   next
+         //
+      CASE mFldType = "B"
+         mSql += "DOUBLE"
+      CASE mFldType = "B" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "FLOAT"
+      CASE mFldType = "B" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "DOUBLE(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "B" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "Y" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "DECIMAL(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+         //
+         // L = logico boleano bit
+         //
+      CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
+         mSql += "NUMBER (1)"
+      CASE mFldType = "L" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "FIREBIRD" )
+         mSql += "BOOLEAN"
+      CASE mFldType = "L" .AND. ( cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" ;
+            .OR. cTIPOSQL = "ACCDDB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "BIT"
+      CASE mFldType = "L"
+         mSql += "BOOL"
+         //
+         // M= memo TEXT LONGTEXT
+         //
+      CASE mFldType = "M" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
+         mSql += "CLOB"
+      CASE mFldType = "M" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "TEXT"
+      CASE mFldType = "M" .AND. ( cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" ;
+            .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64" )
+         mSql += "LONGTEXT"
+      CASE mFldType = "M" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "BLOB SUB_TYPE 1"
+      CASE mFldType = "M"
+         mSql += "TEXT"
+         //
+         // G = blob LONGBINARY
+         //
+      CASE mFldType = "G" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "BYTEA"
+      CASE mFldType = "G" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "VARBINARY"
+      CASE mFldType = "G" .AND. ( cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" ;
+            .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64" )
+         mSql += "LONGBINARY"
+      CASE mFldType = "G" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         Sql += "IMAGE"
+      CASE mFldType = "M" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "BLOB SUB_TYPE 0"
+      CASE mFldType = "G"
+         mSql += "BLOB"
+
+         // Q = Varbinary
+      CASE mFldType = "Q" .AND. cTIPOSQL = "SQLITE"
+         mSql += "BLOB "
+      CASE mFldType = "Q" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "VARBINARY(" + hb_ntos( mFldLen ) + ")"
+      CASE mFldType = "Q" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "BYTEA"
+      CASE mFldType = "Q" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "BLOB SUB_TYPE 0"
+         // W = Blob
+      CASE mFldType = "W" .AND. ( cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "BLOB "
+      CASE mFldType = "W" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         Sql += "IMAGE"
+      CASE mFldType = "W" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "BLOB SUB_TYPE 0"
+         //
+         // invalido
+         //
+      OTHERWISE
+         alertx( "Invalid Field Type: " + mFldType )
+         RETURN ""
+      ENDCASE
+   NEXT
    mSql += ")"
-return msql
+
+   RETURN msql
+
+// + EOF: sql2dbf.prg
+// +

@@ -1,77 +1,83 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : m_afa.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_afa.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:56 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
-MDI("Criar Arquivo Sudameris->CLIENTES.DBF")
-CAMINHO := ProfileString( "MANA5.INI", "PATH", "COBSUDA",HB_CWD()+"\COBSUDA" )+SPACE(40)//
 
-//CAMINHO := "\COBSUDA\"+SPACE(40)
-MDS("Digite o Caminho")
-@ 24,30 GET CAMINHO         
+MDI( "Criar Arquivo Sudameris->CLIENTES.DBF" )
+CAMINHO := ProfileString( "MANA5.INI", "PATH", "COBSUDA", hb_cwd() + "\COBSUDA" ) + Space( 40 )  //
+
+// CAMINHO := "\COBSUDA\"+SPACE(40)
+MDS( "Digite o Caminho" )
+@ 24, 30 GET CAMINHO
 IF !READCUR()
-   RETU .F.
+RETU .F.
 ENDIF
 
-aLAYG1 := PEGLAY("MEXPOR1","MAFA01")
+aLAYG1 := PEGLAY( "MEXPOR1", "MAFA01" )
 
 FILTRO  := ''
-FILTRO  := RFILORD("MA01",.F.)
-CAMINHO := ALLTRIM(CAMINHO)+"CLIENTES"
-IF ! file(CAMINHO+".DBF")
-   ALERTX("Nao Encontrei Arquivo "+CAMINHO)
-   RETU .F.
+FILTRO  := RFILORD( "MA01", .F. )
+CAMINHO := AllTrim( CAMINHO ) + "CLIENTES"
+IF !File( CAMINHO + ".DBF" )
+ALERTX( "Nao Encontrei Arquivo " + CAMINHO )
+RETU .F.
 ENDIF
-IF !USECHK(CAMINHO,,.T.)
-   RETU .F.
+IF !USECHK( CAMINHO,, .T. )
+RETU .F.
 ENDIF
 
-nLASTREC := LASTREC()
-zei_fort(nLASTREC,,,0)
-ordDestroy("temp")
-ordcreate(,"temp","CPF_CGC")
-ordSetFocus("temp")
+nLASTREC := LastRec()
+zei_fort( nLASTREC,,, 0 )
+ordDestroy( "temp" )
+ordCreate(, "temp", "CPF_CGC" )
+ordSetFocus( "temp" )
 
-IF !USEREDE("MA01",1,1)
-   DBCLOSEALL()
-   RETU .F.
+IF !USEREDE( "MA01", 1, 1 )
+dbCloseAll()
+RETU .F.
 ENDIF
-IF !EMPTY(FILTRO)
-   SET FILTER TO &FILTRO
+IF !Empty( FILTRO )
+SET FILTER TO &FILTRO
 ENDIF
-DBGOTOP()
-WHILE !EOF()
-   mNOMESAC  := LEFT(NOME,40)
-   mTPINSSAC := IF(PESSOA = "J","02","01")
-   cCGCTEMP  := CGC
-   mCGCCPFS  := IF(PESSOA = "J",cCGCTEMP,"000"+ALLTRIM(cCGCTEMP))
-   mENDERECO := LEFT(ENDERECO,40)
-   mCEP      := STRTRAN(CEP,"-","")
-   mCIDADE   := LEFT(CIDADE,15)
-   mUF       := ESTADO
-   GRAVALAY(aLAY1,"CLIENTES",,.F.,mCGCCPFS,.T.)
-   DBSELECTAR("MA01")
-   DBSKIP()
+dbGoTop()
+WHILE !Eof()
+mNOMESAC  := Left( NOME, 40 )
+mTPINSSAC := IF( PESSOA = "J", "02", "01" )
+cCGCTEMP  := CGC
+mCGCCPFS  := IF( PESSOA = "J", cCGCTEMP, "000" + AllTrim( cCGCTEMP ) )
+mENDERECO := Left( ENDERECO, 40 )
+mCEP      := StrTran( CEP, "-", "" )
+mCIDADE   := Left( CIDADE, 15 )
+mUF       := ESTADO
+GRAVALAY( aLAY1, "CLIENTES",, .F., mCGCCPFS, .T. )
+dbSelectAr( "MA01" )
+dbSkip()
 ENDDO
-DBCLOSEALL()
+dbCloseAll()
 
+
+// + EOF: m_afa.prg
+// +

@@ -1,87 +1,117 @@
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
-*+
-*+    Source Module => J:\ITAESBRA\M_AOCRM.PRG
-*+
-*+    Reformatted by Click! 2.03 on Jul-5-2002 at  2:16 pm
-*+
-*+ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_aocrm.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:46 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
+// +ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
+// +
+// +    Source Module => J:\ITAESBRA\M_AOCRM.PRG
+// +
+// +    Reformatted by Click! 2.03 on Jul-5-2002 at  2:16 pm
+// +
+// +ЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭ
 
 dDATA := ZDATA
 MDS( "Qual Data" )
-@ 24, 40 get dDATA
-if !READCUR()
-   retu .F.
-endif
+@ 24, 40 GET dDATA
+IF !READCUR()
+RETU .F.
+ENDIF
 CRIARVARS( "PE01BX" )
 
-if !USEREDE( "CRM", 1, 2 )
-   dbcloseall()
-   retu .F.
-endif
-dbselectar( "CRM" )
-dbgotop()
-dbseek( dDATA )
-while dDATA = DATA .and. !eof()
-   if TIPOE = "M" .or. TIPOE = "C"
-      lGRAVOU := .F.
-      for X := 1 to 2
-         xTIPOE     := TIPOE
-         xCODIGO    := padr( CBUSCA, 24 )
-         xNRNOTASAI := if( X = 1, MNRNOTA, NRNOTB )
-         xDATASAI   := DATA
-         xTOTKGSAI  := if( X = 1, QTDEA, QTDEB )
-         xCRM       := CRM
-         xPEDIDO    := PRPED
-         xITEM      := PRITE
-         xCLIFOR    := CLIFOR
-         do case
-         case CRM->GRAVAUP = "S"
-            ALERTX( "Crm: " + str( xCRM ) + " Ja Gravado" )
-         case empty( xCODIGO )
-            ALERTX( "Crm: " + str( xCRM ) + " sem Codigo Produto" )
-         case empty( xDATASAI )
-            ALERTX( "Crm: " + str( xCRM ) + " sem data" )
-         case empty( xTOTKGSAI )
-            ALERTX( "Crm: " + str( xCRM ) + " sem quantidade" )
-         case empty( xPEDIDO ) .or. empty( xITEM )
-            ALERTX( "Crm: " + str( xCRM ) + " sem Programa Recebimento " )
-         otherwise
-            if IGUALVARS( "PE01", str( xPEDIDO, 5 ) + str( xITEM, 2 ) )
-               mDATASAI   := xDATASAI
-               mNRNOTASAI := xNRNOTASAI
-               mTOTKGSAI  := xTOTKGSAI
-               mTOTKGEST  := mTOTKGANT - mTOTKGSAI
-               mCRM       := xCRM
-               mPEDIDO    := xPEDIDO
-               mITEM      := xITEM
-               BAIXAREM( "PE01", "PE01BX", str( mPEDIDO, 5 ) + str( mITEM, 2 ) )
-               lGRAVOU := .T.
-               mTIPO   := xTIPOE
-               mCODIGO := xCODIGO
-               mUNROTA := xNRNOTASAI
-               mUDATA  := xDATASAI
-               mUFORNE := xCLIFOR
-               mUQTDE  := xTOTKGSAI
-               xCODIGO := padr( xCODIGO, 24 )
-               if VERSEHA( "PECRT", xTIPOE + xCODIGO + str( xCLIFOR, 8 ) )
-                  REPORVARS( "PECRT", xTIPOE + xCODIGO + str( xCLIFOR, 8 ) )
-               else
-                  APAGAREG( "PECRT", xTIPOE + xCODIGO + str( xCLIFOR, 8 ), .F., .F. )
-               endif
-            else
-               ALERTX( "N„o Encontrei Programa Recebimento: " + str( xPEDIDO ) + "." + str( xITEM ) )
-            endif
-         endcase
-      next X
-      if lGRAVOU
-         dbselectar( "CRM" )
-         netgrvcam("GRAVAUP","S")
-         dbunlock()
-      endif
-   endif
-   dbselectar( "CRM" )
-   dbskip()
-enddo
-dbcloseall()
+IF !USEREDE( "CRM", 1, 2 )
+dbCloseAll()
+RETU .F.
+ENDIF
+dbSelectAr( "CRM" )
+dbGoTop()
+dbSeek( dDATA )
+WHILE dDATA = DATA .AND. !Eof()
+IF TIPOE = "M" .OR. TIPOE = "C"
+lGRAVOU := .F.
+FOR X := 1 TO 2
+xTIPOE     := TIPOE
+xCODIGO    := PadR( CBUSCA, 24 )
+xNRNOTASAI := if( X = 1, MNRNOTA, NRNOTB )
+xDATASAI   := DATA
+xTOTKGSAI  := if( X = 1, QTDEA, QTDEB )
+xCRM       := CRM
+xPEDIDO    := PRPED
+xITEM      := PRITE
+xCLIFOR    := CLIFOR
+DO CASE
+CASE CRM->GRAVAUP = "S"
+ALERTX( "Crm: " + Str( xCRM ) + " Ja Gravado" )
+CASE Empty( xCODIGO )
+ALERTX( "Crm: " + Str( xCRM ) + " sem Codigo Produto" )
+CASE Empty( xDATASAI )
+ALERTX( "Crm: " + Str( xCRM ) + " sem data" )
+CASE Empty( xTOTKGSAI )
+ALERTX( "Crm: " + Str( xCRM ) + " sem quantidade" )
+CASE Empty( xPEDIDO ) .OR. Empty( xITEM )
+ALERTX( "Crm: " + Str( xCRM ) + " sem Programa Recebimento " )
+OTHERWISE
+IF IGUALVARS( "PE01", Str( xPEDIDO, 5 ) + Str( xITEM, 2 ) )
+mDATASAI   := xDATASAI
+mNRNOTASAI := xNRNOTASAI
+mTOTKGSAI  := xTOTKGSAI
+mTOTKGEST  := mTOTKGANT - mTOTKGSAI
+mCRM       := xCRM
+mPEDIDO    := xPEDIDO
+mITEM      := xITEM
+BAIXAREM( "PE01", "PE01BX", Str( mPEDIDO, 5 ) + Str( mITEM, 2 ) )
+lGRAVOU := .T.
+mTIPO   := xTIPOE
+mCODIGO := xCODIGO
+mUNROTA := xNRNOTASAI
+mUDATA  := xDATASAI
+mUFORNE := xCLIFOR
+mUQTDE  := xTOTKGSAI
+xCODIGO := PadR( xCODIGO, 24 )
+IF VERSEHA( "PECRT", xTIPOE + xCODIGO + Str( xCLIFOR, 8 ) )
+REPORVARS( "PECRT", xTIPOE + xCODIGO + Str( xCLIFOR, 8 ) )
+ELSE
+APAGAREG( "PECRT", xTIPOE + xCODIGO + Str( xCLIFOR, 8 ), .F., .F. )
+ENDIF
+ELSE
+ALERTX( "N„o Encontrei Programa Recebimento: " + Str( xPEDIDO ) + "." + Str( xITEM ) )
+ENDIF
+ENDCASE
+NEXT X
+IF lGRAVOU
+dbSelectAr( "CRM" )
+netgrvcam( "GRAVAUP", "S" )
+dbUnlock()
+ENDIF
+ENDIF
+dbSelectAr( "CRM" )
+dbSkip()
+ENDDO
+dbCloseAll()
 
-*+ EOF: M_AOCRM.PRG
+// + EOF: M_AOCRM.PRG
+
+// + EOF: m_aocrm.prg
+// +

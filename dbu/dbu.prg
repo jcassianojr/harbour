@@ -1,13 +1,30 @@
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+--------------------------------------------------------------------
 *+
-*+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBU.PRG
 *+
-*+    Functions: Function HELP()
-*+               Function DBUDIRl()
-*+               Function DBUREDE()
-*+               Function READDBU()
 *+
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+    Programa  : dbu.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 28-Dez-2024 as 10:06 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
 #include "dbinfo.ch"
 #INCLUDE "INKEY.CH"
 #INCLUDE "BOX.CH"
@@ -34,14 +51,14 @@ REQUEST FPTCDX  // 8 SMTCDX DBF CDX MEMO=SMT
 REQUEST SMTCDX  // 9 FPTCDX DBF CDX MEMO=FPT
 REQUEST SIXCDX  //10 SIXCDX DBF CDX           SIXCDX SISNTX SISNSX SuccessWare Index Driver (SIx Driver) replaces the default NTX/DBT index and memo driver with an NSX/SMT  single-file index https://www.apollodb.com/sixrdd.asp
 REQUEST DBFNSX  //11 DBFNSX DBF NSX
-REQUEST DBFBLOB //12 It operates on memo files only (.dbv) without tables (.dbf)r
-REQUEST HSCDX   //13-HSCDX  DBFCDX/HSCDX 
-REQUEST RLCDX   //-14-RLCDX  DBFCDX/RLCDX 
+REQUEST DBFBLOB   //12 It operates on memo files only (.dbv) without tables (.dbf)r
+REQUEST HSCDX   //13-HSCDX  DBFCDX/HSCDX
+REQUEST RLCDX   //-14-RLCDX  DBFCDX/RLCDX
 REQUEST VFPCDX  //-15-VFPCDX DBFCDX/DBFFPT/VFPCDX
 
 REQUEST BMDBFCDX  //-16 BMDBFCDX DBFCDX
-REQUEST BMDBFNSX //-17 BMDBFNSX DBFNSX
-REQUEST BMDBFNTX //-18 BMDBFNTX DBFNTX
+REQUEST BMDBFNSX  //-17 BMDBFNSX DBFNSX
+REQUEST BMDBFNTX  //-18 BMDBFNTX DBFNTX
 
 
 //Microsoft FoxPro create an IDX index file similar ntx
@@ -49,21 +66,35 @@ REQUEST BMDBFNTX //-18 BMDBFNTX DBFNTX
 //REQUEST DBFMDX nao tem mais a rdd removido tipos dbulib.prg dBASE IV  mdx index files can contain up to 47 individual index files in a single mdx file
 
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function MAIN()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNCTION MAIN()
+
 
 
 netregosok()
 
 HB_IDLESTATE()
-Set( _SET_CODEPAGE, "PTISO")   
-HB_LANGSELECT('PT') 
-rddsetdefault( "DBFCDX" )
-Set( _SET_OPTIMIZE, .t.)
-Set( _SET_DELETED, .t.)
-Set( _SET_SOFTSEEK, .t.)
-__SetCentury( .t. )
-Set( _SET_EPOCH, year( date() ) - 60 )
-Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
+Set(_SET_CODEPAGE,"PTISO")
+HB_LANGSELECT('PT')
+rddsetdefault("DBFCDX")
+Set(_SET_OPTIMIZE,.t.)
+Set(_SET_DELETED,.t.)
+Set(_SET_SOFTSEEK,.t.)
+__SetCentury(.t.)
+Set(_SET_EPOCH,year(date()) - 60)
+Set(_SET_DATEFORMAT,"dd/mm/yyyy")
 SetCursor(.t.)
 
 
@@ -114,35 +145,35 @@ public color11
 public color12
 public com_line
 public curs_on
-public ld_cha:="-"
-public zDELIMITE:=","
-public zSEPLOGIC:="1   "
-public zEXPOREXT:="DLM"
-public zDECSIM:="."
-public zANOTAM:="2"
-public zANOFOR:="DMA"+SPACE(7)
-public zANOSEP:="/"
-public zCNVCHAR:="N"
-public zMEMOEXT:=".CDX"
-public zusovia:="DBFCDX"
-public zREGSEP:=" "
- 
-rddsetdefault( "DBFCDX" )
+public ld_cha     := "-"
+public zDELIMITE  := ","
+public zSEPLOGIC  := "1   "
+public zEXPOREXT  := "DLM"
+public zDECSIM    := "."
+public zANOTAM    := "2"
+public zANOFOR    := "DMA"+SPACE(7)
+public zANOSEP    := "/"
+public zCNVCHAR   := "N"
+public zMEMOEXT   := ".CDX"
+public zusovia    := "DBFCDX"
+public zREGSEP    := " "
+
+rddsetdefault("DBFCDX")
 HB_IDLESTATE()
-Set( _SET_CODEPAGE, "PTISO")    
-rddsetdefault( "DBFCDX" )
-Set( _SET_OPTIMIZE, .t.)
-Set( _SET_DELETED, .t.)
-Set( _SET_SOFTSEEK, .t.)
-__SetCentury( .t. )
-Set( _SET_EPOCH, year( date() ) - 60 )
-Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
-Set( _SET_SCOREBOARD, .f. )
+Set(_SET_CODEPAGE,"PTISO")
+rddsetdefault("DBFCDX")
+Set(_SET_OPTIMIZE,.t.)
+Set(_SET_DELETED,.t.)
+Set(_SET_SOFTSEEK,.t.)
+__SetCentury(.t.)
+Set(_SET_EPOCH,year(date()) - 60)
+Set(_SET_DATEFORMAT,"dd/mm/yyyy")
+Set(_SET_SCOREBOARD,.f.)
 
 clear
 
 //hb_keyput(K_ALT_ENTER)
-MVINFOConfTela("DBU "+str(hb_Version( HB_VERSION_BITWIDTH )))
+MVINFOConfTela("DBU "+str(hb_Version(HB_VERSION_BITWIDTH)))
 
 //Variaves Userededbu
 ZUSER := ""
@@ -150,50 +181,50 @@ ZDIRE := HB_CWD()
 
 //mdt(str(hb_Version( HB_VERSION_BITWIDTH )))
 
-//Inicializa o Mouse 
-set( _SET_EVENTMASK, HB_INKEY_ALL )
-lMOUSE:=.T.
+//Inicializa o Mouse
+set(_SET_EVENTMASK,HB_INKEY_ALL)
+lMOUSE       := .T.
 MOUSE_X      := 0
 MOUSE_Y      := 0
 MOUSE_B      := 0
 aMENUPROMPTS := {}
 
-func_title := { "Ajuda", "Abrir", "Criar", "Salvar", "Editar", "Apoio", "Mover", "Setar", "Util" }
+func_title := {"Ajuda","Abrir","Criar","Salvar","Editar","Apoio","Mover","Setar","Util"}
 
 //Variavel Usado na prg dbuedit
 public mGetVar
 
-PATHX := HB_CWD()                 // VARIAVEIS DE TRABALHO
-Set( _SET_PATH, PATHX)
+PATHX := HB_CWD()   // VARIAVEIS DE TRABALHO
+Set(_SET_PATH,PATHX)
 
 HELPARQ  := "DBUHELP"
 READVAR  := ""
 ABERTURA := .T.
-TIPODBF  := 2 //dbfcdx
+TIPODBF  := 2   //dbfcdx
 
 
-aPARAM:=HB_aParams()
-FOR iLOOP=1 TO LEN(aPARAM)
-    aPARAM[iLOOP]:=UPPER(aPARAM[iLOOP])
-	DO CASE
-       case	AT("/FOXPRO",aPARAM[iLOOP])>0 .or.  AT("/DBFCDX",aPARAM[iLOOP])>0 
-	       TIPODBF := 2
-		   aPARAM[iLOOP]:=""
-       case	AT("/DBFNTX",aPARAM[iLOOP])>0 
-	       TIPODBF := 1
-		   aPARAM[iLOOP]:=""
-       case	AT("/DBFNDX",aPARAM[iLOOP])>0 
-	       TIPODBF := 3
-		   aPARAM[iLOOP]:=""
-       case	AT("/DBFMDX",aPARAM[iLOOP])>0 
-	       TIPODBF := 4
-		   aPARAM[iLOOP]:=""
-       case	AT("/ADSCDX",aPARAM[iLOOP])>0 
-	       TIPODBF := 5
-		   aPARAM[iLOOP]:=""
-	OTHERWISE   
-	      tipodbfesc()
-	ENDCASE
+aPARAM := HB_aParams()
+FOR iLOOP := 1 TO LEN(aPARAM)
+   aPARAM[ iLOOP ] := UPPER(aPARAM[iLOOP])
+   DO CASE
+   case AT("/FOXPRO",aPARAM[iLOOP]) > 0 .or. AT("/DBFCDX",aPARAM[iLOOP]) > 0
+      TIPODBF         := 2
+      aPARAM[ iLOOP ] := ""
+   case AT("/DBFNTX",aPARAM[iLOOP]) > 0
+      TIPODBF         := 1
+      aPARAM[ iLOOP ] := ""
+   case AT("/DBFNDX",aPARAM[iLOOP]) > 0
+      TIPODBF         := 3
+      aPARAM[ iLOOP ] := ""
+   case AT("/DBFMDX",aPARAM[iLOOP]) > 0
+      TIPODBF         := 4
+      aPARAM[ iLOOP ] := ""
+   case AT("/ADSCDX",aPARAM[iLOOP]) > 0
+      TIPODBF         := 5
+      aPARAM[ iLOOP ] := ""
+   OTHERWISE
+      tipodbfesc()
+   ENDCASE
 NEXT iLOOP
 
 
@@ -212,47 +243,47 @@ color10 := "B/BG"
 color11 := "W+/BG"
 color12 := "W+/B"
 
-param1:=""
-param2:=""
-param3:=""
+param1 := ""
+param2 := ""
+param3 := ""
 
-FOR iLOOP=1 TO LEN(aPARAM)
-    IF	AT("/MONO",aPARAM[iLOOP])>0 //monocromatico
-	   color1  := "W/N,N/W"
-       color2  := "N/W"
-       color3  := "W+/N"
-       color4  := "W/N,N/W,,,W/N"
-	   color5  := "W+/N,N/W,,,W/N"
-	   color6  := "W/N"
-	   color7  := "W/N,N/W"
-	   color8  := "W/N,N/W,,,W/N"
-	   color9  := "N/W,N/W"
-	   color10 := "N/W"
-	   color11 := "N/W"
-	   color12 := "W+/N"
-	   aPARAM[iLOOP]:=""
-	ENDIF 
-	do case
-	   case iloop=1
-	         param1:=aPARAM[1]
-	   case iloop=2
-	         param2:=aPARAM[2]
-  	   case iloop=3
-	         param3:=aPARAM[3]
-	endcase
+FOR iLOOP := 1 TO LEN(aPARAM)
+   IF AT("/MONO",aPARAM[iLOOP]) > 0   //monocromatico
+      color1          := "W/N,N/W"
+      color2          := "N/W"
+      color3          := "W+/N"
+      color4          := "W/N,N/W,,,W/N"
+      color5          := "W+/N,N/W,,,W/N"
+      color6          := "W/N"
+      color7          := "W/N,N/W"
+      color8          := "W/N,N/W,,,W/N"
+      color9          := "N/W,N/W"
+      color10         := "N/W"
+      color11         := "N/W"
+      color12         := "W+/N"
+      aPARAM[ iLOOP ] := ""
+   ENDIF
+   do case
+   case iloop = 1
+      param1 := aPARAM[1]
+   case iloop = 2
+      param2 := aPARAM[2]
+   case iloop = 3
+      param3 := aPARAM[3]
+   endcase
 NEXT iLOOP
 
 
 //Recebe um arquivo para abrir
 com_line := param1
 
-ACENTUA=.T.
-SetKey( 39, {|| AC_AGUDO() } )
-SetKey( 94, {|| AC_CIRC() } )
-SetKey( 96, {|| AC_CRASE() } )
-SetKey( 126, {|| AC_TIL() } )
-SetKey( K_ALT_S, {|| ACENTUA := ! ACENTUA, ALERTX( "Acentuacao: " +if(acentua,"ligada","desligada") )} )   //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
-SetKey( K_F12  , {|| __SetCentury( ! __SetCentury() ) , alertX("Seculos em Datas: " +if(__SetCentury(),"ligado","desligado")) } ) //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
+ACENTUA := .T.
+SetKey(39,{|| AC_AGUDO()})
+SetKey(94,{|| AC_CIRC()})
+SetKey(96,{|| AC_CRASE()})
+SetKey(126,{|| AC_TIL()})
+SetKey(K_ALT_S,{|| ACENTUA := !ACENTUA,ALERTX("Acentuacao: "+if(acentua,"ligada","desligada"))})  //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
+SetKey(K_F12,{|| __SetCentury(!__SetCentury()),alertX("Seculos em Datas: "+if(__SetCentury(),"ligado","desligado"))})   //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
 //SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
 
 
@@ -260,79 +291,79 @@ lVERTXT := .T.
 lEDITXT := .T.
 
 //Teclas Especiais set pois no dbu usa o read padrao nao o modificado readcur que seta esta configuracao
-SetKey( K_ALT_V, {|| hb_gtInfo( HB_GTI_CLIPBOARDPASTE, .T. ) } )
-SetKey( K_ALT_O, {|| XPOSESQ() } )
-SetKey( K_ALT_P, {|| XPOSDIR() } )
-SetKey( K_ALT_F, {|| XGRATXT() } )
-SetKey( K_ALT_G, {|| XCENTER() } )
-SetKey( K_ALT_H, {|| xcaptxt() } )
-SetKey( K_ALT_J, {|| xediwor() } )
-SetKey( K_ALT_K, {|| xtirace() } )
-SetKey( K_ALT_L, {|| XEXPAND() } )
-SetKey( K_ALT_B, {|| XCAPFIRS() } )
-SetKey( K_ALT_N, {|| XCONVMIN() } )
-SetKey( K_ALT_M, {|| XCONVMAI() } )
-SetKey( K_ALT_INS, {|| XALTINS() } )
-SetKey( K_CTRL_DEL, {|| XCTRLDEL () } )
-SetKey( K_CTRL_INS, {|| XCTRLINS() } )
+SetKey(K_ALT_V,{|| hb_gtInfo(HB_GTI_CLIPBOARDPASTE,.T.)})
+SetKey(K_ALT_O,{|| XPOSESQ()})
+SetKey(K_ALT_P,{|| XPOSDIR()})
+SetKey(K_ALT_F,{|| XGRATXT()})
+SetKey(K_ALT_G,{|| XCENTER()})
+SetKey(K_ALT_H,{|| xcaptxt()})
+SetKey(K_ALT_J,{|| xediwor()})
+SetKey(K_ALT_K,{|| xtirace()})
+SetKey(K_ALT_L,{|| XEXPAND()})
+SetKey(K_ALT_B,{|| XCAPFIRS()})
+SetKey(K_ALT_N,{|| XCONVMIN()})
+SetKey(K_ALT_M,{|| XCONVMAI()})
+SetKey(K_ALT_INS,{|| XALTINS()})
+SetKey(K_CTRL_DEL,{|| XCTRLDEL()})
+SetKey(K_CTRL_INS,{|| XCTRLINS()})
 
 
 if empty(param1)
-   param1:="*.dbf"
+   param1 := "*.dbf"
 endif
 
-FOR iLOOP=1 TO LEN(aPARAM)
-    do case
-      case AT("/XMLA",aPARAM[iLOOP])>0
-           multidocs(1,"*.dbf")
-//           FAZERDBF( {|| dbf2xml() }, .F. ,,,param1)
-    
-       case AT("/TEC",aPARAM[iLOOP])>0 
-           IF MDG("Gerar Observacoes")
-              multidocs(2,param1)  //.tam
-           ELSE
-              multidocs(3,param1)  //.tec
-           ENDIF	
-      case AT("/TAM",aPARAM[iLOOP])>0 
-	       multidocs(2,param1)
-      case AT("/DBE",aPARAM[iLOOP])>0 
-	       multidocs(4,param1)
-      case AT("/DLM",aPARAM[iLOOP])>0 
-           pegparexp()
-           multidocs(5,param1)
-      case AT("/SDF",aPARAM[iLOOP])>0 
-            multidocs(6,param1)
-      case AT("/XML",aPARAM[iLOOP])>0 
-           multidocs(7,param1)
-      case AT("/JSON",aPARAM[iLOOP])>0 
-           multidocs(8,param1)
-       case AT("/FIX",aPARAM[iLOOP])>0
-            if mdg( "Fixar? " +zdire) = "S"
-		 	   FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))},param1)
-            endif
-       case AT("/ZER",aPARAM[iLOOP])>0
-           if mdg( "Zerar? " +zdire)
-              if md( "Realmente Zerar?" +zdire)
-                FAZERDBF( { || dbuzap() }, .t. ,{|| copybkdbf(ARQUIVO)},{||memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))},param1)
-              endif  
-           endif
-      case AT("/AJU",aPARAM[iLOOP])>0 
-           if mdg( "Ajustar? " + zdire )
-              dbetodbf(param1,.F.)
-           endif
-      case AT("/COR",aPARAM[iLOOP])>0 
-           if mdg( "Corrigir? " + zdire )
-              DBETODBF(param1,,.T.)
-          endif
-    endcase   
+FOR iLOOP := 1 TO LEN(aPARAM)
+   do case
+   case AT("/XMLA",aPARAM[iLOOP]) > 0
+      multidocs(1,"*.dbf")
+      //           FAZERDBF( {|| dbf2xml() }, .F. ,,,param1)
+
+   case AT("/TEC",aPARAM[iLOOP]) > 0
+      IF MDG("Gerar Observacoes")
+         multidocs(2,param1)  //.tam
+      ELSE
+         multidocs(3,param1)  //.tec
+      ENDIF
+   case AT("/TAM",aPARAM[iLOOP]) > 0
+      multidocs(2,param1)
+   case AT("/DBE",aPARAM[iLOOP]) > 0
+      multidocs(4,param1)
+   case AT("/DLM",aPARAM[iLOOP]) > 0
+      pegparexp()
+      multidocs(5,param1)
+   case AT("/SDF",aPARAM[iLOOP]) > 0
+      multidocs(6,param1)
+   case AT("/XML",aPARAM[iLOOP]) > 0
+      multidocs(7,param1)
+   case AT("/JSON",aPARAM[iLOOP]) > 0
+      multidocs(8,param1)
+   case AT("/FIX",aPARAM[iLOOP]) > 0
+      if mdg("Fixar? "+zdire) = "S"
+         FAZERDBF({|| dbupack()},.t.,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))},param1)
+      endif
+   case AT("/ZER",aPARAM[iLOOP]) > 0
+      if mdg("Zerar? "+zdire)
+         if md("Realmente Zerar?"+zdire)
+            FAZERDBF({|| dbuzap()},.t.,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))},param1)
+         endif
+      endif
+   case AT("/AJU",aPARAM[iLOOP]) > 0
+      if mdg("Ajustar? "+zdire)
+         dbetodbf(param1,.F.)
+      endif
+   case AT("/COR",aPARAM[iLOOP]) > 0
+      if mdg("Corrigir? "+zdire)
+         DBETODBF(param1,,.T.)
+      endif
+   endcase
 next Iloop
 
 
-setcolor( color1 )
+setcolor(color1)
 clear
 
-more_up   := chr( 24 )
-more_down := chr( 25 )
+more_up   := chr(24)
+more_down := chr(25)
 frame     := "---|---|"
 lframe    := "---|---|"
 mframe    := "---|+-+|"
@@ -340,7 +371,7 @@ sframe    := "+-+|+-+|"
 
 need_field := need_ntx := need_relat := need_filtr := box_open := .F.
 //kf1        := kf2 := kf3 := kf4 := kf5 := kf6 := ""
-kf1 :=kf2 := kf3 := kf4 := kf5 := kf6 := ""
+kf1        := kf2 := kf3 := kf4 := kf5 := kf6 := ""
 help_code  := 0
 curs_on    := .F.
 cur_dir    := ""
@@ -352,168 +383,168 @@ page       := 1
 n_files    := 0
 view_file  := ""
 view_err   := ""
-dbf:=array(6)
+dbf        := array(6)
 
-ntx1:=array(7)
-ntx2:=array(7)
-ntx3:=array(7)
-ntx4:=array(7)
-ntx5:=array(7)
-ntx6:=array(7)
+ntx1 := array(7)
+ntx2 := array(7)
+ntx3 := array(7)
+ntx4 := array(7)
+ntx5 := array(7)
+ntx6 := array(7)
 
-DECLARE s_relate[ 15 ]
-DECLARE k_relate[ 15 ]
-DECLARE t_relate[ 15 ]
+DECLARE s_relate[15]
+DECLARE k_relate[15]
+DECLARE t_relate[15]
 
-DECLARE field_n1[ 128 ]
-DECLARE field_n2[ 128 ]
-DECLARE field_n3[ 128 ]
-DECLARE field_n4[ 128 ]
-DECLARE field_n5[ 128 ]
-DECLARE field_n6[ 128 ]
+DECLARE field_n1[128]
+DECLARE field_n2[128]
+DECLARE field_n3[128]
+DECLARE field_n4[128]
+DECLARE field_n5[128]
+DECLARE field_n6[128]
 
-DECLARE field_list[ 128 ]
+DECLARE field_list[128]
 
-DECLARE row_a[ 3 ]
-DECLARE row_x[ 3 ]
+DECLARE row_a[3]
+DECLARE row_x[3]
 
-row_a[ 1 ] = 6
-row_x[ 1 ] = 6
-row_a[ 2 ] = 10
-row_x[ 2 ] = 12
-row_a[ 3 ] = 16
-row_x[ 3 ] = 22
+row_a[1] = 6
+row_x[1] = 6
+row_a[2] = 10
+row_x[2] = 12
+row_a[3] = 16
+row_x[3] = 22
 
-DECLARE column[ 6 ]
+DECLARE column[6]
 
-DECLARE cr1[ 3 ]
-DECLARE cr2[ 3 ]
-DECLARE cr3[ 3 ]
-DECLARE cr4[ 3 ]
-DECLARE cr5[ 3 ]
-DECLARE cr6[ 3 ]
+DECLARE cr1[3]
+DECLARE cr2[3]
+DECLARE cr3[3]
+DECLARE cr4[3]
+DECLARE cr5[3]
+DECLARE cr6[3]
 
-DECLARE el1[ 3 ]
-DECLARE el2[ 3 ]
-DECLARE el3[ 3 ]
-DECLARE el4[ 3 ]
-DECLARE el5[ 3 ]
-DECLARE el6[ 3 ]
+DECLARE el1[3]
+DECLARE el2[3]
+DECLARE el3[3]
+DECLARE el4[3]
+DECLARE el5[3]
+DECLARE el6[3]
 
-help_title := array( 22 )
+help_title := array(22)
 
-afill( dbf, "" )
+afill(dbf,"")
 
-afill( ntx1, "" )
-afill( ntx2, "" )
-afill( ntx3, "" )
-afill( ntx4, "" )
-afill( ntx5, "" )
-afill( ntx6, "" )
+afill(ntx1,"")
+afill(ntx2,"")
+afill(ntx3,"")
+afill(ntx4,"")
+afill(ntx5,"")
+afill(ntx6,"")
 
-afill( field_n1, "" )
-afill( field_n2, "" )
-afill( field_n3, "" )
-afill( field_n4, "" )
-afill( field_n5, "" )
-afill( field_n6, "" )
+afill(field_n1,"")
+afill(field_n2,"")
+afill(field_n3,"")
+afill(field_n4,"")
+afill(field_n5,"")
+afill(field_n6,"")
 
-afill( s_relate, "" )
-afill( k_relate, "" )
-afill( t_relate, "" )
+afill(s_relate,"")
+afill(k_relate,"")
+afill(t_relate,"")
 
-afill( field_list, "" )
+afill(field_list,"")
 
-menu_deflt := array( 9 )
-afill( menu_deflt, 1 )
+menu_deflt := array(9)
+afill(menu_deflt,1)
 
 LAYOUT()
 
 //Menus que Saem
 exit_str := "3569"
 
-ajuda_m := { "Ajuda" }
-ajuda_b := { .T. }
+ajuda_m := {"Ajuda"}
+ajuda_b := {.T.}
 
-abrir_m:= {"Database","Indice","Visao","POSTGRESQL",;
-            "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE"}
-abrir_b:=array(11)
-abrir_b[ 1 ] = "sysfunc = 0 .AND. .NOT. box_open"
-abrir_b[ 2 ] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
-abrir_b[ 3 ] = "sysfunc = 0 .AND. .NOT. box_open"
-abrir_b[ 4 ] = "sysfunc = 0 .AND. .NOT. box_open"
-abrir_b[ 5 ] = "sysfunc = 0 .AND. .NOT. box_open"
-abrir_b[ 6 ] = "sysfunc = 0 .AND. .NOT. box_open"
-abrir_b[ 7 ] = "sysfunc = 0 .AND. .NOT. box_open"
-abrir_b[ 8 ] = "sysfunc = 0 .AND. .NOT. box_open"
-abrir_b[ 9 ] = "sysfunc = 0 .AND. .NOT. box_open"
-abrir_b[10 ] = "sysfunc = 0 .AND. .NOT. box_open"
-abrir_b[11 ] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_m := {"Database","Indice","Visao","POSTGRESQL",;
+ "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE"}
+abrir_b := array(11)
+abrir_b[1] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[2] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
+abrir_b[3] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[4] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[5] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[6] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[7] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[8] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[9] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[10] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[11] = "sysfunc = 0 .AND. .NOT. box_open"
 
-DECLARE criar_b[ 11 ]
-criar_m:={"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso" ,;
-                 "sem  uso","sem  uso","Sem  uso","Sem  uso","Sem  uso"}
-//criar_m[5]:=ZEXPOREXT   //agora usa geradoc 0 que pergunta o tipo  de exportacao        
+DECLARE criar_b[11]
+criar_m := {"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso",;
+ "sem  uso","sem  uso","Sem  uso","Sem  uso","Sem  uso"}
+//criar_m[5]:=ZEXPOREXT   //agora usa geradoc 0 que pergunta o tipo  de exportacao
 
-criar_b[ 1 ] = "sysfunc = 0"
-FOR X=2 TO 8
-   criar_b[ X ] = "sysfunc = 0 .AND. .NOT. EMPTY(cur_dbf)"
+criar_b[1] = "sysfunc = 0"
+FOR X := 2 TO 8
+   criar_b[X] = "sysfunc = 0 .AND. .NOT. EMPTY(cur_dbf)"
 next x
-FOR X=9 TO 11
+FOR X := 9 TO 11
    criar_b[X] = "sysfunc = 0.AND. EMPTY(cur_dbf)"
 next x
 
-salvar_m:={"Visao","Estrutura"}
-salvar_b:=array(2)
-salvar_b[ 1 ] = "sysfunc = 0 .AND. .NOT. box_open"
-salvar_b[ 2 ] = "sysfunc = 3 .AND. func_sel = 1 .AND. .NOT. box_open"
+salvar_m := {"Visao","Estrutura"}
+salvar_b := array(2)
+salvar_b[1] = "sysfunc = 0 .AND. .NOT. box_open"
+salvar_b[2] = "sysfunc = 3 .AND. func_sel = 1 .AND. .NOT. box_open"
 
 
-editar_m:={"Database","Visao"}
-editar_b:=ARRAY(2)
-editar_b[ 1 ] = "sysfunc = 0 .AND. .NOT. EMPTY(cur_dbf)"
-editar_b[ 2 ] = "sysfunc = 0 .AND. .NOT. EMPTY(dbf[1])"
+editar_m := {"Database","Visao"}
+editar_b := ARRAY(2)
+editar_b[1] = "sysfunc = 0 .AND. .NOT. EMPTY(cur_dbf)"
+editar_b[2] = "sysfunc = 0 .AND. .NOT. EMPTY(dbf[1])"
 
 
-apoio_m:= {"Copia","Anexar","Repor","Fixar","Zerar","Del ALL FOR","Dos","Diret"}
-apoio_b:=array(8)
-afill( apoio_b, "sysfunc = 0 .AND. .NOT. EMPTY(cur_dbf)", 1, 5 )
-apoio_b[ 6 ] = "sysfunc = 0 .AND. .NOT. EMPTY(dbf[1])"
-apoio_b[ 7 ] = "sysfunc = 0"
-apoio_b[ 8 ] = "sysfunc = 0"
+apoio_m := {"Copia","Anexar","Repor","Fixar","Zerar","Del ALL FOR","Dos","Diret"}
+apoio_b := array(8)
+afill(apoio_b,"sysfunc = 0 .AND. .NOT. EMPTY(cur_dbf)",1,5)
+apoio_b[6] = "sysfunc = 0 .AND. .NOT. EMPTY(dbf[1])"
+apoio_b[7] = "sysfunc = 0"
+apoio_b[8] = "sysfunc = 0"
 
 
-mover_m := { "Busca", "Para", "Achar", "Pular" }
-mover_b := array( 4 )
-afill( mover_b, "sysfunc = 5 .AND. .NOT. box_open" )
-mover_b[ 1 ] = mover_b[ 1 ] + " .AND. .NOT. EMPTY(cur_ntx)"
+mover_m := {"Busca","Para","Achar","Pular"}
+mover_b := array(4)
+afill(mover_b,"sysfunc = 5 .AND. .NOT. box_open")
+mover_b[1] = mover_b[1]+" .AND. .NOT. EMPTY(cur_ntx)"
 
 
-setar_m:={"Relacao","Filtro","Campos","Abertura","Apagados","Tipo DBF","EXPORTACAO"}
-setar_b:=ARRAY(7)
-setar_b[ 1 ] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(dbf[2])"
-setar_b[ 2 ] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
-setar_b[ 3 ] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
-setar_b[ 4 ] = "sysfunc = 0"
-setar_b[ 5 ] = "sysfunc = 0"
-setar_b[ 6 ] = "sysfunc = 0"
-setar_b[ 7 ] = "sysfunc = 0"
+setar_m := {"Relacao","Filtro","Campos","Abertura","Apagados","Tipo DBF","EXPORTACAO"}
+setar_b := ARRAY(7)
+setar_b[1] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(dbf[2])"
+setar_b[2] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
+setar_b[3] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
+setar_b[4] = "sysfunc = 0"
+setar_b[5] = "sysfunc = 0"
+setar_b[6] = "sysfunc = 0"
+setar_b[7] = "sysfunc = 0"
 
-util_m := { "Rem Reg Dup", "Exportar", "Sort DBF", ;
-            "FixarTodos","ZeraTodos", "DBEs->DBF","Recriar","CNV Memos","Sinc DBFs","Converter", ;
-            "Format->DBF","sem uso","sem uso","sem uso","sem uso","sem uso","sem uso"}
-util_b := { .T., .T., .T.,.T.,.T.,.T., .T., .T., .T. ,.T.,.T. ,.T.,.T.,.T.,.T.,.T.,.T.}
+util_m := {"Rem Reg Dup","Exportar","Sort DBF",;
+ "FixarTodos","ZeraTodos","DBEs->DBF","Recriar","CNV Memos","Sinc DBFs","Converter",;
+ "Format->DBF","sem uso","sem uso","sem uso","sem uso","sem uso","sem uso"}
+util_b := {.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.}
 //FOR X=5 TO 16
 //     util_b[x]:="EMPTY(cur_dbf)"
 //next x
 
-DECLARE dbf_list[ adir( "*.dbf" ) + 20 ]
-DECLARE ntx_list[ adir( "*" + XEXT() ) + 20 ]
-DECLARE vew_list[ adir( "*.vew" ) + 20 ]
+DECLARE dbf_list[adir("*.dbf")+20]
+DECLARE ntx_list[adir("*"+XEXT())+20]
+DECLARE vew_list[adir("*.vew")+20]
 
-array_dir( "*.dbf", dbf_list )
-array_dir( "*" + XEXT(), ntx_list )
-array_dir( "*.vew", vew_list )
+array_dir("*.dbf",dbf_list)
+array_dir("*"+XEXT(),ntx_list)
+array_dir("*.vew",vew_list)
 
 local_func := 0
 local_sel  := 1
@@ -522,34 +553,34 @@ lkey       := 0
 sysfunc    := 0
 func_sel   := 1
 
-com_line := ltrim( trim( upper( com_line ) ) )
+com_line := ltrim(trim(upper(com_line)))
 
-if .not. empty( com_line )
+if .not. empty(com_line)
    do case
-   case rat( ".", com_line ) > rat( hb_ps(), com_line )
-      if .not. HB_FILEEXISTS( com_line )
+   case rat(".",com_line) > rat(hb_ps(),com_line)
+      if .not. HB_FILEEXISTS(com_line)
          com_line := ""
       endif
-   case file( com_line + ".vew" )
+   case file(com_line+".vew")
       com_line += ".vew"
-   case file( com_line + ".dbf" )
+   case file(com_line+".dbf")
       com_line += ".dbf"
    otherwise
       com_line := ""
    endcase
 
-   if .not. empty( com_line )
-      if rat( ".vew", lower(com_line) ) = len( com_line ) - 3
+   if .not. empty(com_line)
+      if rat(".vew",lower(com_line)) = len(com_line) - 3
          view_file := com_line
-         set_from( .F. )
-         keyboard chr( - 4 ) + chr( 24 ) + chr( 13 )
+         set_from(.F.)
+         keyboard chr(- 4)+chr(24)+chr(13)
       else
-         dbf[ 1 ] = com_line
-         DBUREDE( com_line,, ABERTURA )
-         all_fields( 1, M->field_n1 )
-         keyboard chr( - 4 ) + chr( 13 )
+         dbf[1] = com_line
+         DBUREDE(com_line,,ABERTURA)
+         all_fields(1,M->field_n1)
+         keyboard chr(- 4)+chr(13)
       endif
-      if .not. empty( dbf[ 1 ] )
+      if .not. empty(dbf[1])
          view_err := ""
       endif
    endif
@@ -558,111 +589,111 @@ endif
 do while .T.
    cur_func := M->sysfunc
    do case
-   case M->sysfunc = 2 .and. M->func_sel > 3 //abir outros databases 
-       do case
-         case M->func_sel = 4
-           MENUSQL("PGSQL")
+   case M->sysfunc = 2 .and. M->func_sel > 3  //abir outros databases
+      do case
+      case M->func_sel = 4
+         MENUSQL("PGSQL")
       case M->func_sel = 5
-           MENUSQL("SQLITE")
+         MENUSQL("SQLITE")
       case M->func_sel = 6
-           MENUSQL("MARIADB")
+         MENUSQL("MARIADB")
       case M->func_sel = 7
-           MENUSQL("MYSQL")
+         MENUSQL("MYSQL")
       case M->func_sel = 8
-           MENUSQL("MDB")
+         MENUSQL("MDB")
       case M->func_sel = 9
-          MENUSQL("ACCDB")
+         MENUSQL("ACCDB")
       case M->func_sel = 10
-          MENUSQL("MSSQL")
-       case M->func_sel = 11
-          MENUSQL("ORACLE")         
+         MENUSQL("MSSQL")
+      case M->func_sel = 11
+         MENUSQL("ORACLE")
       endcase
       sysfunc := 0  //setar para nao retornar ficar em loop
-   case M->sysfunc = 9 //utilitarios F9
+   case M->sysfunc = 9  //utilitarios F9
       do case
       case M->func_sel = 1
-          if rsvp( "Limpar Registros Duplicados" ) = "S" 
-             limparegdupdbf()
+         if rsvp("Limpar Registros Duplicados") = "S"
+            limparegdupdbf()
          ENDIF
       case M->func_sel = 2
-          IF MDG("Todos(SIM) Escolher (NAO)")
-              multidocs(0) //passa 0 par a perguntar o formato
-          ELSE    
-             copiardbfpara(1)
-          ENDIF  
+         IF MDG("Todos(SIM) Escolher (NAO)")
+            multidocs(0)  //passa 0 par a perguntar o formato
+         ELSE
+            copiardbfpara(1)
+         ENDIF
 
       case M->func_sel = 3
-           sortdbf()
-           
-     
+         sortdbf()
+
+
       case M->func_sel = 4
-           if rsvp( "Fixar Todos ? (S/N)" ) = "S"
-               FAZERDBF( { || dbupack() }, .t. ,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
-               stat_msg( "Fixar Todos Concluido" )
-           endif
+         if rsvp("Fixar Todos ? (S/N)") = "S"
+            FAZERDBF({|| dbupack()},.t.,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
+            stat_msg("Fixar Todos Concluido")
+         endif
       case M->func_sel = 5
-           if rsvp( "Zerar Todos ? (S/N)" ) = "S"
-              if mdg( "Realmente Zerar Todos ? (S/N)" )
-                 FAZERDBF( { || dbuzap() }, .t. ,{|| copybkdbf(ARQUIVO)},{||memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
-                 stat_msg( "Zerar Todos Concluido" )
-              endif
-           endif
+         if rsvp("Zerar Todos ? (S/N)") = "S"
+            if mdg("Realmente Zerar Todos ? (S/N)")
+               FAZERDBF({|| dbuzap()},.t.,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))})
+               stat_msg("Zerar Todos Concluido")
+            endif
+         endif
       case M->func_sel = 6
-           IF MDG("Criar Inexistentes")
-              DBETODBF("*.DBE")
-           ELSE
-              DBETODBF()
-           ENDIF
-           stat_msg( "DBEs->DBF Concluido" )
+         IF MDG("Criar Inexistentes")
+            DBETODBF("*.DBE")
+         ELSE
+            DBETODBF()
+         ENDIF
+         stat_msg("DBEs->DBF Concluido")
       case M->func_sel = 7
-          if rsvp( "Corrigir Todos ? (S/N)" ) = "S"
-              if mdg( "Corrigir Todos ? (S/N)" )
-                 multidocs(4)
-                 DBETODBF(,,.T.)
-              endif
-           endif
+         if rsvp("Corrigir Todos ? (S/N)") = "S"
+            if mdg("Corrigir Todos ? (S/N)")
+               multidocs(4)
+               DBETODBF(,,.T.)
+            endif
+         endif
       case M->func_sel = 8
-          if rsvp( "Converter memos entre formatos" ) = "S" 
-		     convertmemo() 
-          ENDIF
-      case M->func_sel = 9// podera ser usado para outro menu pois agora a funcao e unica 
-          if rsvp( "Sincronizar Tabelas" ) = "S" 
-		     dBUsincdbf()
-          ENDIF
+         if rsvp("Converter memos entre formatos") = "S"
+            convertmemo()
+         ENDIF
+      case M->func_sel = 9  // podera ser usado para outro menu pois agora a funcao e unica
+         if rsvp("Sincronizar Tabelas") = "S"
+            dBUsincdbf()
+         ENDIF
       case M->func_sel = 10
-          if rsvp( "Converter  entre formatos" ) = "S" 
-		       converttipo() 
-          ENDIF 
-          
-     case M->func_sel = 11
-          copiardbfpara(2) //append formatos para dbf
+         if rsvp("Converter  entre formatos") = "S"
+            converttipo()
+         ENDIF
+
+      case M->func_sel = 11
+         copiardbfpara(2)   //append formatos para dbf
       case M->func_sel = 12
          //    MENUSQL("SQLITE")
       case M->func_sel = 13
-        //     MENUSQL("MARIADB")
+         //     MENUSQL("MARIADB")
       case M->func_sel = 14
-        //     MENUSQL("MYSQL")
+         //     MENUSQL("MYSQL")
       case M->func_sel = 15
-        //     MENUSQL("MDB")
+         //     MENUSQL("MDB")
       case M->func_sel = 16
-        //    MENUSQL("ACCDB")
+         //    MENUSQL("ACCDB")
       case M->func_sel = 17
-        //    MENUSQL("MSSQL")      
-          
-            
+         //    MENUSQL("MSSQL")
+
+
       endcase
       sysfunc := 0
-   case M->sysfunc = 5 //F5 edicao
-      if .not. empty( dbf[ 1 ] )
+   case M->sysfunc = 5  //F5 edicao
+      if .not. empty(dbf[1])
          setup()
-         if empty( M->view_err )
-            cur_fields := "field_n" + substr( "123456", M->cur_area, 1 )
+         if empty(M->view_err)
+            cur_fields := "field_n"+substr("123456",M->cur_area,1)
             do case
-            case M->func_sel = 1 .and. empty( M->cur_dbf )
+            case M->func_sel = 1 .and. empty(M->cur_dbf)
                view_err := "Nao data arquivo na corrente area selecionada"
-            case M->func_sel = 1 .and. empty( &cur_fields[ 1 ] )
+            case M->func_sel = 1 .and. empty(&cur_fields[1])
                view_err := "Nao ativo campo lista na corrente area selecionada"
-            case empty( field_list[ 1 ] )
+            case empty(field_list[1])
                view_err := "Nao ativo campo lista"
             otherwise
                if M->func_sel = 1
@@ -677,24 +708,24 @@ do while .T.
          view_err := "Nao database em uso"
       endif
       sysfunc := 0
-   case M->sysfunc = 3 //f3 criar
+   case M->sysfunc = 3  //f3 criar
       do case
       case M->func_sel = 1
          hi_cur()
          help_code := 4
          modi_stru()
          dehi_cur()
-         if empty( M->cur_dbf )
+         if empty(M->cur_dbf)
             cur_area := 0
          endif
       case M->func_sel = 9
-        // GERADBF( 7 )
+         // GERADBF( 7 )
       case M->func_sel = 10
-        // GERADBF( 8 )
+         // GERADBF( 8 )
       case M->func_sel = 11
-        // GERADBF( 9 )
+         // GERADBF( 9 )
       otherwise
-         if empty( M->cur_dbf )
+         if empty(M->cur_dbf)
             view_err := "Nao h  arquivo de dados na corrente area selecionada"
          else
             do case
@@ -702,37 +733,37 @@ do while .T.
                help_code := 5
                make_ntx()
             case M->func_sel = 3
-                geradoc(0)
-             //  GERADOC( 3 )
+               geradoc(0)
+               //  GERADOC( 3 )
             case M->func_sel = 4
-                    //  GERADOC( 4 )
-                alertx("funcao nao disponivel")
+               //  GERADOC( 4 )
+               alertx("funcao nao disponivel")
             case M->func_sel = 5
-                //  GERADOC( 5 )
-                alertx("funcao nao disponivel")
+               //  GERADOC( 5 )
+               alertx("funcao nao disponivel")
             case M->func_sel = 6
-                //  GERADOC( 6 )
-                alertx("funcao nao disponivel")
+               //  GERADOC( 6 )
+               alertx("funcao nao disponivel")
             case M->func_sel = 7
-                // Dbf2Xml()
-                alertx("funcao nao disponivel")
+               // Dbf2Xml()
+               alertx("funcao nao disponivel")
             case M->func_sel = 8
-                // GERADOC( 7 )
-                alertx("funcao nao disponivel")
+               // GERADOC( 7 )
+               alertx("funcao nao disponivel")
             endcase
          endif
       endcase
       sysfunc := 0
-   case M->sysfunc = 6 .and. M->func_sel < 7 //f6 apoio
-      if empty( M->cur_dbf )
+   case M->sysfunc = 6 .and. M->func_sel < 7  //f6 apoio
+      if empty(M->cur_dbf)
          view_err := "Nao ha arquivo de dados na corrente area selecionada"
          sysfunc  := 0
          loop
       endif
-      if .not. empty( dbf[ 1 ] )
+      if .not. empty(dbf[1])
          setup()
       endif
-      if .not. empty( M->view_err )
+      if .not. empty(M->view_err)
          sysfunc := 0
          loop
       endif
@@ -741,44 +772,44 @@ do while .T.
       case M->func_sel < 4
          capprep()
       case M->func_sel = 4
-         if rsvp( "Fixar " + M->cur_dbf + "? (S/N)" ) = "S"
-            stat_msg( "Fixando " + M->cur_dbf )
+         if rsvp("Fixar "+M->cur_dbf+"? (S/N)") = "S"
+            stat_msg("Fixando "+M->cur_dbf)
             copybkdbf(M->cur_dbf)
-            select( M->cur_area )
+            select (M->cur_area)
             if flock()
                pack
-//               dbreindex()
-               stat_msg( M->cur_dbf + " Fixado" )
+               //               dbreindex()
+               stat_msg(M->cur_dbf+" Fixado")
             else
-               stat_msg( "Esta operacao requer Uso Exclusivo" )
+               stat_msg("Esta operacao requer Uso Exclusivo")
             endif
          endif
 
       case M->func_sel = 5
-         if rsvp( "Zerar " + M->cur_dbf + "? (S/N)" ) = "S"
+         if rsvp("Zerar "+M->cur_dbf+"? (S/N)") = "S"
             copybkdbf(M->cur_dbf)
-            select( M->cur_area )
-            stat_msg( "Zerando " + M->cur_dbf )
+            select (M->cur_area)
+            stat_msg("Zerando "+M->cur_dbf)
             if flock()
                zap
-               stat_msg( M->cur_dbf + " Zerado" )
+               stat_msg(M->cur_dbf+" Zerado")
             else
-               stat_msg( "Esta operacao requer Uso Exclusivo" )
+               stat_msg("Esta operacao requer Uso Exclusivo")
             endif
          endif
       case M->func_sel = 6
-           dbudelfor()
+         dbudelfor()
       endcase
       dehi_cur()
       sysfunc := 0
 
-   case M->sysfunc = 6 .and. ( M->func_sel = 7 .or. M->func_sel = 8 ) //f6 apoio intem 7 e 8
+   case M->sysfunc = 6 .and. (M->func_sel = 7 .or. M->func_sel = 8)   //f6 apoio intem 7 e 8
       LAYOUT()
-      if .not. empty( dbf[ 1 ] )
+      if .not. empty(dbf[1])
          setup()
       endif
-      if .not. empty( M->view_err )
-         error_msg( M->view_err, 24, 7 )
+      if .not. empty(M->view_err)
+         error_msg(M->view_err,24,7)
          view_err := ""
       endif
       run_com   := ""
@@ -787,15 +818,15 @@ do while .T.
       if M->func_sel = 7
          do while .not. q_check()
             LAYOUT()
-            @  2,  0 say replicate( "-", 80 )
-            @ 24,  0 say "DOS -" + chr( 16 ) + " "
-            run_com := enter_rc( M->com_line, 24, 7, 127, "@KS73", M->color1 )
-            if .not. empty( M->run_com ) .and. M->keystroke = 13
+            @  2,0 say replicate("-",80)           
+            @ 24,0 say "DOS -"+chr(16)+" "         
+            run_com := enter_rc(M->com_line,24,7,127,"@KS73",M->color1)
+            if .not. empty(M->run_com) .and. M->keystroke = 13
                com_line := M->run_com
-               @ 24,  0
-			   SetCursor(.t.)
+               @ 24,0
+               SetCursor(.t.)
                hb_run(run_com)
-			   SetCursor(.f.)
+               SetCursor(.f.)
             endif
          enddo
       endif
@@ -803,42 +834,64 @@ do while .T.
          DBUDIR()
       endif
       LAYOUT()
-      DECLARE dbf_list[ adir( "*.dbf" ) + 20 ]
-      DECLARE ntx_list[ adir( "*" + XEXT() ) + 20 ]
-      DECLARE vew_list[ adir( "*.vew" ) + 20 ]
-      array_dir( "*.dbf", dbf_list )
-      array_dir( "*" + XEXT(), ntx_list )
-      array_dir( "*.vew", vew_list )
-      cur_area := 0 
+      DECLARE dbf_list[adir("*.dbf")+20]
+      DECLARE ntx_list[adir("*"+XEXT())+20]
+      DECLARE vew_list[adir("*.vew")+20]
+      array_dir("*.dbf",dbf_list)
+      array_dir("*"+XEXT(),ntx_list)
+      array_dir("*.vew",vew_list)
+      cur_area := 0
       sysfunc  := 0
 
    otherwise
       help_code := 1
       set_view()
       if M->keystroke = 27
-	     Set( _SET_TYPEAHEAD, 0 )
+         Set(_SET_TYPEAHEAD,0)
          dbcloseall()
          __XRestScreen()
-		 SetCursor(.t.)
-		 SetColor( "" )
+         SetCursor(.t.)
+         SetColor("")
          quit
       endif
    endcase
 enddo
-RETU 
+RETU
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function HELP()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 Function HELP()
+
 return .t.
 
 
 /*
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
+*+
+*+
 *+    Function HELP()
+*+
+*+
 *+
 *+    Called from ( dbuutil.prg  )   1 - function menu_key()
 *+
+*+
+*+
 *+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+
 *+
 func HELP( programa, linha, variavel )                   //F1- AJUDA AO USUARIO
 
@@ -931,135 +984,165 @@ retu .T.
 */
 
 
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+*+--------------------------------------------------------------------
+*+
+*+
 *+
 *+    Function DBUDIR()
 *+
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
 *+
 function DBUDIR
 
-local cDIR := space( 80 )
-@ 24, 00 say "Ir para"
-@ 24, 10 get cDIR  pict "@S50"
-if ! READDBU()
+
+local cDIR := space(80)
+@ 24,00 say "Ir para"                    
+@ 24,10 get cDIR      pict "@S50"        
+if !READDBU()
    retu .F.
 endif
-if ! empty( cDIR )
+if !empty(cDIR)
    HB_CWD(cDIR)
 endif
 
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+*+--------------------------------------------------------------------
+*+
+*+
 *+
 *+    Function DBUDELFOR()
 *+
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
 *+
 function DBUDELFOR
-local cDIR := space( 80 )
+
+local cDIR     := space(80)
 local nLASTREC
-@ 24, 00 say "Apagar"
-@ 24, 10 get cDIR  pict "@S50"
+@ 24,00 say "Apagar"                    
+@ 24,10 get cDIR     pict "@S50"        
 if !READDBU()
    retu .F.
 endi
-Cdir:=alltrim(cDIR)
-if !empty( cDIR )
-   if rsvp( "Apagar " + cdir + "? (S/N)" ) = "S"
-      nLASTREC:=LASTREC()
-      zei_fort( nLASTREC,,,0)
-      DBEVAL({|| netrecdel()},{||&cDIR. }, {|| zei_fort(nLASTREC,,,1)})
-      stat_msg( cDIR+ " Apagado" )
+Cdir := alltrim(cDIR)
+if !empty(cDIR)
+   if rsvp("Apagar "+cdir+"? (S/N)") = "S"
+      nLASTREC := LASTREC()
+      zei_fort(nLASTREC,,,0)
+      DBEVAL({|| netrecdel()},{|| &cDIR.},{|| zei_fort(nLASTREC,,,1)})
+      stat_msg(cDIR+" Apagado")
    endif
 endif
 
 
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+*+--------------------------------------------------------------------
+*+
+*+
 *+
 *+    Function DBUREDE()
 *+
-*+    Called from ( dbu.prg      )   1 -
-*+                ( dbucopy.prg  )   1 - function do_copy()
-*+                                   1 - do_append()
-*+                ( dbustru.prg  )   1 - modi_stru()
-*+                                   6 - function do_modstru()
-*+                ( dbuview.prg  )   1 - function do_opendbf()
-*+                                   1 - function clear_dbf()
-*+                                   1 - function do_creavew()
-*+                                   2 - function do_openvew()
 *+
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 *+
-function DBUREDE( cARQ, cIND, lMODO )
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+function DBUREDE(cARQ,cIND,lMODO)
+
 
 local cEXT := XEXT()
-if valtype( lMODO ) # "L"
+if valtype(lMODO) # "L"
    lMODO := .T.
 endif
-if valtype( cARQ ) # "C"
-   ALERTX( "Funcao DBUREDE, Nome do Arquivo nao e Caracter" )
+if valtype(cARQ) # "C"
+   ALERTX("Funcao DBUREDE, Nome do Arquivo nao e Caracter")
    retu .F.
 endif
-if ( ! HB_FILEEXISTS( cARQ ) ) .and. ( ! HB_FILEEXISTS( cARQ + ".dbf" ) )
-   ALERTX( "Arquivo de Dados Nao Encontado" )
+if (!HB_FILEEXISTS(cARQ)) .and. (!HB_FILEEXISTS(cARQ+".dbf"))
+   ALERTX("Arquivo de Dados Nao Encontado")
    retu .F.
 endif
-USOVIA:=RDDNOME(TIPODBF)
+USOVIA := RDDNOME(TIPODBF)
 while .T.
    //    DBUSEAREA(new area,cDRIVE,cFILE,cALIAS,lMODO,lREAD)
 
    //dbusearea( .T., USOVIA, cARQ,, !lMODO )
-     IF lMODO
-          USE (cARQ) EXCLUSIVE NEW VIA USOVIA
-     ELSE
-          USE (cARQ) SHARED    NEW VIA USOVIA
-     ENDIF
+   IF lMODO
+      USE (cARQ) EXCLUSIVE NEW VIA USOVIA
+   ELSE
+      USE (cARQ) SHARED NEW VIA USOVIA
+   ENDIF
    if !neterr()
       exit
    endif
-   KEY := inkey( .5 )
+   KEY := inkey(.5)
    if KEY = K_ESC
       dbclosearea()
       retu .F.
    endif
-   MDS( "Nao Estou Conseguindo Abrir aquivo " + cARQ )
+   MDS("Nao Estou Conseguindo Abrir aquivo "+cARQ)
 enddo
-if valtype( cIND ) = "C"
-   if file( cIND ) .or. HB_FILEEXISTS( cIND + cEXT )
-      ordlistadd( cIND )
+if valtype(cIND) = "C"
+   if file(cIND) .or. HB_FILEEXISTS(cIND+cEXT)
+      ordlistadd(cIND)
       //      DBSETINDEX(cIND)
    else
-      ALERTX( "Arquivo de Indices Nao Encontrado " )
+      ALERTX("Arquivo de Indices Nao Encontrado ")
    endif
 endif
 return .T.
 
 
 
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+*+--------------------------------------------------------------------
+*+
+*+
 *+
 *+    Function READDBU()
 *+
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
 *+
 function READDBU
 
-setcursor( if( readinsert(), 1, 2 ) )
+
+setcursor(if(readinsert(),1,2))
 read
-setcursor( 0 )
+setcursor(0)
 if lastkey() == K_ESC
    retu .F.
 endif
 return .T.
 
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-*+
-*+    Function LNKFUN() funcoes para linkeditar junto
-*+
-*+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-*+
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function LNKFUN()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNCTION LNKFUN()
+
 DECODE()
 ENCODE()
 DESCEND()
@@ -1079,9 +1162,40 @@ HB_MINUTE()
 HB_SEC()
 RETURN .T.
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function errindex()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 function errindex()
+
 return .t.
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function errprinter()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 function errprinter()
+
 return .t.
 
+
+*+ EOF: dbu.prg
+*+

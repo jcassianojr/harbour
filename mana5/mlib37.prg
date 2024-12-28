@@ -1,102 +1,111 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : mlib37.prg
-*+
-*+
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Autor     : Jorge Cassiano
-*+
-*+    Copyright (c) 2010, Jorge Cassiano
-*+
-*+
-*+
-*+    Documentado em 30-Ago-2011 as 10:55 am
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : mlib37.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:58 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 #include "box.ch"
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MARCAR()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func MARCAR(cTITULO)
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MARCAR()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNC MARCAR( cTITULO )
+
+   LOCAL COR   := SetColor()
+   LOCAL aTELA := SaveScreen( 18, 15, 21, 70 )
+
+   SetColor( 'N/W,' + zCOR002 )
+   hb_DispBox( 17, 13, 20, 68, B_DOUBLE, 'W' )
+   IF PCount() > 0
+      @ 17, 14 SAY " " + cTITULO + " "
+   ENDIF
+   @ 18, 15 SAY spac( 48 ) + "100%"
+   SetColor( 'BG/W' )
+   @ 19, 16 SAY repl( '±', 50 )
+   SetColor( COR )
+   RETU aTELA
 
 
-local COR   := setcolor()
-local aTELA := savescreen(18,15,21,70)
-setcolor('N/W,'+zCOR002)
-hb_dispbox(17,13,20,68,B_DOUBLE,'W')
-if pcount() > 0
-   @ 17,14 say " "+cTITULO+" "         
-endif
-@ 18,15 say spac(48)+"100%"         
-setcolor('BG/W')
-@ 19,16 say repl('±',50)         
-setcolor(COR)
-retu aTELA
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MARCAR1()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNC MARCAR1
+
+   LOCAL COR := SetColor()
+   PRIV X
+   PRIV Y
+   PRIV PORC
+
+   SetColor( ZCOR010 )
+   X    := xGRAF / GRAF * 50
+   Y    := xGRAF / GRAF * 100
+   X    := if( X > 50, 50, X )
+   Y    := if( Y > 100, 100, Y )
+   PORC := repl( 'Û', X )
+   SetColor( 'B/W' )
+   @ 19, 16 SAY PORC
+// IF X>2
+// @ 18,16+X-3 SAY SPAC(3)
+// ENDIF
+   IF Y > 99
+      SetColor( 'N/W' )
+      @ 18, 16       SAY spac( 16 + X - 2 - 16 )
+      @ 18, 16 + X - 2 SAY Y                   PICT '999'
+      SetColor( 'B/W' )
+      @ 19, 16 SAY PORC + 'Û'
+   ELSE
+      SetColor( 'N/W' )
+      @ 18, 16       SAY spac( 16 + X - 1 - 16 )
+      @ 18, 16 + X - 1 SAY Y                   PICT '99'
+   ENDIF
+   @ 18, Col() SAY '%'
+   xGRAF++
+   SetColor( COR )
+   RETU .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function MARCAR1()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-func MARCAR1
-
-
-local COR := setcolor()
-priv X
-priv Y
-priv PORC
-setcolor(ZCOR010)
-X    := xGRAF / GRAF * 50
-Y    := xGRAF / GRAF * 100
-X    := if(X > 50,50,X)
-Y    := if(Y > 100,100,Y)
-PORC := repl('Û',X)
-setcolor('B/W')
-@ 19,16 say PORC         
-//IF X>2
-//   @ 18,16+X-3 SAY SPAC(3)
-//ENDIF
-if Y > 99
-   setcolor('N/W')
-   @ 18,16       say spac(16+X - 2 - 16)                   
-   @ 18,16+X - 2 say Y                   pict '999'        
-   setcolor('B/W')
-   @ 19,16 say PORC+'Û'         
-else
-   setcolor('N/W')
-   @ 18,16       say spac(16+X - 1 - 16)                  
-   @ 18,16+X - 1 say Y                   pict '99'        
-endif
-@ 18,col() say '%'         
-xGRAF ++
-setcolor(COR)
-retu .T.
-
+// + EOF: mlib37.prg
+// +

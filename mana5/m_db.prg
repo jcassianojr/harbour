@@ -1,188 +1,238 @@
-*+--------------------------------------------------------------------
-*+
-*+    Programa  : m_db.prg Indexar arquivos
-*+
-*+    Sistema   : MANAEXO
-*+
-*+    Linguagem : Harbour
-*+
-*+    Copyright (c) 2023, Jcassiano
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : m_db.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as  9:57 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-function m_db
 
-para wFILTRO
 
-MDI(" Indexar Arquivos ")
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function m_db()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION m_db
 
-//Variaveis de Trabalho
-lPULAFEC  := .F.
-lPULACEP  := .F.
-lPULACNPJ := .F.
-aARQ      := {}
-aARQD     := {}
+   PARA wFILTRO
 
-if valtype(wFILTRO) # "C"
-   lPULAFEC  := MDG("Pular Arquivos Fechados")
-   lPULACEP  := MDG("Pular Arquivos CEPS")
-   lPULACNPJ := MDG("Pular Arquivos CNPJ/IE")
-   lMESARQ   := MDG("Exibir Mensagem arquivo nao encontrado")
-   FILTRO    := RFILORD(zARQ,.F.)
-else
-   lMESARQ   :=.T.
-   FILTRO := wFILTRO
-endif
+   MDI( " Indexar Arquivos " )
 
-if !useCHK(ZDIRC+"MANARQ",ZDIRC+"MANARQ",.T.)
-   dbcloseall()
-   retu .F.
-endif
-nLASTREC:=LASTREC()
-zei_fort( nLASTREC,,,0)
-set filter to &FILTRO
-dbgotop()
-while !eof()
-   lINCLUI := .T.
-   @ 24,00 say padr(ARQUIVO,8)         
-   if (!empty(arqANO) .and. lPULAFEC) .or. ARQUIVO = "MANARQ" .or. ARQUIVO = "MANARQ1"
-      //Nao Inclui Na Lista Fechados
-      lINCLUI := .F.
+// Variaveis de Trabalho
+   lPULAFEC  := .F.
+   lPULACEP  := .F.
+   lPULACNPJ := .F.
+   aARQ      := {}
+   aARQD     := {}
+
+   IF ValType( wFILTRO ) # "C"
+      lPULAFEC  := MDG( "Pular Arquivos Fechados" )
+      lPULACEP  := MDG( "Pular Arquivos CEPS" )
+      lPULACNPJ := MDG( "Pular Arquivos CNPJ/IE" )
+      lMESARQ   := MDG( "Exibir Mensagem arquivo nao encontrado" )
+      FILTRO    := RFILORD( zARQ, .F. )
+   ELSE
+      lMESARQ := .T.
+      FILTRO  := wFILTRO
    ENDIF
-   if PADRAO = "A" .and. lPULACEP   //E cep e foi solicitado pular
-      lINCLUI := .F.
+
+   IF !useCHK( ZDIRC + "MANARQ", ZDIRC + "MANARQ", .T. )
+      dbCloseAll()
+      RETU .F.
    ENDIF
-   IF lPULACNPJ .AND. (AT("CNPJIE",ARQUIVO) > 0 .OR. AT("BAIXA",ARQUIVO) > 0)
-      lINCLUI := .F.
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   SET FILTER TO &FILTRO
+   dbGoTop()
+   WHILE !Eof()
+      lINCLUI := .T.
+      @ 24, 00 SAY PadR( ARQUIVO, 8 )
+      IF ( !Empty( arqANO ) .AND. lPULAFEC ) .OR. ARQUIVO = "MANARQ" .OR. ARQUIVO = "MANARQ1"
+         // Nao Inclui Na Lista Fechados
+         lINCLUI := .F.
+      ENDIF
+      IF PADRAO = "A" .AND. lPULACEP   // E cep e foi solicitado pular
+         lINCLUI := .F.
+      ENDIF
+      IF lPULACNPJ .AND. ( At( "CNPJIE", ARQUIVO ) > 0 .OR. At( "BAIXA", ARQUIVO ) > 0 )
+         lINCLUI := .F.
+      ENDIF
+      IF lINCLUI
+         AAdd( aARQ, AllTrim( ARQUIVO ) )
+         AAdd( aARQD, { PADRAO, AllTrim( CAMINHO ), if( Empty( DRIVER ), "DBFCDX", DRIVER ) } )
+      ENDIF
+      dbSkip()
+      zei_fort( nLASTREC,,, 1 )
+   ENDDO
+   dbCloseArea()
+
+// LOCALARQ(PADRAO,CAMINHO)
+
+   IF !useCHK( ZDIRC + "MANARQ1", ZDIRC + "MANARQ1", .T. )
+      dbCloseAll()
+      RETU .F.
    ENDIF
-   IF lINCLUI
-      aadd(aARQ,alltrim(ARQUIVO))
-      aadd(aARQD,{PADRAO,alltrim(CAMINHO),if(empty(DRIVER),"DBFCDX",DRIVER)})
-   endif
-   dbskip()
-   zei_fort(nLASTREC,,,1)
-enddo
-dbclosearea()
+   nLASTREC := Len( aARQ )
+   zei_fort( nLASTREC,,, 0 )
+   FOR X := 1 TO Len( aARQ )
+      cARQ := aARQ[ X ]
+      @ 24, 00 SAY PadR( cARQ, 8 )
+      // Carrega o Diret¢rio do Arquivo
+      mDIR := LOCALARQ( aARQD[ X, 1 ], aARQD[ X, 2 ] )
+      // Carrega os Indices
+      aIND := {}
+      dbGoTop()
+      dbSeek( cARQ )
+      WHILE cARQ = AllTrim( ARQUIVO ) .AND. !Eof()
+         AAdd( aIND, { AllTrim( INDICE ), AllTrim( INDEXP ) } )
+         dbSkip()
+      ENDDO
+      // Apagando Indices
+      IF aARQD[ X, 3 ] = "DBFCDX"
+         IF File( mDIR + cARQ + ".CDX" )
+            FErase( mDIR + cARQ + ".CDX" )
+         ENDIF
+      ELSE
+         FOR W := 1 TO Len( aIND )
+            IF File( mDIR + aIND[ W, 1 ] + ".NTX" )
+               FErase( mDIR + aIND[ W, 1 ] + ".NTX" )
+            ENDIF
+         NEXT W
+      ENDIF
+      IF USECHK( mDIR + cARQ,, .F., aARQD[ X, 3 ], .T., 300, lMESARQ )   // USECHK(cARQ,cIND,lSHA,cDRIVER,lNEW,nTIME,lMES)
+         PACK
+         nLASTREC := LastRec()
+         zei_fort( nLASTREC,,, 0 )
+         FOR W := 1 TO Len( aIND )
+            @ 24, 10 SAY PadR( aIND[ W, 1 ], 8 )
+            IF aARQD[ X, 3 ] = "DBFCDX"
+               mDIRIND := mDIR + cARQ
+               cTAG    := aIND[ W, 1 ]
+            ELSE
+               mDIRIND := mDIR + aIND[ W, 1 ]
+            ENDIF
+            mINDEXP := aIND[ W, 2 ]
+            IF Left( mINDEXP, 1 ) # "<"
+               IF aARQD[ X, 3 ] = "DBFCDX"
+                  INDEX ON &mINDEXP TAG &cTAG. EVAL ZEI_FORT( nLASTREC,,, 1 )
+               ELSE
+                  INDEX ON &mINDEXP TO &mDIRIND EVAL ZEI_FORT( nLASTREC,,, 1 )
+               ENDIF
+            ELSE
+               mINDEXP := SubStr( mINDEXP, 2 )
+               IF aARQD[ X, 3 ] = "DBFCDX"
+                  INDEX ON &mINDEXP TAG &cTAG. DESCEN EVAL ZEI_FORT( nLASTREC,,, 1 )
+               ELSE
+                  INDEX ON &mINDEXP TO &mDIRIND DESCEN EVAL ZEI_FORT( nLASTREC,,, 1 )
+               ENDIF
+            ENDIF
+         NEXT W
+         dbCloseArea()
+      ENDIF
+      dbSelectAr( "MANARQ1" )
+      zei_fort( nLASTREC,,, 1 )
+   NEXT X
 
-//LOCALARQ(PADRAO,CAMINHO)
+   IF !useCHK( ZDIRC + "MANARQ", ZDIRC + "MANARQ", .T. )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+   dbSelectAr( "MANARQ1" )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   dbGoTop()
+   WHILE !Eof()
+      lTEM     := .T.
+      cARQUIVO := AllTrim( ARQUIVO )
+      dbSelectAr( "manarq" )
+      dbGoTop()
+      IF !dbSeek( cARQUIVO )
+         ltem := .F.
+      ENDIF
+      dbSelectAr( "MANARQ1" )
+      WHILE cARQUIVO = AllTrim( ARQUIVO ) .AND. !Eof()
+         IF !ltem
+            netrecdel()
+         ENDIF
+         dbSkip()
+         zei_fort( nLASTREC,,, 1 )
+      ENDDO
+   ENDDO
 
-if !useCHK(ZDIRC+"MANARQ1",ZDIRC+"MANARQ1",.T.)
-   dbcloseall()
-   retu .F.
-endif
-nLASTREC:=len(aARQ)
-zei_fort( nLASTREC,,,0)
-for X := 1 to len(aARQ)
-   cARQ := aARQ[X]
-   @ 24,00 say padr(cARQ,8)         
-   //Carrega o Diret¢rio do Arquivo
-   mDIR := LOCALARQ(aARQD[X,1],aARQD[X,2])
-   //Carrega os Indices
-   aIND := {}
-   dbgotop()
-   dbseek(cARQ)
-   while cARQ = alltrim(ARQUIVO) .and. !eof()
-      aadd(aIND,{alltrim(INDICE),alltrim(INDEXP)})
-      dbskip()
-   enddo
-   //Apagando Indices
-   if aARQD[X,3] = "DBFCDX"
-      if file(mDIR+cARQ+".CDX")
-         ferase(mDIR+cARQ+".CDX")
-      endif
-   else
-      for W := 1 to len(aIND)
-         if file(mDIR+aIND[W,1]+".NTX")
-            ferase(mDIR+aIND[W,1]+".NTX")
-         endif
-      next W
-   endif
-   if USECHK(mDIR+cARQ,,.F.,aARQD[X,3],.T.,300,lMESARQ)    // USECHK(cARQ,cIND,lSHA,cDRIVER,lNEW,nTIME,lMES)
-      PACK
-      nLASTREC := LASTREC()
-      zei_fort(nLASTREC,,,0)
-      for W := 1 to len(aIND)
-         @ 24,10 say padr(aIND[W,1],8)         
-         if aARQD[X,3] = "DBFCDX"
-            mDIRIND := mDIR+cARQ
-            cTAG    := aIND[W,1]
-         else
-            mDIRIND := mDIR+aIND[W,1]
-         endif
-         mINDEXP := aIND[W,2]
-         if left(mINDEXP,1) # "<"
-            if aARQD[X,3] = "DBFCDX"
-               index on &mINDEXP tag &cTAG. EVAL ZEI_FORT(nLASTREC,,,1)
-            else
-               index on &mINDEXP to &mDIRIND EVAL ZEI_FORT(nLASTREC,,,1)
-            endif
-         else
-            mINDEXP := substr(mINDEXP,2)
-            if aARQD[X,3] = "DBFCDX"
-               index on &mINDEXP tag &cTAG. DESCEN EVAL ZEI_FORT(nLASTREC,,,1)
-            else
-               index on &mINDEXP to &mDIRIND DESCEN EVAL ZEI_FORT(nLASTREC,,,1)
-            endif
-         endif
-      next W
-      dbclosearea()
-   endif
-   dbselectar("MANARQ1")
-   zei_fort(nLASTREC,,,1)
-next X
-
-if !useCHK(ZDIRC+"MANARQ",ZDIRC+"MANARQ",.T.)
-   dbcloseall()
-   retu .F.
-endif
-dbselectar("MANARQ1")
-nLASTREC:=LASTREC()
-zei_fort( nLASTREC,,,0)
-dbgotop()
-while ! eof()
-    lTEM:=.T.
-    cARQUIVO:=ALLTRIm(ARQUIVO)
-    dbselectar("manarq")
-    dbgotop()
-    if ! dbseek(cARQUIVO)
-       ltem:= .f.
-    endif
-    dbselectar("MANARQ1")
-    while cARQUIVO =ALLTRIm(ARQUIVO) .AND. ! EOF()
-        if ! ltem
-           netrecdel()
-        endif
-        dbskip()
-        zei_fort(nLASTREC,,,1)
-    enddo
-enddo
-
-dbcloseall()
-FIXAR("MANARQ1")
+   dbCloseAll()
+   FIXAR( "MANARQ1" )
 
 
 
-*+--------------------------------------------------------------------
-*+
-*+    Function MDT()
-*+
-*+--------------------------------------------------------------------
-*+
-function MDT(cMSG)  //EXIBE MENSAGEM POR UM TEMPO
-hb_Alert(cMSG, , , 1 ) 
-return .t.
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MDT()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNCTION MDT( cMSG )  // EXIBE MENSAGEM POR UM TEMPO
+
+   hb_Alert( cMSG,,, 1 )
+
+   RETURN .T.
 
 
-*+--------------------------------------------------------------------
-*+
-*+    Function MD()
-*+
-*+--------------------------------------------------------------------
-*+
-function MD   //TELA PARA AS MENSAGENS
-@ MAXROW(),00
-return .T.
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function MD()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION MD   // TELA PARA AS MENSAGENS
+
+   @ MaxRow(), 00
+
+   RETURN .T.
 
 
+
+// + EOF: m_db.prg
+// +

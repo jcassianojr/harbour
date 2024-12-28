@@ -1,32 +1,32 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_27.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:32 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_27.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:32 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-CABE2('FOPTO_27 - Marcar um dia com um c¢digo')
+CABE2( 'FOPTO_27 - Marcar um dia com um c¢digo' )
 dINI := zdataini
 dFIM := zdatafim
 mCOD := "  "
@@ -37,54 +37,55 @@ mEXT := " "
 mSOD := "  "
 mALM := " "
 mZER := "N"
-@ 18,00 say 'Digite o Periodo para marca‡„o'                                           
-@ 19,00 say 'Digite o C¢digo/Sub para marca‡„o'                                        
-@ 19,50 say 'Zerar'                                                                    
-@ 20,00 say 'Redu‡ao Horario  SN'                                                      
-@ 21,00 say 'Banco de Horas   SNF'                                                     
-@ 22,00 say 'Folga Indicada   SNV'                                                     
-@ 23,00 say 'Hora Extra       SNVTZ'                                                   
-@ 24,00 say 'Almoco           ABCDESN'                                                 
-@ 18,40 get dINI                                                                       
-@ 18,50 get dFIM                                                                       
-@ 19,40 get mCOD                                                                       
-@ 19,43 get mSOD                                                                       
-@ 19,55 get mZER                                pict "!" valid mZER $ "SN "            
-@ 20,40 get mRED                                pict "!" valid mRED $ "SN "            
-@ 21,40 get mBCO                                pict "!" valid mBCO $ "SNF "           
-@ 22,40 get mFOL                                pict "!" valid mFOL $ "SNVM "          
-@ 23,40 get mEXT                                pict "!" valid mEXT $ "SNVTZ "         
-@ 24,40 get mALM                                pict "!" valid mALM $ "ABCDESN "       
-if !READCUR()
-   retu .F.
-endif
+@ 18, 00 SAY 'Digite o Periodo para marca‡„o'
+@ 19, 00 SAY 'Digite o C¢digo/Sub para marca‡„o'
+@ 19, 50 SAY 'Zerar'
+@ 20, 00 SAY 'Redu‡ao Horario  SN'
+@ 21, 00 SAY 'Banco de Horas   SNF'
+@ 22, 00 SAY 'Folga Indicada   SNV'
+@ 23, 00 SAY 'Hora Extra       SNVTZ'
+@ 24, 00 SAY 'Almoco           ABCDESN'
+@ 18, 40 GET dINI
+@ 18, 50 GET dFIM
+@ 19, 40 GET mCOD
+@ 19, 43 GET mSOD
+@ 19, 55 GET mZER                                PICT "!" VALID mZER $ "SN "
+@ 20, 40 GET mRED                                PICT "!" VALID mRED $ "SN "
+@ 21, 40 GET mBCO                                PICT "!" VALID mBCO $ "SNF "
+@ 22, 40 GET mFOL                                PICT "!" VALID mFOL $ "SNVM "
+@ 23, 40 GET mEXT                                PICT "!" VALID mEXT $ "SNVTZ "
+@ 24, 40 GET mALM                                PICT "!" VALID mALM $ "ABCDESN "
+IF !READCUR()
+RETU .F.
+ENDIF
 
-cPN := "PN"+ANOMESW
+cPN := "PN" + ANOMESW
 
-MDS('Aguarde Fazendo as substitui‡”es')
+MDS( 'Aguarde Fazendo as substitui‡”es' )
 
-if !NETUSE(PES)
-   retu
-endif
-FILTRO := FILTRO("EMPTY(DEMITIDO)")
-set filter to &FILTRO
-if !NETUSE(cPN)
-   DBCLOSEALL()
-   retu
-endif
+IF !NETUSE( PES )
+RETU
+ENDIF
+FILTRO := FILTRO( "EMPTY(DEMITIDO)" )
+SET FILTER TO &FILTRO
+IF !NETUSE( cPN )
+dbCloseAll()
+RETU
+ENDIF
 
-dbselectar(PES)
-dbgotop()
-while !eof()
-   PETELA(8)
-   mNUMERO := NUMERO
-   fopto2h(if(mZER = "S",.T.,.F.))
-   dbselectar(PES)
-   dbskip()
-enddo
-dbcloseall()
-return .T.
+dbSelectAr( PES )
+dbGoTop()
+WHILE !Eof()
+PETELA( 8 )
+mNUMERO := NUMERO
+fopto2h( if( mZER = "S", .T., .F. ) )
+dbSelectAr( PES )
+dbSkip()
+ENDDO
+dbCloseAll()
+
+   RETURN .T.
 
 
-*+ EOF: fopto_27.prg
-*+
+// + EOF: fopto_27.prg
+// +

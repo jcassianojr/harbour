@@ -1,152 +1,152 @@
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Programa  : fopto_2g.prg
-*+
-*+
-*+
-*+     Sistema:
-*+
-*+     Linguagem: Harbour
-*+
-*+     Autor: jcassiano
-*+
-*+     Copyright (c) 2024,  jcassiano
-*+
-*+     
-*+
-*+
-*+
-*+    Documentado em 27-Dez-2024 as  9:32 pm
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : fopto_2g.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 27-Dez-2024 as  9:32 pm
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
 
 
-CABE2("FOPTO_2G - Importar Ocorrencias")
+CABE2( "FOPTO_2G - Importar Ocorrencias" )
 
-cPO := "PO"+ANOMESW   //ANOWORK + strzero( MES, 2 )
-CHECKCRI(cPO,"FO_POCO","STR(NUMERO,8)+DTOS(OCOINI)")
+cPO := "PO" + ANOMESW   // ANOWORK + strzero( MES, 2 )
+CHECKCRI( cPO, "FO_POCO", "STR(NUMERO,8)+DTOS(OCOINI)" )
 
-//cARQ := space( 40 )
-//MDS( "Digite o Nome do Arquivo" )
-//@ 24, 30 get cARQ
-//if !READCUR()
-//   retu .F.
-//endif
-//cARQ := alltrim( cARQ )
-cARQ := win_GetOpenFileName(,"Arquivos de Ocorrencias",HB_CWD(),"Arquivos de Ocorrencias","*.*",1)
+// cARQ := space( 40 )
+// MDS( "Digite o Nome do Arquivo" )
+// @ 24, 30 get cARQ
+// if !READCUR()
+// retu .F.
+// endif
+// cARQ := alltrim( cARQ )
+cARQ := win_GetOpenFileName(, "Arquivos de Ocorrencias", hb_cwd(), "Arquivos de Ocorrencias", "*.*", 1 )
 
-if !HB_FILEEXISTS(cARQ)
-   ALERTX("Nao encontrei Arquivo: "+cARQ)
-   retu .F.
-endif
-nHANDLE := hb_fopen(cARQ)
-if nHANDLE <= 0
-   ALERTX("Nao Consegui abrir o Arquivo: "+cARQ)
-   retu .F.
-endif
-lCONF  := MDG("Conferir funcionario a funcionario")
-lOCOR  := MDG("Gravar em SIM=ocorrencias NAO=Ponto")
+IF !hb_FileExists( cARQ )
+ALERTX( "Nao encontrei Arquivo: " + cARQ )
+RETU .F.
+ENDIF
+nHANDLE := hb_fopen( cARQ )
+IF nHANDLE <= 0
+ALERTX( "Nao Consegui abrir o Arquivo: " + cARQ )
+RETU .F.
+ENDIF
+lCONF  := MDG( "Conferir funcionario a funcionario" )
+lOCOR  := MDG( "Gravar em SIM=ocorrencias NAO=Ponto" )
 aNUM   := {}
 aINI   := {}
 aFIM   := {}
 aCOD   := {}
-LINHA1 := FREADLINE(nHANDLE)
-LINHA  := alltrim(LINHA1)
-while .T.
-   if !empty(LINHA)
-      dINI := substr(LINHA,9,6)
-      tDIA := substr(dINI,1,2)
-      tMES := substr(dINI,3,2)
-      tANO := substr(dINI,5,2)
-      dINI := ctod(tDIA+"/"+tMES+"/"+tANO)
-      dFIM := substr(LINHA,15,6)
-      tDIA := substr(dFIM,1,2)
-      tMES := substr(dFIM,3,2)
-      tANO := substr(dFIM,5,2)
-      dFIM := ctod(tDIA+"/"+tMES+"/"+tANO)
-      aadd(aNUM,val(left(LINHA,8)))
-      aadd(aINI,dINI)
-      aadd(aFIM,dFIM)
-      aadd(aCOD,if(len(LINHA) = 22,right(LINHA,2),"  "))
-   endif
-   LINHA := alltrim(FREADLINE(nHANDLE))
-   if LINHA = LINHA1
-      exit
-   endif
-enddo
-fclose(nHANDLE)
+LINHA1 := FREADLINE( nHANDLE )
+LINHA  := AllTrim( LINHA1 )
+WHILE .T.
+IF !Empty( LINHA )
+dINI := SubStr( LINHA, 9, 6 )
+tDIA := SubStr( dINI, 1, 2 )
+tMES := SubStr( dINI, 3, 2 )
+tANO := SubStr( dINI, 5, 2 )
+dINI := CToD( tDIA + "/" + tMES + "/" + tANO )
+dFIM := SubStr( LINHA, 15, 6 )
+tDIA := SubStr( dFIM, 1, 2 )
+tMES := SubStr( dFIM, 3, 2 )
+tANO := SubStr( dFIM, 5, 2 )
+dFIM := CToD( tDIA + "/" + tMES + "/" + tANO )
+AAdd( aNUM, Val( Left( LINHA, 8 ) ) )
+AAdd( aINI, dINI )
+AAdd( aFIM, dFIM )
+AAdd( aCOD, if( Len( LINHA ) = 22, Right( LINHA, 2 ), "  " ) )
+ENDIF
+LINHA := AllTrim( FREADLINE( nHANDLE ) )
+IF LINHA = LINHA1
+EXIT
+ENDIF
+ENDDO
+FClose( nHANDLE )
 
-cPN := "PN"+ANOMESW   //ANOWORK + strzero( MES, 2 )
-CRIARVARS(PES)
+cPN := "PN" + ANOMESW   // ANOWORK + strzero( MES, 2 )
+CRIARVARS( PES )
 
-for W := 1 to len(aNUM)
-   mNUMERO := aNUM[W]
-   dINI    := aINI[W]
-   dFIM    := aFIM[W]
-   dOCO    := aCOD[W]
-   if IGUALVARS(PES,PESIND,mNUMERO)
-      IF lCONF
-         @ 05,00 say mNUMERO                                  
-         @ 05,10 say mNOME                                    
-         @ 06,00 say "Data inicial"                           
-         @ 06,20 say "Data Final"                             
-         @ 06,40 say "Codigo"                                 
-         @ 07,00 get dINI                                     
-         @ 07,20 get dFIM                                     
-         @ 07,40 get dOCO           valid !empty(dOCO)        
-         READCUR()
-      ENDIF
-      if !empty(dOCO)
-         if !lOCOR  //se nao for ocorrencia gravar ponto
-            if NETUSE(cPN)  //AREDE( cPN, cPN, 1 )
-               for J := dINI to dFIM
-                  dbgotop()
-                  if dbseek(str(mNUMERO,8)+dtos(J))
-                     netreclock()
-                     field->COD := dOCO
-                     dbunlock()
-                  endif
-               next
-               dbclosearea()
-            endif
-         else
-            if NETUSE(cPO)  //AREDE( cPO, cPO, 1 )
-               dbgotop()
-               if !dbseek(str(mNUMERO,8)+dtos(dINI))
-                  netrecapp()
-                  field->NUMERO := mNUMERO
-                  field->OCOINI := dINI
-               else
-                  netreclock()
-               endif
-               field->OCOFIM := dFIM
-               field->OCOCOD := dOCO
-               dbunlock()
-            endif
-            dbclosearea()
-         endif
-      endif
-   else
-      IF lCONF
-         ALERTX("Funcion rio nao Cadastrado: "+str(mNUMERO))
-      ENDIF
-   endif
-next W
+FOR W := 1 TO Len( aNUM )
+mNUMERO := aNUM[ W ]
+dINI    := aINI[ W ]
+dFIM    := aFIM[ W ]
+dOCO    := aCOD[ W ]
+IF IGUALVARS( PES, PESIND, mNUMERO )
+IF lCONF
+@ 05, 00 SAY mNUMERO
+@ 05, 10 SAY mNOME
+@ 06, 00 SAY "Data inicial"
+@ 06, 20 SAY "Data Final"
+@ 06, 40 SAY "Codigo"
+@ 07, 00 GET dINI
+@ 07, 20 GET dFIM
+@ 07, 40 GET dOCO           VALID !Empty( dOCO )
+READCUR()
+ENDIF
+IF !Empty( dOCO )
+IF !lOCOR  // se nao for ocorrencia gravar ponto
+IF NETUSE( cPN )  // AREDE( cPN, cPN, 1 )
+FOR J := dINI TO dFIM
+dbGoTop()
+IF dbSeek( Str( mNUMERO, 8 ) + DToS( J ) )
+netreclock()
+field->COD := dOCO
+dbUnlock()
+ENDIF
+NEXT
+dbCloseArea()
+ENDIF
+ELSE
+IF NETUSE( cPO )  // AREDE( cPO, cPO, 1 )
+dbGoTop()
+IF !dbSeek( Str( mNUMERO, 8 ) + DToS( dINI ) )
+netrecapp()
+field->NUMERO := mNUMERO
+field->OCOINI := dINI
+ELSE
+netreclock()
+ENDIF
+field->OCOFIM := dFIM
+field->OCOCOD := dOCO
+dbUnlock()
+ENDIF
+dbCloseArea()
+ENDIF
+ENDIF
+ELSE
+IF lCONF
+ALERTX( "Funcion rio nao Cadastrado: " + Str( mNUMERO ) )
+ENDIF
+ENDIF
+NEXT W
 
 IF lCONF
-   if MDG("Deseja imprimir arquivo Importado")
-      IMPARQ(cARQ)
-   endif
-   //FOPTO_2H(.T.)
-else
-   //FOPTO_2H(.F.)
-endif
+IF MDG( "Deseja imprimir arquivo Importado" )
+IMPARQ( cARQ )
+ENDIF
+// FOPTO_2H(.T.)
+ELSE
+// FOPTO_2H(.F.)
+ENDIF
 
 
-*+ EOF: fopto_2g.prg
-*+
+// + EOF: fopto_2g.prg
+// +

@@ -1,348 +1,363 @@
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Source Module => C:\DEVELOP\CLIPPER\DBU\DBUSTRU.PRG
-*+
-*+    Functions:  modi_stru()
-*+               Function stru_row()
-*+               Function stru_item()
-*+               Function no_append()
-*+               Function stru_ck()
-*+               Function field_check()
-*+               Function stru_title()
-*+               Function do_modstru()
-*+
-*+    Reformatted by Click! 2.03 on Jun-27-2003 at  6:24 pm
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    modi_stru()
-*+
-*+    Called from ( dbu.prg      )   1 -
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-
-#INCLUDE "BOX.CH"
-function modi_stru
-
-local saveColor
-private filename
-private fill_row
-private cur_row
-private rec1
-private m_item
-private i
-private n
-private f_name
-private f_type
-private f_len
-private f_dec
-private prev_rec
-private field_id
-private stru_ok
-private is_insert
-private is_append
-private altered
-private type_n
-private empty_row
-private not_empty
-private old_help
-private chg_name
-private len_temp
-private stru_name
-private wstru_buff
-private temparq
-
-
-old_help  := help_code
-saveColor := setcolor( M->color7 )
-
-wstru_buff := savescreen( 8, 20, 23, 59 )
-
-DECLARE ffield[ 4 ]
-DECLARE field_col[ 4 ]
-DECLARE data_type[ 23 ]
-DECLARE l_usr[ 23 ]
-
-
-
-ffield[ 1 ] = "field_name"
-ffield[ 2 ] = "field_type"
-ffield[ 3 ] = "field_len"
-ffield[ 4 ] = "field_dec"
-
-field_col[ 1 ] = 22
-field_col[ 2 ] = 35
-field_col[ 3 ] = 48
-field_col[ 4 ] = 55
-
-
-
-//define HB_FT_NONE            0
-data_type[  1 ] = "Caracter "  //HB_FT_STRING           1      "C"  //
-data_type[  2 ] = "Numerico "  //HB_FT_LONG             4      "N"   //
-data_type[  3 ] = "Data     "  //HB_FT_DATE             3      "D"   //
-data_type[  4 ] = "Logico   "  //HB_FT_LOGICAL          2      "L"  //
-data_type[  5 ] = "Memoria  "  //HB_FT_MEMO            16      "M"  //
-data_type[  6 ] = "BLOB     "  //HB_FT_BLOB            19      "W" 
-data_type[  7 ] = "Image    "  //HB_FT_IMAGE           18      "P" 
-data_type[  8 ] = "OLE      "  //HB_FT_OLE             20      "G" 
-data_type[  9 ] = "VarLength"  //HB_FT_VARLENGTH       15      "Q" 
-data_type[ 10 ] = "Any      "  //HB_FT_ANY             17      "V"
-data_type[ 11 ] = "Float    "  //HB_FT_FLOAT            5      "F" 
-data_type[ 12 ] = "Double   "  //8 
-data_type[ 13 ] = "Double   "  //B  HB_FT_DOUBLE        7      "B" 
-data_type[ 14 ] = "CurDouble"  //HB_FT_CURDOUBLE       14      "Z"  //
-data_type[ 15 ] = "Currency "  //HB_FT_CURRENCY        13      "Y"   //
-data_type[ 16 ] = "Integer  "  //HB_FT_INTEGER  VV      6      "I" 
-data_type[ 17 ] = "Integer  "  //2 INT2
-data_type[ 18 ] = "Integer  "  //4  INT4
-data_type[ 19 ] = "Autoinc  "  //HB_FT_AUTOINC         12      "+" 
-data_type[ 20 ] = "Modtime  "  //HB_FT_MODTIME         10      "=" 
-data_type[ 21 ] = "Rowver   "  //HB_FT_ROWVER          11      "^"
-data_type[ 22 ] = "Timestamp"  //HB_FT_TIMESTAMP        9      "@" 
-data_type[ 23 ] = "Time/stmp"  //HB_FT_TIME             8      "T" 
-
-
-l_usr[1] = 3			&& C character - variable len
-l_usr[2] = 4			&& N numeric - variable len and dec
-l_usr[3] = 3			&& D Date - fixed len - 3, 4 or 8
-l_usr[4] = 2			&& L logical - fixed len - 1
-l_usr[5] = 3			&& M memo - fixed len - 10 or 4
-l_usr[6] = 3			&& "W" - fixed len - 10 or 4
-l_usr[7] = 3			&& "P" - fixed len - 10 or 4
-l_usr[8] = 3			&& "G" - fixed len - 10 or 4
-l_usr[9] = 3			&& "Q" - variable len
-l_usr[10] = 3			&& "V" len 4 or 6 or above dec 0
-l_usr[11] = 4			&& "F" like "N"
-l_usr[12] = 4			&& "8" len 8 
-l_usr[13] = 4			&& "B" len 8 
-l_usr[14] = 4			&& "Z" len 8 
-l_usr[15] = 2			&& "Y" len 8, dec 4
-l_usr[16] = 4			&& "I" len 1-4 or 8, default 4
-l_usr[17] = 2			&& "2" len 2 dec 0
-l_usr[18] = 2			&& "4" len 4 dec 0
-l_usr[19] = 2			&& "+" len 4 dec 0
-l_usr[20] = 2			&& "=" len 8 dec 0
-l_usr[21] = 2			&& "^" len 8 dec 0
-l_usr[22] = 2			&& "@" len 8 dec 0
-l_usr[23] = 3			&& "T" len 4 or 8 dec 0
-
-
-
-type_n    := 1
-altered   := .F.
-chg_name  := .T.
-prev_rec  := 0
-n         := 1
-i         := 0
-cur_row   := 13
-is_insert := .F.
-keystroke := 999
-filename  := ""
-
-empty_row := "           |           |       |    "
-not_empty := "           | Caracter  |    10 |    "
-
-if .not. empty( M->cur_dbf )
-
-   stat_msg( "Lendo Estrutura do Arquivo" )
-   stru_name := M->cur_dbf
-   temparq:=trocaext(stru_name, "_stru.dbf" )
-   
-   select( M->cur_area )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Programa  : dbustru.prg
+// +
+// +
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:07 am
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+
+
+
+#include "BOX.CH"
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function modi_stru()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION modi_stru
+
+   LOCAL saveColor
+   PRIVATE filename
+   PRIVATE fill_row
+   PRIVATE cur_row
+   PRIVATE rec1
+   PRIVATE m_item
+   PRIVATE i
+   PRIVATE n
+   PRIVATE f_name
+   PRIVATE f_type
+   PRIVATE f_len
+   PRIVATE f_dec
+   PRIVATE prev_rec
+   PRIVATE field_id
+   PRIVATE stru_ok
+   PRIVATE is_insert
+   PRIVATE is_append
+   PRIVATE altered
+   PRIVATE type_n
+   PRIVATE empty_row
+   PRIVATE not_empty
+   PRIVATE old_help
+   PRIVATE chg_name
+   PRIVATE len_temp
+   PRIVATE stru_name
+   PRIVATE wstru_buff
+   PRIVATE temparq
+
+   old_help  := help_code
+   saveColor := SetColor( M->color7 )
+
+   wstru_buff := SaveScreen( 8, 20, 23, 59 )
+
+   DECLARE ffield[ 4 ]
+   DECLARE field_col[ 4 ]
+   DECLARE data_type[ 23 ]
+   DECLARE l_usr[ 23 ]
+
+
+
+   ffield[ 1 ] = "field_name"
+   ffield[ 2 ] = "field_type"
+   ffield[ 3 ] = "field_len"
+   ffield[ 4 ] = "field_dec"
+
+   field_col[ 1 ] = 22
+   field_col[ 2 ] = 35
+   field_col[ 3 ] = 48
+   field_col[ 4 ] = 55
+
+
+
+// define HB_FT_NONE            0
+   data_type[ 1 ] = "Caracter "  // HB_FT_STRING           1      "C"  //
+   data_type[ 2 ] = "Numerico "  // HB_FT_LONG             4      "N"   //
+   data_type[ 3 ] = "Data     "  // HB_FT_DATE             3      "D"   //
+   data_type[ 4 ] = "Logico   "  // HB_FT_LOGICAL          2      "L"  //
+   data_type[ 5 ] = "Memoria  "  // HB_FT_MEMO            16      "M"  //
+   data_type[ 6 ] = "BLOB     "  // HB_FT_BLOB            19      "W"
+   data_type[ 7 ] = "Image    "  // HB_FT_IMAGE           18      "P"
+   data_type[ 8 ] = "OLE      "  // HB_FT_OLE             20      "G"
+   data_type[ 9 ] = "VarLength"  // HB_FT_VARLENGTH       15      "Q"
+   data_type[ 10 ] = "Any      "   // HB_FT_ANY             17      "V"
+   data_type[ 11 ] = "Float    "   // HB_FT_FLOAT            5      "F"
+   data_type[ 12 ] = "Double   "   // 8
+   data_type[ 13 ] = "Double   "   // B  HB_FT_DOUBLE        7      "B"
+   data_type[ 14 ] = "CurDouble"   // HB_FT_CURDOUBLE       14      "Z"  //
+   data_type[ 15 ] = "Currency "   // HB_FT_CURRENCY        13      "Y"   //
+   data_type[ 16 ] = "Integer  "   // HB_FT_INTEGER  VV      6      "I"
+   data_type[ 17 ] = "Integer  "   // 2 INT2
+   data_type[ 18 ] = "Integer  "   // 4  INT4
+   data_type[ 19 ] = "Autoinc  "   // HB_FT_AUTOINC         12      "+"
+   data_type[ 20 ] = "Modtime  "   // HB_FT_MODTIME         10      "="
+   data_type[ 21 ] = "Rowver   "   // HB_FT_ROWVER          11      "^"
+   data_type[ 22 ] = "Timestamp"   // HB_FT_TIMESTAMP        9      "@"
+   data_type[ 23 ] = "Time/stmp"   // HB_FT_TIME             8      "T"
+
+
+   l_usr[ 1 ] = 3  // C character - variable len
+   l_usr[ 2 ] = 4  // N numeric - variable len and dec
+   l_usr[ 3 ] = 3  // D Date - fixed len - 3, 4 or 8
+   l_usr[ 4 ] = 2  // L logical - fixed len - 1
+   l_usr[ 5 ] = 3  // M memo - fixed len - 10 or 4
+   l_usr[ 6 ] = 3  // "W" - fixed len - 10 or 4
+   l_usr[ 7 ] = 3  // "P" - fixed len - 10 or 4
+   l_usr[ 8 ] = 3  // "G" - fixed len - 10 or 4
+   l_usr[ 9 ] = 3  // "Q" - variable len
+   l_usr[ 10 ] = 3   // "V" len 4 or 6 or above dec 0
+   l_usr[ 11 ] = 4   // "F" like "N"
+   l_usr[ 12 ] = 4   // "8" len 8
+   l_usr[ 13 ] = 4   // "B" len 8
+   l_usr[ 14 ] = 4   // "Z" len 8
+   l_usr[ 15 ] = 2   // "Y" len 8, dec 4
+   l_usr[ 16 ] = 4   // "I" len 1-4 or 8, default 4
+   l_usr[ 17 ] = 2   // "2" len 2 dec 0
+   l_usr[ 18 ] = 2   // "4" len 4 dec 0
+   l_usr[ 19 ] = 2   // "+" len 4 dec 0
+   l_usr[ 20 ] = 2   // "=" len 8 dec 0
+   l_usr[ 21 ] = 2   // "^" len 8 dec 0
+   l_usr[ 22 ] = 2   // "@" len 8 dec 0
+   l_usr[ 23 ] = 3   // "T" len 4 or 8 dec 0
+
+
+
+   type_n    := 1
+   altered   := .F.
+   chg_name  := .T.
+   prev_rec  := 0
+   n         := 1
+   i         := 0
+   cur_row   := 13
+   is_insert := .F.
+   keystroke := 999
+   filename  := ""
+
+   empty_row := "           |           |       |    "
+   not_empty := "           | Caracter  |    10 |    "
+
+   IF ! Empty( M->cur_dbf )
 
-   __dbCopyXStruct( temparq ) //COPY to &temparq STRUCTURE EXTENDED
+      stat_msg( "Lendo Estrutura do Arquivo" )
+      stru_name := M->cur_dbf
+      temparq   := trocaext( stru_name, "_stru.dbf" )
 
-   select 10
-   DBUREDE( temparq )
-   stru_ok   := .T.
-   is_append := .F.
+      SELECT ( M->cur_area )
 
-   stat_msg( "" )
+      __dbCopyXStruct( temparq )   // COPY to &temparq STRUCTURE EXTENDED
 
-else
+      SELECT 10
+      DBUREDE( temparq )
+      stru_ok   := .T.
+      is_append := .F.
 
-   
-   stru_name:=WIN_GETSAVEFILENAME( , "Novo Arquivo", HB_CWD(),"dbf", "*.txt" , 1,, "novoarquivo.dbf")
-   temparq:=trocaext(stru_name,"_stru.dbf")
-   
-   select 10
-  // __dbCreate( temparq,,, .F., ) //CREATE &temparq
-   dbcreate(temparq)
-  
-   netrecapp()
-   field->field_type := "C"
-   field->field_len  := 10
-   field->field_dec  := 0
+      stat_msg( "" )
 
-   stru_ok   := .F.
-   is_append := .T.
- //  stru_name := "" zera para pegar abaixo o novo no nome mas feito aqui pelo win_getsavefilename
+   ELSE
 
-endif
 
-scroll( 8, 20, 23, 59, 0 )
-HB_dispbox( 8, 20, 23, 59,M->frame)
+      stru_name := WIN_GETSAVEFILENAME(, "Novo Arquivo", hb_cwd(), "dbf", "*.txt", 1,, "novoarquivo.dbf" )
+      temparq   := trocaext( stru_name, "_stru.dbf" )
 
-@  9, field_col[ 1 ] ;
-        say "Estrutura de " + pad( if( empty( stru_name ), "<novo arquivo>", ;
-        substr( stru_name, rat( hb_ps(), stru_name ) + 1 ) ), 13 )
+      SELECT 10
+      // __dbCreate( temparq,,, .F., ) //CREATE &temparq
+      dbCreate( temparq )
 
-@ 11, 20 say " Nome Campo   Tipo        Tamanho  Dec"
-@ 12, 20 say "|------------|-----------|-------|-----|"
-@ 23, 33 say "|-----------|-------|"
+      netrecapp()
+      field->field_type := "C"
+      field->field_len  := 10
+      field->field_dec  := 0
 
-do while .not. q_check()
+      stru_ok   := .F.
+      is_append := .T.
+      // stru_name := "" zera para pegar abaixo o novo no nome mas feito aqui pelo win_getsavefilename
 
-   do case
+   ENDIF
 
-   case keystroke = 999
-      scroll( 13, 21, 22, 58, 0 )
-      rec1     := recno()
-      fill_row := 13
+   Scroll( 8, 20, 23, 59, 0 )
+   hb_DispBox( 8, 20, 23, 59, M->frame )
 
-      do while .not. eof() .and. fill_row <= 22
-         stru_row( fill_row )
+   @  9, field_col[ 1 ] ;
+      SAY "Estrutura de " + Pad( if( Empty( stru_name ), "<novo arquivo>", ;
+      SubStr( stru_name, RAt( hb_ps(), stru_name ) + 1 ) ), 13 )
 
-         skip
-         fill_row ++
+   @ 11, 20 SAY " Nome Campo   Tipo        Tamanho  Dec"
+   @ 12, 20 SAY "|------------|-----------|-------|-----|"
+   @ 23, 33 SAY "|-----------|-------|"
 
-      enddo
+   DO WHILE ! q_check()
 
-      do while fill_row <= 22
-         @ fill_row, field_col[ 1 ] say empty_row
-         fill_row ++
+      DO CASE
 
-      enddo
+      CASE keystroke = 999
+         Scroll( 13, 21, 22, 58, 0 )
+         rec1     := RecNo()
+         fill_row := 13
 
-      goto rec1
-      fill_row := 13
+         DO WHILE ! Eof() .AND. fill_row <= 22
+            stru_row( fill_row )
 
-      do while fill_row < cur_row
-         skip
+            SKIP
+            fill_row++
 
-         if eof()
-            cur_row := fill_row
-            go bottom
-            exit
+         ENDDO
 
-         endif
+         DO WHILE fill_row <= 22
+            @ fill_row, field_col[ 1 ] SAY empty_row
+            fill_row++
 
-         fill_row ++
+         ENDDO
 
-      enddo
+         GOTO rec1
+         fill_row := 13
 
-      keystroke := 0
+         DO WHILE fill_row < cur_row
+            SKIP
 
-   case keystroke = 13 .or. isdata( keystroke )
+            IF Eof()
+               cur_row := fill_row
+               GO BOTTOM
+               EXIT
 
-      if n = 2
-         type_n = AT(LEFT(field_type, 1), "CNDLMWPGQVF8BZYI24+=^@T")
-         //type_n := at( field_type, "CNDLM" )
+            ENDIF
 
-      else
-         set cursor on
+            fill_row++
 
-         if keystroke <> 13
-            keyboard chr( keystroke )
+         ENDDO
 
-         endif
-      endif
+         keystroke := 0
 
-      field_id := ffield[ n ]
+      CASE keystroke = 13 .OR. isdata( keystroke )
 
-      m_item := &field_id
+         IF n = 2
+            type_n := At( Left( field_type, 1 ), "CNDLMWPGQVF8BZYI24+=^@T" )
+            // type_n := at( field_type, "CNDLM" )
 
-      set key 5 to clear_gets
-      set key 24 to clear_gets
-      xkey_clear()
+         ELSE
+            SET CURSOR ON
 
-      do case
+            IF keystroke <> 13
+               KEYBOARD Chr( keystroke )
 
-      case n = 1
-         setcolor( M->color1 )
-         @ cur_row, field_col[ 1 ] get field_name picture "@!K"
-         READDBU()
-         setcolor( M->color7 )
-         keystroke := lastkey()
+            ENDIF
+         ENDIF
 
-      case n = 2
+         field_id := ffield[ n ]
 
-         do case
+         m_item := &field_id
 
-         CASE UPPER(CHR(keystroke)) $ "CNDLMWPGQVF8BZYI24+=^@T"
-         //case upper( chr( keystroke ) ) $ "CNDLM"
-//            type_n    := at( upper( chr( keystroke ) ), "CNDLM" )
-          	type_n = AT(UPPER(CHR(keystroke)), "CNDLMWPGQVF8BZYI24+=^@T")
-            keystroke := 13
+         SET KEY 5 TO clear_gets
+         SET KEY 24 TO clear_gets
+         xkey_clear()
 
-         case keystroke = 32
-            type_n := if( type_n = 5, 1, type_n + 1 )
+         DO CASE
 
-         case keystroke <> 13
-            keystroke := 0
+         CASE n = 1
+            SetColor( M->color1 )
+            @ cur_row, field_col[ 1 ] GET field_name PICTURE "@!K"
+            READDBU()
+            SetColor( M->color7 )
+            keystroke := LastKey()
 
-         endcase
+         CASE n = 2
 
-         IF m_item <> SUBSTR("CNDLMWPGQVF8BZYI24+=^@T", type_n, 1)
-         //if m_item <> substr( "CNDLM", type_n, 1 )
-            //REPLACE field_type WITH SUBSTR("CNDLMWPGQVF8BZYI24+=^@T", type_n, 1)
-            field->field_type := SUBSTR("CNDLMWPGQVF8BZYI24+=^@T", type_n, 1)
-            //field->field_type := substr( "CNDLM", type_n, 1 )
+            DO CASE
 
-            do case
+            CASE Upper( Chr( keystroke ) ) $ "CNDLMWPGQVF8BZYI24+=^@T"
+               // case upper( chr( keystroke ) ) $ "CNDLM"
+               // type_n    := at( upper( chr( keystroke ) ), "CNDLM" )
+               type_n    := At( Upper( Chr( keystroke ) ), "CNDLMWPGQVF8BZYI24+=^@T" )
+               keystroke := 13
 
-               case field_type = "C"
+            CASE keystroke = 32
+               type_n := if( type_n = 5, 1, type_n + 1 )
+
+            CASE keystroke <> 13
+               keystroke := 0
+
+            ENDCASE
+
+            IF m_item <> SubStr( "CNDLMWPGQVF8BZYI24+=^@T", type_n, 1 )
+               // if m_item <> substr( "CNDLM", type_n, 1 )
+               // REPLACE field_type WITH SUBSTR("CNDLMWPGQVF8BZYI24+=^@T", type_n, 1)
+               field->field_type := SubStr( "CNDLMWPGQVF8BZYI24+=^@T", type_n, 1 )
+               // field->field_type := substr( "CNDLM", type_n, 1 )
+
+               DO CASE
+
+               CASE field_type = "C"
                   field->field_dec := 0
-               
+
                CASE field_type = "Q"
                   IF field_len > 255
-                     field->field_len := 255                     
+                     field->field_len := 255
                   ELSEIF field_len = 0
-                     field->field_len := 1                     
+                     field->field_len := 1
                   ENDIF
                   REPLACE field_dec WITH 0
 
                CASE field_type = "V"
                   IF field_len <> 4 .AND. field_len < 6
-                     field->field_len := 6                     
+                     field->field_len := 6
                   ENDIF
                   field->field_dec := 0
-                  
+
 
                CASE field_type $ "NF"
-                  * numeric
-                     if m_item = "C" .and. ( field_dec <> 0 .or.  field_len > 19 )
-                        field->field_len := 10
-                        field->field_dec := 0
-                     endif
+                  // numeric
+                  IF m_item = "C" .AND. ( field_dec <> 0 .OR. field_len > 19 )
+                     field->field_len := 10
+                     field->field_dec := 0
+                  ENDIF
 
                CASE field_type = "I"
-                  IF field_len = 0 .OR. (field_len > 4 .AND. field_len <> 8)
-                      field->field_len := 4                     
+                  IF field_len = 0 .OR. ( field_len > 4 .AND. field_len <> 8 )
+                     field->field_len := 4
                   ENDIF
 
                CASE field_type = "Y"
-                   field->field_len := 8
-                   field->field_dec := 4
+                  field->field_len := 8
+                  field->field_dec := 4
 
-                  
+
 
                CASE field_type $ "8BZ"
                   IF field_len <> 8
                      field->field_len := 8
-                     
+
                   ENDIF
 
                CASE field_type = "2"
-                  
+
                   field->field_len := 2
                   field->field_dec := 0
 
-                                    
+
 
                CASE field_type = "4"
                   field->field_len := 4
@@ -352,16 +367,16 @@ do while .not. q_check()
 
                CASE field_type = "T"
                   IF field_len <> 4 .AND. field_len <> 8
-                     field->field_len := 8                     
+                     field->field_len := 8
                   ENDIF
                   field->field_dec := 0
-                  
+
 
                CASE field_type = "@"
                   field->field_len := 8
                   field->field_dec := 0
-               
-                  
+
+
 
                CASE field_type = "D"
                   IF field_len <> 3 .AND. field_len <> 4 .AND. field_len <> 8
@@ -370,992 +385,1034 @@ do while .not. q_check()
                   field->field_dec := 0
 
 
-               case field_type = "L"
+               CASE field_type = "L"
                   field->field_len := 1
                   field->field_dec := 0
 
                CASE field_type $ "MVWPG"
                   IF field_len <> 10 .AND. field_len <> 4
                      field->field_len := 10
-                     
+
                   ENDIF
                   field->field_dec := 0
-                  
+
 
                CASE field_type = "+"
-                  field->field_len := 4                  
+                  field->field_len := 4
                   field->field_dec := 0
 
                CASE field_type $ "=^"
-                  field->field_len := 8                                    
+                  field->field_len := 8
                   field->field_dec := 0
-                  
-                   
-            endcase
 
-            @ cur_row, field_col[ 3 ] say str( field_len, 4 )
 
-          	IF field_type $ "NFYI8BZ" //if field_type = "N"
-               @ cur_row, field_col[ 4 ] say field_dec
+               ENDCASE
 
-            else
-               @ cur_row, field_col[ 4 ] say "   "
+               @ cur_row, field_col[ 3 ] SAY Str( field_len, 4 )
 
-            endif
-         endif new type
+               IF field_type $ "NFYI8BZ"   // if field_type = "N"
+                  @ cur_row, field_col[ 4 ] SAY field_dec
 
-      case n = 3
+               ELSE
+                  @ cur_row, field_col[ 4 ] SAY "   "
 
-         if field_type = "C"
-            len_temp := ( 256 * field_dec ) + field_len
+               ENDIF
+            ENDIF NEW TYPE
 
-         else
-            len_temp := field_len
+         CASE n = 3
 
-         endif
+            IF field_type = "C"
+               len_temp := ( 256 * field_dec ) + field_len
 
-         setcolor( M->color1 )
-         @ cur_row, field_col[ n ] get len_temp picture "9999"
-         READDBU()
-         setcolor( M->color7 )
-         keystroke := lastkey()
+            ELSE
+               len_temp := field_len
 
-         if menu_key() = 0
+            ENDIF
 
-            if field_type = "C"
-               field->field_len := ( len_temp % 256 )
-               field->field_dec := int( len_temp / 256 )
+            SetColor( M->color1 )
+            @ cur_row, field_col[ n ] GET len_temp PICTURE "9999"
+            READDBU()
+            SetColor( M->color7 )
+            keystroke := LastKey()
 
-            else
+            IF menu_key() = 0
 
-               if len_temp < 256
-                  field->field_len := len_temp
+               IF field_type = "C"
+                  field->field_len := ( len_temp % 256 )
+                  field->field_dec := Int( len_temp / 256 )
 
-               else
-                  keystroke := 0
+               ELSE
 
-               endif
-            endif
-         endif
+                  IF len_temp < 256
+                     field->field_len := len_temp
 
-      case n = 4
-         setcolor( M->color1 )
-         @ cur_row, field_col[ n ] get field_dec
-         READDBU()
-         setcolor( M->color7 )
-         keystroke := lastkey()
+                  ELSE
+                     keystroke := 0
 
-      endcase
+                  ENDIF
+               ENDIF
+            ENDIF
 
-      set key 5 to
-      set key 24 to
-      xkey_norm()
-      set cursor OFF
+         CASE n = 4
+            SetColor( M->color1 )
+            @ cur_row, field_col[ n ] GET field_dec
+            READDBU()
+            SetColor( M->color7 )
+            keystroke := LastKey()
 
-      if menu_key() <> 0
-         field->&field_id := m_item
-         keyboard chr( keystroke )
+         ENDCASE
 
-      endif
+         SET KEY 5 to
+         SET KEY 24 to
+         xkey_norm()
+         SET CURSOR OFF
 
-      if m_item <> &field_id
-         stru_ok := .F.
-         altered := .T.
+         IF menu_key() <> 0
+            field->&field_id := m_item
+            KEYBOARD Chr( keystroke )
 
-         if n > 1
-            chg_name := .F.
+         ENDIF
 
-         endif
-      endif
+         IF m_item <> &field_id
+            stru_ok := .F.
+            altered := .T.
 
-      do case
+            IF n > 1
+               chg_name := .F.
 
-      case keystroke = 18 .or. keystroke = 5
-         keystroke := 5
+            ENDIF
+         ENDIF
 
-      case keystroke = 3 .or. keystroke = 24
-         keystroke := 24
+         DO CASE
 
-      case keystroke = 13 .or. ;
-                 ( isdata( keystroke ) .and. keystroke <> 32 )
-         keystroke := 4
+         CASE keystroke = 18 .OR. keystroke = 5
+            keystroke := 5
 
-      otherwise
+         CASE keystroke = 3 .OR. keystroke = 24
+            keystroke := 24
+
+         CASE keystroke = 13 .OR. ;
+               ( isdata( keystroke ) .AND. keystroke <> 32 )
+            keystroke := 4
+
+         OTHERWISE
+            keystroke := 0
+
+         ENDCASE
+
+         stru_item()
+
+      CASE keystroke = 5 .AND. RecNo() > 1
+
+         IF is_append
+
+            IF ! stru_ck( .F. )
+               no_append()
+
+            ENDIF
+         ENDIF
+
+         IF stru_ck( .T. )
+            SKIP - 1
+
+            IF cur_row = 13
+               Scroll( 13, 21, 22, 58, - 1 )
+
+               stru_row( 13 )
+
+            ELSE
+               cur_row--
+
+            ENDIF
+
+            is_append := .F.
+            is_insert := .F.
+
+         ELSE
+            n := i
+
+         ENDIF
+
          keystroke := 0
 
-      endcase
+      CASE keystroke = 24
 
-      stru_item()
+         IF stru_ck( RecNo() < LastRec() )
+            SKIP
 
-   case keystroke = 5 .and. recno() > 1
+            IF Eof()
+               netrecapp()
+               field->field_type := "C"
+               field->field_len  := 10
+               field->field_dec  := 0
+               is_append         := .T.
+               stru_ok           := .F.
+               n                 := 1
 
-      if is_append
+               IF cur_row < 22
+                  @ cur_row + 1, field_col[ 1 ] SAY not_empty
 
-         if .not. stru_ck( .F. )
-            no_append()
+               ENDIF
 
-         endif
-      endif
+            ELSE
+               is_insert := .F.
 
-      if stru_ck( .T. )
-         skip - 1
+            ENDIF
 
-         if cur_row = 13
-            scroll( 13, 21, 22, 58, - 1 )
+            IF cur_row = 22
+               Scroll( 13, 21, 22, 58, 1 )
 
-            stru_row( 13 )
+               stru_row( 22 )
 
-         else
-            cur_row --
+            ELSE
+               cur_row++
 
-         endif
+            ENDIF
 
-         is_append := .F.
-         is_insert := .F.
+         ELSE
+            n := i
 
-      else
-         n := i
+         ENDIF
 
-      endif
+         keystroke := 0
 
-      keystroke := 0
+      CASE keystroke = 4
 
-   case keystroke = 24
+         IF n < l_usr[ At( Left( field_type, 1 ), "CNDLMWPGQVF8BZYI24+=^@T" ) ]  // if n < l_usr[ at( field_type, "CNDLM" ) ]
+            n++
 
-      if stru_ck( recno() < lastrec() )
-         skip
+         ENDIF
 
-         if eof()
+         keystroke := 0
+
+      CASE keystroke = 19
+
+         IF n > 1
+            n--
+
+         ENDIF
+
+         keystroke := 0
+
+      CASE keystroke = 18
+         keystroke := 0
+
+         IF RecNo() = 1
+            LOOP
+
+         ENDIF
+
+         IF is_append
+
+            IF ! stru_ck( .F. )
+               no_append()
+
+            ENDIF
+         ENDIF
+
+         IF stru_ck( .T. )
+            is_append := .F.
+            is_insert := .F.
+
+            IF RecNo() = cur_row - 12
+               GO TOP
+               cur_row := 13
+
+            ELSE
+               SKIP - ( 9 + cur_row - 13 )
+               keystroke := 999
+
+            ENDIF
+
+         ELSE
+            n := i
+
+         ENDIF
+
+      CASE keystroke = 3
+         keystroke := 0
+
+         IF is_append
+            LOOP
+
+         ENDIF
+
+         IF stru_ck( .T. )
+            is_insert := .F.
+
+            IF LastRec() - RecNo() <= 22 - cur_row
+               cur_row += LastRec() - RecNo()
+               GO BOTTOM
+
+            ELSE
+               keystroke := 999
+               SKIP 9 - ( cur_row - 13 )
+
+               IF Eof()
+                  GO BOTTOM
+
+               ENDIF
+            ENDIF
+
+         ELSE
+            n := i
+
+         ENDIF
+
+      CASE keystroke = 31
+         keystroke := 0
+
+         IF RecNo() = 1
+            LOOP
+
+         ENDIF
+
+         IF is_append
+
+            IF ! stru_ck( .F. )
+               no_append()
+
+            ENDIF
+         ENDIF
+
+         IF stru_ck( .T. )
+            is_append := .F.
+            is_insert := .F.
+
+            IF RecNo() > cur_row - 12
+               keystroke := 999
+
+            ENDIF
+
+            GO TOP
+            cur_row := 13
+
+         ELSE
+            n := i
+
+         ENDIF
+
+      CASE keystroke = 30
+         keystroke := 0
+
+         IF is_append
+            LOOP
+
+         ENDIF
+
+         IF stru_ck( .T. )
+            is_insert := .F.
+
+            IF LastRec() - RecNo() <= 22 - cur_row
+               cur_row += LastRec() - RecNo()
+               GO BOTTOM
+
+            ELSE
+               keystroke := 999
+               GO BOTTOM
+               SKIP - 9
+               cur_row := 22
+
+            ENDIF
+
+         ELSE
+            n := i
+
+         ENDIF
+
+      CASE keystroke = 6 .OR. keystroke = 23
+         keystroke := 0
+         n         := l_usr[ At( Left( field_type, 1 ), "CNDLMWPGQVF8BZYI24+=^@T" ) ]
+         // n         := l_usr[ at( field_type, "CNDLM" ) ]
+
+      CASE keystroke = 1 .OR. keystroke = 29
+         // update field/record number on screen
+         // @ 9,field_col[1] + 26 SAY "Field " + pad(LTRIM(STR(RECNO())), 5)
+         IF n > l_usr[ At( Left( field_type, 1 ), "CNDLMWPGQVF8BZYI24+=^@T" ) ]
+            // check for n out of range
+            n := l_usr[ At( Left( field_type, 1 ), "CNDLMWPGQVF8BZYI24+=^@T" ) ]
+         ENDIF
+         keystroke := 0
+         // n         := 1
+
+      CASE keystroke = 22
+
+         IF stru_ck( .T. )
+            n         := 1
+            stru_ok   := .F.
+            is_append := .F.
+            is_insert := .T.
+            rec1      := RecNo()
+
             netrecapp()
+
+            DO WHILE rec1 < RecNo()
+               SKIP - 1
+
+               f_name := field_name
+               f_type := field_type
+               f_len  := field_len
+               f_dec  := field_dec
+
+               SKIP
+               field->field_name := f_name
+               field->field_type := f_type
+               field->field_len  := f_len
+               field->field_dec  := f_dec
+
+               SKIP - 1
+
+            ENDDO
+
+            field->field_name := Space( 10 )
             field->field_type := "C"
             field->field_len  := 10
             field->field_dec  := 0
-            is_append         := .T.
-            stru_ok           := .F.
-            n                 := 1
 
-            if cur_row < 22
-               @ cur_row + 1, field_col[ 1 ] say not_empty
+            IF cur_row < 22
+               Scroll( ( cur_row ), 21, 22, 58, - 1 )
 
-            endif
+            ENDIF
 
-         else
-            is_insert := .F.
+            @ cur_row, field_col[ 1 ] SAY not_empty
 
-         endif
+         ELSE
+            n := i
 
-         if cur_row = 22
-            scroll( 13, 21, 22, 58, 1 )
+         ENDIF
 
-            stru_row( 22 )
+         keystroke := 0
 
-         else
-            cur_row ++
+      CASE keystroke = 7 .AND. LastRec() > 1
+         rec1 := RecNo()
+         netrecdel()
+         PACK
 
-         endif
+         IF rec1 > LastRec()
+            GO BOTTOM
 
-      else
-         n := i
+            IF cur_row = 13
+               stru_row( 13 )
 
-      endif
+            ELSE
+               @ cur_row, field_col[ 1 ] SAY empty_row
+               cur_row--
 
-      keystroke := 0
+            ENDIF
 
-   case keystroke = 4
+         ELSE
 
-    	IF n < l_usr[AT(LEFT(field_type, 1), "CNDLMWPGQVF8BZYI24+=^@T")] //if n < l_usr[ at( field_type, "CNDLM" ) ]
-         n ++
+            IF cur_row < 22
+               Scroll( ( cur_row ), 21, 22, 58, 1 )
 
-      endif
+            ENDIF
 
-      keystroke := 0
+            GOTO rec1
+            SKIP 22 - cur_row
 
-   case keystroke = 19
+            IF ! Eof()
+               stru_row( 22 )
 
-      if n > 1
-         n --
+            ELSE
+               @ 22, field_col[ 1 ] SAY empty_row
 
-      endif
+            ENDIF
 
-      keystroke := 0
+            GOTO rec1
 
-   case keystroke = 18
-      keystroke := 0
+            prev_rec := 0
 
-      if recno() = 1
-         loop
+         ENDIF
 
-      endif
+         IF ! is_append .AND. ! is_insert
+            altered  := .T.
+            chg_name := .F.
 
-      if is_append
+         ENDIF
 
-         if .not. stru_ck( .F. )
-            no_append()
-
-         endif
-      endif
-
-      if stru_ck( .T. )
          is_append := .F.
          is_insert := .F.
+         stru_ok   := .T.
+         keystroke := 0
 
-         if recno() = cur_row - 12
-            go top
-            cur_row := 13
+      CASE prev_rec <> RecNo()
+         prev_rec := RecNo()
 
-         else
-            skip - ( 9 + cur_row - 13 )
-            keystroke := 999
+         @  9, field_col[ 1 ] + 26 SAY "Campo " + Pad( LTrim( Str( RecNo() ) ), 5 )
 
-         endif
 
-      else
-         n := i
+         IF n > l_usr[ At( Left( field_type, 1 ), "CNDLMWPGQVF8BZYI24+=^@T" ) ]
+            // check for n out of range
+            n := l_usr[ At( Left( field_type, 1 ), "CNDLMWPGQVF8BZYI24+=^@T" ) ]
+         ENDIF
 
-      endif
 
-   case keystroke = 3
-      keystroke := 0
+         // if n > l_usr[ at( field_type, "CNDLM" ) ]
+         // n := l_usr[ at( field_type, "CNDLM" ) ]
+         //
+         // endif
 
-      if is_append
-         loop
+      CASE local_func = 4
+         local_func := 0
 
-      endif
+         IF ! stru_ck( .T. )
+            n := i
+            LOOP
 
-      if stru_ck( .T. )
-         is_insert := .F.
+         ENDIF
 
-         if lastrec() - recno() <= 22 - cur_row
-            cur_row += lastrec() - recno()
-            go bottom
-
-         else
-            keystroke := 999
-            skip 9 - ( cur_row - 13 )
-
-            if eof()
-               go bottom
-
-            endif
-         endif
-
-      else
-         n := i
-
-      endif
-
-   case keystroke = 31
-      keystroke := 0
-
-      if recno() = 1
-         loop
-
-      endif
-
-      if is_append
-
-         if .not. stru_ck( .F. )
-            no_append()
-
-         endif
-      endif
-
-      if stru_ck( .T. )
          is_append := .F.
          is_insert := .F.
+         filename  := stru_name
 
-         if recno() > cur_row - 12
-            keystroke := 999
+         IF filebox( ".dbf", "dbf_list", "stru_title", ;
+               "do_modstru", .T., 13 ) <> 0
+            stru_name := filename
 
-         endif
+            @  9, field_col[ 1 ] + 13 ;
+               SAY Pad( if( Empty( stru_name ), "<novo arquivo>", ;
+               SubStr( stru_name, RAt( hb_ps(), stru_name ) + 1 ) ), 13 )
 
-         go top
-         cur_row := 13
+            IF aseek( dbf, filename ) = 0
+               cur_dbf := filename
 
-      else
-         n := i
+               open_dbf( .F., .T. )
 
-      endif
+               SELECT 10
 
-   case keystroke = 30
-      keystroke := 0
+            ENDIF
 
-      if is_append
-         loop
+            keystroke := 27
+            cur_area  := 0
 
-      endif
+         ENDIF
 
-      if stru_ck( .T. )
-         is_insert := .F.
+         stat_msg( "" )
 
-         if lastrec() - recno() <= 22 - cur_row
-            cur_row += lastrec() - recno()
-            go bottom
+      OTHERWISE
 
-         else
-            keystroke := 999
-            go bottom
-            skip - 9
-            cur_row := 22
-
-         endif
-
-      else
-         n := i
-
-      endif
-
-   case keystroke = 6 .or. keystroke = 23
-      keystroke := 0
-      n = l_usr[AT(LEFT(field_type, 1), "CNDLMWPGQVF8BZYI24+=^@T")]
-      //n         := l_usr[ at( field_type, "CNDLM" ) ]
-
-   case keystroke = 1 .or. keystroke = 29   
- 			* update field/record number on screen
- 			//@ 9,field_col[1] + 26 SAY "Field " + pad(LTRIM(STR(RECNO())), 5)
-			IF n > l_usr[AT(LEFT(field_type, 1), "CNDLMWPGQVF8BZYI24+=^@T")]
- 				* check for n out of range
-				n = l_usr[AT(LEFT(field_type, 1), "CNDLMWPGQVF8BZYI24+=^@T")]
- 			ENDIF
-      keystroke := 0
-//      n         := 1
-
-   case keystroke = 22
-
-      if stru_ck( .T. )
-         n         := 1
-         stru_ok   := .F.
-         is_append := .F.
-         is_insert := .T.
-         rec1      := recno()
-
-         netrecapp()
-
-         do while rec1 < recno()
-            skip - 1
-
-            f_name := field_name
-            f_type := field_type
-            f_len  := field_len
-            f_dec  := field_dec
-
-            skip
-            field->field_name := f_name
-            field->field_type := f_type
-            field->field_len  := f_len
-            field->field_dec  := f_dec
-
-            skip - 1
-
-         enddo
-
-         field->field_name := space( 10 )
-         field->field_type := "C"
-         field->field_len  := 10
-         field->field_dec  := 0
-
-         if cur_row < 22
-            scroll( ( cur_row ), 21, 22, 58, - 1 )
-
-         endif
-
-         @ cur_row, field_col[ 1 ] say not_empty
-
-      else
-         n := i
-
-      endif
-
-      keystroke := 0
-
-   case keystroke = 7 .and. lastrec() > 1
-      rec1 := recno()
-      netrecdel()
-      pack
-
-      if rec1 > lastrec()
-         go bottom
-
-         if cur_row = 13
-            stru_row( 13 )
-
-         else
-            @ cur_row, field_col[ 1 ] say empty_row
-            cur_row --
-
-         endif
-
-      else
-
-         if cur_row < 22
-            scroll( ( cur_row ), 21, 22, 58, 1 )
-
-         endif
-
-         goto rec1
-         skip 22 - cur_row
-
-         if .not. eof()
-            stru_row( 22 )
-
-         else
-            @ 22, field_col[ 1 ] say empty_row
-
-         endif
-
-         goto rec1
-
-         prev_rec := 0
-
-      endif
-
-      if .not. is_append .and. .not. is_insert
-         altered  := .T.
-         chg_name := .F.
-
-      endif
-
-      is_append := .F.
-      is_insert := .F.
-      stru_ok   := .T.
-      keystroke := 0
-
-   case prev_rec <> recno()
-      prev_rec := recno()
-
-      @  9, field_col[ 1 ] + 26 say "Campo " + pad( ltrim( str( recno() ) ), 5 )
-      
-      
-      IF n > l_usr[AT(LEFT(field_type, 1), "CNDLMWPGQVF8BZYI24+=^@T")]
- 				* check for n out of range
-				n = l_usr[AT(LEFT(field_type, 1), "CNDLMWPGQVF8BZYI24+=^@T")]
- 			ENDIF
-      
-
-//      if n > l_usr[ at( field_type, "CNDLM" ) ]
-//         n := l_usr[ at( field_type, "CNDLM" ) ]
-//
-//      endif
-
-   case local_func = 4
-      local_func := 0
-
-      if .not. stru_ck( .T. )
-         n := i
-         loop
-
-      endif
-
-      is_append := .F.
-      is_insert := .F.
-      filename  := stru_name
-
-      if filebox( ".dbf", "dbf_list", "stru_title", ;
-                  "do_modstru", .T., 13 ) <> 0
-         stru_name := filename
-
-         @  9, field_col[ 1 ] + 13 ;
-                 say pad( if( empty( stru_name ), "<novo arquivo>", ;
-                 substr( stru_name, rat( hb_ps(), stru_name ) + 1 ) ), 13 )
-
-         if aseek( dbf, filename ) = 0
-            cur_dbf := filename
-
-            open_dbf( .F., .T. )
-
-            select 10
-
-         endif
-
-         keystroke := 27
-         cur_area  := 0
-
-      endif
-
-      stat_msg( "" )
-
-   otherwise
-
-      if .not. key_ready()
-         setcolor( M->color2 )
-         stru_item()
-         setcolor( M->color7 )
-
-         read_key()
-
-         if .not. ( keystroke = 13 .or. isdata( keystroke ) )
+         IF ! key_ready()
+            SetColor( M->color2 )
             stru_item()
+            SetColor( M->color7 )
 
-         endif
-      endif
+            read_key()
 
-      if keystroke = 27 .and. altered
+            IF !( keystroke = 13 .OR. isdata( keystroke ) )
+               stru_item()
 
-         if rsvp( "Ok Abondonar Mudancas? (S/N)" ) <> "S"
-            keystroke := 0
+            ENDIF
+         ENDIF
 
-         endif
-      endif
-   endcase
-enddo create / modify structure
-if select( TEMPARQ ) # 0
-   dbselectar( TEMPARQ )
-endif
-dbclosearea()
-ferase(temparq)
-//ferase( temparq + ".dbf" )
-//ferase( temparq + ".TMP" )
-stat_msg( "" )
+         IF keystroke = 27 .AND. altered
 
-restscreen( 8, 20, 23, 59, M->wstru_buff )
+            IF rsvp( "Ok Abondonar Mudancas? (S/N)" ) <> "S"
+               keystroke := 0
 
-setcolor( saveColor )
-return
+            ENDIF
+         ENDIF
+      ENDCASE
+   ENDDO CREATE / modify structure
+   IF SELECT ( TEMPARQ ) # 0
+      dbSelectAr( TEMPARQ )
+   ENDIF
+   dbCloseArea()
+   FErase( temparq )
+// ferase( temparq + ".dbf" )
+// ferase( temparq + ".TMP" )
+   stat_msg( "" )
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function stru_row()
-*+
-*+    Called from ( dbustru.prg  )   5 - modi_stru()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function stru_row
+   RestScreen( 8, 20, 23, 59, M->wstru_buff )
 
-parameters fill_row
+   SetColor( saveColor )
 
-@ fill_row, field_col[ 1 ] ;
-        say field_name + " | " + data_type[AT(LEFT(field_type, 1), "CNDLMWPGQVF8BZYI24+=^@T")] + " | "
-        
-        
-if field_type = "C"
-   @ fill_row, field_col[ 3 ] say str( ( ( 256 * field_dec ) + field_len ), 4 ) + ;
-           " н    "
+   RETURN
 
-else
-   @ fill_row, field_col[ 3 ] say str( field_len, 4 ) + " н    "
 
-   IF field_type $ "NFYI8BZ" //if field_type = "N"
-      @ fill_row, field_col[ 4 ] say field_dec
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function stru_row()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION stru_row
 
-   endif
-endif
+   PARAMETERS fill_row
 
-return 0
+   @ fill_row, field_col[ 1 ] ;
+      SAY field_name + " | " + data_type[ At( Left( field_type, 1 ), "CNDLMWPGQVF8BZYI24+=^@T" ) ] + " | "
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function stru_item()
-*+
-*+    Called from ( dbustru.prg  )   3 - modi_stru()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function stru_item
 
-do case
+   IF field_type = "C"
+      @ fill_row, field_col[ 3 ] SAY Str( ( ( 256 * field_dec ) + field_len ), 4 ) + ;
+         " н    "
 
-case n = 1
-   @ cur_row, field_col[ 1 ] say field_name
+   ELSE
+      @ fill_row, field_col[ 3 ] SAY Str( field_len, 4 ) + " н    "
 
-case n = 2
-   @ cur_row,field_col[2] SAY data_type[AT(LEFT(field_type, 1), "CNDLMWPGQVF8BZYI24+=^@T")]
-   //@ cur_row, field_col[ 2 ] say data_type[ at( field_type, "CNDLM" ) ]
+      IF field_type $ "NFYI8BZ"  // if field_type = "N"
+         @ fill_row, field_col[ 4 ] SAY field_dec
 
-case n = 3
+      ENDIF
+   ENDIF
 
-   if field_type = "C"
-      @ cur_row, field_col[ n ] say str( ( ( 256 * field_dec ) + ;
-              field_len ), 4 )
+   RETURN 0
 
-   else
-      @ cur_row, field_col[ n ] say str( field_len, 4 )
 
-   endif
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function stru_item()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION stru_item
 
-case n = 4
-   @ cur_row, field_col[ 4 ] say field_dec
+   DO CASE
 
-endcase
+   CASE n = 1
+      @ cur_row, field_col[ 1 ] SAY field_name
 
-return 0
+   CASE n = 2
+      @ cur_row, field_col[ 2 ] SAY data_type[ At( Left( field_type, 1 ), "CNDLMWPGQVF8BZYI24+=^@T" ) ]
+      // @ cur_row, field_col[ 2 ] say data_type[ at( field_type, "CNDLM" ) ]
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function no_append()
-*+
-*+    Called from ( dbustru.prg  )   3 - modi_stru()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function no_append
+   CASE n = 3
 
-netrecdel()
-pack
-dbgobottom()
-dbskip()
+      IF field_type = "C"
+         @ cur_row, field_col[ n ] SAY Str( ( ( 256 * field_dec ) + ;
+            field_len ), 4 )
 
-if ( recno() = cur_row - 12 ) .or. keystroke = 5
-   @ cur_row, field_col[ 1 ] say empty_row
+      ELSE
+         @ cur_row, field_col[ n ] SAY Str( field_len, 4 )
 
-endif
+      ENDIF
 
-stru_ok := .T.
+   CASE n = 4
+      @ cur_row, field_col[ 4 ] SAY field_dec
 
-return 0
+   ENDCASE
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function stru_ck()
-*+
-*+    Called from ( dbustru.prg  )  11 - modi_stru()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function stru_ck
+   RETURN 0
 
-parameters disp_err
 
-if .not. stru_ok
-   i       := field_check( disp_err )
-   stru_ok := ( i = 0 )
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function no_append()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION no_append
 
-endif
+   netrecdel()
+   PACK
+   dbGoBottom()
+   dbSkip()
 
-return stru_ok
+   IF ( RecNo() = cur_row - 12 ) .OR. keystroke = 5
+      @ cur_row, field_col[ 1 ] SAY empty_row
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function field_check()
-*+
-*+    Called from ( dbustru.prg  )   1 - function stru_ck()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function field_check
+   ENDIF
 
-parameters disp_err
-private pos
-private test_num
-private test_name
-private status
-private err_msg
+   stru_ok := .T.
 
-status  := 0
-err_msg := ""
+   RETURN 0
 
-pos := len( trim( field_name ) )
 
-if pos = 0
-   status  := 1
-   err_msg := "Campo sem nome"
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function stru_ck()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION stru_ck
 
-endif
+   PARAMETERS disp_err
 
-if status = 0
+   IF ! stru_ok
+      i       := field_check( disp_err )
+      stru_ok := ( i = 0 )
 
-   do while pos > 0 .and. substr( field_name, pos, 1 ) $ ;
-              "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
-      pos --
+   ENDIF
 
-   enddo
+   RETURN stru_ok
 
-   if pos > 0 .or. substr( field_name, 1, 1 ) $ "0123456789_"
-      status  := 1
-      err_msg := "Nome ilegal de Campo"
 
-      if keystroke = 24
-         disp_err := .T.
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function field_check()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION field_check
 
-      endif
-   endif
-endif
+   PARAMETERS disp_err
+   PRIVATE pos
+   PRIVATE test_num
+   PRIVATE test_name
+   PRIVATE STATUS
+   PRIVATE err_msg
 
-if status = 0
-   test_num  := recno()
-   test_name := field_name
-   locate for field_name = test_name .and. recno() <> test_num
+   STATUS  := 0
+   err_msg := ""
 
-   if found()
-      status  := 1
-      err_msg := "Nome de campos duplicados"
+   pos := Len( Trim( field_name ) )
 
-      if keystroke = 24
-         disp_err := .T.
+   IF pos = 0
+      STATUS  := 1
+      err_msg := "Campo sem nome"
 
-      endif
-   endif
+   ENDIF
 
-   goto test_num
+   IF STATUS = 0
 
-endif
+      DO WHILE pos > 0 .AND. SubStr( field_name, pos, 1 ) $ ;
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
+         pos--
 
-if status = 0
+      ENDDO
 
-   if field_type = "C"
-      test_num := ( 256 * field_dec ) + field_len
+      IF pos > 0 .OR. SubStr( field_name, 1, 1 ) $ "0123456789_"
+         STATUS  := 1
+         err_msg := "Nome ilegal de Campo"
 
-      if test_num <= 0 .or. test_num > 1024
-         status  := 3
-         err_msg := "Tamanho de Campo invalido"
-
-         if keystroke = 24
+         IF keystroke = 24
             disp_err := .T.
 
-         endif
-      endif
+         ENDIF
+      ENDIF
+   ENDIF
 
-   else
+   IF STATUS = 0
+      test_num  := RecNo()
+      test_name := field_name
+      LOCATE FOR field_name = test_name .AND. RecNo() <> test_num
 
-      if field_len <= 0 .or. field_len > 19
-         status  := 3
-         err_msg := "Tamanho de Campo invalido"
+      IF Found()
+         STATUS  := 1
+         err_msg := "Nome de campos duplicados"
 
-         if keystroke = 24
+         IF keystroke = 24
             disp_err := .T.
 
-         endif
-      endif
-   endif
-endif
+         ENDIF
+      ENDIF
 
-IF field_type $ "NFYI8BZ" .AND. status = 0
-//if field_type = "N" .and. status = 0
+      GOTO test_num
 
-   if field_dec > if( field_len < 3, 0, if( field_len > 17, 15, field_len - 2 ) )
-      status  := 4
-      err_msg := "Tamanho de decimais invalido"
+   ENDIF
 
-      if keystroke = 24
-         disp_err := .T.
+   IF STATUS = 0
 
-      endif
-   endif
-endif
+      IF field_type = "C"
+         test_num := ( 256 * field_dec ) + field_len
 
-if status > 0 .and. disp_err
-   error_msg( err_msg )
+         IF test_num <= 0 .OR. test_num > 1024
+            STATUS  := 3
+            err_msg := "Tamanho de Campo invalido"
 
-endif
+            IF keystroke = 24
+               disp_err := .T.
 
-return status
+            ENDIF
+         ENDIF
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function stru_title()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function stru_title
+      ELSE
 
-parameters sysparam
+         IF field_len <= 0 .OR. field_len > 19
+            STATUS  := 3
+            err_msg := "Tamanho de Campo invalido"
 
-return box_title( M->sysparam, "Salvando estrutura para..." )
+            IF keystroke = 24
+               disp_err := .T.
 
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-*+    Function do_modstru()
-*+
-*+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-*+
-function do_modstru
+            ENDIF
+         ENDIF
+      ENDIF
+   ENDIF
 
-private stru_done
-private i
-private is_open
-private new_name
-private name_temp
-private add_name
-private dbt_spec
-private dbt_temp
-private rec1
+   IF field_type $ "NFYI8BZ" .AND. STATUS = 0
+      // if field_type = "N" .and. status = 0
 
-do case
+      IF field_dec > if( field_len < 3, 0, if( field_len > 17, 15, field_len - 2 ) )
+         STATUS  := 4
+         err_msg := "Tamanho de decimais invalido"
 
-case empty( filename )
-   error_msg( "Nome de Arquivo nao fornecido" )
-   stru_done := .F.
+         IF keystroke = 24
+            disp_err := .T.
 
-otherwise
-   i       := aseek( dbf, filename )
-   is_open := ( i > 0 )
+         ENDIF
+      ENDIF
+   ENDIF
 
-   if file( filename ) .and. .not. ( filename == cur_dbf )
+   IF STATUS > 0 .AND. disp_err
+      error_msg( err_msg )
 
-      if rsvp( filename + if( is_open, " J  est  aberto", ;
+   ENDIF
+
+   RETURN STATUS
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function stru_title()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION stru_title
+
+   PARAMETERS sysparam
+
+   RETURN box_title( M->sysparam, "Salvando estrutura para..." )
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function do_modstru()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION do_modstru
+
+   PRIVATE stru_done
+   PRIVATE i
+   PRIVATE is_open
+   PRIVATE new_name
+   PRIVATE name_temp
+   PRIVATE add_name
+   PRIVATE dbt_spec
+   PRIVATE dbt_temp
+   PRIVATE rec1
+
+   DO CASE
+
+   CASE Empty( filename )
+      error_msg( "Nome de Arquivo nao fornecido" )
+      stru_done := .F.
+
+   OTHERWISE
+      i       := aseek( dbf, filename )
+      is_open := ( i > 0 )
+
+      IF File( filename ) .AND. !( filename == cur_dbf )
+
+         IF rsvp( filename + if( is_open, " J  est  aberto", ;
                " ou j  existe" ) + ;
                "...Sobreponha? (S/N)" ) <> "S"
-         return .F.
+            RETURN .F.
 
-      endif
-   endif
+         ENDIF
+      ENDIF
 
-   if is_open
-      name_temp := "ntx" + substr( "123456", i, 1 )
-      need_ntx  := need_ntx .or. .not. empty( &name_temp[ 1 ] )
+      IF is_open
+         name_temp := "ntx" + SubStr( "123456", i, 1 )
+         need_ntx  := need_ntx .OR. ! Empty( &name_temp[ 1 ] )
 
-      not_target( i, .F. )
+         not_target( i, .F. )
 
-      select( M->i )
-      dbclosearea()
+         SELECT ( M->i )
+         dbCloseArea()
 
-      name_temp := "kf" + substr( "123456", i, 1 )
+         name_temp := "kf" + SubStr( "123456", i, 1 )
 
-      if .not. empty( &name_temp )
-         need_filtr := .T.
+         IF ! Empty( &name_temp )
+            need_filtr := .T.
 
-      endif
+         ENDIF
 
-      select 10
+         SELECT 10
 
-   endif
+      ENDIF
 
-   rec1 := recno()
-   dbclosearea()
+      rec1 := RecNo()
+      dbCloseArea()
 
-   add_name := .not. HB_FILEEXISTS( name( filename ) + ".dbf" )
+      add_name := ! hb_FileExists( name( filename ) + ".dbf" )
 
-   if file( filename )
-      new_name := " "
+      IF File( filename )
+         new_name := " "
 
-      if chg_name .and. altered
-         new_name := rsvp( "Trocar nome(s) de Campos? (S/N)" )
+         IF chg_name .AND. altered
+            new_name := rsvp( "Trocar nome(s) de Campos? (S/N)" )
 
-         if .not. new_name $ "SN"
-            DBUREDE( temparq )
-            goto rec1
-            return .F.
-
-         endif
-      endif
-
-
-      name_bak  := trocaext(filename,"_temp.dbf") //substr( filename, 1, rat( hb_ps(), filename ) ) +  substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) + ".bak"
-      name_temp := trocaext(temparq,"_temp.dbf") //substr( filename, 1, rat( hb_ps(), filename ) ) +  temparq + ".bak"
-
-      cORIMEMO:=hb_rddInfo( RDDI_MEMOEXT)
-
-      cFILEMEMO:=TROCAEXT(filename,cORIMEMO)
-	  IF FILE(cFILEMEMO)					   
-		 dbt_spec := cFILEMEMO //substr( filename, 1, rat( ".", filename ) )  +   "DBT"
-		 dbt_temp := trocaext(cFILEMEMO,"_TEMP"+_cORIMEMO)//substr( name_temp, 1, rat( ".", name_temp ) ) +  "DBT"
-	  endif	  
-
-//	  IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "DBT")					   
-//		 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "DBT"
-//		 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "DBT"
-//	  endif	  
-
-	 // IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "FPT")					   
-	//	 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "FPT"
-	//	 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "FPT"
-	  //endif	  
-
-	  //IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "SMT")					   
-	//	 dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "SMT"
-	//	 dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "SMT"
-	 // endif	  
-
-      if file( dbt_spec )
-
-         if new_name = "S"
-            new_name := rsvp( "Atencao: Memos serao perdidos ...Continue? (S/N)" )
-
-            if new_name <> "S"
+            IF ! new_name $ "SN"
                DBUREDE( temparq )
-               goto rec1
-               return .F.
+               GOTO rec1
+               RETURN .F.
 
-            endif
-         endif
+            ENDIF
+         ENDIF
 
-         if file( DBT_TEMP )
-            ferase( DBT_TEMP )
-         endif
-         
-         Frename(dbt_spec,dbt_temp) //         rename &dbt_spec to &dbt_temp
 
-      endif
+         name_bak  := trocaext( filename, "_temp.dbf" )   // substr( filename, 1, rat( hb_ps(), filename ) ) +  substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) + ".bak"
+         name_temp := trocaext( temparq, "_temp.dbf" )  // substr( filename, 1, rat( hb_ps(), filename ) ) +  temparq + ".bak"
 
-      stat_msg( if( new_name <> "S", "Alterando estrutura do Arquivo",  "Alternado nome(s) de campo" ) )
+         cORIMEMO := hb_rddInfo( RDDI_MEMOEXT )
 
-      if file( NAME_BAK )
-         ferase( NAME_BAK )
-      endif
+         cFILEMEMO := TROCAEXT( filename, cORIMEMO )
+         IF File( cFILEMEMO )
+            dbt_spec := cFILEMEMO  // substr( filename, 1, rat( ".", filename ) )  +   "DBT"
+            dbt_temp := trocaext( cFILEMEMO, "_TEMP" + _cORIMEMO )  // substr( name_temp, 1, rat( ".", name_temp ) ) +  "DBT"
+         ENDIF
 
-      Frename(filename,name_bak)
+         // IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "DBT")
+         // dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "DBT"
+         // dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "DBT"
+         // endif
 
-      aSTRU := {}
-      dbselectar( TEMPARQ )
-      nLASTREC:=LASTREC()
-      zei_fort( nLASTREC,,,0)
-      dbeval( { || aadd( aSTRU, { FIELD_NAME, FIELD_TYPE, FIELD_LEN, FIELD_DEC } ) } , {|| zei_fort(nLASTREC,,,1)})
-      dbcreate( FILENAME, aSTRU )
-      DBUREDE( FILENAME )
-      dbselectar( substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) )
+         // IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "FPT")
+         // dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "FPT"
+         // dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "FPT"
+         // endif
 
-      if new_name = "S"
-         dbselectar( substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) )
-         dbclosearea()
-         temparq2 := trocaext(temparq , ".txt")
-         DBUREDE( name_bak )
-         nLASTREC:=LASTREC()
-         zei_fort( nLASTREC,,,0)
-         
-         COPY to &temparq2 SDF while zei_fort(nLASTREC,,,1)
-         dbclosearea()
-         DBUREDE( filename )
-         
-         nLASTREC:=flinecount(temparq2)
-         zei_fort( nLASTREC,,,0)         
-         append from &temparq2 SDF while zei_fort(nLASTREC,,,1)         
-         ferase( temparq2 )
-         
-      else
-      
-         nLASTREC:=NetRegCount(name_bak)
-         zei_fort( nLASTREC,,,0)
-         append from &name_bak while zei_fort(nLASTREC,,,1)
-         
-      endif
+         // IF FILE(substr( filename, 1, rat( ".", filename ) )  +   "SMT")
+         // dbt_spec := substr( filename, 1, rat( ".", filename ) )  +   "SMT"
+         // dbt_temp := substr( name_temp, 1, rat( ".", name_temp ) ) +  "SMT"
+         // endif
 
-      if file( name_temp )
-         ferase(name_temp) //erase &name_temp
-      endif
-      if file( dbt_temp )
-         ferase(dbt_temp) //erase &dbt_temp
-      endif
+         IF File( dbt_spec )
 
-      if is_open
-         dbclosearea()
-         select( M->i )
-         DBUREDE( filename )
-         name_temp := "field_n" + substr( "123456", M->i, 1 )
-         all_fields( M->i, &name_temp )
-         select 10
-      endif
+            IF new_name = "S"
+               new_name := rsvp( "Atencao: Memos serao perdidos ...Continue? (S/N)" )
 
-   else
-      stat_msg( "Criando um novo arquivo" )
-      CREATE &filename from &temparq
-      dbclosearea()
+               IF new_name <> "S"
+                  DBUREDE( temparq )
+                  GOTO rec1
+                  RETURN .F.
 
-      if at( ".dbf", lower(filename) ) = len( filename ) - 3 .and.  HB_FILEEXISTS( name( filename ) + ".dbf" ) .and. add_name
-         i := afull( dbf_list ) + 1
+               ENDIF
+            ENDIF
 
-         if i <= len( dbf_list )
-            dbf_list[ i ] = filename
-            array_sort( dbf_list )
+            IF File( DBT_TEMP )
+               FErase( DBT_TEMP )
+            ENDIF
 
-         endif
-      endif
-   endif
+            FRename( dbt_spec, dbt_temp )   // rename &dbt_spec to &dbt_temp
 
-   dbclosearea()
-   stru_done := .T.
+         ENDIF
 
-endcase
+         stat_msg( if( new_name <> "S", "Alterando estrutura do Arquivo", "Alternado nome(s) de campo" ) )
 
-return stru_done
+         IF File( NAME_BAK )
+            FErase( NAME_BAK )
+         ENDIF
 
-*+ EOF: DBUSTRU.PRG
+         FRename( filename, name_bak )
+
+         aSTRU := {}
+         dbSelectAr( TEMPARQ )
+         nLASTREC := LastRec()
+         zei_fort( nLASTREC,,, 0 )
+         dbEval( {|| AAdd( aSTRU, { FIELD_NAME, FIELD_TYPE, FIELD_LEN, FIELD_DEC } ) }, {|| zei_fort( nLASTREC,,, 1 ) } )
+         dbCreate( FILENAME, aSTRU )
+         DBUREDE( FILENAME )
+         dbSelectAr( SubStr( FILENAME, 1, At( ".", FILENAME ) - 1 ) )
+
+         IF new_name = "S"
+            dbSelectAr( SubStr( FILENAME, 1, At( ".", FILENAME ) - 1 ) )
+            dbCloseArea()
+            temparq2 := trocaext( temparq, ".txt" )
+            DBUREDE( name_bak )
+            nLASTREC := LastRec()
+            zei_fort( nLASTREC,,, 0 )
+
+            COPY TO &temparq2 SDF WHILE zei_fort( nLASTREC,,, 1 )
+            dbCloseArea()
+            DBUREDE( filename )
+
+            nLASTREC := flinecount( temparq2 )
+            zei_fort( nLASTREC,,, 0 )
+            APPEND FROM &temparq2 SDF WHILE zei_fort( nLASTREC,,, 1 )
+            FErase( temparq2 )
+
+         ELSE
+
+            nLASTREC := NetRegCount( name_bak )
+            zei_fort( nLASTREC,,, 0 )
+            APPEND FROM &name_bak WHILE zei_fort( nLASTREC,,, 1 )
+
+         ENDIF
+
+         IF File( name_temp )
+            FErase( name_temp )  // erase &name_temp
+         ENDIF
+         IF File( dbt_temp )
+            FErase( dbt_temp )   // erase &dbt_temp
+         ENDIF
+
+         IF is_open
+            dbCloseArea()
+            SELECT ( M->i )
+            DBUREDE( filename )
+            name_temp := "field_n" + SubStr( "123456", M->i, 1 )
+            all_fields( M->i, &name_temp )
+            SELECT 10
+         ENDIF
+
+      ELSE
+         stat_msg( "Criando um novo arquivo" )
+         CREATE &filename FROM &temparq
+         dbCloseArea()
+
+         IF At( ".dbf", Lower( filename ) ) = Len( filename ) - 3 .AND. hb_FileExists( name( filename ) + ".dbf" ) .AND. add_name
+            i := afull( dbf_list ) + 1
+
+            IF i <= Len( dbf_list )
+               dbf_list[ i ] = filename
+               array_sort( dbf_list )
+
+            ENDIF
+         ENDIF
+      ENDIF
+
+      dbCloseArea()
+      stru_done := .T.
+
+   ENDCASE
+
+   RETURN stru_done
+
+
+// + EOF: dbustru.prg
+// +
