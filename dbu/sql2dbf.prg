@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : sql2dbf.prg
 // +
-// +
-// +
-// +     Sistema:
+// +     Sistema: DBU
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,13 +10,7 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:08 am
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
@@ -189,6 +179,51 @@ FUNCTION exportadbf( db, ntipo )
    RETURN NIL
 
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function C2SQLTS
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+Function C2SQLTS (dpDate,cpTime)
+
+LOCAL cDate := ""
+LOCAL cTime := ""
+LOCAL cRetu := ""
+
+	If Pcount () == 0
+
+		cDate := DtoS (Date ())
+		cTime := Time ()
+
+	Else
+	
+		DO Case
+		
+			Case Pcount () == 1
+			
+				cDate := DtoS (dpDate)
+				cTime := "23:59:59"
+				
+			Case Pcount () == 2
+		
+				cDate := DtoS (dpDate)
+				cTime := AllTrim (cpTime)
+				
+		EndCase
+		
+	EndIf
+	
+	cRetu := "'"+subStr(cDate,1,4)+"-"+subStr(cDate,5,2)+"-"+subStr(cDate,7,2)+" "+cTime+"'"
+
+Return cRetu
+
 
 // +--------------------------------------------------------------------
 // +
@@ -213,6 +248,8 @@ FUNCTION C2SQL( Value )
    DO CASE
    CASE ValType( Value ) == "N"
       cValue := AllTrim( Str( Value ) )
+   CASE ValType( Value ) == "@"    //Datetime
+       cValue :=C2SQLTS( Value)
    CASE ValType( Value ) == "D"
       IF !Empty( Value )
          cdate  := DToS( value )

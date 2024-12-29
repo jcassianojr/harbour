@@ -1,10 +1,7 @@
 // +--------------------------------------------------------------------
 // +
 // +
-// +
 // +    Programa  : dbuodbc.prg
-// +
-// +
 // +
 // +     Sistema:
 // +
@@ -14,13 +11,7 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:07 am
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
@@ -68,7 +59,7 @@ FUNCTION odbcmenu( cUSOSQL )
    pegcfgbanco()
 
 // escolhe o arquivos
-   IF cTIPOSQL = "MDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCESS64" .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64" .OR. cTIPOSQL = "SQLITE"
+   IF lMDB .OR. lACCDB .OR. cTIPOSQL = "SQLITE"
       OPENTIPOARQ()
    ENDIF
 
@@ -135,7 +126,7 @@ FUNCTION odbccriadatabase()
       IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
          odbcexecsql( "CREATE DATABASE IF NOT EXISTS " + Cnewdatabasex )
       ENDIF
-      IF cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "MDB" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS64" .OR. cTIPOSQL = "ACCDB64"
+      IF cTIPOSQL = "SQLITE" .OR. lMDB .OR. lACCDB
          mdbcria()
       ENDIF
    ENDIF
@@ -446,9 +437,6 @@ FUNCTION odbcexecsql( eCOMANDO )
    dsFunctions:Destroy()
 
    RETURN .T.
-
-
-
 
 
 // + EOF: dbuodbc.prg
