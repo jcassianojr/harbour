@@ -1,10 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : dbudialeto.prg
-// +
-// +
 // +
 // +     Sistema:
 // +
@@ -15,12 +11,7 @@
 // +     Copyright (c) 2024,  jcassiano
 // +
 // +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:06 am
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
@@ -123,10 +114,129 @@ FUNCTION Dialeto_rollback()
    ENDCASE
 
    RETURN cCOMANDO
+   
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_DataBanco()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +   
+ Function Dialeto_DataBanco()
+LOCAL cCOMANDO
+cCOMANDO:=""
+  DO CASE
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+           cCOMANDO ="GETDATE()"
+      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+           cCOMANDO ="SYSDATE()"
+    //  CASE cTIPOSQL="FIREBIRD"
+    //       cCOMANDO =""
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0
+           cCOMANDO ="CURRENT_DATE"
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+           cCOMANDO ="CURRENT_DATE"
+        CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
+           cCOMANDO ="SYSDATE"               
+   ENDCASE
+return cCOMANDO  
+   
 
-// DATE
-// DATETIME
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_GetIdentity ()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +   
+
+Function Dialeto_GetIdentity()
+LOCAL cCOMANDO
+cCOMANDO:=""
+  DO CASE
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+           cCOMANDO ="select @@IDENTITY"
+      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+           cCOMANDO ="select LAST_INSERT_ID()"
+   //   CASE cTIPOSQL="FIREBIRD"
+   //        cCOMANDO =""
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0
+           cCOMANDO ="SELECT last_insert_rowid()"
+   //   CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+   //        cCOMANDO =""
+       CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
+           cCOMANDO ="select LAST_INSERT_ID()"     
+   ENDCASE
+return cCOMANDO
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_GetRowCount()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +   
+
+Function Dialeto_GetRowCount()
+LOCAL cCOMANDO
+cCOMANDO:=""
+  DO CASE
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+           cCOMANDO ="select @@ROWCOUNT"
+      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+           cCOMANDO ="select ROW_COUNT()"
+   //   CASE cTIPOSQL="FIREBIRD"
+   //        cCOMANDO =""
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0
+           cCOMANDO ="SELECT changes()"
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+           cCOMANDO =""
+       CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
+           cCOMANDO ="select SQL%ROWCOUNT"     
+   ENDCASE
+return cCOMANDO
+
 /*
+// top
+pgsql
+"select "+ColumnsMacro+" from "+TableNameMacro+" limit "+TopCountMacro
+oracle
+"select "+ColumnsMacro+" from "+TableNameMacro  //top ou numrows (ver versao) +" top "+TopCountMacro    where numrow<=Nrows
+mysql
+"select "+ColumnsMacro+" from "+TableNameMacro+" limit "+TopCountMacro
+sqlite
+  "select "+ColumnsMacro+" from "+TableNameMacro+" limit "+TopCountMacro
+// datetime
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +   
+
 Function Dialeto_()
 LOCAL cCOMANDO
 cCOMANDO:=""
@@ -141,6 +251,8 @@ cCOMANDO:=""
            cCOMANDO =""
       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
            cCOMANDO =""
+       CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
+           cCOMANDO =""     
    ENDCASE
 return cCOMANDO
 
