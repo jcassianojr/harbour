@@ -221,6 +221,9 @@ mysql
 "select "+ColumnsMacro+" from "+TableNameMacro+" limit "+TopCountMacro
 sqlite
   "select "+ColumnsMacro+" from "+TableNameMacro+" limit "+TopCountMacro
+ //
+ index
+ "drop index if exists  
 // datetime
 
 

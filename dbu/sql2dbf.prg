@@ -927,6 +927,8 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
       
        CASE mFldType = "@" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI")   
           mSql += "TIMESTAMP"
+       CASE mFldType = "@" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .or. cTIPOSQL = "SQLITE")   
+          mSql += "DATETIME"
          
          //
          // T - TIME  HB_FT_TIME            8 
@@ -987,7 +989,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
          IF mFldDec > 0
             mSql += "FLOAT"
          ELSE
-            mSql += "INTEGER"
+            mSql += "INTEGER default 0"
          ENDIF
 
       CASE mFldType = "N" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "FIREBIRD" )
@@ -996,6 +998,9 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
          ELSE
             IF mFldLen <= 9
                mSql += "INTEGER(" + hb_ntos( mFldLen ) + ")"
+               if cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+                   mSql += " default 0"
+               endif
             ELSE
                mSql += "bigint(" + hb_ntos( mFldLen ) + ")"
             ENDIF
