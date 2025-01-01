@@ -1,10 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : foy2.prg
-// +
-// +
 // +
 // +     Sistema:
 // +
@@ -15,12 +11,7 @@
 // +     Copyright (c) 2024,  jcassiano
 // +
 // +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:46 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
@@ -162,14 +153,16 @@ FUNCTION gFOY2()
 // +
 
 FUNCTION INDEXT( nINI, nFIM, xEMP )
+LOCAL cDBFNAME
 
-   IF !netuse( ccNTX )
+   IF ! netuse( ccNTX )
       RETU
    ENDIF
    dbGoTop()
    WHILE !Eof()
       cCAM    := ""
       USODBF  := AllTrim( DBF )
+      cDBFNAME := USODBF
       aCHAVE  := {}
       aINDICE := {}
       aTAG    := {}
@@ -319,6 +312,12 @@ FUNCTION INDEXT( nINI, nFIM, xEMP )
          dbSkip()
       ENDDO
       IF Len( aCHAVE ) > 0
+         IF .NOT. FILE(USODBF+".DBF")
+            IF FILE(cDBFNAME+".DBE")
+               altd()
+               MAKEDBF(cDBFNAME+".DBE", .F., .T., ,cCAM)
+            ENDIF
+         ENDIF
          INFOR( USODBF, aCHAVE, aINDICE,, aTAG )
       ENDIF
       dbSelectAr( CCNTX )

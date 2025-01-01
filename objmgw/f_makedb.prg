@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : f_makedb.prg
 // +
-// +
-// +
-// +     Sistema:
+// +     Sistema:  Modulo Recursos
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,24 +10,16 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:41 am
 // +
-// +
-// +
 // +--------------------------------------------------------------------
 // +
 
-// ****************************************************************
-
 // +--------------------------------------------------------------------
 // +
 // +
 // +
-// +    Function MAKEDBF()
+// +    Function MAKEDBF(cArqDic, lQUIT, lCRIA, cDRIVER ,cCAMINHO)
 // +
 // +
 // +
@@ -39,7 +27,7 @@
 // +
 // +
 // +
-FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
+FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
 
 // ****************************************************************
 
@@ -61,44 +49,47 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
 #define f_ok     5
 
    LOCAL counter    := num_fields := pointer := 0
-   LOCAL create_dbf := dbf_exist := old_cursor := ;
-      old_exact := .F.
+   LOCAL create_dbf := dbf_exist := old_cursor :=   old_exact := .F.
    LOCAL dbf_memo, memoext, temp_dbf, temp_dbt, temp_stru := ''
    LOCAL dbf_stru  := {}
    LOCAL lMEMO
    LOCAL i
    LOCAL cTAG
    LOCAL cCHAVEDBF
-   cTAG      := ""
-   CCHAVEDBF := ""
-
-   cOLDRDD := rddSetDefault()
-
-   nREGORI  := nREGDES := 0
-   memoflds := -1
+   PRIVATE dbf_name := dbf_text := textline := '', handle := 0,   text_row := 7, new_stru := {}  
+   PRIVATE new_index := {}
+   
+  
+   
    IF ValType( cDRIVER ) # "C"
       cDRIVER := "DBFCDX"
    ENDIF
 
-   PRIVATE dbf_name := dbf_text := textline := '', handle := 0, ;
-      text_row := 7, new_stru := {}
-   PRIVATE new_index := {}
    IF ValType( lQUIT ) # "L"
       lQUIT := .T.
    ENDIF
    IF ValType( lCRIA ) # "L"
       lCRIA := .F.
    ENDIF
+   
+    IF ValType( cCAMINHO ) # "C"
+      cCAMINHO:=""
+   ENDIF 
 
+    cTAG      := ""
+   CCHAVEDBF := ""
+   cOLDRDD := rddSetDefault()
+   nREGORI  := nREGDES := 0
+   memoflds := -1
 
    IF ValType( cArqDic ) # "C"
-      ERROUSO( 'N?o especificado arquivo dicion rio', lQUIT, cOLDRDD )
+      ERROUSO( 'Nao especificado arquivo dicionario', lQUIT, cOLDRDD )
       RETU
    ELSE
       // Retorna ao DOS se o arq. do dicion. de dados nao puder ser aberto.
       handle := hb_fOPEN( cArqDic )
       IF handle <= 0
-         ERROUSO( 'N?o foi poss­vel abrir o arquivo dicion rio' + cArqDic, lQUIT, cOLDRDD )
+         ERROUSO( 'Nao foi possivel abrir o arquivo dicionario' + cArqDic, lQUIT, cOLDRDD )
          RETU
       ENDIF
    ENDIF
@@ -121,17 +112,18 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
 
 // Fica em loop enquanto houver linhas de def. de base de dados (DBFDEF).
 
-   DO WHILE !Empty( dbf_name )
+   WHILE ! Empty( dbf_name )
 
       // Reinicializa as variaveis de controle do loop.
       create_dbf := .F.
       dbf_exist  := .F.
 
       // Verifica a existencia da base de dados.
-      IF File( dbf_name + '.dbf' )
+      IF File( cCaminho+dbf_name + '.dbf' )
          // B. dados existe. Ativa sinaliz. e abre b. dados p/uso exclusivo.
          dbf_exist := .T.
-         IF !netuse( dbf_name, cDRIVER, .F., .F., .T., .F., 30 )   // BREDE(DBF_NAME,0,.T.,.T.)
+         
+         IF !netuse( cCaminho+dbf_name, cDRIVER, .F., .F., .T., .F., 30 )   
             SetCursor( .T. )
             IF Lquit
                QUIT
@@ -214,6 +206,11 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
                ENDIF
             NEXT
          ENDIF
+         
+         // Guarda o Numero de Registro
+         nREGORI := RecNo()
+         dbCloseArea()
+
 
       ELSE
          // Base de dados nao existe. Ativa sinalizador para recria-la.
@@ -221,11 +218,7 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
          create_dbf := .T.
       ENDIF
 
-      // Guarda o Numero de Registro
-      nREGORI := RecNo()
-      dbCloseArea()
-
-
+      
       // Testa os sinalizadores e recria a base de dados, se necessario.
       IF dbf_exist .AND. ( create_dbf .OR. lCRIA )
 
@@ -234,8 +227,8 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
 
          // Localiza na base de dados nomes de memo definidos.
 
-         lMEMO    := ISMEMO( dbf_name, .F., .F. )
-         memoflds := INFOTIPODBF( dbf_name, .F. )
+         lMEMO    := ISMEMO( cCaminho+dbf_name, .F., .F. )
+         memoflds := INFOTIPODBF( cCaminho+dbf_name, .F. )
          memoext  := ""
          IF memoflds = 131
             memoext := ".DBT"
@@ -262,7 +255,7 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
          ENDIF
 
 
-         dbf_memo := dbf_name + MEMOEXT
+         dbf_memo := cCaminho+dbf_name + MEMOEXT
 
 
          // Troca nome dos arquivos da base de dados antiga pelo da copia.
@@ -271,7 +264,7 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
             RETU
          ENDIF
          temp_dbf := TMPFILE( "DBF" )
-         FILECOPY( dbf_name + ".DBF", temp_dbf )
+         FILECOPY( cCaminho+dbf_name + ".DBF", temp_dbf )
          IF lMEMO  // memoflds>0
             temp_dbt := StrTran( temp_dbf, ".DBF", MEMOEXT )
             FILECOPY( dbf_memo, temp_dbt )
@@ -283,12 +276,12 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
             RETURN
          ENDIF
 
-         FErase( dbf_name + ".DBF" )
+         FErase( cCaminho+dbf_name + ".DBF" )
          IF lMEMO  // memoflds>0
             FErase( dbf_memo )
          ENDIF
 
-         IF File( dbf_name + ".DBF" ) .OR. ( lMEMO .AND. File( dbf_memo ) )  // memoflds>0
+         IF File( cCaminho+dbf_name + ".DBF" ) .OR. ( lMEMO .AND. File( dbf_memo ) )  // memoflds>0
             FErase( temp_dbf )
             FErase( temp_dbt )
             ERROUSO( 'Arquivos originais ainda existentes ', lQUIT, cOLDRDD )
@@ -313,13 +306,13 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
          @ text_row, 70 SAY 'н'
 
          // Cria novamente o arq. da b.dados a partir do arq. de estrutura.
-         dbCreate( dbf_name, new_stru )
+         dbCreate( cCaminho+dbf_name, new_stru )
 
 
 
          // Se base de dados existir, copia todos os registros da copia.
          IF dbf_exist
-            IF !netuse( dbf_name, cDRIVER, .F., .F., .T., .F., 30 )  // BREDE(DBF_NAME,0,.T.,.T.)
+            IF !netuse( cCaminho+dbf_name, cDRIVER, .F., .F., .T., .F., 30 )  
                SetCursor( .T. )
                IF lQUIT
                   QUIT
@@ -374,7 +367,7 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER )
       // Obtem prox. linha de def. da base de dados a partir do dicion. dados.
       GETDBFDEF()
 
-   ENDDO WHILE !Empty( dbf_name )
+   ENDDO //WHILE !Empty( dbf_name )
 
 // fecha o arquivo de texto /Inclusao Jorge
    IF HANDLE # 0
@@ -411,8 +404,6 @@ STATIC FUNCTION ERROUSO( cMES, lQUIT, cOLDRDD )
       rddSetDefault( cOLDRDD )
    ENDIF
    RETU .T.
-
-// ****************************************************************
 
 
 // +--------------------------------------------------------------------
@@ -459,8 +450,6 @@ STATIC FUNCTION GETDBFDEF
 
 
 
-// ****************************************************************
-
 // +--------------------------------------------------------------------
 // +
 // +
@@ -475,7 +464,6 @@ STATIC FUNCTION GETDBFDEF
 // +
 STATIC FUNCTION NEXTLINE
 
-// ****************************************************************
 
 // Obtem a proxima linha de instrucao do arquivo de definicoes.
 
@@ -492,14 +480,13 @@ STATIC FUNCTION NEXTLINE
    RETURN NIL
 
 
-// ****************************************************************
 
 // +--------------------------------------------------------------------
 // +
 // +
 // +
 // +    Static Function LOADSTRU()
-// +
+// +     arrega as definicoes da base de dados para o array de estruturas.
 // +
 // +
 // +--------------------------------------------------------------------
@@ -507,10 +494,6 @@ STATIC FUNCTION NEXTLINE
 // +
 // +
 STATIC FUNCTION LOADSTRU
-
-// ****************************************************************
-
-// Carrega as definicoes da base de dados para o array de estruturas.
 
    LOCAL fld_dec   := fld_len := fld_name := fld_type := MESSAGE := ''
    LOCAL cTAG
@@ -596,12 +579,6 @@ STATIC FUNCTION LOADSTRU
    RETURN NIL
 
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function parse()
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
 
 // +--------------------------------------------------------------------
 // +
@@ -638,4 +615,4 @@ FUNCTION parse( string )
    RETURN ret_string
 
 // + EOF: f_makedb.prg
-// +
+

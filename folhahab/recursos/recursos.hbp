@@ -38,7 +38,7 @@ recuger1.prg
 ..\obj\fo_for.prg
 ..\obj\fo_rell.prg
 ..\obj\folerr.prg
-..\obj\foy2.prg
+..\obj\foy2.prg -B
 d:\develop\harbour\objmgw\comp
 d:\develop\harbour\objmgw\disk52
 d:\develop\harbour\objmgw\disk53
@@ -59,7 +59,7 @@ d:\develop\harbour\objmgw\flib08
 d:\develop\harbour\objmgw\f_encode
 d:\develop\harbour\objmgw\f_freadl
 d:\develop\harbour\objmgw\f_ismemo
-d:\develop\harbour\objmgw\f_makedb
+d:\develop\harbour\objmgw\f_makedb -B
 d:\develop\harbour\objmgw\f_mmopac
 d:\develop\harbour\objmgw\f_tempfi
 d:\develop\harbour\objmgw\mlib06

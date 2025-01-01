@@ -1,10 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : flib04hab.prg
-// +
-// +
 // +
 // +     Sistema:
 // +
@@ -14,42 +10,21 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:42 am
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Source Module => C:\DEVELOP\OBJ\FLIB04.PRG
-// +
-// +               Function INFOR()
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-
-// //#INCLUDE "COMANDO.CH"
 #include "INKEY.CH"
 #include "BOX.CH"
 
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function INFOR()
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
 
 // +--------------------------------------------------------------------
 // +
 // +
 // +
-// +    Function INFOR()
+// +    Function INFOR(mARQUIVO, aCHAVE, aINDICE, lCHECA, aTAG, lAPA)
 // +
 // +
 // +
@@ -57,7 +32,7 @@
 // +
 // +
 // +
-FUNCTION INFOR  // INDEXAR E EXIBIR INFORMACAO ARQUIVO
+FUNCTION INFOR  
 
    PARA mARQUIVO, aCHAVE, aINDICE, lCHECA, aTAG, lAPA
    LOCAL nERRO, X
@@ -99,15 +74,9 @@ FUNCTION INFOR  // INDEXAR E EXIBIR INFORMACAO ARQUIVO
       ENDIF
    NEXT X
 
-
-// FileStats( mARQUIVO,@cFileAttr  , @nFileSize  , ;
-// @dCreateDate, @nCreateTime, ;
-// @dChangeDate, @nChangeTime  )
-
-
    IF !netuse( mARQUIVO,, .F., .F., .T., .F., 30 )
       // netuse(cARQ,cDRIVER,lSHA,lREAD,lNEW,lINDEX,nTIME )
-      RETU .F.
+      RETURN .F.
    ENDIF
    hb_DispBox( 6, 0, 23, 78, B_DOUBLE + " " )
    @  7, 3 SAY spac( 21 ) + "Quadro Informativo do Arquivo" + spac( 26 )
@@ -116,12 +85,8 @@ FUNCTION INFOR  // INDEXAR E EXIBIR INFORMACAO ARQUIVO
    @ 10, 4 SAY "Indice" + spac( 10 ) + Chr( 16 )
    @ 11, 4 SAY "TAG   " + spac( 10 ) + Chr( 16 )
    @ 12, 4 SAY "Registros" + spac( 7 ) + Chr( 16 )
-   @ 13, 4 SAY "Movimenta??o    " + Chr( 16 )
+   @ 13, 4 SAY "Movimentacao    " + Chr( 16 )
 
-// @ 09,40 SAY  "Attibuto  :"+ STRVAL(cFileAttr)
-// @ 10,40 SAY  "Tamanho   :"+ STRVAL(nFileSize,8)
-// @ 11,40 SAY  "Criado em :"+ STRVAL(dCreateDate)+" "+STRVAL( nCreateTime,5,2 )
-// @ 12,40 SAY  "Modificao :"+ STRVAL(dChangeDate)+" "+STRVAL( nChangeTime,5,2 )
 
    @ 24, 00 SAY Chr( 16 ) + "  Aguarde Reorganizando  " + Chr( 17 )
    @ 08, 23 SAY Alias()
@@ -151,14 +116,7 @@ FUNCTION INFOR  // INDEXAR E EXIBIR INFORMACAO ARQUIVO
    dbCloseArea()
    SetColor( "W/N,N/W" )
    @ 06, 00 CLEAR
-   RETU .T.
-
-// +ЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁ
-// +
-// +    Function REDEFILE()
-// +
-// +ЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁЁ
-// +
+   RETURN .T.
 
 
 // +--------------------------------------------------------------------
@@ -174,7 +132,7 @@ FUNCTION INFOR  // INDEXAR E EXIBIR INFORMACAO ARQUIVO
 // +
 // +
 
-FUNC REDEFILE( cARQ, cEXT, lMES )
+FUNCTION REDEFILE( cARQ, cEXT, lMES )
 
    IF ValType( Lmes ) # "L"
       lMES := .T.
@@ -194,8 +152,6 @@ FUNC REDEFILE( cARQ, cEXT, lMES )
    ENDIF
    RETU .T.
 
-
-// + EOF: FLIB04.PRG
 
 // + EOF: flib04hab.prg
 // +
