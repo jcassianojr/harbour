@@ -18,9 +18,10 @@
 
 #include "INKEY.CH"
 
-function folis_d2()
-v_pic := "@S18"
-PADRAO( "FIRMA", "FIRMA", "STR(mNRCLIEN)+' '+mRAZAO", "mNRCLIEN", "FOPTO_4H - Cadastro de Empresas", "Codigo Raz„o", ;
+FUNCTION folis_d2()
+
+   v_pic := "@S18"
+   PADRAO( "FIRMA", "FIRMA", "STR(mNRCLIEN)+' '+mRAZAO", "mNRCLIEN", "FOPTO_4H - Cadastro de Empresas", "Codigo Raz„o", ;
       {|| ALERTX( "nao disponvivel neste modulo" ) }, {|| tFOLISD2() }, {|| gFOLISD2() }, {|| FO_FOR( "GRUPO='FIRMA'" ) },, 2,,, "E" )
 
    RETURN .T.

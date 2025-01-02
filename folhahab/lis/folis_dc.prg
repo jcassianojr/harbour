@@ -16,12 +16,13 @@
 // +
 
 
-function folis_dc()
-aTEL01 := EDITPEG( "IRRF01" )
-PADRAO( "IRRF01", "IRRF01", "' '+STR(mNUMERO,  8)+' '+mNOME+' '+mCGC", "mNUMERO", "IRRF Juridico Avulso", "Numero   Nome" + spac( 37 ) + "CGC", ;
+FUNCTION folis_dc()
+
+   aTEL01 := EDITPEG( "IRRF01" )
+   PADRAO( "IRRF01", "IRRF01", "' '+STR(mNUMERO,  8)+' '+mNOME+' '+mCGC", "mNUMERO", "IRRF Juridico Avulso", "Numero   Nome" + spac( 37 ) + "CGC", ;
       {|| PEGCHAVE( "mNUMERO", ULTIMOREG( "IRRF01", "NUMERO", .T. ), ":" ) }, "IRRF01", {|| gDC() } )
 
-return
+   RETURN
 
 // +--------------------------------------------------------------------
 // +

@@ -16,114 +16,116 @@
 // +
 
 
-function folis_c1()
-IF !MDL( 'Listar 13§ Provis„o', 0 )
-RETU
-ENDIF
-DIARFE := Date()
-MDS( 'Qual a data de referencia' )
-@ 24, 40 GET DIARFE
-READCUR()
-ANOFIM    := Year( DIARFE )
-MESFIM    := Month( DIARFE )
-DIAFIM    := Day( DIARFE )
-FILTRO    := ""
-lPRIMEIRA := MDG( "Abater Primeira Parcela 13o. Sal rio" )
-lGRAVA    := MDG( "Gravar Resultados- Apura‡„o Contabil" )
-lANAL     := MDG( "Deseja Resumo Analitico" )
-IF MDG( "Incluir Demitidos Mes" )
-FILTRO := '(EMPTY(DEMITIDO).OR.(MONTH(DEMITIDO)>=MONTH(DIARFE).AND.YEAR(DEMITIDO)>=YEAR(DIARFE)))'
-ELSE
-FILTRO := 'EMPTY(DEMITIDO)'
-ENDIF
+FUNCTION folis_c1()
+
+   IF !MDL( 'Listar 13§ Provis„o', 0 )
+      RETU
+   ENDIF
+   DIARFE := Date()
+   MDS( 'Qual a data de referencia' )
+   @ 24, 40 GET DIARFE
+   READCUR()
+   ANOFIM    := Year( DIARFE )
+   MESFIM    := Month( DIARFE )
+   DIAFIM    := Day( DIARFE )
+   FILTRO    := ""
+   lPRIMEIRA := MDG( "Abater Primeira Parcela 13o. Sal rio" )
+   lGRAVA    := MDG( "Gravar Resultados- Apura‡„o Contabil" )
+   lANAL     := MDG( "Deseja Resumo Analitico" )
+   IF MDG( "Incluir Demitidos Mes" )
+      FILTRO := '(EMPTY(DEMITIDO).OR.(MONTH(DEMITIDO)>=MONTH(DIARFE).AND.YEAR(DEMITIDO)>=YEAR(DIARFE)))'
+   ELSE
+      FILTRO := 'EMPTY(DEMITIDO)'
+   ENDIF
 
 
-FL       := CODFPAS := TOTENC := TOTALAVO := TOTALVAL := 0
-TOTALTER := TOTALENC := TOTALE := INSSDESC := 0
+   FL       := CODFPAS := TOTENC := TOTALAVO := TOTALVAL := 0
+   TOTALTER := TOTALENC := TOTALE := INSSDESC := 0
 
 
-VERSEHA( "FIRMA", "", NREMP,,, .F., { { "FPAS", "CODFPAS" } } )
-VERSEHA( "CONFINSS",, Val( CODFPAS ),,, .F., { { "EMPRESA+TOTAL+ACIDENTE+8", "TOTENC" } } )
+   VERSEHA( "FIRMA", "", NREMP,,, .F., { { "FPAS", "CODFPAS" } } )
+   VERSEHA( "CONFINSS",, Val( CODFPAS ),,, .F., { { "EMPRESA+TOTAL+ACIDENTE+8", "TOTENC" } } )
 
 
-MDS( 'Encargos Calculados Pelo Computador' )
-@ 24, 40 GET TOTENC
-READCUR()
-TOTENC := TOTENC / 100
+   MDS( 'Encargos Calculados Pelo Computador' )
+   @ 24, 40 GET TOTENC
+   READCUR()
+   TOTENC := TOTENC / 100
 
-aXCON := PEGRELCTA( "PROV13" )
-
-
-IF !NETUSE( pes )
-dbCloseAll()
-RETU
-ENDIF
-FILTRO := ''
-INX    := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
-
-IF MDG( 'Deseja Digitar Sal rio Vari vel' )
-dbSelectAr( PES )
-dbGoTop()
-WHILE !Eof()
-PETELA( 8 )
-NETRECLOCK()
-MDS( 'Digite o vari vel para o Funcionario Acima' )
-@ 24, 50 GET SALVAR13S PICT '###,###,###,###.##'
-READCUR()
-dbUnlock()
-dbSkip()
-ENDDO
-ENDIF
-
-IF lPRIMEIRA
-IF File( PATHX + "\FO_FP13A.DBF" )
-IF !NETUSE( "FO_FP13A" )
-dbCloseAll()
-RETU
-ENDIF
-ELSE
-IF !NETUSE( F13 )   // competencias antigas
-dbCloseAll()
-RETU .F.
-ENDIF
-ENDIF
-cSELE2 := Alias()
-ENDIF
-
-IF lGRAVA
-IF !NETUSE( "PROV13" )
-dbCloseAll()
-RETU .F.
-ENDIF
-nLASTREC := LastRec()
-MDS( "Aguarde Preparando Arquivo Acumulado" )
-zei_fort( nLASTREC,,, 0 )
-dbEval( {|| netrecdel() }, {|| ANO = MESFIM .AND. MES = MESFIM }, {|| zei_fort( nLASTREC,,, 1 ) } )
-dbCloseArea()
-NETPACK( "PROV13" )
-ENDIF
-
-IF !NETUSE( FOL )
-dbCloseAll()
-RETU .F.
-ENDIF
+   aXCON := PEGRELCTA( "PROV13" )
 
 
-aTOTGER := { 0, 0, 0, 0, 0, 0 }
-CTLIN   := 80
-LISTARUE( {| X | FOLISC1( X ) }, {|| FOLISC1B() } )
-return
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETU
+   ENDIF
+   FILTRO := ''
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
+
+   IF MDG( 'Deseja Digitar Sal rio Vari vel' )
+      dbSelectAr( PES )
+      dbGoTop()
+      WHILE !Eof()
+         PETELA( 8 )
+         NETRECLOCK()
+         MDS( 'Digite o vari vel para o Funcionario Acima' )
+         @ 24, 50 GET SALVAR13S PICT '###,###,###,###.##'
+         READCUR()
+         dbUnlock()
+         dbSkip()
+      ENDDO
+   ENDIF
+
+   IF lPRIMEIRA
+      IF File( PATHX + "\FO_FP13A.DBF" )
+         IF !NETUSE( "FO_FP13A" )
+            dbCloseAll()
+            RETU
+         ENDIF
+      ELSE
+         IF !NETUSE( F13 )   // competencias antigas
+            dbCloseAll()
+            RETU .F.
+         ENDIF
+      ENDIF
+      cSELE2 := Alias()
+   ENDIF
+
+   IF lGRAVA
+      IF !NETUSE( "PROV13" )
+         dbCloseAll()
+         RETU .F.
+      ENDIF
+      nLASTREC := LastRec()
+      MDS( "Aguarde Preparando Arquivo Acumulado" )
+      zei_fort( nLASTREC,,, 0 )
+      dbEval( {|| netrecdel() }, {|| ANO = MESFIM .AND. MES = MESFIM }, {|| zei_fort( nLASTREC,,, 1 ) } )
+      dbCloseArea()
+      NETPACK( "PROV13" )
+   ENDIF
+
+   IF !NETUSE( FOL )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+
+
+   aTOTGER := { 0, 0, 0, 0, 0, 0 }
+   CTLIN   := 80
+   LISTARUE( {| X | FOLISC1( X ) }, {|| FOLISC1B() } )
+
+   RETURN
 
 
 

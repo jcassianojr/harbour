@@ -17,33 +17,35 @@
 
 #include "BOX.CH"
 
-function folis_d3()
-CABE2( 'Alterar m‚dia de variaveis para 13o. Sal rio' )
-PARA CC
-IF CC = 0
-IF !NETUSE( "FO_VAR" )   // AREDE("FO_VAR","FO_VAR",0)
-RETU
-ENDIF
-ENDIF
-IF CC = 1
-IF !NETUSE( "FO_VBR" )   // AREDE("FO_VBR","FO_VBR",0)
-RETU
-ENDIF
-ENDIF
-FILTRO := FILTRO( "" )
-SET FILTER TO &FILTRO
-dbGoTop()
-DECLARE CAMPOS[ 1 ]
-CAMPOS[ 1 ] = '" "+STR(NUMERO,5)+" "+STR(CONTA)+" "+STR(HORAS,6,2)+" "+STR(VALOR,14,2)+" "'
+FUNCTION folis_d3()
+
+   CABE2( 'Alterar m‚dia de variaveis para 13o. Sal rio' )
+   PARA CC
+   IF CC = 0
+      IF !NETUSE( "FO_VAR" )   // AREDE("FO_VAR","FO_VAR",0)
+         RETU
+      ENDIF
+   ENDIF
+   IF CC = 1
+      IF !NETUSE( "FO_VBR" )   // AREDE("FO_VBR","FO_VBR",0)
+         RETU
+      ENDIF
+   ENDIF
+   FILTRO := FILTRO( "" )
+   SET FILTER TO &FILTRO
+   dbGoTop()
+   DECLARE CAMPOS[ 1 ]
+   CAMPOS[ 1 ] = '" "+STR(NUMERO,5)+" "+STR(CONTA)+" "+STR(HORAS,6,2)+" "+STR(VALOR,14,2)+" "'
 // CLEAR TYPEAHEAD
-hb_keyClear()
-KEYBOARD " "
-hb_DispBox( 8, 0, 24, 79, B_DOUBLE )
-@ 09, 02 SAY "Num. Conta Horas Valor"
-@ 10, 00 SAY 'Æ' + REPL( '-', 78 ) + 'µ'
-dbEdit( 11, 1, 23, 36, CAMPOS, "VAREDIT", .T., "", "", "", "", "" )
-dbCloseAll()
-RETUrn .t.
+   hb_keyClear()
+   KEYBOARD " "
+   hb_DispBox( 8, 0, 24, 79, B_DOUBLE )
+   @ 09, 02 SAY "Num. Conta Horas Valor"
+   @ 10, 00 SAY 'Æ' + REPL( '-', 78 ) + 'µ'
+   dbEdit( 11, 1, 23, 36, CAMPOS, "VAREDIT", .T., "", "", "", "", "" )
+   dbCloseAll()
+
+   RETURN .T.
 
 
 // +--------------------------------------------------------------------

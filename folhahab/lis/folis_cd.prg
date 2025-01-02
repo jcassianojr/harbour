@@ -17,44 +17,45 @@
 // +
 
 
-function folis_cd()
+FUNCTION folis_cd()
 
-IF !MDL( 'Listar 13§ Provis„o Acumulada', 0 )
-RETU
-ENDIF
-
-
-lANAL := MDG( "Deseja Resumo Analitico" )
-aXCON := PEGRELCTA( "PROV13" )
+   IF !MDL( 'Listar 13§ Provis„o Acumulada', 0 )
+      RETU
+   ENDIF
 
 
-IF !NETUSE( pes )
-dbCloseAll()
-RETU
-ENDIF
-FILTRO := ''
-INX    := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
+   lANAL := MDG( "Deseja Resumo Analitico" )
+   aXCON := PEGRELCTA( "PROV13" )
 
 
-IF !NETUSE( "PROV13" )
-dbCloseAll()
-RETU .F.
-ENDIF
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETU
+   ENDIF
+   FILTRO := ''
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
 
 
-LISTARUE( {| X | FOLISCD( X ) } )
-return .t.
+   IF !NETUSE( "PROV13" )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+
+
+   LISTARUE( {| X | FOLISCD( X ) } )
+
+   RETURN .T.
 
 
 
