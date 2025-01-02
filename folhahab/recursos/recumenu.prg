@@ -1,39 +1,22 @@
-// :*****************************************************************************
-// :
-// :   RECUMENU.PRG: Menu Principal Recurso
-// :      Linguagem: Clipper 5.x
-// :        Sistema: RECURSOS
-// :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 04/28/94     11:31
-// :
-// :  Procs & Fncts: RECUMENU()
-// :
-// :          Chama: RECUGER()          (fun‡„o    em RECUGER.PRG)
-// :               : RECUAPO()          (fun‡„o    em RECUAPO.PRG)
-// :               : RECUSER()          (fun‡„o    em RECUSER.PRG)
-// :
-// :     Documentado 05/13/94 em 15:46                DISK!  vers„o 5.01
-// :*****************************************************************************
+// +--------------------------------------------------------------------
+// +
+// +    Programa  : recumenu.prg Menu Principal Recurso
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +    Documentado em 2-Jan-2025 as  7:33 pm
+// +
+// +--------------------------------------------------------------------
+// +
+
 
 #include "BOX.CH"
-
-/*
-g_oMenuBar := WvgSetAppWindow():menuBar()
-
-oMenu12 := WvgMenu():new( g_oMenuBar, , .t. ):create()
-oMenu12:caption := "Recursos"
-
-oMenu12:AddItem( "1 - alert1 "  , {|| alert("1") } )          //execModulos("0.1")
-oMenu12:AddItem( "2 - alert2 "  , {|| alert("2") } )
-
-g_oMenuBar:addItem( { oMenu12, "Recursos" } )
-
-
-//return (oMenu12)
-*/
-
-
 
 // +--------------------------------------------------------------------
 // +
@@ -102,4 +85,6 @@ FUNCTION RECUMENU()
 
    RETURN .T.
 
-// : FIM: RECUMENU.PRG
+
+// + EOF: recumenu.prg
+// +

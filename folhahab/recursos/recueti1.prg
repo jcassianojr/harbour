@@ -1,36 +1,19 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : recueti1.prg Programa de Edicao e Emiss„o de Etiquetas Simples
 // +
-// +    Programa  : recueti1.prg
+// +     Sistema: Recursos
 // +
+// +     Linguagem: Harbour
 // +
-// +    Documentado em 27-Dez-2024 as  8:41 pm
-
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +    Documentado em 2-Jan-2025 as  7:33 pm
 // +
 // +--------------------------------------------------------------------
 // +
-
-// :*****************************************************************************
-// :
-// :    RECUETI1.PRG: Programa de Edicao e Emiss„o de Etiquetas Simples
-// :       Linguagem: Harbour
-// :        Sistema: RECURSOS
-// :          Autor: jcassiano
-// :      Copyright (c) 2024,  jcassiano
-// :
-// :   & Fncts: RECUETI1()
-// :               : EDITA2
-// :               : CAD()
-// :
-// :          Chama: EDITA2             (  em RECUETI1.PRG)
-// :
-// :     Arq. Dados: ETIQ1 - ETIQUETA SIMPLES
-// :               : ETIQ2 - LAYOUT DE TAMANHO DE ETIQUETA
-// :
-// :         Indice:  ETIQ1      CODIGO DA ETIQUETA
-// :                             CODIGO
-// :
-// :*****************************************************************************
 
 
 // +--------------------------------------------------------------------
@@ -70,17 +53,19 @@ FUNCTION RECUETI1()
 
    RETURN
 
-// !*****************************************************************************
-// !
-// !       EDITA2
-// !
-// !    Chamado por: RECUETI1.PRG
-// !
-// !          Chama: NSHOW1()           (funcao    em RECUPROC.PRG)
-// !               : CAD()              (funcao    em RECUETI1.PRG, chamado  no Dbedit())
-// !
-// !*****************************************************************************
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function EDITA2()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 FUNCTION EDITA2
 
    @ 08, 00 CLEAR
@@ -112,22 +97,25 @@ FUNCTION EDITA2
    SetCursor( 1 )
    RETU
 
-// !*****************************************************************************
-// !
-// !         Funcao: CAD()
-// !
-// !    Chamado por: EDITA2             (  em RECUETI1.PRG)
-// !
-// !          Chama: TELATIP            (  em RECUGER1.PRG)
-// !               : CAD1()             (funcao    em RECUGER1.PRG, chamado  no Dbedit())
-// !
-// !*****************************************************************************
 
-FUNC CAD
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function CAD()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 
-// ***********
+FUNCTION  CAD
+
    PARA MODO
    PRIV COR
+
    KEY := LastKey()
    DO CASE
    CASE MODO < 4
@@ -276,8 +264,6 @@ FUNC CAD
       RETU ( 0 )
    ENDCASE
    RETU ( 1 )
-// : FIM: RECUETI1.PRG
-   
 
 // + EOF: recueti1.prg
 // +

@@ -1,14 +1,20 @@
+// +--------------------------------------------------------------------
+// +
+// +    Programa  : recursos.prg Programa Principal
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +    Documentado em 2-Jan-2025 as  7:33 pm
+// +
+// +--------------------------------------------------------------------
+// +
 
-// :*****************************************************************************
-// :
-// :   RECURSOS.PRG: Programa Principal
-// :      Linguagem: Clipper 5.x
-// :        Sistema: RECURSOS
-// :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 04/28/94     11:42
-// :
-// :*****************************************************************************
 
 
 #include "HBGTINFO.CH"
@@ -19,8 +25,6 @@ REQUEST DBFCDX
 
 #include "INKEY.CH"
 #include "tshead.ch"
-
-
 
 
 // +--------------------------------------------------------------------
@@ -138,6 +142,7 @@ FUNCTION main
    RETU NIL
 
 
+
 // +--------------------------------------------------------------------
 // +
 // +
@@ -152,6 +157,7 @@ FUNCTION main
 // +
 
 FUNCTION corrigeendereco
+
 
    RETURN NIL
 
@@ -169,10 +175,7 @@ FUNCTION corrigeendereco
 // +
 // +
 FUNCTION m_da
-
    RETURN NIL
 
-// : FIM: RECURSOS.PRG
-
-// + FIM recursos.prg
+// + EOF: recursos.prg
 // +
