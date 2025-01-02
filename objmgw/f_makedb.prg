@@ -338,7 +338,7 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
                FErase( temp_dbt )
             ENDIF
             IF memoflds > 0
-               MEMOPACK( dbf_name )
+               MEMOPACK( cCaminho+dbf_name )
             ENDIF
 
          ENDIF
@@ -347,14 +347,15 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
       ENDIF
 
       // cria indices se nao existir
-      IF !File( dbf_name + hb_rddInfo( RDDI_ORDBAGEXT ) )
-         IF netuse( dbf_name, cDRIVER, .F., .F., .T., .F., 30 )
+      IF !File( cCaminho+dbf_name + hb_rddInfo( RDDI_ORDBAGEXT ) )
+         IF netuse( cCaminho+dbf_name, cDRIVER, .F., .F., .T., .F., 30 )
             AltD()
             IF Len( new_index ) > 0
                FOR I := 1 TO Len( new_index )
                   cTAG      := new_index[ i, 1 ]
                   cCHAVEDBF := new_index[ i, 2 ]
-                  INDEX ON &cCHAVEDBF TAG &cTAG TO &dbf_name
+                  cCAMINDEX :=cCaminho+dbf_name
+                  INDEX ON &cCHAVEDBF TAG &cTAG TO &cCAMINDEX
                NEXT I
             ENDIF
             dbCloseArea()

@@ -851,16 +851,30 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
 
    LOCAL mSQL
    LOCAL i
+   LOCAL llMDB
+   LOCAL llACCDB
 
    IF ValType( cTIPOSQL ) <> "C"
       cTIPOSQL := "SQLITE"
    ENDIF
+   
+   llMDB:=.F.
+   llACCDB:=.F.
+   
+    IF cTIPOSQL = "MDB" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS64"
+       llMDB := .T.
+    ENDIF
+    IF cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64"
+       llACCDB := .T.
+    ENDIF
+
+   
 
    msql := ""
    IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"  // postgree e case sensitive deixando em maisuclav
       cTABLENAME := Upper( cTABLENAME )
    ENDIF
-   IF lMDB .OR. lACCDB
+   IF llMDB .OR. llACCDB
       mSql := "CREATE TABLE " + cTablename + " ("
    ELSE
       mSql := "CREATE TABLE IF NOT EXISTS " + cTablename + " ("
@@ -886,7 +900,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
          //
       CASE mFldType = "C" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
          mSql += "VARCHAR2 (" + LTrim( Str( mFldLen ) ) + ")"
-      CASE mFldType = "C" .AND. ( clMDB .OR. lACCDB ;
+      CASE mFldType = "C" .AND. ( llMDB .OR. llACCDB ;
                                  .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
          mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"
       CASE mFldType = "C" .AND. cTIPOSQL = "SQLITE"
@@ -916,7 +930,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
       CASE mFldType = "D" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
          mSql += "TIMESTAMP"
 
-      CASE mFldType = "D" .AND. ( lMDB .OR. lACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+      CASE mFldType = "D" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
          mSql += "DATETIME"
       CASE mFldType = "D"
          mSql += "DATE"
@@ -979,7 +993,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
             ENDIF
          ENDIF
 
-      CASE mFldType = "N" .AND. ( clMDB .OR. lACCDB )
+      CASE mFldType = "N" .AND. ( llMDB .OR. llACCDB )
          IF mFldDec > 0
             mSql += "DOUBLE"
          ELSE
@@ -1008,7 +1022,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
          //
          // F= float  HB_FT_FLOAT           5 
          //
-      CASE  mFldType = "F" .AND. ( lMDB .OR. lACCDB )
+      CASE  mFldType = "F" .AND. ( llMDB .OR. llACCDB )
          mSql += "DOUBLE"
       CASE mFldType = "F" .AND. cTIPOSQL = "SQLITE"
          mSql += "REAL "
@@ -1044,7 +1058,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
          //
          // I = integer LONG HB_FT_INTEGER         6  
          //
-      CASE mFldType = "I" .AND. ( lMDB .OR. lACCDB )
+      CASE mFldType = "I" .AND. ( llMDB .OR. llACCDB )
          mSql += "LONG"
       CASE mFldType = "I" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
          mSql += "INT " 
@@ -1079,7 +1093,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
          mSql += "NUMBER (1)"
       CASE mFldType = "L" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "FIREBIRD" )
          mSql += "BOOLEAN"
-      CASE mFldType = "L" .AND. ( lMDB .OR. lACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+      CASE mFldType = "L" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
          mSql += "BIT"
       CASE mFldType = "L"
          mSql += "BOOL"
@@ -1090,7 +1104,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
          mSql += "CLOB"
       CASE mFldType = "M" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
          mSql += "TEXT"
-      CASE mFldType = "M" .AND. ( lMDB .OR. lACCDB )
+      CASE mFldType = "M" .AND. ( llMDB .OR. llACCDB )
          mSql += "LONGTEXT"
       CASE mFldType = "M" .AND. ( cTIPOSQL = "FIREBIRD" )
          mSql += "BLOB SUB_TYPE 1"
@@ -1103,7 +1117,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
          mSql += "BYTEA"
       CASE mFldType = "G" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
          mSql += "VARBINARY"
-      CASE mFldType = "G" .AND. ( lMDB .OR. lACCDB )
+      CASE mFldType = "G" .AND. ( llMDB .OR. llACCDB )
          mSql += "LONGBINARY"
       CASE mFldType = "M" .AND. ( cTIPOSQL = "FIREBIRD" )
          mSql += "BLOB SUB_TYPE 0"
