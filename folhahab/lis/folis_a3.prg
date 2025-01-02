@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_a3.prg Acumular Dados para Rais
 // +
-// +
-// +    Programa  : folis_a3.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,31 +10,14 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :  FOLIS_A3.PRG : Acumular Dados para Rais
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1998,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-
+function folis_a3()
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
 CABE2( 'Acumulando Dados Para Rais' )
@@ -515,7 +494,6 @@ dbSkip()
 ENDDO
 dbCloseAll()
 
-// : FIM: FOLIS_A3.PRG
-
+return
 // + EOF: folis_a3.prg
 // +

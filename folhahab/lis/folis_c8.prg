@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_c8.prg  DIRF
 // +
-// +
-// +    Programa  : folis_c8.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,29 +10,14 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_C8.PRG: DIRF
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
+
+function folis_c8()
 
 IF !MDL( '  D.  I.   R.   F.    ', 0 )
 RETU
@@ -247,7 +228,7 @@ IMPFOL()
 VIDEO()
 dbCloseAll()
 IMPEND()
-RETU
+RETUrn
 
 // : FIM: FOLIS_C8.PRG
 

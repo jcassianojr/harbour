@@ -1,21 +1,14 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_a7.prg  Preparar Arquivo DIRF
 // +
-// +
-// +    Programa  : folis_a7.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
 // +     Autor: jcassiano
 // +
 // +     Copyright (c) 2024,  jcassiano
-// +
-// +
-// +
 // +
 // +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
@@ -25,18 +18,7 @@
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :   FOLIS_A7.PRG: Preparar Arquivo DIRF
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
-
+function folis_a7()
 CABE2( 'Criar Arquivo para DIRF ' )
 IF !MDG( 'Voce ja conferiu o Cadastro Funcionarios, estao OK.' )
 FOLIS_D1()
@@ -295,7 +277,7 @@ FUNC DIRFEMPDAD()
    mrXFAX := StrTran( mrXFAX, " ", "0" )
    mrXFAX := StrZero( Val( mrxFAX ), 8 )
    mrXDDD := StrZero( Val( XRDDD ), 4 )
-   RETU .T.
+   RETUrn .T.
 
 // + EOF: folis_a7.prg
 // +

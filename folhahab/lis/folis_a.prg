@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_a.prg Acumula Folhas Anuais,Sal.Variavel 13§,Rais,Infome e Dirf
 // +
-// +
-// +    Programa  : folis_a.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,29 +10,12 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :    FOLIS_A.PRG: Acumula Folhas Anuais,Sal.Variavel 13§,Rais,Infome e Dirf
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1998,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 22/01/97
-// :
-// :*****************************************************************************
-
-
+function folis_a()
 WHILE .T.
 CABE3( "  Acumula Folhas Anuais,Sal.Variavel 13§,Rais,Infome e Dirf  ", 24, 79 )
 @ 10, 1 PROM " A - Acumular Folhas de Pagamento do Ano de Trabalho" + SPAC( 26 )
@@ -69,7 +48,7 @@ OTHERWISE
 RETU
 ENDCASE
 ENDDO
-// : FIM: FOLIS_A.PRG
+return .t.
 
 // + EOF: folis_a.prg
 // +

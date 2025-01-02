@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_cc.prg Listar Rais Checagem Funcionarios
 // +
-// +
-// +    Programa  : folis_cc.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,28 +10,12 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_CC.PRG: Listar Rais Checagem Funcionarios
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
-// //#INCLUDE "COMANDO.CH"
+function folis_cc()
 IF !MDL( 'Listar RAIS Checagem Empregados', 0 )
 RETU .F.
 ENDIF
@@ -110,7 +90,7 @@ dbCloseAll()
 IMPFOL()
 VIDEO()
 IMPEND()
-RETU .T.
+RETUrn .T.
 
 
 // +--------------------------------------------------------------------

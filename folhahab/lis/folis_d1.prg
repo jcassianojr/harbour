@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_d1.prg Revisao e Alteracao de Dados da Rais
 // +
-// +
-// +    Programa  : folis_d1.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,26 +10,11 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :******************************************************************************:
-// :
-// :   FOLIS_D1.PRG: Revis„o e Altera‡„o de Dados da Rais
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1998,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
 #include "INKEY.CH"
 #include "BOX.CH"

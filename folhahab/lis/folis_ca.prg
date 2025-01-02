@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_ca.prg Listar Resumo Rais Empresa
 // +
-// +
-// +    Programa  : folis_ca.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,28 +10,12 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// : FOLIS_CA.PRG  : Listar Resumo Rais Empresa
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
-// //#INCLUDE "COMANDO.CH"
+function folis_ca()
 IF !MDL( 'Listar RAIS Resumo Empresa', 0 )
 RETU
 ENDIF
@@ -100,7 +80,7 @@ dbCloseAll()
 IMPFOL()
 VIDEO()
 IMPEND()
-RETU .T.
+RETUrn .T.
 
 // + EOF: folis_ca.prg
 // +

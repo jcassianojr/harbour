@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folhalis.prg  programa main inicial
 // +
-// +
-// +    Programa  : folhalis.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,28 +10,11 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :   FOLHALIS.PRG: Nome do Programa
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 04/26/94      8:00
-// :
-// :*****************************************************************************
 
 REQUEST HB_LANG_PT
 REQUEST HB_CODEPAGE_PTISO

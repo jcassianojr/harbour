@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folism.prg menu principal modulo 
 // +
-// +
-// +    Programa  : folism.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,30 +10,14 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :     FOLISM.PRG: Listas anuais
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 19/01/1999
-// :
-// :*****************************************************************************
-// ////#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
+function folism()
 Set( _SET_MESSAGE, 24, .T. )
 WHILE .T.
 SetColor( "+W/BR,N/W" )
@@ -67,7 +47,7 @@ hb_DispBox( 12, 01, 20, 78, B_DOUBLE )
 @ 19, 06 SAY "²²²²      ²²²²²   ²²²²²²²  ²²  ²²   ²²  ²²    ß ß ß  ß ßßß ß ß ß ßßß"
 SetColor( "+W/BR, N/W" )
 @ 02, 02 PROM "  ACUMULAR  " MESS "  Acumula Folhas Anuais,Sal.Variavel 13§,Rais,Infome e Dirf  "
-@ 02, 16 PROM "  CALCULOS  " MESS "  C lculos e Transferencias do 13o. Salario  "
+@ 02, 16 PROM "  CALCULOS  " MESS "  Calculos e Transferencias do 13o. Salario  "
 @ 02, 30 PROM "  IMPRIMIR  " MESS "  Planilhas, F.Financeira, Rais, Dirf Informe "
 @ 02, 54 PROM "  REVISAO DADOS " MESS "  Revisar Acumulo de Dados / Arquivos Trabalho "
 @ 02, 72 PROM " SAIR " MESS "  Abandonar o sistema  "
@@ -86,7 +66,7 @@ SetColor( "W/N,N/W" )
 RETU
 ENDCASE
 ENDDO
-// : FIM: FOLISM.PRG
+return
 
 // + EOF: folism.prg
 // +

@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_b.prg calcular 13o. Salario/ Transferir
 // +
-// +
-// +    Programa  : folis_b.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,29 +10,13 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :      FOLIS.PRG: Calcular 13o. Salario/ Transferir
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-
+function folis_b()
 DO WHILE .T.
 CABE3( "  Calcular 13o. Salario/ Transferir   ", 24, 79 )
 SetColor( "W/N,N/W" )
@@ -68,7 +48,7 @@ OTHERWISE
 RETU
 ENDCASE
 ENDDO
-// : FIM: FOLIS_B.PRG
+return
 
 // + EOF: folis_b.prg
 // +

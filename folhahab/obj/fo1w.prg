@@ -1,12 +1,9 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : fo1w.prg cadastros muncipios MD10
 // +
 // +
-// +    Programa  : fo1w.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO 
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,19 +11,14 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:44 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
 #include "BOX.CH"
 
+function fo1w()
 PRIV xUF := ""
 
 caRQ := PEGCAMINI( "MD10" ) + "MD10"

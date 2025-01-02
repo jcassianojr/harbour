@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_cb.prg Listar Resumo Rais Empresa Empregados
 // +
-// +
-// +    Programa  : folis_cb.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,28 +10,13 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// : FOLIS_CB.PRG  : Listar Resumo Rais Empresa Empregados
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-// //#INCLUDE "COMANDO.CH"
+function folis_cb()
 IF !MDL( 'Listar RAIS Resumo Empregados', 0 )
 RETU
 ENDIF
@@ -175,7 +156,7 @@ dbCloseAll()
 IMPFOL()
 VIDEO()
 IMPEND()
-RETU .T.
+RETUrn .T.
 
 // + EOF: folis_cb.prg
 // +

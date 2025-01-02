@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_c.prg menu de relatorios
 // +
-// +
-// +    Programa  : folis_c.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,27 +10,12 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :  FOLIS_C.PRG  : Relat¢rios
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
+function folis_c()
 IMPHP()
 
 
@@ -89,8 +70,7 @@ OTHERWISE
 RETU
 ENDCASE
 ENDDO
-
-// : FIM: FOLIS_C.PRG
+return
 
 // + EOF: folis_c.prg
 // +

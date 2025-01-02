@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : imprais.prg importar rais para folha
 // +
-// +
-// +    Programa  : imprais.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,19 +10,13 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
 
-
+function imprais()
 CABE2( 'Sincronizar Arquivo' )
 nMESINI := 1
 nMESFIM := 12
@@ -347,6 +337,7 @@ dbSkip()
 zei_fort( nLASTREC,,, 1 )
 ENDDO
 dbCloseAll()
+return 
 
 // FORAIS->RAIZJAN:=VAL((Carq)->SAL01)/100
 // FORAIS->RAIZFEV:=VAL((Carq)->SAL02)/100

@@ -1,12 +1,10 @@
 // +--------------------------------------------------------------------
 // +
 // +
-// +
-// +    Programa  : folis_d6.prg
-// +
+// +    Programa  : folis_d6.prg onversao da Folha de Pagamento pelo Indice digitado
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -15,27 +13,12 @@
 // +     Copyright (c) 2024,  jcassiano
 // +
 // +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_D6.PRG: ConversÑo da Folha de Pagamento pelo Indice digitado
-// :      Linguagem: Clipper 5.x7
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
-
+function folis_d6()
 @ 08, 00 CLEAR
 @ 10, 10 SAY "VOCE IRè CONVERTER SUA FOLHA DE PAGAMENTO PELO INDICE"
 @ 11, 10 SAY "QUE VOCE DIGITAR SO FAÄA ESTE PROCESSO UMA UNICA VEZ"
@@ -69,8 +52,7 @@ Zei_fort( nLASTREC,,, 0 )
 dbEval( {|| netgrvcam( "VALOR", VALOR / INDICE ) },, {|| zei_fort( nLASTREC,,, 1 ) } )
 
 dbCloseAll()
-RETU
-// : FIM: FOLIS_D6.PRG
+RETUrn
 
 // + EOF: folis_d6.prg
 // +

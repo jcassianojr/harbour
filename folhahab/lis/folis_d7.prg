@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_d7.prg Virado do Ano
 // +
-// +
-// +    Programa  : folis_d7.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,34 +10,17 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_D7.PRG: Virado do Ano
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :          Autor: Equipe Softec
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-
-
-// //#INCLUDE "COMANDO.CH"
 #include "INKEY.CH"
 #include "BOX.CH"
 
+
+function folis_d7()
 INFOR( "FIRMA", "NRCLIEN", "FIRMA", .T. )
 CABE2( 'INICIAR ANO' )
 
@@ -261,9 +240,6 @@ Inkey( 0 )
 RETU .T.
 
 
-
-
-// : FIM: FOLIS_D7.PRG
 
 // + EOF: folis_d7.prg
 // +

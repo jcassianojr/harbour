@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_d2.prg Revisao e Alteracao de Dados da Rais Empresa
 // +
-// +
-// +    Programa  : folis_d2.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,32 +10,15 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :******************************************************************************:
-// :
-// :   FOLIS_D2.PRG: Revis„o e Altera‡„o de Dados da Rais Empresa
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 
+function folis_d2()
 v_pic := "@S18"
 PADRAO( "FIRMA", "FIRMA", "STR(mNRCLIEN)+' '+mRAZAO", "mNRCLIEN", "FOPTO_4H - Cadastro de Empresas", "Codigo Raz„o", ;
       {|| ALERTX( "nao disponvivel neste modulo" ) }, {|| tFOLISD2() }, {|| gFOLISD2() }, {|| FO_FOR( "GRUPO='FIRMA'" ) },, 2,,, "E" )

@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_a6.prg Gerar Arquivo para RAIS
 // +
-// +
-// +    Programa  : folis_a6.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -15,30 +11,17 @@
 // +     Copyright (c) 2024,  jcassiano
 // +
 // +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
 // +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :   FOLIS_A6.PRG: Gerar Arquivo para RAIS
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 2007,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 30/01/2007
-// :
-// :*****************************************************************************
 
 #include "INKEY.CH"
 #include "BOX.CH"
 
+function folis_a6()
 CABE2( 'Preparar Arquivo para Rais' )
 IF !MDG( 'Voce ja conferiu o Cadastro Empresas, estao OK.' )
 FOLIS_D2()
@@ -728,7 +711,7 @@ ENDIF
 
 ALERTX( "NAo EsqueCa de Utilizar o Validador/Importador" )
 
-RETU
+RETUrn
 
 
 

@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_a8.prg  Preparar Arquivo DIRF Juridica
 // +
-// +
-// +    Programa  : folis_a8.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -15,27 +11,13 @@
 // +     Copyright (c) 2024,  jcassiano
 // +
 // +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_A8.PRG: Preparar Arquivo DIRF Juridica
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-
+function folis_a8()
 CABE2( 'Gera IRRF Avulsa Juridica' )
 
 
@@ -165,7 +147,7 @@ dbCloseAll()
 
 FWrite( USO, Chr( 26 ) )
 FClose( USO )
-RETU .T.
+RETUrn .T.
 
 // + EOF: folis_a8.prg
 // +

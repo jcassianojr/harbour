@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_a4.prg Acumular Dados para informa de Rendimentos
 // +
-// +
-// +    Programa  : folis_a4.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,30 +10,15 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :  FOLIS_A4.PRG : Acumular Dados para informa de Rendimentos
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :
-// :*****************************************************************************
-
-
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
+function folis_a4()
 CABE2( 'Acumulando Dados Para Informe' )
 IF !MDG( 'Deseja Realmente Acumular' )
 RETU .F.
@@ -266,9 +247,8 @@ dbCloseAll()
 IF MDG( "Gravar Resultados Informe" )
 FOLIS_C6( "G", nACU )
 ENDIF
+return
 
-
-// : FIM: FOLIS_A4.PRG
 
 // + EOF: folis_a4.prg
 // +

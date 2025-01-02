@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_c5.prg istar Ficha Financeira de FuncionArios
 // +
-// +
-// +    Programa  : folis_c5.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,30 +10,12 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :  FOLIS_C5.PRG : Listar Ficha Financeira de Funcion rios
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
-
-// //#INCLUDE "COMANDO.CH"
+function folis_c5()
 IF !MDL( 'Listar Ficha Financeira', 0 )
 RETU
 ENDIF
@@ -323,7 +301,6 @@ dbCloseAll()
 IMPFOL()
 IMPEND()
 RETU
-// : FIM: FOLIS_C5.PRG
 
 // + EOF: folis_c5.prg
 // +

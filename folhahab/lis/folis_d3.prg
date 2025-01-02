@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_d3.prg alterar media de variaveis para 13o. Salario
 // +
-// +
-// +    Programa  : folis_d3.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,28 +10,14 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_D3.PRG: Alterar m‚dia de variaveis para 13o. Sal rio
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 #include "BOX.CH"
 
+function folis_d3()
 CABE2( 'Alterar m‚dia de variaveis para 13o. Sal rio' )
 PARA CC
 IF CC = 0
@@ -61,15 +43,8 @@ hb_DispBox( 8, 0, 24, 79, B_DOUBLE )
 @ 10, 00 SAY 'Æ' + REPL( '-', 78 ) + 'µ'
 dbEdit( 11, 1, 23, 36, CAMPOS, "VAREDIT", .T., "", "", "", "", "" )
 dbCloseAll()
-RETU
+RETUrn .t.
 
-// !*****************************************************************************
-// !
-// !         Fun‡„o: VAREDIT()
-// !
-// !    Chamado por: FOLIS_D3.PRG
-// !
-// !*****************************************************************************
 
 // +--------------------------------------------------------------------
 // +

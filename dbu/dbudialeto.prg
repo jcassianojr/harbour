@@ -226,6 +226,17 @@ sqlite
  "drop index if exists  
 // datetime
 
+//oracle set exemplos
+alter session set NLS_TERRITORY = GERMANY
+alter session set nls_date_format = 'YYYY-MM-DD HH24:MI:SS'
+alter session set nls_timestamp_format = 'YYYY-MM-DD HH24:MI:SSXFF'
+alter session set nls_language = english
+ALTER SESSION set NLS_NUMERIC_CHARACTERS = ".,"
+alter session set nls_sort = BINARY
+ALTER SESSION SET recyclebin = OFF
+alter session set ddl_lock_timeout = 600
+alter session set session_cached_cursors=1000
+
 
 // +--------------------------------------------------------------------
 // +

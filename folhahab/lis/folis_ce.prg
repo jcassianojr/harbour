@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_ce.prg  Imprimir Informe de Rendimentos Avulso Juridico
 // +
-// +
-// +    Programa  : folis_ce.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema:fOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -15,28 +11,13 @@
 // +     Copyright (c) 2024,  jcassiano
 // +
 // +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_C7.PRG: Imprimir Informe de Rendimentos Avulso Juridico
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-// //#INCLUDE "COMANDO.CH"
-
+function folis_ce()
 xrRESN := OBTER( "FIRMA",, NREMP, "RESPONSAV" )
 DXDIA2 := Date()
 
@@ -214,6 +195,7 @@ ENDDO
 dbCloseAll()
 VIDEO()
 IMPEND()
+return
 
 // + EOF: folis_ce.prg
 // +

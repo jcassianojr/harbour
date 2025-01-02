@@ -1,12 +1,9 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_cd.prg Listar 13§ Provisao Acumulada
 // +
 // +
-// +    Programa  : folis_cd.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,29 +11,13 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// : FOLIS_CD.PRG  : Listar 13§ Provis„o Acumulada'
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-// //#INCLUDE "COMANDO.CH"
+function folis_cd()
 
 IF !MDL( 'Listar 13§ Provis„o Acumulada', 0 )
 RETU
@@ -73,6 +54,7 @@ ENDIF
 
 
 LISTARUE( {| X | FOLISCD( X ) } )
+return .t.
 
 
 

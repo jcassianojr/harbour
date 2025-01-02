@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_c9.prg  Listar Rais
 // +
-// +
-// +    Programa  : folis_c9.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,28 +10,13 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_C9.PRG: Listar Rais
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-// //#INCLUDE "COMANDO.CH"
+function folis_c9()
 
 IF !MDL( 'Listar RAIS', 0 )
 RETU
@@ -202,15 +183,8 @@ SET PRINT ON
 SET PRINT OFF
 dbCloseAll()
 IMPEND()
-RETU
+RETUrn
 
-// !*****************************************************************************
-// !
-// !       CABRAIS
-// !
-// !    Chamado por: FOLIS_C9.PRG
-// !
-// !*****************************************************************************
 
 // +--------------------------------------------------------------------
 // +
@@ -246,9 +220,7 @@ FUNCTION CABRAIS
    @ PRow(), 93    SAY SOC   PICT '##'
    @ PRow(), 96    SAY FAMIL PICT '##'
    @ PRow(), 101   SAY SCGC
-   RETU
-
-// : FIM: FOLIS_C9.PRG
+   RETURN
 
 // + EOF: folis_c9.prg
 // +

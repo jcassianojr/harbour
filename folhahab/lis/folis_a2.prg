@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_a2.prg Acumulando Salario Variavel 13o. Salario
 // +
-// +
-// +    Programa  : folis_a2.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,33 +10,16 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :  FOLIS_A2.PRG : Acumulando Salario Variavel 13§ Salario
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
 
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
+function folis_a2()
 CABE2( 'Acumulando Salario Variavel 13§ Salario' )
 IF !MDG( 'Deseja Realmente Acumular' )
 RETU
@@ -306,7 +285,6 @@ ENDDO
 dbCloseAll()
 RETU
 
-// : FIM: FOLIS_A2.PRG
 
 // + EOF: folis_a2.prg
 // +

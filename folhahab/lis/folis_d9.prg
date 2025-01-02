@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_d9.prg Rais Ajustes de Codigos Velhos/Novos
 // +
-// +
-// +    Programa  : folis_d9.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,27 +10,12 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_D9.PRG: Rais Ajustes de Codigos Velhos/Novos
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
+function folis_d9()
 IF !NETUSE( PES )
 RETU .F.
 ENDIF
@@ -84,6 +65,7 @@ dbUnlock()
 dbSkip()
 ENDDO
 dbCloseAll()
+return
 
 // + EOF: folis_d9.prg
 // +

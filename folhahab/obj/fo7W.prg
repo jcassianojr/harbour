@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : fo7W.prg funcao cadastro colaboradores
 // +
-// +
-// +    Programa  : fo7W.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO 
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,13 +10,7 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:45 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
@@ -28,6 +18,7 @@
 
 #include "BOX.CH"
 
+function fo7w()
 cARQTXT := "C:\TEMP\DUP.TXT"
 nHANDLE := FCreate( cARQTXT )
 cFILTRO := "EMPTY(DEMITIDO).OR.YEAR(DEMITIDO)>=ANOUSO"
@@ -51,6 +42,7 @@ VERTXT( cARQTXT )
 IF MDG( "Deseja imprimir" )
 imparq( cARQTXT )
 ENDIF
+return .t.
 
 
 // +--------------------------------------------------------------------

@@ -1,12 +1,9 @@
 // +--------------------------------------------------------------------
 // +
 // +
+// +    Programa  : folis_d.prg Revisar Acumulo de Dados,Tabela de UFIR,Variaveis,Arquivos
 // +
-// +    Programa  : folis_d.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,27 +11,12 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :    FOLIS_D.PRG: Revisar Acumulo de Dados,Tabela de UFIR,Vari veis,Arquivos
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
+function folis_d()
 WHILE .T.
 CABE3( "  Revisar Acumulo de Dados, Tabela de UFIR, Vari veis, Arquivos  ", 24, 79 )
 @ 06, 1 PROM " A - Alterar e Verificar Dados Acumulados para RAIS Empresa                   "
@@ -92,7 +74,7 @@ OTHERWISE
 RETU
 ENDCASE
 ENDDO
-// : FIM: FOLIS_D.PRG
+return
 
 // + EOF: folis_d.prg
 // +

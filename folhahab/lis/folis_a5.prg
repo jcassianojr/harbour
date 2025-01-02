@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_a5.prg  Acumular Dados para DIRF
 // +
-// +
-// +    Programa  : folis_a5.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -15,28 +11,12 @@
 // +     Copyright (c) 2024,  jcassiano
 // +
 // +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// :   FOLIS_A5.PRG: Acumular Dados para DIRF
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
-
-
+function folis_a5()
 CABE2( '* ACUMULADO DADOS P/DIRF *' )
 IF !MDG( 'Voce ja acumulou Informe de Rendimentos' )
 FOLIS_A4()
@@ -182,9 +162,8 @@ ENDDO
 FLock()
 PACK
 dbCloseAll()
-RETU
+RETUrn
 
-// : FIM: FOLIS_A5.PRG
 
 // + EOF: folis_a5.prg
 // +

@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_dc.prg imprimmir informe de rendimentos
 // +
-// +
-// +    Programa  : folis_dc.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,32 +10,18 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_D6.PRG: Informe
-// :   Linguagem   : Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
+function folis_dc()
 aTEL01 := EDITPEG( "IRRF01" )
 PADRAO( "IRRF01", "IRRF01", "' '+STR(mNUMERO,  8)+' '+mNOME+' '+mCGC", "mNUMERO", "IRRF Juridico Avulso", "Numero   Nome" + spac( 37 ) + "CGC", ;
       {|| PEGCHAVE( "mNUMERO", ULTIMOREG( "IRRF01", "NUMERO", .T. ), ":" ) }, "IRRF01", {|| gDC() } )
 
-
+return
 
 // +--------------------------------------------------------------------
 // +

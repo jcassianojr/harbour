@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_c7.prg  IMPRIMIR ANEXO INFORME DE RENDIMENTOS
 // +
-// +
-// +    Programa  : folis_c7.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,20 +10,12 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-
-// //#INCLUDE "COMANDO.CH"
-
+function folis_c7()
 IF !MDL( 'IMPRIMIR ANEXO INFORME DE RENDIMENTOS', 0 )
 RETU
 ENDIF
@@ -269,7 +257,7 @@ ENDDO
 video()
 dbCloseAll()
 IMPEND()
-RETU
+RETUrn
 
 
 // +--------------------------------------------------------------------

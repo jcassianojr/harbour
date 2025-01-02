@@ -1,12 +1,8 @@
 // +--------------------------------------------------------------------
 // +
+// +    Programa  : folis_c4.prg  LanCamento de uma Conta
 // +
-// +
-// +    Programa  : folis_c4.prg
-// +
-// +
-// +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -14,29 +10,13 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 27-Dez-2024 as  9:26 pm
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :   FOLIS_C4.PRG: Lan‡amento de uma Conta
-// :       Liguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 23/02/99
-// :
-// :*****************************************************************************
 
-// //#INCLUDE "COMANDO.CH"
-
+function folis_c4()
 IF !MDL( 'Listar Lan‡amento de uma Conta', 0 )
 RETU
 ENDIF
@@ -254,11 +234,6 @@ IMPEND()
 RETU
 
 
-// !*****************************************************************************
-// !
-// !         Fun‡„o: ANOSTR()
-// !
-// !*****************************************************************************
 
 // +--------------------------------------------------------------------
 // +
