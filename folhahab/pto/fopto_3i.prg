@@ -6,7 +6,7 @@
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,8 +26,7 @@
 // +
 
 
-// //#INCLUDE "COMANDO.CH"
-
+function fopto_3i()
 dINI := dFIM := ZDATA
 MDS( 'Qual Periodo' )
 @ 24, 20 GET dINI

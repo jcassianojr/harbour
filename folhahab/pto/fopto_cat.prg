@@ -2,11 +2,11 @@
 *+
 *+
 *+
-*+    Programa  : fopto_cat.prg
+*+    Programa  : fopto_cat.prg Sincronizar Catraca
 *+
 *+
 *+
-*+     Sistema:
+*+     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 *+
 *+     Linguagem: Harbour
 *+
@@ -28,6 +28,8 @@
 #include "adordd.ch"
 #include "try.ch"
 
+
+function fopto_cat()
 PARA cMASCARA,cMASCDEM
 
 

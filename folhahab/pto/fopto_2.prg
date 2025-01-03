@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_2.prg
+// +    Programa  : fopto_2.prg menu pongo
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,8 +26,7 @@
 // +
 
 
-// //#INCLUDE "COMANDO.CH"
-
+function fopto_2()
 HELPDBF := "FOPTO20"
 
 WHILE .T.
@@ -148,7 +147,7 @@ OTHERWISE
 RETU
 ENDCASE
 ENDDO
-
+return
 
 // + EOF: fopto_2.prg
 // +

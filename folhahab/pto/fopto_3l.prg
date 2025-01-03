@@ -2,11 +2,11 @@
 *+
 *+
 *+
-*+    Programa  : fopto_3l.prg
+*+    Programa  : fopto_3l.prg Geracao AFDT
 *+
 *+
 *+
-*+     Sistema:
+*+     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 *+
 *+     Linguagem: Harbour
 *+
@@ -25,10 +25,10 @@
 *+--------------------------------------------------------------------
 *+
 
-////#INCLUDE "COMANDO.CH"
 #include "adordd.ch"
 #include "try.ch"
 
+function fopto_3l()
 CABE2('FOPTO_3L - Geracao AFDT '+ANOMESW)
 PARA lPER,lDESC
 
@@ -831,7 +831,7 @@ IF lCPN
       FOPTO_12(DCORTE,DCORTF,cFILTRO)
    NEXT X
 ENDIF
-
+return
 
 
 *+--------------------------------------------------------------------

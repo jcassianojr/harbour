@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_13.prg
+// +    Programa  : fopto_13.prg Ver/Imprimir Arquivo do Rel¢gio-TXT
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,12 +25,12 @@
 // +--------------------------------------------------------------------
 // +
 
-
+function fopto_13()
 CABE2( 'FOPTO_13 - Ver/Imprimir Arquivo do Rel¢gio-TXT' )
 ntipo := PEGRELOGIO()
 DADO  := pegarqcon( nTIPO, "TXT" )
 FOPTO13( DADO )
-
+return
 
 // +--------------------------------------------------------------------
 // +

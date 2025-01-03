@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_17.prg
+// +    Programa  : fopto_17.prg Criando Arquivo de Reserva
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,6 +26,7 @@
 // +
 
 
+function fopto_17()
 CABE2( 'FOPTO_17 - Criando Arquivo de Reserva' )
 
 ntipo := PEGRELOGIO()

@@ -2,11 +2,11 @@
 *+
 *+
 *+
-*+    Programa  : fopto_15.prg
+*+    Programa  : fopto_15.prg Importar Catraca Portaria/Refeitorio
 *+
 *+
 *+
-*+     Sistema:
+*+     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 *+
 *+     Linguagem: Harbour
 *+
@@ -25,11 +25,11 @@
 *+--------------------------------------------------------------------
 *+
 
-////#INCLUDE "COMANDO.CH"
 #include "adordd.ch"
 #include "try.ch"
 
 
+function fopto_15()
 para nTIPO
 LOCAL oRs,oErr
 local cConnStr

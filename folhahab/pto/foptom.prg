@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : foptom.prg
+// +    Programa  : foptom.prg Menu Principal
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,17 +25,9 @@
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :    FOPTOM.PRG: Menu Principal
-// :     Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
-// :
-// :*****************************************************************************
-
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
+function foptom()
 COMPETE := MMES + "/" + Str( Year( DXDIA ), 4 )
 
 imphp()
@@ -87,8 +79,8 @@ OTHERWISE
 RETU
 ENDCASE
 ENDDO
+return
 
-// : FIM: FOPTOM.PRG
 
 // + EOF: foptom.prg
 // +

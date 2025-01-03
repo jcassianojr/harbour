@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_3h.prg
+// +    Programa  : fopto_3h.prg  Passagens Funcionario/Hora por dia
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,9 +25,7 @@
 // +--------------------------------------------------------------------
 // +
 
-
-// //#INCLUDE "COMANDO.CH"
-
+function fopto_3h()
 IF !MDL( 'FOPTO_3H - Passagens Funcionario/Hora por dia' )
 RETU
 ENDIF

@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_3.prg
+// +    Programa  : fopto_3.prg menu relatorios
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,8 +26,7 @@
 // +
 
 
-// imphp()
-
+function fopto_3()
 HELPDBF := "FOPTO30"
 
 WHILE .T.
@@ -147,7 +146,7 @@ __SetCentury( .T. )
 RETU
 ENDCASE
 ENDDO
-
+return
 
 // + EOF: fopto_3.prg
 // +

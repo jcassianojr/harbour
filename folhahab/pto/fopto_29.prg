@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_29.prg
+// +    Programa  : fopto_29.prg Apagando Arquivos de Movimentacao
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema:FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,6 +25,7 @@
 // +--------------------------------------------------------------------
 // +
 
+function fopto_29()
 CABE2( 'FOPTO_29 - Apagando Arquivos de Movimenta‡„o' )
 nMES := Month( Date() )
 nANO := Year( Date() )
@@ -53,7 +54,7 @@ FO29APG( "PH", "Corre‡ao Horarios" )
 FO29APG( "PX", "Creditos Avulsos" )
 FO29APG( "BK", "Requisicao Bco Horas Principal" )
 FO29APG( "BH", "Requisi‡ao Bco Horas Secundario" )
-
+return
 
 
 // +--------------------------------------------------------------------

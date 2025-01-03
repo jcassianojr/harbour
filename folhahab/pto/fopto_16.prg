@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_16.prg
+// +    Programa  : fopto_16.prg Visualizando Arquivo'
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -29,6 +29,7 @@
 // //#INCLUDE "COMANDO.CH"
 #include "INKEY.CH"
 
+function fopto_16()
 CABE2( 'FOPTO_16 - Visualizando Arquivo' )
 
 PARA cTIPO
@@ -42,7 +43,7 @@ PADRAO( cARQ, cARQ, "' '+STR(mNUMERO,8)+' '+DTOC(mDATA)+' '+STR(mHORA,5,2)+' '+m
       {|| ALLTRUE( ALERTX( "Inclusao por importacao" ) ) }, "FO_DIO", "FO_DIO", {|| FO_FOR( "GRUPO='FO_DIO'" ) }, ;
       ,,,, "V" )
 
-
+return
 
 
 

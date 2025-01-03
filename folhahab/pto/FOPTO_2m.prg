@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : FOPTO_2m.prg
+// +    Programa  : FOPTO_2m.prg  Ajuste SA/DO
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,10 +25,7 @@
 // +--------------------------------------------------------------------
 // +
 
-// //#INCLUDE "COMANDO.CH"
-
-
-
+function fopto_2m()
 CABE2( 'FOPTO_2M - Ajuste SA/DO ' )
 mNUMERO := 0
 mDATA   := Date()
@@ -53,6 +50,7 @@ ELSE
 ALERTX( "Data nao Encontrada" )
 ENDIF
 dbCloseArea()
+return
 
 // + EOF: FOPTO_2m.prg
 // +

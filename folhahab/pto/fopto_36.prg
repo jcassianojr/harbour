@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_36.prg
+// +    Programa  : fopto_36.prg Relatórios - Pontos e Totais
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,8 +26,7 @@
 // +
 
 
-// //#INCLUDE "COMANDO.CH"
-
+function fopto_36()
 CABE3( 'FOPTO_3 - Relatórios - Pontos e Totais', 23 )
 
 cMESANO := ANOMESW

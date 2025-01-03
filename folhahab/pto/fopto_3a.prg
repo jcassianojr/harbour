@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_3a.prg
+// +    Programa  : fopto_3a.prg Escala de Revezamento
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,9 +26,7 @@
 // +
 
 
-// //#INCLUDE "COMANDO.CH"
-
-
+function fopto_3a()
 IF !MDL( 'FOPTO_3A - Escala de Revezamento' )
 RETU
 ENDIF
@@ -101,6 +99,7 @@ dbSkip()
 ENDDO
 dbCloseAll()
 IMPEND()
+return .t.
 
 
 // + EOF: fopto_3a.prg

@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_31.prg
+// +    Programa  : fopto_31.prg Listagem do Ponto Mensal
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +

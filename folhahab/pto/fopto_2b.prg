@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_2b.prg
+// +    Programa  : fopto_2b.prg Apagar Movimento Ponto
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -28,13 +28,14 @@
 
 #include "INKEY.CH"
 
+function fopto_2b()
 CABE2( 'FOPTO_2B - Apagar Movimento Ponto' )
 IF MDG( "Deseja funcionario por funcionario" )
 FOPTO2B01()
 ELSE
 FOPTO2B02()
 ENDIF
-
+return
 
 // +--------------------------------------------------------------------
 // +

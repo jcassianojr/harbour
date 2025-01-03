@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_26.prg
+// +    Programa  : fopto_26.prg Calculando Ponto
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,7 +27,7 @@
 
 
 
-
+function fopto_26()
 CABE2( 'FOPTO_26 - Calculando Ponto' )
 FN   := 8 / 7   // Fator do Adicional Noturno
 FDIA := 7.33

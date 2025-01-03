@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_2y.prg
+// +    Programa  : fopto_2y.prg Exclusao Demitidos
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,6 +25,7 @@
 // +--------------------------------------------------------------------
 // +
 
+function fopto_2y()
 CABE2( 'FOPTO_2Y - Exclusao Demitidos' )
 cPN := "PN" + ANOMESW
 
@@ -57,6 +58,7 @@ dbSelectAr( PES )
 dbSkip()
 ENDDO
 dbCloseAll()
+return
 
 // + EOF: fopto_2y.prg
 // +

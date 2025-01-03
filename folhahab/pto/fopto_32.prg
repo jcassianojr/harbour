@@ -2,11 +2,11 @@
 *+
 *+
 *+
-*+    Programa  : fopto_32.prg
+*+    Programa  : fopto_32.prg  Pesquisa Funcionarios
 *+
 *+
 *+
-*+     Sistema:
+*+     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 *+
 *+     Linguagem: Harbour
 *+
@@ -25,7 +25,6 @@
 *+--------------------------------------------------------------------
 *+
 
-////#INCLUDE "COMANDO.CH"
 #include "adordd.ch"
 #include "try.ch"
 
@@ -53,6 +52,7 @@ nrOc orgaoEmissor dtExpedicao dtValidade
 */
 
 
+function fopto_32()
 local cConn    := "Provider=MSDASQL.1;Persist Security Info=False;Data Source=ol_logix"
 local cCOMANDO := ""
 PUBLIC oConn,oErr,oREGISTRO,oREGISTR2
@@ -137,7 +137,7 @@ oregistr2:close()
 LISTARUE({| X | FOPTO32(X)})
 oConn:close()
 dbcloseall()
-
+return
 
 *+--------------------------------------------------------------------
 *+
@@ -424,6 +424,7 @@ oRegistro:CLOSE()
 ENDIF
 FO_PES->(DBSKIP())
 ENDDO
+return
 //IMPEND()
 //dbcloseall()
 //oConn:close()

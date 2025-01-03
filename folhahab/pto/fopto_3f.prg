@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_3f.prg
+// +    Programa  : fopto_3f.prg Listagem Totais
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,8 +26,7 @@
 // +
 
 
-// //#INCLUDE "COMANDO.CH"
-
+function fopto_3f()
 IF !MDL( 'FOPTO_3F - Listagem Totais' )
 RETU
 ENDIF

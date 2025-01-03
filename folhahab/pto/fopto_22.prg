@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_22.prg
+// +    Programa  : fopto_22.prg Alterar o Ponto Diario
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,8 +26,9 @@
 // +
 
 
-// //#INCLUDE "COMANDO.CH"
 #include "INKEY.CH"
+
+function fopto_22()
 
 PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
 

@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_11.prg
+// +    Programa  : fopto_11.prg Transferindo e Atualizando dados do Relogio
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,7 +25,7 @@
 // +--------------------------------------------------------------------
 // +
 
-
+function fopto_11()
 CABE2( 'FOPTO_11 - Transferindo e Atualizando dados do Relogio' )
 PARA nTIPO, lPER
 IF ValType( lPER ) # "L"

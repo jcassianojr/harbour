@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_3b.prg
+// +    Programa  : fopto_3b.prg Listagem de Ocorrencias
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,8 +25,7 @@
 // +--------------------------------------------------------------------
 // +
 
-
-// //#INCLUDE "COMANDO.CH"
+function fopto_3b()
 IF !MDL( "FOPTO_3B -Listagem de Ocorrencias" )
 RETU .F.
 ENDIF

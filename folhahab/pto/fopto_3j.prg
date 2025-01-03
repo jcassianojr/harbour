@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_3j.prg
+// +    Programa  : fopto_3j.prg Resumo Final em minutos sexadecimal
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,8 +26,7 @@
 // +
 
 
-// //#INCLUDE "COMANDO.CH"
-
+function fopto_3j()
 cPN := "PN" + ANOMESW
 cPT := "PT" + ANOMESW
 

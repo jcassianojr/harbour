@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_2g.prg
+// +    Programa  : fopto_2g.prg Importar Ocorrencias
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,6 +26,7 @@
 // +
 
 
+function fopto_2g()
 CABE2( "FOPTO_2G - Importar Ocorrencias" )
 
 cPO := "PO" + ANOMESW   // ANOWORK + strzero( MES, 2 )
@@ -146,7 +147,7 @@ ENDIF
 ELSE
 // FOPTO_2H(.F.)
 ENDIF
-
+return
 
 // + EOF: fopto_2g.prg
 // +

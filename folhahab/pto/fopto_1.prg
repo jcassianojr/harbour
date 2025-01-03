@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_1.prg
+// +    Programa  : fopto_1.prg menu relogios arquivos
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,6 +26,7 @@
 // +
 
 
+function fopto_1()
 HELPDBF := "FOPTO10"
 
 WHILE .T.
@@ -148,6 +149,7 @@ OTHERWISE
 RETU
 ENDCASE
 ENDDO
+return
 
 
 // +--------------------------------------------------------------------

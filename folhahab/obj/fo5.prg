@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fo5.prg
+// +    Programa  : fo5.prg Menu Cadastro de Departamentos
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,20 +25,12 @@
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :        FO5.PRG: Menu Cadastro de Departamentos
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 04/07/94     15:05
-// :
-// :*****************************************************************************
 
 #include "inkey.ch"
-// //#INCLUDE "COMANDO.CH"
 #include "box.ch"
 
+
+function fo5()
 PRIV HELPDBF
 HELPDBF := "FO5"
 
@@ -71,6 +63,7 @@ OTHERWISE
 RETU
 ENDCASE
 ENDDO
+return
 
 
 // +--------------------------------------------------------------------

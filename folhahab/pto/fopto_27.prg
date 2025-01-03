@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_27.prg
+// +    Programa  : fopto_27.prg Marcar um dia com um c¢digo
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,7 +25,7 @@
 // +--------------------------------------------------------------------
 // +
 
-
+function fopto_27()
 CABE2( 'FOPTO_27 - Marcar um dia com um c¢digo' )
 dINI := zdataini
 dFIM := zdatafim

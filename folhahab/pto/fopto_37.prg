@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_37.prg
+// +    Programa  : fopto_37.prg Analise do Ponto
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,10 +27,9 @@
 
 
 
-// Teclas Operacionais
-// //#INCLUDE "COMANDO.CH"
 #include "INKEY.CH"
 
+function fopto_37()
 CABE2( "FOPTO_37 - Analise do Ponto" )
 
 dDATAINI := zdataini

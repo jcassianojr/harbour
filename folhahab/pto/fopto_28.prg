@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_28.prg
+// +    Programa  : fopto_28.prg  Pre Lan‡amento Valor
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,7 +25,7 @@
 // +--------------------------------------------------------------------
 // +
 
-
+function fopto_28()
 CABE2( 'FOPTO_28 - Pre Lan‡amento Valor' )
 dINI   := zdataini
 dFIM   := zdatafim

@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_21.prg
+// +    Programa  : fopto_21.prg Iniciando o mEs
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -42,6 +42,8 @@
 // ProcRepublica 15/11/aaaa
 // Natal         25/12/aaaa
 
+
+function fopto_21()
 CABE2( 'FOPTO_21 - Iniciando o mEs' )
 
 

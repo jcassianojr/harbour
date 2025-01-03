@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_3g.prg
+// +    Programa  : fopto_3g.prg Total de Passagens Diaria por funcion rios
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,8 +26,7 @@
 // +
 
 
-// //#INCLUDE "COMANDO.CH"
-
+function fopto_3g()
 IF !MDL( "FOPTO_3G - Total de Passagens Diaria por funcion rios" )
 RETU
 ENDIF
@@ -89,7 +88,7 @@ IMPFOL()
 ENDIF
 dbCloseAll()
 IMPEND()
-
+return
 
 
 // + EOF: fopto_3g.prg

@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fo_unid.prg
+// +    Programa  : fo_unid.prg unidades funcionais
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema:FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,11 +26,10 @@
 // +
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
+function fo_unid()
 PADRAO( "UNID", "UNID", "mCODIGO+' '+mNOME+' '+STR(mNUMERO,4)+' '+mMODIRETA", "mCODIGO", "FOUNID - Cadastro de Unidade Funcional", "Codigo Nome", ;
       {|| PEGCHAVE( "mCODIGO", Space( 10 ), "Codigo Unidade" ) }, {|| tFOUNID() }, {|| gFOUNID() }, {|| FO_RELL( "FOUNID" ) },, 2 )
 

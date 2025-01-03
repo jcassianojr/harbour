@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_18.prg
+// +    Programa  : fopto_18.prg Criando Arquivo TXT Com Base Arquivo Reserva
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,7 +25,7 @@
 // +--------------------------------------------------------------------
 // +
 
-
+function fopto_18()
 CABE2( 'FOPTO_18 - Criando Arquivo TXT Com Base Arquivo Reserva' )
 
 ntipo := PEGRELOGIO()
@@ -53,7 +53,7 @@ IF TIPC = "D"
 COPY TO &cTXT. DELI WHILE zei_fort( nLASTREC,,, 1 )
 ENDIF
 dbCloseAll()
-
+return
 
 // + EOF: fopto_18.prg
 // +
