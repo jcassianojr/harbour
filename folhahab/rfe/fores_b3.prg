@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fores_b3.prg
+// +    Programa  : fores_b3.prg PLANILHA ADMINISTRATIVA FERIAS
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,52 +25,44 @@
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :  FORES_B3.PRG : PLANILHA ADMINISTRATIVA FERIAS
-// :     Linguagem : Clipper 5.2e
-// :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 08/08/97
-// :
-// :*****************************************************************************
 
-
-
-// //#INCLUDE "COMANDO.CH"
 #include "INKEY.CH"
-IF !MDL( 'PLANILHA ADMINISTRATIVA FERIAS', 0 )
-RETU
-ENDIF
 
-SAISAL := IF( MDG( 'Deseja Com Sal rios' ), .T., .F. )
-SAIPRI := IF( MDG( 'Deseja Apenas Primeiro Periodo aquisitivo' ), .T., .F. )
+FUNCTION fores_b3()
+
+   IF !MDL( 'PLANILHA ADMINISTRATIVA FERIAS', 0 )
+      RETU
+   ENDIF
+
+   SAISAL := IF( MDG( 'Deseja Com Sal rios' ), .T., .F. )
+   SAIPRI := IF( MDG( 'Deseja Apenas Primeiro Periodo aquisitivo' ), .T., .F. )
 
 
-IF !NETUSE( pes )
-dbCloseAll()
-RETU
-ENDIF
-FILTRO := ''
-INX    := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETU
+   ENDIF
+   FILTRO := ''
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
 
-IF !NETUSE( "FO_FER" )
-RETURN
-ENDIF
+   IF !NETUSE( "FO_FER" )
+      RETURN
+   ENDIF
 
-LISTARUE( {| X | B3X( X ) } )
+   LISTARUE( {| X | B3X( X ) } )
 
+   RETURN
 
 
 

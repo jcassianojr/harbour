@@ -748,14 +748,14 @@ OBSERVAÇÕES:
          IF !Empty( CODIBGE )
             cUFCOD := CODUF( CODIBGE, "UF" )
             IF cUFCOD <> UF  // Checagem 2 digitos inicial da codibge do estado
-               FWrite( nUSO, "CodIBGE <> UF : " + Codibge + " " + UF + "<>" + cUFCOD + " " + NOME++hb_osNewLine() )
+               FWrite( nUSO, "CodIBGE <> UF : " + Codibge + " " + UF + "<>" + cUFCOD + " " + NOME+hb_osNewLine() )
             ENDIF
          ENDIF
          dbSkip()
          IF !Eof()
             IF nSEQ = CodIBGE
                IF UF <> "XX" .AND. !Empty( codibge )   // ibge duplicado
-                  FWrite( nUSO, "CODIBGE: " + CodiBGE + " " + UF + " " + NOME++hb_osNewLine() )
+                  FWrite( nUSO, "CODIBGE: " + CodiBGE + " " + UF + " " + NOME+hb_osNewLine() )
                ENDIF
             ENDIF
          ENDIF
@@ -773,7 +773,7 @@ OBSERVAÇÕES:
          IF !Eof()
             IF nSEQ = Codirrf
                IF UF <> "XX" .AND. !Empty( codirrf )   // irrf duplicado
-                  FWrite( nUSO, "IRRF: " + Codirrf + " " + UF + " " + NOME++hb_osNewLine() )
+                  FWrite( nUSO, "IRRF: " + Codirrf + " " + UF + " " + NOME+hb_osNewLine() )
                ENDIF
             ENDIF
          ENDIF

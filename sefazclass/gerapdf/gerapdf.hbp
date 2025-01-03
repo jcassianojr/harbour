@@ -5,6 +5,8 @@
 -vcshead=vcshead.ch
 -tshead=tshead.ch
 
+-m -n -w0 -es2 -ge1
+
 gerapdf.prg
 hbwin.hbc
 hbzebra.hbc

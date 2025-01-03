@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fores_a5.prg
+// +    Programa  : fores_a5.prg Baixar Periodo de F‚rias
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,45 +25,28 @@
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :  FORES_A5.PRG : Baixar Periodo de F‚rias
-// :     Linguagem : Clipper 5.x
-// :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
-// :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 04/26/94      8:59
-// :
-// :  Procs & Fncts: FORES_A5()
-// :               : FOREA5()
-// :
-// :          Chama: CABE2()            (fun‡„o    em FORESP.PRG)
-// :               : FOREA5()           (fun‡„o    em FORES_A5.PRG)
-// :
-// :    Arq. Dados : FO_FER - Remanejamento de Ferias
-// :
-// :       Indices : FER        CODIGO DO FUNCIONARIO
-// :                            CONTROLE
-// :     Documentado 05/13/94 em 15:05                DISK!  vers„o 5.01
-// :*****************************************************************************
 #include "BOX.CH"
 
 
-CABE2( 'Baixar Periodo de F‚rias' )
-WHILE .T.
-@ 08, 00 CLEA
-SetColor( "+N/BG" )
-hb_DispBox( 4, 0, 16, 64, B_DOUBLE )
-@ 10, 2 PROM "  1 - Todos dados os periodos Aquisitivos de um Funcion rio "
-@ 12, 2 PROM "  2 - Apenas um Per¡odo aquisitivo de Um funcion rio" + SPAC( 8 )
-@ 14, 2 PROM "  3 - Um per¡odo de data para Todos os Funcion rios" + SPAC( 9 )
-MENU TO KEY
-SetColor( "W/N,N/W" )
-IF KEY = 0
-RETU
-ENDIF
-FOREA5( KEY )
-ENDDO
+FUNCTION fores_a5()
+
+   CABE2( 'Baixar Periodo de F‚rias' )
+   WHILE .T.
+      @ 08, 00 CLEA
+      SetColor( "+N/BG" )
+      hb_DispBox( 4, 0, 16, 64, B_DOUBLE )
+      @ 10, 2 PROM "  1 - Todos dados os periodos Aquisitivos de um Funcion rio "
+      @ 12, 2 PROM "  2 - Apenas um Per¡odo aquisitivo de Um funcion rio" + SPAC( 8 )
+      @ 14, 2 PROM "  3 - Um per¡odo de data para Todos os Funcion rios" + SPAC( 9 )
+      MENU TO KEY
+      SetColor( "W/N,N/W" )
+      IF KEY = 0
+         RETU
+      ENDIF
+      FOREA5( KEY )
+   ENDDO
+
+   RETURN
 
 // !*****************************************************************************
 // !

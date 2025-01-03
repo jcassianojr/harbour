@@ -7,7 +7,7 @@
 
 cepwebvia.prg -b
 
-d:\develop\harbour\sefazclass\source\ze_xmlfunc.prg
+d:\develop\harbour\sefazclass\ze_xmlfunc.prg
 
 #vendo com o novo hb_error
 #d:\develop\harbour\objmgw\error.prg

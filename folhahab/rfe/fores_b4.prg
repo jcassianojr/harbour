@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fores_b4.prg
+// +    Programa  : fores_b4.prg Listar F‚rias Cont bil
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: OLHA PAGAMENTO - RECISAO E FERIAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,110 +25,102 @@
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :  FORES_B4.PRG : Listar F‚rias Cont bil
-// :     Linguagem : Clipper 5.x
-// :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 11/10/97
-// :
-// :*****************************************************************************
 
-// //#INCLUDE "COMANDO.CH"
+FUNCTION fores_b4()
 
-IF !MDL( 'Listar F‚rias Cont bil', 0 )
-RETU .F.
-ENDIF
+   IF !MDL( 'Listar F‚rias Cont bil', 0 )
+      RETU .F.
+   ENDIF
 
 
-DIARFE := Date()
-MDS( 'Qual a data de referencia' )
-@ 24, 40 GET DIARFE
-READCUR()
+   DIARFE := Date()
+   MDS( 'Qual a data de referencia' )
+   @ 24, 40 GET DIARFE
+   READCUR()
 
-ANOFIM  := Year( DIARFE )
-MESFIM  := Month( DIARFE )
-DIAFIM  := Day( DIARFE )
-DATAFIM := DIARFE
+   ANOFIM  := Year( DIARFE )
+   MESFIM  := Month( DIARFE )
+   DIAFIM  := Day( DIARFE )
+   DATAFIM := DIARFE
 
-CODFPAS := TOTENC := FL := 0
-lGRAVA  := MDG( "Gravar Resultados- Apura‡„o Contabil" )
-lANAL   := MDG( "Deseja Resumo Analitico" )
+   CODFPAS := TOTENC := FL := 0
+   lGRAVA  := MDG( "Gravar Resultados- Apura‡„o Contabil" )
+   lANAL   := MDG( "Deseja Resumo Analitico" )
 
-VERSEHA( "FIRMA",, NREMP,,, .F., { { "FPAS", "CODFPAS" } } )
-VERSEHA( "CONFINSS",, Val( CODFPAS ),,, .F., { { "EMPRESA+TOTAL+ACIDENTE+8", "TOTENC" } } )
+   VERSEHA( "FIRMA",, NREMP,,, .F., { { "FPAS", "CODFPAS" } } )
+   VERSEHA( "CONFINSS",, Val( CODFPAS ),,, .F., { { "EMPRESA+TOTAL+ACIDENTE+8", "TOTENC" } } )
 
-MDS( 'Confirme o Percentual de Encargos ' )
-@ 24, 40 GET TOTENC
-IF !READCUR()
-RETU .F.
-ENDIF
-TOTENC := TOTENC / 100
+   MDS( 'Confirme o Percentual de Encargos ' )
+   @ 24, 40 GET TOTENC
+   IF !READCUR()
+      RETU .F.
+   ENDIF
+   TOTENC := TOTENC / 100
 
-aXCON := Array( 15 )
-AFill( aXCON, 0 )
-aXCON := PEGRELCTA( "PROVFE" )
-
-
-IF lGRAVA
-IF !netuse( "PROVFE" )
-dbCloseAll()
-RETU .F.
-ENDIF
-nLASTREC := LastRec()
-MDS( "Aguarde Preparando Arquivo Acumulado" )
-zei_fort( nLASTREC,,, 0 )
-dbEval( {|| netrecdel() }, {|| ANO = MESFIM .AND. MES = MESFIM }, {|| zei_fort( nLASTREC,,, 1 ) } )
-dbCloseArea()
-netpack( "PROVFE" )
-IF !netuse( "PROVFE" )
-dbCloseAll()
-RETU .F.
-ENDIF
-ENDIF
+   aXCON := Array( 15 )
+   AFill( aXCON, 0 )
+   aXCON := PEGRELCTA( "PROVFE" )
 
 
-IF !NETUSE( FOL )   // AREDE(FOL,FOL,1)
-dbCloseAll()
-RETU .F.
-ENDIF
+   IF lGRAVA
+      IF !netuse( "PROVFE" )
+         dbCloseAll()
+         RETU .F.
+      ENDIF
+      nLASTREC := LastRec()
+      MDS( "Aguarde Preparando Arquivo Acumulado" )
+      zei_fort( nLASTREC,,, 0 )
+      dbEval( {|| netrecdel() }, {|| ANO = MESFIM .AND. MES = MESFIM }, {|| zei_fort( nLASTREC,,, 1 ) } )
+      dbCloseArea()
+      netpack( "PROVFE" )
+      IF !netuse( "PROVFE" )
+         dbCloseAll()
+         RETU .F.
+      ENDIF
+   ENDIF
 
-IF MDG( "Incluir Demitidos Mes" )
-FILTRO := '(EMPTY(DEMITIDO).OR.(MONTH(DEMITIDO)>=MONTH(DIARFE).AND.YEAR(DEMITIDO)>=YEAR(DIARFE)))'
-ELSE
-FILTRO := 'EMPTY(DEMITIDO)'
-ENDIF
+
+   IF !NETUSE( FOL )   // AREDE(FOL,FOL,1)
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+
+   IF MDG( "Incluir Demitidos Mes" )
+      FILTRO := '(EMPTY(DEMITIDO).OR.(MONTH(DEMITIDO)>=MONTH(DIARFE).AND.YEAR(DEMITIDO)>=YEAR(DIARFE)))'
+   ELSE
+      FILTRO := 'EMPTY(DEMITIDO)'
+   ENDIF
 
 
 
-IF !NETUSE( pes )
-dbCloseAll()
-RETU
-ENDIF
-FILTRO := ''
-INX    := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETU
+   ENDIF
+   FILTRO := ''
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
 
-IF !NETUSE( "FO_FER" )
-dbCloseAll()
-RETU
-ENDIF
+   IF !NETUSE( "FO_FER" )
+      dbCloseAll()
+      RETU
+   ENDIF
 
-aTOTGER := { 0, 0, 0, 0, 0, 0 }
-CTLIN   := 80
-LISTARUE( {| X | B4X( X ) }, {|| B4XB() } )
+   aTOTGER := { 0, 0, 0, 0, 0, 0 }
+   CTLIN   := 80
+   LISTARUE( {| X | B4X( X ) }, {|| B4XB() } )
 
+   RETURN
 
 
 // +--------------------------------------------------------------------

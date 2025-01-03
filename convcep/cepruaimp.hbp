@@ -2,6 +2,7 @@
 -lng=pt_BR
 -vcshead=vcshead.ch
 -tshead=tshead.ch
+-m -n -w0 -es2 -ge1
 
 hbct.hbc
 #hbwin.hbc

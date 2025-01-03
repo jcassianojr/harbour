@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fores_b6.prg
+// +    Programa  : fores_b6.prg 1Listar Ferias Provisao Acumulada
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: OLHA DE PAGAMENTO - MODULO LISTAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,54 +25,43 @@
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :
-// : FOLIS_B6.PRG  : 13o. Salario Acumulado
-// :      Linguagem: Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO LISTAS
-// :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 04/07/94     13:40
-// :
-// :*****************************************************************************
 
-// //#INCLUDE "COMANDO.CH"
+FUNCTION fores_b6()
 
-IF !MDL( 'Listar Ferias Provisao Acumulada', 0 )
-RETU
-ENDIF
+   IF !MDL( 'Listar Ferias Provisao Acumulada', 0 )
+      RETU
+   ENDIF
 
-lANAL := MDG( "Deseja Analitico" )
-aXCON := PEGRELCTA( "PROVFE" )
+   lANAL := MDG( "Deseja Analitico" )
+   aXCON := PEGRELCTA( "PROVFE" )
 
 
-IF !NETUSE( pes )
-dbCloseAll()
-RETU
-ENDIF
-FILTRO := ''
-INX    := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETU
+   ENDIF
+   FILTRO := ''
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
 
-IF !netuse( "PROVFE" )
-dbCloseAll()
-RETU .F.
-ENDIF
+   IF !netuse( "PROVFE" )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
 
-LISTARUE( {| X | FORESB6( X ) } )
+   LISTARUE( {| X | FORESB6( X ) } )
 
-
+   RETURN
 
 // +--------------------------------------------------------------------
 // +

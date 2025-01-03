@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fores_a9.prg
+// +    Programa  : fores_a9.prg provisao de ferias
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema:FOLHA PAGAMENTO - RECISAO E FERIAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,12 +27,15 @@
 
 #include "BOX.CH"
 
-PADRAO( "PROVFE", "PROVFE", "' '+STR(mNUMERO,  8)+' '+DTOC(mCOMP)+' '+STR(mMES,  2)+' '+STR(mANO,  4)+' '+STR(mDEPTO,  4)+' '+STR(mSETOR,  3)+' '+STR(mSECAO,  3)+' '+STR(mVALTOT, 12, 2)", "STRZERO(mNUMERO,8)+DTOS(mCOMP)+STRZERO(mANO,4)+STRZERO(mMES,2)", "Provis„o Ferias Acumulada", "Numero   Comp.    Mes/Ano Dep  Set Sec Valor", ;
+FUNCTION fores_a9()
+
+   PADRAO( "PROVFE", "PROVFE", "' '+STR(mNUMERO,  8)+' '+DTOC(mCOMP)+' '+STR(mMES,  2)+' '+STR(mANO,  4)+' '+STR(mDEPTO,  4)+' '+STR(mSETOR,  3)+' '+STR(mSECAO,  3)+' '+STR(mVALTOT, 12, 2)", "STRZERO(mNUMERO,8)+DTOS(mCOMP)+STRZERO(mANO,4)+STRZERO(mMES,2)", "Provis„o Ferias Acumulada", "Numero   Comp.    Mes/Ano Dep  Set Sec Valor", ;
       {|| alltrue( mCHAVE := StrZero( mNUMERO, 8 ) + DToS( mCOMP ) + StrZero( mANO, 4 ) + StrZero( mMES, 2 ) ) }, {|| tRESA9() }, {|| gRESA9() }, {|| FO_FOR( "GRUPO='PROVFE'" ) } )
 
 // {||iRESA9()}
-MMES := MMES( OP )  // Volta Status
-RETU .T.
+   MMES := MMES( OP )  // Volta Status
+
+   RETURN .T.
 
 // alltrue(mCHAVE:=STRZERO(mNUMERO,8)+DTOS(mCOMP)+STRZERO(mANO,4)+STRZERO(mMES,2))
 

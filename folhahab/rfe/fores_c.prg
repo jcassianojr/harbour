@@ -44,28 +44,30 @@
 // :*****************************************************************************
 
 
+FUNCTION fores_c()
 
-WHILE .T.
-CABE3( "  Calcular F‚rias e Rescis„o  ", 13 )
-@ 09, 1 PROM '  A - Calcular F‚rias de Um Funcion rio                '
-@ 10, 1 PROM '  B - Calcular Complemento de F‚rias de Um Funcion rio '
-@ 11, 1 PROM '  C - Calcular Rescis„o de Um Funcion rio              '
-@ 12, 1 PROM '  D - Calcular Complemento Rescis„o de Um Funcion rio  '
-MENU TO OPCAO2
-DO CASE
-CASE OPCAO2 = 1
-FORES_C1( 1 )
-CASE OPCAO2 = 2
-FORES_C1( 2 )
-CASE OPCAO2 = 3
-FORES_C3( 1 )
-CASE OPCAO2 = 4
-FORES_C3( 2 )
-OTHERWISE
-RETU
-ENDCASE
-ENDDO
-// : FIM: FORES_C.PRG
+   WHILE .T.
+      CABE3( "  Calcular F‚rias e Rescis„o  ", 13 )
+      @ 09, 1 PROM '  A - Calcular F‚rias de Um Funcion rio                '
+      @ 10, 1 PROM '  B - Calcular Complemento de F‚rias de Um Funcion rio '
+      @ 11, 1 PROM '  C - Calcular Rescis„o de Um Funcion rio              '
+      @ 12, 1 PROM '  D - Calcular Complemento Rescis„o de Um Funcion rio  '
+      MENU TO OPCAO2
+      DO CASE
+      CASE OPCAO2 = 1
+         FORES_C1( 1 )
+      CASE OPCAO2 = 2
+         FORES_C1( 2 )
+      CASE OPCAO2 = 3
+         FORES_C3( 1 )
+      CASE OPCAO2 = 4
+         FORES_C3( 2 )
+      OTHERWISE
+         RETU
+      ENDCASE
+   ENDDO
+
+   RETURN
 
 // + EOF: fores_c.prg
 // +

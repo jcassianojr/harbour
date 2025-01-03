@@ -203,9 +203,9 @@ FUNCTION tirace2( cXml )
    FOR nCont := 1 TO Len( cRemoveTag )
       cXml := StrTran( cXml, cRemoveTag[ nCont ], "" )
    NEXT
-   IF ![
-      cXml := StrTran( cXml, [ '],["])
-   ENDIF
+//   IF ![
+ //     cXml := StrTran( cXml, [ '],["])
+ //  ENDIF
    IF Chr( 195 ) $ cXml
       nPos := At( Chr( 195 ), cXml )
       IF Asc( SubStr( cXml, nPos + 1 ) ) > 122

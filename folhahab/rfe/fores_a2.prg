@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fores_a2.prg
+// +    Programa  : fores_a2.prg Remanejamento de F‚rias
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,103 +25,90 @@
 // +--------------------------------------------------------------------
 // +
 
-// :*****************************************************************************
-// :
-// :  FORES_A2.PRG : Remanejamento de F‚rias
-// :     Linguagem : Clipper 5.2e
-// :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 08/07/97
-// :
-// :*****************************************************************************
+
+FUNCTION fores_a2()
+
+   CABE2( 'Remanejamento de F‚rias' )
+   DIAFIM := Date()
+   MDS( 'Digite a data Termino:' )
+   @ 24, 40 GET DIAFIM
+   READCUR()
 
 
-CABE2( 'Remanejamento de F‚rias' )
-DIAFIM := Date()
-MDS( 'Digite a data Termino:' )
-@ 24, 40 GET DIAFIM
-READCUR()
+   IF !netuse( pes )
+      RETU
+   ENDIF
+   IF !netuse( "FO_FER" )
+      RETU
+   ENDIF
 
+   MDS( "Checando Competencia" )
+   dbSelectAr( "FO_FER" )
+   dbGoTop()
+   WHILE !Eof()
+      IF Empty( DATFERIAS ) .OR. Empty( DATFERIASF )
+         netrecdel()
+      ENDIF
+      dbSkip()
+   ENDDO
 
-IF !netuse( pes )
-RETU
-ENDIF
-IF !netuse( "FO_FER" )
-RETU
-ENDIF
-
-MDS( "Checando Competencia" )
-dbSelectAr( "FO_FER" )
-dbGoTop()
-WHILE !Eof()
-IF Empty( DATFERIAS ) .OR. Empty( DATFERIASF )
-netrecdel()
-ENDIF
-dbSkip()
-ENDDO
-
-MDS( "Excluindo Funcionarios de Anos Anteriores" )
-dbSelectAr( "FO_FER" )
-dbGoTop()
-WHILE !Eof()
-mNUMERO := NUMERO
-dbSelectAr( PES )
-dbGoTop()
-dbSeek( mNUMERO )
-lFUNC := Found()
-dbSelectAr( "FO_FER" )
-WHILE mNUMERO = NUMERO .AND. !Eof()
-IF !lFUNC
-netrecdel()
-ENDIF
-dbSkip()
-ENDDO
-ENDDO
-MDS( "Fixando o arquivo" )
+   MDS( "Excluindo Funcionarios de Anos Anteriores" )
+   dbSelectAr( "FO_FER" )
+   dbGoTop()
+   WHILE !Eof()
+      mNUMERO := NUMERO
+      dbSelectAr( PES )
+      dbGoTop()
+      dbSeek( mNUMERO )
+      lFUNC := Found()
+      dbSelectAr( "FO_FER" )
+      WHILE mNUMERO = NUMERO .AND. !Eof()
+         IF !lFUNC
+            netrecdel()
+         ENDIF
+         dbSkip()
+      ENDDO
+   ENDDO
+   MDS( "Fixando o arquivo" )
 // PACK
 
-MDS( "Remanejando o Arquivo" )
-dbSelectAr( PES )
-FILTRO := FILTRO( 'EMPTY(DEMITIDO)' )
-SET FILTER TO &FILTRO
-dbGoTop()
-WHILE !Eof()
-PETELA( 8 )
-CTR  := NUMERO
-NOM  := NOME
-DEP1 := DEPTO
-SEC1 := SECAO
-SET1 := SETOR
-CHA1 := CHAPA
-DAT  := ADMITIDO
-IF Empty( ADMITIDO )
-ALERTX( 'Funcion rio sem data de admiss„o' )
-dbSkip()
-LOOP
-ENDIF
-dbSelectAr( "FO_FER" )
-dbGoTop()
-dbSeek( CTR * 100000000 )
-WHILE CTR = NUMERO .AND. !Eof()
-DAT := DATFERIASF + 1
-dbSkip()
-ENDDO
-WHILE DAT < DIAFIM
-GRAVAREM()
-DAT := DATFERIASF + 1
-ENDDO
-dbSelectAr( PES )
-dbSkip()
-ENDDO
-dbCloseAll()
-RETU
+   MDS( "Remanejando o Arquivo" )
+   dbSelectAr( PES )
+   FILTRO := FILTRO( 'EMPTY(DEMITIDO)' )
+   SET FILTER TO &FILTRO
+   dbGoTop()
+   WHILE !Eof()
+      PETELA( 8 )
+      CTR  := NUMERO
+      NOM  := NOME
+      DEP1 := DEPTO
+      SEC1 := SECAO
+      SET1 := SETOR
+      CHA1 := CHAPA
+      DAT  := ADMITIDO
+      IF Empty( ADMITIDO )
+         ALERTX( 'Funcion rio sem data de admiss„o' )
+         dbSkip()
+         LOOP
+      ENDIF
+      dbSelectAr( "FO_FER" )
+      dbGoTop()
+      dbSeek( CTR * 100000000 )
+      WHILE CTR = NUMERO .AND. !Eof()
+         DAT := DATFERIASF + 1
+         dbSkip()
+      ENDDO
+      WHILE DAT < DIAFIM
+         GRAVAREM()
+         DAT := DATFERIASF + 1
+      ENDDO
+      dbSelectAr( PES )
+      dbSkip()
+   ENDDO
+   dbCloseAll()
+   RETU
 
 
-// !*****************************************************************************
-// !
-// !       GRAVAREM
-// !
-// !*****************************************************************************
 
 // +--------------------------------------------------------------------
 // +
@@ -135,6 +122,7 @@ RETU
 // +
 // +
 // +
+
 FUNCTION GRAVAREM   // GRAVA DADOS DO REMANEJAMENTO
 
    IF Day( DAT ) = 29 .AND. Month( DAT ) = 02

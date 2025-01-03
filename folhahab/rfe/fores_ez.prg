@@ -2,7 +2,7 @@
 // +
 // +
 // +
-// +    Programa  : fores_ez.prg
+// +    Programa  : fores_ez.prg Listar GRFC
 // +
 // +
 // +
@@ -25,271 +25,274 @@
 // +--------------------------------------------------------------------
 // +
 
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-IF !MDL( 'Listar GRFC', 0 )
-RETU
-ENDIF
 
-mNUMERO := 0
-mSAT    := 0
-mCODTER := Space( 4 )
-mTAXA   := 0
-cVAR1   := "1"
-cVAR2   := "0"
-aVAL    := Array( 9 )
-AFill( aVAL, 0 )
-nVAL1   := nVAL2 := nVAL3 := nVAL4 := 0
-nVAL5A  := nVAL5B := nVAL5C := nVAL5D := 0
-nVAL6A  := nVAL6B := nVAL6C := nVAL6D := 0
-nVAL7A  := nVAL7B := nVAL7C := nVAL7D := 0
-nVAL8A  := nVAL8B := nVAL8C := nVAL8D := 0
-nJAM01  := nJAM02 := 0
-nMUL01  := nMUL02 := 0
-TOMACGC := TOMARAZ := ""
-nFATFG  := 0.085
-nFATMU  := 0.500
-MDS( "Confirme Fatores FGTS,MULTA" )
-@ 24, 40 GET nFATFG PICT "999.999"
-@ 24, 60 GET nFATMU PICT "999.999"
-IF !READCUR()
-RETU .F.
-ENDIF
+FUNCTION fores_ez()
 
+   IF !MDL( 'Listar GRFC', 0 )
+      RETU
+   ENDIF
 
-
-MDS( "Qual Funcionario" )
-@ 24, 40 GET mNUMERO
-IF !READCUR()
-RETU .F.
-ENDIF
+   mNUMERO := 0
+   mSAT    := 0
+   mCODTER := Space( 4 )
+   mTAXA   := 0
+   cVAR1   := "1"
+   cVAR2   := "0"
+   aVAL    := Array( 9 )
+   AFill( aVAL, 0 )
+   nVAL1   := nVAL2 := nVAL3 := nVAL4 := 0
+   nVAL5A  := nVAL5B := nVAL5C := nVAL5D := 0
+   nVAL6A  := nVAL6B := nVAL6C := nVAL6D := 0
+   nVAL7A  := nVAL7B := nVAL7C := nVAL7D := 0
+   nVAL8A  := nVAL8B := nVAL8C := nVAL8D := 0
+   nJAM01  := nJAM02 := 0
+   nMUL01  := nMUL02 := 0
+   TOMACGC := TOMARAZ := ""
+   nFATFG  := 0.085
+   nFATMU  := 0.500
+   MDS( "Confirme Fatores FGTS,MULTA" )
+   @ 24, 40 GET nFATFG PICT "999.999"
+   @ 24, 60 GET nFATMU PICT "999.999"
+   IF !READCUR()
+      RETU .F.
+   ENDIF
 
 
 
-IF !NETUSE( PES )   // AREDE(PES,PES,1)
-RETU
-ENDIF
-dbGoTop()
-IF !dbSeek( mNUMERO )
-dbCloseAll()
-ALERTX( "Funcionario nao Encontrado" )
-RETU .F.
-ENDIF
-dDAT1    := DEMITIDO - 30
-dDAT2    := DEMITIDO
-dDAT3    := DEMITIDO
-mTOMADOR := TOMADOR
+   MDS( "Qual Funcionario" )
+   @ 24, 40 GET mNUMERO
+   IF !READCUR()
+      RETU .F.
+   ENDIF
 
 
 
-IF !NETUSE( "FIRMA" )   // AREDE("FIRMA","FIRMA",1)
-dbCloseAll()
-RETU .F.
-ENDIF
-dbSeek( NREMP )
-
-aCTA01 := PEGRELCTA( "FGTS01" )
-aCTA02 := PEGRELCTA( "FGTS02" )
-aCTA03 := PEGRELCTA( "FGTS03" )
-aCTA04 := PEGRELCTA( "FGTS04" )
-aCTA05 := PEGRELCTA( "FGTS05" )
-aCTA06 := PEGRELCTA( "FGTS06" )
-aCTA07 := PEGRELCTA( "FGTS07" )
-aCTA08 := PEGRELCTA( "FGTS08" )
-aCTA09 := PEGRELCTA( "FGTS09" )
-
-IF !NETUSE( "TOMADOR" )   // AREDE("TOMADOR","TOMADOR",1)
-dbCloseAll()
-RETU .F.
-ENDIF
-dbGoTop()
-IF dbSeek( mTOMADOR )
-TOMACGC := NOME
-TOMARAZ := CGC
-ENDIF
-dbCloseArea()
-
-IF !NETUSE( "FO_RSS" )  // AREDE("FO_RSS","FO_RSS",1)
-dbCloseAll()
-RETU .F.
-ENDIF
-dbSelectAr( "FO_RSS" )
-dbGoTop()
-dbSeek( mNUMERO * 10000 )
-WHILE mNUMERO = NUMERO .AND. !Eof()
-FOR X := 1 TO 15
-IF aCTA01[ X ] = CONTA
-aVAL[ 1 ] += VALOR
-ENDIF
-IF aCTA02[ X ] = CONTA
-aVAL[ 2 ] += VALOR
-ENDIF
-IF aCTA03[ X ] = CONTA
-aVAL[ 3 ] += VALOR
-ENDIF
-IF aCTA04[ X ] = CONTA
-aVAL[ 4 ] += VALOR
-ENDIF
-IF aCTA05[ X ] = CONTA
-aVAL[ 5 ] += VALOR
-ENDIF
-IF aCTA06[ X ] = CONTA
-aVAL[ 6 ] += VALOR
-ENDIF
-IF aCTA07[ X ] = CONTA
-aVAL[ 7 ] += VALOR
-ENDIF
-IF aCTA08[ X ] = CONTA
-aVAL[ 8 ] += VALOR
-ENDIF
-IF aCTA09[ X ] = CONTA
-aVAL[ 9 ] += VALOR
-ENDIF
-NEXT X
-dbSkip()
-ENDDO
-dbCloseArea()
-
-
-nVAL6A := aVAL[ 1 ] + aVAL[ 2 ]
-nVAL7A := aVAL[ 7 ]
-nVAL8A := Round( aVAL[ 9 ] / nFATMU, 2 )
-
-nVAL6C := Round( nVAL6A * nFATFG, 2 )
-nVAL7C := Round( nVAL7A * nFATFG, 2 )
-nVAL8C := aVAL[ 9 ]
+   IF !NETUSE( PES )   // AREDE(PES,PES,1)
+      RETU
+   ENDIF
+   dbGoTop()
+   IF !dbSeek( mNUMERO )
+      dbCloseAll()
+      ALERTX( "Funcionario nao Encontrado" )
+      RETU .F.
+   ENDIF
+   dDAT1    := DEMITIDO - 30
+   dDAT2    := DEMITIDO
+   dDAT3    := DEMITIDO
+   mTOMADOR := TOMADOR
 
 
 
+   IF !NETUSE( "FIRMA" )   // AREDE("FIRMA","FIRMA",1)
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+   dbSeek( NREMP )
 
-dbSelectAr( "FIRMA" )
-mFPAS := OBTER( "FIRMA",, NREMP, "FPAS" )
+   aCTA01 := PEGRELCTA( "FGTS01" )
+   aCTA02 := PEGRELCTA( "FGTS02" )
+   aCTA03 := PEGRELCTA( "FGTS03" )
+   aCTA04 := PEGRELCTA( "FGTS04" )
+   aCTA05 := PEGRELCTA( "FGTS05" )
+   aCTA06 := PEGRELCTA( "FGTS06" )
+   aCTA07 := PEGRELCTA( "FGTS07" )
+   aCTA08 := PEGRELCTA( "FGTS08" )
+   aCTA09 := PEGRELCTA( "FGTS09" )
 
-VERSEHA( "CONFINSS",, Val( mFPAS ),,, .F., { { "EMPRESA+TOTAL+ACIDENTE", "mTAXA" }, ;
+   IF !NETUSE( "TOMADOR" )   // AREDE("TOMADOR","TOMADOR",1)
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+   dbGoTop()
+   IF dbSeek( mTOMADOR )
+      TOMACGC := NOME
+      TOMARAZ := CGC
+   ENDIF
+   dbCloseArea()
+
+   IF !NETUSE( "FO_RSS" )  // AREDE("FO_RSS","FO_RSS",1)
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+   dbSelectAr( "FO_RSS" )
+   dbGoTop()
+   dbSeek( mNUMERO * 10000 )
+   WHILE mNUMERO = NUMERO .AND. !Eof()
+      FOR X := 1 TO 15
+         IF aCTA01[ X ] = CONTA
+            aVAL[ 1 ] += VALOR
+         ENDIF
+         IF aCTA02[ X ] = CONTA
+            aVAL[ 2 ] += VALOR
+         ENDIF
+         IF aCTA03[ X ] = CONTA
+            aVAL[ 3 ] += VALOR
+         ENDIF
+         IF aCTA04[ X ] = CONTA
+            aVAL[ 4 ] += VALOR
+         ENDIF
+         IF aCTA05[ X ] = CONTA
+            aVAL[ 5 ] += VALOR
+         ENDIF
+         IF aCTA06[ X ] = CONTA
+            aVAL[ 6 ] += VALOR
+         ENDIF
+         IF aCTA07[ X ] = CONTA
+            aVAL[ 7 ] += VALOR
+         ENDIF
+         IF aCTA08[ X ] = CONTA
+            aVAL[ 8 ] += VALOR
+         ENDIF
+         IF aCTA09[ X ] = CONTA
+            aVAL[ 9 ] += VALOR
+         ENDIF
+      NEXT X
+      dbSkip()
+   ENDDO
+   dbCloseArea()
+
+
+   nVAL6A := aVAL[ 1 ] + aVAL[ 2 ]
+   nVAL7A := aVAL[ 7 ]
+   nVAL8A := Round( aVAL[ 9 ] / nFATMU, 2 )
+
+   nVAL6C := Round( nVAL6A * nFATFG, 2 )
+   nVAL7C := Round( nVAL7A * nFATFG, 2 )
+   nVAL8C := aVAL[ 9 ]
+
+
+
+
+   dbSelectAr( "FIRMA" )
+   mFPAS := OBTER( "FIRMA",, NREMP, "FPAS" )
+
+   VERSEHA( "CONFINSS",, Val( mFPAS ),,, .F., { { "EMPRESA+TOTAL+ACIDENTE", "mTAXA" }, ;
       { "ACIDENTE", "mSAT" }, ;
       { "STRZERO(TERCEIRO,4)", "mCODTER" } } )
 
 
-nVAL1 := aVAL[ 1 ] + aVAL[ 2 ]
-nVAL2 := aVAL[ 8 ]
-nVAL3 := aVAL[ 5 ]
+   nVAL1 := aVAL[ 1 ] + aVAL[ 2 ]
+   nVAL2 := aVAL[ 8 ]
+   nVAL3 := aVAL[ 5 ]
 
-ALERTX( "Confirme os Valores com Aten‡„o" )
-hb_DispBox( 6, 0, 23, 79, B_DOUBLE )
-@  7, 2  SAY "Aviso" + spac( 7 ) + "1-Trabalhado 2-Indenizado 3-Ausencia/Dispensa"
-@  8, 2  SAY "Dissidio    0-Sim 1-NÆo"
-@ 10, 2  SAY "                                              Data Recibo"
-@ 13, 2  SAY "Jam (A)" + spac( 16 ) + "Multa (A)"
-@ 14, 6  SAY "(B)" + spac( 22 ) + "(B)"
-@ 16, 2  SAY "Mes" + spac( 15 ) + "Remunera‡„o               Recolhimento Reco+JAM+Mul"
-@ 17, 2  SAY "Anterior"
-@ 18, 2  SAY "Rescisao"
-@ 19, 2  SAY "Indeniza‡ao"
-@ 20, 2  SAY "Multa"
-@  7, 12 GET cVAR1
-@  8, 12 GET cVAR2
+   ALERTX( "Confirme os Valores com Aten‡„o" )
+   hb_DispBox( 6, 0, 23, 79, B_DOUBLE )
+   @  7, 2  SAY "Aviso" + spac( 7 ) + "1-Trabalhado 2-Indenizado 3-Ausencia/Dispensa"
+   @  8, 2  SAY "Dissidio    0-Sim 1-NÆo"
+   @ 10, 2  SAY "                                              Data Recibo"
+   @ 13, 2  SAY "Jam (A)" + spac( 16 ) + "Multa (A)"
+   @ 14, 6  SAY "(B)" + spac( 22 ) + "(B)"
+   @ 16, 2  SAY "Mes" + spac( 15 ) + "Remunera‡„o               Recolhimento Reco+JAM+Mul"
+   @ 17, 2  SAY "Anterior"
+   @ 18, 2  SAY "Rescisao"
+   @ 19, 2  SAY "Indeniza‡ao"
+   @ 20, 2  SAY "Multa"
+   @  7, 12 GET cVAR1
+   @  8, 12 GET cVAR2
 // @ 11,  2 GET nVAL1 PICT "999,999.99"
 // @ 11, 18 GET nVAL2 PICT "999,999.99"
 // @ 11, 31 GET nVAL3 PICT "999,999.99"
-@ 11, 48 GET dDAT3
-@ 13, 11 GET nJAM01 PICT "999.99999999"
-@ 14, 11 GET nJAM02 PICT "999.99999999"
-@ 13, 35 GET nMUL01 PICT "999"
-@ 14, 35 GET nMUL02 PICT "999"
-READCUR()
-CALCEZ01()
+   @ 11, 48 GET dDAT3
+   @ 13, 11 GET nJAM01 PICT "999.99999999"
+   @ 14, 11 GET nJAM02 PICT "999.99999999"
+   @ 13, 35 GET nMUL01 PICT "999"
+   @ 14, 35 GET nMUL02 PICT "999"
+   READCUR()
+   CALCEZ01()
 
-@ 17, 11 GET dDAT1
-@ 17, 20 GET nVAL5A PICT "999,999.99" VALID CALCEZ02()
+   @ 17, 11 GET dDAT1
+   @ 17, 20 GET nVAL5A PICT "999,999.99" VALID CALCEZ02()
 // @ 17, 33 GET nVAL5B PICT "999,999.99" VALID CALCEZ02()
-@ 17, 46 GET nVAL5C PICT "999,999.99" VALID CALCEZ01() .AND. CALCEZ02()
-@ 17, 59 GET nVAL5D PICT "999,999.99"
+   @ 17, 46 GET nVAL5C PICT "999,999.99" VALID CALCEZ01() .AND. CALCEZ02()
+   @ 17, 59 GET nVAL5D PICT "999,999.99"
 
-@ 18, 11 GET dDAT2
-@ 18, 20 GET nVAL6A PICT "999,999.99" VALID CALCEZ03()
+   @ 18, 11 GET dDAT2
+   @ 18, 20 GET nVAL6A PICT "999,999.99" VALID CALCEZ03()
 // @ 18, 33 GET nVAL6B PICT "999,999.99" VALID CALCEZ03()
-@ 18, 46 GET nVAL6C PICT "999,999.99" VALID CALCEZ01() .AND. CALCEZ03()
-@ 18, 59 GET nVAL6D PICT "999,999.99"
+   @ 18, 46 GET nVAL6C PICT "999,999.99" VALID CALCEZ01() .AND. CALCEZ03()
+   @ 18, 59 GET nVAL6D PICT "999,999.99"
 
-@ 19, 20 GET nVAL7A PICT "999,999.99" VALID CALCEZ04()
+   @ 19, 20 GET nVAL7A PICT "999,999.99" VALID CALCEZ04()
 // @ 19, 33 GET nVAL7B PICT "999,999.99" VALID CALCEZ04()
-@ 19, 46 GET nVAL7C PICT "999,999.99" VALID CALCEZ01() .AND. CALCEZ04()
-@ 19, 59 GET nVAL7D PICT "999,999.99"
+   @ 19, 46 GET nVAL7C PICT "999,999.99" VALID CALCEZ01() .AND. CALCEZ04()
+   @ 19, 59 GET nVAL7D PICT "999,999.99"
 
-@ 20, 20 GET nVAL8A PICT "999,999.99" VALID CALCEZ05()
-@ 20, 46 GET nVAL8C PICT "999,999.99" VALID CALCEZ01() .AND. CALCEZ05()
-@ 20, 59 GET nVAL8D PICT "999,999.99"
-IF !READCUR()
-RETU .F.
-ENDIF
-
-
-IMPRESSORA()
-SET CENTURY ON
-dbSelectAr( "FIRMA" )
-@ 13, 02 SAY RAZAO
-@ 16, 02 SAY CGC
-@ 16, 25 SAY Left( RESPONSAV, 10 )
-@ 16, 39 SAY DDD
-@ 16, 45 SAY TELEFONE
-@ 19, 02 SAY ENDERECO
-@ 22, 02 SAY BAIRRO
-@ 22, 30 SAY CIDADE
-@ 22, 60 SAY ESTADO
-@ 22, 65 SAY CEP
-@ 25, 02 SAY TOMACGC
-@ 25, 30 SAY TOMARAZ
-
-dbSelectAr( "FIRMA" )
-@ 28, 02 SAY mFPAS
-@ 28, 25 SAY IF( SIMPLES # "S", "1", "2" )
-@ 28, 35 SAY ATIVIDADE
+   @ 20, 20 GET nVAL8A PICT "999,999.99" VALID CALCEZ05()
+   @ 20, 46 GET nVAL8C PICT "999,999.99" VALID CALCEZ01() .AND. CALCEZ05()
+   @ 20, 59 GET nVAL8D PICT "999,999.99"
+   IF !READCUR()
+      RETU .F.
+   ENDIF
 
 
-dbSelectAr( PES )
-@ 32, 02 SAY NOME
-@ 35, 02 SAY PIS
-@ 35, 18 SAY ADMITIDO
-IF Empty( CATEGORIA )
-@ 35, 29 SAY "01"
-ELSE
-@ 35, 29 SAY CATEGORIA
-ENDIF
-@ 35, 34 SAY DEMITIDO
-@ 35, 45 SAY FGTSMOT
-@ 35, 50 SAY cVAR1
+   IMPRESSORA()
+   SET CENTURY ON
+   dbSelectAr( "FIRMA" )
+   @ 13, 02 SAY RAZAO
+   @ 16, 02 SAY CGC
+   @ 16, 25 SAY Left( RESPONSAV, 10 )
+   @ 16, 39 SAY DDD
+   @ 16, 45 SAY TELEFONE
+   @ 19, 02 SAY ENDERECO
+   @ 22, 02 SAY BAIRRO
+   @ 22, 30 SAY CIDADE
+   @ 22, 60 SAY ESTADO
+   @ 22, 65 SAY CEP
+   @ 25, 02 SAY TOMACGC
+   @ 25, 30 SAY TOMARAZ
+
+   dbSelectAr( "FIRMA" )
+   @ 28, 02 SAY mFPAS
+   @ 28, 25 SAY IF( SIMPLES # "S", "1", "2" )
+   @ 28, 35 SAY ATIVIDADE
 
 
-@ 38, 02 SAY NASC
-@ 38, 15 SAY IF( Left( TIRAOUT( CPF ), 7 ) = PROFIS, Left( TIRAOUT( CPF ), 7 ) + "/" + SubStr( TIRAOUT( CPF ), 8 ), PROFIS + "-" + SERIE + "/" + CTPSUF ) // CTPS digital com os primeiros 7 dígitos do CPF e o campo Série, com os 4 dígitos restantes
-@ 38, 45 SAY FGTS
+   dbSelectAr( PES )
+   @ 32, 02 SAY NOME
+   @ 35, 02 SAY PIS
+   @ 35, 18 SAY ADMITIDO
+   IF Empty( CATEGORIA )
+      @ 35, 29 SAY "01"
+   ELSE
+      @ 35, 29 SAY CATEGORIA
+   ENDIF
+   @ 35, 34 SAY DEMITIDO
+   @ 35, 45 SAY FGTSMOT
+   @ 35, 50 SAY cVAR1
 
 
-@ 42, 02 SAY nVAL5A                        PICT "@E 999,999.99"
-@ 42, 16 SAY nVAL6A                        PICT "@E 999,999.99"
-@ 42, 32 SAY nVAL7A                        PICT "@E 999,999.99"
-@ 42, 48 SAY nVAL8A                        PICT "@E 999,999.99"
-@ 42, 64 SAY ( nVAL5A + nVAL6A + nVAL7A + nVAL8A ) PICT "@E 999,999.99"
-
-@ 51, 02 SAY nVAL5C                        PICT "@E 999,999.99"
-@ 51, 16 SAY nVAL6C                        PICT "@E 999,999.99"
-@ 51, 32 SAY nVAL7C                        PICT "@E 999,999.99"
-@ 51, 48 SAY nVAL8C                        PICT "@E 999,999.99"
-@ 51, 64 SAY ( nVAL5C + nVAL6C + nVAL7C + nVAL8C ) PICT "@E 999,999.99"
+   @ 38, 02 SAY NASC
+   @ 38, 15 SAY IF( Left( TIRAOUT( CPF ), 7 ) = PROFIS, Left( TIRAOUT( CPF ), 7 ) + "/" + SubStr( TIRAOUT( CPF ), 8 ), PROFIS + "-" + SERIE + "/" + CTPSUF ) // CTPS digital com os primeiros 7 dígitos do CPF e o campo Série, com os 4 dígitos restantes
+   @ 38, 45 SAY FGTS
 
 
+   @ 42, 02 SAY nVAL5A                        PICT "@E 999,999.99"
+   @ 42, 16 SAY nVAL6A                        PICT "@E 999,999.99"
+   @ 42, 32 SAY nVAL7A                        PICT "@E 999,999.99"
+   @ 42, 48 SAY nVAL8A                        PICT "@E 999,999.99"
+   @ 42, 64 SAY ( nVAL5A + nVAL6A + nVAL7A + nVAL8A ) PICT "@E 999,999.99"
+
+   @ 51, 02 SAY nVAL5C                        PICT "@E 999,999.99"
+   @ 51, 16 SAY nVAL6C                        PICT "@E 999,999.99"
+   @ 51, 32 SAY nVAL7C                        PICT "@E 999,999.99"
+   @ 51, 48 SAY nVAL8C                        PICT "@E 999,999.99"
+   @ 51, 64 SAY ( nVAL5C + nVAL6C + nVAL7C + nVAL8C ) PICT "@E 999,999.99"
 
 
-dbSelectAr( "FIRMA" )
-@ 55, 02 SAY CIDADE + "," + DToC( dDAT3 )
-SET CENTURY OFF
 
-IMPFOL()
-dbCloseAll()
-VIDEO()
-IMPEND()
 
+   dbSelectAr( "FIRMA" )
+   @ 55, 02 SAY CIDADE + "," + DToC( dDAT3 )
+   SET CENTURY OFF
+
+   IMPFOL()
+   dbCloseAll()
+   VIDEO()
+   IMPEND()
+
+   RETURN
 
 // +--------------------------------------------------------------------
 // +
