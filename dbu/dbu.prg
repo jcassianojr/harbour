@@ -96,6 +96,7 @@ __SetCentury(.t.)
 Set(_SET_EPOCH,year(date()) - 60)
 Set(_SET_DATEFORMAT,"dd/mm/yyyy")
 SetCursor(.t.)
+Set(_SET_SCOREBOARD,.f.)
 
 
 public n_files
@@ -158,17 +159,7 @@ public zMEMOEXT   := ".CDX"
 public zusovia    := "DBFCDX"
 public zREGSEP    := " "
 
-rddsetdefault("DBFCDX")
-HB_IDLESTATE()
-Set(_SET_CODEPAGE,"PTISO")
-rddsetdefault("DBFCDX")
-Set(_SET_OPTIMIZE,.t.)
-Set(_SET_DELETED,.t.)
-Set(_SET_SOFTSEEK,.t.)
-__SetCentury(.t.)
-Set(_SET_EPOCH,year(date()) - 60)
-Set(_SET_DATEFORMAT,"dd/mm/yyyy")
-Set(_SET_SCOREBOARD,.f.)
+
 
 clear
 
@@ -467,8 +458,8 @@ ajuda_m := {"Ajuda"}
 ajuda_b := {.T.}
 
 abrir_m := {"Database","Indice","Visao","POSTGRESQL",;
- "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE"}
-abrir_b := array(11)
+ "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB"}
+abrir_b := array(12)
 abrir_b[1] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[2] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
 abrir_b[3] = "sysfunc = 0 .AND. .NOT. box_open"
@@ -480,6 +471,7 @@ abrir_b[8] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[9] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[10] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[11] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[12] = "sysfunc = 0 .AND. .NOT. box_open"
 
 DECLARE criar_b[11]
 criar_m := {"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso",;
@@ -607,6 +599,8 @@ do while .T.
          MENUSQL("MSSQL")
       case M->func_sel = 11
          MENUSQL("ORACLE")
+      case M->func_sel = 12
+         letomenu()
       endcase
       sysfunc := 0  //setar para nao retornar ficar em loop
    case M->sysfunc = 9  //utilitarios F9

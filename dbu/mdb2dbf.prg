@@ -141,6 +141,10 @@ return nil
 *+
 function pegcfgbanco()
 
+IF cTIPOSQL="LETO"
+   cSERVERX   := PADR("//127.0.0.1:2812/",30," ")
+ENDIF   
+
 IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
    cUSERX := PADR("root",30," ")
 ENDIF
@@ -148,6 +152,8 @@ ENDIF
 IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    cUSERX := PADR("postgres",30," ")
 ENDIF
+
+
 //
 // ajustes nomes de drivers para 32 e 64 bits
 //
@@ -172,9 +178,13 @@ IF cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64"
 ENDIF
 
 IF cTIPOSQL = "MYSQL" .or. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
-           .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+           .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" 
    OPENTIPOARQ()
    mdbdatabases()
+ENDIF
+
+IF cTIPOSQL = "LETO"
+   OPENTIPOARQ()
 ENDIF
 
 lMDB := .F.
@@ -845,10 +855,10 @@ LOCAL cMDBARQ
 cMDBARQ := ""
 
 DO CASE
-CASE lMDB   //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
+CASE lMDB   
    cMDBARQ    := win_GetOPENFileName(,"Arquivos de Destino",HB_CWD(),"Arquivos mdb","*.MDB",1)
    cDATABASEX := cMDBARQ
-CASE lACCDB   //cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+CASE lACCDB   
    cMDBARQ    := win_GetOPENFileName(,"Arquivos de Destino",HB_CWD(),"Arquivos accdb","*.accdb",1)
    cDATABASEX := cMDBARQ
 CASE cTIPOSQL = "SQLITE"
@@ -858,9 +868,8 @@ CASE cTIPOSQL = "SQLITE"
     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
    cDATABASEX := cMDBARQ
 CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
-    .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+    .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "LETO"
    cSERVERX := PADR(cSERVERX,30," ")
-   // cDATABASEX:=PADR(cDATABASEX,30," ") escolhido nao precisa digitar
    cUSERX := PADR(cUSERX,30," ")
    cPASSX := PADR(cPASSX,30," ")
    HB_dispbox(3,22,22,55,B_DOUBLE+" ")

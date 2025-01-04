@@ -48,6 +48,7 @@ sddodbc.hbc
 sddmy.hbc
 sddpg.hbc
 sddsqlt3.hbc
+letodb.hbc
 #sddoci.hbc
 
 d:\develop\harbour\dbu\DBU.PRG  
@@ -96,6 +97,8 @@ d:\develop\harbour\dbu\dbuodbc.prg
 #
 d:\develop\harbour\dbu\adoxb.prg   
 d:\develop\harbour\dbu\dbuadox.prg 
+#
+d:\develop\harbour\dbu\dbuleto.prg
 #
 d:\develop\harbour\objmgw\netdbf.prg
 d:\develop\harbour\objmgw\comp.prg  

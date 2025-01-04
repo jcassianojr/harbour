@@ -364,6 +364,15 @@ case nTIPODBF = 17
 case nTIPODBF = 18
    USOVIA := "BMDBFNTX"
    rddSetDefault("BMDBFNTX")
+   
+case nTIPODBF = 90   
+   USOVIA := "LETO"
+   rddSetDefault("LETO")
+case nTIPODBF = 91  
+   USOVIA := "SQLMIX"
+   rddSetDefault("SQLMIX")
+      
+   
 otherwise
    USOVIA := "DBFCDX"
    rddsetdefault("DBFCDX")

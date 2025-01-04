@@ -119,6 +119,8 @@ FUNCTION mixmenu( cUSOSQL )
 // mdbtabela(cdatabasex)
 
    cOLDRDD := rddSetDefault( "SQLMIX" )
+   nOLDTIPORDD := TIPODBF
+   TIPODBF:=91
 // mix_open()
 
    WHILE .T.
@@ -159,12 +161,15 @@ FUNCTION mixmenu( cUSOSQL )
          mixexpdbf( 2 )
          // mixexpformat() usando sqlmix array memory migrar rdd quando disponivel
       OTHERWISE
-         RETURN
+         EXIT
       ENDCASE
    ENDDO
 
 
    rddSetDefault( cOLDRDD )
+   TIPODBF :=nOLDTIPORDD
+   RDDNOME(TIPODBF)
+   
    RESTAA( aAMBIENTE )
    LAYOUT()
 
