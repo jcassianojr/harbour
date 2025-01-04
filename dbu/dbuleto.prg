@@ -14,6 +14,7 @@
 #include "leto_rev.ch"
 #include "rddleto.ch"
 #include "BOX.CH"
+#include "TRY.CH"
 
 REQUEST LETO
 
@@ -45,14 +46,11 @@ FUNCTION letomenu()
    WHILE .T.
       hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
       @ 03, 24 SAY "LETODB" + " " + cSERVERX
-      OPCAO( 4, 24, " &Versao Infro           ", 86 )   // V
+      OPCAO( 4, 24, "&Versao Info              ", 86 )   // V
       OPCAO( 5, 24, "&Tabelas                   ", 84 )   // T
-      
-       //OPCAO( 5, 24, "&Database Selecionar       ", 68 )   // D
-   //   OPCAO( 6, 24, "&Importar  DBF             ", 73 )   // I
-    //  OPCAO( 7, 24, "&Tabelas                   ", 84 )   // T
-    //  OPCAO( 8, 24, "&Exportar  DBF             ", 69 )   // E
-    //  OPCAO( 9, 24, "&Apagar Tabela             ", 65 )   // A
+      OPCAO( 6, 24, "&Importar  DBF             ", 73 )   // I
+      OPCAO( 7, 24, "&Exportar  DBF             ", 69 )   // E
+      OPCAO( 8, 24, "&Apagar Tabela             ", 65 )   // A
     //  OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F
       KEY := menu( 1, 0 )
       DO CASE
@@ -61,10 +59,12 @@ FUNCTION letomenu()
       CASE KEY = 2
            LETO_tables(cSERVERX)
       CASE KEY = 3
+           LETO_DBFTOSRV(cSERVERX) 
       CASE KEY = 4
+           LETO_SRVTODBF(cSERVERX)
       CASE KEY = 5
+          LETO_DELDBF(cSERVERX) 
       CASE KEY = 6
-      CASE KEY = 7
       OTHERWISE
          EXIT
       ENDCASE
@@ -79,6 +79,84 @@ FUNCTION letomenu()
 
    RETURN .T.
    
+   
+FUNCTION LETO_SRVTODBF(cSrvAddr) 
+   cARQORI    := LETO_tables(cSERVERX)
+   cARQUIVO   :=TIRAEXT(cARQORI )
+   cEXTMEMO:=".FPT"
+   cEXTINDEX:=".CDX"
+   nConnect := LETO_CONNECT( cSrvAddr )
+   altd()
+   IF nConnect >= 0
+       IF .NOT. File( cARQORI )
+          Leto_FCopyFromSrv( cARQORI, cARQORI )
+       ENDIF 
+       IF .NOT. FILE (cARQUIVO+cEXTMEMO) 
+           Leto_FCopyFromSrv( cARQUIVO+cEXTMEMO, cARQUIVO+cEXTMEMO )
+       ENDIF
+       IF .NOT. FILE (cARQUIVO+cEXTINDEX) 
+          Leto_FCopyFromSrv(cARQUIVO+cEXTINDEX, cARQUIVO+cEXTINDEX )
+       ENDIF
+       leto_disconnect() 
+   ENDIF
+RETURN .T.     
+
+FUNCTION LETO_DELDBF(cSrvAddr) 
+   cARQORI    := LETO_tables(cSERVERX)
+   cARQUIVO   :=TIRAEXT(cARQORI )
+   cEXTMEMO:=".FPT"
+   cEXTINDEX:=".CDX"
+   IF MDG('Excluir '+cARQORI)
+       nConnect := LETO_CONNECT( cSrvAddr )
+       IF nConnect >= 0
+           Leto_FERASE( cARQORI, cARQORI )
+           Leto_FERASE( cARQUIVO+cEXTMEMO )
+           Leto_FERASE(cARQUIVO+cEXTINDEX )
+           leto_disconnect() 
+       ENDIF
+    ENDIF   
+RETURN .T.     
+
+   
+FUNCTION LETO_DBFTOSRV(cSrvAddr) 
+   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+   cCAMINHO   :=""
+   cARQUIVO   :=""
+   cEXTENSAO  :=""
+   cEXTMEMO   :=""
+   cEXTINDEX  :=""
+   //HB_FNameSplit( <cString>, <@cPath> , <@cFileName> , <@cExtension> ) -> NIL
+   hb_FNameSplit( cARQORI, @cCAMINHO, @cARQUIVO, @cEXTENSAO )
+   TRY
+     cEXTMEMO   := hb_rddInfo(RDDI_MEMOEXT)  //a extensao do origem memo do destino vem com ponto
+   END
+   TRY
+     cEXTINDEX   := hb_rddInfo(RDDI_ORDBAGEXT)
+   END
+   //melhorar antes da busca do dbf escolher rdd
+   //como o rdddefault esta leto nao tras as extensoes
+   //antes do connection setar novamente rdddefault leto
+   //usando exensoes dbfcdx por hora
+   IF EMPTY(cEXTMEMO)
+      cEXTMEMO:=".FPT"
+   ENDIF
+   IF EMPTY(cEXTINDEX)
+      cEXTINDEX:=".CDX"
+   ENDIF
+   nConnect := LETO_CONNECT( cSrvAddr )
+   IF nConnect >= 0
+       IF File( cARQORI )
+          Leto_FCopyToSrv( cARQORI, cARQUIVO+cEXTENSAO )
+       ENDIF 
+       IF FILE (cCAMINHO+cARQUIVO+cEXTMEMO) 
+           Leto_FCopyToSrv( cCAMINHO+cARQUIVO+cEXTMEMO, cARQUIVO+cEXTMEMO )
+       ENDIF
+       IF FILE (cCAMINHO+cARQUIVO+cEXTINDEX) 
+          Leto_FCopyToSrv( cCAMINHO+cARQUIVO+cEXTINDEX, cARQUIVO+cEXTINDEX )
+       ENDIF
+       leto_disconnect() 
+   ENDIF
+RETURN .T.  
    
 FUNCTION LETO_INFO( cSrvAddr, cLogFile, cOptions )
    LOCAL nConnect := LETO_CONNECT()
@@ -196,7 +274,6 @@ FUNCTION leto_tables( cSrvAddr )
 
        aRETU := leto_directory( "*.DBF" )  
        
-       //altd()
        FOR i := 1 TO Len( aRETU )
           AAdd( aRESULT, aRETU[ i, 1 ] )
        NEXT i

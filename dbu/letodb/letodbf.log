@@ -49,3 +49,40 @@
 01.04.2025 15:11:15 INFO: disconnect 127.0.0.1:49881 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
 01.04.2025 15:19:03 INFO: connected  127.0.0.1:49903 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
 01.04.2025 15:19:52 INFO: disconnect 127.0.0.1:49903 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 15:40:55 DEBUG thread3() ending ..
+01.04.2025 15:40:55       Server at port 2812 have shutdown.
+01.04.2025 17:39:04       UDF file: d:\develop\harbour\dbu\letodb\letoudf.hrb have been loaded.
+01.04.2025 17:39:04 INFO: LetoDBf Server 3.00 (20250104), will run at IP 127.0.0.1:2812 ( internal also used :2813 )
+01.04.2025 17:39:04 INFO: DataPath=d:\develop\modelos\letodb, ShareTables=0, NoSaveWA=1, Max Tables=999
+01.04.2025 17:39:04 INFO: LoginPassword=0, CacheRecords=21, LockExtended=0, Max Users=99
+01.04.2025 17:39:04 INFO: Encrypted LZ4 traffic=N
+01.04.2025 17:39:04 DEBUG second socket: 340 for errors established
+01.04.2025 17:39:04 DEBUG thread3() with pipe handle: 348 started .. 
+01.04.2025 17:42:36 INFO: connected  127.0.0.1:49718 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 17:44:49 INFO: disconnect 127.0.0.1:49718 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 17:51:08 INFO: connected  127.0.0.1:49730 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 17:51:16 INFO: disconnect 127.0.0.1:49730 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 17:52:20 INFO: connected  127.0.0.1:49733 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 17:52:22 INFO: disconnect 127.0.0.1:49733 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 17:52:32 INFO: connected  127.0.0.1:49735 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 17:52:34 INFO: disconnect 127.0.0.1:49735 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:03:58 INFO: connected  127.0.0.1:49739 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:04:01 INFO: disconnect 127.0.0.1:49739 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:04:01 INFO: connected  127.0.0.1:49741 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:04:04 INFO: disconnect 127.0.0.1:49741 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:09:28 INFO: connected  127.0.0.1:49743 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:09:36 INFO: disconnect 127.0.0.1:49743 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:09:36 INFO: connected  127.0.0.1:49745 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:09:36 INFO: disconnect 127.0.0.1:49745 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:09:38 INFO: connected  127.0.0.1:49747 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:09:41 INFO: disconnect 127.0.0.1:49747 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:09:41 INFO: connected  127.0.0.1:49749 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:09:42 INFO: disconnect 127.0.0.1:49749 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:09:45 INFO: connected  127.0.0.1:49751 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:09:48 INFO: disconnect 127.0.0.1:49751 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:09:48 INFO: connected  127.0.0.1:49753 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:09:48 INFO: disconnect 127.0.0.1:49753 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:09:50 INFO: connected  127.0.0.1:49755 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:09:53 INFO: disconnect 127.0.0.1:49755 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 18:09:53 INFO: connected  127.0.0.1:49757 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 18:09:53 INFO: disconnect 127.0.0.1:49757 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
