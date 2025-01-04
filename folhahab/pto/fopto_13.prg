@@ -25,12 +25,14 @@
 // +--------------------------------------------------------------------
 // +
 
-function fopto_13()
-CABE2( 'FOPTO_13 - Ver/Imprimir Arquivo do Rel¢gio-TXT' )
-ntipo := PEGRELOGIO()
-DADO  := pegarqcon( nTIPO, "TXT" )
-FOPTO13( DADO )
-return
+FUNCTION fopto_13()
+
+   CABE2( 'FOPTO_13 - Ver/Imprimir Arquivo do Rel¢gio-TXT' )
+   ntipo := PEGRELOGIO()
+   DADO  := pegarqcon( nTIPO, "TXT" )
+   FOPTO13( DADO )
+
+   RETURN
 
 // +--------------------------------------------------------------------
 // +

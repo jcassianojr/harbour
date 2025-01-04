@@ -26,154 +26,155 @@
 // +
 
 
-function fopto_36()
-CABE3( 'FOPTO_3 - Relatórios - Pontos e Totais', 23 )
+FUNCTION fopto_36()
 
-cMESANO := ANOMESW
-cPN     := "PN" + ANOMESW
-cPT     := "PT" + ANOMESW
-cPD     := "PD" + ANOMESW
-cPP     := "PP" + ANOMESW
-cPA     := "PA" + ANOMESW
-FO21CRI( "PD", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
-FO21CRI( "PA", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
-FO21CRI( "PP", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
-FO21CRI( "PN", "FO_PON", "STR(NUMERO,8)+DTOS(DATA)" )
-FO21CRI( "PT", "FO_POT", "NUMERO" )
+   CABE3( 'FOPTO_3 - Relatórios - Pontos e Totais', 23 )
 
-
-
-
-cIMPORI := "R"
-cDEC    := "N"
-cBCO    := "N"
-cDEM    := "N"
-CENT    := "N"
-@ 15, 01 SAY "Resumo Final em minutos sexadecimal"
-@ 16, 01 SAY "Resumo Banco de Horas"
-@ 17, 01 SAY "Listar Demitidos"
-@ 18, 01 SAY "Espacar Entrelinha"
-@ 15, 40 GET cDEC                                  PICT "!" VALID cDEC $ "SN"
-@ 16, 40 GET cBCO                                  PICT "!" VALID cBCO $ "SN"
-@ 17, 40 GET cDEM                                  PICT "!" VALID cDEM $ "SN"
-@ 18, 40 GET CENT                                  PICT "!" VALID CENT $ "SN"
-IF !READCUR()
-RETU .F.
-ENDIF
-
-aEVED := {}
-aEVEC := {}
-aEVEB := {}
-PegFeriados()
-
-
-
-lMIN := cDEC = "S"
-lBCO := cBCO = "S"
-lDEM := cDEM = "S"
-lENT := CENT = "S"
-
-CODCTA := PEGCX()
-
-DESCTA := Array( 24 )
-
-IF !NETUSE( "FIRMA" )
-RETU
-ENDIF
-dbGoTop()
-dbSeek( NREMP )
-mRAZ := RAZAO
-mCGC := CGC
-mEND := ENDERECO
-mBAI := BAIRRO
-mCID := CIDADE
-mEST := ESTADO
-dbCloseAll()
-
-IF !NETUSE( "CONTAS" )
-RETURN
-ENDIF
-
-
-IF !NETUSE( pes )
-dbCloseAll()
-RETURN
-ENDIF
-IF lDEM
-FILTRO := ""
-ELSE
-FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
-ENDIF
-INX := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
-
-
-IF !NETUSE( cPN )
-dbCloseAll()
-RETU
-ENDIF
-
-IF !NETUSE( cPT )
-dbCloseAll()
-RETU
-ENDIF
-
-IF !NETUSE( "TABTURNO" )
-dbCloseAll()
-RETU
-ENDIF
-
-IF !NETUSE( if( lSECBCO, "BCOBAK", "BCOHRS" ) )
-dbCloseAll()
-RETU
-ENDIF
-cSELE6 := Alias()
-
-IF !NETUSE( "FO_PTT" )
-dbCloseAll()
-RETU
-ENDIF
+   cMESANO := ANOMESW
+   cPN     := "PN" + ANOMESW
+   cPT     := "PT" + ANOMESW
+   cPD     := "PD" + ANOMESW
+   cPP     := "PP" + ANOMESW
+   cPA     := "PA" + ANOMESW
+   FO21CRI( "PD", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   FO21CRI( "PA", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   FO21CRI( "PP", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   FO21CRI( "PN", "FO_PON", "STR(NUMERO,8)+DTOS(DATA)" )
+   FO21CRI( "PT", "FO_POT", "NUMERO" )
 
 
 
 
-IF !NETUSE( cPD )
-dbCloseAll()
-RETURN 0
-ENDIF
-IF !NETUSE( cPP )
-dbCloseAll()
-RETURN 0
-ENDIF
-IF !NETUSE( cPA )
-dbCloseAll()
-RETURN 0
-ENDIF
+   cIMPORI := "R"
+   cDEC    := "N"
+   cBCO    := "N"
+   cDEM    := "N"
+   CENT    := "N"
+   @ 15, 01 SAY "Resumo Final em minutos sexadecimal"
+   @ 16, 01 SAY "Resumo Banco de Horas"
+   @ 17, 01 SAY "Listar Demitidos"
+   @ 18, 01 SAY "Espacar Entrelinha"
+   @ 15, 40 GET cDEC                                  PICT "!" VALID cDEC $ "SN"
+   @ 16, 40 GET cBCO                                  PICT "!" VALID cBCO $ "SN"
+   @ 17, 40 GET cDEM                                  PICT "!" VALID cDEM $ "SN"
+   @ 18, 40 GET CENT                                  PICT "!" VALID CENT $ "SN"
+   IF !READCUR()
+      RETU .F.
+   ENDIF
+
+   aEVED := {}
+   aEVEC := {}
+   aEVEB := {}
+   PegFeriados()
 
 
 
-IF !MDL( 'FOPTO_36 - Listagem Apontamento e Totais' )
-RETU
-ENDIF
-IF lENT
-IMPRESSORA()
-QQOut( Chr( 27 ) + "3" + "72" )
-VIDEO()
-ENDIF
+   lMIN := cDEC = "S"
+   lBCO := cBCO = "S"
+   lDEM := cDEM = "S"
+   lENT := CENT = "S"
 
-LISTARUE( {| X | FOPTO36( X ) } )
+   CODCTA := PEGCX()
 
-RETU
+   DESCTA := Array( 24 )
+
+   IF !NETUSE( "FIRMA" )
+      RETU
+   ENDIF
+   dbGoTop()
+   dbSeek( NREMP )
+   mRAZ := RAZAO
+   mCGC := CGC
+   mEND := ENDERECO
+   mBAI := BAIRRO
+   mCID := CIDADE
+   mEST := ESTADO
+   dbCloseAll()
+
+   IF !NETUSE( "CONTAS" )
+      RETURN
+   ENDIF
+
+
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETURN
+   ENDIF
+   IF lDEM
+      FILTRO := ""
+   ELSE
+      FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
+   ENDIF
+   INX := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
+
+
+   IF !NETUSE( cPN )
+      dbCloseAll()
+      RETU
+   ENDIF
+
+   IF !NETUSE( cPT )
+      dbCloseAll()
+      RETU
+   ENDIF
+
+   IF !NETUSE( "TABTURNO" )
+      dbCloseAll()
+      RETU
+   ENDIF
+
+   IF !NETUSE( if( lSECBCO, "BCOBAK", "BCOHRS" ) )
+      dbCloseAll()
+      RETU
+   ENDIF
+   cSELE6 := Alias()
+
+   IF !NETUSE( "FO_PTT" )
+      dbCloseAll()
+      RETU
+   ENDIF
+
+
+
+
+   IF !NETUSE( cPD )
+      dbCloseAll()
+      RETURN 0
+   ENDIF
+   IF !NETUSE( cPP )
+      dbCloseAll()
+      RETURN 0
+   ENDIF
+   IF !NETUSE( cPA )
+      dbCloseAll()
+      RETURN 0
+   ENDIF
+
+
+
+   IF !MDL( 'FOPTO_36 - Listagem Apontamento e Totais' )
+      RETU
+   ENDIF
+   IF lENT
+      IMPRESSORA()
+      QQOut( Chr( 27 ) + "3" + "72" )
+      VIDEO()
+   ENDIF
+
+   LISTARUE( {| X | FOPTO36( X ) } )
+
+   RETU
 
 
 // +--------------------------------------------------------------------
@@ -188,6 +189,7 @@ RETU
 // +
 // +
 // +
+
 FUNCTION FOPTO36
 
    PARA COMPARE
@@ -273,7 +275,7 @@ FUNCTION FOPTO36
          dbSeek( Str( NUM, 8 ) )
          WHILE NUM = NUMERO .AND. !Eof()
             // X := day( DATA )
-            @ PRow() + 1, 0   SAY IMPSTR( cIMPCOM ) + DToC( data )
+            @ PRow() + 1, 0   SAY IMPSTR( cIMPCOM ) + DToC( DATA )
             @ PRow(), PCol() SAY MUDHOR
             @ PRow(), 09     SAY COD
             IF !Empty( ENT ) .OR. !Empty( SAI )
@@ -299,13 +301,13 @@ FUNCTION FOPTO36
                NEXT X
             ENDIF
             IF ( COD = "SA" .OR. SOD = "SA" ) .AND. DoW( DATA ) <> 7
-               @ PRow() + 1, 0 SAY DToC( data ) + " Codigo SA sem ser sabado"
+               @ PRow() + 1, 0 SAY DToC( DATA ) + " Codigo SA sem ser sabado"
             ENDIF
             IF ( COD = "DO" .OR. SOD = "DO" ) .AND. DoW( DATA ) <> 1
-               @ PRow() + 1, 0 SAY DToC( data ) + " Codigo DO sem ser domingo"
+               @ PRow() + 1, 0 SAY DToC( DATA ) + " Codigo DO sem ser domingo"
             ENDIF
             IF ( COD = "FE" .OR. SOD = "FE" ) .AND. AScan( aEVED, Str( Day( DATA ), 2 ) + Str( Month( DATA ), 2 ) ) = 0
-               @ PRow() + 1, 0 SAY DToC( data ) + " Codigo FE sem feriado cadastrado "
+               @ PRow() + 1, 0 SAY DToC( DATA ) + " Codigo FE sem feriado cadastrado "
             ENDIF
 
             VIDEO()

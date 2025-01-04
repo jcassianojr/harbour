@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_48.prg
+// +    Programa  : fopto_48.prg  Creditos Avulsos
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,20 +27,20 @@
 
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
 
-mHORA2 := 0
+FUNCTION fopto_48()
 
-cPX := "PX" + ANOMESW
+   mHORA2 := 0
+
+   cPX := "PX" + ANOMESW
 
 
-CHECKCRI( cPX, "FO_PDES", "STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)" )
+   CHECKCRI( cPX, "FO_PDES", "STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)" )
 
-PADRAO( cPX, cPX, "' '+STR(mNUMERO,8)+' '+DTOC(mDATA)+' '+STR(mCONTA,2)+' '+STR(mHORAS,6,2)+' '+mOBS", "STR(mNUMERO,8)+DTOS(mDATA)+STR(mCONTA,2)", ;
+   PADRAO( cPX, cPX, "' '+STR(mNUMERO,8)+' '+DTOC(mDATA)+' '+STR(mCONTA,2)+' '+STR(mHORAS,6,2)+' '+mOBS", "STR(mNUMERO,8)+DTOS(mDATA)+STR(mCONTA,2)", ;
       "FOPTO_48 - Creditos Avulsos", ;
       "Numero   Data     CT Horas  Obs", ;
       {|| iFOPTO48() }, {|| tFOPTO48() }, {|| gFOPTO48() }, {|| ALLTRUE() },, 2,,, zTIPVID )

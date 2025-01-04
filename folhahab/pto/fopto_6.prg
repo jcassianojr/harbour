@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_6.prg
+// +    Programa  : fopto_6.prg  Banco de Horas
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -32,95 +32,98 @@
 #include "INKEY.CH"
 // //#INCLUDE "COMANDO.CH"
 
-IF ZFECHADO = "S"
-ALERTX( "Mes ja Fechado" )
-ENDIF
+FUNCTION fopto_6()
 
-WHILE .T.
-CABE3( ' FOPTO_4U - Banco de Horas' + if( lSeCBCO, "Anterior", "Atual" ), 23 )
-OPCAO( 04, 01, " &A - Consultar                   ", 65, " Consultar Banco de Horas                      " )
-OPCAO( 05, 01, " &B - Apagar   Competencia        ", 66, " Apaga Uma Competencia Banco de Horas          " )
-OPCAO( 06, 01, " &C - Arquivar Demitidos          ", 67, " Arquiva Banco Horas Demitidos                 " )
-OPCAO( 07, 01, " &D - Arquivar Um ano             ", 68, " Arquiva Um Ano Banco de Hora                  " )
-OPCAO( 08, 01, " &E - Arquivar Competencia MesAno ", 69, " Arquiva uma competencia mes/ano               " )
-OPCAO( 09, 01, " &F - Arquivar Um Funcionario     ", 70, " Arquiva Um Funcionario Banco de Hora          " )
-OPCAO( 10, 01, " &G - Consulta Banco Hrs Arquivado", 71, " Consultar Banco de Horas Arquivado            " )
-OPCAO( 11, 01, " &H - Retornar Demitidos          ", 72, " Retorna Banco Horas Demitidos                 " )
-OPCAO( 12, 01, " &I - Retornar Um ano             ", 73, " Retorna Um Ano Banco de Hora                  " )
-OPCAO( 13, 01, " &J - Retornar Competencia MesAno ", 74, " Retorna uma competencia mes/ano               " )
-OPCAO( 14, 01, " &K - Retornar Um Funcionario     ", 75, " Retorna Um Funcionario Banco de Hora          " )
-OPCAO( 15, 01, " &L - Importar Saldo Ponto/BcoHrs ", 76, " Transferei saldo horas Ponto para Banco Horas " )
-OPCAO( 16, 01, " &M - Zerar Saldo Horas Competenc ", 77, " Zera os Valores das Horas de uma Competencia  " )
-OPCAO( 17, 01, " &N - Zerar Saldo Dias  Competenc ", 78, " Zera os Valores de dia De  uma Competencia    " )
-OPCAO( 04, 41, " &1 - Requisicoes Banco Horas     ", 49, " Requisicoes Banco Horas                       " )
-OPCAO( 05, 41, " &2 - Multiplas Requisicao Bco Hrs", 50, " Multiplos Lancamentos Requisicoes Banco Horas " )
-OPCAO( 06, 41, " &3 - Exportar saldo arquivo txt  ", 51, "                                               " )
-OPCAO( 07, 41, " &4 - Exportar saldo folha        ", 52, "                                               " )
-OPCAO( 08, 41, " &5 - Troca Atual por Anterior    ", 53, "                                               " )
-OPCAO := menu( 1, 24 )
-IF ZUSER <> "SUPERVISOR" .AND. ZUSER <> "SOFTEC" .AND. OPCAO > 0
-IF !VERSEHA( "MUSERM",, USERMCRI( ZUSER, "F", OPCAO ) )
-ALERTX( "Voce nAo tem acesso, Verifique com o Supervisor" )
-LOOP
-ENDIF
-ENDIF
-IF ZFECHADO = "S"
-IF OPCAO = 16 .OR. OPCAO = 2 .OR. OPCAO = 12 .OR. OPCAO = 13 .OR. OPCAO = 14
-ALERTX( "Mes ja Fechado" )
-LOOP
-ENDIF
-ENDIF
+   IF ZFECHADO = "S"
+      ALERTX( "Mes ja Fechado" )
+   ENDIF
 
-DO CASE
-CASE OPCAO = 1   // A Consulta Atual
-FOPTO_4R( 1 )
-CASE OPCAO = 2   // B Apaga Competencia
-FOPTO4Q02()
-CASE OPCAO = 3   // C Arquiva Demitido
-fopto4u( 1, 1 )
-CASE OPCAO = 4   // D Arquiva Ano
-fopto4u( 2, 1 )
-CASE OPCAO = 5   // E Arquiva Mes Ano
-fopto4u( 3, 1 )
-CASE OPCAO = 6   // F Arquiva Funcionario
-fopto4u( 4, 1 )
-CASE OPCAO = 7   // G Consulta Baixados
-FOPTO_4R( 2 )
-CASE OPCAO = 8   // H Retorna Demitidos
-fopto4u( 1, 2 )
-CASE OPCAO = 9   // I Retorna Ano
-fopto4u( 2, 2 )
-CASE OPCAO = 10  // J Retorna mes ano
-fopto4u( 3, 2 )
-CASE OPCAO = 11  // K Retorna funcionario
-fopto4u( 4, 2 )
-CASE OPCAO = 12  // L Importar Saldo Ponto/BcoHrs
-FOPTO_4S()
-CASE OPCAO = 13  // M zera horas
-fopto4u( 5, 1 )
-CASE OPCAO = 14  // N zera dias
-fopto4u( 6, 1 )
-CASE OPCAO = 15  // 1 requisicao banco de horas
-FOPTO_4Q()
-CASE OPCAO = 16  // 2 - Multiplos Banco Horas
-FOPTO_4K()
-CASE OPCAO = 17  // 3
-FOPTO_25( 5 )   // Saldo Banco Horas->arquivo.txt
-CASE OPCAO = 18  // 4
-FOPTO_25( 6 )   // Saldo Banco Horas->folha
-CASE opcao = 19  // 5
-IF !lSeCBCO
-lSECBCO := .T.   // Controle de Banco de Horas Anterior
-ALERTX( "Controle Banco Horas Anterior-Ativado" )
-ELSE
-lSECBCO := .F.
-ALERTX( "Controle Banco Horas Anterior-Desativado" )
-ENDIF
-OTHERWISE
-RETU
-ENDCASE
-ENDDO
+   WHILE .T.
+      CABE3( ' FOPTO_6 - Banco de Horas' + if( lSeCBCO, "Anterior", "Atual" ), 23 )
+      OPCAO( 04, 01, " &A - Consultar                   ", 65, " Consultar Banco de Horas                      " )
+      OPCAO( 05, 01, " &B - Apagar   Competencia        ", 66, " Apaga Uma Competencia Banco de Horas          " )
+      OPCAO( 06, 01, " &C - Arquivar Demitidos          ", 67, " Arquiva Banco Horas Demitidos                 " )
+      OPCAO( 07, 01, " &D - Arquivar Um ano             ", 68, " Arquiva Um Ano Banco de Hora                  " )
+      OPCAO( 08, 01, " &E - Arquivar Competencia MesAno ", 69, " Arquiva uma competencia mes/ano               " )
+      OPCAO( 09, 01, " &F - Arquivar Um Funcionario     ", 70, " Arquiva Um Funcionario Banco de Hora          " )
+      OPCAO( 10, 01, " &G - Consulta Banco Hrs Arquivado", 71, " Consultar Banco de Horas Arquivado            " )
+      OPCAO( 11, 01, " &H - Retornar Demitidos          ", 72, " Retorna Banco Horas Demitidos                 " )
+      OPCAO( 12, 01, " &I - Retornar Um ano             ", 73, " Retorna Um Ano Banco de Hora                  " )
+      OPCAO( 13, 01, " &J - Retornar Competencia MesAno ", 74, " Retorna uma competencia mes/ano               " )
+      OPCAO( 14, 01, " &K - Retornar Um Funcionario     ", 75, " Retorna Um Funcionario Banco de Hora          " )
+      OPCAO( 15, 01, " &L - Importar Saldo Ponto/BcoHrs ", 76, " Transferei saldo horas Ponto para Banco Horas " )
+      OPCAO( 16, 01, " &M - Zerar Saldo Horas Competenc ", 77, " Zera os Valores das Horas de uma Competencia  " )
+      OPCAO( 17, 01, " &N - Zerar Saldo Dias  Competenc ", 78, " Zera os Valores de dia De  uma Competencia    " )
+      OPCAO( 04, 41, " &1 - Requisicoes Banco Horas     ", 49, " Requisicoes Banco Horas                       " )
+      OPCAO( 05, 41, " &2 - Multiplas Requisicao Bco Hrs", 50, " Multiplos Lancamentos Requisicoes Banco Horas " )
+      OPCAO( 06, 41, " &3 - Exportar saldo arquivo txt  ", 51, "                                               " )
+      OPCAO( 07, 41, " &4 - Exportar saldo folha        ", 52, "                                               " )
+      OPCAO( 08, 41, " &5 - Troca Atual por Anterior    ", 53, "                                               " )
+      OPCAO := menu( 1, 24 )
+      IF ZUSER <> "SUPERVISOR" .AND. ZUSER <> "SOFTEC" .AND. OPCAO > 0
+         IF !VERSEHA( "MUSERM",, USERMCRI( ZUSER, "F", OPCAO ) )
+            ALERTX( "Voce nAo tem acesso, Verifique com o Supervisor" )
+            LOOP
+         ENDIF
+      ENDIF
+      IF ZFECHADO = "S"
+         IF OPCAO = 16 .OR. OPCAO = 2 .OR. OPCAO = 12 .OR. OPCAO = 13 .OR. OPCAO = 14
+            ALERTX( "Mes ja Fechado" )
+            LOOP
+         ENDIF
+      ENDIF
 
+      DO CASE
+      CASE OPCAO = 1   // A Consulta Atual
+         FOPTO_4R( 1 )
+      CASE OPCAO = 2   // B Apaga Competencia
+         FOPTO4Q02()
+      CASE OPCAO = 3   // C Arquiva Demitido
+         fopto4u( 1, 1 )
+      CASE OPCAO = 4   // D Arquiva Ano
+         fopto4u( 2, 1 )
+      CASE OPCAO = 5   // E Arquiva Mes Ano
+         fopto4u( 3, 1 )
+      CASE OPCAO = 6   // F Arquiva Funcionario
+         fopto4u( 4, 1 )
+      CASE OPCAO = 7   // G Consulta Baixados
+         FOPTO_4R( 2 )
+      CASE OPCAO = 8   // H Retorna Demitidos
+         fopto4u( 1, 2 )
+      CASE OPCAO = 9   // I Retorna Ano
+         fopto4u( 2, 2 )
+      CASE OPCAO = 10  // J Retorna mes ano
+         fopto4u( 3, 2 )
+      CASE OPCAO = 11  // K Retorna funcionario
+         fopto4u( 4, 2 )
+      CASE OPCAO = 12  // L Importar Saldo Ponto/BcoHrs
+         FOPTO_4S()
+      CASE OPCAO = 13  // M zera horas
+         fopto4u( 5, 1 )
+      CASE OPCAO = 14  // N zera dias
+         fopto4u( 6, 1 )
+      CASE OPCAO = 15  // 1 requisicao banco de horas
+         FOPTO_4Q()
+      CASE OPCAO = 16  // 2 - Multiplos Banco Horas
+         FOPTO_4K()
+      CASE OPCAO = 17  // 3
+         FOPTO_25( 5 )   // Saldo Banco Horas->arquivo.txt
+      CASE OPCAO = 18  // 4
+         FOPTO_25( 6 )   // Saldo Banco Horas->folha
+      CASE opcao = 19  // 5
+         IF !lSeCBCO
+            lSECBCO := .T.   // Controle de Banco de Horas Anterior
+            ALERTX( "Controle Banco Horas Anterior-Ativado" )
+         ELSE
+            lSECBCO := .F.
+            ALERTX( "Controle Banco Horas Anterior-Desativado" )
+         ENDIF
+      OTHERWISE
+         RETU
+      ENDCASE
+   ENDDO
+
+   RETURN
 
 
 

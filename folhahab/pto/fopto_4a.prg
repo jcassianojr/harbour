@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4a.prg
+// +    Programa  : fopto_4a.prg Alterar Cadastro De Faltas
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,27 +25,12 @@
 // +--------------------------------------------------------------------
 // +
 
-// ******************************************************************************
-// :
-// :  FOPTO_4A.PRG : Alterar Cadastro De Faltas
-// :     Linguagem : Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
-// :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 04/26/94      8:48
-// :
-// :  Procs & Fncts: FOPTO_4A()
-// :
-// :     Documentado 05/13/94 em 15:44                DISK!  vers„o 5.01
-// :*****************************************************************************
-
-
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-PADRAO( "TABFALTA", "TABFALTA", "mCODIGO+' '+mNOME", "mCODIGO", "FOPTO_4A - Codigos Faltas e Atrasos", "Codigo Descri‡„o", ;
+FUNCTION fopto_4a()
+
+   PADRAO( "TABFALTA", "TABFALTA", "mCODIGO+' '+mNOME", "mCODIGO", "FOPTO_4A - Codigos Faltas e Atrasos", "Codigo Descri‡„o", ;
       {|| PEGCHAVE( "mCODIGO", Space( 2 ), "Codigo:" ) }, {|| tFOPTO4A() }, {|| gFOPTO4A() }, {|| FO_RELL( "PONTOCAD03" ) },, 2 )
 
    RETURN .T.
@@ -106,8 +91,6 @@ FUNCTION gFOPTO4A
    READCUR()
 
    RETURN .T.
-
-// : FIM: FOPTO_4A.PRG
 
 // + EOF: fopto_4a.prg
 // +

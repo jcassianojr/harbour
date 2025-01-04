@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4e.prg
+// +    Programa  : fopto_4e.prg Cadastro de Funcionários
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,38 +27,39 @@
 
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-MESTADO  := ""
-MCIDADE  := ""
-MNESTADO := ""
-MNCIDADE := ""
-cGRUPO   := "T"
-cFILTRO  := ""
-mRAISITU := ""
-MCBONEW  := ""
-MFAIXA   := ""
-mREQCNH  := ""
-mREQOC   := ""
-mOCEMIS  := ""
+
+FUNCTION fopto_4e()
+
+   MESTADO  := ""
+   MCIDADE  := ""
+   MNESTADO := ""
+   MNCIDADE := ""
+   cGRUPO   := "T"
+   cFILTRO  := ""
+   mRAISITU := ""
+   MCBONEW  := ""
+   MFAIXA   := ""
+   mREQCNH  := ""
+   mREQOC   := ""
+   mOCEMIS  := ""
 
 
-MDS( '(A)tivos (D)emitidos (M)Ativos+Demitidos Mes (T)odos ' )
-@ 24, 78 GET cGRUPO PICT "!" VALID cGRUPO $ "ADTM"
-READCUR()
-DO CASE
-CASE cGRUPO = "D"
-cFILTRO := "! EMPTY(DEMITIDO)"
-CASE cGRUPO = "A"
-cFILTRO := "EMPTY(DEMITIDO)"
-CASE cGRUPO = "M"
-cFILTRO := "((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MES.AND.YEAR(DEMITIDO)>=ANOUSO))"
-ENDCASE
+   MDS( '(A)tivos (D)emitidos (M)Ativos+Demitidos Mes (T)odos ' )
+   @ 24, 78 GET cGRUPO PICT "!" VALID cGRUPO $ "ADTM"
+   READCUR()
+   DO CASE
+   CASE cGRUPO = "D"
+      cFILTRO := "! EMPTY(DEMITIDO)"
+   CASE cGRUPO = "A"
+      cFILTRO := "EMPTY(DEMITIDO)"
+   CASE cGRUPO = "M"
+      cFILTRO := "((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MES.AND.YEAR(DEMITIDO)>=ANOUSO))"
+   ENDCASE
 
-PADRAO( PES, PESIND, "STR(mNUMERO)+' '+mNOME+' '+STR(mCCUSTO,4)+' '+mUNIFUN+' '+mMODIRETA+' '+mHTT+' '+dtoc(mADMITIDO)+' '+dtoc(mDEMITIDO)", ;
+   PADRAO( PES, PESIND, "STR(mNUMERO)+' '+mNOME+' '+STR(mCCUSTO,4)+' '+mUNIFUN+' '+mMODIRETA+' '+mHTT+' '+dtoc(mADMITIDO)+' '+dtoc(mDEMITIDO)", ;
       "mNUMERO", "FOPTO_4E - Cadastro de Funcionários", "Numero Nome", ;
       {|| iFOPTO4E( .T. ) }, {|| tFOPTO4E() }, {|| gFOPTO4E() }, {|| FO_RELL( "PONTOCAD07" ) }, { .F., cFILTRO, .T. }, 2 )
 

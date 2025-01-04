@@ -29,72 +29,73 @@
 
 #include "INKEY.CH"
 
-function fopto_37()
-CABE2( "FOPTO_37 - Analise do Ponto" )
+FUNCTION fopto_37()
 
-dDATAINI := zdataini
-dDATAFIM := zdatafim
-cPN      := "PN" + ANOMESW
-cPNA     := "PN" + Right( StrZero( nANOANT, 4 ), 2 ) + StrZero( NMESANT, 2 )
-cPE      := "PE" + ANOMESW
+   CABE2( "FOPTO_37 - Analise do Ponto" )
 
-MDS( "Digite o Periodo " )
-@ 24, 40 GET dDATAINI
-@ 24, 50 GET dDATAFIM
-IF !READCUR()
-RETU .F.
-ENDIF
+   dDATAINI := zdataini
+   dDATAFIM := zdatafim
+   cPN      := "PN" + ANOMESW
+   cPNA     := "PN" + Right( StrZero( nANOANT, 4 ), 2 ) + StrZero( NMESANT, 2 )
+   cPE      := "PE" + ANOMESW
 
-FOPTO37()
+   MDS( "Digite o Periodo " )
+   @ 24, 40 GET dDATAINI
+   @ 24, 50 GET dDATAFIM
+   IF !READCUR()
+      RETU .F.
+   ENDIF
 
-PADRAO( "FOPTOATR", "FOPTOATR", "STR(mNUMERO,6)+' '+left(mNOME,25)+' '+DTOC(mDATA)+' '+mCODANL+' '+mCOD+' '+mSOD+' '+mBCOSN+' '+STR(mRENT,5,2)+' '+STR(mENT,5,2)+' '+STR(mRSAI,5,2)+' '+STR(mSAI,5,2)", "STR(mNUMERO,8)+DTOS(mDATA)+mCODANL", ;
+   FOPTO37()
+
+   PADRAO( "FOPTOATR", "FOPTOATR", "STR(mNUMERO,6)+' '+left(mNOME,25)+' '+DTOC(mDATA)+' '+mCODANL+' '+mCOD+' '+mSOD+' '+mBCOSN+' '+STR(mRENT,5,2)+' '+STR(mENT,5,2)+' '+STR(mRSAI,5,2)+' '+STR(mSAI,5,2)", "STR(mNUMERO,8)+DTOS(mDATA)+mCODANL", ;
       "Atraso/Faltas/Saida", ;
       "Numero Nome                      Data    ERR CO SO BH Entr Ent  Said  Sai", ;
       {|| alltrue() }, {|| alltrue() }, {|| gFOPTO37() }, {|| ALLTRUE() }, .T., 2 )
 
-IF ZFECHADO = "S"
-ALERTX( "Mês já fechado não sera feito lançamentos" )
-RETURN
-ENDIF
-lLAN11 := MDG( "Lancar 11" )
-lLAN35 := MDG( "Lancar 35" )
-lLAN24 := MDG( "Lancar 24" )
-IF !lLAN11 .AND. !lLAN35 .AND. !lLAN24
-RETURN
-ENDIF
+   IF ZFECHADO = "S"
+      ALERTX( "Mês já fechado não sera feito lançamentos" )
+      RETURN
+   ENDIF
+   lLAN11 := MDG( "Lancar 11" )
+   lLAN35 := MDG( "Lancar 35" )
+   lLAN24 := MDG( "Lancar 24" )
+   IF !lLAN11 .AND. !lLAN35 .AND. !lLAN24
+      RETURN
+   ENDIF
 
-cPX := "PX" + ANOMESW
-CHECKCRI( cPX, "FO_PDES", "STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)" )
-IF !netuse( "foptoatr" )
-RETURN
-ENDIF
-IF !netuse( cPX )
-dbCloseAll()
-RETURN
-ENDIF
-dbSelectAr( cPX )
-initvars()
-clrvars()
-dbSelectAr( "foptoatr" )
-dbGoTop()
-WHILE !Eof()
-IF ( CODANL = "11" .AND. llan11 ) .OR. ( CODANL = "35" .AND. llan35 ) .OR. ( CODANL = "24" .AND. llan24 )
-mNUMERO := NUMERO
-mDATA   := DATA
-mCONTA  := 1
-mHORAS  := HORXXX
-mOBS    := OBSATR
-dbSelectAr( cPX )
-dbGoTop()
-IF !dbSeek( Str( mNUMERO, 8 ) + DToS( mDATA ) + Str( mCONTA, 2 ) )
-netrecapp()
-replvars()
-ENDIF
-ENDIF
-dbSelectAr( "foptOatr" )
-dbSkip()
-ENDDO
-dbCloseAll()
+   cPX := "PX" + ANOMESW
+   CHECKCRI( cPX, "FO_PDES", "STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)" )
+   IF !netuse( "foptoatr" )
+      RETURN
+   ENDIF
+   IF !netuse( cPX )
+      dbCloseAll()
+      RETURN
+   ENDIF
+   dbSelectAr( cPX )
+   initvars()
+   clrvars()
+   dbSelectAr( "foptoatr" )
+   dbGoTop()
+   WHILE !Eof()
+      IF ( CODANL = "11" .AND. llan11 ) .OR. ( CODANL = "35" .AND. llan35 ) .OR. ( CODANL = "24" .AND. llan24 )
+         mNUMERO := NUMERO
+         mDATA   := DATA
+         mCONTA  := 1
+         mHORAS  := HORXXX
+         mOBS    := OBSATR
+         dbSelectAr( cPX )
+         dbGoTop()
+         IF !dbSeek( Str( mNUMERO, 8 ) + DToS( mDATA ) + Str( mCONTA, 2 ) )
+            netrecapp()
+            replvars()
+         ENDIF
+      ENDIF
+      dbSelectAr( "foptOatr" )
+      dbSkip()
+   ENDDO
+   dbCloseAll()
 
    RETURN
 

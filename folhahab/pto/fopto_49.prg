@@ -6,7 +6,7 @@
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,14 +27,14 @@
 
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-PADRAO( "FOPTOEVE", "FOPTOEVE", "STR(mDIA,2)+' '+STR(mMES,2)+' '+mCODIGO+' '+mDESCRICAO", "STR(mDIA,2)+STR(mMES,2)", "FOPTO_49 - Feriados", "Dia Mˆs Codigo Descri‡„o", ;
+FUNCTION fopto_49()
+
+   PADRAO( "FOPTOEVE", "FOPTOEVE", "STR(mDIA,2)+' '+STR(mMES,2)+' '+mCODIGO+' '+mDESCRICAO", "STR(mDIA,2)+STR(mMES,2)", "FOPTO_49 - Feriados", "Dia Mˆs Codigo Descri‡„o", ;
       {|| iFOPTO49() }, {|| tFOPTO49() }, {|| gFOPTO49() }, {|| FO_RELL( "PONTOCAD02" ) },, 2 )
-RETU .T.
+   RETU .T.
 
 
 // +--------------------------------------------------------------------
@@ -49,6 +49,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNCTION gFOPTO49
 
 // Get nas Menvars

@@ -217,7 +217,7 @@ FUNCTION fopto_23
          NEXT x
          AFill( aUSO, 0 )
          FOR X := 1 TO 24
-            IF At( "ITAESBRA", ZEMPRESA ) > 0 .OR. At( "IMBRIZI", ZEMPRESA ) > 0   // Calculos especiais Clientes
+            IF At( "EMPRESA", ZEMPRESA ) > 0 .OR. At( "EMPTEMPORARIO", ZEMPRESA ) > 0   // Calculos especiais Clientes
                nDIFHN := 0
                netreclock()
                IF X = 4 .AND. CTA04 > 0  // 100% 150% (Noturna)

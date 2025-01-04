@@ -28,78 +28,78 @@
 
 #include "INKEY.CH"
 
-function fopto_22()
+FUNCTION fopto_22()
 
-PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
+   PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
 
-CABE2( 'FOPTO_22 - Alterar o Ponto Diario' )
+   CABE2( 'FOPTO_22 - Alterar o Ponto Diario' )
 
-aCODCTA := PEGCX()
+   aCODCTA := PEGCX()
 
-cPN := "PN" + ANOMESW
-cPT := "PT" + ANOMESW
-cPD := "PD" + ANOMESW
-cPP := "PP" + ANOMESW
-cPA := "PA" + ANOMESW
-cPS := "PS" + ANOMESW
+   cPN := "PN" + ANOMESW
+   cPT := "PT" + ANOMESW
+   cPD := "PD" + ANOMESW
+   cPP := "PP" + ANOMESW
+   cPA := "PA" + ANOMESW
+   cPS := "PS" + ANOMESW
 
 // testa criacao portaria evitar erros
-CHECKCRI( cPP, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   CHECKCRI( cPP, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
 // testa criacao refeitorio evitar erros
-CHECKCRI( cPA, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   CHECKCRI( cPA, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
 
 
-IF !NETUSE( cPN )
-RETU
-ENDIF
-FILTRO := ''
-FI     := Trim( FILTRO )
-FILTRO := FILTRO( FI )
-SET FILTER TO &FILTRO
+   IF !NETUSE( cPN )
+      RETU
+   ENDIF
+   FILTRO := ''
+   FI     := Trim( FILTRO )
+   FILTRO := FILTRO( FI )
+   SET FILTER TO &FILTRO
 
-IF !NETUSE( cPD )
-dbCloseAll()
-RETU
-ENDIF
+   IF !NETUSE( cPD )
+      dbCloseAll()
+      RETU
+   ENDIF
 
-IF !NETUSE( cPT )
-dbCloseAll()
-RETU
-ENDIF
+   IF !NETUSE( cPT )
+      dbCloseAll()
+      RETU
+   ENDIF
 
-IF !NETUSE( cPS )
-dbCloseAll()
-RETU
-ENDIF
+   IF !NETUSE( cPS )
+      dbCloseAll()
+      RETU
+   ENDIF
 
-IF !NETUSE( cPP )
-dbCloseAll()
-RETU
-ENDIF
+   IF !NETUSE( cPP )
+      dbCloseAll()
+      RETU
+   ENDIF
 
-IF !NETUSE( cPA )
-dbCloseAll()
-RETU
-ENDIF
-IF !netuse( "fo_ptt" )
-dbCloseAll()
-ENDIF
+   IF !NETUSE( cPA )
+      dbCloseAll()
+      RETU
+   ENDIF
+   IF !netuse( "fo_ptt" )
+      dbCloseAll()
+   ENDIF
 
 // clear typeahead
-hb_keyClear()
-KEYBOARD " "
+   hb_keyClear()
+   KEYBOARD " "
 // sele 1
-dbSelectAr( cPN )
-dbGoTop()
-@  3, 0 SAY "   Num   Dia    Cod SOD  Ent  Almoco    Saida Turno Ent  Almoco     Saida V F BC"
-DECLARE CAMPOS[ 1 ]
-CAMPOS[ 1 ] = 'STR(NUMERO,6)+" "+LEFT(CDIA(DATA),3)+","+LEFT(DTOC(DATA),5)+" "+COD+" "+SOD+" "+STR(ENT,5,2)+" "+STR(ALS,5,2)+" "+STR(ALE,5,2)+" "+STR(SAI,5,2)+" "+CODREV+" "+STR(ENTREV,  5, 2)+" "+STR(ALIREV,5, 2)+" "+STR(ALSREV,5,2)+" "+STR(SAIREV,5,2)+" "+VIRADA+" "+FOLSN+" "+BCOSN'
-dbEdit( 4, 0, 24, 79, CAMPOS, "DIMP22", .T., "", "", "", "", "" )
-dbCloseAll()
+   dbSelectAr( cPN )
+   dbGoTop()
+   @  3, 0 SAY "   Num   Dia    Cod SOD  Ent  Almoco    Saida Turno Ent  Almoco     Saida V F BC"
+   DECLARE CAMPOS[ 1 ]
+   CAMPOS[ 1 ] = 'STR(NUMERO,6)+" "+LEFT(CDIA(DATA),3)+","+LEFT(DTOC(DATA),5)+" "+COD+" "+SOD+" "+STR(ENT,5,2)+" "+STR(ALS,5,2)+" "+STR(ALE,5,2)+" "+STR(SAI,5,2)+" "+CODREV+" "+STR(ENTREV,  5, 2)+" "+STR(ALIREV,5, 2)+" "+STR(ALSREV,5,2)+" "+STR(SAIREV,5,2)+" "+VIRADA+" "+FOLSN+" "+BCOSN'
+   dbEdit( 4, 0, 24, 79, CAMPOS, "DIMP22", .T., "", "", "", "", "" )
+   dbCloseAll()
 // clear typeahead
-hb_keyClear()
-KEYBOARD " "
-RETU
+   hb_keyClear()
+   KEYBOARD " "
+   RETU
 
 
 // +--------------------------------------------------------------------
@@ -114,6 +114,7 @@ RETU
 // +
 // +
 // +
+
 FUNCTION DIMP22
 
    PARAMETERS MODO

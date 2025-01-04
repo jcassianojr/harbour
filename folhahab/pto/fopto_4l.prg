@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4l.prg
+// +    Programa  : fopto_4l.prg  Correcao de Horarios
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,26 +27,27 @@
 
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
 
-cPH := "PH" + ANOMESW
+FUNCTION fopto_4l()
+
+   PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
+
+   cPH := "PH" + ANOMESW
 
 
-CHECKCRI( cPH, "FO_PHOR", "STR(NUMERO,8)+DTOS(OCOINI)" )
+   CHECKCRI( cPH, "FO_PHOR", "STR(NUMERO,8)+DTOS(OCOINI)" )
 
-PADRAO( cPH, cPH, "' '+STR(mNUMERO,  8)+' '+DTOC(mOCOINI)+' '+DTOC(mOCOFIM)+' '+mOCOCOD", "STR(mNUMERO,8)+DTOS(mOCOINI)", ;
+   PADRAO( cPH, cPH, "' '+STR(mNUMERO,  8)+' '+DTOC(mOCOINI)+' '+DTOC(mOCOFIM)+' '+mOCOCOD", "STR(mNUMERO,8)+DTOS(mOCOINI)", ;
       "FOPTO_4L - Correcao de Horarios", ;
       "Numero Horario", ;
       {|| iFOPTO4L() }, {|| tFOPTO4L() }, {|| gFOPTO4L() }, {|| ALLTRUE() },, 2,,, zTIPVID )
 
 
 // FOPTO_2J()
-RETU .T.
+   RETU .T.
 
 
 // +--------------------------------------------------------------------
@@ -61,6 +62,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNC iFOPTO4L
 
    MDS( "Digite o Numero e a data Inicio" )

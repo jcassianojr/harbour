@@ -324,7 +324,7 @@ FUNCTION fopto_19
    nLINHA := 0
    WHILE .T.
       IF !lTXT
-         LINHA := Str( NUMero, 8 ) + DToS( data ) + Str( HORA, 5, 2 ) + RELOGIO
+         LINHA := Str( NUMero, 8 ) + DToS( DATA ) + Str( HORA, 5, 2 ) + RELOGIO
       ENDIF
       @ 23, 00 SAY linha
       mEMPRESA := NREMP

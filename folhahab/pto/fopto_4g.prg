@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4g.prg
+// +    Programa  : fopto_4g.prg Escala Revezamento
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,28 +27,28 @@
 
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
+FUNCTION fopto_4g()
+
 // Pegando Eventos
-aEVED := {}
-aEVEC := {}
-aEVEB := {}
-PegFeriados()
+   aEVED := {}
+   aEVEC := {}
+   aEVEB := {}
+   PegFeriados()
 
 
-PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
+   PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
 
-cPE := "PE" + ANOMESW
-CHECKCRI( cPE, "FOPTOREV", "GRUPO+DTOS(DATA)" )
+   cPE := "PE" + ANOMESW
+   CHECKCRI( cPE, "FOPTOREV", "GRUPO+DTOS(DATA)" )
 
-cANT := "PE" + Right( StrZero( nANOANT, 4 ), 2 ) + StrZero( NMESANT, 2 )
-CHECKCRI( cANT, "FOPTOREV", "GRUPO+DTOS(DATA)" )
+   cANT := "PE" + Right( StrZero( nANOANT, 4 ), 2 ) + StrZero( NMESANT, 2 )
+   CHECKCRI( cANT, "FOPTOREV", "GRUPO+DTOS(DATA)" )
 
 
-PADRAO( cPE, cPE, "' '+mGRUPO+' '+STR(mHORARIO,8)+' '+DTOC(mDATA)+' '+PADR(CDIA(mDATA),8)+' '+mCODREV+' '+STR(mENTREV,  6, 2)+' '+STR(mALIREV,  6, 2)+' '+STR(mALSREV,  6, 2)+' '+STR(mSAIREV,  6, 2)", "mGRUPO+DTOS(mDATA)", ;
+   PADRAO( cPE, cPE, "' '+mGRUPO+' '+STR(mHORARIO,8)+' '+DTOC(mDATA)+' '+PADR(CDIA(mDATA),8)+' '+mCODREV+' '+STR(mENTREV,  6, 2)+' '+STR(mALIREV,  6, 2)+' '+STR(mALSREV,  6, 2)+' '+STR(mSAIREV,  6, 2)", "mGRUPO+DTOS(mDATA)", ;
       "FOPTO_4G - Escala Revezamento", ;
       "Gr Data     Horario", ;
       {|| iFOPTO4G() }, {|| tFOPTO4G() }, {|| gFOPTO4G() }, {|| ALLTRUE() },, 2,,, zTIPVID )

@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4o.prg
+// +    Programa  : fopto_4o.prg Plano de Acessos
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -29,24 +29,27 @@
 #include "INKEY.CH"
 #include "BOX.CH"
 
-IF ZUSER <> "SUPERVISOR" .AND. ZUSER <> "SOFTEC"  // So troca Senha
-ALERTX( "Acesso Permitido Somente Para o Supervisor" )
-RETURN .F.
-ENDIF
 
-PRIV mACEITE := "S", USUARIO := Space( 10 ), mCONTROLE := ""
-MDS( "Digite o Usuario" )
-@ 24, 40 GET USUARIO
-IF !READCUR()
-RETURN .F.
-ENDIF
+FUNCTION fopto_4o()
 
-IF Empty( USUARIO ) .OR. !VERSEHA( "MUSER",, ENCODE( USUARIO ) )
-ALERTX( "Usuario Nao Cadastrado" )
-RETURN .F.
-ENDIF
+   IF ZUSER <> "SUPERVISOR" .AND. ZUSER <> "SOFTEC"  // So troca Senha
+      ALERTX( "Acesso Permitido Somente Para o Supervisor" )
+      RETURN .F.
+   ENDIF
 
-PADRAO( "FOLOPT", "FOLOPT", "' '+mITEMENU+' '+STR(mPOSICAO,  2)+' '+mDESCP+' '+mDESCM", "mITEMENU+STR(mPOSICAO,2)", "FOPTO_40 - Plano de Acessos", "I PO Item" + spac( 22 ) + "Mensagem", ;
+   PRIV mACEITE := "S", USUARIO := Space( 10 ), mCONTROLE := ""
+   MDS( "Digite o Usuario" )
+   @ 24, 40 GET USUARIO
+   IF !READCUR()
+      RETURN .F.
+   ENDIF
+
+   IF Empty( USUARIO ) .OR. !VERSEHA( "MUSER",, ENCODE( USUARIO ) )
+      ALERTX( "Usuario Nao Cadastrado" )
+      RETURN .F.
+   ENDIF
+
+   PADRAO( "FOLOPT", "FOLOPT", "' '+mITEMENU+' '+STR(mPOSICAO,  2)+' '+mDESCP+' '+mDESCM", "mITEMENU+STR(mPOSICAO,2)", "FOPTO_40 - Plano de Acessos", "I PO Item" + spac( 22 ) + "Mensagem", ;
       {|| iFOPTO4O() }, {|| tFOPTO4O() }, {|| gFOPTO4O() },,, 2 )
 
    RETURN .T.

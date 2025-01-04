@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4t.prg
+// +    Programa  : fopto_4t.prg Cadastro de Ocorrencias
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -32,11 +32,14 @@
 // //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-cPO := "PO" + ANOMESW
 
-CHECKCRI( cPO, "FO_POCO", "STR(NUMERO,8)+DTOS(OCOINI)" )
+FUNCTION fopto_4t()
 
-PADRAO( cPO, cPO, "' '+STR(mNUMERO,  8)+' '+DTOC(mOCOINI)+' '+DTOC(mOCOFIM)+' '+mOCOCOD+' '+mOCOSUB+' '+mOCOBCO+' '+mOCOFOL+' '+mOCOEXT+' '+mABONA+' '+mCESTA", ;
+   cPO := "PO" + ANOMESW
+
+   CHECKCRI( cPO, "FO_POCO", "STR(NUMERO,8)+DTOS(OCOINI)" )
+
+   PADRAO( cPO, cPO, "' '+STR(mNUMERO,  8)+' '+DTOC(mOCOINI)+' '+DTOC(mOCOFIM)+' '+mOCOCOD+' '+mOCOSUB+' '+mOCOBCO+' '+mOCOFOL+' '+mOCOEXT+' '+mABONA+' '+mCESTA", ;
       "STR(mNUMERO,8)+DTOS(mOCOINI)", ;
       "FOPTO_4T - Cadastro de Ocorrencias", ;
       "Numero     Periodo          CodSubBHFOEXABCB", ;

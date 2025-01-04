@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4q.prg
+// +    Programa  : fopto_4q.prg Requisicao de Horas
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,21 +27,23 @@
 
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-cBH := if( lSECBCO, "BK", "BH" ) + ANOMESW
+FUNCTION fopto_4q()
 
-CHECKCRI( cBH, "BCOREQ", "REQUISI" )
+   cBH := if( lSECBCO, "BK", "BH" ) + ANOMESW
 
-PADRAO( cBH, cBH, "' '+STR(mREQUISI,8)+' '+STR(mNUMERO,8)+' '+DTOC(mDATA)+' '+STR(mHORAS,6,2)+' '+mTIPO+' '+IF(EMPTY(mIMP),' ','*')", "mREQUISI", ;
+   CHECKCRI( cBH, "BCOREQ", "REQUISI" )
+
+   PADRAO( cBH, cBH, "' '+STR(mREQUISI,8)+' '+STR(mNUMERO,8)+' '+DTOC(mDATA)+' '+STR(mHORAS,6,2)+' '+mTIPO+' '+IF(EMPTY(mIMP),' ','*')", "mREQUISI", ;
       "FOPTO_4Q - Requisicao de Horas", ;
       "Requisi  Numero   Data     Horas T", ;
       {|| PEGCHAVE( "mREQUISI", ULTIMOREG( cBH, "REQUISI", .T. ), "Requisao:" ) }, {|| tFOPTO4Q() }, {|| gFOPTO4Q() }, {|| ALLTRUE() },, 2,,, zTIPVID )
 
-FOPTO4Q01()
+   FOPTO4Q01()
+
+   RETURN
 
 
 // +--------------------------------------------------------------------

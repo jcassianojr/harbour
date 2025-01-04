@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_44.prg
+// +    Programa  : fopto_44.prg Alterar a Hor rio de Refer?ncia
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,35 +25,24 @@
 // +--------------------------------------------------------------------
 // +
 
-// ******************************************************************************
-// :
-// :  FOPTO_44.PRG : Alterar a Hor rio de Refer?ncia
-// :     Linguagem : Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
-// :      Copyright (c) 1998,  SOFTEC  S/C Ltda.
-// :  Atualizado em: 24/11/98      8:48
-// :
-// :*****************************************************************************
-
-
-
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
 
-CRIARVARS( "FOPTOHRE" )   // compatibilidade manter  para exibir os horarios que estao
+FUNCTION fopto_44()
+
+   PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
+
+   CRIARVARS( "FOPTOHRE" )   // compatibilidade manter  para exibir os horarios que estao
 // foptohre
 
-PRIV mCODIGO  // Variavel Usado no igualvars do horario Padrao
+   PRIV mCODIGO  // Variavel Usado no igualvars do horario Padrao
 
 
-PADRAO( "FO_RELHR", "FO_RELHR", "STR(mNUMERO,8)+' '+mNOME+' '+if(mHFOL00='N',mHORREF,mGRUPO)+' '", ;
+   PADRAO( "FO_RELHR", "FO_RELHR", "STR(mNUMERO,8)+' '+mNOME+' '+if(mHFOL00='N',mHORREF,mGRUPO)+' '", ;
       "mNUMERO", "FOPTO_44 - Horario de Referencia", "Funcionario" + spac( 27 ) + "Horario", ;
       {|| PEGCHAVE( "mNUMERO", ULTIMOREG( "FO_RELHR", "NUMERO", .T. ), "Numero" ) }, {|| tFOPTO44( 1 ) }, {|| gFOPTO44( 1 ) }, {|| FO_RELL( "PONTOCAD01" ) }, "", 2,,, "X" )
-RETU .T.
+   RETU .T.
 
 
 
@@ -70,6 +59,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNC gFOPTO44( nTIPO )  // usado fo_relhr e foptohre
 
    IF nTIPO = 1

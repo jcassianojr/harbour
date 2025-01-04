@@ -26,76 +26,77 @@
 // +
 
 
-function fopto_3i()
-dINI := dFIM := ZDATA
-MDS( 'Qual Periodo' )
-@ 24, 20 GET dINI
-@ 24, 30 GET dFIM
-IF !READCUR()
-RETU .F.
-ENDIF
+FUNCTION fopto_3i()
 
-IF !CHECKIMP( 0 )
-RETU .F.
-ENDIF
+   dINI := dFIM := ZDATA
+   MDS( 'Qual Periodo' )
+   @ 24, 20 GET dINI
+   @ 24, 30 GET dFIM
+   IF !READCUR()
+      RETU .F.
+   ENDIF
 
-ARQ     := {}
-nINIANO := Year( dINI )
-nFIMANO := Year( dFIM )
-FOR J := nINIANO TO nFIMANO
-PATH1 := '\FOLHA\EMP' + ANOSTR( J ) + StrZero( NREMP, 3 ) + '\' + spac( 20 )
-MDS( 'Confirme localiza‡„o Arquivos de:' + Str( J, 4 ) )
-@ 24, 45 GET PATH1
-IF !READCUR()
-RETU .F.
-ENDIF
-PATH1 := AllTrim( PATH1 )
-DO CASE
-CASE nINIANO = nFIMANO
-nMESINI := Month( dINI )
-nMESFIM := Month( dFIM )
-CASE nINIANO = J
-nMESINI := Month( dINI )
-nMESFIM := 12
-CASE nFIMANO = J
-nMESINI := 1
-nMESFIM := Month( dFIM )
-ENDCASE
-FOR W := nMESINI TO nMESFIM
-cARQ := PATH1 + "PN" + ANOSTR( J ) + StrZero( W, 2 )
-IF !INFOR( cARQ, "STR(NUMERO,8)+DTOS(DATA)", cARQ, .T. )
-RETU .F.
-ENDIF
-AAdd( ARQ, { cARQ, J, W } )
-NEXT W
-NEXT J
+   IF !CHECKIMP( 0 )
+      RETU .F.
+   ENDIF
 
-IF !netuse( "tabfalta" )
-dbCloseAll()
-RETU .F.
-ENDIF
+   ARQ     := {}
+   nINIANO := Year( dINI )
+   nFIMANO := Year( dFIM )
+   FOR J := nINIANO TO nFIMANO
+      PATH1 := '\FOLHA\EMP' + ANOSTR( J ) + StrZero( NREMP, 3 ) + '\' + spac( 20 )
+      MDS( 'Confirme localiza‡„o Arquivos de:' + Str( J, 4 ) )
+      @ 24, 45 GET PATH1
+      IF !READCUR()
+         RETU .F.
+      ENDIF
+      PATH1 := AllTrim( PATH1 )
+      DO CASE
+      CASE nINIANO = nFIMANO
+         nMESINI := Month( dINI )
+         nMESFIM := Month( dFIM )
+      CASE nINIANO = J
+         nMESINI := Month( dINI )
+         nMESFIM := 12
+      CASE nFIMANO = J
+         nMESINI := 1
+         nMESFIM := Month( dFIM )
+      ENDCASE
+      FOR W := nMESINI TO nMESFIM
+         cARQ := PATH1 + "PN" + ANOSTR( J ) + StrZero( W, 2 )
+         IF !INFOR( cARQ, "STR(NUMERO,8)+DTOS(DATA)", cARQ, .T. )
+            RETU .F.
+         ENDIF
+         AAdd( ARQ, { cARQ, J, W } )
+      NEXT W
+   NEXT J
 
-IF !NETUSE( pes )
-dbCloseAll()
-RETU
-ENDIF
-FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
-INX    := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
+   IF !netuse( "tabfalta" )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
 
-LISTARUE( {| X | FOPTO3I( X ) } )
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETU
+   ENDIF
+   FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
 
-RETU
+   LISTARUE( {| X | FOPTO3I( X ) } )
+
+   RETU
 
 
 // +--------------------------------------------------------------------
@@ -110,6 +111,7 @@ RETU
 // +
 // +
 // +
+
 FUNC FOPTO3I
 
    LOCAL cARQUSO

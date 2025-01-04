@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4b.prg
+// +    Programa  : fopto_4b.prg Horarios Basico
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,17 +26,18 @@
 // +
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
 
-PADRAO( "FOPTOHOR", "FOPTOHOR", "' '+str(mNUMERO,8)+' '+mCODIGO+' '+STR(mENT,  6, 2)+' '+STR(mALMI,  6, 2)+' '+STR(mALMF,  6, 2)+' '+STR(mSAI,  6, 2)+' '+mVIRADA+' '+mFOLGASN", ;
+FUNCTION fopto_4b()
+
+   PEGPTOHOR( "XX", .T., .F. )   // Verifica indices
+
+   PADRAO( "FOPTOHOR", "FOPTOHOR", "' '+str(mNUMERO,8)+' '+mCODIGO+' '+STR(mENT,  6, 2)+' '+STR(mALMI,  6, 2)+' '+STR(mALMF,  6, 2)+' '+STR(mSAI,  6, 2)+' '+mVIRADA+' '+mFOLGASN", ;
       "mNUMERO", "FOPTO_4B - Horarios Basico", "Numero Cod Entrad Almoco       Saida V F", ;
       {|| iFOPTO4B() }, {|| tFOPTO4B() }, {|| gFOPTO4B() }, {|| FO_RELL( "PONTOCAD04" ) },, 2,,, "X" )
-RETU .T.
+   RETU .T.
 
 
 
@@ -52,6 +53,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNCTION iFOPTO4B
 
    mNUMERO := ULTIMOREG( "FOPTOHOR", "NUMERO", .T. )

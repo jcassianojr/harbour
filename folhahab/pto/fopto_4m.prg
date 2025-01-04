@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4m.prg
+// +    Programa  : fopto_4m.prg  Correcoes de Marcacoes
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,24 +27,24 @@
 
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-cPM := "PM" + ANOMESW
+FUNCTION fopto_4m()
+
+   cPM := "PM" + ANOMESW
 
 
-CHECKCRI( cPM, "FO_PMAN", "STR(NUMERO,8)+DTOS(DATOCO)+TIPOCO" )
+   CHECKCRI( cPM, "FO_PMAN", "STR(NUMERO,8)+DTOS(DATOCO)+TIPOCO" )
 
 
-PADRAO( cPM, cPM, "' '+STR(mNUMERO,  8)+' '+DTOC(mDATOCO)+' '+STR(mHOROCO,5,2)+' '+STR(mHOROC2,5,2)+' '+STR(mHOROC3,5,2)+' '+STR(mHOROC4,5,2)+' '+mTIPOCO", ;
+   PADRAO( cPM, cPM, "' '+STR(mNUMERO,  8)+' '+DTOC(mDATOCO)+' '+STR(mHOROCO,5,2)+' '+STR(mHOROC2,5,2)+' '+STR(mHOROC3,5,2)+' '+STR(mHOROC4,5,2)+' '+mTIPOCO", ;
       "STR(mNUMERO,8)+DTOS(mDATOCO)+mTIPOCO", ;
       "FOPTO_4M - Correcoes de Marcacoes", ;
       "Numero     Data    Cod ENT    ALM        SAI  T ", ;
       {|| iFOPTO4m() }, {|| tFOPTO4m() }, {|| gFOPTO4m() }, {|| ALLTRUE() },, 2,,, zTIPVID )
 
-RETU .T.
+   RETU .T.
 
 
 // +--------------------------------------------------------------------
@@ -59,6 +59,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNC iFOPTO4m
 
    MDS( "Digite o Numero e a data Tipo" )

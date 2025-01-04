@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4f.prg
+// +    Programa  : fopto_4f.prg Alterar Cadastro De Turno
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -25,24 +25,15 @@
 // +--------------------------------------------------------------------
 // +
 
-// ******************************************************************************
-// :
-// :  FOPTO_4F.PRG : Alterar Cadastro De Turno
-// :     Linguagem : Clipper 5.x
-// :        Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
-// :
-// :*****************************************************************************
-
-
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
 
-PADRAO( "TABTURNO", "TABTURNO", "mCODIGO+' '+mNOME", "mCODIGO", "FOPTO_4F - Cadastro de Turnos", "Codigo Descri‡„o", ;
+FUNCTION fopto_4f()
+
+   PADRAO( "TABTURNO", "TABTURNO", "mCODIGO+' '+mNOME", "mCODIGO", "FOPTO_4F - Cadastro de Turnos", "Codigo Descri‡„o", ;
       {|| PEGCHAVE( "mCODIGO", Space( 2 ), "Codigo:" ) }, {|| tFOPTO4F() }, {|| gFOPTO4F() }, {|| FO_RELL( "PONTOCAD08" ) },, 2,,, "X" )
-RETU .T.
+   RETU .T.
 
 
 // +--------------------------------------------------------------------
@@ -57,6 +48,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNC gFOPTO4F
 
    @  6, 4  SAY mCODIGO

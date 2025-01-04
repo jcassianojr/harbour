@@ -6,7 +6,7 @@
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,17 +27,17 @@
 
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 #include "BOX.CH"
 
-v_pic := "@S18"
-PADRAO( "FIRMA", "FIRMA", "STR(mNRCLIEN)+' '+mRAZAO", "mNRCLIEN", "FOPTO_4H - Cadastro de Empresas", "Codigo Raz„o", ;
+FUNCTION fopto_4h()
+
+   v_pic := "@S18"
+   PADRAO( "FIRMA", "FIRMA", "STR(mNRCLIEN)+' '+mRAZAO", "mNRCLIEN", "FOPTO_4H - Cadastro de Empresas", "Codigo Raz„o", ;
       {|| ALERTX( "nao disponivel neste modulo" ) }, {|| tFOPTO4H() }, {|| gFOPTO4H() }, {|| FO_RELL( "PONTOCAD09" ) },, 2,,, "E" )
 
 
-RETU .T.
+   RETU .T.
 
 
 
@@ -53,6 +53,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNCTION gFOPTO4H
 
    @  5, 3  SAY mNRCLIEN

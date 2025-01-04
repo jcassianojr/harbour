@@ -26,55 +26,56 @@
 // +
 
 
-function fopto_17()
-CABE2( 'FOPTO_17 - Criando Arquivo de Reserva' )
+FUNCTION fopto_17()
 
-ntipo := PEGRELOGIO()
+   CABE2( 'FOPTO_17 - Criando Arquivo de Reserva' )
 
-ARQREL := TARQREL( nTIPO, .F., "D" )
-cDD    := TARQREL( nTIPO, .F. )
-DCORTE := ZDATAINI
-DCORTF := ZDATAFIM
-MDS( 'Informe o Periodo' )
-@ 24, 40 GET DCORTE
-@ 24, 50 GET DCORTF
-IF !READCUR()
-RETU .F.
-ENDIF
+   ntipo := PEGRELOGIO()
 
-FO21CRI( cDD, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   ARQREL := TARQREL( nTIPO, .F., "D" )
+   cDD    := TARQREL( nTIPO, .F. )
+   DCORTE := ZDATAINI
+   DCORTF := ZDATAFIM
+   MDS( 'Informe o Periodo' )
+   @ 24, 40 GET DCORTE
+   @ 24, 50 GET DCORTF
+   IF !READCUR()
+      RETU .F.
+   ENDIF
 
-IF !NETUSE( ARQrel,,,,, .F., )
-RETU
-ENDIF
-IF !netuse( Cdd )
-dbCloseAll()
-RETU .F.
-ENDIF
+   FO21CRI( cDD, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
 
-dbSelectAr( ARQREL )
-initvars()
-GRAPP := 1
-GRAPT := LastRec()
-GRAPT( 'AGUARDE ATUALIZANDO DADOS ' )
-dbGoTop()
-WHILE !Eof()
-equvars()
-@ 24, 00 SAY NUMERO
-@ 24, 10 SAY DATA
-@ 24, 20 SAY HORA
-dbSelectAr( cDD )
-dbGoTop()
-IF !dbSeek( Str( mNUMERO, 8 ) + DToS( mDATA ) + Str( mHORA, 7, 2 ) )
-netrecapp()
-REPLVARS()
-ENDIF
-dbSelectAr( ARQREL )
-GRAPS()
-dbSkip()
-ENDDO
-dbCloseAll()
-RETU .T.
+   IF !NETUSE( ARQrel,,,,, .F., )
+      RETU
+   ENDIF
+   IF !netuse( Cdd )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
+
+   dbSelectAr( ARQREL )
+   initvars()
+   GRAPP := 1
+   GRAPT := LastRec()
+   GRAPT( 'AGUARDE ATUALIZANDO DADOS ' )
+   dbGoTop()
+   WHILE !Eof()
+      equvars()
+      @ 24, 00 SAY NUMERO
+      @ 24, 10 SAY DATA
+      @ 24, 20 SAY HORA
+      dbSelectAr( cDD )
+      dbGoTop()
+      IF !dbSeek( Str( mNUMERO, 8 ) + DToS( mDATA ) + Str( mHORA, 7, 2 ) )
+         netrecapp()
+         REPLVARS()
+      ENDIF
+      dbSelectAr( ARQREL )
+      GRAPS()
+      dbSkip()
+   ENDDO
+   dbCloseAll()
+   RETU .T.
 
 
 // + EOF: fopto_17.prg

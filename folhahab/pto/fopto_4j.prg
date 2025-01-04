@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4j.prg
+// +    Programa  : fopto_4j.prg Provisorios
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema:FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -27,69 +27,70 @@
 
 
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
-
-CRIARVARS( "FOPTOPRO" )
 
 
+FUNCTION fopto_4j()
 
-WHILE .T.
-CABE3( 'FOPTO_4J - Provisorios   ', 23 )
-OPCAO( 04, 01, " &A - Consultar Competencia em Uso", 65, " Consultar                                     " )
-OPCAO( 05, 01, " &B - Consultar Todos Lancamentos ", 66, "                          Arquivado            " )
-OPCAO( 06, 01, " &C - Consultar Arquivado         ", 67, " Consultar Arquivados                          " )
-OPCAO( 07, 01, " &D - Arquivar Demitidos          ", 68, " Arquiva             Demitidos                 " )
-OPCAO( 08, 01, " &E - Arquivar Um ano             ", 69, " Arquiva Um Ano                                " )
-OPCAO( 09, 01, " &F - Arquivar Competencia MesAno ", 70, " Arquiva uma competencia mes/ano               " )
-OPCAO( 10, 01, " &G - Arquivar Um Funcionario     ", 71, " Arquiva Um Funcionario                        " )
-OPCAO( 11, 01, " &H - Retornar Demitidos          ", 72, " Retorna             Demitidos                 " )
-OPCAO( 12, 01, " &I - Retornar Um ano             ", 73, " Retorna Um Ano                                " )
-OPCAO( 13, 01, " &J - Retornar Competencia MesAno ", 74, " Retorna uma competencia mes/ano               " )
-OPCAO( 14, 01, " &K - Retornar Um Funcionario     ", 75, " Retorna Um Funcionario                        " )
+   CRIARVARS( "FOPTOPRO" )
+
+
+
+   WHILE .T.
+      CABE3( 'FOPTO_4J - Provisorios   ', 23 )
+      OPCAO( 04, 01, " &A - Consultar Competencia em Uso", 65, " Consultar                                     " )
+      OPCAO( 05, 01, " &B - Consultar Todos Lancamentos ", 66, "                          Arquivado            " )
+      OPCAO( 06, 01, " &C - Consultar Arquivado         ", 67, " Consultar Arquivados                          " )
+      OPCAO( 07, 01, " &D - Arquivar Demitidos          ", 68, " Arquiva             Demitidos                 " )
+      OPCAO( 08, 01, " &E - Arquivar Um ano             ", 69, " Arquiva Um Ano                                " )
+      OPCAO( 09, 01, " &F - Arquivar Competencia MesAno ", 70, " Arquiva uma competencia mes/ano               " )
+      OPCAO( 10, 01, " &G - Arquivar Um Funcionario     ", 71, " Arquiva Um Funcionario                        " )
+      OPCAO( 11, 01, " &H - Retornar Demitidos          ", 72, " Retorna             Demitidos                 " )
+      OPCAO( 12, 01, " &I - Retornar Um ano             ", 73, " Retorna Um Ano                                " )
+      OPCAO( 13, 01, " &J - Retornar Competencia MesAno ", 74, " Retorna uma competencia mes/ano               " )
+      OPCAO( 14, 01, " &K - Retornar Um Funcionario     ", 75, " Retorna Um Funcionario                        " )
 // OPCAO( 15, 01, " &L - Excluir um Funcionario+Mvto ", 76, " Excluir um Funcionario Provisorio+Movimento   " )
-OPCAO := menu( 1, 24 )
-DO CASE
-CASE OPCAO = 1   // A Consulta Atual So competencia
-cFILTRO := "DATA>=ZDATAINI.AND.DATA<=ZDATAFIM"
-PADRAO( "FOPTOPRO", "FOPTOPRO", "STR(mORIGEM)+' '+DTOC(mDATA)+' '+STR(mDESTINO)+' '+mNOME", "STR(mORIGEM)+DTOS(mDATA)", "Cadastro de Provisorios", "Origem      Dia   Destino Obs", ;
+      OPCAO := menu( 1, 24 )
+      DO CASE
+      CASE OPCAO = 1   // A Consulta Atual So competencia
+         cFILTRO := "DATA>=ZDATAINI.AND.DATA<=ZDATAFIM"
+         PADRAO( "FOPTOPRO", "FOPTOPRO", "STR(mORIGEM)+' '+DTOC(mDATA)+' '+STR(mDESTINO)+' '+mNOME", "STR(mORIGEM)+DTOS(mDATA)", "Cadastro de Provisorios", "Origem      Dia   Destino Obs", ;
             {|| iFOPTO4J() }, {|| tFOPTO4J() }, {|| gFOPTO4J() }, {|| FO_RELL( "PONTOCAD11" ) }, cFILTRO, 2 )
-CASE OPCAO = 2   // B Consulta Atual
-PADRAO( "FOPTOPRO", "FOPTOPRO", "STR(mORIGEM)+' '+DTOC(mDATA)+' '+STR(mDESTINO)+' '+mNOME", "STR(mORIGEM)+DTOS(mDATA)", "Cadastro de Provisorios", "Origem      Dia   Destino Obs", ;
+      CASE OPCAO = 2   // B Consulta Atual
+         PADRAO( "FOPTOPRO", "FOPTOPRO", "STR(mORIGEM)+' '+DTOC(mDATA)+' '+STR(mDESTINO)+' '+mNOME", "STR(mORIGEM)+DTOS(mDATA)", "Cadastro de Provisorios", "Origem      Dia   Destino Obs", ;
             {|| iFOPTO4J() }, {|| tFOPTO4J() }, {|| gFOPTO4J() }, {|| FO_RELL( "PONTOCAD11" ) },, 2 )
-CASE OPCAO = 3   // C Consultar Arquivados
-PADRAO( "FOPTOPRD", "FOPTOPRD", "STR(mORIGEM)+' '+DTOC(mDATA)+' '+STR(mDESTINO)+' '+mNOME", "STR(mORIGEM)+DTOS(mDATA)", "Cadastro de Provisorios", "Origem      Dia   Destino Obs", ;
+      CASE OPCAO = 3   // C Consultar Arquivados
+         PADRAO( "FOPTOPRD", "FOPTOPRD", "STR(mORIGEM)+' '+DTOC(mDATA)+' '+STR(mDESTINO)+' '+mNOME", "STR(mORIGEM)+DTOS(mDATA)", "Cadastro de Provisorios", "Origem      Dia   Destino Obs", ;
             {|| iFOPTO4J() }, {|| tFOPTO4J() }, {|| gFOPTO4J() }, {|| FO_RELL( "PONTOCAD11" ) },, 2 )
-CASE OPCAO = 4   // D Arquiva Demitido
-fopto4u( 1, 3 )
-CASE OPCAO = 5   // E Arquiva Ano
-fopto4u( 2, 3 )
-CASE OPCAO = 6   // F Arquiva Mes Ano
-fopto4u( 3, 3 )
-CASE OPCAO = 7   // G Arquiva Funcionario
-fopto4u( 4, 3 )
-CASE OPCAO = 8   // H Retorna Demitidos
-fopto4u( 1, 4 )
-CASE OPCAO = 9   // I Retorna Ano
-fopto4u( 2, 4 )
-CASE OPCAO = 10  // J Retorna mes ano
-fopto4u( 3, 4 )
-CASE OPCAO = 11  // K Retorna funcionario
-fopto4u( 4, 4 )
-OTHERWISE
-RETU
-ENDCASE
-IF opcao = 1 .OR. opcao = 2
-IF mdg( "Atualizar Importacao Provisorios" )
-TrocaPro()
-IF MDG( "Deseja Transferir Dados Ponto do Mes" )
-FOPTO_12()
-ENDIF
-ENDIF
-ENDIF
-ENDDO
-RETU .T.
+      CASE OPCAO = 4   // D Arquiva Demitido
+         fopto4u( 1, 3 )
+      CASE OPCAO = 5   // E Arquiva Ano
+         fopto4u( 2, 3 )
+      CASE OPCAO = 6   // F Arquiva Mes Ano
+         fopto4u( 3, 3 )
+      CASE OPCAO = 7   // G Arquiva Funcionario
+         fopto4u( 4, 3 )
+      CASE OPCAO = 8   // H Retorna Demitidos
+         fopto4u( 1, 4 )
+      CASE OPCAO = 9   // I Retorna Ano
+         fopto4u( 2, 4 )
+      CASE OPCAO = 10  // J Retorna mes ano
+         fopto4u( 3, 4 )
+      CASE OPCAO = 11  // K Retorna funcionario
+         fopto4u( 4, 4 )
+      OTHERWISE
+         RETU
+      ENDCASE
+      IF opcao = 1 .OR. opcao = 2
+         IF mdg( "Atualizar Importacao Provisorios" )
+            TrocaPro()
+            IF MDG( "Deseja Transferir Dados Ponto do Mes" )
+               FOPTO_12()
+            ENDIF
+         ENDIF
+      ENDIF
+   ENDDO
+   RETU .T.
 
 
 // +--------------------------------------------------------------------
@@ -104,6 +105,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNC iFOPTO4J
 
    MDS( 'Provisorio Real    Motivo:' )

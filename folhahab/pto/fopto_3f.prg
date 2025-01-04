@@ -26,72 +26,73 @@
 // +
 
 
-function fopto_3f()
-IF !MDL( 'FOPTO_3F - Listagem Totais' )
-RETU
-ENDIF
+FUNCTION fopto_3f()
 
-PAG  := 1
-DIAX := Date()
-aTOT := Array( 24 )
-AFill( aTOT, 0 )
+   IF !MDL( 'FOPTO_3F - Listagem Totais' )
+      RETU
+   ENDIF
 
-cTIP := "C"
-cSIN := "S"
-cFUN := "S"
-@ 15, 00 SAY "(C)ompetencia (A)anual (S)emanal"
-@ 16, 00 SAY "Sintetico   (S/N)"
-@ 17, 00 SAY "Funcionario (S/N)"
-@ 15, 40 GET cTIP                               PICT "!" VALID c $ "CAS"
-@ 15, 40 GET cSIN                               PICT "!" VALID c $ "SN"
-@ 15, 40 GET cFUN                               PICT "!" VALID c $ "SN"
-IF !READCUR()
-RETU .F.
-ENDIF
+   PAG  := 1
+   DIAX := Date()
+   aTOT := Array( 24 )
+   AFill( aTOT, 0 )
 
-lSINT := cSIN = "S"
-lFUNC := cFUN = "S"
+   cTIP := "C"
+   cSIN := "S"
+   cFUN := "S"
+   @ 15, 00 SAY "(C)ompetencia (A)anual (S)emanal"
+   @ 16, 00 SAY "Sintetico   (S/N)"
+   @ 17, 00 SAY "Funcionario (S/N)"
+   @ 15, 40 GET cTIP                               PICT "!" VALID c $ "CAS"
+   @ 15, 40 GET cSIN                               PICT "!" VALID c $ "SN"
+   @ 15, 40 GET cFUN                               PICT "!" VALID c $ "SN"
+   IF !READCUR()
+      RETU .F.
+   ENDIF
 
-cPT := "PT" + ANOMESW
-IF cTIP = "A"
-cPT := "FO_PTT"
-ENDIF
-IF cTIP = "S"
-cPT := cPT := "PS" + ANOMESW
-ENDIF
+   lSINT := cSIN = "S"
+   lFUNC := cFUN = "S"
 
-PRIV mMES
-PRIV mANO
-mMES := MESTRAB
-mANO := ANOUSO
+   cPT := "PT" + ANOMESW
+   IF cTIP = "A"
+      cPT := "FO_PTT"
+   ENDIF
+   IF cTIP = "S"
+      cPT := cPT := "PS" + ANOMESW
+   ENDIF
 
-IF !NETUSE( pes )
-dbCloseAll()
-RETU
-ENDIF
-FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
-INX    := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
+   PRIV mMES
+   PRIV mANO
+   mMES := MESTRAB
+   mANO := ANOUSO
+
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETU
+   ENDIF
+   FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
 
 
-IF !NETUSE( cPT )
-dbCloseAll()
-RETU
-ENDIF
+   IF !NETUSE( cPT )
+      dbCloseAll()
+      RETU
+   ENDIF
 
-LISTARUE( {| X | FOPTO3F( X ) } )
+   LISTARUE( {| X | FOPTO3F( X ) } )
 
-RETU
+   RETU
 
 
 // +--------------------------------------------------------------------
@@ -106,6 +107,7 @@ RETU
 // +
 // +
 // +
+
 FUNC FOPTO3F
 
    PARA COMPARE

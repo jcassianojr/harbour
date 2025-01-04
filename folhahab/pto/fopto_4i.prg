@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4i.prg
+// +    Programa  : fopto_4i.prg cadastro de contas
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -26,15 +26,14 @@
 // +
 
 
-// ******************************************************************************
 
-// Teclas Operacionais
 #include "INKEY.CH"
-// //#INCLUDE "COMANDO.CH"
 
-PADRAO( "CONTAS", "CONTAS", "STR(mCODIGO)+' '+mDESCR", "mCODIGO", "FOPTO_4I - Cadastro de Contas", "Codigo Descri‡„o", ;
+FUNCTION fopto_4i()
+
+   PADRAO( "CONTAS", "CONTAS", "STR(mCODIGO)+' '+mDESCR", "mCODIGO", "FOPTO_4I - Cadastro de Contas", "Codigo Descri‡„o", ;
       {|| PEGCHAVE( "mCODIGO", 0, "Codigo:" ) }, {|| tFOPTO4I() }, {|| gFOPTO4I() }, {|| FO_RELL( "PONTOCAD10" ) },, 2 )
-RETU .T.
+   RETU .T.
 
 
 
@@ -50,6 +49,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNC gFOPTO4I
 
    @ 24, 00 clea

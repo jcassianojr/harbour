@@ -2,11 +2,11 @@
 // +
 // +
 // +
-// +    Programa  : fopto_4p.prg
+// +    Programa  : fopto_4p.prg  Cadastro de Usuarios
 // +
 // +
 // +
-// +     Sistema:
+// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // +
 // +     Linguagem: Harbour
 // +
@@ -30,14 +30,16 @@
 #include "INKEY.CH"
 #include "BOX.CH"
 
-IF ZUSER <> "SUPERVISOR" .AND. ZUSER <> "SOFTEC"  // So troca Senha
-ALERTX( "Acesso Permitido Somente Para o Supervisor" )
-RETU .F.
-ENDIF
+FUNCTION fopto_4p()
 
-PADRAO( "MUSER", "MUSER", "' '+mUSUARIO+' '+mVALIDADE+' '+mEQUIVALE", "mUSUARIO", "FOPTO_4P - Cadastro de Usuarios", "Usuario    Validade Equivalencia", ;
+   IF ZUSER <> "SUPERVISOR" .AND. ZUSER <> "SOFTEC"  // So troca Senha
+      ALERTX( "Acesso Permitido Somente Para o Supervisor" )
+      RETU .F.
+   ENDIF
+
+   PADRAO( "MUSER", "MUSER", "' '+mUSUARIO+' '+mVALIDADE+' '+mEQUIVALE", "mUSUARIO", "FOPTO_4P - Cadastro de Usuarios", "Usuario    Validade Equivalencia", ;
       {|| iFOPTO4P() }, {|| tFOPTO4P() }, {|| gFOPTO4P() },,, 2 )
-RETU .T.
+   RETU .T.
 
 
 // +--------------------------------------------------------------------
@@ -52,6 +54,7 @@ RETU .T.
 // +
 // +
 // +
+
 FUNCTION iFOPTO4P
 
    mUSUARIO := Space( 10 )
@@ -155,94 +158,13 @@ FUNCTION gFOPTO4P
    ENDIF
    mUSUARIO  := XENCODE( mUSUARIO )
    mEQUIVALE := XENCODE( mEQUIVALE )
-// ALTD()
    mSENHA    := XENCODE( mSENHA, .F. )  // sem upper
    mVALIDADE := XENCODE( StrTran( DToC( mVALIDADE ), '/', '' ) )
    mCHAVE    := mUSUARIO
 
-// ALERT(DECODE(mSENHA))
-
    RETURN .T.
 
-/* inluido disk63 junto com pegapass
-function CheckPass(Ctexto,lMES)
-LOCAL nI,lMAIS,lMINUS,lDIG,lSYMBOL
-lMAIS   := .F.
-lMINUS  := .F.
-lDIG    := .F.
-lSYMBOL := .F.
-IF VALTYPE(lMES)#"L"
-    lMES:=.T.
-ENDIF
-IF lEN(aLLTRIM(cTEXTO))<8
-   IF lMES
-      ALERTX("Minimo 8 Caracteres")
-   ENDIF
-   RETURN .F.
-ENDIF
 
-FOR nI = 1 TO LEN(cTexto)
-IF SUBStr ( cTEXTO, nI, 1 ) $ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-       lMAIS :=.T.
-    ENDIF
-   IF SUBStr ( cTEXTO, nI, 1 ) $ 'abcdefghijklmnopqrstuvwxyz'
-       lMINUS :=.T.
-    ENDIF
-    IF SUBStr ( cTEXTO, nI, 1 ) $ '0123456789'
-       lDIG :=.T.
-    ENDIF
-    IF SUBStr ( cTEXTO, nI, 1 ) $ '-+_!@#$%^&*., ?'
-       lSYMBOL :=.T.
-    ENDIF
-NEXT
-IF lMAIS .AND. lMINUS .AND. lDIG .AND. lSYMBOL
-   RETURN .T.
-ELSE
-  if ! lMAIS .AND. lMES
-     alertx(" Sem uma maiuscula")
-   ENDIF
-   if ! lMinus  .AND. lMES
-     alertx(" Sem uma minuscula")
-   ENDIF
-    if ! lDIG  .AND. lMES
-     alertx(" Sem um numero")
-   ENDIF
-    if ! lSYMBOL  .AND. lMES
-     alertx(" Sem um simbulo -+_!@#$%^&*., ?")
-   ENDIF
-ENDIF
-RETURN .F.
-*/
-
-/*inluidos no f_encod
-FUNCTION ENCODEVAL (in_string)
-LOCAL counter , next_char , aCHAVE
-aCHAVE := array( 10 )
-afill( aCHAVE, 0 )
-IF empty(in_string)
-   return aCHAVE
-endif
-FOR counter = 1 TO LEN(in_string)
-    next_char = SUBSTR(in_string, counter * -1, 1)
-    nCHAR:= (ASC(next_char) + 30) * 2
-    aCHAVE[counter]:=nchar
-NEXT
-RETURN aCHAVE
-
-FUNCTION DECODEVAL(aVALOR)
-LOCAL in_string,nVALOR,counter,nLEN
-in_string:=""
-nLEN :=len(aVALOR)
-FOR counter = 1 to len(aVALOR)
-    IF aVALOR[counter]>0
-       nVALOR := aVALOR[nLEN-counter+1]
-       nVALOR := nVALOR /2
-       nVALOR := nVALOR - 30
-       in_string = in_string  + CHR(nVALOR)
-    ENDIF
-NEXT
-RETURN in_string
-*/
 
 
 // + EOF: fopto_4p.prg

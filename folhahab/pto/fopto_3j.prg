@@ -26,81 +26,82 @@
 // +
 
 
-function fopto_3j()
-cPN := "PN" + ANOMESW
-cPT := "PT" + ANOMESW
+FUNCTION fopto_3j()
 
-lMIN := MDG( "Resumo Final em minutos sexadecimal" )
+   cPN := "PN" + ANOMESW
+   cPT := "PT" + ANOMESW
 
-IF !netuse( "FIRMA" )
-RETU
-ENDIF
-dbGoTop()
-dbSeek( NREMP )
-mRAZ := RAZAO
-mCGC := CGC
-mEND := ENDERECO
-mBAI := BAIRRO
-mCID := CIDADE
-mEST := ESTADO
-dbCloseAll()
+   lMIN := MDG( "Resumo Final em minutos sexadecimal" )
 
-IF !NETUSE( "CONTAS" )
-RETU
-ENDIF
+   IF !netuse( "FIRMA" )
+      RETU
+   ENDIF
+   dbGoTop()
+   dbSeek( NREMP )
+   mRAZ := RAZAO
+   mCGC := CGC
+   mEND := ENDERECO
+   mBAI := BAIRRO
+   mCID := CIDADE
+   mEST := ESTADO
+   dbCloseAll()
 
-IF !NETUSE( pes )
-dbCloseAll()
-RETU
-ENDIF
-FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
-INX    := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
+   IF !NETUSE( "CONTAS" )
+      RETU
+   ENDIF
 
-IF !NETUSE( cPN )
-dbCloseAll()
-RETU
-ENDIF
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETU
+   ENDIF
+   FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
 
-IF !NETUSE( cPT )
-dbCloseAll()
-RETU
-ENDIF
+   IF !NETUSE( cPN )
+      dbCloseAll()
+      RETU
+   ENDIF
 
-IF !NETUSE( "TABTURNO" )
-dbCloseAll()
-RETU
-ENDIF
+   IF !NETUSE( cPT )
+      dbCloseAll()
+      RETU
+   ENDIF
+
+   IF !NETUSE( "TABTURNO" )
+      dbCloseAll()
+      RETU
+   ENDIF
 
 
-IF !NETUSE( if( lSECBCO, "BCOBAK", "BCOHRS" ) )
-dbCloseAll()
-RETU
-ENDIF
-cSELE6 := Alias()
+   IF !NETUSE( if( lSECBCO, "BCOBAK", "BCOHRS" ) )
+      dbCloseAll()
+      RETU
+   ENDIF
+   cSELE6 := Alias()
 
-IF !MDL( 'FOPTO-3J - Listagem Apontamento e Totais Banco Horas' )
-RETU
-ENDIF
-IF MDG( "Espacar Entrelinha" )
-IMPRESSORA()
-QQOut( Chr( 27 ) + "3" + "72" )
-VIDEO()
-ENDIF
+   IF !MDL( 'FOPTO-3J - Listagem Apontamento e Totais Banco Horas' )
+      RETU
+   ENDIF
+   IF MDG( "Espacar Entrelinha" )
+      IMPRESSORA()
+      QQOut( Chr( 27 ) + "3" + "72" )
+      VIDEO()
+   ENDIF
 
-LISTARUE( {| X | FOPTO3J( X ) } )
+   LISTARUE( {| X | FOPTO3J( X ) } )
 
-RETU
+   RETU
 
 
 // +--------------------------------------------------------------------
@@ -115,6 +116,7 @@ RETU
 // +
 // +
 // +
+
 FUNC FOPTO3J
 
    PARA COMPARE

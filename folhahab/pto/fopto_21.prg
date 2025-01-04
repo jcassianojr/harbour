@@ -43,94 +43,95 @@
 // Natal         25/12/aaaa
 
 
-function fopto_21()
-CABE2( 'FOPTO_21 - Iniciando o mEs' )
+FUNCTION fopto_21()
+
+   CABE2( 'FOPTO_21 - Iniciando o mEs' )
 
 
-IF !MDG( 'Voce tem certeza' )
-RETU .F.
-ENDIF
+   IF !MDG( 'Voce tem certeza' )
+      RETU .F.
+   ENDIF
 
 // FO21CRI("PE","FOPTOREV", "GRUPO+DTOS(DATA)" ) //ja cria na fopto_43
-fopto_43()
+   fopto_43()
 
-dINI := zdataini
-dFIM := zdatafim
-MDS( 'Digite o Periodo ' )
-@ 24, 40 GET dINI
-@ 24, 50 GET dFIM
-IF !READCUR()
-RETU .F.
-ENDIF
-nMES := Month( dFIM )
-nANO := Year( dFIM )
-MDS( 'Confirme a Competencia' )
-@ 24, 40 GET nMES
-@ 24, 50 GET nANO
-IF !READCUR()
-RETU .F.
-ENDIF
-cMESANO := SubStr( StrZero( nANO, 4 ), 3, 2 ) + StrZero( nMES, 2 )
+   dINI := zdataini
+   dFIM := zdatafim
+   MDS( 'Digite o Periodo ' )
+   @ 24, 40 GET dINI
+   @ 24, 50 GET dFIM
+   IF !READCUR()
+      RETU .F.
+   ENDIF
+   nMES := Month( dFIM )
+   nANO := Year( dFIM )
+   MDS( 'Confirme a Competencia' )
+   @ 24, 40 GET nMES
+   @ 24, 50 GET nANO
+   IF !READCUR()
+      RETU .F.
+   ENDIF
+   cMESANO := SubStr( StrZero( nANO, 4 ), 3, 2 ) + StrZero( nMES, 2 )
 
 // Serao Usados Arede
-cPN := "PN" + cMESANO
-cPE := "PE" + cMESANO
+   cPN := "PN" + cMESANO
+   cPE := "PE" + cMESANO
 
 
-FO21CRI( "PN", "FO_PON", "STR(NUMERO,8)+DTOS(DATA)" )
-FO21CRI( "PT", "FO_POT", "NUMERO" )
-FO21CRI( "PD", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
-FO21CRI( "PA", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
-FO21CRI( "PP", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
-FO21CRI( "PO", "FO_POCO", "STR(NUMERO,8)+DTOS(OCOINI)" )
-FO21CRI( "PM", "FO_PMAN", "STR(NUMERO,8)+DTOS(DATOCO)+TIPOCO" )
-FO21CRI( "PH", "FO_PHOR", "STR(NUMERO,8)+DTOS(OCOINI)" )
-FO21CRI( "PX", "FO_PDES", "STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)" )
-FO21CRI( "PS", "FO_POS", "STR(NUMERO,8)+DTOS(SEMFIM)" )
-FO21CRI( "BK", "BCOREQ", "REQUISI" )
-FO21CRI( "BH", "BCOREQ", "REQUISI" )
+   FO21CRI( "PN", "FO_PON", "STR(NUMERO,8)+DTOS(DATA)" )
+   FO21CRI( "PT", "FO_POT", "NUMERO" )
+   FO21CRI( "PD", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   FO21CRI( "PA", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   FO21CRI( "PP", "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   FO21CRI( "PO", "FO_POCO", "STR(NUMERO,8)+DTOS(OCOINI)" )
+   FO21CRI( "PM", "FO_PMAN", "STR(NUMERO,8)+DTOS(DATOCO)+TIPOCO" )
+   FO21CRI( "PH", "FO_PHOR", "STR(NUMERO,8)+DTOS(OCOINI)" )
+   FO21CRI( "PX", "FO_PDES", "STR(NUMERO,8)+DTOS(DATA)+STR(CONTA,2)" )
+   FO21CRI( "PS", "FO_POS", "STR(NUMERO,8)+DTOS(SEMFIM)" )
+   FO21CRI( "BK", "BCOREQ", "REQUISI" )
+   FO21CRI( "BH", "BCOREQ", "REQUISI" )
 
 
 // Pegando Eventos
-aEVED := {}
-aEVEC := {}
-aEVEB := {}
-PegFeriados()
+   aEVED := {}
+   aEVEC := {}
+   aEVEB := {}
+   PegFeriados()
 
 
 // Feriados Moveis
-FOR I := 1 TO 4
-DO CASE
-CASE I = 1
-cTEXTO := "Carnaval"
-nPASSO := -47
-CASE I = 2
-cTEXTO := "Sexta Santa"
-nPASSO := -2
-CASE I = 3
-cTEXTO := "Corpus Christi"
-nPASSO := 60
-CASE I = 4
-cTEXTO := "Pascoa"
-nPASSO := 0
-ENDCASE
-dFERMOV := CalcPascoa( nANO ) + nPASSO
-IF dFERMOV >= dINI .AND. dFERMOV <= dFIM
-IF MDG( "Gravar Feriado " + cTEXTO )
-@ 24, 00 SAY "Confirme data " + cTEXTO
-@ 24, 30 GET dFERMOV
-READCUR()
-AAdd( aEVED, Str( Day( dFERMOV ), 2 ) + Str( Month( dFERMOV ), 2 ) )
-AAdd( aEVEC, "FE" )
-AAdd( aEVEB, { " ", " ", " " } )
-ENDIF
-ENDIF
-NEXT X
+   FOR I := 1 TO 4
+      DO CASE
+      CASE I = 1
+         cTEXTO := "Carnaval"
+         nPASSO := -47
+      CASE I = 2
+         cTEXTO := "Sexta Santa"
+         nPASSO := -2
+      CASE I = 3
+         cTEXTO := "Corpus Christi"
+         nPASSO := 60
+      CASE I = 4
+         cTEXTO := "Pascoa"
+         nPASSO := 0
+      ENDCASE
+      dFERMOV := CalcPascoa( nANO ) + nPASSO
+      IF dFERMOV >= dINI .AND. dFERMOV <= dFIM
+         IF MDG( "Gravar Feriado " + cTEXTO )
+            @ 24, 00 SAY "Confirme data " + cTEXTO
+            @ 24, 30 GET dFERMOV
+            READCUR()
+            AAdd( aEVED, Str( Day( dFERMOV ), 2 ) + Str( Month( dFERMOV ), 2 ) )
+            AAdd( aEVEC, "FE" )
+            AAdd( aEVEB, { " ", " ", " " } )
+         ENDIF
+      ENDIF
+   NEXT X
 
 
-IF !NETUSE( PES )
-RETU
-ENDIF
+   IF !NETUSE( PES )
+      RETU
+   ENDIF
 
 /*
 FILTRO := "admitido>=ctod('01/08/2009')"
@@ -143,180 +144,180 @@ while ! eof()
 enddo
 */
 
-FILTRO := FILTRO( '(EMPTY(DEMITIDO).OR.DEMITIDO<=dfim).and.! empty(PIS)' )
-SET FILTER TO &FILTRO
-dbGoTop()
+   FILTRO := FILTRO( '(EMPTY(DEMITIDO).OR.DEMITIDO<=dfim).and.! empty(PIS)' )
+   SET FILTER TO &FILTRO
+   dbGoTop()
 
-IF !netuse( cPN )
-dbCloseAll()
-RETU
-ENDIF
+   IF !netuse( cPN )
+      dbCloseAll()
+      RETU
+   ENDIF
 
-IF !NETUSE( "FO_RELHR" )
-dbCloseAll()
-RETU .T.
-ENDIF
+   IF !NETUSE( "FO_RELHR" )
+      dbCloseAll()
+      RETU .T.
+   ENDIF
 
-IF !NETUSE( "FOPTOHRE" )
-dbCloseAll()
-RETU .T.
-ENDIF
-
-
-IF !netuse( cPE )
-dbCloseAll()
-RETU
-ENDIF
-
-dbSelectAr( pes )
-dbGoTop()
-WHILE !Eof()
-PETELA( 8 )
-VALPIS( PIS, .T., .F., FIELD->EVINC )
-NUM     := NUMERO
-mBANCO  := " "
-mCODADC := "  "
-nINI    := dINI
+   IF !NETUSE( "FOPTOHRE" )
+      dbCloseAll()
+      RETU .T.
+   ENDIF
 
 
-IF nINI < ADMITIDO   // Inicia A partir da data admiss?o
-nINI := ADMITIDO
-ENDIF
-IF !Empty( DATTRANSF )   // Inicia a partir da data transferencia
-IF nINI < DATTRANSF
-nINI := DATTRANSF
-ENDIF
-ENDIF
-nFIM := dFIM
-IF !Empty( DEMITIDO )  // Encerra na data de demiss?o
-IF DEMITIDO < nFIM
-nFIM := DEMITIDO
-ENDIF
-ENDIF
+   IF !netuse( cPE )
+      dbCloseAll()
+      RETU
+   ENDIF
 
-aFOLGA   := {}
-aNHOR    := {}
-aREF     := {}
-mGRUPO   := ""
-mTURNO   := ""
-mALMOCO  := ""
-mMARMES  := ""
-mHORREF  := ""
-mHORARIO := 0
-peghorfix( num )
-
-IF mMARMES <> "N"
-dbSelectAr( cPN )   // sele 2
-FOR X := nINI TO nFIM
-@ 24, 00 SAY "Data:" + DToC( x )
-cCOD := " "
-nEVE := AScan( aEVED, Str( Day( X ), 2 ) + Str( Month( X ), 2 ) )   // Checa Dia/Mes
-IF nEVE = 0
-nEVE := AScan( aEVED, Str( DoW( X ), 2 ) + Str( 0, 2 ) )   // Checa Dia da Semana
-ENDIF
-lFOLGA   := .F.
-lDOMINGO := .F.
-lSABADO  := .F.
-lCODBH   := .F.
-IF !Empty( mGRUPO ) .AND. mTURNO = "S"
-dbSelectAr( cPE )
-dbGoTop()
-IF dbSeek( mGRUPO + DToS( X ) )
-IF CODREV = "FO"
-lFOLGA := .T.
-ENDIF
-IF CODREV = "DO"
-lDOMINGO := .T.
-ENDIF
-IF CODREV = "SA"
-lSABADO := .T.
-ENDIF
-IF CODREV = "BH"
-lCODBH := .T.
-ENDIF
-mCODADC  := CODADC
-mBANCO   := BCOSN
-mHORARIO := HORARIO
-ENDIF
-ENDIF
-IF !Empty( mHORREF ) .AND. mTURNO = "N"
-nDOW := DoW( X )
-IF aREF[ nDOW, 1 ] > 0
-IF aFOLGA[ nDOW ] <> "S"   // Se nao for folga pega padrao
-mHORARIO := aNHOR[ nDOW ]
-ENDIF
-ELSE
-mHORARIO := aNHOR[ 8 ]
-ENDIF
-ENDIF
-dbSelectAr( cPN )
-dbGoTop()
-IF !dbSeek( Str( NUM, 8 ) + DToS( X ) )
-netrecapp()
-field->NUMERO := NUM
-field->DATA   := X
-ELSE
-netreclock()
-ENDIF
-IF Empty( COD )
-IF nEVE > 0
-IF Empty( mGRUPO ) .OR. mTURNO # "S" .OR. AEVEC[ nEVE ] = "FE"
-IF AEVEC[ nEVE ] <> "DO" .AND. AEVEC[ nEVE ] <> "SA"
-field->COD := AEVEC[ nEVE ]
-ELSE
-IF aFOLGA[ DoW( X ) ] = "S"  // so se for folga marca
-field->COD := AEVEC[ nEVE ]   // Sabado e Domingo
-ENDIF
-ENDIF
-ENDIF
-IF AEVEB[ nEVE, 1 ] = "S"
-field->BCOSN := "S"
-ENDIF
-IF AEVEB[ nEVE, 2 ] = "S"
-field->REDSN := "S"
-ENDIF
-IF AEVEB[ nEVE, 3 ] = "S"
-field->FOLSN := "S"
-ENDIF
-ELSE
-field->ALMOCO := mALMOCO
-ENDIF
-IF lFOLGA
-FOPTO21CS( "FO" )
-field->FOLSN := "S"
-ENDIF
-IF lDOMINGO
-FOPTO21CS( "DO" )
-ENDIF
-IF lSABADO
-FOPTO21CS( "SA" )
-ENDIF
-IF lCODBH
-FOPTO21CS( "BH" )
-ENDIF
-IF !Empty( mCODADC )
-FOPTO21CS( mCODADC )
-ENDIF
-IF !Empty( mBANCO )
-field->BCOSN := mBANCO
-ENDIF
-ENDIF
-IF cod = "FE" .OR. Cod = "FO" .OR. COD = "SA" .OR. COD = "DO" .OR. COD = "BH"  // gravados acima pela fopot21cs
-ELSE
-field->HORARIO := mHORARIO
-ENDIF
-dbCommit()
-dbUnlock()
-NEXT X
-ENDIF
-dbSelectAr( pes )
-dbSkip()
-ENDDO
-dbCloseAll()
+   dbSelectAr( pes )
+   dbGoTop()
+   WHILE !Eof()
+      PETELA( 8 )
+      VALPIS( PIS, .T., .F., FIELD->EVINC )
+      NUM     := NUMERO
+      mBANCO  := " "
+      mCODADC := "  "
+      nINI    := dINI
 
 
-FOY2( 0, "FOPTONTX", "E" )
-pegcompete()
+      IF nINI < ADMITIDO   // Inicia A partir da data admiss?o
+         nINI := ADMITIDO
+      ENDIF
+      IF !Empty( DATTRANSF )   // Inicia a partir da data transferencia
+         IF nINI < DATTRANSF
+            nINI := DATTRANSF
+         ENDIF
+      ENDIF
+      nFIM := dFIM
+      IF !Empty( DEMITIDO )  // Encerra na data de demiss?o
+         IF DEMITIDO < nFIM
+            nFIM := DEMITIDO
+         ENDIF
+      ENDIF
+
+      aFOLGA   := {}
+      aNHOR    := {}
+      aREF     := {}
+      mGRUPO   := ""
+      mTURNO   := ""
+      mALMOCO  := ""
+      mMARMES  := ""
+      mHORREF  := ""
+      mHORARIO := 0
+      peghorfix( num )
+
+      IF mMARMES <> "N"
+         dbSelectAr( cPN )   // sele 2
+         FOR X := nINI TO nFIM
+            @ 24, 00 SAY "Data:" + DToC( x )
+            cCOD := " "
+            nEVE := AScan( aEVED, Str( Day( X ), 2 ) + Str( Month( X ), 2 ) )   // Checa Dia/Mes
+            IF nEVE = 0
+               nEVE := AScan( aEVED, Str( DoW( X ), 2 ) + Str( 0, 2 ) )   // Checa Dia da Semana
+            ENDIF
+            lFOLGA   := .F.
+            lDOMINGO := .F.
+            lSABADO  := .F.
+            lCODBH   := .F.
+            IF !Empty( mGRUPO ) .AND. mTURNO = "S"
+               dbSelectAr( cPE )
+               dbGoTop()
+               IF dbSeek( mGRUPO + DToS( X ) )
+                  IF CODREV = "FO"
+                     lFOLGA := .T.
+                  ENDIF
+                  IF CODREV = "DO"
+                     lDOMINGO := .T.
+                  ENDIF
+                  IF CODREV = "SA"
+                     lSABADO := .T.
+                  ENDIF
+                  IF CODREV = "BH"
+                     lCODBH := .T.
+                  ENDIF
+                  mCODADC  := CODADC
+                  mBANCO   := BCOSN
+                  mHORARIO := HORARIO
+               ENDIF
+            ENDIF
+            IF !Empty( mHORREF ) .AND. mTURNO = "N"
+               nDOW := DoW( X )
+               IF aREF[ nDOW, 1 ] > 0
+                  IF aFOLGA[ nDOW ] <> "S"   // Se nao for folga pega padrao
+                     mHORARIO := aNHOR[ nDOW ]
+                  ENDIF
+               ELSE
+                  mHORARIO := aNHOR[ 8 ]
+               ENDIF
+            ENDIF
+            dbSelectAr( cPN )
+            dbGoTop()
+            IF !dbSeek( Str( NUM, 8 ) + DToS( X ) )
+               netrecapp()
+               field->NUMERO := NUM
+               field->DATA   := X
+            ELSE
+               netreclock()
+            ENDIF
+            IF Empty( COD )
+               IF nEVE > 0
+                  IF Empty( mGRUPO ) .OR. mTURNO # "S" .OR. AEVEC[ nEVE ] = "FE"
+                     IF AEVEC[ nEVE ] <> "DO" .AND. AEVEC[ nEVE ] <> "SA"
+                        field->COD := AEVEC[ nEVE ]
+                     ELSE
+                        IF aFOLGA[ DoW( X ) ] = "S"  // so se for folga marca
+                           field->COD := AEVEC[ nEVE ]   // Sabado e Domingo
+                        ENDIF
+                     ENDIF
+                  ENDIF
+                  IF AEVEB[ nEVE, 1 ] = "S"
+                     field->BCOSN := "S"
+                  ENDIF
+                  IF AEVEB[ nEVE, 2 ] = "S"
+                     field->REDSN := "S"
+                  ENDIF
+                  IF AEVEB[ nEVE, 3 ] = "S"
+                     field->FOLSN := "S"
+                  ENDIF
+               ELSE
+                  field->ALMOCO := mALMOCO
+               ENDIF
+               IF lFOLGA
+                  FOPTO21CS( "FO" )
+                  field->FOLSN := "S"
+               ENDIF
+               IF lDOMINGO
+                  FOPTO21CS( "DO" )
+               ENDIF
+               IF lSABADO
+                  FOPTO21CS( "SA" )
+               ENDIF
+               IF lCODBH
+                  FOPTO21CS( "BH" )
+               ENDIF
+               IF !Empty( mCODADC )
+                  FOPTO21CS( mCODADC )
+               ENDIF
+               IF !Empty( mBANCO )
+                  field->BCOSN := mBANCO
+               ENDIF
+            ENDIF
+            IF cod = "FE" .OR. Cod = "FO" .OR. COD = "SA" .OR. COD = "DO" .OR. COD = "BH"  // gravados acima pela fopot21cs
+            ELSE
+               field->HORARIO := mHORARIO
+            ENDIF
+            dbCommit()
+            dbUnlock()
+         NEXT X
+      ENDIF
+      dbSelectAr( pes )
+      dbSkip()
+   ENDDO
+   dbCloseAll()
+
+
+   FOY2( 0, "FOPTONTX", "E" )
+   pegcompete()
 
    RETURN
 

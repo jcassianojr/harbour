@@ -25,35 +25,37 @@
 // +--------------------------------------------------------------------
 // +
 
-function fopto_18()
-CABE2( 'FOPTO_18 - Criando Arquivo TXT Com Base Arquivo Reserva' )
+FUNCTION fopto_18()
 
-ntipo := PEGRELOGIO()
+   CABE2( 'FOPTO_18 - Criando Arquivo TXT Com Base Arquivo Reserva' )
 
-cDD := TARQREL( nTIPO, .F. )
+   ntipo := PEGRELOGIO()
 
-IF !REDEFILE( cDD, "DBF", .T. )
-RETU .F.
-ENDIF
+   cDD := TARQREL( nTIPO, .F. )
 
-TIPC := pegarqcon( nTIPO, "PRO" )
+   IF !REDEFILE( cDD, "DBF", .T. )
+      RETU .F.
+   ENDIF
 
-FO21CRI( cDD, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+   TIPC := pegarqcon( nTIPO, "PRO" )
 
-IF !NETUSE( cDD )
-RETU .F.
-ENDIF
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-cTXT += ".TXT"
-IF TIPC = "S"
-COPY TO &cTXT. SDF WHILE zei_fort( nLASTREC,,, 1 )
-ENDIF
-IF TIPC = "D"
-COPY TO &cTXT. DELI WHILE zei_fort( nLASTREC,,, 1 )
-ENDIF
-dbCloseAll()
-return
+   FO21CRI( cDD, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+
+   IF !NETUSE( cDD )
+      RETU .F.
+   ENDIF
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   cTXT += ".TXT"
+   IF TIPC = "S"
+      COPY TO &cTXT. SDF WHILE zei_fort( nLASTREC,,, 1 )
+   ENDIF
+   IF TIPC = "D"
+      COPY TO &cTXT. DELI WHILE zei_fort( nLASTREC,,, 1 )
+   ENDIF
+   dbCloseAll()
+
+   RETURN
 
 // + EOF: fopto_18.prg
 // +

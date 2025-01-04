@@ -25,49 +25,50 @@
 // +--------------------------------------------------------------------
 // +
 
-function fopto_3b()
-IF !MDL( "FOPTO_3B -Listagem de Ocorrencias" )
-RETU .F.
-ENDIF
+FUNCTION fopto_3b()
 
-PAG  := 1
-DIAX := Date()
-cPN  := "PN" + ANOMESW
+   IF !MDL( "FOPTO_3B -Listagem de Ocorrencias" )
+      RETU .F.
+   ENDIF
 
-IF !NETUSE( pes )
-dbCloseAll()
-RETU
-ENDIF
-FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
-INX    := ""
-FILORD( .T. )
-nLASTREC := LastRec()
-zei_fort( nLASTREC,,, 0 )
-IF ValType( INX ) = "N"
-dbSetOrder( INX )
-ELSE
-ordDestroy( "temp" )
-ordCreate(, "temp", inx )
-ordSetFocus( "temp" )
-ENDIF
-SET FILTER TO &FILTRO
+   PAG  := 1
+   DIAX := Date()
+   cPN  := "PN" + ANOMESW
 
-IF !NETUSE( cPN )
-dbCloseAll()
-RETU .F.
-ENDIF
+   IF !NETUSE( pes )
+      dbCloseAll()
+      RETU
+   ENDIF
+   FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
+   INX    := ""
+   FILORD( .T. )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   IF ValType( INX ) = "N"
+      dbSetOrder( INX )
+   ELSE
+      ordDestroy( "temp" )
+      ordCreate(, "temp", inx )
+      ordSetFocus( "temp" )
+   ENDIF
+   SET FILTER TO &FILTRO
 
-IF !NETUSE( "TABFALTA" )
-dbCloseAll()
-RETU .F.
-ENDIF
+   IF !NETUSE( cPN )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
 
-lSINT := MDG( "Deseja Resumo Sintetico" )
-lFUNC := MDG( "Deseja Resumo Por Funcionario" )
+   IF !NETUSE( "TABFALTA" )
+      dbCloseAll()
+      RETU .F.
+   ENDIF
 
-LISTARUE( {| X | FOPTO3B( X ) } )
+   lSINT := MDG( "Deseja Resumo Sintetico" )
+   lFUNC := MDG( "Deseja Resumo Por Funcionario" )
 
-RETU
+   LISTARUE( {| X | FOPTO3B( X ) } )
+
+   RETU
 
 
 // +--------------------------------------------------------------------
@@ -82,6 +83,7 @@ RETU
 // +
 // +
 // +
+
 FUNC FOPTO3B
 
    PARA COMPARE
