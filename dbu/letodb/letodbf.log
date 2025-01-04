@@ -13,3 +13,5 @@
 01.04.2025 19:28:51 INFO: disconnect 127.0.0.1:49749 letobackup.exe users=(0 : 1 : 1), tables=(0 : 1)
 01.04.2025 19:30:02 INFO: connected  127.0.0.1:49752 letobackup.exe CP: EN  DF: mm/dd/yy  conn-ID 0
 01.04.2025 19:30:03 INFO: disconnect 127.0.0.1:49752 letobackup.exe users=(0 : 1 : 1), tables=(0 : 1)
+01.04.2025 19:33:04 INFO: connected  127.0.0.1:49791 console.exe CP: EN  DF: mm/dd/yy  conn-ID 0
+01.04.2025 19:33:49 INFO: disconnect 127.0.0.1:49791 console.exe users=(0 : 1 : 1), tables=(0 : 1)
