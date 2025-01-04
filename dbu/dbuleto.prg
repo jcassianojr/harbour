@@ -46,12 +46,13 @@ FUNCTION letomenu()
    WHILE .T.
       hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
       @ 03, 24 SAY "LETODB" + " " + cSERVERX
-      OPCAO( 4, 24, "&Versao Info              ", 86 )   // V
+      OPCAO( 4, 24, "&Versao Info               ", 86 )   // V
       OPCAO( 5, 24, "&Tabelas                   ", 84 )   // T
       OPCAO( 6, 24, "&Importar  DBF             ", 73 )   // I
       OPCAO( 7, 24, "&Exportar  DBF             ", 69 )   // E
       OPCAO( 8, 24, "&Apagar Tabela             ", 65 )   // A
-    //  OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F
+      OPCAO( 9, 24, "Exportar &Formatos         ", 70 )  // F
+    //opcao backup zip
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -65,6 +66,7 @@ FUNCTION letomenu()
       CASE KEY = 5
           LETO_DELDBF(cSERVERX) 
       CASE KEY = 6
+          leto_expformat(cSERVERX) 
       OTHERWISE
          EXIT
       ENDCASE
@@ -117,6 +119,35 @@ FUNCTION LETO_DELDBF(cSrvAddr)
     ENDIF   
 RETURN .T.     
 
+
+FUNCTION leto_expformat(cSrvAddr) 
+   cARQORI    := LETO_tables(cSERVERX)
+   cTABELAX  :=TIRAEXT(cARQORI )
+
+
+   LCOPIANAT := .F.  // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado mysqlrddd
+   tDOC      := pegtipodoc()   // .t. Inclui dbf se for nativa
+   pegparexp()
+   lDOCCAB   := .F.
+   lDOCDAD   := .F.
+   lDOCRECNO := .F.
+   cSUBTIPO  := " "
+   PegcsUB( tDOC )   // pegar o subtipo conforme tipo
+   cDESTINO := cTABELAX + "_" + cTIPOSQL + "_leto." + zEXPOREXT
+   MDT( cDESTINO )
+   MDT( "abrindo arquivo de origem: " + cTABELAX )
+   nConnect := LETO_CONNECT( cSrvAddr )
+   altd()
+       IF nConnect >= 0
+         //DBUseArea( <lNewArea> , <cDriver> , <cName>, <xcAlias> , <lShared> , <lReadOnly>,<cCodePage>,<nConnection> ) -> lSuccess
+         dbUseArea( .T.,,  cTABELAX,,.T. )
+         nLASTREC := LastRec()
+         zei_fort( nLASTREC,,, 0 )
+         aSTRU := dbStruct()
+         multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, TIRAEXT( cDESTINO ), aSTRU )
+         dbCloseArea()
+     endif
+return .t.
    
 FUNCTION LETO_DBFTOSRV(cSrvAddr) 
    cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
@@ -291,5 +322,7 @@ FUNCTION leto_tables( cSrvAddr )
    RESTAA( aAMBIENTE )
 
    RETURN ( iif( nChoices > 0, aResult[ nChoices ], "" ) )
+
+
 
 
