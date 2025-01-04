@@ -30,3 +30,22 @@
 01.04.2025 12:13:17 INFO: connected  127.0.0.1:49811 test_var.exe CP: EN  DF: mm/dd/yy  conn-ID 0
 01.04.2025 12:13:21 INFO: disconnect 127.0.0.1:49811 test_var.exe users=(0 : 1 : 4), tables=(0 : 8)
 01.04.2025 12:18:17 DEBUG thread3() ending ..
+01.04.2025 14:42:14       UDF file: d:\develop\harbour\dbu\letodb\letoudf.hrb have been loaded.
+01.04.2025 14:42:14 INFO: LetoDBf Server 3.00 (20250104), will run at IP 127.0.0.1:2812 ( internal also used :2813 )
+01.04.2025 14:42:14 INFO: DataPath=d:\develop\modelos\letodb, ShareTables=0, NoSaveWA=1, Max Tables=999
+01.04.2025 14:42:14 INFO: LoginPassword=0, CacheRecords=21, LockExtended=0, Max Users=99
+01.04.2025 14:42:14 INFO: Encrypted LZ4 traffic=N
+01.04.2025 14:42:14 DEBUG second socket: 360 for errors established
+01.04.2025 14:42:14 DEBUG thread3() with pipe handle: 368 started .. 
+01.04.2025 14:58:23 INFO: connected  127.0.0.1:49845 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 14:58:49 INFO: disconnect 127.0.0.1:49845 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 14:58:59 INFO: connected  127.0.0.1:49847 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 15:00:02 INFO: disconnect 127.0.0.1:49847 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 15:04:57 INFO: connected  127.0.0.1:49866 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 15:05:20 INFO: disconnect 127.0.0.1:49866 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 15:06:33 INFO: connected  127.0.0.1:49869 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 15:10:54 INFO: disconnect 127.0.0.1:49869 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 15:11:05 INFO: connected  127.0.0.1:49881 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 15:11:15 INFO: disconnect 127.0.0.1:49881 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 15:19:03 INFO: connected  127.0.0.1:49903 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 15:19:52 INFO: disconnect 127.0.0.1:49903 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)

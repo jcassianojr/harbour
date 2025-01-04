@@ -170,8 +170,6 @@ FUNCTION LETO_INFO( cSrvAddr, cLogFile, cOptions )
    ELSE
       ALERT( cInfo )
    ENDIF
-   
-   leto_disconnect()
 
 RETURN cInfo
 
@@ -189,14 +187,13 @@ FUNCTION leto_tables( cSrvAddr )
    aRESULT   := {}
    
    
-   
-  nConnect := LETO_CONNECT( cSrvAddr )
+      nConnect := LETO_CONNECT( cSrvAddr )
 
    IF nConnect >= 0
 
-       aRETU := leto_directory( "*.DBF" )  
+       aRETU := leto_MgGetTables(nConnect)
        
-       //altd()
+       altd()
        FOR i := 1 TO Len( aRETU )
           AAdd( aRESULT, aRETU[ i, 1 ] )
        NEXT i
@@ -207,9 +204,11 @@ FUNCTION leto_tables( cSrvAddr )
           nChoices := AChoice( 4, 23, 21, 54, aResult )
        ENDIF
        
+       altd()
+       aRETU:=Leto_MgGetInfo(nConnect)
    endif
    
-   leto_disconnect()
+   
 
    RESTAA( aAMBIENTE )
 
