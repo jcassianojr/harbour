@@ -1,0 +1,31 @@
+01.04.2025 12:09:22 INFO: connected  127.0.0.1:49771 dbu32.exe CP: PTISO  DF: dd/mm/yyyy  conn-ID 0
+01.04.2025 12:09:48 INFO: disconnect 127.0.0.1:49771 dbu32.exe users=(0 : 1 : 1), tables=(0 : 0)
+01.04.2025 12:10:14 INFO: connected  127.0.0.1:49776 ron.exe CP: EN  DF: yyyy.mm.dd  conn-ID 0
+01.04.2025 12:10:14 INFO: connected  127.0.0.1:49778 ron.exe CP: EN  DF: yyyy.mm.dd  conn-ID 1
+01.04.2025 12:10:14 INFO: connected  127.0.0.1:49780 ron.exe CP: EN  DF: yyyy.mm.dd  conn-ID 2
+01.04.2025 12:10:15 INFO: connected  127.0.0.1:49781 ron.exe CP: EN  DF: yyyy.mm.dd  conn-ID 3
+01.04.2025 12:10:19 INFO: disconnect 127.0.0.1:49778 ron.exe users=(1 : 4 : 4), tables=(3 : 8)
+01.04.2025 12:10:19 INFO: disconnect 127.0.0.1:49781 ron.exe users=(3 : 3 : 4), tables=(0 : 8)
+01.04.2025 12:10:19 INFO: disconnect 127.0.0.1:49780 ron.exe users=(2 : 2 : 4), tables=(0 : 8)
+01.04.2025 12:10:19 INFO: disconnect 127.0.0.1:49776 ron.exe users=(0 : 1 : 4), tables=(0 : 8)
+01.04.2025 12:10:19 INFO: connected  127.0.0.1:49784 test_dbf.exe CP: EN  DF: dd/mm/yy  conn-ID 0
+01.04.2025 12:10:30 INFO: disconnect 127.0.0.1:49784 test_dbf.exe users=(0 : 1 : 4), tables=(0 : 8)
+01.04.2025 12:10:51 INFO: connected  127.0.0.1:49788 test_dbfe.exe CP: EN  DF: dd/mm/yy  conn-ID 0
+01.04.2025 12:10:53 ERROR leto_ParseCommand()
+01.04.2025 12:10:53 i;0;X;
+01.04.2025 12:11:06 INFO: disconnect 127.0.0.1:49788 test_dbfe.exe users=(0 : 1 : 4), tables=(0 : 8)
+01.04.2025 12:11:27 INFO: connected  127.0.0.1:49796 test_file.exe CP: EN  DF: mm/dd/yy  conn-ID 0
+01.04.2025 12:11:31 INFO: USERSTRU 552, AREASTRU 168, TABLESTRU 192, GLOBESTRU 40 INDEXSTRU 64 
+01.04.2025 12:11:38 INFO: disconnect 127.0.0.1:49796 test_file.exe users=(0 : 1 : 4), tables=(0 : 8)
+01.04.2025 12:11:39 INFO: connected  127.0.0.1:49798 test_filt.exe CP: EN  DF: dd/mm/yy  conn-ID 0
+01.04.2025 12:11:43 ERROR leto_ParseCommand()
+01.04.2025 12:11:43 w;18335840;02;
+01.04.2025 12:11:43 INFO: disconnect 127.0.0.1:49798 test_filt.exe users=(0 : 1 : 4), tables=(0 : 8)
+01.04.2025 12:12:07 INFO: connected  127.0.0.1:49802 test_ta.exe CP: EN  DF: mm/dd/yy  conn-ID 0
+01.04.2025 12:13:06 INFO: disconnect 127.0.0.1:49802 test_ta.exe users=(0 : 1 : 4), tables=(0 : 8)
+01.04.2025 12:13:08 INFO: connected  127.0.0.1:49807 test_tr.exe CP: EN  DF: mm/dd/yy  conn-ID 0
+01.04.2025 12:13:10 INFO: disconnect 127.0.0.1:49807 test_tr.exe users=(0 : 1 : 4), tables=(0 : 8)
+01.04.2025 12:13:12 INFO: connected  127.0.0.1:49809 test_var.exe CP: EN  DF: mm/dd/yy  conn-ID 0
+01.04.2025 12:13:16 INFO: disconnect 127.0.0.1:49809 test_var.exe users=(0 : 1 : 4), tables=(0 : 8)
+01.04.2025 12:13:17 INFO: connected  127.0.0.1:49811 test_var.exe CP: EN  DF: mm/dd/yy  conn-ID 0
+01.04.2025 12:13:21 INFO: disconnect 127.0.0.1:49811 test_var.exe users=(0 : 1 : 4), tables=(0 : 8)
