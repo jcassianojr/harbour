@@ -23,7 +23,7 @@ FUNCTION letomenu()
 
    LOCAL aAMBIENTE
 
-   cTIPOSQL := "LETODB"  // Passa para privada usadas nas funcoes aBaixo
+   cTIPOSQL := "LETO"  // Passa para privada usadas nas funcoes aBaixo
 
    aAMBIENTE  := SALVAA()
    cSERVERX   := PADR("//127.0.0.1:2812/",30," ")
@@ -327,5 +327,49 @@ FUNCTION leto_tables( cSrvAddr )
    RETURN ( iif( nChoices > 0, aResult[ nChoices ], "" ) )
 
 
+/*
+private Mydbf:="//127.0.0.1:2812/\Testdbf.dbf"
+private cfilter:='FIELD1="ABC"'
+dbCreate( Mydbf , { {"FIELD1","C",3,0} } , "LETO" )
+dbUsearea( .F. , "LETO" , Mydbf , NIL , .T. , .F. )
+dbSetfilter( {|| &cfilter } , cfilter )
+dbclearfilter()
+dbclosearea()
 
+
+Local cPATH := "//localhost:2812/" //n∆o precisa informar o caminho dos DBFÔs porque j† foi informado(configurado) no arquivo leotdb. ini
+usando setrdddefault() nao precisaou do path
+
+
+//Conectando com o servidor LetoDb.
+
+      nConect := leto_Connect( cPath)
+      IF nConect == -1
+          nRes := leto_Connect_Err()
+         IF nRes == LETO_ERR_LOGIN
+            alert( "Falha ao Logar" )
+         ELSEIF nRes == LETO_ERR_RECV
+           alert( "Error ao conectar" )
+         ELSEIF nRes == LETO_ERR_SEND
+            alert( "Erro de envio" )
+         ELSE
+            alert( "N∆o connectado ao servidor: " + cPath )
+         ENDIF
+         Return .F.
+      ENDIF
+
+cIndex  := cPATH+"meu_arquivo.cdx"
+
+cDbf := cPATH+"meu_aquivo.dbf"
+
+DbUseArea(.t.,'LETO',cDbf,"alias_xyz",.T.,.F.,'PTISO')
+If leto_file(cIndex)
+   DBSETINDEX( cIndex )
+Else
+   index on ...//seu c¢digo
+   index on ... //seu c¢digo
+EndIf
+
+
+*/
 

@@ -1,24 +1,25 @@
 liberar porta e app no firewall
 
 no ini
-mudar o caminho
-DataPath =d:\develop\modelos\folha\
+mudar o caminho desejado
+DataPath =d:\develop\modelos\letodb\
 
 descomentar server ip
 Server = 127.0.0.1
 IP = 127.0.0.1
 Port = 2812
+internal also used :2813
 
 
 executar com administrador
-server installation : fichier letoinstall.bat
+server installation 
 letodb.exe install
 
-deleting the server : fichier letouninstall.bat
+deleting the server 
 letodb.exe uninstall
 
-server shutdown : fichier letostop.bat
+server shutdown 
 net stop LetoDbf_Service
 
-launching the server : fichier letostart.bat
+launching the server 
 net start LetoDbf_Service
