@@ -230,12 +230,12 @@ LOCAL KEY
 aAMBIENTE := SALVAA()
 HB_dispbox(03,10,22,60,B_DOUBLE+" ")
 @ 03,24 SAY "DRIVER   ARQ IND MEMO"         
-OPCAO(4,24,"DBF&NTX   DBF NTX DBT     ",78)   //N 1 DBFNTX DBF/DBFFPT/DBFNTX
-OPCAO(5,24,"DBF&CDX   DBF CDX FPT     ",67)   //C 2 DBFCDX DBF/DBFFPT/HB_CDXRDD
-OPCAO(6,24,"&ADSCDX   DBF CDX FPT     ",65)   //A 3 ADSCDX
-OPCAO(7,24,"ADSNT&X   DBF NTX DBT     ",88)   //X 4 ADSNTX
-OPCAO(8,24,"ADSVF&P   VFP CDX FPT     ",80)   //P 5 ADSVFP
-OPCAO(9,24,"ADSAD&T   ADS ADI AD      ",84)   //T 6 ADSADT
+OPCAO( 4,24,"DBF&NTX   DBF NTX DBT     ",78)   //N 1 DBFNTX DBF/DBFFPT/DBFNTX
+OPCAO( 5,24,"DBF&CDX   DBF CDX FPT     ",67)   //C 2 DBFCDX DBF/DBFFPT/HB_CDXRDD
+OPCAO( 6,24,"&ADSCDX   DBF CDX FPT     ",65)   //A 3 ADSCDX
+OPCAO( 7,24,"ADSNT&X   DBF NTX DBT     ",88)   //X 4 ADSNTX
+OPCAO( 8,24,"ADSVF&P   VFP CDX FPT     ",80)   //P 5 ADSVFP
+OPCAO( 9,24,"ADSAD&T   ADS ADI ADT     ",84)   //T 6 ADSADT
 OPCAO(10,24,"D&BTCDX   DBF CDX DBT     ",66)  //B 7 DBTCDX DBFCDX/DBFFPT/DBTCDX
 OPCAO(11,24,"&SMTCDX   DBF CDX SMT     ",83)  //S 8 DBFCDX/DBFFPT/SMTCDX
 OPCAO(12,24,"&FPTCDX   DBF CDX FPT     ",70)  //F 9 FPTCDX DBFCDX/DBFFPT/FPTCDX
@@ -267,17 +267,12 @@ return TIPODBF
 rddregister hb_rddRegister
 rdd    super       fonte        memo
 
--nondbf
+-nondbf problemas con linha so chr(13) ou so chr(10) outro limitadores
 FCOMMA             fcomma.prg
 ARRAYRDD           arrayrdd.prg
 LOGRDD             logrdd.prg
 SDF                sdf1.prg
 DELIM              delim1.prg
-
--sql
-ADORDD
-
--ssd
 
 
 */
@@ -615,7 +610,6 @@ ENDCASE
 RETURN lRETU
 
 
-// ************************
 
 *+--------------------------------------------------------------------
 *+

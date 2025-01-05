@@ -167,13 +167,16 @@ FUNCTION LETO_DBFTOSRV(cSrvAddr)
    //melhorar antes da busca do dbf escolher rdd
    //como o rdddefault esta leto nao tras as extensoes
    //antes do connection setar novamente rdddefault leto
-   //usando exensoes dbfcdx por hora
+   //usando exensoes dbfcdx por horan
+    // tipodbfesc tem as extensao memo e indices no menu
    IF EMPTY(cEXTMEMO)
       cEXTMEMO:=".FPT"
    ENDIF
    IF EMPTY(cEXTINDEX)
       cEXTINDEX:=".CDX"
    ENDIF
+ //*.dbf, *.fpt, *.dbt, *.smt
+   //.CDX, .IDX, .MDX, .NTX, .NDX
    nConnect := LETO_CONNECT( cSrvAddr )
    IF nConnect >= 0
        IF File( cARQORI )
