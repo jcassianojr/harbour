@@ -1,30 +1,3 @@
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Programa  : adordd.prg
-// +
-// +
-// +
-// +     Sistema:
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024,  jcassiano
-// +
-// +
-// +
-// +
-// +
-// +    Documentado em 28-Dez-2024 as 10:06 am
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-
 /*
  * ADORDD - RDD to automatically manage Microsoft ADO
  *
