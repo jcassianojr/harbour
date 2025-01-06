@@ -1,6 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+    Created by Click! on 28-Dez-2024 at 10:08 am
+*+    Created by Click! on 6-Jan-2025 at  3:38 pm
 *+
 *+--------------------------------------------------------------------
 
@@ -189,6 +189,9 @@ dbudialeto.prg
   Function Dialeto_begin()
   Function Dialeto_commit()
   Function Dialeto_rollback()
+  Function Dialeto_DataBanco()
+  Function Dialeto_GetIdentity()
+  Function Dialeto_GetRowCount()
   Function Dialeto_SQL()
 
 dbudoc.prg
@@ -239,6 +242,17 @@ dbuindx.prg
   Function ntx_tag()
   Function ntx_exist()
   Function do_index()
+
+dbuleto.prg
+
+  Function letomenu()
+  Function LETO_SRVTODBF()
+  Function LETO_DELDBF()
+  Function leto_errocon()
+  Function leto_expformat()
+  Function LETO_DBFTOSRV()
+  Function LETO_INFO()
+  Function leto_tables()
 
 dbulib.prg
 
@@ -524,6 +538,7 @@ sql2dbf.prg
   Function sqlitemenu()
   Function sqllitedeltable()
   Function exportadbf()
+  Function C2SQLTS()
   Function C2SQL()
   Function sqltablestru()
   Function sqlitepack()

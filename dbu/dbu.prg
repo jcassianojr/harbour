@@ -1071,10 +1071,8 @@ while .T.
   // DBUseArea( <lNewArea> , <cDriver> , <cName>, <xcAlias> , <lShared> , <lReadOnly>,<cCodePage>,<nConnection> ) -> lSuccess
    IF lMODO
       dbUseArea( .T., USOVIA, (cARQ),, .F. , .F. )
-      //USE (cARQ) EXCLUSIVE NEW VIA USOVIA
    ELSE
       dbUseArea( .T., USOVIA, (cARQ),, .T. , .F. )
-      //USE (cARQ) SHARED NEW VIA USOVIA
    ENDIF
    if !neterr()
       exit

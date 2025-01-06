@@ -1,6 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+    Created by Click! on 28-Dez-2024 at 10:08 am
+*+    Created by Click! on 6-Jan-2025 at  3:38 pm
 *+
 *+--------------------------------------------------------------------
 
@@ -786,6 +786,10 @@ c2sql()         in sql2dbf.prg
               ( sql2dbf.prg  )   3 - function export2dbf()
                                  1 - function export2sql()
 
+c2sqlts()       in sql2dbf.prg
+
+  Called from ( sql2dbf.prg  )   1 - function c2sql()
+
 capprep()       in dbucopy.prg
 
   Called from ( dbu.prg      )   1 - function main()
@@ -1375,6 +1379,7 @@ hb_cwd()        in harbour.lib
               ( dbuadox.prg  )   1 - function adoximpdbf()
               ( dbudoc.prg   )   1 - function gravadoc()
               ( dbuedi.prg   )   1 - function editxt()
+              ( dbuleto.prg  )   1 - function leto_dbftosrv()
               ( dbulib.prg   )   3 - function copiardbfpara()
               ( dbumix.prg   )   1 - function miximpdbf()
               ( dbumy.prg    )   1 - function dbf2mysql()
@@ -1411,6 +1416,8 @@ hb_dispbox()    in harbour.lib
               ( dbucopy.prg  )   2 - function tog_delim()
                                  2 - function tog_sdf()
               ( dbuedit.prg  )   2 - function browse()
+              ( dbuleto.prg  )   1 - function letomenu()
+                                 1 - function leto_tables()
               ( dbulib.prg   )   1 - function inputbox()
                                  2 - function menusql()
                                  1 - function pegparexp()
@@ -1438,6 +1445,10 @@ hb_dtoc()       in harbour.lib
 
   Called from ( dbu.prg      )   1 - function lnkfun()
 
+hb_eol()        in harbour.lib
+
+  Called from ( dbuleto.prg  )  14 - function leto_info()
+
 hb_fileexists() in harbour.lib
                 or hbrtl.lib
 
@@ -1463,6 +1474,7 @@ hb_fnamesplit() in harbour.lib
               ( adoxb.prg    )   1 - function adosetdriver()
               ( dbuadox.prg  )   1 - function adoximpdbf()
               ( dbudoc.prg   )   1 - function fazerdbf()
+              ( dbuleto.prg  )   1 - function leto_dbftosrv()
               ( dbumix.prg   )   1 - function miximpdbf()
               ( dbumy.prg    )   1 - function dbf2mysql()
               ( dbuodbc.prg  )   1 - function odbcimpdbf()
@@ -1479,6 +1491,10 @@ hb_gtinfo()     in harbour.lib
 
   Called from ( dbu.prg      )   1 - function main()
 
+hb_gzcompress() in harbour.lib
+
+  Called from ( dbuleto.prg  )   2 - function leto_info()
+
 hb_hour()       in harbour.lib
 
   Called from ( dbu.prg      )   1 - function lnkfun()
@@ -1490,7 +1506,7 @@ hb_hset()       in harbour.lib
 hb_idlestate()  in harbour.lib
                 or hbrtl.lib
 
-  Called from ( dbu.prg      )   2 - function main()
+  Called from ( dbu.prg      )   1 - function main()
 
 hb_isnil()      in harbour.lib
 
@@ -1536,7 +1552,7 @@ hb_ntos()       in harbour.lib
 
   Called from ( adordd.prg   )   3 - static function ado_createfields()
               ( dbuedit.prg  )   1 - static function doget()
-              ( sql2dbf.prg  )  31 - function sqlitecreatetable()
+              ( sql2dbf.prg  )  33 - function sqlitecreatetable()
 
 hb_ntot()       in harbour.lib
 
@@ -1561,6 +1577,7 @@ hb_rddinfo()    in harbour.lib
 
   Called from ( dbucnvmemo.p )   2 - function convertmemo()
                                  4 - function converttipo()
+              ( dbuleto.prg  )   2 - function leto_dbftosrv()
               ( dbulib.prg   )   3 - function layout()
                                  1 - function xext()
               ( dbustru.prg  )   1 - function do_modstru()
@@ -1627,10 +1644,15 @@ hb_ttos()       in harbour.lib
 hb_version()    in harbour.lib
 
   Called from ( dbu.prg      )   1 - function main()
+              ( dbuleto.prg  )   1 - function leto_info()
               ( dbumy.prg    )   1 - function mysqlmenu()
               ( dbupg.prg    )   1 - function pgsqlmenu()
               ( mdb2dbf.prg  )   3 - function pegcfgbanco()
               ( sql2dbf.prg  )   1 - function sqlitemenu()
+
+hb_zuncompress( in harbour.lib
+
+  Called from ( dbuleto.prg  )   1 - function leto_info()
 
 help()          in dbu.prg
 
@@ -1696,6 +1718,7 @@ layout()        in dbulib.prg
   Called from ( dbu.prg      )   4 - function main()
               ( dbuadox.prg  )   1 - function adoxmenu()
               ( dbudoc.prg   )   1 - function dbetodbf()
+              ( dbuleto.prg  )   1 - function letomenu()
               ( dbulib.prg   )   1 - function menusql()
                                  1 - function pegparexp()
                                  1 - function rddnome()
@@ -1707,6 +1730,94 @@ layout()        in dbulib.prg
               ( dbuview.prg  )   1 - function draw_view()
               ( mdb2dbf.prg  )   1 - function mdbmenu()
               ( sql2dbf.prg  )   1 - function sqlitemenu()
+
+letomenu()      in dbuleto.prg
+
+  Called from ( dbu.prg      )   1 - function main()
+
+leto_connect()  <unresolved function>
+
+  Called from ( dbuleto.prg  )   1 - function leto_dbftosrv()
+                                 1 - function leto_deldbf()
+                                 1 - function leto_expformat()
+                                 2 - function leto_info()
+                                 1 - function leto_srvtodbf()
+                                 1 - function leto_tables()
+
+leto_connect_er <unresolved function>
+
+  Called from ( dbuleto.prg  )   1 - function leto_errocon()
+
+leto_dbftosrv() in dbuleto.prg
+
+  Called from ( dbuleto.prg  )   1 - function letomenu()
+
+leto_deldbf()   in dbuleto.prg
+
+  Called from ( dbuleto.prg  )   1 - function letomenu()
+
+leto_directory( <unresolved function>
+
+  Called from ( dbuleto.prg  )   1 - function leto_tables()
+
+leto_disconnect <unresolved function>
+
+  Called from ( dbuleto.prg  )   1 - function leto_dbftosrv()
+                                 1 - function leto_deldbf()
+                                 1 - function leto_info()
+                                 1 - function leto_srvtodbf()
+                                 1 - function leto_tables()
+
+leto_errocon()  in dbuleto.prg
+
+  Called from ( dbuleto.prg  )   1 - function leto_dbftosrv()
+                                 1 - function leto_deldbf()
+                                 1 - function leto_expformat()
+                                 1 - function leto_srvtodbf()
+                                 1 - function leto_tables()
+
+leto_expformat( in dbuleto.prg
+
+  Called from ( dbuleto.prg  )   1 - function letomenu()
+
+leto_fcopyfroms <unresolved function>
+
+  Called from ( dbuleto.prg  )   3 - function leto_srvtodbf()
+
+leto_fcopytosrv <unresolved function>
+
+  Called from ( dbuleto.prg  )   3 - function leto_dbftosrv()
+
+leto_ferase()   <unresolved function>
+
+  Called from ( dbuleto.prg  )   3 - function leto_deldbf()
+
+leto_info()     in dbuleto.prg
+
+  Called from ( dbuleto.prg  )   1 - function letomenu()
+
+leto_mgid()     <unresolved function>
+
+  Called from ( dbuleto.prg  )   1 - function leto_info()
+
+leto_mglog()    <unresolved function>
+
+  Called from ( dbuleto.prg  )   2 - function leto_info()
+
+leto_srvtodbf() in dbuleto.prg
+
+  Called from ( dbuleto.prg  )   1 - function letomenu()
+
+leto_tables()   in dbuleto.prg
+
+  Called from ( dbuleto.prg  )   1 - function letomenu()
+                                 1 - function leto_deldbf()
+                                 1 - function leto_expformat()
+                                 1 - function leto_srvtodbf()
+
+leto_udf()      <unresolved function>
+
+  Called from ( dbuleto.prg  )   3 - function leto_info()
 
 limparegdupdbf( in dbusincdbf.prg
 
@@ -1805,6 +1916,7 @@ mdg()           <unresolved function>
               ( dbuadox.prg  )   1 - function adoxdeltable()
               ( dbucnvmemo.p )   1 - function converttipo()
               ( dbudoc.prg   )   5 - function pegcsub()
+              ( dbuleto.prg  )   1 - function leto_deldbf()
               ( dbulib.prg   )   1 - function copiardbfpara()
               ( dbumix.prg   )   2 - function mixmenu()
               ( dbumy.prg    )   1 - function dbf2mysql()
@@ -1842,6 +1954,8 @@ mdt()           in dbulib.prg
                                  1 - function adoximpdbf()
               ( dbucnvmemo.p )   5 - function convertmemo()
                                  5 - function converttipo()
+              ( dbuleto.prg  )   4 - function leto_errocon()
+                                 2 - function leto_expformat()
               ( dbulib.prg   )   3 - function copiardbfpara()
                                  7 - function copyto()
                                  1 - function menusql()
@@ -1970,6 +2084,7 @@ multidocg()     in dbudoc.prg
 
   Called from ( dbuadox.prg  )   1 - function adoxexpdbf()
               ( dbudoc.prg   )   1 - function multidocs()
+              ( dbuleto.prg  )   1 - function leto_expformat()
               ( dbumix.prg   )   1 - function mixexpdbf()
                                  1 - function mixexpformat()
               ( dbumyexp.prg )   1 - function myexpformat()
@@ -2449,6 +2564,7 @@ oindex:columns: <unresolved function>
 opcao()         <unresolved function>
 
   Called from ( dbuadox.prg  )   7 - function adoxmenu()
+              ( dbuleto.prg  )   6 - function letomenu()
               ( dbulib.prg   )   5 - function menusql()
                                 14 - function pegtipodoc()
                                 18 - function tipodbfesc()
@@ -2476,7 +2592,7 @@ opentipoarq()   in mdb2dbf.prg
                                  1 - function mdbcria()
                                  1 - function mdbexp()
                                  1 - function mdbimpdbf()
-                                 1 - function pegcfgbanco()
+                                 2 - function pegcfgbanco()
 
 open_dbf()      in dbuview.prg
 
@@ -2802,6 +2918,7 @@ oxconection:ope <unresolved function>
 pegcfgbanco()   in mdb2dbf.prg
 
   Called from ( dbuadox.prg  )   1 - function adoxmenu()
+              ( dbuleto.prg  )   1 - function letomenu()
               ( dbumix.prg   )   1 - function mixmenu()
               ( dbuodbc.prg  )   1 - function odbcmenu()
               ( mdb2dbf.prg  )   1 - function mdbmenu()
@@ -2812,6 +2929,7 @@ pegcsub()       in dbudoc.prg
               ( dbudoc.prg   )   1 - function geradoc()
                                  1 - function gravadoc()
                                  1 - function multidocs()
+              ( dbuleto.prg  )   1 - function leto_expformat()
               ( dbulib.prg   )   1 - function copiardbfpara()
               ( dbumix.prg   )   1 - function mixexpdbf()
                                  1 - function mixexpformat()
@@ -2828,6 +2946,7 @@ pegparexp()     in dbulib.prg
               ( dbudoc.prg   )   1 - function geradoc()
                                  1 - function gravadoc()
                                  1 - function multidocs()
+              ( dbuleto.prg  )   1 - function leto_expformat()
               ( dbulib.prg   )   1 - function copiardbfpara()
               ( dbumix.prg   )   1 - function mixexpdbf()
                                  1 - function mixexpformat()
@@ -2849,6 +2968,7 @@ pegtipodoc()    in dbulib.prg
               ( dbudoc.prg   )   1 - function geradoc()
                                  1 - function gravadoc()
                                  1 - function multidocs()
+              ( dbuleto.prg  )   1 - function leto_expformat()
               ( dbulib.prg   )   1 - function copiardbfpara()
               ( dbumix.prg   )   1 - function mixexpdbf()
                                  1 - function mixexpformat()
@@ -3021,9 +3141,11 @@ rddnome()       in dbulib.prg
               ( dbucnvmemo.p )   5 - function convertmemo()
                                  5 - function converttipo()
               ( dbudoc.prg   )   1 - function dbetodbf()
+              ( dbuleto.prg  )   1 - function letomenu()
               ( dbulib.prg   )   2 - function copiardbfpara()
                                  1 - function tipodbfesc()
               ( dbumix.prg   )   1 - function miximpdbf()
+                                 1 - function mixmenu()
               ( dbumy.prg    )   2 - function dbf2mysql()
               ( dbuodbc.prg  )   1 - function odbcimpdbf()
               ( dbupg.prg    )   2 - function dbf2pgsql()
@@ -3053,6 +3175,10 @@ read_key()      in dbuutil.prg
               ( dbuview.prg  )   1 - function set_relation()
                                  1 - function set_view()
 
+repl()          <unresolved function>
+
+  Called from ( dbuleto.prg  )   2 - function leto_info()
+
 replvars()      <unresolved function>
 
   Called from ( dbusincdbf.p )   2 - function dbusincdbf()
@@ -3062,6 +3188,8 @@ restaa()        <unresolved function>
   Called from ( dbuadox.prg  )   1 - function adoxmenu()
               ( dbucnvmemo.p )   3 - function convertmemo()
                                  3 - function converttipo()
+              ( dbuleto.prg  )   1 - function letomenu()
+                                 1 - function leto_tables()
               ( dbulib.prg   )   1 - function copiardbfpara()
                                  1 - function inputbox()
                                  1 - function menusql()
@@ -3108,6 +3236,8 @@ salvaa()        <unresolved function>
   Called from ( dbuadox.prg  )   1 - function adoxmenu()
               ( dbucnvmemo.p )   1 - function convertmemo()
                                  1 - function converttipo()
+              ( dbuleto.prg  )   1 - function letomenu()
+                                 1 - function leto_tables()
               ( dbulib.prg   )   1 - function copiardbfpara()
                                  1 - function inputbox()
                                  1 - function menusql()
@@ -3374,6 +3504,9 @@ tiraext()       <unresolved function>
               ( dbucopy.prg  )   1 - function copybkdbf()
               ( dbudoc.prg   )   1 - function dbetodbf()
                                  1 - function multidocg()
+              ( dbuleto.prg  )   1 - function leto_deldbf()
+                                 2 - function leto_expformat()
+                                 1 - function leto_srvtodbf()
               ( dbumix.prg   )   1 - function mixexpdbf()
                                  1 - function mixexpformat()
               ( dbumyexp.prg )   1 - function myexpformat()
@@ -3581,6 +3714,7 @@ win_getopenfile in hbwin.lib
 
   Called from ( dbuadox.prg  )   1 - function adoximpdbf()
               ( dbuedi.prg   )   1 - function editxt()
+              ( dbuleto.prg  )   1 - function leto_dbftosrv()
               ( dbulib.prg   )   3 - function copiardbfpara()
               ( dbumix.prg   )   1 - function miximpdbf()
               ( dbumy.prg    )   1 - function dbf2mysql()
@@ -3742,6 +3876,7 @@ zei_fort()      <unresolved function>
                                  2 - function gravadoc()
                                  2 - function pegtipo2val()
               ( dbuindx.prg  )   5 - function do_index()
+              ( dbuleto.prg  )   1 - function leto_expformat()
               ( dbulib.prg   )   8 - function appendfrom()
                                  1 - function copyto()
               ( dbumix.prg   )   3 - function mixexpdbf()
@@ -3774,7 +3909,7 @@ __dbsort()      <unresolved function>
 
 __setcentury()  <unresolved function>
 
-  Called from ( dbu.prg      )   5 - function main()
+  Called from ( dbu.prg      )   4 - function main()
 
 __xrestscreen() <unresolved function>
 
