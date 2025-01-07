@@ -25,10 +25,6 @@
 // +--------------------------------------------------------------------
 // +
 
-/*
-http://www.pctoledo.com.br/forum/viewtopic.php?f=39&t=17470&start=75#p118783
-*/
-
 
 /*  Msxml2.XMLHTTP.6.0 Msxml2.XMLHTTP.3.0
 1. Microsoft XML, v 3.0.
@@ -38,12 +34,11 @@ http://www.pctoledo.com.br/forum/viewtopic.php?f=39&t=17470&start=75#p118783
 */
 
 // https://brasilaberto.com/blog/posts/5-melhores-apis-de-cep-2023
-//
 // https://api.brasilaberto.com/v1/zipcode/01001000
-// *** https://viacep.com.br/ws/01001000/json/
+// https://viacep.com.br/ws/01001000/json/
 // https://opencep.com/v1/15050305
 // https://brasilapi.com.br/api/cep/v2/01001000
-// *** https://cdn.apicep.com/file/apicep/06233-030.json
+// https://cdn.apicep.com/file/apicep/06233-030.json
 
 #include "tshead.ch"
 
@@ -94,7 +89,6 @@ FUNCTION Main()
    lAPAGANAO    := MSGYESNO( "Apaga Nao encontrado" )
 
    lCHECKVIACEP := MSGYESNO( "Usar viacep" )
-// lCHECKAPICOR  :=MSGYESNO("Usar apicor")
    lCHECKREPVIR  := MSGYESNO( "Usar RepVirtual" )
    lCHECKAPICEP  := MSGYESNO( "Usar apicep" )
    lCHECKAPIAWE  := MSGYESNO( "Usar apiAWE" )
@@ -180,22 +174,9 @@ FUNCTION Main()
 
                lTEMCEP := .F.
 
-            /*
-             if lCHECKAPICOR //correio web primeria busca
-          ? '  CEPAPI:'+ cCEP
-                ?
-           ConsultaCep( cCep, @cBairro, @cCidade, @cEndereco, @cUF, @cId )
-        IF ! empty(cEndereco+cBairro)
-                    GRAVARUAIMP()
-                    lTEMCEP:=.T.
-        else
-                    GRAVARUANAO('nao localizado web correio')
-                 endif
-             endif
-             */
 
                IF lCHECKVIACEP   // via cep web segunda busca
-                  ? '  CEPCOR:' + cCEP
+                  ? '  CEPVIA:' + cCEP
                   ?
                   oCep := cepWeb( cCEP )
                   IF !oCep == NIL
@@ -476,46 +457,6 @@ PROCEDURE CepRepublica( xCep )
    cTIPORUA  := XmlNode( cXml, "tipo_logradouro" )
 
    RETURN .T.
-
-/*
-STATIC FUNCTION ConsultaCep( cCep, cBairro, cCidade, cEndereco, cUF, cId )
-
-   LOCAL cUrlWs := [https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente]
-   LOCAL oSefaz
-
-   WITH OBJECT oSefaz := SefazClass():New()
-      :cSoapUrl := cUrlWs
-      :cXmlSoap := SoapEnvelope( cCep )
-      :MicrosoftXmlSoapPost()
-      :cXmlRetorno := XmlTransform( :cXmlRetorno )
-      cCep      := XmlNode( :cXmlRetorno, "cep" )
-      cBairro   := XmlNode( :cXmlRetorno, "bairro" )
-      cCidade   := XmlNode( :cXmlRetorno, "cidade" )
-      cEndereco := XmlNode( :cXmlRetorno, "end" )
-      cUF       := XmlNode( :cXmlRetorno, "uf" )
-      cID       := XmlNode( :cXmlRetorno, "id" )
-   ENDWITH
-  // ? oSefaz:cXmlRetorno
-
-   RETURN AT("CEP NAO ENCONTRADO",oSefaz:cXmlRetorno)=0
-   //RETURN NIL
-
-STATIC FUNCTION SoapEnvelope( cCEP )
-
-   LOCAL cxMLSoap
-
-   cxMLSoap := [<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">]
-   cxMLSoap +=    [<soapenv:Header/>]
-   cxMLSoap +=    [<soapenv:Body>]
-   cxMLSoap +=       [<cli:consultaCEP>]
-   //cxMLSoap +=          [<!--Optional:-->]
-   cxMLSoap +=          [<cep>] + cCEP + [</cep>]
-   cxMLSoap +=       [</cli:consultaCEP>]
-   cxMLSoap +=    [</soapenv:Body>]
-   cxMLSoap += [</soapenv:Envelope>]
-
-   RETURN cxMLSoap
-*/
 
 
 // +--------------------------------------------------------------------
