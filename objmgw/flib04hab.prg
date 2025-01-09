@@ -107,11 +107,20 @@ FUNCTION INFOR
       nLASTREC := LastRec()
       zei_fort( nLASTREC,,, 0 )
 
-      IF Empty( mTAG )
-         INDEX ON &mCHAVE TO &mINDICE EVAL ZEI_FORT( nLASTREC,,, 1 )
+
+    IF Empty( mTAG )
+         ordCondSet(,,,, {|| ZEI_FORT( nLASTREC,,, 1 )},, RecNo(),,,,,,,,,,,,, ) 
+         ordCreate( mINDICE,, mCHAVE, {|| &mCHAVE}, )
       ELSE
-         INDEX ON &mCHAVE TAG &mTAG. EVAL ZEI_FORT( nLASTREC,,, 1 )
+         ordCondSet(,,,, {|| ZEI_FORT( nLASTREC,,, 1 )},, RecNo(),,,,,,,,,,,,, ) 
+         ordCreate(, mTAG, mCHAVE, {|| &mCHAVE}, )
       ENDIF
+
+      //IF Empty( mTAG )
+      //   INDEX ON &mCHAVE TO &mINDICE EVAL ZEI_FORT( nLASTREC,,, 1 )
+      //ELSE
+      //   INDEX ON &mCHAVE TAG &mTAG. EVAL ZEI_FORT( nLASTREC,,, 1 )
+      //ENDIF
    NEXT X
    dbCloseArea()
    SetColor( "W/N,N/W" )

@@ -149,13 +149,16 @@ FUNCTION MEMOPACK( packlist, lMES, lINFO, cUSORDD )  // Array Arquivos se texto 
          COPY TO &temp_file WHILE ZEI_FORT( nLASTREC,,, 1 )
 
          USE &temp_file
+         //DBUseArea( <lNewArea> , <cDriver> , <cName>, <xcAlias> , <lShared> , <lReadOnly>,<cCodePage>,<nConnection> ) -> lSuccess         
+         dbUseArea( .F.,, temp_file,, .F., .F. )
+
 
          // Recupera o parametro deleted original.
          Set( _SET_DELETED, old_delete )
 
          IF LastRec() = real_recs
             // Copia com exito se a contagem de registros for a mesma.
-            USE
+            dbCloseArea() //USE
             IF File( temp_file + cNTXEXT )
 
                // Remove os arquivos antigos.

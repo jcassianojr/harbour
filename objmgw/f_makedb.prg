@@ -355,7 +355,11 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
                   cTAG      := new_index[ i, 1 ]
                   cCHAVEDBF := new_index[ i, 2 ]
                   cCAMINDEX :=cCaminho+dbf_name
-                  INDEX ON &cCHAVEDBF TAG &cTAG TO &cCAMINDEX
+                  ordCondSet(,,,,,, RecNo(),,,,,,,,,,,,, ) 
+                  //
+                  ordCreate( cCAMINDEX, cTAG, cCHAVEDBF, {|| &cCHAVEDBF}, )
+                 // OrdCreate( <cIndexFile>, <cIndexName> , <cIndexExpr>, <bIndexExpr>, <lUnique> ) -> NIL
+                  //INDEX ON &cCHAVEDBF TAG &cTAG TO &cCAMINDEX
                NEXT I
             ENDIF
             dbCloseArea()
