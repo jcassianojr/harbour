@@ -44,7 +44,9 @@ REQUEST SDDODBC
 REQUEST SDDMY
 REQUEST SDDPG
 REQUEST SDDSQLITE3
-// REQUEST SDDOCI //erro ao iniciar dbu testar outras versoes ocilib.dll
+//REQUEST SDDOCI //compilou e abriu sem erro versao 1.77 incluido -locilib  e  sddoci.hbc no hpb
+//foram usadas compilacao independentes pelo bat da pasta harbour/contrib copiadas e pasta lib padrao
+//na compilacao 64 ainda nao esta encontra ocilib teste futuramente o porque
 
 ANNOUNCE RDDSYS
 

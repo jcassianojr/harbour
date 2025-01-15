@@ -4,6 +4,9 @@
 #-vcshead=vcshead.ch
 #-tshead=tshead.ch
 #-manifest=dbu.Manifest  comentado erro compilacao 32 bits
+#-locilib
+-m -n -w0 -es2 -ge1
+
 
 d:\develop\harbour\dbu\dbu.rc
 
