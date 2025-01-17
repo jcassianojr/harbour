@@ -208,6 +208,7 @@ FUNCTION multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, cARQDIC, aESTRU )
    IF tDOC = 2 // Verificando o tamanho utilizado por cada campo
       PEGTIPO2VAL()
    ENDIF
+   altd()
    GRAVADOC( tdoc, cARQDIC, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCRECNO )
 
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -269,6 +270,7 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK )
 // +
 
 FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCRECNO )
+
 
    LOCAL cARQGRV := cARQ
    LOCAL cLIN := hb_osNewLine()
@@ -450,8 +452,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          NEXT j
       ENDIF
 
+      altd()
       // cabecario sql  nao precisa loop nos fields
-      IF tDOC = 7 .AND. cSUBTIPO <> "ISO"
+      IF (tDOC = 7 .AND. cSUBTIPO <> "ISO") .OR. (tDOC = 5 .AND. cSUBTIPO = "SQL" .AND. lDOCCAB ) //.AND. .NOT. lDOCDAD)
          aUSO := aESTRU
          IF Empty( aESTRU )
             aUSO := dbStruct()
@@ -462,9 +465,15 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          CASE ZANOFOR = "SQLITE"
             cTEXTO := SqliteCreateTable( cARQ, aUSO, "SQLITE" )
          CASE  ZANOFOR = "MYSQL" .OR. ZANOFOR = "MYSQL64" .OR. ZANOFOR = "MARIADB"
-            cTEXTO := SqliteCreateTable( cNOMETABELA, aSTRU, "MYSQL" )
+            cTEXTO := SqliteCreateTable( cARQ, aUSO, "MYSQL" )
+         CASE  ZANOFOR = "PGSQL" 
+            cTEXTO := SqliteCreateTable( cARQ, aUSO, "PGSQL" )  
+        CASE  ZANOFOR = "ORACLE" 
+            cTEXTO := SqliteCreateTable( cARQ, aUSO, "ORACLE" )      
          CASE  ZANOFOR = "MDB" .OR. ZANOFOR = "ACCESS"
-            cTEXTO := SqliteCreateTable( cNOMETABELA, aSTRU, "MDB" )
+            cTEXTO := SqliteCreateTable( cARQ, aUSO, "MDB" )
+         CASE  ZANOFOR = "MSSQL"
+            cTEXTO := SqliteCreateTable( cARQ, aUSO, "MSSQL" )   
          OTHERWISE
             cTEXTO := "CREATE TABLE " + cARQ + hb_osNewLine()
             cTEXTO += " ("
@@ -489,7 +498,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             cTEXTO += ") ; "  + cLIN
          ENDCASE
 
+        
          nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
+         cTEXTO    +=  hb_osNewLine()
          FOR j = 1 TO  nIndexes
             cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
             cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
@@ -537,7 +548,10 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
    IF tDOC = 3  .OR. tDOC = 2
       cTEXTO += '+-----+------------+----------+-----+----+------------------------------------+' + cLIN
    ENDIF
-   IF tDOC = 4
+   
+   
+   
+   IF tDOC = 4 
       cTEXTO += 'ENDDEF' + cLIN
       nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
       IF nIndexes > 0

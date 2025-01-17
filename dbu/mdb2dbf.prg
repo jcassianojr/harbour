@@ -100,6 +100,7 @@ WHILE .T.
    OPCAO(7,24,"Exportar Tabela &Formatos  ",69)   //F 70
    OPCAO(8,24,"&Database Selecionar       ",68)   //D 68
    OPCAO(9,24,"&Exportar  DBF             ",69)   //E 69
+   OPCAO(10,24,"&SQL Create DBF           ",83)   //S 83
    KEY := menu(1,0)
    DO CASE
    CASE KEY = 1
@@ -117,6 +118,16 @@ WHILE .T.
       ENDIF
    CASE KEY = 6
       MDBEXP(1)
+   CASE KEY = 7  
+      tDOC = 5 //SQL
+      ZANOFOR := cTIPOSQL
+      zEXPOREXT = "SQL"
+      lDOCCAB:=MDG( "Gravar Informacao Estrutura" )
+      lDOCDAD:=MDG( "Gravar Dados" )
+      lDOCRECNO:=.F. //MDG( "Incluir Recno()/ID" )
+      cSUBTIPO:="SQL"
+      cMASK:="*.DBF"
+      FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
    OTHERWISE
       EXIT
    ENDCASE

@@ -259,7 +259,7 @@ STATIC FUNCTION xhb_DefError( oError )
 
 // Set NetErr() of there was a database open error
    IF oError:genCode == EG_OPEN .AND. ;
-         oError:osCode == 32 .AND. ;
+         (oError:osCode == 32 .OR. oError:osCode == 5 ).AND. ;
          oError:canDefault
       NetErr( .T. )
       RETURN .F.
