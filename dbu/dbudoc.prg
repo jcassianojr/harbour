@@ -603,6 +603,8 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += clin + "[ORACLE]"
       cTEXTO += clin + SqliteCreateTable( cARQ, aESTRU, "ORACLE" )
       CTEXTO += clin + cINDEXTEXTO
+      //
+      CTEXTO += GERADBML(cARQ,aESTRU)
 
    ENDIF
 
@@ -965,6 +967,89 @@ FUNCTION DBETODBF( cMASK, lLAY, lCRIA )
    RETURN .T.
 
 
+// +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+// +
+// +    Function  GERADBML()
+// +
+// +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+// +
+
+FUNCTION GERADBML(cARQ,aUSO)
+/*
+Table table_name {
+  column_name column_type [column_settings]
+}
+
+// table belonged to a schema
+Table schema_name.table_name {
+  column_name column_type [column_settings]
+Note: 'Stores user data'  
+}
+
+created_at timestamp [default: `now()`]
+column_name column_type [note: 'replace text here']
+
+*/
+LOCAL cLINHA
+LOCAL K
+LOCAL j
+cLINHA:=HB_OSNEWLINE()
+cLINHA+="[DBML]"+HB_OSNEWLINE()
+cLINHA+="Table "+cARQ+" {"+HB_OSNEWLINE()
+FOR K:= 1 TO lEN(aUSO)
+
+   cLINHA += CHR(34)+AllTrim( aUSO[ K ][ DBS_NAME ] ) +CHR(34)
+        DO CASE
+               CASE aUSO[ K ][ DBS_TYPE ] = "C"
+                    cLINHA += " CHAR (" + AllTrim( Str( aUSO[ K ][ DBS_LEN ] ) ) + ")"
+               CASE aUSO[ K ][ DBS_TYPE ] = "D"
+                   cLINHA += " DATETIME "
+                //PGSQL  TIMESTAMP   
+                   
+               CASE aUSO[ K ][ DBS_TYPE ] = "B"
+                   cLINHA += " BOOLEAN"   
+                   //" TINYINT(1)" SQL
+               CASE aUSO[ K ][ DBS_TYPE ] = "N"
+                   IF aUSO[ K ][DBS_DEC] =0
+                     cLINHA += " INTEGER [default: 0]"
+                   ELSE
+                     cLINHA += " DECIMAL (" + AllTrim( Str( aUSO[ K ][ DBS_LEN ] ) ) + "," + AllTrim( Str( aUSO[ K ][ DBS_DEC ] ) ) + ") [default: 0]"
+                   ENDIF  
+               //CASE 
+               //    "BYTEA"    PGSQL BYNARY
+               CASE aUSO[ K ][ DBS_TYPE ] = "M"   
+                    cLINHA += " LONGTEXT"
+        ENDCASE
+    cLINHA+= HB_OSNEWLINE()          
+               
+  //"TIPO" CHAR(20)
+NEXT K
+ // Indexes {
+ //   TIPO [name: "TIPO"]
+  //}
+//   Indexes {
+//    DOCUMENTO [name: "DOCUMENTO"]
+//    NOVODOC [name: "NOVODOC"]
+//    (TIPO, NUMERO) [name: "TIPONUMERO"]
+//  }
+ nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
+IF nIndexes>0
+    cLINHA+="  Indexes {" +HB_OSNEWLINE()
+         FOR j = 1 TO  nIndexes
+            cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
+            cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
+            cLINHA+= " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) "
+            cLINHA+= " [name: "+CHR(34)+cINDEXNAME+CHR(34)+"]" +HB_OSNEWLINE() 
+            //cSQLINDEX := "create index " + cINDEXNAME + " on " + cARQ + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;"
+            //cTEXTO += cSQLINDEX + hb_osNewLine()
+         NEXT j 
+    cLINHA+= HB_OSNEWLINE()     
+    cLINHA+=" }" +HB_OSNEWLINE()     
+ ENDIF 
+  
+  
+cLINHA+="}"+HB_OSNEWLINE()
+RETURN cLINHA
 
 
 // + EOF: DBUDOC.PRG
