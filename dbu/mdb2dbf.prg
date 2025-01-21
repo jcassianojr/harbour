@@ -152,18 +152,26 @@ return nil
 *+
 function pegcfgbanco()
 
+
 IF cTIPOSQL="LETO"
-   cSERVERX   := PADR("//127.0.0.1:2812/",30," ")
+   cSERVERX   := PADR("//127.0.0.1:2812/",30," ")   //port 2812
 ENDIF   
 
 IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-   cUSERX := PADR("root",30," ")
+   cUSERX := PADR("root",30," ")   //mariadb port  3306
 ENDIF
 
 IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-   cUSERX := PADR("postgres",30," ")
+   cUSERX := PADR("postgres",30," ") //pgssql port 5432
 ENDIF
 
+
+//mariadb 3306
+//mysql 
+//mssql sa
+//pgsal postgres 5432
+//oracle 
+//firebird  3050 sysdbf
 
 //
 // ajustes nomes de drivers para 32 e 64 bits
