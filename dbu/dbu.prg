@@ -524,7 +524,7 @@ setar_b[7] = "sysfunc = 0"
 
 util_m := {"Rem Reg Dup","Exportar","Sort DBF",;
  "FixarTodos","ZeraTodos","DBEs->DBF","Recriar","CNV Memos","Sinc DBFs","Converter",;
- "Format->DBF","sem uso","sem uso","sem uso","sem uso","sem uso","sem uso"}
+ "Format->DBF","SQL e DBML","sem uso","sem uso","sem uso","sem uso","sem uso"}
 util_b := {.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.}
 //FOR X=5 TO 16
 //     util_b[x]:="EMPTY(cur_dbf)"
@@ -662,7 +662,14 @@ do while .T.
       case M->func_sel = 11
          copiardbfpara(2)   //append formatos para dbf
       case M->func_sel = 12
-         //    MENUSQL("SQLITE")
+          mdltodos()
+          Sqltodos("SQLITE")
+          Sqltodos("MSSQL")
+          Sqltodos("MYSQL")
+          Sqltodos("POSTGRESQL")
+          Sqltodos("ACCESS")
+          Sqltodos("ORACLE")
+      
       case M->func_sel = 13
          //     MENUSQL("MARIADB")
       case M->func_sel = 14
@@ -720,7 +727,7 @@ do while .T.
          // GERADBF( 9 )
       otherwise
          if empty(M->cur_dbf)
-            view_err := "Nao h  arquivo de dados na corrente area selecionada"
+            view_err := "Nao ha arquivo de dados na corrente area selecionada"
          else
             do case
             case M->func_sel = 2

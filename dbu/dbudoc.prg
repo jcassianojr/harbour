@@ -974,7 +974,7 @@ FUNCTION DBETODBF( cMASK, lLAY, lCRIA )
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // +
 
-FUNCTION GERADBML(cARQ,aUSO)
+FUNCTION GERADBML(cARQ,aUSO,lCAB)
 /*
 Table table_name {
   column_name column_type [column_settings]
@@ -993,8 +993,21 @@ column_name column_type [note: 'replace text here']
 LOCAL cLINHA
 LOCAL K
 LOCAL j
+IF VALTYPE(cARQ)<>"C"
+    cARQ:=ALIAS()
+ENDIF
+IF VALTYPE(AUSO)<>"A"
+    aUSO:=DBSTRUCT()
+ENDIF
+IF VALTYPE(lCAB)<>"L"
+    lCAB:=.T.
+ENDIF
+
+
 cLINHA:=HB_OSNEWLINE()
-cLINHA+="[DBML]"+HB_OSNEWLINE()
+IF lCAB
+    cLINHA+="[DBML]"+HB_OSNEWLINE()
+ENDIF    
 cLINHA+="Table "+cARQ+" {"+HB_OSNEWLINE()
 FOR K:= 1 TO lEN(aUSO)
 

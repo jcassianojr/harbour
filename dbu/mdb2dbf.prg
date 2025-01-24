@@ -101,6 +101,9 @@ WHILE .T.
    OPCAO(8,24,"&Database Selecionar       ",68)   //D 68
    OPCAO(9,24,"&Exportar  DBF             ",69)   //E 69
    OPCAO(10,24,"&SQL Create DBF           ",83)   //S 83
+   
+   OPCAO(11,24,"DBF &TO DBML               ",85)   //T 85
+   
    KEY := menu(1,0)
    DO CASE
    CASE KEY = 1
@@ -118,16 +121,22 @@ WHILE .T.
       ENDIF
    CASE KEY = 6
       MDBEXP(1)
-   CASE KEY = 7  
-      tDOC = 5 //SQL
-      ZANOFOR := cTIPOSQL
-      zEXPOREXT = "SQL"
-      lDOCCAB:=MDG( "Gravar Informacao Estrutura" )
-      lDOCDAD:=MDG( "Gravar Dados" )
-      lDOCRECNO:=.F. //MDG( "Incluir Recno()/ID" )
-      cSUBTIPO:="SQL"
-      cMASK:="*.DBF"
-      FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
+   CASE KEY = 7 
+        IF MDG("Individual") 
+          tDOC = 5 //SQL
+          ZANOFOR := cTIPOSQL
+          zEXPOREXT = "SQL"
+          lDOCCAB:=MDG( "Gravar Informacao Estrutura" )
+          lDOCDAD:=MDG( "Gravar Dados" )
+          lDOCRECNO:=.F. //MDG( "Incluir Recno()/ID" )
+          cSUBTIPO:="SQL"
+          cMASK:="*.DBF"
+          FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
+        else
+          sqltodos(cTIPOSQL)
+        endif  
+   CASE KEY=8
+        mdltodos()   
    OTHERWISE
       EXIT
    ENDCASE
@@ -1991,7 +2000,17 @@ endif
 RETURN
 
 
+function mdltodos()
+cTEXTO:=""
+FAZERDBF( {|| cTEXTO+=GERADBML(,,.F.) }, .F. )
+hb_MemoWrit("estrutura.DBML", cTEXTO ) 
+RETURN .T.
 
+function sqltodos(cTIPOSQL)
+cTEXTO:=""
+FAZERDBF( {|| cTEXTO+=SqliteCreateTable( , , cTIPOSQL,.T. ) }, .F. )
+hb_MemoWrit(cTIPOSQL+".sql", cTEXTO ) 
+RETURN .T.
 
 
 *+ EOF: mdb2dbf.prg

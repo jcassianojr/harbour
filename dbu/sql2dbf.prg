@@ -847,7 +847,7 @@ FUNCTION MDPCHAVEI( cICHAVE )   // Cria string campo1,campo2,... para create ind
 // +
 // +
 // +
-FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
+FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX )
 
    LOCAL mSQL
    LOCAL i
@@ -857,6 +857,19 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
    IF ValType( cTIPOSQL ) <> "C"
       cTIPOSQL := "SQLITE"
    ENDIF
+   
+   
+   IF VALTYPE(cTablename)<>"C"
+      cTablename:=ALIAS()
+   ENDIF
+   IF VALTYPE(aStruct)<>"A"
+     aStruct:=DBSTRUCT()
+   ENDIF
+   
+    IF VALTYPE(lINDEX)<>"L"
+      lINDEX:=.F.
+   ENDIF
+   
    
    llMDB:=.F.
    llACCDB:=.F.
@@ -1186,6 +1199,19 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL )
       ENDCASE
    NEXT
    mSql += ")"
+   mSQL +=HB_OSNEWLINE()
+   
+   IF lINDEX
+      nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
+      mSQL    +=  hb_osNewLine()
+      FOR j = 1 TO  nIndexes
+          cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
+          cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
+          cSQLINDEX := "create index " + cINDEXNAME + " on " + cTABLENAME + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;"
+          mSQL += cSQLINDEX + hb_osNewLine()
+     NEXT j
+      mSQL +=HB_OSNEWLINE()
+   ENDIF
 
    RETURN msql
 
