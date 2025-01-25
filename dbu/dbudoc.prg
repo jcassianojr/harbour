@@ -1019,12 +1019,13 @@ FOR K:= 1 TO lEN(aUSO)
                    cLINHA += " DATETIME "
                 //PGSQL  TIMESTAMP   
                    
-               CASE aUSO[ K ][ DBS_TYPE ] = "B"
+               CASE aUSO[ K ][ DBS_TYPE ] = "L"
                    cLINHA += " BOOLEAN"   
                    //" TINYINT(1)" SQL
                CASE aUSO[ K ][ DBS_TYPE ] = "N"
                    IF aUSO[ K ][DBS_DEC] =0
-                     cLINHA += " INTEGER [default: 0]"
+                     //    cLINHA += " INTEGER [default: 0]"
+                     cLINHA += " DECIMAL (" + AllTrim( Str( aUSO[ K ][ DBS_LEN ] ) ) +  ") [default: 0]"
                    ELSE
                      cLINHA += " DECIMAL (" + AllTrim( Str( aUSO[ K ][ DBS_LEN ] ) ) + "," + AllTrim( Str( aUSO[ K ][ DBS_DEC ] ) ) + ") [default: 0]"
                    ENDIF  
