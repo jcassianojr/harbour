@@ -654,5 +654,21 @@ ENDIF
 RETURN
 
 
+
+FUNCTION ArraytoTexto( a, cDelim )  //usado filetoemial flib08 app thunder (outros usos futuros)
+LOCAL cRet := ""
+AEval( a, {|e| cRet := cRet + e + cDelim } )
+RETURN hb_strShrink( cRet )
+
+FUNCTION WaitProcess( cProcess )   //usado filetoemial flib08 app thunder  (outros usos futuros)
+LOCAL hProcess := hb_ProcessOpen( cProcess )
+   IF ! ( hProcess == -1 )
+      DO WHILE hb_ProcessValue( hProcess, .T. ) == 0
+          hb_IdleSleep( 0.1 )
+      ENDDO
+      hb_ProcessClose( hProcess, .T. )
+   ENDIF
+   RETURN NIL
+
 *+ EOF: comp.prg
 *+

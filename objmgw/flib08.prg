@@ -817,6 +817,11 @@ retu .t.
 FUNCTION FILETOEMAIL(cARQ,cASSUNTO,cCORPOMSG)
 
 LOCAL cServerIP,nPort,cFrom,aTo,aArqEmail,cUser,cPass,cPop,cVAR
+LOCAL cTELA
+LOCAL nOPCAO
+LOCAL lVAR
+LOCAL aUSO
+LOCAL cParams
 aUSO := SALVAA()
 cTO  := SPACE(60)
 IF VALTYPE(cASSUNTO) <> "C"
@@ -840,6 +845,7 @@ cFROM     := PROFILESTRING("PRINTER.INI","EMAIL","FROM")
 cUSER     := PROFILESTRING("PRINTER.INI","EMAIL","USUARIO")
 cPASS     := PROFILESTRING("PRINTER.INI","EMAIL","SENHA")
 cPOP      := PROFILESTRING("PRINTER.INI","EMAIL","POP")
+cCAMAPP   := PROFILESTRING("PRINTER.INI","EMAIL","APP")+" "    //"C:\Program Files\Mozilla Thunderbird\thunderbird.exe "
 
 cTO := ALLTRIM(cTO)
 cTO := lower(cTO)
@@ -875,32 +881,81 @@ ENDIF
    lRead      -> Optional. If Set to .T., a Confirmation request is send. Standard Setting is .F.
    lTrace     -> Optional. If Set to .T., a log File is created (sendmail<nNr>.log). Standard Setting is .F.
    */
-IF MDG("Enviar SIM(Sendmail) NAO(MAPI)")
-   TRY
-   lVar := HB_SendMail(cServerIP,nPort,cFrom,aTo,,,cCorpoMsg,cAssunto,aArqEmail,cUser,cPass,cPop,3,.F.,.T.)
-   catch
-   lVAR := .F.
-END
-ELSE
-lVAR := .T.
-TRY
-win_MAPISendMail(;
- cAssunto,;   // subject
- cCorpoMsg,;  // menssage
- NIL,;  // type of message
- DToS(Date())+" "+Time(),;  // send date
- "",;   // conversation ID
- .F.,;  // acknowledgment
- .T.,;  // user intervention
- {cfrom},;  // sender
- aTO,;  // destinators
- aArqEmail)   // attach
 
-catch
-lVAR := .F.
-END
+
+cTELA := savescreen(6,0,17,80)
+CLSBOX(6,0,17,80)
+
+   HB_dispbox(6,0,17,79,B_DOUBLE+" ")
+   oPCAO(07,01," &SendMail ",73)   //S
+   oPCAO(08,01," &MAPI     ",65)   //M
+   oPCAO(09,01," &APP      ",69)   //A
+   nOPCAO := menu(,0)
+restscreen(6,0,17,80,cTELA)   
+   
+   
+lVAR := .F.   
+IF nOPCAO=1
+   TRY
+      lVar := HB_SendMail(cServerIP,nPort,cFrom,aTo,,,cCorpoMsg,cAssunto,aArqEmail,cUser,cPass,cPop,3,.F.,.T.)
+   catch
+      lVAR := .F.
+   END
+   
+ENDIF
+IF nOPCAO=2
+    lVAR := .T.
+    TRY
+        win_MAPISendMail(;
+         cAssunto,;   // subject
+         cCorpoMsg,;  // menssage
+         NIL,;  // type of message
+         DToS(Date())+" "+Time(),;  // send date
+         "",;   // conversation ID
+         .F.,;  // acknowledgment
+         .T.,;  // user intervention
+         {cfrom},;  // sender
+         aTO,;  // destinators
+         aArqEmail)   // attach
+          lVAR := .T.
+    catch
+        lVAR := .F.
+    END
 
 ENDIF
+
+IF nOPCAO=3
+  //LOCAL cCAMAPP := "C:\Program Files\Mozilla Thunderbird\thunderbird.exe " cCAMAPP   := PROFILESTRING("PRINTER.INI","EMAIL","APP")+" " 
+  //LOCAL cCommand := "-compose "
+  //LOCAL cTo      := "to='Joh...@example.org,TheOt...@example.org'"
+  //LOCAL cCC      := "cc='TheOther...@example.com'"
+  //LOCAL cBcc     := "bcc='TheHidden...@example.com'"
+  //LOCAL cSub     := "subject='dinner'"
+  //LOCAL cBody    := "body='How Do I Use Thunderbird to send emails through Harbour program?'"
+  //LOCAL cAttach  := "attachment='"+ __FILE__ + "'"
+   //AList( { cTo, cCC, cBcc, cSub, cBody, cAttach }, "," )
+   //cParams := AList( { cTo, cCC, cBcc, cSub, cBody, cAttach }, "," )
+   
+   //aTo,,,cCorpoMsg,cAssunto,aArqEmail,cUser,cPass,cPo
+   
+   
+   cAttach  := "attachment='"+ cARQ + "'"
+   cSub     := "subject='"+ cAssunto + "'"
+   cBody    := "body='"+ cCorpoMsg + "'"
+   cDESTINO := "to='"+ cTO + "'"
+   
+   cParams := ArraytoTexto( { cDestino,  cSub, cBody, cAttach }, "," )
+   
+   //? "Sending mail..."
+   WaitProcess( cCAMAPP + "-compose " + cParams )
+   //? "Mail sent ..." 
+   lVAR := .t.
+
+
+
+
+ENDIF
+
 If lVar
    cVar := "Envio Ok"
 Else
