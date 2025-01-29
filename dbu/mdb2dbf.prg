@@ -1027,6 +1027,8 @@ IF cTIPOINFO = "DATABASE"
       cCOMANDO := "SELECT datname FROM pg_database;"
    CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
       cCOMANDO := "SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb') "
+   CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" 
+       cCOMANDO := "SELECT username  FROM dba_users  WHERE account_status = 'OPEN'  ORDER BY username;"
    ENDCASE
 ENDIF
 IF cTIPOINFO = "TABELA"
@@ -1044,6 +1046,8 @@ IF cTIPOINFO = "TABELA"
       //SELECT table_name  FROM information_schema.tables  WHERE table_type = 'BASE TABLE' AND table_schema='public'
    CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
       cCOMANDO := "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';"
+    CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" 
+      cCOMANDO := "SELECT table_name  FROM user_tables"    //global SELECT owner, table_name  FROM all_tables
    endcase
 ENDIF
 IF cTIPOINFO = "ESTRUTURA"
