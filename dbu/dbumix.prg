@@ -30,6 +30,7 @@
 #require "sddmy"
 #require "sddpg"
 #require "sddsqlt3"
+//#require "sddoci"
 
 
 #include "dbinfo.ch"
@@ -44,6 +45,7 @@ REQUEST SDDODBC
 REQUEST SDDMY
 REQUEST SDDPG
 REQUEST SDDSQLITE3
+//REQUEST SDDOCI
 //REQUEST SDDOCI //compilou e abriu sem erro versao 1.77 incluido -locilib  e  sddoci.hbc no hpb
 //foram usadas compilacao independentes pelo bat da pasta harbour/contrib copiadas e pasta lib padrao
 //na compilacao 64 ainda nao esta encontra ocilib teste futuramente o porque
