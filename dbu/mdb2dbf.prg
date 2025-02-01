@@ -2012,7 +2012,7 @@ RETURN .T.
 
 function sqltodos(cTIPOSQL)
 cTEXTO:=""
-FAZERDBF( {|| cTEXTO+=SqliteCreateTable( , , cTIPOSQL,.T. ) }, .F. )
+FAZERDBF( {|| cTEXTO+=SqliteCreateTable( , , cTIPOSQL,.T.,.T. ) }, .F. )
 hb_MemoWrit(cTIPOSQL+".sql", cTEXTO ) 
 RETURN .T.
 

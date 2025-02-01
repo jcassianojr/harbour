@@ -847,7 +847,7 @@ FUNCTION MDPCHAVEI( cICHAVE )   // Cria string campo1,campo2,... para create ind
 // +
 // +
 // +
-FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX )
+FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
 
    LOCAL mSQL
    LOCAL i
@@ -869,7 +869,10 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX )
     IF VALTYPE(lINDEX)<>"L"
       lINDEX:=.F.
    ENDIF
-   
+  
+    IF VALTYPE(lPK)<>"L"
+      lPK:=.F.
+   ENDIF 
    
    llMDB:=.F.
    llACCDB:=.F.
@@ -1198,10 +1201,16 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX )
          RETURN ""
       ENDCASE
    NEXT
-   mSql += ")"
+   mSql += ") "+HB_OSNEWLINE()
+   IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
+      mSql += " COLLATE='latin1_swedish_ci' "+HB_OSNEWLINE()
+      mSql += " ENGINE=InnoDB "+HB_OSNEWLINE()
+   ENDIF
+   mSql += " ; "
    mSQL +=HB_OSNEWLINE()
    
    IF lINDEX
+      cPKCHAVE  :=""
       nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
       mSQL    +=  hb_osNewLine()
       FOR j = 1 TO  nIndexes
@@ -1209,8 +1218,14 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX )
           cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
           cSQLINDEX := "create index " + cINDEXNAME + " on " + cTABLENAME + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;"
           mSQL += cSQLINDEX + hb_osNewLine()
+          IF J=1
+             cPKCHAVE=MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) )
+          ENDIF
      NEXT j
       mSQL +=HB_OSNEWLINE()
+      IF lPK .AND. .NOT. EMPTY(cPKCHAVE)
+         mSQL +="ALTER TABLE " + cTABLENAME + " ADD PRIMARY KEY(" + cPKCHAVE + ") ;"+HB_OSNEWLINE()
+      ENDIF
    ENDIF
 
    RETURN msql
