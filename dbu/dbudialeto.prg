@@ -145,6 +145,51 @@ cCOMANDO:=""
            cCOMANDO ="SYSDATE"               
    ENDCASE
 return cCOMANDO  
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_DataHoraBanco()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +   
+ Function Dialeto_DataHoraBanco()
+LOCAL cCOMANDO
+cCOMANDO:=""
+  DO CASE
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+           cCOMANDO ="SYSDATETIME()"
+      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+           cCOMANDO ="CURRENT_TIMESTAMP ()"
+    //  CASE cTIPOSQL="FIREBIRD"
+    //       cCOMANDO =""
+      CASE cTIPOSQL="SQLITE" //.or. at(".SQLITE",upper(cdatabaseX))>0
+           cCOMANDO ="CURRENT_TIMESTAMP"
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+           cCOMANDO ="NOW()"
+        CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
+           cCOMANDO ="SYSTIMESTAMP"               
+   ENDCASE
+return cCOMANDO  
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function Dialeto_DataVazia()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +   
    
  Function Dialeto_DataVazia(cSQLDIALETO)
 LOCAL cCOMANDO
