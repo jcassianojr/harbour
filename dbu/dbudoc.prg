@@ -619,12 +619,14 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       nLASTREC := LastRec()
       zei_fort( nLASTREC,,, 0 )
       nXLS := 0
+      cTEXTO:=""
+      if zEXPOREXT = "SQL" .AND. ZANOFOR = "ORACLE"
+         cTEXTO +="SET AUTOCOMMIT ON ;" + HB_OSNEWLINE()
+      endif
       dbGoTop()
       WHILE ! Eof()
          IF tDOC = 5 .AND. lDOCRECNO
-            cTEXTO := AllTrim( Str( RecNo() ) ) + ZDELIMITE
-         ELSE
-            cTEXTO := ""
+            cTEXTO += AllTrim( Str( RecNo() ) ) + ZDELIMITE
          ENDIF
          nXLS++
          DO CASE
