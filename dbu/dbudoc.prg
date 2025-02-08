@@ -737,7 +737,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                //
             CASE cFieldType = "D"
                IF Empty( nVAL )
-                  cTEXTO += ""
+                  cTEXTO += Dialeto_DataVazia(ZANOFOR)  //""
                ELSE
                   cTEXTO += DATA2STR( nVAL, ZANOFOR, ZANOSEP, ZANOTAM )
                ENDIF

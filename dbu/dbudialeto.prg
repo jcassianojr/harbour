@@ -146,6 +146,28 @@ cCOMANDO:=""
    ENDCASE
 return cCOMANDO  
    
+ Function Dialeto_DataVazia(cSQLDIALETO)
+LOCAL cCOMANDO
+IF VALTYPE(cSQLDIALETO)<>"C"
+   cSQLDIALETO:=cTIPOSQL
+ENDIF
+cCOMANDO:=""
+  DO CASE
+      CASE cSQLDIALETO="MSSQL" .OR. cSQLDIALETO="SQLSERVER"
+           cCOMANDO ="NULL"
+      CASE cSQLDIALETO="MYSQL" .OR. cSQLDIALETO="MYSQL64"  .OR. cSQLDIALETO="MARIADB"
+           cCOMANDO ="NULL"
+    //  CASE cTIPOSQL="FIREBIRD"
+    //       cCOMANDO =""
+      CASE cSQLDIALETO="SQLITE" //.or. at(".SQLITE",upper(cdatabaseX))>0
+           cCOMANDO =""
+      CASE cSQLDIALETO="PGSQL" .OR. cSQLDIALETO="PGSQL64" .OR. cSQLDIALETO="POSTGRESQL"
+           cCOMANDO ="NULL"
+      CASE cSQLDIALETO="ORACLE" .OR. cSQLDIALETO="OCI"
+           cCOMANDO ="NULL"               
+   ENDCASE
+return cCOMANDO  
+
 
 // +--------------------------------------------------------------------
 // +
