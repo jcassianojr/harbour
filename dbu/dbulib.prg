@@ -402,7 +402,7 @@ tDOC      := 0
 aAMBIENTE := SALVAA()
 
 HB_dispbox(03,10,22,60,B_DOUBLE+" ")
-OPCAO(8,14,"XML&A                               ",65)   //A 1
+OPCAO(8,14,"X&LS                               ",65)   //A 1
 OPCAO(9,14,"&TAM  STRU+TAM                      ",74)   //T 3
 OPCAO(10,14,"TE&C  STRU                          ",67)  //C 2
 OPCAO(11,14,"&DBE  STRU DDL                      ",68)  //D 4
@@ -422,7 +422,7 @@ tdoc := menu(2,0)
 
 DO CASE
 CASE tDOC = 1
-   zEXPOREXT := "XML"
+   zEXPOREXT := "XLS"
 CASE tDOC = 2
    zEXPOREXT := "TAM"
 CASE tDOC = 3
