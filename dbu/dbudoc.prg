@@ -221,7 +221,6 @@ FUNCTION multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, cARQDIC, aESTRU )
    IF tDOC = 2 // Verificando o tamanho utilizado por cada campo
       PEGTIPO2VAL()
    ENDIF
-   altd()
    GRAVADOC( tdoc, cARQDIC, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCRECNO )
 
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -782,7 +781,6 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                cTEXTO += AllTrim( STRVAL( nVAL, nFieldLength, nFieldDec, ZDECSIM ) )
             ENDCASE
             
-            altd()
             DO CASE
             CASE tDOC = 7 .AND. cSUBTIPO = "PCK"
                cTEXTO += Chr( 34 )
