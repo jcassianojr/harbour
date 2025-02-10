@@ -465,6 +465,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             cTEXTO += "</Campo>" + CLIN
          ENDCASE
       NEXT x
+      
       // Grava os indices
       IF tDOC = 7 .AND. cSUBTIPO = "ISO"
          nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
@@ -476,7 +477,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       ENDIF
 
       // cabecario sql  nao precisa loop nos fields
-      IF (tDOC = 7 .AND. cSUBTIPO <> "ISO") .OR. (tDOC = 5 .AND. cSUBTIPO = "SQL" .AND. lDOCCAB ) //.AND. .NOT. lDOCDAD)
+      IF (tDOC = 5 .AND. cSUBTIPO = "SQL" .AND. lDOCCAB ) //.AND. .NOT. lDOCDAD) //(tDOC = 7 .AND. cSUBTIPO <> "ISO") 
          aUSO := aESTRU
          IF Empty( aESTRU )
             aUSO := dbStruct()

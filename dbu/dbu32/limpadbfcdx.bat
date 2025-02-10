@@ -4,4 +4,5 @@ del *.dbe
 del *.fpt
 del *.sql
 del *.dbml
+del *.xlsx
 
