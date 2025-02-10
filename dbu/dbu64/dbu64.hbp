@@ -14,6 +14,8 @@ hbct.hbc
 hbwin.hbc
 hbtip.hbc
 xhb.hbc
+hbziparc.hbc
+hbmxml.hbc
 rddads.hbc
 rddbm.hbc
 
@@ -51,9 +53,10 @@ d:\develop\harbour\dbu\dbustru.prg
 d:\develop\harbour\dbu\dbuutil.prg
 d:\develop\harbour\dbu\dbuver.prg
 d:\develop\harbour\dbu\dbuview.prg
-d:\develop\harbour\dbu\dbuXLS.prg
 d:\develop\harbour\dbu\dbusincdbf.prg
 d:\develop\harbour\dbu\dbudialeto.prg
+d:\develop\harbour\dbu\dbuXLSclass.prg
+d:\develop\harbour\dbu\XLSXClass.prg
 #
 # sqlite compilado com fontes C nativo
 #

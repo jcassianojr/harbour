@@ -22,6 +22,8 @@ hbwin.hbc
 hbtip.hbc
 xhb.hbc
 hbmemio.hbc
+hbziparc.hbc
+hbmxml.hbc
 #
 #ads
 #
@@ -65,7 +67,8 @@ d:\develop\harbour\dbu\dbustru.prg
 d:\develop\harbour\dbu\dbuutil.prg 
 d:\develop\harbour\dbu\dbuver.prg
 d:\develop\harbour\dbu\dbuview.prg
-d:\develop\harbour\dbu\dbuXLS.prg
+d:\develop\harbour\dbu\dbuXLSclass.prg
+d:\develop\harbour\dbu\XLSXClass.prg
 d:\develop\harbour\dbu\dbusincdbf.prg
 d:\develop\harbour\dbu\dbudialeto.prg
 #

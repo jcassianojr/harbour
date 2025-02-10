@@ -191,11 +191,14 @@ FUNCTION multidocs
    lDOCRECNO := .F.
    cSUBTIPO := " "
    PegcsUB( tDOC )  // pegar o subtipo conforme tipo
-   IF tdoc = 7 .AND. cSUBTIPO="XML"
-      FAZERDBF( {|| dbf2xml() }, .F.,,, cMASK )
-   ELSE
-      FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
-   ENDIF
+   DO CASE 
+      CASE tDOC = 1 .AND. cSUBTIPO = "TDB"
+           FAZERDBF( {|| Fazerxlsclass() }, .F.,,, cMASK )
+      CASE tdoc = 7 .AND. cSUBTIPO="XML"
+          FAZERDBF( {|| dbf2xml() }, .F.,,, cMASK )
+      OTHERWISE
+           FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
+   ENDCASE
    stat_msg( "Documentacao Gerada" )
 
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -310,6 +313,11 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       Dbf2Xml()
       RETURN .T.
    ENDIF
+   
+    IF tDOC = 1 .AND. cSUBTIPO = "TDB"
+       Fazerxlsclass()
+       RETURN .T.
+   ENDIF    
 
    IF zEXPOREXT = "XML" .AND. tDOC = 5
       tDOC := 7
@@ -326,8 +334,10 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
 
 
    DO CASE
-   case tDOC = 1 
-        cARQGRV += ".XLS"
+   case tDOC = 1 .AND. cSUBTIPO="TDB"
+        cARQGRV += "_"+cSUBTIPO+"_.xlsx"
+   case tDOC = 1
+        cARQGRV += "_"+cSUBTIPO+"_.XLS"
    CASE tDOC = 2
       cARQGRV += ".TAM"
    CASE tDOC = 3
@@ -340,7 +350,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
    CASE tDOC = 6
       cARQGRV += ".SDF"
    CASE tDOC = 7
-      cARQGRV += ".XML"
+      cARQGRV += "_"+cSUBTIPO+"_.XLS"
    CASE tDOC = 8
       cARQGRV += ".JSON"
    ENDCASE
@@ -386,9 +396,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += "<!-- cabecalho com os nomes dos campos da tabela -->" + cLIN
       cTEXTO += "<tr>" + cLIN
    ENDIF
-   IF tDOC = 1 .AND. cSUBTIPO = "TDB"
-      nHANDLEDOC := xlsOpen( cARQGRV )
-   ENDIF
+  // IF tDOC = 1 .AND. cSUBTIPO = "TDB"
+   //   nHANDLEDOC := xlsOpen( cARQGRV )
+   //ENDIF
 
 
    IF lDOCCAB
@@ -424,8 +434,8 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             ENDIF
          CASE tDOC = 1 .AND. cSUBTIPO = "TRH"
             cTEXTO += "<th nowrap>" + AllTrim( cCAMPO ) + "</th>" + cLIN
-         CASE tDOC = 1 .AND. cSUBTIPO = "TDB"
-            xlsWrite( nHANDLEDOC, 1, X, AllTrim( cCAMPO ) )
+   //      CASE tDOC = 1 .AND. cSUBTIPO = "TDB"
+    //        xlsWrite( nHANDLEDOC, 1, X, AllTrim( cCAMPO ) )
          CASE tDOC = 6
             IF lDOCDAD
                cTEXTO +=  AllTrim( cCAMPO ) + " " // + cLIN //So nome do campo
@@ -786,9 +796,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                cTEXTO += Chr( 34 )
             CASE tDOC = 1 .AND. cSUBTIPO = "TRH"
                cTEXTO += "</td>" + Chr( 13 ) + Chr( 10 )
-            CASE tDOC = 1 .AND. cSUBTIPO = "TDB"
-               xlsWrite( nHANDLEDOC, nXLS, X, cTEXTO )
-               cTEXTO := ""
+      //      CASE tDOC = 1 .AND. cSUBTIPO = "TDB"
+      //         xlsWrite( nHANDLEDOC, nXLS, X, cTEXTO )
+       //        cTEXTO := ""
             CASE ( ( tDOC = 5 .AND. cSUBTIPO = "TAB" ) .OR. tDOC = 6 )
                IF X <> nFIELDS
                   cTEXTO += ZDELIMITE
@@ -856,7 +866,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       FWrite( nHandledoc, hb_jsonEncode( hRecords, .T. ) )
    ENDIF
    IF tDOC = 1 .AND. cSUBTIPO = "TDB" // ja aberto em cima
-      xlsClose( nHANDLEDOC )
+     // xlsClose( nHANDLEDOC )
    ELSE
       FClose( nHANDLEDOC )
    ENDIF
