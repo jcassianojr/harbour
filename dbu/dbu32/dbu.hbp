@@ -24,6 +24,7 @@ xhb.hbc
 hbmemio.hbc
 hbziparc.hbc
 hbmxml.hbc
+hbxlsxml.hbc
 #
 #ads
 #
@@ -71,6 +72,7 @@ d:\develop\harbour\dbu\dbuXLSclass.prg
 d:\develop\harbour\dbu\XLSXClass.prg
 d:\develop\harbour\dbu\dbusincdbf.prg
 d:\develop\harbour\dbu\dbudialeto.prg
+d:\develop\harbour\dbu\dbuxlsxml.prg
 #
 # sqlite
 #

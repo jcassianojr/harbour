@@ -113,7 +113,7 @@ FUNCTION GERADOC( tdoc )
 FUNCTION PegcsUB( tDOC )
 
    IF tDOC = 7
-         nCHOICE := ALERT( "Tipo XML", { "MS", "PACKET", "ISO" } )//ALERTX( "Tipo XML", { "MS", "PACKET", "ISO" } )
+         nCHOICE := ALERT( "Tipo XML", { "MS", "PACKET", "ISO","XLSXLM"  } )//ALERTX( "Tipo XML", { "MS", "PACKET", "ISO" } )
          DO CASE
          CASE nCHOICE = 1
             cSUBTIPO := "XML"
@@ -121,6 +121,9 @@ FUNCTION PegcsUB( tDOC )
             cSUBTIPO := "PCK"
          CASE nCHOICE = 3
             cSUBTIPO := "ISO"
+             cSUBTIPO := "TDB"
+         CASE nCHOICE = 4
+            cSUBTIPO := "XLSXLM"      
          ENDCASE
       lDOCDAD := MDG( "Gravar Dados" )
       // IF MDG( "Tipo DATAPACKET(S) TIPO ISO-8859-1(N)" )
@@ -132,7 +135,7 @@ FUNCTION PegcsUB( tDOC )
    IF  tDOC = 1
        lDOCCAB := MDG( "Gravar Informacao Estrutura" )
        lDOCDAD := MDG( "Gravar Dados" )
-       nCHOICE := ALERT( "Tipo XLS", { "TAB", "TRH-HTML", "TDB" } )
+       nCHOICE := ALERT( "Tipo XLS", { "TAB", "TRH-HTML", "TDB","XLSXLM" } )
          DO CASE
          CASE nCHOICE = 1
             tDOC := 5           
@@ -141,6 +144,8 @@ FUNCTION PegcsUB( tDOC )
             cSUBTIPO := "TRH"
          CASE nCHOICE = 3
             cSUBTIPO := "TDB"
+         CASE nCHOICE = 4
+            cSUBTIPO := "XLSXLM"   
          ENDCASE
    
    ENDIF
@@ -192,6 +197,8 @@ FUNCTION multidocs
    cSUBTIPO := " "
    PegcsUB( tDOC )  // pegar o subtipo conforme tipo
    DO CASE 
+      CASE cSUBTIPO = "XLSXLM" 
+           FAZERDBF( {|| Fazerxlsxlm() }, .F.,,, cMASK )
       CASE tDOC = 1 .AND. cSUBTIPO = "TDB"
            FAZERDBF( {|| Fazerxlsclass() }, .F.,,, cMASK )
       CASE tdoc = 7 .AND. cSUBTIPO="XML"
@@ -318,6 +325,11 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
        Fazerxlsclass()
        RETURN .T.
    ENDIF    
+   
+    IF cSUBTIPO = "XLSXLM" 
+       Fazerxlsxlm() 
+       RETURN .T.
+    ENDIF   
 
    IF zEXPOREXT = "XML" .AND. tDOC = 5
       tDOC := 7

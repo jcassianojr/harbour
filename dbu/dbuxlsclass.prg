@@ -98,7 +98,7 @@ IF lDOCDAD
            ENDIF
        next I
        nPOS++
-       
+       ZEI_FORT( nLASTREC,,, 1 )
        dbskip()
     ENDDO
 ENDIF    
