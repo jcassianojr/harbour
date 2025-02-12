@@ -650,8 +650,29 @@ LOCAL cPrn,ncop := 1
 Win_PrintDlgDC(@cPrn,,,ncop)
 IF !(EMPTY(cPrn))
    wapi_ShellExecute(0,"print",cARQUIVO,cPrn,0,0)
+   // hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
 ENDIF
 RETURN
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function shellexecopen()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION ShellExecuteOpen( cFileName, cParameters, cPath, nShow )
+
+   wapi_ShellExecute( Nil, "open", cFileName, cParameters, cPath, hb_DefaultValue( nShow, 1 ) )
+   // hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
+    //#define WIN_SW_SHOWNORMAL   1
+   RETURN Nil
+
 
 
 
