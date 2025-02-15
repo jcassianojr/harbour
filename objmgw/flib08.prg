@@ -354,7 +354,9 @@ if nTIPSPO = 6 .or. nTIPSPO = 7 .or. nTIPSPO = 8 .or. nTIPSPO = 9 .or. nTIPSPO =
    CASE nOPCAO = 1
       shellexecprint(cFILE)
    CASE nOPCAO = 2
-      wapi_ShellExecute(0,"open",cFILE,"",0,1)
+      //wapi_ShellExecute(0,"open",cFILE,"",0,1)
+      //ShellExecuteOpen( cFileName, cParameters, cPath, nShow )
+      ShellExecuteOpen( cFILE, "", "",1 )
    CASE nOPCAO = 3
       filetoemail(cFILE)
    CASE nOPCAO = 4

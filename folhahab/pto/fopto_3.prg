@@ -117,23 +117,14 @@ FUNCTION fopto_3()
          FOPTO_3k( 1 )
       CASE OPCAO = 23  // w    saldo banco de horas fechados
          FOPTO_3k( 2 )
-      CASE OPCAO = 24  // 1 wrpt folha
+      CASE OPCAO = 24  // 1 wrpt folha F$
          cCAM := ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
-// cCAM+="WRPTF.EXE $"+ALLTRIM(zUSER)+"%#"
-// "$"+ALLTRIM(zUSER)+"%#"
-// hb_run(cCAM)
          WAPI_ShellExecute( NIL, "Open", cCAM + "WRPT.EXE", "F$" + AllTrim( zUSER ) + "%#", cCAM, 1 )
-// hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
-// essSW_SHOWNORMAL = 1
-
-      CASE OPCAO = 25  // 2 wrtp rh
+      CASE OPCAO = 25  // 2 wrtp rh X$
          cCAM := ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
-// cCAM+="WRPTX.EXE $"+ALLTRIM(zUSER)+"%RH#"
-// hb_run(cCAM)
          WAPI_ShellExecute( NIL, "Open", cCAM + "WRPT.EXE", "X$" + AllTrim( zUSER ) + "%#", cCAM, 1 )
-      CASE OPCAO = 26  // 3 wrtp integrado
+      CASE OPCAO = 26  // 3 wrtp integrado  "I$
          cCAM := ProfileString( "FOLHA.INI", "WRPT", "CAMINHO", "" )
-// cCAM+="WRPTI.EXE $"+ALLTRIM(zUSER)+"%RH#"
          WAPI_ShellExecute( NIL, "Open", cCAM + "WRPT.EXE", "I$" + AllTrim( zUSER ) + "%#", cCAM, 1 )
       CASE Opcao = 27
          WIN_PRINTDLGDC()
@@ -141,7 +132,6 @@ FUNCTION fopto_3()
          imphp()
       CASE opcao = 29
          fopto_32()
-// Win_PrintDlgDC()
       OTHERWISE
          __SetCentury( .T. )
          RETU

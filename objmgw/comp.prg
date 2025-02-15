@@ -626,11 +626,6 @@ OTHERWISE
 ENDCASE
 
 
-//Win_PrintDlgDC() dialogo impressora nativo
-/* win_PrintDlgDC( [@<cDevice>], [<nFromPage>], [<nToPage>], [<nCopies>] )
- *                --> <hDC>
- */
-
 
 *+--------------------------------------------------------------------
 *+
@@ -647,7 +642,13 @@ ENDCASE
 FUNCTION shellexecprint(cARQUIVO)
 
 LOCAL cPrn,ncop := 1
+
+/* win_PrintDlgDC( [@<cDevice>], [<nFromPage>], [<nToPage>], [<nCopies>] ) --> <hDC>
+  Win_PrintDlgDC() dialogo impressora nativo
+*/
 Win_PrintDlgDC(@cPrn,,,ncop)
+
+
 IF !(EMPTY(cPrn))
    wapi_ShellExecute(0,"print",cARQUIVO,cPrn,0,0)
    // hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
