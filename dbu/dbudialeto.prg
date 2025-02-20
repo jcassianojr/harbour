@@ -278,6 +278,15 @@ cCOMANDO:=""
    ENDCASE
 return cCOMANDO
 
+
+/* maria mysql
+SELECT CONNECTION_ID();
+SHOW VARIABLES;
+SHOW TABLES FROM `information_schema`;
+SHOW DATABASES;
+
+*/
+
 /*
 // top
 pgsql
