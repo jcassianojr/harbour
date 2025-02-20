@@ -282,9 +282,24 @@ return cCOMANDO
 /* maria mysql
 SELECT CONNECTION_ID();
 SHOW VARIABLES;
-SHOW TABLES FROM `information_schema`;
-SHOW DATABASES;
+*/
 
+/* sqlite
+PRAGMA busy_timeout=30000;
+*/
+
+
+/*
+SELECT NOW();
+SELECT 'citext'::regtype::oid;
+SET statement_timeout TO 30000;
+SELECT EXTRACT(EPOCH FROM CURRENT_TIMESTAMP - pg_postmaster_start_time())::INTEGER;
+SHOW ssl;
+SELECT table_name FROM information_schema.tables WHERE table_schema='information_schema';
+SELECT "nspname" FROM "pg_catalog"."pg_namespace" ORDER BY "nspname";
+SET search_path TO 'public', '$user';
+SELECT *, pg_table_size(QUOTE_IDENT(t.TABLE_SCHEMA) || '.' || QUOTE_IDENT(t.TABLE_NAME))::bigint AS data_length, pg_relation_size(QUOTE_IDENT(t.TABLE_SCHEMA) || '.' || QUOTE_IDENT(t.TABLE_NAME))::bigint AS index_length, c.reltuples, obj_description(c.oid) AS comment FROM "information_schema"."tables" AS t LEFT JOIN "pg_namespace" n ON t.table_schema = n.nspname LEFT JOIN "pg_class" c ON n.oid = c.relnamespace AND c.relname=t.table_name WHERE t."table_schema"='public';
+SELECT "p"."proname", "p"."proargtypes" FROM "pg_catalog"."pg_namespace" AS "n" JOIN "pg_catalog"."pg_proc" AS "p" ON "p"."pronamespace" = "n"."oid" WHERE "n"."nspname"='public';
 */
 
 /*

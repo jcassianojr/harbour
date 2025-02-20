@@ -1022,13 +1022,15 @@ cCOMANDO := ""
 IF cTIPOINFO = "DATABASE"
    DO CASE
    CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SHOW DATABASES"
+      cCOMANDO := "SHOW DATABASES;"
    CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
       cCOMANDO := "SELECT datname FROM pg_database;"
    CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
       cCOMANDO := "SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb') "
    CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" 
        cCOMANDO := "SELECT username  FROM dba_users  WHERE account_status = 'OPEN'  ORDER BY username;"
+   CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0    
+       cCOMANDO := "SELECT name FROM pragma_database_list;"
    ENDCASE
 ENDIF
 IF cTIPOINFO = "TABELA"
@@ -1038,9 +1040,10 @@ IF cTIPOINFO = "TABELA"
        +" and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
        +" order by MSysObjects.name "
    CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
-      cCOMANDO := "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+      cCOMANDO := "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name"
    CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
       cCOMANDO := "SHOW TABLES"
+      //SHOW TABLES FROM `information_schema`;
    CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
       cCOMANDO := "SELECT tablename FROM pg_tables WHERE schemaname='public'"
       //SELECT table_name  FROM information_schema.tables  WHERE table_type = 'BASE TABLE' AND table_schema='public'

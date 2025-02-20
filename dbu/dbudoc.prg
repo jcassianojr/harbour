@@ -658,6 +658,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       if zEXPOREXT = "SQL" .AND. ZANOFOR = "ORACLE"
          cTEXTO +="SET AUTOCOMMIT ON ;" + HB_OSNEWLINE()
       endif
+      if zEXPOREXT = "SQL" .AND. (ZANOFOR = "MYSQL" .OR. ZANOFOR = "MYSQL64" .OR. ZANOFOR = "MARIADB")
+         cTEXTO +="SET autocommit=1;" + HB_OSNEWLINE()
+      endif
       dbGoTop()
       WHILE ! Eof()
          IF tDOC = 5 .AND. lDOCRECNO
