@@ -752,6 +752,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                CASE zCNVCHAR = "A"
                   nVAL := win_oemtoansi( nVAL ) // hb_oemtoansi(nVAL)
                ENDCASE
+               
+               //inclui nova barra pois e considerada escape no insert into
+               nVAL := StrTran(nVAL, "\", "\\" ) 
 
                // datetime em forma de string
                IF  SubStr( nVAL, 5, 1 ) = "-" .AND. SubStr( nVAL, 8, 1 ) = "-"
