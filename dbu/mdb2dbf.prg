@@ -745,6 +745,7 @@ IF lMDB .OR. lACCDB
    CreateAccessDatabase(cARQORI)
    EXECUTACMD(cARQORI,"GRANT SELECT ON TABLE MSysObjects TO ADMIN,PUBLIC")
    EXECUTACMD(cARQORI,"create view showtables as select name from MSysObjects where MSysObjects.type In (1,4,6) and MSysObjects.name not like '~*' and MSysObjects.name not like 'MSys%'")
+   //EXECUTACMD(cARQORI,"GRANT SELECT ON VIEW showtableS TO ADMIN,PUBLIC")
 ENDIF
 
 //cria com create native
