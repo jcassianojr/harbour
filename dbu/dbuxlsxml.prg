@@ -22,7 +22,6 @@ ENDIF
 
 IF lDOCCAB
     for i:=1 to nfields
-        cPOS:=CHR(64+I)+ALLTRIM(Str(nPOS, 8 , 0 ) )
         eval:=ALLTRIM(astru[I][1])+","+astru[I][2]
         IF astru[I][2]="C" .OR. astru[I][2]="N"
            eVAL+=","+ALLTRIM(STR(astru[I][3],8,0))
