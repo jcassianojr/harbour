@@ -113,7 +113,7 @@ FUNCTION GERADOC( tdoc )
 FUNCTION PegcsUB( tDOC )
 
    IF tDOC = 7
-         nCHOICE := ALERT( "Tipo XML", { "MS", "PACKET", "ISO","XLSXLM"  } )//ALERTX( "Tipo XML", { "MS", "PACKET", "ISO" } )
+         nCHOICE := ALERT( "Tipo XML", { "MS", "PACKET", "ISO","XLSXLM"  } )
          DO CASE
          CASE nCHOICE = 1
             cSUBTIPO := "XML"
@@ -121,16 +121,10 @@ FUNCTION PegcsUB( tDOC )
             cSUBTIPO := "PCK"
          CASE nCHOICE = 3
             cSUBTIPO := "ISO"
-             cSUBTIPO := "TDB"
          CASE nCHOICE = 4
             cSUBTIPO := "XLSXLM"      
          ENDCASE
       lDOCDAD := MDG( "Gravar Dados" )
-      // IF MDG( "Tipo DATAPACKET(S) TIPO ISO-8859-1(N)" )
-      //   cSUBTIPO := "PCK"
-      //ELSE
-      //   cSUBTIPO := "ISO"
-      //ENDIF
    ENDIF
    IF  tDOC = 1
        lDOCCAB := MDG( "Gravar Informacao Estrutura" )
@@ -147,7 +141,6 @@ FUNCTION PegcsUB( tDOC )
          CASE nCHOICE = 4
             cSUBTIPO := "XLSXLM"   
          ENDCASE
-   
    ENDIF
    IF  tDOC = 5 .OR.  tDOC = 6
       lDOCCAB := MDG( "Gravar Informacao Estrutura" )
@@ -408,10 +401,6 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += "<!-- cabecalho com os nomes dos campos da tabela -->" + cLIN
       cTEXTO += "<tr>" + cLIN
    ENDIF
-  // IF tDOC = 1 .AND. cSUBTIPO = "TDB"
-   //   nHANDLEDOC := xlsOpen( cARQGRV )
-   //ENDIF
-
 
    IF lDOCCAB
       FOR MEMVAR->x := 1 TO nFIELDS      // aqui menvar evitar confusao dbf que tem o campo X
@@ -433,7 +422,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                aESTRU[ X, 2 ] + ' ' + ;
                Str( aESTRU[ X, 3 ], 3 ) + ' ' + ;
                Str( aESTRU[ X, 4 ], 2 ) + cLIN
-         CASE tDOC = 5  .AND. cSUBTIPO <> "SQL" //.AND. cSUBTIPO <> "TRH" .AND. cSUBTIPO <> "TDB" 
+         CASE tDOC = 5  .AND. cSUBTIPO <> "SQL" 
             cCAMPO := AllTrim( cCAMPO )
             cCAMPO := RANGEREPL( Chr( 0 ), Chr( 31 ), cCAMPO, " " ) // Remove caracteres de controle
             IF lDOCDAD
@@ -446,8 +435,6 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             ENDIF
          CASE tDOC = 1 .AND. cSUBTIPO = "TRH"
             cTEXTO += "<th nowrap>" + AllTrim( cCAMPO ) + "</th>" + cLIN
-   //      CASE tDOC = 1 .AND. cSUBTIPO = "TDB"
-    //        xlsWrite( nHANDLEDOC, 1, X, AllTrim( cCAMPO ) )
          CASE tDOC = 6
             IF lDOCDAD
                cTEXTO +=  AllTrim( cCAMPO ) + " " // + cLIN //So nome do campo
@@ -559,20 +546,17 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += "<Dados>" + cLIN
    ENDIF
 
-   IF tDOC = 5 .AND. lDOCCAB // THR E TDB TIPO 1 agora.AND. cSUBTIPO <> "TRH" .AND. cSUBTIPO <> "TDB"
+   IF tDOC = 5 .AND. lDOCCAB 
       cTEXTO += cLIN
    ENDIF
    IF tDOC = 6
       cTEXTO += cLIN
    ENDIF
 
-   IF tDOC = 1 .AND. cSUBTIPO = "TDB" // ja aberto Acima
-   ELSE
-      nHANDLEDOC := FCreate( cARQGRV )
-      IF Len( cTEXTO ) > 0
-         FWrite( nHANDLEDOC, cTEXTO )
-      ENDIF
-   ENDIF
+    nHANDLEDOC := FCreate( cARQGRV )
+    IF Len( cTEXTO ) > 0
+       FWrite( nHANDLEDOC, cTEXTO )
+    eNDIF
 
    IF tDOC = 8
       hRecords := { => }
@@ -815,9 +799,6 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                cTEXTO += Chr( 34 )
             CASE tDOC = 1 .AND. cSUBTIPO = "TRH"
                cTEXTO += "</td>" + Chr( 13 ) + Chr( 10 )
-      //      CASE tDOC = 1 .AND. cSUBTIPO = "TDB"
-      //         xlsWrite( nHANDLEDOC, nXLS, X, cTEXTO )
-       //        cTEXTO := ""
             CASE ( ( tDOC = 5 .AND. cSUBTIPO = "TAB" ) .OR. tDOC = 6 )
                IF X <> nFIELDS
                   cTEXTO += ZDELIMITE
@@ -850,7 +831,6 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             cTEXTO += cLIN
          ENDCASE
          DO CASE
-         CASE tDOC = 1 .AND. cSUBTIPO = "TDB" // ja aberto em cima
          CASE tdoc = 8
             hb_HSet( hRecords, LTrim( Str( nxls ) ), hRecord ) // like so, a hash of recno: hash of columns/values of this record  RecNo() usa nxls para ficar sequencial
          OTHERWISE
@@ -875,20 +855,13 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += "</html>" + cLIN
    ENDIF
    IF Len( cTEXTO ) > 0
-      IF tDOC = 1 .AND. cSUBTIPO = "TDB" // ja aberto em cima
-      ELSE
-         FWrite( nHANDLEDOC, cTEXTO )
-      ENDIF
+      FWrite( nHANDLEDOC, cTEXTO )
    ENDIF
    IF tDOC = 8
       FSeek( nHandledoc, 0, 2 )
       FWrite( nHandledoc, hb_jsonEncode( hRecords, .T. ) )
    ENDIF
-   IF tDOC = 1 .AND. cSUBTIPO = "TDB" // ja aberto em cima
-     // xlsClose( nHANDLEDOC )
-   ELSE
-      FClose( nHANDLEDOC )
-   ENDIF
+   FClose( nHANDLEDOC )
 
    RETURN .T.
 
