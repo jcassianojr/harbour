@@ -142,7 +142,7 @@ FUNCTION PegcsUB( tDOC )
             cSUBTIPO := "XLSXLM"   
          ENDCASE
    ENDIF
-   IF  tDOC = 5 .OR.  tDOC = 6    //delimitado
+   IF  tDOC = 5 .OR.  tDOC = 6    //delimitado   //sdf
       lDOCCAB := MDG( "Gravar Informacao Estrutura" )
       lDOCDAD := MDG( "Gravar Dados" )
       IF lDOCDAD
@@ -150,6 +150,9 @@ FUNCTION PegcsUB( tDOC )
       ENDIF
       IF ZEXPOREXT = "SQL" .AND. tDOC = 5  //delimitado
          cSUBTIPO := "SQL"
+      ENDIF
+      IF tDOC=6
+         zDELIMITE := ""
       ENDIF
    ELSE
       lDOCCAB := .T.
@@ -350,7 +353,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
    CASE tDOC = 5  .OR. zEXPOREXT = "SQL" .OR. zEXPOREXT = "SSV" .OR. zEXPOREXT = "CSV" ;
          .OR. zEXPOREXT = "UNL" .OR. zEXPOREXT = "TSV" .OR. zEXPOREXT = "PSV"              //delimitado
       cARQGRV += "." + ZEXPOREXT
-   CASE tDOC = 6   //delimitado
+   CASE tDOC = 6   //sdf
       cARQGRV += ".SDF"
    CASE tDOC = 7  //xml
       cARQGRV += "_"+cSUBTIPO+"_.XLS"
@@ -433,9 +436,10 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             ENDIF
          CASE tDOC = 1 .AND. cSUBTIPO = "TRH"  //xls
             cTEXTO += "<th nowrap>" + AllTrim( cCAMPO ) + "</th>" + cLIN
-         CASE tDOC = 6   //delimitado
+         CASE tDOC = 6   //sdf
             IF lDOCDAD
                cTEXTO +=  AllTrim( cCAMPO ) + " " // So nome do campo
+               cTEXTO:=PADR(cTEXTO,10)
             ELSE
                cTEXTO += PadR( cCAMPO, 10 ) + ' ' + ;
                   aESTRU[ X, 2 ] + ' ' + ;
@@ -547,12 +551,12 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
    IF tDOC = 5 .AND. lDOCCAB    //delimitado
       cTEXTO += cLIN
    ENDIF
-   IF tDOC = 6   //delimitado
+   IF tDOC = 6 .AND. lDOCCAB   //SDF
       cTEXTO += cLIN
    ENDIF
 
     nHANDLEDOC := FCreate( cARQGRV )
-    IF Len( cTEXTO ) > 0
+    IF Len( cTEXTO ) > 0 
        FWrite( nHANDLEDOC, cTEXTO )
     eNDIF
 
@@ -715,9 +719,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                IF Empty( nFieldLength )
                   nFieldLength = 8
                ENDIF
-               IF ! Empty( nFieldLength )
-                  nFieldLength = 0
-               ENDIF
+               //IF ! Empty( nFieldLength )
+               //   nFieldLength = 0 
+               //ENDIF
             ENDIF
 
 
@@ -746,14 +750,18 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                ENDIF
 
                DO CASE
-               CASE tDOC = 7 // xml
-                  cTEXTO += str2html( nVAL )
-               CASE zEXPOREXT = "SQL"
-                  cTEXTO += "'" + nVAL + "'" // sql string recenbem aspas simples
-               CASE zEXPOREXT = "DLM" .AND. ( zREGSEP = Chr( 34 ) .OR. zREGSEP = Chr( 39 ) )    // dlm que char recebem aspas ou dupla aspas
-                  cTEXTO += zREGSEP + nVAL + ZREGSEP
-               OTHERWISE
-                  cTEXTO += nVAL
+                   CASE tDOC=6 .AND. cFieldType = "C" .AND. nFieldLength>0
+                        cTEXTO += PadR(nVAL,nFieldLength , " " ) 
+                  CASE tDOC=6 .AND. cFieldType = "M" 
+                        cTEXTO += PadR(nVAL,255 , " " )       
+                   CASE tDOC = 7 // xml
+                      cTEXTO += str2html( nVAL )
+                   CASE zEXPOREXT = "SQL"
+                      cTEXTO += "'" + nVAL + "'" // sql string recenbem aspas simples
+                   CASE zEXPOREXT = "DLM" .AND. ( zREGSEP = Chr( 34 ) .OR. zREGSEP = Chr( 39 ) )    // dlm que char recebem aspas ou dupla aspas
+                      cTEXTO += zREGSEP + nVAL + ZREGSEP
+                   OTHERWISE
+                      cTEXTO += nVAL
                ENDCASE
                //
                // Data
@@ -789,7 +797,11 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                // Numerico
                //
             CASE cFieldType = "N"
-               cTEXTO += AllTrim( STRVAL( nVAL, nFieldLength, nFieldDec, ZDECSIM ) )
+                IF tDOC=6
+                   cTEXTO += STRTRAN(STRVAL( nVAL, nFieldLength, nFieldDec, ZDECSIM ) ," ",0)
+                ELSE
+                   cTEXTO += AllTrim( STRVAL( nVAL, nFieldLength, nFieldDec, ZDECSIM ) )
+                ENDIF
             ENDCASE
             
             DO CASE
@@ -815,8 +827,11 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          DO CASE
          CASE tDOC = 7 .AND. cSUBTIPO = "PCK"     //xml
             cTEXTO += "/>" + cLIN
-         CASE tDOC = 6                            //delimitado
-            cTEXTO += cLIN
+         CASE tDOC = 6                            //SDF
+            // IF nFieldLength>0
+            //    cTEXTO:=PADR(cTEXTO,nFieldLength+ nFieldDec)
+            // ENDIF   
+             cTEXTO += cLIN
          CASE tDOC = 1 .AND. cSUBTIPO = "TRH"     //xls
             cTEXTO += "</tr>" + cLIN
          CASE tDOC = 7 .AND. cSUBTIPO = "ISO"     //xml

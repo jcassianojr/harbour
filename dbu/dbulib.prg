@@ -402,17 +402,17 @@ tDOC      := 0
 aAMBIENTE := SALVAA()
 
 HB_dispbox(03,10,22,60,B_DOUBLE+" ")
-OPCAO(8,14,"X&LS                               ",65)   //A 1
-OPCAO(9,14,"&TAM  STRU+TAM                      ",74)   //T 3
+OPCAO(08,14,"X&LS                                ",76)  //L 1
+OPCAO(09,14,"&TAM  STRU+TAM                      ",84)  //T 3
 OPCAO(10,14,"TE&C  STRU                          ",67)  //C 2
 OPCAO(11,14,"&DBE  STRU DDL                      ",68)  //D 4
-OPCAO(12,14,"DL&M  DELIM                         ",77)  //M 5
-OPCAO(13,14,"&SDF                                ",83)  //S 6
+OPCAO(12,14,"DL&M  Delimitador Especificado      ",77)  //M 5
+OPCAO(13,14,"&SDF  tamanho do campo              ",83)  //S 6
 OPCAO(14,14,"&XML                                ",88)  //X 7
 OPCAO(15,14,"&JSON                               ",74)  //J 8
 OPCAO(16,14,"SSV Semi Colon (;) &Ponto e Virgula ",80)  //P  9
-OPCAO(17,14,"CS&V Colon      (,) Virgula         ",86)  //V1 0
-OPCAO(18,14,"&UNL PSV        (|) Pipe            ",85)  //U 11
+OPCAO(17,14,"CS&V Colon     (,) Virgula          ",86)  //V1 0
+OPCAO(18,14,"&UNL PSV       (|) Pipe             ",85)  //U 11
 OPCAO(19,14,"TSV            TA&B                 ",66)  //B 12
 OPCAO(20,14,"S&QL   insert into                  ",81)  //Q 13
 IF lincdbf
@@ -432,7 +432,7 @@ CASE tDOC = 4
 CASE tDOC = 5   
    zEXPOREXT := "DLM" //-->5 delimitado pelo caracter escolhido
 CASE tDOC = 6   
-   zEXPOREXT := "SDF" // delimitado espaco
+   zEXPOREXT := "SDF" //  espaco
 CASE tDOC = 7
    zEXPOREXT := "XML"
 CASE tDOC = 8
@@ -591,6 +591,7 @@ DO CASE
     CASE zEXPOREXT = "TAM"
     CASE zEXPOREXT = "DBF"
     CASE zEXPOREXT = "SDF"
+         zDELIMITE := ""  //pelo tamanho do campo sem delimitador
     CASE zEXPOREXT = "DLM"
     CASE zEXPOREXT = "SSV"
        zDELIMITE := ";"
