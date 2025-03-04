@@ -52,15 +52,15 @@ cCOMP   :=""
 IF lDOCCAB
       for i:=1 to nfields
           cPOS:=CHR(64+I)+ALLTRIM(Str(nPOS, 8 , 0 ) )
-          eval:=ALLTRIM(astru[I][1])+","+astru[I][2]
+          evalor:=ALLTRIM(astru[I][1])+","+astru[I][2]
           altd()
           IF astru[I][2]="C" .OR. astru[I][2]="N"
-             eVAL+=","+ALLTRIM(STR(astru[I][3],8,0))
+             evalor+=","+ALLTRIM(STR(astru[I][3],8,0))
           ENDIF  
           IF astru[I][2]="N" 
-             eVAL+=","+ALLTRIM(STR(astru[I][4],8,0))
+             evalor+=","+ALLTRIM(STR(astru[I][4],8,0))
           ENDIF   
-          oSheet1:Cell(cCOMP+cPOS, eVAL )
+          oSheet1:Cell(cCOMP+cPOS, evalor )
            IF CHR(64+I)="Z"
               IF EMPTY(cCOMP)
                  cCOMP:="A"
@@ -80,14 +80,14 @@ IF lDOCDAD
        for i:=1 to nfields
            cPOS:=CHR(64+I)+ALLTRIM(Str(nPOS, 8 , 0 ) )
         //   ? cPOS
-           eVAL:=HB_FIELDGET(I)
-           IF VALTYPE(eVAL)="C"
-              eVAL := RANGEREPL( Chr( 0 ), Chr( 31 ), eVAL, " " ) 
-              eVAL := TIRACE(eVAL)
-              eVAL := ALLTRIM(eVAL)
+           evalor:=HB_FIELDGET(I)
+           IF VALTYPE(evalor)="C"
+              evalor := RANGEREPL( Chr( 0 ), Chr( 31 ), evalor, " " ) 
+              evalor := TIRACE(evalor)
+              evalor := ALLTRIM(evalor)
            ENDIF
-           if .NOT. EMPTY(eVAL)
-              oSheet1:Cell(cCOMP+cPOS, eVAL )
+           if .NOT. EMPTY(evalor)
+              oSheet1:Cell(cCOMP+cPOS, evalor )
            endif
            IF CHR(64+I)="Z"
               IF EMPTY(cCOMP)

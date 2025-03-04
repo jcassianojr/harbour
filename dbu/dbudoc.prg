@@ -339,8 +339,6 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
 
 
    DO CASE
-   case tDOC = 1 .AND. cSUBTIPO="TDB"
-        cARQGRV += "_"+cSUBTIPO+"_.xlsx"
    case tDOC = 1
         cARQGRV += "_"+cSUBTIPO+"_.XLS"
    CASE tDOC = 2
@@ -437,7 +435,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             cTEXTO += "<th nowrap>" + AllTrim( cCAMPO ) + "</th>" + cLIN
          CASE tDOC = 6
             IF lDOCDAD
-               cTEXTO +=  AllTrim( cCAMPO ) + " " // + cLIN //So nome do campo
+               cTEXTO +=  AllTrim( cCAMPO ) + " " // So nome do campo
             ELSE
                cTEXTO += PadR( cCAMPO, 10 ) + ' ' + ;
                   aESTRU[ X, 2 ] + ' ' + ;

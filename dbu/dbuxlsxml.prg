@@ -22,14 +22,14 @@ ENDIF
 
 IF lDOCCAB
     for i:=1 to nfields
-        eval:=ALLTRIM(astru[I][1])+","+astru[I][2]
+        evalor:=ALLTRIM(astru[I][1])+","+astru[I][2]
         IF astru[I][2]="C" .OR. astru[I][2]="N"
-           eVAL+=","+ALLTRIM(STR(astru[I][3],8,0))
+           evalor+=","+ALLTRIM(STR(astru[I][3],8,0))
         ENDIF  
         IF astru[I][2]="N" 
-           eVAL+=","+ALLTRIM(STR(astru[I][4],8,0))
+           evalor+=","+ALLTRIM(STR(astru[I][4],8,0))
         ENDIF   
-        sheet1:writeString( nPOS, I, eval)
+        sheet1:writeString( nPOS, I, evalor)
     next i
     nPOS++
 ENDIF
@@ -38,8 +38,8 @@ IF lDOCDAD
     dbgotop()
     while .not. EOF()
        for i:=1 to nfields
-           eVAL:=HB_FIELDGET(I)
-           if .NOT. EMPTY(eVAL)
+           evalor:=HB_FIELDGET(I)
+           if .NOT. EMPTY(evalor)
                /*
               METHOD writeFormula( dataType, row, column, xData, style )
               METHOD writeString( row, column, xData, style )
@@ -48,16 +48,16 @@ IF lDOCDAD
                METHOD writeData( type, row, column, xData, style, formula )
             */
               do case
-                 case valtype(eval)="C"
-                      sheet1:writeString( nPOS, I, eval)
-                 case valtype(eval)="D"
-                      //sheet1:writeDateTime( nPOS, I, eval) gravava como data numerica
-                      eVAL:=DTOC(eVAL)
-                      sheet1:writeString( nPOS, I, eval)
-                 case valtype(eval)="N"
-                      sheet1:writeNumber( nPOS, I, eval)
-                 case valtype(eval)="L"     
-                      IF EVAL
+                 case valtype(evalor)="C"
+                      sheet1:writeString( nPOS, I, evalor)
+                 case valtype(evalor)="D"
+                      //sheet1:writeDateTime( nPOS, I, evalor) gravava como data numerica
+                      evalor:=DTOC(evalor)
+                      sheet1:writeString( nPOS, I, evalor)
+                 case valtype(evalor)="N"
+                      sheet1:writeNumber( nPOS, I, evalor)
+                 case valtype(evalor)="L"     
+                      IF evalor
                          sheet1:writeString( nPOS, I, "TRUE")
                       ELSE
                          sheet1:writeString( nPOS, I, "FALSE")
