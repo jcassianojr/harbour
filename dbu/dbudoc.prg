@@ -76,7 +76,7 @@ FUNCTION GERADOC( tdoc )
       IF tdoc = 0
          RETURN .F.
       ENDIF
-      IF tDOC = 5 // parametros da exportacao
+      IF tDOC = 5 // parametros da exportacao delimitado
          pegparexp()
       ENDIF
    ENDIF
@@ -112,7 +112,7 @@ FUNCTION GERADOC( tdoc )
 
 FUNCTION PegcsUB( tDOC )
 
-   IF tDOC = 7
+   IF tDOC = 7    //xml
          nCHOICE := ALERT( "Tipo XML", { "MS", "PACKET", "ISO","XLSXLM"  } )
          DO CASE
          CASE nCHOICE = 1
@@ -126,13 +126,13 @@ FUNCTION PegcsUB( tDOC )
          ENDCASE
       lDOCDAD := MDG( "Gravar Dados" )
    ENDIF
-   IF  tDOC = 1
+   IF  tDOC = 1   //xls
        lDOCCAB := MDG( "Gravar Informacao Estrutura" )
        lDOCDAD := MDG( "Gravar Dados" )
        nCHOICE := ALERT( "Tipo XLS", { "TAB", "TRH-HTML", "TDB","XLSXLM" } )
          DO CASE
-         CASE nCHOICE = 1
-            tDOC := 5           
+         CASE nCHOICE = 1   //xls
+            tDOC := 5           //delimitado
             cSUBTIPO := "TAB"  //salva delimitado por tab 
          CASE nCHOICE = 2
             cSUBTIPO := "TRH"
@@ -142,19 +142,19 @@ FUNCTION PegcsUB( tDOC )
             cSUBTIPO := "XLSXLM"   
          ENDCASE
    ENDIF
-   IF  tDOC = 5 .OR.  tDOC = 6
+   IF  tDOC = 5 .OR.  tDOC = 6    //delimitado
       lDOCCAB := MDG( "Gravar Informacao Estrutura" )
       lDOCDAD := MDG( "Gravar Dados" )
       IF lDOCDAD
          lDOCRECNO := MDG( "Incluir Recno()/ID" )
       ENDIF
-      IF ZEXPOREXT = "SQL" .AND. tDOC = 5
+      IF ZEXPOREXT = "SQL" .AND. tDOC = 5  //delimitado
          cSUBTIPO := "SQL"
       ENDIF
    ELSE
       lDOCCAB := .T.
    ENDIF
-   IF  tDOC = 8
+   IF  tDOC = 8   //json
       lDOCDAD := .T.
       lDOCRECNO := .F. // A id do recno ja faz parte do json
    ENDIF
@@ -181,7 +181,7 @@ FUNCTION multidocs
          RETURN .F.
       ENDIF
    ENDIF
-   IF tDOC = 5 // parametros da exportacao
+   IF tDOC = 5 // parametros da exportacao //delimitado
       pegparexp()
    ENDIF
    lDOCCAB  := .F.
@@ -190,11 +190,11 @@ FUNCTION multidocs
    cSUBTIPO := " "
    PegcsUB( tDOC )  // pegar o subtipo conforme tipo
    DO CASE 
-      CASE cSUBTIPO = "XLSXLM" 
+      CASE cSUBTIPO = "XLSXLM"                 //xlsxlm 
            FAZERDBF( {|| Fazerxlsxlm() }, .F.,,, cMASK )
-      CASE tDOC = 1 .AND. cSUBTIPO = "TDB"
+      CASE tDOC = 1 .AND. cSUBTIPO = "TDB"    //xls
            FAZERDBF( {|| Fazerxlsclass() }, .F.,,, cMASK )
-      CASE tdoc = 7 .AND. cSUBTIPO="XML"
+      CASE tdoc = 7 .AND. cSUBTIPO="XML"      //xlm 
           FAZERDBF( {|| dbf2xml() }, .F.,,, cMASK )
       OTHERWISE
            FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
@@ -221,7 +221,7 @@ FUNCTION multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, cARQDIC, aESTRU )
    aVAL := Array( Len( aESTRU ) )
    AFill( aVAL, 0 )
    nFIELDS := Len( aESTRU )
-   IF tDOC = 2 // Verificando o tamanho utilizado por cada campo
+   IF tDOC = 2 // Verificando o tamanho utilizado por cada campo  TAM
       PEGTIPO2VAL()
    ENDIF
    GRAVADOC( tdoc, cARQDIC, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCRECNO )
@@ -303,33 +303,33 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       IF tdoc = 0
          RETURN .F.
       ENDIF
-      IF tDOC = 5 // parametros da exportacao
+      IF tDOC = 5 // parametros da exportacao //delimitado
          pegparexp()
       ENDIF
       PegcsUB( tDOC )  // pegar o subtipo conforme tipo
    ENDIF
 
-   IF tdoc = 7 .AND. cSUBTIPO="XML"
+   IF tdoc = 7 .AND. cSUBTIPO="XML"    //xlm
       Dbf2Xml()
       RETURN .T.
    ENDIF
    
-    IF tDOC = 1 .AND. cSUBTIPO = "TDB"
+    IF tDOC = 1 .AND. cSUBTIPO = "TDB"  //xls
        Fazerxlsclass()
        RETURN .T.
    ENDIF    
    
-    IF cSUBTIPO = "XLSXLM" 
+    IF cSUBTIPO = "XLSXLM"         //xlsxlm 
        Fazerxlsxlm() 
        RETURN .T.
     ENDIF   
 
-   IF zEXPOREXT = "XML" .AND. tDOC = 5
+   IF zEXPOREXT = "XML" .AND. tDOC = 5   //xml //delimitado tab
       tDOC := 7
    ENDIF
 
    IF zEXPOREXT = "JSON"
-      tDOC := 8
+      tDOC := 8    //json
    ENDIF
    IF tDOC = 4 // dbe
       lDOCDAD := .F.
@@ -339,22 +339,22 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
 
 
    DO CASE
-   case tDOC = 1
+   case tDOC = 1    //xls
         cARQGRV += "_"+cSUBTIPO+"_.XLS"
-   CASE tDOC = 2
+   CASE tDOC = 2    //TAM 
       cARQGRV += ".TAM"
-   CASE tDOC = 3
+   CASE tDOC = 3    //TEC 
       cARQGRV += ".TEC"
-   CASE tDOC = 4
+   CASE tDOC = 4    // dbe
       cARQGRV += ".DBE"
    CASE tDOC = 5  .OR. zEXPOREXT = "SQL" .OR. zEXPOREXT = "SSV" .OR. zEXPOREXT = "CSV" ;
-         .OR. zEXPOREXT = "UNL" .OR. zEXPOREXT = "TSV" .OR. zEXPOREXT = "PSV"
+         .OR. zEXPOREXT = "UNL" .OR. zEXPOREXT = "TSV" .OR. zEXPOREXT = "PSV"              //delimitado
       cARQGRV += "." + ZEXPOREXT
-   CASE tDOC = 6
+   CASE tDOC = 6   //delimitado
       cARQGRV += ".SDF"
-   CASE tDOC = 7
+   CASE tDOC = 7  //xml
       cARQGRV += "_"+cSUBTIPO+"_.XLS"
-   CASE tDOC = 8
+   CASE tDOC = 8     //json
       cARQGRV += ".JSON"
    ENDCASE
    IF File( cARQGRV )
@@ -367,10 +367,10 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       stat_msg( "Nao exitem campos na area selecionada" )
       RETURN .F.
    ENDIF
-   IF tDOC = 4
+   IF tDOC = 4  // dbe
       cTEXTO += 'DBFDEF ' + Upper( cARQ ) + cLIN
    ENDIF
-   IF tDOC = 3 .OR. tDOC = 2
+   IF tDOC = 3 .OR. tDOC = 2   //TAM  TEC
       cTEXTO += '+-----------------------------------------------------------------------------+' + cLIN
       cTEXTO += '| Arquivo          : ' + PadR( cARQ, 57 ) + '|' + cLIN
       cTEXTO += '| Atualizado em    : ' + PadR( LUpdate(), 57 ) + '|' + cLIN
@@ -381,18 +381,18 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += '| No. | Nome Campo | Tipo     | Com | De | Observacoes                        |' + cLIN
       cTEXTO += '|-----+------------+----------+-----+----+------------------------------------+' + cLIN
    ENDIF
-   IF tDOC = 7 .AND. cSUBTIPO = "PCK"
+   IF tDOC = 7 .AND. cSUBTIPO = "PCK" //xml
       cTEXTO += "<?xml version=" + Chr( 34 ) + "1.0" + Chr( 34 ) + " standalone=" + Chr( 34 ) + "yes" + Chr( 34 ) + "?>" + cLIN
       cTEXTO += "<DATAPACKET Version=" + Chr( 34 ) + "2.0" + Chr( 34 ) + ">" + cLIN
       cTEXTO += "<METADATA>" + cLIN
       cTEXTO += "   <FIELDS>" + cLIN
    ENDIF
-   IF tDOC = 7 .AND. cSUBTIPO = "ISO"
+   IF tDOC = 7 .AND. cSUBTIPO = "ISO"  //xml
       cTEXTO := '<?xml version="1.0" encoding="ISO-8859-1"?>' + cLIN
       cTEXTO += "<DataRoot>" + cLIN
       cTEXTO += "<Estrutura>" + cLIN
    ENDIF
-   IF tDOC = 1 .AND. cSUBTIPO = "TRH"
+   IF tDOC = 1 .AND. cSUBTIPO = "TRH"   //xls 
       cTEXTO += "<html>" + cLIN
       cTEXTO += "<body>" + cLIN
       cTEXTO += "<table border=" + Chr( 34 ) + "1" + Chr( 34 ) + ">" + cLIN
@@ -404,9 +404,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       FOR MEMVAR->x := 1 TO nFIELDS      // aqui menvar evitar confusao dbf que tem o campo X
          cCAMPO := aESTRU[ X, 1 ]
          DO CASE
-         CASE tDOC = 3  .OR. tDOC = 2
+         CASE tDOC = 3  .OR. tDOC = 2  //TAM  TEC
             cOBS := Space( 35 )
-            IF tDOC = 2 .AND. aVAL[ X ] > 0
+            IF tDOC = 2 .AND. aVAL[ X ] > 0   //TAM
                cOBS := PadR( StrZero( aVAL[ X ] ), 35 )
             ENDIF
             cTEXTO += '| ' + Str( X, 3 ) + ' | ' + ;
@@ -415,12 +415,12 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                Str( aESTRU[ X, 3 ], 3 ) + ' | ' + ;
                Str( aESTRU[ X, 4 ], 2 ) + ' | ' + ;
                cOBS + '|' + cLIN
-         CASE tDOC = 4
+         CASE tDOC = 4   // dbe
             cTEXTO += '   ' + PadR( cCAMPO, 10 ) + ' ' + ;
                aESTRU[ X, 2 ] + ' ' + ;
                Str( aESTRU[ X, 3 ], 3 ) + ' ' + ;
                Str( aESTRU[ X, 4 ], 2 ) + cLIN
-         CASE tDOC = 5  .AND. cSUBTIPO <> "SQL" 
+         CASE tDOC = 5  .AND. cSUBTIPO <> "SQL"  //delimitado
             cCAMPO := AllTrim( cCAMPO )
             cCAMPO := RANGEREPL( Chr( 0 ), Chr( 31 ), cCAMPO, " " ) // Remove caracteres de controle
             IF lDOCDAD
@@ -431,9 +431,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                   Str( aESTRU[ X, 3 ], 3 ) + ZDELIMITE + ;
                   Str( aESTRU[ X, 4 ], 2 ) + cLIN
             ENDIF
-         CASE tDOC = 1 .AND. cSUBTIPO = "TRH"
+         CASE tDOC = 1 .AND. cSUBTIPO = "TRH"  //xls
             cTEXTO += "<th nowrap>" + AllTrim( cCAMPO ) + "</th>" + cLIN
-         CASE tDOC = 6
+         CASE tDOC = 6   //delimitado
             IF lDOCDAD
                cTEXTO +=  AllTrim( cCAMPO ) + " " // So nome do campo
             ELSE
@@ -442,7 +442,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                   Str( aESTRU[ X, 3 ], 3 ) + ' ' + ;
                   Str( aESTRU[ X, 4 ], 2 ) + cLIN
             ENDIF
-         CASE tDOC = 7 .AND. cSUBTIPO = "PCK"  // <FIELD attrname="Descricao" fieldtype="string" WIDTH="10"/>
+         CASE tDOC = 7 .AND. cSUBTIPO = "PCK"  //xlm
             cTEXTO += "   <FIELD attrname=" + Chr( 34 ) + AllTrim( cCAMPO ) + Chr( 34 )
             cTEXTO += " fieldtype="
             cTEXTO += Chr( 34 ) + TIPOXML( aESTRU[ X, 2 ], aESTRU[ X, 3 ], aESTRU[ X, 4 ] ) + Chr( 34 )
@@ -453,7 +453,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                cTEXTO += " WIDTH=" + Chr( 34 ) + AllTrim( Str( 255 ) ) + Chr( 34 )
             ENDIF
             cTEXTO += "/>" + cLIN
-         CASE tDOC = 7 .AND. cSUBTIPO = "ISO"
+         CASE tDOC = 7 .AND. cSUBTIPO = "ISO"  //xlm
             cTEXTO += "<Campo>" + CLIN
             cTEXTO += "<Nome>"    + AllTrim( cCAMPO ) +          "</Nome>" + CLIN
             cTEXTO += "<Tipo>"    + aESTRU[ X ][ 2 ] +             "</Tipo>" + CLIN
@@ -464,7 +464,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       NEXT x
       
       // Grava os indices
-      IF tDOC = 7 .AND. cSUBTIPO = "ISO"
+      IF tDOC = 7 .AND. cSUBTIPO = "ISO"     //xlm
          nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
          FOR j = 1 TO  nIndexes
             cTEXTO += "<Indice>" + cLIN
@@ -474,7 +474,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       ENDIF
 
       // cabecario sql  nao precisa loop nos fields
-      IF (tDOC = 5 .AND. cSUBTIPO = "SQL" .AND. lDOCCAB ) //.AND. .NOT. lDOCDAD) //(tDOC = 7 .AND. cSUBTIPO <> "ISO") 
+      IF (tDOC = 5 .AND. cSUBTIPO = "SQL" .AND. lDOCCAB ) //delimitado 
          aUSO := aESTRU
          IF Empty( aESTRU )
             aUSO := dbStruct()
@@ -498,7 +498,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             cTEXTO := "CREATE TABLE " + cARQ + hb_osNewLine()
             cTEXTO += " ("
             FOR K = 1 TO Len( aUSO )
-               cTEXTO += AllTrim( aUSO[ K ][ DBS_NAME ] ) + " " // 1
+               cTEXTO += AllTrim( aUSO[ K ][ DBS_NAME ] ) + " " 
                DO CASE
                CASE aUSO[ K ][ DBS_TYPE ] = "C"
                   IF aUSO[ K ][ DBS_LEN ] = 254
@@ -531,23 +531,23 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
    ENDIF
 
 
-   IF tDOC = 1 .AND. cSUBTIPO = "TRH"
+   IF tDOC = 1 .AND. cSUBTIPO = "TRH"   //xls
       cTEXTO += "</tr>" + cLIN
    ENDIF
-   IF tDOC = 7 .AND. cSUBTIPO = "PCK"
+   IF tDOC = 7 .AND. cSUBTIPO = "PCK"   //xml
       cTEXTO += "  </FIELDS>" + cLIN
       cTEXTO += "</METADATA>" + cLIN
       cTEXTO += "<ROWDATA>" + cLIN
    ENDIF
-   IF tDOC = 7 .AND. cSUBTIPO = "ISO"
+   IF tDOC = 7 .AND. cSUBTIPO = "ISO"    //xml
       cTEXTO += "</Estrutura>" + cLIN
       cTEXTO += "<Dados>" + cLIN
    ENDIF
 
-   IF tDOC = 5 .AND. lDOCCAB 
+   IF tDOC = 5 .AND. lDOCCAB    //delimitado
       cTEXTO += cLIN
    ENDIF
-   IF tDOC = 6
+   IF tDOC = 6   //delimitado
       cTEXTO += cLIN
    ENDIF
 
@@ -556,19 +556,19 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
        FWrite( nHANDLEDOC, cTEXTO )
     eNDIF
 
-   IF tDOC = 8
+   IF tDOC = 8     //json
       hRecords := { => }
    ENDIF
 
    cTEXTO := ""
 
-   IF tDOC = 3  .OR. tDOC = 2
+   IF tDOC = 3  .OR. tDOC = 2   //TAM  TEC
       cTEXTO += '+-----+------------+----------+-----+----+------------------------------------+' + cLIN
    ENDIF
    
    
    
-   IF tDOC = 4 
+   IF tDOC = 4    // dbe
       cTEXTO += 'ENDDEF' + cLIN
       nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
       IF nIndexes > 0
@@ -645,35 +645,35 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       endif
       dbGoTop()
       WHILE ! Eof()
-         IF tDOC = 5 .AND. lDOCRECNO
+         IF tDOC = 5 .AND. lDOCRECNO    //delimitado
             cTEXTO += AllTrim( Str( RecNo() ) ) + ZDELIMITE
          ENDIF
          nXLS++
          DO CASE
-         CASE tDOC = 7 .AND. cSUBTIPO = "PCK"
+         CASE tDOC = 7 .AND. cSUBTIPO = "PCK"     //xml
             cTEXTO += "<ROW RowState=" + Chr( 34 ) + "12" + Chr( 34 )
-         CASE tDOC = 1 .AND. cSUBTIPO = "TRH"
+         CASE tDOC = 1 .AND. cSUBTIPO = "TRH"  //xls
             cTEXTO += "<tr>"         + cLIN
-         CASE tDOC = 1 .AND. cSUBTIPO = "ISO"
+         CASE tDOC = 1 .AND. cSUBTIPO = "ISO"   //xls
             cTEXTO += "<Registro>" + cLin
          CASE zEXPOREXT = "SQL"
             cTEXTO += "insert into " + Alias() + " values ("
          ENDCASE
 
-         IF tDOC = 8
+         IF tDOC = 8    //json
             hRecord := { => }
             cTEXTO := ""    // zerando estava gerando acumlando os campos anteriores
          ENDIF
 
          FOR X = 1 TO nFIELDS
             cCAMPO := aESTRU[ X, 1 ]
-            IF tDOC = 7 .AND. cSUBTIPO = "PCK"
+            IF tDOC = 7 .AND. cSUBTIPO = "PCK"    //xml
                cTEXTO += " " + AllTrim( cCAMPO ) + "=" + Chr( 34 )
             ENDIF
-            IF tDOC = 1 .AND. cSUBTIPO = "TRH"
+            IF tDOC = 1 .AND. cSUBTIPO = "TRH"     //xls
                cTEXTO += "<td align=" + Chr( 34 ) + "right" + Chr( 34 ) + ">"
             ENDIF
-            IF tDOC = 7 .AND. cSUBTIPO = "ISO"
+            IF tDOC = 7 .AND. cSUBTIPO = "ISO"     //xml
                cTEXTO += "<" + cCAMPO + ">"
             ENDIF
 
@@ -793,17 +793,17 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             ENDCASE
             
             DO CASE
-            CASE tDOC = 7 .AND. cSUBTIPO = "PCK"
+            CASE tDOC = 7 .AND. cSUBTIPO = "PCK"     //xml
                cTEXTO += Chr( 34 )
-            CASE tDOC = 1 .AND. cSUBTIPO = "TRH"
+            CASE tDOC = 1 .AND. cSUBTIPO = "TRH"          //xls
                cTEXTO += "</td>" + Chr( 13 ) + Chr( 10 )
-            CASE ( ( tDOC = 5 .AND. cSUBTIPO = "TAB" ) .OR. tDOC = 6 )
+            CASE ( ( tDOC = 5 .AND. cSUBTIPO = "TAB" ) .OR. tDOC = 6 )   //delimitado
                IF X <> nFIELDS
                   cTEXTO += ZDELIMITE
                ENDIF
-            CASE tDOC = 7 .AND. cSUBTIPO = "ISO"
+            CASE tDOC = 7 .AND. cSUBTIPO = "ISO"       //xml
                cTEXTO += "</" + cCAMPO + ">" + cLIN
-            CASE Tdoc = 8
+            CASE Tdoc = 8    //json
                hb_HSet( hRecord, FieldName( x ), Ctexto )// FieldGet(nField)) // for each record, hrecord holds a hash of column name: column value
                cTEXTO := ""
             OTHERWISE
@@ -813,23 +813,23 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             ENDCASE
          NEXT X
          DO CASE
-         CASE tDOC = 7 .AND. cSUBTIPO = "PCK"
+         CASE tDOC = 7 .AND. cSUBTIPO = "PCK"     //xml
             cTEXTO += "/>" + cLIN
-         CASE tDOC = 6
+         CASE tDOC = 6                            //delimitado
             cTEXTO += cLIN
-         CASE tDOC = 1 .AND. cSUBTIPO = "TRH"
+         CASE tDOC = 1 .AND. cSUBTIPO = "TRH"     //xls
             cTEXTO += "</tr>" + cLIN
-         CASE tDOC = 7 .AND. cSUBTIPO = "ISO"
+         CASE tDOC = 7 .AND. cSUBTIPO = "ISO"     //xml
             cTEXTO += "</Registro>" + cLIN
-         CASE zEXPOREXT = "SQL"
+         CASE zEXPOREXT = "SQL"                   //delimitado
             cTEXTO += ") ; " + cLIN
-         CASE Tdoc = 8
+         CASE Tdoc = 8                             //json
             // Abaixo
          OTHERWISE
             cTEXTO += cLIN
          ENDCASE
          DO CASE
-         CASE tdoc = 8
+         CASE tdoc = 8     //json
             hb_HSet( hRecords, LTrim( Str( nxls ) ), hRecord ) // like so, a hash of recno: hash of columns/values of this record  RecNo() usa nxls para ficar sequencial
          OTHERWISE
             FWrite( nHANDLEDOC, cTEXTO )
@@ -839,15 +839,15 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          dbSkip()
       ENDDO
    ENDIF
-   IF tDOC = 7 .AND. cSUBTIPO = "PCK"
+   IF tDOC = 7 .AND. cSUBTIPO = "PCK"     //xml
       cTEXTO += "</ROWDATA>" + cLIN
       cTEXTO += "</DATAPACKET>" + cLIN
    ENDIF
-   IF tDOC = 7 .AND. cSUBTIPO = "ISO"
+   IF tDOC = 7 .AND. cSUBTIPO = "ISO"      //xml
       cTEXTO += "</Dados>" + cLIN
       cTEXTO += "</DataRoot>" + cLIN
    ENDIF
-   IF tDOC = 1 .AND. cSUBTIPO = "TRH"
+   IF tDOC = 1 .AND. cSUBTIPO = "TRH"      //xls
       cTEXTO += "</table>" + cLIN
       cTEXTO += "</body>" + cLIN
       cTEXTO += "</html>" + cLIN
@@ -855,7 +855,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
    IF Len( cTEXTO ) > 0
       FWrite( nHANDLEDOC, cTEXTO )
    ENDIF
-   IF tDOC = 8
+   IF tDOC = 8   //json
       FSeek( nHandledoc, 0, 2 )
       FWrite( nHandledoc, hb_jsonEncode( hRecords, .T. ) )
    ENDIF
