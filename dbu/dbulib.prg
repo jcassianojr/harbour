@@ -428,25 +428,25 @@ CASE tDOC = 2
 CASE tDOC = 3
    zEXPOREXT := "TEC"
 CASE tDOC = 4
-   zEXPOREXT := "DBE"
-CASE tDOC = 5
-   zEXPOREXT := "DLM"
-CASE tDOC = 6
-   zEXPOREXT := "SDF"
+   zEXPOREXT := "DBE"  
+CASE tDOC = 5   
+   zEXPOREXT := "DLM" //-->5 delimitado pelo caracter escolhido
+CASE tDOC = 6   
+   zEXPOREXT := "SDF" // delimitado espaco
 CASE tDOC = 7
    zEXPOREXT := "XML"
 CASE tDOC = 8
    zEXPOREXT := "JSON"
-CASE tDOC = 9
-   zEXPOREXT := "SSV"
-CASE tDOC = 10
-   zEXPOREXT := "CSV"
-CASE tDOC = 11
-   zEXPOREXT := "UNL"
-CASE tDOC = 12
-   zEXPOREXT := "TSV"
-CASE tDOC = 13
-   zEXPOREXT := "SQL"
+CASE tDOC = 9   
+   zEXPOREXT := "SSV" //-->5 delimitado ;
+CASE tDOC = 10   
+   zEXPOREXT := "CSV" //-->5 delimitado ,
+CASE tDOC = 11   
+   zEXPOREXT := "UNL" //-->5 delimitado | PIPE
+CASE tDOC = 12  
+   zEXPOREXT := "TSV" //-->5 delimitado TAB CHR(9)
+CASE tDOC = 13   
+   zEXPOREXT := "SQL" //-->5 delimitado , no insert into
 CASE tDOC = 14
    zEXPOREXT := "DBF"
 ENDCASE
@@ -585,26 +585,26 @@ zDELIMITE := " "
 zregSEP   := " "
 lRETU     := .T.
 DO CASE
-CASE zEXPOREXT = "TXT"
-CASE zEXPOREXT = "TEC"
-CASE zEXPOREXT = "DBE"
-CASE zEXPOREXT = "TAM"
-CASE zEXPOREXT = "DBF"
-CASE zEXPOREXT = "SDF"
-CASE zEXPOREXT = "DLM"
-CASE zEXPOREXT = "SSV"
-   zDELIMITE := ";"
-CASE zEXPOREXT = "CSV"
-   zDELIMITE := ","
-CASE zEXPOREXT = "UNL" .OR. zEXPOREXT = "PSV"
-   zDELIMITE := "|"
-CASE zEXPOREXT = "TSV" .OR. zEXPOREXT = "XLS"
-   zDELIMITE := "9"
-CASE zEXPOREXT = "XML"
-CASE zEXPOREXT = "SQL"
-   zDELIMITE := ","
-CASE zEXPOREXT = "JSON"
-OTHERWISE
+    CASE zEXPOREXT = "TXT"
+    CASE zEXPOREXT = "TEC"
+    CASE zEXPOREXT = "DBE"
+    CASE zEXPOREXT = "TAM"
+    CASE zEXPOREXT = "DBF"
+    CASE zEXPOREXT = "SDF"
+    CASE zEXPOREXT = "DLM"
+    CASE zEXPOREXT = "SSV"
+       zDELIMITE := ";"
+    CASE zEXPOREXT = "CSV"
+       zDELIMITE := ","
+    CASE zEXPOREXT = "UNL" .OR. zEXPOREXT = "PSV"
+       zDELIMITE := "|"
+    CASE zEXPOREXT = "TSV" .OR. zEXPOREXT = "XLS"
+       zDELIMITE := "9"
+    CASE zEXPOREXT = "XML"
+    CASE zEXPOREXT = "SQL"
+       zDELIMITE := ","
+    CASE zEXPOREXT = "JSON"
+    OTHERWISE
    lRETU := .F.
 ENDCASE
 RETURN lRETU
