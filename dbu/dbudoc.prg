@@ -76,7 +76,7 @@ FUNCTION GERADOC( tdoc )
       IF tdoc = 0
          RETURN .F.
       ENDIF
-      IF tDOC = 5 // parametros da exportacao delimitado
+      IF tDOC = 5 .or. tDOC = 6// parametros da exportacao delimitado
          pegparexp()
       ENDIF
    ENDIF
@@ -184,7 +184,7 @@ FUNCTION multidocs
          RETURN .F.
       ENDIF
    ENDIF
-   IF tDOC = 5 // parametros da exportacao //delimitado
+   IF tDOC = 5 .or. tDOC = 6 // parametros da exportacao //delimitado sdf
       pegparexp()
    ENDIF
    lDOCCAB  := .F.
@@ -306,7 +306,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       IF tdoc = 0
          RETURN .F.
       ENDIF
-      IF tDOC = 5 // parametros da exportacao //delimitado
+      IF tDOC = 5 .or. tdoc=6 // parametros da exportacao //delimitado
          pegparexp()
       ENDIF
       PegcsUB( tDOC )  // pegar o subtipo conforme tipo
@@ -652,6 +652,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          IF tDOC = 5 .AND. lDOCRECNO    //delimitado
             cTEXTO += AllTrim( Str( RecNo() ) ) + ZDELIMITE
          ENDIF
+         IF tDOC = 6 .AND. lDOCRECNO    //sdf
+            cTEXTO += Strzero( RecNo(),8,0 )  
+         ENDIF
          nXLS++
          DO CASE
          CASE tDOC = 7 .AND. cSUBTIPO = "PCK"     //xml
@@ -806,10 +809,10 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             
             DO CASE
             CASE tDOC = 7 .AND. cSUBTIPO = "PCK"     //xml
-               cTEXTO += Chr( 34 )
+                 cTEXTO += Chr( 34 )
             CASE tDOC = 1 .AND. cSUBTIPO = "TRH"          //xls
-               cTEXTO += "</td>" + Chr( 13 ) + Chr( 10 )
-            CASE ( ( tDOC = 5 .AND. cSUBTIPO = "TAB" ) .OR. tDOC = 6 )   //delimitado
+                 cTEXTO += "</td>" + Chr( 13 ) + Chr( 10 )
+            CASE tDOC = 5 .AND. cSUBTIPO = "TAB"     //delimitado tab  
                IF X <> nFIELDS
                   cTEXTO += ZDELIMITE
                ENDIF
@@ -828,9 +831,6 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          CASE tDOC = 7 .AND. cSUBTIPO = "PCK"     //xml
             cTEXTO += "/>" + cLIN
          CASE tDOC = 6                            //SDF
-            // IF nFieldLength>0
-            //    cTEXTO:=PADR(cTEXTO,nFieldLength+ nFieldDec)
-            // ENDIF   
              cTEXTO += cLIN
          CASE tDOC = 1 .AND. cSUBTIPO = "TRH"     //xls
             cTEXTO += "</tr>" + cLIN
