@@ -526,6 +526,14 @@ FUNCTION mix_close()
    ENDIF
 
 
+function mix_AFFECTEDROWS()
+LOCAL nRetVal
+nRetVal:=0
+IF ! Empty( nconn ) .AND. nConn <> 0
+     nRetVal := rddInfo( RDDI_AFFECTEDROWS,,, nConn )
+ENDIF
+return nRetVal
+
 
 // +--------------------------------------------------------------------
 // +

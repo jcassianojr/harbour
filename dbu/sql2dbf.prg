@@ -242,40 +242,40 @@ FUNCTION C2SQL( Value )
    LOCAL cValue := ""
    LOCAL cdate  := ""
 
-   IF ValType( value ) == "C" .AND. Len( AllTrim( value ) ) > 0
-      value := StrTran( value, "'", "''" )
-   ENDIF
    DO CASE
-   CASE ValType( Value ) == "N"
-      cValue := AllTrim( Str( Value ) )
-   CASE ValType( Value ) == "@"    //Datetime
-       cValue :=C2SQLTS( Value)
-   CASE ValType( Value ) == "D"
-      IF !Empty( Value )
-         cdate  := DToS( value )
-         cValue := "'" + SubStr( cDate, 1, 4 ) + "-" + SubStr( cDate, 5, 2 ) + "-" + SubStr( cDate, 7, 2 ) + "'"
-      ELSE
-         cValue := "''"
-      ENDIF
-   CASE ValType( Value ) $ "CM"
-      IF Empty( Value )
-         cValue := "''"
-      ELSE
-         // troca caracteres ',() usados pelo sql language
-         cVALUE := StrTran( cVALUE, "'", " " )
-         cVALUE := StrTran( cVALUE, ",", " " )
-         cVALUE := StrTran( cVALUE, "(", " " )
-         cVALUE := StrTran( cVALUE, ")", " " )
-         cVALUE := AllTrim( cVALUE )
-         cValue := "'" + value + "'"
-      ENDIF
-   CASE ValType( Value ) == "L"
-      cValue := AllTrim( Str( iif( Value == .F., 0, 1 ) ) )
+       CASE ValType( Value ) == "N"
+          cValue := AllTrim( Str( Value ) )
+       CASE ValType( Value ) == "@"    //Datetime
+           cValue :=C2SQLTS( Value)
+       CASE ValType( Value ) == "D"
+          IF ! Empty( Value )
+             cdate  := DToS( value )
+             cValue := "'" + SubStr( cDate, 1, 4 ) + "-" + SubStr( cDate, 5, 2 ) + "-" + SubStr( cDate, 7, 2 ) + "'"
+          ELSE
+             cValue := "''"
+          ENDIF
+       CASE ValType( Value ) $ "CM"
+          IF Empty( Value )
+             cValue := "''"
+          ELSE
+             cVALUE := VALUE
+             // troca caracteres ',() usados pelo sql language
+             cVALUE := StrTran( cVALUE, "'", " " )
+             cVALUE := StrTran( cVALUE, ",", " " )
+             cVALUE := StrTran( cVALUE, "(", " " )
+             cVALUE := StrTran( cVALUE, ")", " " )
+             //cVALUE := StrTran( cvalue, "'", "''" )   //  dobra ' acima removendo evitar erros de fechamento string quando ' esta no meio da string
+             cVALUE := StrTran( cVALUE, "\", "\\" )   //  inclui nova barra pois e considerada escape no insert into
+             cVALUE := AllTrim( cVALUE ) 
+             cValue := "'" + cvalue + "'"
+          ENDIF
+       CASE ValType( Value ) == "L"
+          cValue := AllTrim( Str( iif( Value == .F., 0, 1 ) ) )
    OTHERWISE
       cValue := "''"   // NOTE: Here we lose values we cannot convert
    ENDCASE
 
-   RETURN cValue
+RETURN cValue
 
 
 
