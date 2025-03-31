@@ -5,7 +5,7 @@
 #-tshead=tshead.ch
 #-manifest=dbu.Manifest  comentado erro compilacao 32 bits
 #-locilib
-#-m -n -w0 -es2 -ge1
+# -m -n -w0 -es2 -ge1
 
 
 #d:\develop\harbour\dbu\dbu.rc
@@ -14,9 +14,6 @@ hbct.hbc
 hbwin.hbc
 hbtip.hbc
 xhb.hbc
-hbziparc.hbc
-hbmxml.hbc
-hbxlsxml.hbc
 rddads.hbc
 rddbm.hbc
 
@@ -27,6 +24,9 @@ hbmysql.hbc
 hbpgsql.hbc
 hbodbc.hbc
 hbmemio.hbc
+hbziparc.hbc
+hbmxml.hbc
+hbxlsxml.hbc
 #
 # sqlmix
 #
