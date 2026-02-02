@@ -164,13 +164,14 @@ OBSERVAÇÕES:
       WHILE !Eof()
          mNOME    := md10imp->nome
          mUF      := md10imp->uf
-         mNOME    := tratanome( mNOME, .T., .T. )
+         mNOME    := tratanome( mNOME, .T., .T. ,.T.)
          mDDD     := md10imp->DDD
          mCODIBGE := md10imp->CODIBGE
 
          // mCODTSE   := md10imp->CODTSE     mesmo codigo codirrf
          mCODBACEN := md10imp->CODBACEN
          mCODIRRF  := md10imp->CODIRRF
+         mCODSIAFI := md10imp->CODSIAFI
 
          mINICEP := md10imp->INICEP
          mFIMCEP := md10imp->FIMCEP
@@ -257,6 +258,12 @@ OBSERVAÇÕES:
             IF !Empty( mCODBACEN ) .AND. Empty( md10->CODBACEN )
                md10->CODBACEN := mCODBACEN
             ENDIF
+          
+            IF !Empty( mCODSIAFI ) .AND. Empty( md10->CODSIAFI )
+               md10->CODSIAFI := mCODSIAFI
+            ENDIF
+          
+            
             IF !Empty( mINICEP ) .AND. Val( md10->INICEP ) = 0
                md10->INICEP := mINICEP
             ENDIF
@@ -277,14 +284,34 @@ OBSERVAÇÕES:
             IF !Empty( mCODTEL ) .AND. Val( md10->CODTEL ) = 0
                md10->CODTEL := mCODTEL
             ENDIF
+            IF AT("-",mLATITUDE)>0
+               mLATITUDE:=STRTRAN(mLATITUDE,"-","")
+               IF EMPTY(MHEMISFERIO)
+                  MHEMISFERIO:="S"
+               ENDIF
+            ENDIF
+            IF AT("+",mLATITUDE)>0
+               mLATITUDE:=STRTRAN(mLATITUDE,"+","")
+               IF EMPTY(MHEMISFERIO)
+                  MHEMISFERIO:="N"
+               ENDIF
+            ENDIF
+     
+            IF AT("-",mLONGITUDE)>0
+               mLONGITUDE:=STRTRAN(mLONGITUDE,"-","")
+            ENDIF       
+             IF AT("+",mLONGITUDE)>0
+               mLONGITUDE:=STRTRAN(mLONGITUDE,"+","")
+            ENDIF     
+            
             IF !Empty( mLATITUDE ) .AND. Val( md10->LATITUDE ) = 0
-               md10->LATITUDE := LATITUDE
+               md10->LATITUDE := MLATITUDE
             ENDIF
             IF !Empty( mLONGITUDE ) .AND. Val( md10->LONGITUDE ) = 0
-               md10->LONGITUDE := LONGITUDE
+               md10->LONGITUDE := MLONGITUDE
             ENDIF
             IF !Empty( mHEMISFERIO ) .AND. Val( md10->HEMISFERIO ) = 0
-               md10->HEMISFERIO := HEMISFERIO
+               md10->HEMISFERIO := MHEMISFERIO
             ENDIF
             IF mAREA > 0 .AND. md10->AREA = 0
                md10->AREA := mAREA

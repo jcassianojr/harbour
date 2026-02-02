@@ -17,11 +17,11 @@
 
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // +
-// +    Function PEGTIPO2VAL()
+// +    Function PEGTIPO2VAL(aESTRU)
 // +
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // +
-FUNCTION PEGTIPO2VAL()
+FUNCTION PEGTIPO2VAL(aESTRU)
 
    nLASTREC := LastRec()
    zei_fort( nLASTREC,,, 0 )
@@ -94,7 +94,7 @@ FUNCTION GERADOC( tdoc )
    AVAL := Array( nFIELDS )
    AFill( aVAL, 0 )
    IF tDOC = 2 // Verificando o tamanho utilizado por cada campo
-      PEGTIPO2VAL()
+      PEGTIPO2VAL(aESTRU)
    ENDIF
    PegcsUB( tDOC )
    GRAVADOC( tdoc, stru_base, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCRECNO )
@@ -225,7 +225,7 @@ FUNCTION multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, cARQDIC, aESTRU )
    AFill( aVAL, 0 )
    nFIELDS := Len( aESTRU )
    IF tDOC = 2 // Verificando o tamanho utilizado por cada campo  TAM
-      PEGTIPO2VAL()
+      PEGTIPO2VAL(aESTRU)
    ENDIF
    GRAVADOC( tdoc, cARQDIC, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCRECNO )
 
@@ -278,7 +278,7 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK )
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // +
 // +    Function GRAVADOC()
-// aVAL maior dos campos usado no tipo 2 TAM
+// aVAL maior dos campos usado no tipo TEC=3 /TAM=2
 // lDOCCAB inclui cabecario
 // lDOCDAD inclui dados registros
 // cSUBTIPO subtipo alguns formartos
@@ -346,7 +346,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
         cARQGRV += "_"+cSUBTIPO+"_.XLS"
    CASE tDOC = 2    //TAM 
       cARQGRV += ".TAM"
-   CASE tDOC = 3    //TEC 
+   CASE tDOC = 3    //TEC =3
       cARQGRV += ".TEC"
    CASE tDOC = 4    // dbe
       cARQGRV += ".DBE"
@@ -373,7 +373,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
    IF tDOC = 4  // dbe
       cTEXTO += 'DBFDEF ' + Upper( cARQ ) + cLIN
    ENDIF
-   IF tDOC = 3 .OR. tDOC = 2   //TAM  TEC
+   IF tDOC = 3 .OR. tDOC = 2   //TAM=2  TEC=3
       cTEXTO += '+-----------------------------------------------------------------------------+' + cLIN
       cTEXTO += '| Arquivo          : ' + PadR( cARQ, 57 ) + '|' + cLIN
       cTEXTO += '| Atualizado em    : ' + PadR( LUpdate(), 57 ) + '|' + cLIN
@@ -407,9 +407,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       FOR MEMVAR->x := 1 TO nFIELDS      // aqui menvar evitar confusao dbf que tem o campo X
          cCAMPO := aESTRU[ X, 1 ]
          DO CASE
-         CASE tDOC = 3  .OR. tDOC = 2  //TAM  TEC
+         CASE tDOC = 3  .OR. tDOC = 2  //TAM=2  TEC=3
             cOBS := Space( 35 )
-            IF tDOC = 2 .AND. aVAL[ X ] > 0   //TAM
+            IF tDOC = 2 .AND. aVAL[ X ] > 0   //TAM=2
                cOBS := PadR( StrZero( aVAL[ X ] ), 35 )
             ENDIF
             cTEXTO += '| ' + Str( X, 3 ) + ' | ' + ;
@@ -566,7 +566,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
 
    cTEXTO := ""
 
-   IF tDOC = 3  .OR. tDOC = 2   //TAM  TEC
+   IF tDOC = 3  .OR. tDOC = 2   //TAM=3  TEC=2
       cTEXTO += '+-----+------------+----------+-----+----+------------------------------------+' + cLIN
    ENDIF
    
