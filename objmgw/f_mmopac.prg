@@ -55,7 +55,10 @@ FUNCTION MEMOPACK( packlist, lMES, lINFO, cUSORDD )  // Array Arquivos se texto 
    LOCAL real_recs
    LOCAL ret_value
    LOCAL cARQNOME
+   LOCAL aRETVAL 
    PRIVATE temp_file
+   
+   //aRETVAL:={0,"",""}
 
    cOLDRDD := rddSetDefault()
 
@@ -78,7 +81,10 @@ FUNCTION MEMOPACK( packlist, lMES, lINFO, cUSORDD )  // Array Arquivos se texto 
          EXIT
       ENDIF
 
-      nVERSAO := INFOTIPODBF( cARQNOME, lMES )  // traz o tipo pelo reader na f_ismemo
+      //nVERSAO := INFOTIPODBF( cARQNOME, lMES )  // traz o tipo pelo reader na f_ismemo
+      
+      aRETVAL:= INFOTIPODBF( cCaminho+dbf_name, .F. )
+      nVERSAO := aRETVAL[1]
 
       IF !( nVERSAO = 131 .OR. nVERSAO = 245 .OR. nVERSAO = 139 )
          ret_value := '6 - Nao Possui Memo' + cARQNOME
@@ -86,8 +92,13 @@ FUNCTION MEMOPACK( packlist, lMES, lINFO, cUSORDD )  // Array Arquivos se texto 
       ENDIF
 
       IF Empty( cUSORDD )
-         cNTXEXT := ".DBT"   // rddSetDefault("DBTCDX")
-         IF nVERSAO = 245
+         //cNTXEXT := ".DBT"   // rddSetDefault("DBTCDX")
+         cNTXEXT := aRETVAL[1]
+         //remover ifs versao futura com testes na infodbftipo retornando corretamente 
+         IF nVERSAO = 139 .OR. nVERSAO = 132
+            cNTXEXT := ".DBT"  // rddSetDefault( "DBFNTX )
+         ENDIF
+         IF nVERSAO = 245 .OR. nVERSAO = 48
             cNTXEXT := ".FPT"  // rddSetDefault( "FPTCDX" )
          ENDIF
          IF nVERSAO = 229
@@ -110,15 +121,20 @@ FUNCTION MEMOPACK( packlist, lMES, lINFO, cUSORDD )  // Array Arquivos se texto 
 
       // Abre a base de dados e obtem a contagem de registros.
       IF Empty( cUSORDD )
-         IF nVERSAO = 131
-            rddSetDefault( "DBFNTX" )  // rddSetDefault("DBTCDX")
+        cUSORDD := aRETVAL[2]
+         //remover ifs versao futura com testes na infodbftipo retornando corretamente 
+         
+         
+         IF memoflds = 131 .or. nVERSAO = 48
+            rddSetDefault( cUSORDD )
          ENDIF
-         IF nVERSAO = 245
-            rddSetDefault( "DBFCDX" )  // rddSetDefault( "FPTCDX" )
+         IF memoflds = 245
+            rddSetDefault( ccUSORDD  )
          ENDIF
-         IF nVERSAO = 229
-            rddSetDefault( "SMTCDX" )  // rddSetDefault( "SMTCDX" ) SIXCDX
+         IF memoflds = 229
+            rddSetDefault( cUSORDD  )
          ENDIF
+         
          IF nVERSAO = 139
             ret_value := '8 - driver DBFMDX nao mais disponivel '
             EXIT

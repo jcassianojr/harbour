@@ -56,12 +56,14 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
    LOCAL i
    LOCAL cTAG
    LOCAL cCHAVEDBF
+   LOCAL aRETVAL
    PRIVATE dbf_name := dbf_text := textline := '', handle := 0,   text_row := 7, new_stru := {}  
    PRIVATE new_index := {}
+//   aRETVAL:={0,"",""}
    
   
-   
-   IF ValType( cDRIVER ) # "C"
+   //pega pelo infodbf implantar 
+    IF ValType( cDRIVER ) # "C"
       cDRIVER := "DBFCDX"
    ENDIF
 
@@ -228,26 +230,29 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
          // Localiza na base de dados nomes de memo definidos.
 
          lMEMO    := ISMEMO( cCaminho+dbf_name, .F., .F. )
-         memoflds := INFOTIPODBF( cCaminho+dbf_name, .F. )
+         //memoflds := INFOTIPODBF( cCaminho+dbf_name, .F. )
+         aRETVAL:= INFOTIPODBF( cCaminho+dbf_name, .F. )
+         memoflds := aRETVAL[1]
          memoext  := ""
          IF memoflds = 131
             memoext := ".DBT"
-            rddSetDefault( "DBFNTX" )
+            cDRIVER := "DBFNTX"
+            rddSetDefault(cDRIVER )
          ENDIF
          IF memoflds = 245
             memoext := ".FPT"
             cDRIVER := "DBFCDX"
-            rddSetDefault( "DBFCDX" )
+            rddSetDefault( cDRIVER )
          ENDIF
          IF memoflds = 139   // Na memo pack tratara driver sem uso
             memoext := ".DBT"
             cDRIVER := "DBFCDX"
-            rddSetDefault( "DBFMDX" )
+            rddSetDefault( cDRIVER )
          ENDIF
          IF memoflds = 229
             memoext := ".SMT"
             cDRIVER := "SMTCDX"
-            rddSetDefault( "SMTCDX" )
+            rddSetDefault( cDRIVER )
          ENDIF
 
          IF Empty( memoext )
