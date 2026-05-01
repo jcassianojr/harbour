@@ -58,46 +58,69 @@
 // +
 FUNCTION validaPlaca( cPlaca )
 
-   LOCAL lRetorno := .T., nI, cPLACA3
+   LOCAL lRetorno := .T.
+  // LOCAL nI:=0
+   //LOCAL cCHAR:=""
+   LOCAL cPLACA3:=""
+   LOCAL cRegExAntigo  := "^[A-Z]{3}[0-9]{4}$"
+   LOCAL cRegExMercosul := "^[A-Z]{3}[0-9][A-Z][0-9]{2}$"
 
-   ZNERRO := 0
-   ZERRO  := ""
+   ZNERRO := 0  // codigo do erro
+   ZERRO  := ""  //descritivo do erro
 
-   cPLACA := AllTrim( STRVAL( cPLACA ) )
-   cPLACA := TIRAOUT( cPLACA )
-   cPLACA := Upper( cPLACA )
+   cPlaca:= AllTrim( STRVAL( cPlaca) )
+   cPlaca:= TIRAOUT( cPlaca)
+   cPlaca:= Upper( cPlaca)
 
-// Regex regex = new Regex(@"^[a-zA-Z]{3}\-\d{4}$");
-   IF Len( cPlaca ) = 7  // ABC1234
-      FOR nI := 1 TO Len( cPlaca )
-         IF nI <= 3  // tem que ser letra
-            IF !SubStr( cPlaca, nI, 1 ) $ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-               lRetorno := .F.
-               ZNERRO   := 1
-               ZERRO    := "digito " + StrZero( ni, 1 ) + " nao e letra"
-               EXIT
-            ENDIF
-         ELSE  // tem que ser numero
-            IF !SubStr( cPlaca, nI, 1 ) $ '0123456789'
-               lRetorno := .F.
-               ZNERRO   := 2
-               ZERRO    := "digito " + StrZero( ni, 1 ) + " nao e numero"
-               EXIT
-            ENDIF
-         ENDIF
+
+   IF Len( cPlaca) = 7  // Antigo ABC1234  novo mercursul ABC1D23 5 posicao pode ser letra
+      lRetorno :=hb_regexHas( cRegExAntigo, cPlaca) .OR. hb_regexHas( cRegExMercosul, cPlaca)
+   ELSE
+      lRetorno := .F.
+      ZNERRO := 1
+      ZERRO := "Tamanho invalido"    
+   ENDIF
+   
+     /*
+      FOR nI := 1 TO Len( cPlaca)
+         DO CASE
+            CASE nI <= 3 .OR. nI == 5  // 1ª, 2ª, 3ª e 5ª posições devem ser LETRAS
+               IF !cChar $ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                  // Se for a 5ª posição, ainda pode ser número no padrão ANTIGO
+                  // Para ser híbrido, validamos se é letra OU número dependendo da regra
+                  IF nI == 5 .AND. !cChar $ '0123456789' 
+                     lRetorno := .F.
+                     EXIT
+                  ENDIF
+                  
+                  IF nI <= 3
+                     lRetorno := .F.
+                     EXIT
+                  ENDIF
+               ENDIF
+               
+            CASE nI == 4 .OR. nI >= 6 // 4ª, 6ª e 7ª posições devem ser NÚMEROS
+               IF !cChar $ '0123456789'
+                  lRetorno := .F.
+                  EXIT
+               ENDIF
+            ENDCASE
       NEXT
    ELSE
       lRetorno := .F.
    ENDIF
+   */
 
-   IF cPLACA = "XXX9999" .OR. cPLACA = "XXX999" .OR. cPLACA = "XX9999" .OR. cPLACA = "XXXX999"
+   IF cPlaca= "XXX9999" .OR. cPlaca= "XXX999" .OR. cPlaca= "XX9999" .OR. cPlaca= "XXXX999"
       LRetorno := .F.  // placas genericas
       ZNERRO   := 3
-      ZERRO    := "placa generica" + cPLACA
+      ZERRO    := "placa generica" + cPlaca 
    ENDIF
 
-   IF lRETORNO
-      cPLACA3 := SubStr( cPLACA, 1, 3 )
+
+    //// Verifica o estado somente se for o padrão antigo - mercosul implentacao futura
+   IF lRETORNO .AND. hb_regexHas( cRegExAntigo, cPlaca)
+      cPLACA3 := SubStr( cPlaca , 1, 3 )
       DO CASE
       CASE cPLACA3 >= "MZN" .AND. cPLACA3 <= "NAG"   // AC|MZN|NAG|
          ZERRO := "AC"
@@ -145,7 +168,7 @@ FUNCTION validaPlaca( cPlaca )
          ZERRO := "RR"
       CASE cPLACA3 >= "IAQ" .AND. cPLACA3 <= "JDO"   // RS|IAQ|JDO|
          ZERRO := "RS"
-      CASE cPLACA3 >= "LVW" .AND. cPLACA3 <= "MMM"   // SC|LWR|MMM|
+      CASE cPLACA3 >= "LWR" .AND. cPLACA3 <= "MMM"   // SC|LWR|MMM|
          ZERRO := "SC"
       CASE cPLACA3 >= "HZB" .AND. cPLACA3 <= "IAP"   // SE|HZB|IAP|
          ZERRO := "SE"
@@ -187,8 +210,8 @@ TO|MVL|MXG|
 */
 
    RETURN lRetorno
-
-
+   
+   
 // +--------------------------------------------------------------------
 // +
 // +
