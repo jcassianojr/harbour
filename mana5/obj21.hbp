@@ -201,6 +201,8 @@ MANA5IEB\m_a2.prg
 \develop\harbour\objmgw\disk70.prg
 \develop\harbour\objmgw\disk71.prg
 \develop\harbour\objmgw\disk72.prg
+\develop\harbour\objmgw\feriado.prg
+
 
 #vendo com o novo hb_error
 #\develop\harbour\objmgw\error.prg
@@ -220,6 +222,7 @@ MANA5IEB\m_a2.prg
 \develop\harbour\objmgw\pdf.prg
 \develop\harbour\objmgw\profile.prg
 \develop\harbour\sefazclass\ze_digitodoc.prg
+\develop\harbour\sefazclass\ze_miscfunc.prg
 \develop\harbour\objmgw\valida_placa.prg
 #\develop\harbour\objmgw\validacnh.prg
 \develop\harbour\objmgw\wvgini.prg
