@@ -1538,6 +1538,9 @@ local aRETU
 local cSUBTIPO
 aRETU := {cFieldName,cFieldType,nFieldLength,nFieldDec}
 
+
+ALTD()
+
 cTYPE    := cFieldType
 cSUBTIPO := ""
 IF SUBSTR(cTYPE,2,1) = ":"  //sqlimix manda tipo e subtipo exemplos N:i   C:CU  @:D
@@ -1594,7 +1597,7 @@ case cType == "INT2" .OR. cType == "SMALLINT"
    nFieldLength := 4
    nFieldDec    := 0
 
-case cType == "INT"
+case cType == "INT" .or. cType == "MEDIUMINT"
    cFieldType   := 'N'
    nFieldLength := 8
    nFieldDec    := 0
@@ -1611,7 +1614,8 @@ case cType == "BIGINT" .OR. cType == "INT8" .OR. cType == "BIGSERIAL"
    nFieldDec    := 0
 
 
-case cType == "DOUBLE PRECISION" .or. cType == "FLOAT8"
+//no sqllite tem a vezes aparece so DECIMAL nao especificado a precisao DECIMAL(n,d)
+case cType == "DOUBLE PRECISION" .or. cType == "FLOAT8"  .OR. cType == "DECIMAL" 
    cFieldType   := 'N'
    nFieldLength := 19
    nFieldDec    := 9

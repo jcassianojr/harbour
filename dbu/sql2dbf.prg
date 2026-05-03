@@ -571,6 +571,12 @@ FUNCTION export2dbf( ODB1, cNEWTABLE, Ntipo )
    LOCAL aRecord      := {}
    LOCAL cINDEXNAME   := ""
    LOCAL i, j
+   LOCAL aUsados := {}
+   LOCAL cCurName
+   LOCAL aUsedNames := {} // Lista para controlar nomes já usados
+   LOCAL nSeq := 0
+   LOCAL cBaseName := ""
+   
 
    IF Len( AllTrim( cNewTable ) ) == 0
       msgstop( 'You have to select a DBF to export', 'DBF<-->SQLite Exporter' )
@@ -589,16 +595,43 @@ FUNCTION export2dbf( ODB1, cNEWTABLE, Ntipo )
          // 1    2     3      4           5         6
          cFieldType   := Upper( AllTrim( aTable[ i, 3 ] ) )
          cFieldName   := AllTrim( aTable[ i, 2 ] )
+         cfieldOrigin :=cFieldName //guarda o nome original para para nao utilizar os tratrado maiores que 10 abaixo
          nFieldLength := 0
          nFieldDec    := 0
+         
+         
+         // --- LOGICA DE TRATAMENTO DE NOME ---
+        cFieldName := Upper( Left( cFieldName, 10 ) ) // Garante 10 chars
+        
+        // Se o nome já existe na estrutura, entra no loop de renomeio
+        IF AScan( aUsedNames, cFieldName ) > 0
+           nSeq := 1
+           cBaseName := Left( cFieldName, 8 ) // Deixa espaço para "_1"
+           
+           DO WHILE .T.
+              cFieldName := cBaseName + "_" + AllTrim(Str(nSeq))
+              IF AScan( aUsedNames, cFieldName ) == 0
+                 EXIT
+              ENDIF
+              nSeq++
+              // Se chegar em 10, reduz o nome base
+              IF nSeq > 9
+                 cBaseName := Left( cFieldName, 7 )
+              ENDIF
+           ENDDO
+        ENDIF
+        AAdd( aUsedNames, cFieldName ) // Registra o nome final como usado
+        // ------------------------------------
 
 
+       //  altd()
          aTMP := geracampodbf( cFieldName, cFieldType, nFieldLength, nFieldDec )
 
 
 
-         IF aTMP[ DBS_LEN ] = 0 .OR. aTMP[ DBS_LEN ] = 250   // text geracampo volta 250 tentando ajustar o valor mais proximo
-            aTable1 := sqltablestru( oDB1, 'select max( length( ' + cFieldName + ' ) ) from ' + c2sql( cSQLTable ) )
+         IF aTMP[ DBS_LEN ] = 0 .OR. aTMP[ DBS_LEN ] >= 250   // text geracampo volta 250 tentando ajustar o valor mais proximo
+            //usa o nome nao tratado para puxar corretamente
+            aTable1 := sqltablestru( oDB1, 'select max( length( ' + cfieldOrigin + ' ) ) from ' + c2sql( cSQLTable ) )
             IF Len( aTable1 ) > 0
                aTMP[ DBS_LEN ] := Val( AllTrim( aTable1[ 1, 1 ] ) )
             ENDIF
@@ -629,8 +662,13 @@ FUNCTION export2dbf( ODB1, cNEWTABLE, Ntipo )
             netrecapp()  // append blank
             aRecord := aTable[ i ]
             FOR j := 1 TO Len( aRecord )
-               cFieldName := Left( aStruct[ j, 1 ], 10 )   // dbf nome maximo dez caracteres
-               REPLACE &cFieldName WITH aRecord[ j ]
+               //cFieldName := Left( aStruct[ j, 1 ], 10 )   // dbf nome maximo dez caracteres
+               cFieldName := aStruct[ j, 1 ] // Pega o nome tratado na estrutura
+               eVALORGRV  := aRecord[ j ]
+               if valtype(eVALORGRV)="C" .AND. aStruct[ j, 2 ]="N"
+                  eVALORGRV:=VAL(eVALORGRV)
+               ENDIF
+               REPLACE &cFieldName WITH eVALORGRV //aRecord[ j ]
             NEXT j
          NEXT i
          dbCommit()

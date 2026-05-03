@@ -76,12 +76,12 @@ letodb.hbc
 #
 # sqlite
 #
-\develop\harbour\dbu\sql2dbf.prg
+\develop\harbour\dbu\sql2dbf.prg 
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
 \develop\harbour\dbu\adordd.prg
-\develop\harbour\dbu\mdb2dbf.prg
+\develop\harbour\dbu\mdb2dbf.prg -b
 #
 # mysql libmysql
 #
