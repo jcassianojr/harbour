@@ -1,6 +1,7 @@
 // +--------------------------------------------------------------------
 // +
 // +    Programa  : f_ismemo.prg
+// +               identificação de campos Memo e cabeçalhos de arquivos DBF
 // +
 // +     Sistema:
 // +
@@ -101,15 +102,21 @@ FUNCTION ISMEMO( cARQ, lMES, lINFO )
 // +
 FUNCTION INFOTIPODBF( filename, lMES )
 
-   LOCAL buffer := ' ', handle, ret_value, cMES, cDRIVERPAD,aRETVAL,cEXTMEMO
+   LOCAL cbuffer := ' ', nhandle, ret_value, cMES, cDRIVERPAD,aRETVAL,cEXTMEMO,nbuffer
 
-   IF At( ".", filename ) = 0
-      filename := Trim( filename ) + ".DBF"
-   ENDIF
+   //IF At( ".", filename ) = 0
+    //  filename := Trim( filename ) + ".DBF"
+   //ENDIF
+   
+   
+   filename:=hb_FNameExtSet( filename, ".dbf" )
+   
+   
    IF ValType( lMES ) # "L"
       lMES := .F.
    ENDIF
    
+   nbuffer:=0
    cDRIVERPAD:=""
    cEXTMEMO:=""
    aRETVAL:={0,"","",""}
@@ -119,12 +126,22 @@ FUNCTION INFOTIPODBF( filename, lMES )
 //
    ret_value := 0  // Unknown:=0 ou -2 se nao conseguir abrir o arquivo
    cMES      := "Parece Nao Ser DBF"
+   
+   
+   IF !File( filename )
+      aRETVAL[4] := "Arquivo nao encontrado"
+      RETURN aRETVAL
+   ENDIF
 
-   handle := hb_FOPEN( filename, 0 )
-
+   nHANDLE := hb_FOPEN( filename, 0 ) // FO_READ
+   IF nHANDLE == -1
+      aRETVAL[4] := "Erro ao abrir arquivo"
+      RETURN aRETVAL
+   ENDIF
+   
 
 // Se nao ocorrer erro na abertura, carrega o primeiro byte.
-   IF FError() = 0 .AND. FRead( handle, @buffer, 1 ) = 1
+   IF FError() = 0 .AND. FRead( nHANDLE, @cBUFFER, 1 ) = 1
 
    /*
      3† 0x03 —.NTX Single NATIVE DBFNTX Nantucket Clipper / CA-Clipper Uses 0x03 with exclusive .NTX. DBFNTX is Harbour's native RDD for this.
@@ -142,103 +159,104 @@ FUNCTION INFOTIPODBF( filename, lMES )
     
    */
     
-    // Verifica a existencia do codigo do memo no buffer.
+    // Verifica a existencia do codigo do memo no cBUFFER.
       
-      
+      nbuffer:=Asc(cBUFFER)
       
       DO CASE
-      CASE buffer = Chr( 142 )   // 8Eh(142) dBASE IV w. SQL table
+         //cBUFFER = Chr( 142 )--->>nbuffer=142  usando nbuffer assim nao precisa usar chr em todos os cases
+      CASE nbuffer =  142   // 8Eh(142) dBASE IV w. SQL table
          cMES      := "dBASE IV  SQL table"
          ret_value := 142
-      CASE buffer = Chr( 048 )   // VisualFoxPro:=0x30 -->30h(048) Visual FoxPro w. DBC
+      CASE nbuffer =  048    // VisualFoxPro:=0x30 -->30h(048) Visual FoxPro w. DBC
          //48 0x30 .FPT .CDX Compound NATIVE DBFCDX Visual FoxPro (standard) Full support via DBFCDX. FPT memo VFP-compatible.
          cMES      := "Visual FoxPro DBC"
          ret_value := 048
          cDRIVERPAD:="DBFCDX"
          cEXTMEMO:="FPT"
-      CASE buffer = Chr( 123 )   // dBase4WithMemo_:=0x7b -->7Bh(123) dBASE IV with memo
+      CASE nbuffer =  123   // dBase4WithMemo_:=0x7b -->7Bh(123) dBASE IV with memo
          cMES      := "dBASE IV com memo"
          ret_value := 123
-      CASE buffer = Chr( 005 )   // dBase5 :=5 -->05h(005)dBASE V w/o memo file
+      CASE nbuffer = 005    // dBase5 :=5 -->05h(005)dBASE V w/o memo file
          cMES      := "dbase V  Sem memo"
          ret_value := 005
-      CASE buffer = Chr( 004 )   // dBase4 :=4 -->04h(004)dBASE IV or IV w/o memo file
+      CASE nbuffer =  004   // dBase4 :=4 -->04h(004)dBASE IV or IV w/o memo file
          cMES      := "dbase IV  Sem memo"
          ret_value := 004
-      CASE buffer = Chr( 139 )   // dBase4WithMemo:=0x8b -->8Bh(139) dBASE IV w. memo  DBF/MDX DBFMDX (DBT-MEMO)
+      CASE nbuffer =  139    // dBase4WithMemo:=0x8b -->8Bh(139) dBASE IV w. memo  DBF/MDX DBFMDX (DBT-MEMO)
            //139 0x8B .DBT .MDX Compound PARTIAL DBFMDX* dBASE IV (with memo) DBT memo dBASE IV. MDX partial support only.
          cMES      := "dbase IV  com memo"
          cDRIVERPAD:="DBFMDX"
          cEXTMEMO:="DBT"
          ret_value := 139
-      CASE buffer = Chr( 245 )   // FoxPro2WithMemo:=0xf5 -->F5h(245) FoxPro w. memo file  DBF/CDX-IDX DBFCDX ADSCDX (FPT-MEMO)
+      CASE nbuffer =  245    // FoxPro2WithMemo:=0xf5 -->F5h(245) FoxPro w. memo file  DBF/CDX-IDX DBFCDX ADSCDX (FPT-MEMO)
          //245 0xF5 .FPT .CDX/.IDX Compound NATIVE DBFCDX FoxPro 2.x (with memo) FoxPro 2.x FPT memo. Fully compatible via DBFCDX.
          cMES      := "Foxpro  com memo"
          ret_value := 245
          cDRIVERPAD:="DBFCDX"
          cEXTMEMO:="FPT"
-      CASE buffer = Chr( 131 )   // FoxBaseDBase3WithMemo:=0x83 -->83h(131) dBASE III+ with memo file DBF/NTX DBFNTX ADSNTX COMIX (DBT-MEMO) * Tambem pode ser comix  DBF/NTX       COMIX (DBT-MEMO)
+      CASE nbuffer =  131    // FoxBaseDBase3WithMemo:=0x83 -->83h(131) dBASE III+ with memo file DBF/NTX DBFNTX ADSNTX COMIX (DBT-MEMO) * Tambem pode ser comix  DBF/NTX       COMIX (DBT-MEMO)
          //131 0x83 .DBT .NDX/.NTX Single NATIVE DBFNTX dBASE III Plus / FoxBASE+ (with memo) DBT memo dBASE III. Full support. Typical Clipper migration format.
          cMES      := "dBASE III com memo"
          ret_value := 131
          cDRIVERPAD:="DBFNTX"
          cEXTMEMO:="DBT"
-      CASE buffer = Chr( 003 )   // FoxBaseDBase3NoMemo:=3 -->03h(003) dBASE III w/o memo file  DBF/NTX/CDX FORTESS DBFNTX DBFCDX DBFMDX COMIX ADSCDX ADSNTX
+      CASE nbuffer = 003   // FoxBaseDBase3NoMemo:=3 -->03h(003) dBASE III w/o memo file  DBF/NTX/CDX FORTESS DBFNTX DBFCDX DBFMDX COMIX ADSCDX ADSNTX
          //3 0x03 — .NDX/.NTX Single NATIVE DBFNTX dBASE III Plus / FoxBASE+ (no memo) Most common legacy Clipper format. Full read/write/index support.
          cMES      := "dBASE III sem memo"
          ret_value := 003
          cDRIVERPAD:="DBFNTX"
-      CASE buffer = Chr( 002 )   // FoxBase:=2                           -->02h(002)
+      CASE nbuffer =  002    // FoxBase:=2                           -->02h(002)
          //2 0x02 — .NDX/.NTX Single NATIVE DBFNTX FoxBASE original No memo. Compatible with Clipper and CA-Clipper.
          cMES      := "FoxBase"
          ret_value := 2
          cDRIVERPAD:="DBFNTX"
-      CASE buffer = Chr( 007 )   // VO :=7        -->07h(007)
+      CASE nbuffer =  007    // VO :=7        -->07h(007)
          cMES      := "VO"
          ret_value := 7
-      CASE buffer = Chr( 019 )   // Flagship := 0x13      -->13h(
+      CASE nbuffer =  019    // Flagship := 0x13      -->13h(
          cMES      := "Flagship"
          ret_value := 019
-      CASE buffer = Chr( 035 )   // Flagship248 := 0x23     -->23h(
+      CASE nbuffer =  035    // Flagship248 := 0x23     -->23h(
          cMES      := "Flagship248"
          ret_value := 035
-      CASE buffer = Chr( 049 )   // VisualFoxProAutoIncrement:=0x31  -->31h(
+      CASE nbuffer =  049    // VisualFoxProAutoIncrement:=0x31  -->31h(
          //49  0x31 .FPT .CDX Compound NATIVE DBFCDX Visual FoxPro (autoincrement) Autoincrement field read OK; write needs attention.
          cMES      := "VisualFoxProAutoIncrement"
          ret_value := 049
          cDRIVERPAD:="DBFNTX"
-      CASE buffer = Chr( 050 )   // VisualFoxProVarChar :=0x32   -->32h(
+      CASE nbuffer =  050    // VisualFoxProVarChar :=0x32   -->32h(
         //50 0x32 .FPT .CDX Compound PARTIAL  DBFCDX Visual FoxPro (VARCHAR/VARBINARY) VARCHAR/VARBINARY read as Character. No variable-length native support.
          cMES      := "VisualFoxProVarChar"
          ret_value := 050
          cDRIVERPAD:="DBFCDX"
-      CASE buffer = Chr( 051 )   // Flagship248WithDBV := 0x33   -->33h(
+      CASE nbuffer =  051    // Flagship248WithDBV := 0x33   -->33h(
          cMES      := "Flagship248WithDBV"
          ret_value := 051
-      CASE buffer = Chr( 067 )   // dBase4SQLTableNoMemo:=0x43   -->43h(
+      CASE nbuffer =  067    // dBase4SQLTableNoMemo:=0x43   -->43h(
         // 67 0x43 — .MDX Compound PARTIAL DBFMDX* dBASE IV SQL table (no memo) DBFMDX available but limited. MDX not a native Harbour RDD.
          cMES      := "dBase4SQLTableNoMemo"
          ret_value := 067
          cDRIVERPAD:="DBFMDX"
-      CASE buffer = Chr( 099 )   // dBase4SQLSystemNoMemo:=0x63   -->63h(
+      CASE nbuffer = 099    // dBase4SQLSystemNoMemo:=0x63   -->63h(
          //99 0x63 — .MDX Compound PARTIAL DBFMDX* dBASE IV SQL system files Partial read only. Avoid in production.
          cMES      := "dBase4SQLSystemNoMemo"
          ret_value := 099
          cDRIVERPAD:="DBFMDX"
-      CASE buffer = Chr( 135 )   // VOWithMemo := 0x87     -->87h(
+      CASE nbuffer =  135    // VOWithMemo := 0x87     -->87h(
          cMES      := "VOWithMemo"
          ret_value := 135
-      CASE buffer = Chr( 203 )   // dBase4SQLTableWithMemo:=0xcb   -->cbh(
+      CASE nbuffer =  203    // dBase4SQLTableWithMemo:=0xcb   -->cbh(
          //203 0xCB .DBT .MDX Compound PARTIAL DBFMDX* dBASE IV SQL table (with memo) Same as 0x8B with SQL flag. Rare in practice.
          cMES      := "dBase4SQLTableWithMemo"
          ret_value := 203
          cDRIVERPAD:="DBFMDX"
-      CASE buffer = Chr( 229 )   // ClipperSixWithSMT:=0xe5    -->e5h(
+      CASE nbuffer =  229    // ClipperSixWithSMT:=0xe5    -->e5h(
           //229 0xE5 .SMT .NTX Single PARTIAL SIXRDD* HiPer-Six / Six Driver Proprietary SMT memo. Requires SIXRDD. Avoid in new apps.
          cMES      := "Six With SMT"   // rddSetDefault( "SMTCDX" ) rddSetDefault( "SIXCDX" )
          ret_value := 229
          cDRIVERPAD:="SMTCDX"
-      CASE buffer = Chr( 251 )   // FoxBASE_:=0xfb      -->fbh(
+      CASE nbuffer =  251    // FoxBASE_:=0xfb      -->fbh(
         //251 0xFB — .NDX/.NTX Single NATIVE DBFNTX FoxBASE (variant) FoxBASE variant. No memo. Identical to 0x02/0x03.
          cMES      := "FoxBASE"
          cDRIVERPAD:="DBFNTX"
@@ -249,7 +267,7 @@ FUNCTION INFOTIPODBF( filename, lMES )
       cMES      := "Nao Pode Ser Verificado"
    ENDIF
 // Apaga tudo e encerra a funcao.
-   FClose( handle )
+   FClose( nHANDLE )
    IF Lmes
       ALERTX( Cmes )
    ENDIF
