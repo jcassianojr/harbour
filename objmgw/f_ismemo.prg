@@ -124,7 +124,7 @@ FUNCTION INFOTIPODBF( filename, lMES )
 //
 // Retorna 0 Se Nao For DBF
 //
-   ret_value := 0  // Unknown:=0 ou -2 se nao conseguir abrir o arquivo
+   ret_value := 0  // Unknown:=0 ou -2 se nao  conseguir abrir o arquivo
    cMES      := "Parece Nao Ser DBF"
    
    
