@@ -1539,7 +1539,6 @@ local cSUBTIPO
 aRETU := {cFieldName,cFieldType,nFieldLength,nFieldDec}
 
 
-ALTD()
 
 cTYPE    := cFieldType
 cSUBTIPO := ""
