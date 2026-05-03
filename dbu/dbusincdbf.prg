@@ -79,6 +79,14 @@ FUNCTION dBUsincdbf()
    IF lAPAGA
       ZAP
    ENDIF
+   IF IndexOrd() == 0
+      dbcloseall()
+      RDDNOME( nOLDTIPO )   // retorna tipo anterior
+      RESTAA( aAMBIENTE )
+      alertX("Erro: O destino precisa de um índice para sincronizar!")
+      RETURN
+   ENDIF
+   
    dbSetOrder( 1 )
    cCHAVE := IndexKey()
 
@@ -145,14 +153,10 @@ FUNCTION sortdbf()
    cDESDRIVER := RDDNOME( TIPODBF )
    cARQDES    := trocaext( cARQORI, "_sorted.dbf" )
 
-   @ MaxRow(), 0      SAY "Campos (,)"
-   @ MaxRow(), Col() + 1 GET cSORTED
+   @ MaxRow()-1, 0      SAY "Digite os Campos separados por virgula  (,)"
+   @ MaxRow(), 1 GET cSORTED
    READ
-   IF At( "INDEXKEY", cSORTED ) > 0
-      // aCAMPOS:=HB_ATOKENS(INDEXKEY(),"+") criar funcao para pegar so o nome removendo assim ctod str outros
-   ELSE
-      aCAMPOS := hb_ATokens( cSORTED, "," )
-   ENDIF
+   
 
    MDT( "Fazendo copia de destino: " + "sortet_" + cARQORI )
    filecopy( cARQORI, cARQDES )
@@ -160,16 +164,53 @@ FUNCTION sortdbf()
    MDT( "abrindo arquivo de origem: " + cARQORI )
    //USE ( cARQORI ) ALIAS ORIGEM EXCLUSIVE NEW VIA ( cORIDRIVER )
    dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .F. , .F. )
+   
+   IF !ValidarCampos( cSORTED )
+      // Se for invalido, interrompe a execucao
+      dbcloseall()
+      RDDNOME( nOLDTIPO )
+      RESTAA( aAMBIENTE )
+      RETURN NIL
+   ENDIF
+   aCAMPOS := hb_ATokens( cSORTED, "," )
+   
 
    mdt( "Ordenando por: " + cSORTED )
 // __dbSort( cToFileName, aFields, bFor, bWhile, nNext, nRecord, lRest, cRDD     , nConnection, cCodePage )
    __dbSort( cARQDES, aCAMPOS,,,,,, cDESDRIVER,, )
 
-
+   dbcloseall()
    RDDNOME( nOLDTIPO )   // retorna tipo anterior
    RESTAA( aAMBIENTE )
    alertX( "sincronizado" )
 
+// +--------------------------------------------------------------------
+// + Funcao para validar se os nomes de campos em uma string (separados por virgula)
+// + existem no alias atual.
+// +--------------------------------------------------------------------
+STATIC FUNCTION ValidarCampos( cCampos )
+   LOCAL aCampos  := hb_ATokens( cCampos, "," )
+   LOCAL cCampo   := ""
+   LOCAL lValido  := .T.
+   LOCAL nPos     := 0
+
+   IF Empty( cCampos )
+      alertX( "Nenhum campo informado!" )
+      RETURN .F.
+   ENDIF
+
+   FOR EACH cCampo IN aCampos
+      cCampo := AllTrim( cCampo )
+      
+      // Verifica se o campo existe na estrutura do DBF atual
+      IF FieldPos( cCampo ) == 0
+         alertX( "Campo invalido: " + cCampo )
+         lValido := .F.
+         EXIT
+      ENDIF
+   NEXT
+
+RETURN lValido
 
 
 // +--------------------------------------------------------------------
