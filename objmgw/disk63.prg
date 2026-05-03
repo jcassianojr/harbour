@@ -60,10 +60,10 @@
 // +
 FUNCTION PEGAPASS( PW_ROW, PW_COL, PW_LEN, PW_COR, ECHO_CHAR, p_upcase, p_echochar )
 
-   LOCAL f_str
-   LOCAL f_i
-   LOCAL f_key
-   LOCAL f_c
+   LOCAL OLD_COLOR 
+   LOCAL f_str := "", f_i := 1, f_key, f_c
+
+
    LOCAL f_mrow
    LOCAL f_mcol
 
@@ -74,6 +74,9 @@ FUNCTION PEGAPASS( PW_ROW, PW_COL, PW_LEN, PW_COR, ECHO_CHAR, p_upcase, p_echoch
    IF ValType( PW_COR ) = "C"
       SetColor( PW_COR )
    ENDIF
+   
+   PW_ROW := if( ValType( PW_ROW ) = 'N', PW_ROW, maxrow() )
+   PW_COL := if( ValType( PW_COL ) = 'N', PW_COL, 1 )
 
 // Checa o Tamanho Maximo da String
    PW_LEN := if( ValType( PW_LEN ) = 'N', PW_LEN, 80 )

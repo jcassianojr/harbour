@@ -209,7 +209,7 @@ FUNCTION tratanome( mNOME, lANSI, lACEN, lRANG )
       lACEN := .T.
    ENDIF
    IF ValType( lRANG ) <> "L"
-      lACEN := .F.
+      lRANG := .F.
    ENDIF
 
    mNOME := StrTran( AllTrim( mNOME ), "'", " " )  // tirar como d'agua d'olho

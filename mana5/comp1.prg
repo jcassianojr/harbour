@@ -32,15 +32,15 @@
 // +
 // +    Function Sonumero()
 // +
-// +
+// + usar diretamente sonumerox sonumero e usada na classe sefaz 
 // +
 // +--------------------------------------------------------------------
 // +
 // +
 // +
-FUNCTION Sonumero( cInString, lPONTO, lVIRGULA )
+//FUNCTION Sonumero( cInString, lPONTO, lVIRGULA )
 
-   RETURN SonumeroX( cInString, lPONTO, lVIRGULA )
+//   RETURN SonumeroX( cInString, lPONTO, lVIRGULA )
 
 
 // +--------------------------------------------------------------------
