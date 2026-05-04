@@ -354,7 +354,6 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
       // cria indices se nao existir
       IF !File( cCaminho+dbf_name + hb_rddInfo( RDDI_ORDBAGEXT ) )
          IF netuse( cCaminho+dbf_name, cDRIVER, .F., .F., .T., .F., 30 )
-            AltD()
             IF Len( new_index ) > 0
                FOR I := 1 TO Len( new_index )
                   cTAG      := new_index[ i, 1 ]
@@ -369,7 +368,6 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
             ENDIF
             dbCloseArea()
          ELSE
-            AltD()
          ENDIF
       ENDIF
 
@@ -573,7 +571,6 @@ STATIC FUNCTION LOADSTRU
          cTAG      := Upper( PARSE( @textline ) )
          cCHAVEDBF := Upper( PARSE( @textline ) )
          cCHAVESQL := Upper( PARSE( @textline ) )
-         AltD()
          // Carrega cada definicao de campo para o array de indices
          AAdd( new_index, { cTAG, cCHAVEDBF, cCHAVESQL } )
          NEXTLINE()

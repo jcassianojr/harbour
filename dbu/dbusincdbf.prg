@@ -79,7 +79,7 @@ FUNCTION dBUsincdbf()
    IF lAPAGA
       ZAP
    ENDIF
-   IF IndexOrd() == 0
+   IF OrdCount() == 0
       dbcloseall()
       RDDNOME( nOLDTIPO )   // retorna tipo anterior
       RESTAA( aAMBIENTE )
