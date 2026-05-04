@@ -29,9 +29,11 @@
 // +
 // +
 // +
-FUNCTION Dialeto_begin()
+FUNCTION Dialeto_begin(cTipo)
 
    LOCAL cCOMANDO
+   
+   hb_Default( @cTipo, cTIPOSQL ) // Usa a global como fallback
 
    cCOMANDO := "BEGIN TRANSACTION"
    DO CASE
@@ -279,6 +281,49 @@ cCOMANDO:=""
 return cCOMANDO
 
 
+// +--------------------------------------------------------------------
+// +    Function Dialeto_TopPrefix( nQtd )
+// +--------------------------------------------------------------------
+FUNCTION Dialeto_TopPrefix( nQtd )
+   LOCAL cCOMANDO := ""
+   LOCAL cQtd     := AllTrim( hb_ntos( nQtd ) )
+
+   DO CASE
+   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+      cCOMANDO := " TOP " + cQtd + " "
+   
+   CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
+      // Em versões antigas do Oracle usa-se ROWNUM no WHERE, 
+      // mas no padrão 12c+ pode-se usar o sufixo.
+      cCOMANDO := "" 
+   ENDCASE
+
+   RETURN cCOMANDO
+
+// +--------------------------------------------------------------------
+// +    Function Dialeto_TopSuffix( nQtd )
+// +--------------------------------------------------------------------
+FUNCTION Dialeto_TopSuffix( nQtd )
+   LOCAL cCOMANDO := ""
+   LOCAL cQtd     := AllTrim( hb_ntos( nQtd ) )
+
+   DO CASE
+   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
+      cCOMANDO := " LIMIT " + cQtd
+      
+   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
+      cCOMANDO := " LIMIT " + cQtd
+
+   CASE cTIPOSQL = "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+      cCOMANDO := " LIMIT " + cQtd
+      
+   CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
+      // Padrão ANSI/Oracle 12c
+      cCOMANDO := " FETCH FIRST " + cQtd + " ROWS ONLY"
+   ENDCASE
+
+   RETURN cCOMANDO
+
 /* maria mysql
 SELECT CONNECTION_ID();
 SHOW VARIABLES;
@@ -391,6 +436,16 @@ FUNCTION Dialeto_SQL( cSQLCNV )
       cSQLCNV := StrTran( cSQLCNV, "ALLTRIM(", "TRIM(" )
       cSQLCNV := StrTran( cSQLCNV, "LEN(", "LENGTH(" )
       cSQLCNV := StrTran( cSQLCNV, "CURRENTDATETIME", " current_timestamp " )
+      
+      // Tradução de REPL() (Repetir caracteres)
+        cSQLCNV := StrTran( cSQLCNV, "REPL(", "printf('%.*c', " ) // Gambiarra comum em SQLite
+
+        // Tratamento de Substring (Harbour usa 1-based)
+        cSQLCNV := StrTran( cSQLCNV, "SUBSTR(", "SUBSTR(" ) 
+
+        // DTOS (Data para String YYYYMMDD)
+        cSQLCNV := StrTran( cSQLCNV, "DTOS(", "strftime('%Y%m%d', " )
+      
       // '  {"LEFT(%1%,%2%)"      ,"SUBSTR(%1%,1,%2%)"},;
       // '        {"DTOS(%1%)"        ,"strftime('%Y%m%d',%1%)"},;
       // '        {"DAY(%1%)"       ,"cast(strftime('%d',%1) as int)"},;
@@ -425,6 +480,10 @@ FUNCTION Dialeto_SQL( cSQLCNV )
       cSQLCNV := StrTran( cSQLCNV, "MONTH(", "EXTRACT('MONTH' FROM " )
       cSQLCNV := StrTran( cSQLCNV, "YEAR(", "EXTRACT('YEAR' FROM " )
       cSQLCNV := StrTran( cSQLCNV, "REPL(", "REPEAT(" )
+      // Booleano: Converter .T. e .F. do Harbour
+     cSQLCNV := StrTran( cSQLCNV, ".T.", "TRUE" )
+     cSQLCNV := StrTran( cSQLCNV, ".F.", "FALSE" )
+      
    CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
       cSQLCNV := StrTran( cSQLCNV, "TODAY()", "GETDATE() " )
       cSQLCNV := StrTran( cSQLCNV, "ASC(", "ASCII(" )
@@ -433,6 +492,12 @@ FUNCTION Dialeto_SQL( cSQLCNV )
       cSQLCNV := StrTran( cSQLCNV, "REPL(", "REPLICATE(" )
       cSQLCNV := StrTran( cSQLCNV, "CHR(", "CHAR(" )
       cSQLCNV := StrTran( cSQLCNV, "SUBSTR(", "SUBSTRING(" )
+      // No MSSQL, SUBSTR deve ser SUBSTRING
+      cSQLCNV := StrTran( cSQLCNV, "SUBSTR(", "SUBSTRING(" )
+
+     // AT() do Harbour para CHARINDEX() do SQL
+     cSQLCNV := StrTran( cSQLCNV, "AT(", "CHARINDEX(" )
+      
       // '  {"STR(%1%,%2%,%3%)"      ,"STR(%1%,%2%,%3%)"},;
       // '       {"STR(%1%,%2%)"       ,"STR(%1%,%2%,0)"},;
       // '     {"DTOS(%1%)"        ,"CONVERT(char(8), %1%,11)"},;
