@@ -126,7 +126,7 @@ FUNCTION sqllitedeltable( db )
    IF ! MDG( "Apagar Tabela" + cTABELAX )
       RETURN .F.
    ENDIF
-   IF sqlite3_exec( db, "DROP TABLE  " + cTABELAX ) == SQLITE_OK
+   IF sqlite3_exec( db, "DROP TABLE IF EXISTS " + cTABELAX ) == SQLITE_OK
       MDT( Ctabelax + " Excluida" )
    ENDIF
 
@@ -371,14 +371,49 @@ FUNCTION sqltablestru( dbo1, qstr )
 // +
 FUNCTION sqlitepack( db )
 
+
+   if mdg("Implantar configuracao de performace")
+      optimize_sqlite( db )
+   endif
+
    IF !Empty( db )
+   
+       
+      MDT( "Otimizando índices..." )
+      sqlite3_exec( db, "PRAGMA optimize" )
+      
+      MDT( "Executando VACUUM (PACK)..." )
       IF sqlite3_exec( db, "VACUUM" ) == SQLITE_OK
-         MDT( "VACUUM PACK - Done" )
-         // sqlite3_sleep( 3000 )
+         MDT( "Processo concluído com sucesso." )
       ENDIF
+   
+      
    ENDIF
 
    RETURN .T.
+   
+   
+ FUNCTION optimize_sqlite( db )
+ IF !Empty( db )
+   // Armazena arquivos temporários na memória em vez de disco
+   sqlite3_exec( db, "PRAGMA temp_store = MEMORY" )
+   
+   // Aumenta o tamanho do cache (ex: 2000 páginas)
+   sqlite3_exec( db, "PRAGMA cache_size = 2000" )
+   
+   // Modo WAL (Write-Ahead Logging) - Muito mais rápido para inserções
+   // e permite leitura e escrita simultâneas
+   sqlite3_exec( db, "PRAGMA journal_mode = WAL" )
+   
+   // Reduz a sincronização com o disco (Normal é seguro o suficiente com WAL)
+   sqlite3_exec( db, "PRAGMA synchronous = NORMAL" )
+   
+   sqlite3_exec( db, "PRAGMA auto_vacuum = INCREMENTAL" )
+   // Para liberar o espaço de fato:
+   sqlite3_exec( db, "PRAGMA incremental_vacuum" )
+   
+endif   
+RETURN NIL  
 
 
 // +--------------------------------------------------------------------
@@ -492,6 +527,7 @@ FUNCTION connect2db( dbname, lCreate )
       RETURN NIL
    ENDIF
 
+
    RETURN dbo1
 
 
@@ -540,6 +576,11 @@ FUNCTION createSqlitedb
    ELSE
       mdt( cDBName + " is Connected!" )
    ENDIF
+
+   if mdg("Implantar configuracao de performace")
+      optimize_sqlite( db )
+   endif
+
 
    RETURN NIL
 
@@ -755,6 +796,26 @@ FUNCTION export2sql( odb, cDBFFILE )
 
    cTablename := TIRAEXT( cDBFFILE )
 // use &cTablename.
+
+
+
+   // Verifica se a tabela 
+   aTablesExist := sqltablestru( oDB, "SELECT name FROM sqlite_master WHERE type='table' AND name=" + c2sql(cTablename) )
+   
+   IF Len( aTablesExist ) > 0
+      IF MDG( "Tabela " + cTablename + " ja existe. Deseja exclui-la?" )
+         IF sqlite3_exec( oDB, "DROP TABLE IF EXISTS " + cTablename ) == SQLITE_OK
+            MDT( "Tabela anterior excluida com sucesso." )
+         ELSE
+            msgstop( "Erro ao excluir tabela existente!" )
+            RETURN NIL
+         ENDIF
+      ELSE
+         // Se o usuário não quiser excluir, cancelamos a importação
+         RETURN NIL
+      ENDIF
+   ENDIF
+
 
 
  dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .T. , .F. )
