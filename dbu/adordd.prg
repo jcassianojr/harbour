@@ -1885,6 +1885,22 @@ STATIC FUNCTION ADO_ORDCREATE( nWA, aOrderCreateInfo )
 
    RETURN HB_SUCCESS
 
+STATIC PROCEDURE ADO_REPORT_ERROR( oConnection, cLocation )
+   LOCAL oError := ErrorNew()
+   LOCAL n
+
+   oError:SubSystem := "ADORDD"
+   oError:Description := "Erro em: " + cLocation
+   
+   IF oConnection != NIL .AND. oConnection:Errors:Count > 0
+      FOR n := 0 TO oConnection:Errors:Count - 1
+         oError:Description += hb_eol() + "ADO Error: " + ;
+                               oConnection:Errors(n):Description
+      NEXT
+   ENDIF
+   
+   Eval( ErrorBlock(), oError )
+RETURN
 
 // +--------------------------------------------------------------------
 // +
@@ -2036,15 +2052,38 @@ STATIC FUNCTION ADO_DROP( nRdd, cTable, cIndex, ulConnect )
 // +
 STATIC FUNCTION ADO_SEEK( nWA, lSoftSeek, cKey, lFindLast )
 
-   HB_SYMBOL_UNUSED( nWA )
-   HB_SYMBOL_UNUSED( lSoftSeek )
-   HB_SYMBOL_UNUSED( cKey )
-   HB_SYMBOL_UNUSED( lFindLast )
+   
+   LOCAL aWAData    := USRRDD_AREADATA( nWA )
+   LOCAL oRecordSet := aWAData[ WA_RECORDSET ]
+   LOCAL cFieldName := ""
+   LOCAL cFilter    := ""
 
-/* TODO */
+//   HB_SYMBOL_UNUSED( nWA )
+//   HB_SYMBOL_UNUSED( lSoftSeek )
+ //  HB_SYMBOL_UNUSED( cKey )
+ //  HB_SYMBOL_UNUSED( lFindLast )
 
-   RETURN HB_FAILURE
 
+   // Obtém o nome do primeiro campo para a busca (simplificado)
+   cFieldName := oRecordSet:Fields( 0 ):Name 
+
+   IF ValType( xKey ) == "C"
+      cFilter := cFieldName + " = '" + xKey + "'"
+   ELSE
+      cFilter := cFieldName + " = " + hb_ValToStr( xKey )
+   ENDIF
+
+   oRecordSet:MoveFirst()
+   oRecordSet:Find( cFilter )
+
+   IF oRecordSet:EOF
+      aWAData[ WA_FOUND ] := .F.
+      RETURN HB_FAILURE
+   ENDIF
+
+   aWAData[ WA_FOUND ] := .T.
+   RETURN HB_SUCCESS
+   
 
 // +--------------------------------------------------------------------
 // +
@@ -2134,6 +2173,9 @@ FUNCTION ADORDD_GETFUNCTABLE( pFuncCount, pFuncTable, pSuperTable, nRddID )
    aADOFunc[ UR_SEEK ]         := @ADO_SEEK()
    aADOFunc[ UR_EXISTS ]       := @ADO_EXISTS()
    aADOFunc[ UR_DROP ]         := @ADO_DROP()
+   aADOFunc[ UR_TRANSBEGIN ]    := @ADO_TRANSBEGIN()
+   aADOFunc[ UR_TRANSCOMMIT ]   := @ADO_TRANSCOMMIT()
+   aADOFunc[ UR_TRANSROLLBACK ] := @ADO_TRANSROLLBACK()
 
    RETURN USRRDD_GETFUNCTABLE( pFuncCount, pFuncTable, pSuperTable, nRddID, ;
       /* NO SUPER RDD */,aADOFunc)
@@ -2363,6 +2405,7 @@ STATIC FUNCTION ADO_GETFIELDTYPE( nADOFieldType )
 PROCEDURE hb_adoSetTable( cTableName )
 
    t_cTableName := cTableName
+   //t_cTableName := AllTrim( cTableName )
 
    RETURN
 
@@ -2382,6 +2425,8 @@ PROCEDURE hb_adoSetTable( cTableName )
 PROCEDURE hb_adoSetEngine( cEngine )
 
    t_cEngine := cEngine
+   
+   t_cEngine := Upper( AllTrim( cEngine ) )
 
    RETURN
 
@@ -2578,6 +2623,29 @@ FUNCTION hb_adoRddGetRecordSet( nWA )
    aWAData := USRRDD_AREADATA( nWA )
 
    RETURN iif( aWAData != NIL, aWAData[ WA_RECORDSET ], NIL )
+
+
+STATIC FUNCTION ADO_TRANSBEGIN( nWA )
+   LOCAL oConn := hb_adoRddGetConnection( nWA )
+   IF oConn:State != adStateClosed
+      oConn:BeginTrans()
+   ENDIF
+   RETURN HB_SUCCESS
+
+STATIC FUNCTION ADO_TRANSCOMMIT( nWA )
+   LOCAL oConn := hb_adoRddGetConnection( nWA )
+   IF oConn:State != adStateClosed
+      oConn:CommitTrans()
+   ENDIF
+   RETURN HB_SUCCESS
+
+STATIC FUNCTION ADO_TRANSROLLBACK( nWA )
+   LOCAL oConn := hb_adoRddGetConnection( nWA )
+   IF oConn:State != adStateClosed
+      oConn:RollbackTrans()
+   ENDIF
+   RETURN HB_SUCCESS
+
 
 // + EOF: adordd.prg
 // +
