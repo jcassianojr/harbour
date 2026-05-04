@@ -25,7 +25,7 @@
 *+--------------------------------------------------------------------
 *+
 
-#include "ads.ch"
+//#include "ads.ch"
 #include "dbinfo.ch"
 #include "try.ch"
 

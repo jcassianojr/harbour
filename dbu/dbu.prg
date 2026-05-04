@@ -28,7 +28,7 @@
 #include "dbinfo.ch"
 #INCLUDE "INKEY.CH"
 #INCLUDE "BOX.CH"
-#include "ads.ch"
+//#include "ads.ch"
 #INCLUDE "HBGTINFO.CH"
 #INCLUDE "hbVER.CH"
 //#include "tshead.ch"
