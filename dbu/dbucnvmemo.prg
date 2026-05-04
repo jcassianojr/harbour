@@ -78,8 +78,14 @@ FOR XY := 1 TO LEN(aARQMEMOS)
    cARQORISEMEXT := tiraext(cARQORIMEMO)
 
    MDT("Fazendo copia de reserva: "+"old_"+cARQORISEMEXT)
-   filecopy(cARQORISEMEXT+".dbf","old_"+cARQORISEMEXT+".dbf")
-   filecopy(cARQORISEMEXT+cORIMEMO,"old_"+cARQORISEMEXT+cORIMEMO)
+   if ! filecopy(cARQORISEMEXT+".dbf","old_"+cARQORISEMEXT+".dbf")
+     ALERTX("Erro ao criar backup do DBF: " + cARQORISEMEXT)
+     RETURN .F.
+   ENDIF
+   if ! filecopy(cARQORISEMEXT+cORIMEMO,"old_"+cARQORISEMEXT+cORIMEMO)
+      ALERTX("Erro ao criar backup do DBF: " + cARQORISEMEXT)
+      RETURN .F.
+   ENDIF
    cOLDDBF := "old_"+cARQORISEMEXT
    cNEWDBF := "new_"+cARQORISEMEXT
 

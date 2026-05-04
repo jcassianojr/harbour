@@ -41,6 +41,7 @@
 // https://cdn.apicep.com/file/apicep/06233-030.json
 
 #include "tshead.ch"
+#include "try.ch"
 
 REQUEST HB_CODEPAGE_PTISO
 REQUEST DBFCDX
@@ -507,34 +508,24 @@ FUNCTION AppUserName()
 // +
 FUNCTION CEPapicEp( cCEP )
 
-// https://cdn.apicep.com/file/apicep/06233-030.json //api necessita traco usado formatacep abaico
-   cURL := "https://cdn.apicep.com/file/apicep/" + formatacep( cCEP ) + ".json"
-   oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )  // oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
-   oPg:Open( "GET", cUrl, .F. )
-   oPg:Send()
-   cXMl := oPg:ResponseBody
-// {"code":"06233-030","state":"SP","city":"Osasco","district":"Piratininga","address":"Rua Paula Rodrigues","status":200,"ok":true,"statusText":"ok"}
-   cXMl := XmlTransform( cXMl )
+   TRY
+    // https://cdn.apicep.com/file/apicep/06233-030.json //api necessita traco usado formatacep abaico
+       cURL := "https://cdn.apicep.com/file/apicep/" + formatacep( cCEP ) + ".json"
+       oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )  // oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
+       oPg:Open( "GET", cUrl, .F. )
+       oPg:Send()
+       cXMl := oPg:ResponseBody
+    // {"code":"06233-030","state":"SP","city":"Osasco","district":"Piratininga","address":"Rua Paula Rodrigues","status":200,"ok":true,"statusText":"ok"}
+       cXMl := XmlTransform( cXMl )
 
 
-   CUF       := pegnodojason( cXMl, 'state":' )
-   cCIDADE   := pegnodojason( cXMl, 'city":' )
-   cBairro   := pegnodojason( cXMl, 'district":' )
-   cENDERECO := pegnodojason( cXMl, 'address":' )
-
-/*
-    CUF          := SUBSTR( cXMl , AT( 'state":'   , cXML) + 8 )
-    cCIDADE      := SUBSTR( cXMl , AT( 'city":'    , cXML) + 7 )
-    cBairro      := SUBSTR( cXMl , AT( 'district":', cXML) + 11 )
-    cENDERECO    := SUBSTR( cXMl , AT( 'address":' , cXML) + 10 )
-    CUF          := SUBSTR( cUF       ,1, AT( '"'   , cUF)       -1 )
-    CCIDADE      := SUBSTR( cCIDADE   ,1, AT( '"'   , cCIDADE)   -1 )
-    CBAIRRO      := SUBSTR( cBAIRRO   ,1, AT( '"'   , cBAIRRO)   -1 )
-    CENDERECO    := SUBSTR( cENDERECO ,1, AT( '"'   , cENDERECO) -1 )
-    */
-
-// hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
-
+       CUF       := pegnodojason( cXMl, 'state":' )
+       cCIDADE   := pegnodojason( cXMl, 'city":' )
+       cBairro   := pegnodojason( cXMl, 'district":' )
+       cENDERECO := pegnodojason( cXMl, 'address":' )
+     catch oEr  
+      // mdt("Erro de conexão na API send")
+     end
    RETURN .T.
 
 
@@ -556,51 +547,39 @@ FUNCTION cepapiawe( cCEP )
 // https://cep.awesomeapi.com.br/xml/05424020
 // https://cep.awesomeapi.com.br/05424020
 
-   cURL := "https://cep.awesomeapi.com.br/json/" + cCEP
-   oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )  // oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
-   oPg:Open( "GET", cUrl, .F. )
-   oPg:Send()
-   cXMl := oPg:ResponseBody
-   cXMl := XmlTransform( cXMl )
+   TRY
+         cURL := "https://cep.awesomeapi.com.br/json/" + cCEP
+         oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )  // oPg  := CreateObject("Msxml2.XMLHTTP.3.0") atualizado para versao 6
+         oPg:Open( "GET", cUrl, .F. )
+         oPg:Send()
+         cXMl := oPg:ResponseBody
+    catch oEr  
+      // mdt("Erro de conexão na API send")
+       RETURN .F.
+     end
+     
+     
+     cXMl := XmlTransform( cXMl )
+        IF At( "not_found", cXML ) > 0 .OR. At( "nao foi encontrado", cXML ) > 0
+            RETURN .F.
+         ENDIF
 
-   IF At( "not_found", cXML ) > 0 .OR. At( "nao foi encontrado", cXML ) > 0
-      RETURN .F.
-   ENDIF
-
-// {"cep":"05424020","address_type":"Rua","address_name":"Professor Carlos Reis","address":"Rua Professor Carlos Reis","state":"SP",
-// "district":"Pinheiros","lat":"-23.57021","lng":"-46.69685","city":"São Paulo","city_ibge":"3550308","ddd":"11"}
-// disponiveis ddd latitude longitude
-// 123456789012345
+      // {"cep":"05424020","address_type":"Rua","address_name":"Professor Carlos Reis","address":"Rua Professor Carlos Reis","state":"SP",
+      // "district":"Pinheiros","lat":"-23.57021","lng":"-46.69685","city":"São Paulo","city_ibge":"3550308","ddd":"11"}
+      // disponiveis ddd latitude longitude
+      // 123456789012345
 
 
-   CUF        := pegnodojason( cXML, 'state":' )
-   cCIDADE    := pegnodojason( cXML, 'city":' )
-   cBairro    := pegnodojason( cXML, 'district":' )
-   cENDERECO  := pegnodojason( cXML, 'address_name":' )
-   cTIPORUA   := pegnodojason( cXML, 'address_type":' )
-   cIBGE      := pegnodojason( cXML, 'city_ibge":' )
-   cDDD       := pegnodojason( cXML, 'ddd":' )
-   cLATITUDE  := pegnodojason( cXML, 'lat":' )
-   cLONGITUDE := pegnodojason( cXML, 'lng":' )
+         CUF        := pegnodojason( cXML, 'state":' )
+         cCIDADE    := pegnodojason( cXML, 'city":' )
+         cBairro    := pegnodojason( cXML, 'district":' )
+         cENDERECO  := pegnodojason( cXML, 'address_name":' )
+         cTIPORUA   := pegnodojason( cXML, 'address_type":' )
+         cIBGE      := pegnodojason( cXML, 'city_ibge":' )
+         cDDD       := pegnodojason( cXML, 'ddd":' )
+         cLATITUDE  := pegnodojason( cXML, 'lat":' )
+         cLONGITUDE := pegnodojason( cXML, 'lng":' )
 
-/*
-    CUF          := SUBSTR( cXMl , AT( 'state":'        , cXML) +  8 )
-    cCIDADE      := SUBSTR( cXMl , AT( 'city":'         , cXML) +  7 )
-    cBairro      := SUBSTR( cXMl , AT( 'district":'     , cXML) + 11 )
-    cENDERECO    := SUBSTR( cXMl , AT( 'address_name":' , cXML) + 15 )
-    cTIPORUA     := SUBSTR( cXMl , AT( 'address_type":' , cXML) + 15 )
-    cIBGE        := SUBSTR( cXMl , AT( 'city_ibge":'    , cXML) + 12 )
-    cDDD         := SUBSTR( cXMl , AT( 'ddd":'          , cXML) +  6 )
-    CUF          := SUBSTR( cUF       ,1, AT( '"'   , cUF)       -1 )
-    CCIDADE      := SUBSTR( cCIDADE   ,1, AT( '"'   , cCIDADE)   -1 )
-    CBAIRRO      := SUBSTR( cBAIRRO   ,1, AT( '"'   , cBAIRRO)   -1 )
-    CENDERECO    := SUBSTR( cENDERECO ,1, AT( '"'   , cENDERECO) -1 )
-    cTIPORUA     := SUBSTR( cTIPORUA ,1,  AT( '"'   , cTIPORUA)  -1 )
-    cIBGE        := SUBSTR( cIBGE     ,1, AT( '"'   , cIBGE)     -1 )
-    cDDD         := SUBSTR( cDDD      ,1, AT( '"'   , cDDD)      -1 )
-    */
-
-// hb_memowrit("c"+cCEP+".txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cENDERECO )
 
    RETURN .T.
 
@@ -780,12 +759,20 @@ FUNCTION CEPBrasilAberto( cCEP )
 }
 */
 
+TRY
    cURL := "https://api.brasilaberto.com/v1/zipcode/" + cCEP
    oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )
    oPg:Open( "GET", cUrl, .F. )
    oPg:Send()
    cXMl := oPg:ResponseBody
 
+
+  catch oEr  
+      // mdt("Erro de conexão na API send")
+       return .f.
+     end
+     
+    
    cXMl := XmlTransform( cXMl )
 
    IF At( 'error', cXML ) > 0
@@ -798,18 +785,10 @@ FUNCTION CEPBrasilAberto( cCEP )
    cBairro      := pegnodojason( cXMl, 'district":' )
    cENDERECO    := pegnodojason( cXMl, 'street":' )
    cIBGE        := pegnodojason( cXMl, 'ibgeId":' )
-   cComplemento := pegnodojason( cXMl, 'complement":' )
-
-// alert(Cuf)
-// alert(Ccidade)
-// alert(Cendereco)
-//
-// "cityId": 1,
-// "ibgeId": 3550308,
-// cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
-// hb_memowrit("c"+cCEP+"_01_.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
-
+   cComplemento := pegnodojason( cXMl, 'complement":' ) 
+     
    RETURN .T.
+
 
 
 
@@ -840,17 +819,24 @@ FUNCTION CEPOpenCep( cCEP )
   "ibge": "3549805"
 }
 */
-
+ TRY
    cURL := "https://opencep.com/v1/" + cCEP
    oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )
    oPg:Open( "GET", cUrl, .F. )
    oPg:Send()
    cXMl := oPg:ResponseBody
 
-   cXMl := XmlTransform( cXMl )
+
+
+  catch oEr  
+      // mdt("Erro de conexão na API send")
+       RETURN .F.
+    end
+    
+      cXMl := XmlTransform( cXMl )
 
    IF At( 'error', cXML ) > 0
-      RETURN
+      RETURN .F.
    ENDIF
 
 // altd()
@@ -861,14 +847,8 @@ FUNCTION CEPOpenCep( cCEP )
    cENDERECO    := pegnodojason( cXMl, '"logradouro": ' )
    cIBGE        := pegnodojason( cXMl, '"ibge": ' )
    cComplemento := pegnodojason( cXMl, '"complemento": ' )
-
-// alert(Cuf)
-// alert(Ccidade)
-// alert(Cendereco)
-// cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
-
-// hb_memowrit("c"+cCEP+"_02.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
-
+ 
+    
    RETURN .T.
 
 
@@ -906,43 +886,36 @@ FUNCTION CEPBrasilApi( cCEP )
 }
 */
 
+try
    cURL := "https://brasilapi.com.br/api/cep/v2/" + cCEP
    oPg  := CreateObject( "Msxml2.XMLHTTP.6.0" )
    oPg:Open( "GET", cUrl, .F. )
    oPg:Send()
    cXMl := oPg:ResponseBody
 
-   cXMl := XmlTransform( cXMl )
+
+  catch oEr  
+       //mdt("Erro de conexão na API send")
+       return .f.
+     end
+     
+     cXMl := XmlTransform( cXMl )
 
    IF At( 'error', cXML ) > 0
       RETURN
    ENDIF
 
-// altd()
    CUF       := pegnodojason( cXMl, 'state":' )
    cCIDADE   := pegnodojason( cXMl, '"city":' )
    cBairro   := pegnodojason( cXMl, 'neighborhood":' )
    cENDERECO := pegnodojason( cXMl, 'street":' )
 
-// alert(Cuf)
-// alert(Ccidade)
-// alert(Cendereco)
-// cLATITUDE    :=""
-// cLONGITUDE   :=""
 
    IF At( 'latitude":', cXML ) > 0 .AND. At( 'longitude":', cXML ) > 0
       cLATITUDE  := pegnodojason( cXMl, 'latitude":' )
       cLONGITUDE := pegnodojason( cXMl, 'longitude":' )
    ENDIF
-
-
-//
-// cLONGITUDE   :=""
-// alert(Clatitude)
-// alert(Clongitude)
-// cTEMPEND:=CUF+" "+cCIDADE+" "+cENDERECO
-
-// hb_memowrit("c"+cCEP+"_03.txt",cURL+HB_OSNEWLINE()+cXMl+HB_OSNEWLINE()+cTEMPEND )
+   
 
    RETURN .T.
 
@@ -1022,6 +995,19 @@ FUNCTION OpenCepjason()
    NEXT kk
 
    RETURN .T.
+
+
+/*
+FUNCTION GetDadosJson( cJson )
+   LOCAL hData := {=>}
+   hb_jsonDecode( cJson, @hData )
+   
+   // Acesso direto e seguro
+   cCIDADE   := hb_HGetDef( hData, "city", "" )
+   cUF       := hb_HGetDef( hData, "state", "" )
+   cENDERECO := hb_HGetDef( hData, "street", "" )
+RETURN hData
+*/
 
 
 
