@@ -802,7 +802,7 @@ END
 //
 OTHERWISE
 TRY
-COPY to &cDESTINO. while zei_fort(nLASTREC,,,1) DELIMITED WITH WITH &zDELIMITE
+COPY to &cDESTINO. while zei_fort(nLASTREC,,,1) DELIMITED WITH &zDELIMITE
 catch oErR
 MDT("Erro copiando dados")
 END
@@ -828,7 +828,7 @@ nLASTREC := LASTREC()
 zei_fort(nLASTREC,,,0)
 DO CASE
 CASE zREGSEP = chr(34) .OR. zREGSEP = chr(39)   //delimitador + aspas duplas aspas (") (')
-   APPEND FROM &cDESTINO. while zei_fort(nLASTREC,,,1) DELIMITED WITH ({zDELIMITE,zREGSE})
+   APPEND FROM &cDESTINO. while zei_fort(nLASTREC,,,1) DELIMITED WITH ({zDELIMITE,zREGSEP})
 CASE zEXPOREXT = "DBF"
    APPEND FROM &cDESTINO. while zei_fort(nLASTREC,,,1)
 CASE zEXPOREXT = "SDF"
@@ -840,7 +840,7 @@ CASE zEXPOREXT = "UNL" .OR. zEXPOREXT = "PSV"
 CASE zEXPOREXT = "TSV"
    APPEND FROM &cDESTINO. whILE zei_fort(nLASTREC,,,1) DELIMITED WITH TAB
 OTHERWISE   //SSV  zdelimite= ; e outro delimitador
-   APPEND FROM &cDESTINO. while zei_fort(nLASTREC,,,1) DELIMITED WITH WITH &zDELIMITE
+   APPEND FROM &cDESTINO. while zei_fort(nLASTREC,,,1) DELIMITED WITH &zDELIMITE
 ENDCASE
 RETURN NIL
 

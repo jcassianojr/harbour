@@ -310,6 +310,7 @@ FUNCTION miximpdbf()
    LOCAL J
    LOCAL msql
    LOCAL cTABLE
+   LOCAL nCOUNT
 
    aINDICES := {}
 
@@ -343,6 +344,8 @@ FUNCTION miximpdbf()
       mix_executesql( Aindices )   // Executa comando unico ou array de comandos
    ENDIF
 
+  mix_executesql( Dialeto_begin() ) // Inicia transação
+  nCont := 0
 
    dbGoTop()
    WHILE !Eof()
@@ -358,8 +361,15 @@ FUNCTION miximpdbf()
       NEXT
       mSql += ")"
       mix_executesql( msql )
+      nCont++
+      IF nCont % 500 == 0
+         mix_executesql( Dialeto_commit() )
+         mix_executesql( Dialeto_begin() )
+      ENDIF
       dbSkip()
    ENDDO
+    mix_executesql( Dialeto_commit() )
+
 
    dbCloseArea()
    mix_close()
