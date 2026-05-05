@@ -100,6 +100,10 @@
 
 #define RDD_SIZE       2
 
+#define UR_TRANSBEGIN     51
+#define UR_TRANSCOMMIT    52
+#define UR_TRANSROLLBACK  53
+
 ANNOUNCE ADORDD
 
 THREAD STATIC t_cTableName
