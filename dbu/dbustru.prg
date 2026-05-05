@@ -1092,15 +1092,17 @@ FUNCTION field_check
       err_msg := "Campo sem nome"
 
    ENDIF
+   
+   IF STATUS = 0
+      IF ! IsAlpha( Left(cFieldName, 1) )
+         nStatus := 1
+         cErrMsg := "Nome deve começar com letra"
+	 ENDIF 
+   ENDIF
 
    IF STATUS = 0
 
-      DO WHILE pos > 0 .AND. SubStr( field_name, pos, 1 ) $ ;
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
-         pos--
-
-      ENDDO
-
+    
       IF pos > 0 .OR. SubStr( field_name, 1, 1 ) $ "0123456789_"
          STATUS  := 1
          err_msg := "Nome ilegal de Campo"

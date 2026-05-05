@@ -189,6 +189,11 @@ FUNCTION odbcimpdbf()
 
    cCONN       := GERACONN( cDATABASEX, .F. )
    dsFunctions := TODBC():New( cCONN )
+   
+   nCont := 0
+
+  dsFunctions:SETSQL( Dialeto_begin() )
+      dsFunctions:ExecSQL()
 
    dbSelectArea( cTABLE )
    dbGoTop()
@@ -204,10 +209,28 @@ FUNCTION odbcimpdbf()
          mSql += c2sql( &mFldNm )
       NEXT
       mSql += ")"
+	  
+	  
       dsFunctions:SETSQL( mSQL )
       dsFunctions:ExecSQL()
+	  
+	   nCont++
+      IF nCont % 500 == 0
+         dsFunctions:SETSQL( Dialeto_commit()  )
+         dsFunctions:ExecSQL()
+		 dsFunctions:SETSQL( Dialeto_begin() )
+         dsFunctions:ExecSQL()
+		 
+      ENDIF
+	  
+	  
+	  
+	  
+	  
       dbSkip()
    ENDDO
+   dsFunctions:SETSQL( Dialeto_commit()  )
+   dsFunctions:ExecSQL()
    dbCloseArea()
    dsFunctions:Destroy()
 

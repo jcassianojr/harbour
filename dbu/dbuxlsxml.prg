@@ -1,77 +1,78 @@
 #require "hbxlsxml"
-
-
 PROCEDURE Fazerxlsxlm()
-   LOCAL xml, sheet1
-   LOCAL aSTRU
-   LOCAL nFIELDS
-   LOCAL nPOS
-   LOCAL i
-   
-aSTRU:=DBStruct()
-nFIELDS := Len( aSTRU )
-nPOS    :=1
+    LOCAL oXml, oSheet
+    LOCAL aStru    := DBStruct()
+    LOCAL nFields  := Len( aStru )
+    LOCAL nPos     := 1
+    LOCAL i, xValor, cAlias := Alias()
+    LOCAL cFileName := cAlias + "_xls.xml"
 
-IF FILE( alias()+"_xls.xml")
-  FERASE(alias()+"_xls.xml")
-ENDIF
+    // Validação de arquivo existente
+    IF File( cFileName )
+        IF FErase( cFileName ) == -1
+            Alert( "Erro: Nao foi possivel apagar o arquivo anterior. Verifique se esta aberto." )
+            RETURN
+        ENDIF
+    ENDIF
 
-   xml := ExcelWriterXML():New( alias()+"_xls.xml" )
+    oXml   := ExcelWriterXML():New( cFileName )
+    oSheet := oXml:addSheet( cAlias )
 
-   sheet1 := xml:addSheet( alias() )
+    // --- CABEÇALHO ---
+    // Usando variáveis locais para evitar checagem de lDOCCAB repetida
+    IF Type("lDOCCAB") == "L" .AND. lDOCCAB
+        FOR i := 1 TO nFields
+            // Simplificação da montagem da string de estrutura
+            xValor := aStru[i][1] + "," + aStru[i][2]
+            IF aStru[i][2] $ "CN"
+                xValor += "," + AllTrim(Str(aStru[i][3]))
+            ENDIF  
+            IF aStru[i][2] == "N" 
+                xValor += "," + AllTrim(Str(aStru[i][4]))
+            ENDIF   
+            oSheet:writeString( nPos, i, xValor )
+        NEXT
+        nPos++
+    ENDIF
 
-IF lDOCCAB
-    for i:=1 to nfields
-        evalor:=ALLTRIM(astru[I][1])+","+astru[I][2]
-        IF astru[I][2]="C" .OR. astru[I][2]="N"
-           evalor+=","+ALLTRIM(STR(astru[I][3],8,0))
-        ENDIF  
-        IF astru[I][2]="N" 
-           evalor+=","+ALLTRIM(STR(astru[I][4],8,0))
-        ENDIF   
-        sheet1:writeString( nPOS, I, evalor)
-    next i
-    nPOS++
-ENDIF
+    // --- DADOS ---
+    IF Type("lDOCDAD") == "L" .AND. lDOCDAD
+        DbGoTop()
+        DO WHILE .NOT. Eof()
+            FOR i := 1 TO nFields
+                xValor := FieldGet(i)
+                
+                // Ignora campos vazios para reduzir tamanho do XML
+                IF Empty(xValor) ; LOOP ; ENDIF
 
-IF lDOCDAD
-    dbgotop()
-    while .not. EOF()
-       for i:=1 to nfields
-           evalor:=HB_FIELDGET(I)
-           if .NOT. EMPTY(evalor)
-               /*
-              METHOD writeFormula( dataType, row, column, xData, style )
-              METHOD writeString( row, column, xData, style )
-              METHOD writeNumber( row, column, xData, style )
-              METHOD writeDateTime( row, column, xData, style )
-               METHOD writeData( type, row, column, xData, style, formula )
-            */
-              do case
-                 case valtype(evalor)="C"
-                      sheet1:writeString( nPOS, I, evalor)
-                 case valtype(evalor)="D"
-                      //sheet1:writeDateTime( nPOS, I, evalor) gravava como data numerica
-                      evalor:=DTOC(evalor)
-                      sheet1:writeString( nPOS, I, evalor)
-                 case valtype(evalor)="N"
-                      sheet1:writeNumber( nPOS, I, evalor)
-                 case valtype(evalor)="L"     
-                      IF evalor
-                         sheet1:writeString( nPOS, I, "TRUE")
-                      ELSE
-                         sheet1:writeString( nPOS, I, "FALSE")
-                      ENDIF
-                      
-              endcase
-           endif
-       next I
-       nPOS++
-       ZEI_FORT( nLASTREC,,, 1 )
-       dbskip()
-    ENDDO
-ENDIF
+                SWITCH ValType(xValor)
+                CASE "C"
+                    oSheet:writeString( nPos, i, xValor )
+                    EXIT
+                CASE "N"
+                    oSheet:writeNumber( nPos, i, xValor )
+                    EXIT
+                CASE "D"
+                    // Mantido String conforme sua necessidade original
+                    oSheet:writeString( nPos, i, DToC(xValor) )
+                    EXIT
+                CASE "L"
+                    oSheet:writeString( nPos, i, If(xValor, "TRUE", "FALSE") )
+                    EXIT
+                END
+            NEXT
+            
+            nPos++
+            
+            // Indicador de progresso (se existir a função)
+            IF Type("nLASTREC") == "N"
+                ZEI_FORT( nLASTREC,,, 1 )
+            ENDIF
+            
+            DbSkip()
+        ENDDO
+    ENDIF
 
-   xml:writeData( alias()+"_xls.xml")
+    oXml:writeData() // hbxlsxml geralmente já sabe o nome do arquivo pelo New()
 
-   RETURN
+    RETURN
