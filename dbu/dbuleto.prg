@@ -72,6 +72,7 @@ cDATABASEX := Space(30)
 cUSERX     := Space(30)
 cPASSX     := Space(30)
 cTABELAX   := Space(30)
+cPATH      :=""
 loledb     := .T.
 lMDB       := .F.
 lACCDB     := .F.
@@ -209,7 +210,7 @@ RETURN .T.
 function leto_errocon(nConnect)
 
 LOCAL nRES
-IF nConect == - 1
+IF nConNect == - 1
    nRes := leto_Connect_Err()
    IF nRes == LETO_ERR_LOGIN
       mdt("Falha ao Logar")

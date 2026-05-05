@@ -1,0 +1,7 @@
+A forma mais segura de obter o conjunto correto ‚ extra¡-lo diretamente da instala‡Æo do PostgreSQL que vocˆ pretende acessar:
+
+    V  at‚ a pasta bin da instala‡Æo do PostgreSQL (ex: C:\Program Files\PostgreSQL\16\bin).
+
+    Copie a libpq.dll de l .
+
+    Fundamental: Copie tamb‚m todas as DLLs que come‡am com libcrypto-*.dll, libssl-*.dll, libiconv-*.dll e libintl-*.dll que estiverem na mesma pasta

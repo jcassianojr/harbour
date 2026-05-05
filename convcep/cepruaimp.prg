@@ -89,6 +89,14 @@ FUNCTION Main()
       QUIT
    ENDIF
 
+   nUSO := FCreate( "erro.txt" )
+  IF nUSO == -1
+      Alert( "Erro ao criar arquivo de log!" )
+     dbcloseall()
+     RETURN NIL
+  ENDIF
+
+
    USE cepruaerr NEW EXCLUSIVE
    ZAP
 
@@ -121,11 +129,12 @@ FUNCTION Main()
    dbUseArea( .T., "DBFCDX", cARQUIVO,, .T. )
    ordListAdd( cARQUIVO )
 // trabalhando por id para preenher vaos depois retornar pelo ultimo id
-   nLASTBAIRRO := 1
-   idbairro()
+   dbSetOrder( 1 )
+   dbGoBottom()
+   nLASTBAIRRO:=cepbai->bai_nu_seq
+   nLASTBAIRRO++
+   dbSetOrder( 2 )
 
-
-   nUSO := FCreate( "erro.txt" )
 
 
 // 01/02/2O21 ajusta  cidade esta junto com o estado separado pela barra Ex: SAO PAULO/SP antes de comecar a importacao
@@ -559,7 +568,8 @@ FUNCTION Main()
                // endif
                // endif
                IF nCHVBAI = 0  // inclui o bairro
-                  idbairro()   // utilizando idbairro ate completar os vaos no id
+                  //idbairro()   // utilizando idbairro ate completar os vaos no id
+                  nLASTBAIRRO++
                   dbSelectAr( "cepbai" )
                   dbAppend()
                   cepbai->bai_nu_seq := nLASTBAIRRO
@@ -658,18 +668,22 @@ FUNCTION tratacidade( cUF, cNOME )   // algumas vem com nome no parentes distrit
 // +
 // +
 // +
-FUNCTION idbairro
+//FUNCTION idbairro
 
-   dbSelectAr( "cepbai" )
-   dbSetOrder( 1 )
-   dbGoTop()
-   WHILE dbSeek( nLASTBAIRRO )
-      nLASTBAIRRO++
-      @ 24, 00 SAY "bairro: " + Str( nlastbairro )
-   ENDDO
-   dbSetOrder( 2 )   // antes 4 localcep ibge + nome agora so o nome index 2
+  // dbSelectAr( "cepbai" )
+  // dbSetOrder( 1 )
+  // dbGoBottom()
+  // nLASTBAIRRO:=cepbai->bai_nu_seq
+  // nLASTBAIRRO++
+  // @ 24, 00 SAY "bairro: " + Str( nlastbairro )
+   //dbGoTop()
+   //WHILE dbSeek( nLASTBAIRRO )
+   //   nLASTBAIRRO++
+   //   @ 24, 00 SAY "bairro: " + Str( nlastbairro )
+   //ENDDO
+   //dbSetOrder( 2 )   // antes 4 localcep ibge + nome agora so o nome index 2
 
-   RETURN
+   //RETURN
 
 
 // +--------------------------------------------------------------------

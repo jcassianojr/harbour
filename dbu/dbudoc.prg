@@ -614,7 +614,9 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       CTEXTO += clin + "PRAGMA journal_mode = WAL" //Modo WAL (Write-Ahead Logging) - Muito mais rápido para inserções e permite leitura e escrita simultâneas
       CTEXTO += clin + "PRAGMA synchronous = NORMAL"  //Reduz a sincronização com o disco (Normal é seguro o suficiente com WAL)
       CTEXTO += clin + "PRAGMA auto_vacuum = INCREMENTAL"  //Armazena arquivos temporários na memória em vez de disco
-     
+      CTEXTO += clin + "PRAGMA page_size = 4096;" //
+      CTEXTO += clin + "PRAGMA mmap_size = 300000000"
+     CTEXTO += clin + "PRAGMA busy_timeout = 5000"
       
       cTEXTO += clin + "[MSSQL]"
       cTEXTO += clin + SqliteCreateTable( cARQ, aESTRU, "MSSQL" )
