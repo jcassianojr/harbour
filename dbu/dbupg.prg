@@ -226,7 +226,7 @@ FUNCTION PGsqlnewdatabase()
          MDT( "Ja existe Database " + cnewDATABASEX )
          RETURN .F.
       ELSE
-         oSERVER:EXECUTE( "CREATE DATABASE IF NOT EXISTS " + Cnewdatabasex )
+	     oSERVER:EXECUTE( "CREATE DATABASE  " + Cnewdatabasex )
          IF oServer:NetErr()
             Alert( oServer:ErrorMSG() )
             RETURN .F.

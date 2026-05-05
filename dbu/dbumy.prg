@@ -339,6 +339,7 @@ FUNCTION mystrutodbf()
       zei_fort( nLASTREC,,, 1 )
       oQuery2:skip()
    ENDDO
+   oQuery2:Destroy()
    dbCloseAll()
 
    RETURN .T.
