@@ -84,7 +84,8 @@ mingw-w64-x86_64-liblzf \
 mingw-w64-x86_64-zlib
 
 #libmagic o pacote e file
-pacman -s mingw-w64-x86_64-file
+pacman -S mingw-w64-x86_64-file
+pacman -S mingw-w64-x86_64-libmariadbclient
 
 # Limpa o cache para reduzir o tamanho da pasta do MSYS2
 pacman -Sc --noconfirm
