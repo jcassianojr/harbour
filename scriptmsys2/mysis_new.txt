@@ -1,0 +1,90 @@
+# Sincroniza e atualiza o sistema base 
+pacman -Sy
+pacman -Syu --noconfirm
+pacman -Su --noconfirm
+
+# Ferramentas essenciais de build e controle de versão 
+pacman -S --noconfirm --needed git bison make ccache
+
+# [A] Compiladores e Toolchain 
+pacman -S --noconfirm --needed mingw-w64-i686-toolchain mingw-w64-i686-gcc
+
+# [B] Bancos de Dados (Database) 
+pacman -S --noconfirm --needed \
+mingw-w64-i686-sqlite3 \
+mingw-w64-i686-postgresql \
+mingw-w64-i686-mariadb-connector-c \
+mingw-w64-i686-firebird2
+
+# [C] Gráficos, Interface e Documentos 
+pacman -S --noconfirm --needed \
+mingw-w64-i686-allegro \
+mingw-w64-i686-cairo \
+mingw-w64-i686-freeimage \
+mingw-w64-i686-libgd \
+mingw-w64-i686-qt5-base \
+mingw-w64-i686-ghostscript
+
+# [D] Bibliotecas de Sistema e Contribs Faltantes (Expat, LZF, Zlib)
+pacman -S --noconfirm --needed \
+mingw-w64-i686-curl \
+mingw-w64-i686-openssl \
+mingw-w64-i686-libssh2 \
+mingw-w64-i686-icu \
+mingw-w64-i686-bzip2 \
+mingw-w64-i686-libyaml \
+mingw-w64-i686-libharu \
+mingw-w64-i686-libxlsxwriter \
+mingw-w64-i686-unrar \
+mingw-w64-i686-amqp-cpp \
+mingw-w64-i686-rabbitmq-c \
+mingw-w64-i686-expat \
+mingw-w64-i686-liblzf \
+mingw-w64-i686-zlib
+
+#libmagic o pacote e file
+pacman -S mingw-w64-i686-file
+
+# [A] Compiladores e Toolchain 
+pacman -S --noconfirm --needed mingw-w64-x86_64-toolchain mingw-w64-x86_64-gcc
+
+# [B] Bancos de Dados (Database) 
+pacman -S --noconfirm --needed \
+mingw-w64-x86_64-sqlite3 \
+mingw-w64-x86_64-postgresql \
+mingw-w64-x86_64-mariadb-connector-c \
+mingw-w64-x86_64-libmariadbclient \
+mingw-w64-x86_64-firebird2
+
+# [C] Gráficos, Interface e Documentos 
+pacman -S --noconfirm --needed \
+mingw-w64-x86_64-allegro \
+mingw-w64-x86_64-cairo \
+mingw-w64-x86_64-freeimage \
+mingw-w64-x86_64-libgd \
+mingw-w64-x86_64-qt5-base \
+mingw-w64-x86_64-imagemagick \
+mingw-w64-x86_64-ghostscript
+
+# [D] Bibliotecas de Sistema e Contribs Faltantes (Expat, LZF, Zlib)
+pacman -S --noconfirm --needed \
+mingw-w64-x86_64-curl \
+mingw-w64-x86_64-openssl \
+mingw-w64-x86_64-libssh2 \
+mingw-w64-x86_64-icu \
+mingw-w64-x86_64-bzip2 \
+mingw-w64-x86_64-libyaml \
+mingw-w64-x86_64-libharu \
+mingw-w64-x86_64-libxlsxwriter \
+mingw-w64-x86_64-unrar \
+mingw-w64-x86_64-amqp-cpp \
+mingw-w64-x86_64-rabbitmq-c \
+mingw-w64-x86_64-expat \
+mingw-w64-x86_64-liblzf \
+mingw-w64-x86_64-zlib
+
+#libmagic o pacote e file
+pacman -s mingw-w64-x86_64-file
+
+# Limpa o cache para reduzir o tamanho da pasta do MSYS2
+pacman -Sc --noconfirm

@@ -3,13 +3,12 @@
 -lng=pt_BR
 #-vcshead=vcshead.ch
 #-tshead=tshead.ch
-#-manifest=dbu.Manifest  comentado erro compilacao 32 bits pode 64 aqui tambem 
-#-locilib
-# -m -n -w0 -es2 -ge1
--llibmysql.a 
+#-ldflags=--enable-stdcall-fixup
 
-
+# Arquivo de Recurso (Manifest e Versão)
 #d:\develop\harbour\dbu\dbu.rc
+#-manifest=d:\develop\harbour\dbu\dbu.exe.manifest
+#manifest_64.c
 
 hbct.hbc
 hbwin.hbc
