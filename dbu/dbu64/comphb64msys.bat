@@ -1,4 +1,4 @@
-call d:\devprg\hb\hb64msys.bat
+call \devprg\hb\hb64msys.bat
 hbmk2.exe dbu64.hbp -odbu64.exe
 rem mt.exe -manifest dbu.exe.manifest -outputresource:dbu.exe;#1
 rem windres --preprocessor=cat dbu.rc -o dbu_res.o
