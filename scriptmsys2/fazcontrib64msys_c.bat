@@ -24,9 +24,15 @@ SET HB_WITH_GD=c:\harbour\hb3rd\gd-X64\include\
 
 rem vszakats
 SET HB_WITH_ICU=c:\harbour\hb3rd\icu-x64\include\
-SET HB_WITH_amqp=c:\harbour\hb3rd\amqp-x64\include\
-SET HB_WITH_crypto=c:\harbour\hb3rd\crypto-x64\include\
-SET HB_WITH_yaml=c:\harbour\hb3rd\yaml-x64\include\
+SET HB_WITH_AMQP=d:\harbour\hb3rd\amqp-x64\include\
+SET HB_WITH_CRYPTO=d:\harbour\hb3rd\crypto-x64\include\
+
+SET HB_WITH_EXPAT=d:\harbour\hb3rd\expat-x64\include\
+SET HB_WITH_ZLIB=d:\harbour\hb3rd\zlib-x64\include\
+SET HB_WITH_BZ2=d:\harbour\hb3rd\bzip2-x64\include\
+SET HB_WITH_LIBXLSXWRITER=d:\harbour\hb3rd\libxlsxwriter-x64\include\
+SET HB_WITH_YAML=d:\harbour\hb3rd\yaml-x64\include\
+SET HB_WITH_SQLITE3=d:\harbour\hb3rd\sqlite-x64\include\
 
 set HB_STATIC_MYSQL=yes
 SET HB_STATIC_CURL=yes
@@ -34,7 +40,7 @@ SET HB_STATIC_OPENSSL=yes
 set HB_BUILD_CONTRIB_DYN=no
 set HB_BUILD_DYN=no
 set HB_BUILD_SHARED=no
-SET HB_BUILD_STRIP=all
+
 
 call hb64mysis_c.bat
 cd contrib
