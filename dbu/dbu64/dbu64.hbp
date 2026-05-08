@@ -1,14 +1,17 @@
+# --- Forçar 64 bits ---
+# Forçar cancelamento das flags i586/pentiumpro
+-optim-
+
+
+# Passar as flags diretamente para o compilador C para sobrescrever o padrão
+{gcc}-m64
+{gcc}-march=x86-64
+{gcc}-mtune=generic
+
 -gtwvg
 -gui
 -lng=pt_BR
-#-vcshead=vcshead.ch
-#-tshead=tshead.ch
-#-ldflags=--enable-stdcall-fixup
 
-# Arquivo de Recurso (Manifest e Versão)
-#\develop\harbour\dbu\dbu.rc
-#-manifest=\develop\harbour\dbu\dbu.exe.manifest
-#manifest_64.c
 
 hbct.hbc
 hbwin.hbc
