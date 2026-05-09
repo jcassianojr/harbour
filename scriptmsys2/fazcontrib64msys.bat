@@ -14,17 +14,12 @@ set HB_WITH_GS_BIN=d:\harbour\hb3rd\gscript-x64\bin\
 set HB_WITH_GS=d:\harbour\hb3rd\gscript-x64\include\ghostscript\
 SET HB_WITH_LIBHARU=d:\harbour\hb3rd\libharu-x64\include\
 set HB_WITH_LIBMAGIC=d:\harbour\hb3rd\magic-x64\include\
-set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql-x64\include\
-rem set HB_WITH_MYSQL=d:\harbour\hb3rd\mariadb-x64\include\
-rem set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql-x64Mariadb\include\
 SET HB_WITH_OPENSSL=d:\harbour\hb3rd\openssl-x64\include
 set HB_WITH_PGSQL=d:\harbour\hb3rd\pgsql-x64\include\
 SET HB_WITH_RABBITMQ=d:\harbour\hb3rd\RABBITMQ-x64\include\
 SET HB_WITH_SSH2=d:\harbour\hb3rd\ssh2-x64\include
 set HB_WITH_OCIlib=d:\harbour\hb3rd\oci-x64\include\
 SET HB_WITH_GD=d:\harbour\hb3rd\gd-X64\include\
-
-
 
 rem vszakats
 SET HB_WITH_ICU=d:\harbour\hb3rd\icu-x64\include\
@@ -43,8 +38,7 @@ SET HB_STATIC_OPENSSL=yes
 set HB_BUILD_CONTRIB_DYN=no
 set HB_BUILD_DYN=no
 set HB_BUILD_SHARED=no
-SET HB_BUILD_STRIP=all
-set HB_STATIC_MYSQL=yes
+
 
 
 call hb64mysis.bat
@@ -81,7 +75,6 @@ hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbmemio\hbmemio @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbmisc\hbmisc @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbmlzo\hbmlzo @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbmxml\hbmxml @hbpost
-hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbmysql\hbmysql @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbmzip\hbmzip @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbnetio\hbnetio @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbnf\hbnf @hbpost
@@ -103,7 +96,7 @@ hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  rddmisc\rddmisc @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  rddsql\rddsql @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  sddfb\sddfb @hbpost
 rem hbmk2  -inc  sddfb\sddfb
-hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  sddmy\sddmy @hbpost
+
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  sddoci\sddoci @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  sddodbc\sddodbc @hbpost
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  sddpg\sddpg @hbpost
@@ -141,3 +134,14 @@ hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  superlib\superlib
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  gas4harbour\gas4harbour 
 hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  wvwclip\wvwclip
 hbmk2 -inc hbxlsxwriter\hbxlsxwriter
+
+set HB_STATIC_MYSQL=yes
+set HB_USER_LDFLAGS=-static -static-libgcc -static-libstdc++
+
+set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql-x64\include\
+rem set HB_WITH_MYSQL=d:\harbour\hb3rd\mariadb-x64\include\
+rem set HB_WITH_MYSQL=d:\harbour\hb3rd\mysql-x64Mariadb\include\
+rem set HB_WITH_MYSQL=d:\harbour\hb3rd\mariadb-x64\
+
+hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  sddmy\sddmy @hbpost
+hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbmysql\hbmysql @hbpost

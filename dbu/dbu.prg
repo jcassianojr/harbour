@@ -28,17 +28,15 @@
 #include "dbinfo.ch"
 #INCLUDE "INKEY.CH"
 #INCLUDE "BOX.CH"
-//#include "ads.ch"
+
 #INCLUDE "HBGTINFO.CH"
 #INCLUDE "hbVER.CH"
-//#include "tshead.ch"
-//#INCLUDE "HBver.CH"
+
 
 
 REQUEST HB_LANG_PT
 REQUEST HB_CODEPAGE_PTISO
 REQUEST HB_GT_WVG_DEFAULT
-
 
 REQUEST DBFNTX  // 1 DBFNTX DBF INDEX=NTX
 REQUEST DBFCDX  // 2 DBFCDX DBF INDEX=CDX
@@ -81,6 +79,11 @@ REQUEST BMDBFNTX  //-18 BMDBFNTX DBFNTX
 *+
 FUNCTION MAIN()
 
+// Isso forçará a criação de um arquivo de log se o programa iniciar
+ //  hb_memoWrit( "debug_start.txt", "O programa iniciou em: " + dtoc(date()) + " " + time() )
+   
+   // Redireciona erros para um arquivo
+//   ErrorBlock( {|e| hb_memoWrit( "erro_fatal.txt", e:description ), Break(e)} )
 
 
 netregosok()

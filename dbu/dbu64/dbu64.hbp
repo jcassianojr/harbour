@@ -1,12 +1,17 @@
+#-console
+#-gtwin
+#-inc
+#-warn=yes
+
 -gtwvg
 -gui
 -lng=pt_BR
-
 
 hbct.hbc
 hbwin.hbc
 hbtip.hbc
 xhb.hbc
+gtwvg.hbc
 rddads.hbc
 rddbm.hbc
 
@@ -14,7 +19,7 @@ hbsqlit3.hbc
 #usando prg no lugar da lib abaixo
 #rddado.hbc
 hbmysql.hbc
-hbpgsql.hbc
+#hbpgsql.hbc
 hbodbc.hbc
 hbmemio.hbc
 hbziparc.hbc
@@ -26,7 +31,7 @@ hbxlsxml.hbc
 rddsql.hbc
 sddodbc.hbc
 sddmy.hbc
-sddpg.hbc
+#sddpg.hbc
 sddsqlt3.hbc
 #sddoci.hbc
 
@@ -70,9 +75,9 @@ letodb.hbc
 #
 # postgresql libpg
 #
-\develop\harbour\dbu\dbupg.prg
-\develop\harbour\dbu\dbupgexp 
-\develop\harbour\dbu\pgrdd.prg
+#\develop\harbour\dbu\dbupg.prg
+#\develop\harbour\dbu\dbupgexp 
+#\develop\harbour\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
@@ -106,3 +111,5 @@ letodb.hbc
 \develop\harbour\objmgw\wvgini.prg
 \develop\harbour\objmgw\adofix.prg
 \develop\harbour\objmgw\adoerror.prg
+
+teste.prg
