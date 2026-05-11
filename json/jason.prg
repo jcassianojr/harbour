@@ -74,7 +74,7 @@ FUNCTION Main()
       FErase( cARQJSON )
    NEXT kk
 
-
+   separacidadepais()
 
 // +--------------------------------------------------------------------
 // +
@@ -89,93 +89,86 @@ FUNCTION Main()
 // +
 // +
 
-FUNCTION JASONCSV( cARQJSON, cARQDBF )
-
-   LOCAL cJsonString
-   LOCAL cDESTINO
-   LOCAL eVALOR
-   LOCAL Z
-   LOCAL aVALOR
-   LOCAL nFILEGRV
-   LOCAL nodos
-   LOCAL hdata
-   LOCAL ldbf
-
-   ldbf := .F.
-
-   IF !File( cARQJSON )
+FUNCTION JASONCSV( cFileJson, cFileCsv )
+   LOCAL cJson, hData, nodos, eVALOR, nFilegrv, nX
+   
+   IF .NOT. File( cFileJson )
+      ? "Arquivo nao encontrado: " + cFileJson
       RETURN .F.
    ENDIF
 
-   IF ValType( cARQDBF ) = "C"
-      IF File( cARQDBF + ".dbf" )
-         dbUseArea( .T., "DBFCDX", cARQDBF,, .T. )
-         IF File( cARQDBF + ".cdx" )
-            ordListAdd( cARQDBF )
-            dbSetOrder( 1 )  //
-         ENDIF
-         ldbf := .T.
+   cJson := MemoRead( cFileJson )
+   hData := hb_jsonDecode( cJson )
+
+   IF hData == NIL
+      ? "Erro ao decodificar JSON: " + cFileJson
+      RETURN .F.
+   ENDIF
+
+// 1. Lógica para troca automática de extensão
+   IF cFileCsv == NIL
+      // Pega o nome do arquivo e troca .json por .csv
+      cFileCsv := hb_FNameExtSet( cFileJson, ".csv" )
+   ENDIF
+
+   nFilegrv := FCreate( cFileCsv )
+   IF nFilegrv == -1
+      ? "Erro ao criar arquivo CSV: " + cFileCsv
+      RETURN .F.
+   ENDIF
+
+   ? "Processando: " + cFileJson
+
+   FOR EACH nodos in hData
+      eVALOR := ""
+      
+      // CORREÇÃO CRÍTICA: 
+      // Se o JSON for um Array de Arrays (como os novos arquivos da SEFAZ),
+      // ValType(nodos) será "A" (Array).
+      IF ValType( nodos ) == "A"
+         FOR nX := 1 TO Len( nodos )
+            // Converte o valor para string e limpa caracteres especiais
+            eVALOR += hb_ValToStr( nodos[nX] )
+            IF nX < Len( nodos )
+               eVALOR += "|" // Separador
+            ENDIF
+         NEXT
+      ELSEIF ValType( nodos ) == "H"
+         // Se for um Objeto (Hash), mantém compatibilidade
+         eVALOR := hb_ValToExp( nodos )
+         eVALOR := StrTran( eVALOR, "{", "" )
+         eVALOR := StrTran( eVALOR, "}", "" )
+         eVALOR := StrTran( eVALOR, '", "', "|" )
+         eVALOR := StrTran( eVALOR, '"', "" )
+      ELSE
+         eVALOR := hb_ValToStr( nodos )
       ENDIF
-   ENDIF
 
-   cJsonString := hb_MemoRead( cARQJSON )
-   hData       := hb_jsonDecode( cJsonString )
-   cDESTINO    := StrTran( Lower( cARQJSON ), ".json", ".csv" )
-   nFILEGRV    := FCreate( cDESTINO )
-
-   IF ValType( hdata ) = "U"
-      Alert( ValType( hdata ) + " " + Carqjson )
-      RETURN .F.
-   ENDIF
-
-
-   nFILEGRV := FCreate( cDESTINO )
-
-
-   FOR EACH nodos in hDATA
-      eVALOR := hb_ValToExp( nodos )
-      // Fwrite(nFilegrv,eVALOR+hb_osnewline())
-      eVALOR := StrTran( eVALOR, "{", "" )
-      eVALOR := StrTran( eVALOR, "}", "" )
-      eVALOR := StrTran( eVALOR, ", ", "|" )
+      // Aplica a sua função de limpeza de caracteres
       eVALOR := TIRACE2( eVALOR )
-
-
+      
       FWrite( nFilegrv, eVALOR + hb_osNewLine() )
-
-
-
-      aVALOR := hb_ATokens( eVALOR, "|" )
-
-      IF Len( aVALOR ) > 0 .AND. lDBF
-         eBUSCA  := StrTran( aVALOR[ 1 ], '"', "" )
-         mCODIGO := StrTran( aVALOR[ 1 ], '"', "" )
-         mNOME   := StrTran( aVALOR[ 2 ], '"', "" )
-         AltD()
-         dbGoTop()
-         IF !dbSeek( eBUSCA )
-            dbAppend()
-            field->codigo := mCODIGO
-         ENDIF
-         IF Empty( field->nome ) .AND. !Empty( mNOME )
-            field->nome := mNOME
-         ENDIF
-
-      ENDIF
-
-      // FOR Z = 1 TO LEN(avaLOR)
-      // Fwrite(nFilegrv,avalor[z]+hb_osnewline())
-      // NEXT Z
    NEXT
 
-   FClose( nfilegrv )
+   FClose( nFilegrv )
+   ? "Gerado: " + cFileCsv
+RETURN .T.
 
-   IF ValType( cARQDBF ) = "C"
-      dbCloseAll()
-   ENDIF
 
-   RETURN .T.
+// Função de segurança para garantir que NUNCA retorne NIL
+STATIC FUNCTION ValToStruso( vVal )
+   LOCAL cRet := ""
+   LOCAL cType := ValType( vVal )
 
+   DO CASE
+      CASE cType == "C" ; cRet := vVal
+      CASE cType == "N" ; cRet := AllTrim( Str( vVal ) )
+      CASE cType == "D" ; cRet := DToC( vVal )
+      CASE cType == "L" ; cRet := iif( vVal, "S", "N" )
+      CASE cType == "U" ; cRet := "" // Se for nulo, retorna vazio
+      OTHERWISE         ; cRet := "" 
+   ENDCASE
+RETURN cRet
 
 // +--------------------------------------------------------------------
 // +
@@ -378,3 +371,70 @@ FUNCTION IsJsonValid( cJson )
 
 // + EOF: jason.prg
 // +
+
+
+PROCEDURE separacidadepais()
+    LOCAL cFileOrigem := "sefazcidade.csv"
+    LOCAL cFilePaises := "sefazpaises.csv"
+    LOCAL cFileMunic  := "sefazmunicipios.csv"
+    LOCAL nHandleIn, nHandlePaises, nHandleMunic
+    LOCAL cLinha
+    LOCAL nTamanho := 0, nPosAtual := 0
+
+    IF .NOT. FILE(cFileOrigem)
+        ? "Erro: Arquivo " + cFileOrigem + " nao encontrado."
+        RETURN
+    ENDIF
+
+    nHandleIn     := FOPEN(cFileOrigem)
+    nHandlePaises := FCREATE(cFilePaises)
+    nHandleMunic  := FCREATE(cFileMunic)
+
+    IF nHandleIn < 0 .OR. nHandlePaises < 0 .OR. nHandleMunic < 0
+        ? "Erro ao abrir/criar arquivos."
+        RETURN
+    ENDIF
+
+    // Obtém o tamanho total do arquivo para controlar o loop
+    nTamanho := FSEEK(nHandleIn, 0, 2) 
+    FSEEK(nHandleIn, 0, 0) // Volta para o início
+
+    ? "Processando..."
+
+    DO WHILE nPosAtual < nTamanho
+        cLinha := LerLinha(nHandleIn, @nPosAtual)
+        
+        IF EMPTY(cLinha)
+            LOOP
+        ENDIF
+
+        // Regra: Se os 2 primeiros caracteres forem EX
+        IF LEFT(cLinha, 2) == "EX"
+            FWRITE(nHandlePaises, cLinha + CHR(13) + CHR(10))
+        ELSE
+            FWRITE(nHandleMunic, cLinha + CHR(13) + CHR(10))
+        ENDIF
+    ENDDO
+
+    FCLOSE(nHandleIn)
+    FCLOSE(nHandlePaises)
+    FCLOSE(nHandleMunic)
+
+    ? "Concluido! Arquivos gerados com sucesso."
+RETURN
+
+// Função de leitura de linha adaptada para controlar a posição do ponteiro
+FUNCTION LerLinha(nHandle, nPosAtual)
+    LOCAL cChar := " ", cLinha := ""
+    LOCAL nLidos
+    
+    DO WHILE (nLidos := FREAD(nHandle, @cChar, 1)) > 0
+        nPosAtual += nLidos
+        IF cChar == CHR(10) // New Line
+            EXIT
+        ENDIF
+        IF cChar != CHR(13) // Ignora Carriage Return
+            cLinha += cChar
+        ENDIF
+    ENDDO
+RETURN cLinha
