@@ -75,6 +75,9 @@ FUNCTION Main()
    NEXT kk
 
    separacidadepais()
+   
+   hb_CopyFile("SEFAZCEST.csv","SEFAZCESTNCM.csv")
+   //sera usado na cest e cestncm
 
 // +--------------------------------------------------------------------
 // +
