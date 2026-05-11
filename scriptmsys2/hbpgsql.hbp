@@ -1,0 +1,20 @@
+-hblib
+-inc
+-o${hb_name}
+-w3 -es2
+
+# Usa a variável que você definiu no seu .bat
+-depkeyhead=pgsql:libpq-fe.h
+-depcontrol=pgsql:no{HB_BUILD_3RDEXT='no'}
+-depcontrol=pgsql:${HB_WITH_PGSQL}
+
+# Removidos todos os caminhos de Linux e depimplibs que causam conflito
+-iflag={bcc}-a
+
+${hb_name}.hbx
+postgres.c
+rddcopy.c
+tpostgre.prg
+
+# Indica ao hbmk2 para usar a lib de importação oficial do MSYS2
+-lpq

@@ -1,0 +1,9 @@
+description=PostgreSQL wrapper (SQL)
+
+incpaths=.
+headers=postgres.ch
+
+libs=${_HB_DYNPREF}${hb_name}${_HB_DYNSUFF}
+
+# Força o uso da libpq de forma simples e direta
+libs=pq
