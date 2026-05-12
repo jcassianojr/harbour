@@ -238,3 +238,9 @@ STATIC FUNCTION cValToType( nType )
       OTHERWISE         ; cRet := "Outro (" + hb_ValToStr(nType) + ")"
    ENDCASE
 RETURN cRet
+
+
+function apenasinccomp()
+strzero()
+descend()
+return

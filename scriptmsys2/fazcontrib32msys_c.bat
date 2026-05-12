@@ -13,26 +13,23 @@ SET HB_WITH_FREEIMAGE=c:\harbour\hb3rd\FreeImage\include\
 set HB_WITH_GS_BIN=c:\harbour\hb3rd\gscript\\bin\
 set HB_WITH_GS=c:\harbour\hb3rd\gscript\include\ghostscript\
 SET HB_WITH_LIBHARU=c:\harbour\hb3rd\libharu\include\
-set HB_WITH_MYSQL=c:\harbour\hb3rd\mysql\include\
 set HB_WITH_OCIlib=c:\harbour\hb3rd\oci\include\
 set HB_WITH_OPENSSL=c:\harbour\hb3rd\openssl\include\
-set HB_WITH_PGSQL=c:\harbour\hb3rd\pgsql\include\
 SET HB_WITH_RABBITMQ=c:\harbour\hb3rd\RABBITMQ\include\
 SET HB_WITH_SSH2=c:\harbour\hb3rd\ssh2\include\
 rem vszakats
-SET HB_WITH_ICU=c:\harbour\hb3rd\icu-x64\include\
-SET HB_WITH_AMQP=d:\harbour\hb3rd\amqp-x64\include\
-SET HB_WITH_CRYPTO=d:\harbour\hb3rd\crypto-x64\include\
+SET HB_WITH_ICU=c:\harbour\hb3rd\icu\include\
+SET HB_WITH_AMQP=d:\harbour\hb3rd\amqp\include\
+SET HB_WITH_CRYPTO=d:\harbour\hb3rd\crypto\include\
 
-SET HB_WITH_EXPAT=d:\harbour\hb3rd\expat-x64\include\
-SET HB_WITH_ZLIB=d:\harbour\hb3rd\zlib-x64\include\
-SET HB_WITH_BZ2=d:\harbour\hb3rd\bzip2-x64\include\
-SET HB_WITH_LIBXLSXWRITER=d:\harbour\hb3rd\libxlsxwriter-x64\include\
-SET HB_WITH_YAML=d:\harbour\hb3rd\yaml-x64\include\
-SET HB_WITH_SQLITE3=d:\harbour\hb3rd\sqlite-x64\include\
+SET HB_WITH_EXPAT=d:\harbour\hb3rd\expat\include\
+SET HB_WITH_ZLIB=d:\harbour\hb3rd\zlib\include\
+SET HB_WITH_BZ2=d:\harbour\hb3rd\bzip2\include\
+SET HB_WITH_LIBXLSXWRITER=d:\harbour\hb3rd\libxlsxwriter\include\
+SET HB_WITH_YAML=d:\harbour\hb3rd\yaml\include\
+SET HB_WITH_SQLITE3=d:\harbour\hb3rd\sqlite\include\
 
 
-set HB_STATIC_MYSQL=yes
 SET HB_STATIC_CURL=yes
 SET HB_STATIC_OPENSSL=yes
 set HB_BUILD_CONTRIB_DYN=no
@@ -74,13 +71,11 @@ hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbmemio\hbmemio @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbmisc\hbmisc @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbmlzo\hbmlzo @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbmxml\hbmxml @hbpost
-hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbmysql\hbmysql @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbmzip\hbmzip @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbnetio\hbnetio @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbnf\hbnf @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbodbc\hbodbc @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hboslib\hboslib @hbpost
-hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbpgsql\hbpgsql @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbssl\hbssl @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbpipeio\hbpipeio @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc hbtinymt\hbtinymt @hbpost
@@ -96,10 +91,8 @@ hbmk2 -quiet -width=0 -autohbm- @hbpre -inc rddmisc\rddmisc @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc rddsql\rddsql @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc sddfb\sddfb @hbpost
 rem hbmk2  -inc sddfb\sddfb 
-hbmk2 -quiet -width=0 -autohbm- @hbpre -inc sddmy\sddmy @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc sddoci\sddoci @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc sddodbc\sddodbc @hbpost
-hbmk2 -quiet -width=0 -autohbm- @hbpre -inc sddpg\sddpg @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc sddsqlt3\sddsqlt3 @hbpost
 hbmk2 -quiet -width=0 -autohbm- @hbpre -inc xhb\xhb  @hbpost
 
@@ -134,3 +127,18 @@ rem hbmk2 -quiet -width=0 -autohbm- @hbpre -inc wvwclip\wvwclip @hbpost
 rem hbmk2 -quiet -width=0 -autohbm- @hbpre -inc sqlrddpp\sqlrddpp  @hbpost
 hbmk2  -inc sqlrddpp\sqlrddpp
 hbmk2 -inc hbxlsxwriter\hbxlsxwriter
+
+
+rem mysql
+Set HB_STATIC_MYSQL=yes
+set HB_USER_LDFLAGS=-static -static-libgcc -static-libstdc++
+set HB_WITH_MYSQL=c:\harbour\hb3rd\mysql\include\
+hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  sddmy\sddmy @hbpost
+hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbmysql\hbmysql @hbpost
+
+rem pgsql
+set HB_STATIC_PGSQL=no
+set HB_WITH_PGSQL=c:\harbour\hb3rd\pgsql\include\
+set HB_USER_LDFLAGS=-static -static-libgcc -lintl -liconv -lws2_32 -lsecur32
+hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  hbpgsql\hbpgsql @hbpost
+hbmk2 -quiet  -width=0 -autohbm- @hbpre -inc  sddpg\sddpg @hbpost
