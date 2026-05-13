@@ -47,13 +47,13 @@ FUNCTION Dbf2md()
    fWrite( hXML, "# 🗄️ Dicionario de Estruturas de Dados " + sAlias +hb_eol() )
    fWrite( hXML, "> Varredura automatica realizada em: " + DToC(Date()) + hb_eol() + hb_eol() )
 
-   Doc_DBF_md( cFile, hXML )
+   Doc_DBF_md( sAlias, hXML )
 
    FClose( hXML )
 
    RETURN .T.
    
- Function Doc_DBF_md( sAlias, nHandle )
+ Function Doc_DBF_md( cFile, nHandle )
    LOCAL nI, cTag, cExpr
      
    //Area ja Aberta nivel superior para tratar rdd em uso
