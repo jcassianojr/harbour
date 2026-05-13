@@ -1,26 +1,13 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : dbulib.prg
 *+
-*+
-*+
 *+     Sistema:
-*+
 *+     Linguagem: Harbour
-*+
 *+     Autor: jcassiano
-*+
 *+     Copyright (c) 2024,  jcassiano
 *+
-*+     
-*+
-*+
-*+
 *+    Documentado em 28-Dez-2024 as 10:07 am
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
@@ -402,20 +389,20 @@ tDOC      := 0
 aAMBIENTE := SALVAA()
 
 HB_dispbox(03,10,22,60,B_DOUBLE+" ")
-OPCAO(08,14,"X&LS                                ",76)  //L 1
-OPCAO(09,14,"&TAM  STRU+TAM                      ",84)  //T 3
-OPCAO(10,14,"TE&C  STRU                          ",67)  //C 2
-OPCAO(11,14,"&DBE  STRU DDL                      ",68)  //D 4
-OPCAO(12,14,"DL&M  Delimitador Especificado      ",77)  //M 5
-OPCAO(13,14,"&SDF  tamanho do campo              ",83)  //S 6
-OPCAO(14,14,"&XML                                ",88)  //X 7
-OPCAO(15,14,"&JSON                               ",74)  //J 8
-OPCAO(16,14,"SSV Semi Colon (;) &Ponto e Virgula ",80)  //P  9
-OPCAO(17,14,"CS&V Colon     (,) Virgula          ",86)  //V1 0
-OPCAO(18,14,"&UNL PSV       (|) Pipe             ",85)  //U 11
-OPCAO(19,14,"TSV            TA&B               ",66)  //B 12
-OPCAO(20,14,"S&QL   insert into                  ",81)  //Q 13
-OPCAO(21,14,"Mar&kdown                         ",75)  //K 14
+OPCAO(05,14,"X&LS                                ",76)  //L 1
+OPCAO(06,14,"&TAM  STRU+TAM                      ",84)  //T 3
+OPCAO(07,14,"TE&C  STRU                          ",67)  //C 2
+OPCAO(08,14,"&DBE  STRU DDL                      ",68)  //D 4
+OPCAO(09,14,"DL&M  Delimitador Especificado      ",77)  //M 5
+OPCAO(10,14,"&SDF  tamanho do campo              ",83)  //S 6
+OPCAO(11,14,"&XML                                ",88)  //X 7
+OPCAO(12,14,"&JSON                               ",74)  //J 8
+OPCAO(13,14,"SSV Semi Colon (;) &Ponto e Virgula ",80)  //P  9
+OPCAO(14,14,"CS&V Colon     (,) Virgula          ",86)  //V1 0
+OPCAO(15,14,"&UNL PSV       (|) Pipe             ",85)  //U 11
+OPCAO(16,14,"TSV            TA&B               ",66)  //B 12
+OPCAO(17,14,"S&QL   insert into                  ",81)  //Q 13
+OPCAO(18,14,"Mar&kdown                         ",75)  //K 14
 
 IF lincdbf
    OPCAO(21,14,"DB&F                                ",70)   //F 15

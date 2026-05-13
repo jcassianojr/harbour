@@ -200,7 +200,9 @@ FUNCTION multidocs
       CASE tdoc = 7 .AND. cSUBTIPO="XML"      //xlm 
           FAZERDBF( {|| dbf2xml() }, .F.,,, cMASK )
 	  CASE tdoc = 14
-          FAZERDBF( {|| dbf2md() }, .F.,,, cMASK )	  
+          FAZERDBF( {|| dbf2md() }, .F.,,, cMASK )	 
+          //faztambem sqlite()
+          DocMarkdow()		  
       OTHERWISE
            FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
    ENDCASE

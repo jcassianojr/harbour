@@ -19,6 +19,7 @@
 #include "BOX.CH"
 #include "dbinfo.ch"
 #include "hbVER.CH"
+#include "directry.ch"
 
 #require "hbsqlit3"
 #require "hbmemio"
@@ -59,6 +60,7 @@ FUNCTION sqlitemenu()
       OPCAO( 8, 24, "&Tabelas                   ", 84 )   // T
       OPCAO( 9, 24, "&Apagar Tabela             ", 65 )   // A
       OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F
+	  OPCAO( 11,24,"Mar&kdown documentacao       ", 75) //
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -97,6 +99,12 @@ FUNCTION sqlitemenu()
          IF selectdb()
             exportadbf( odb, 2 )
          ENDIF
+	  case key = 8	
+           cFileName := win_GetOpenFileName(, "SQLite Files", hb_cwd(), "SQLite", ;
+      { { 'SQLite', '*.sqlite' }, { 'SQLite db', '*.DB' }, ;
+      { 'SQLite3', '*.sqlite3' }, { 'SQLite db3', '*.DB3' }, ;
+      { 'SQLite Fossil', '*.fossil' }, { 'All Files', '*.*' } }, 1 )
+            Doc_SQLite(cFileName)	  
       OTHERWISE
          RETURN
       ENDCASE
@@ -1328,6 +1336,127 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
    ENDIF
 
    RETURN msql
+
+
+
+Function DocMarkdow()
+   LOCAL aArquivos := Directory( "*.*" )
+   LOCAL nHandle, oFile, cExt
+   
+   
+   FOR EACH oFile IN aArquivos
+      cExt := Lower( SubStr( oFile[ F_NAME ], At( ".", oFile[ F_NAME ] ) + 1 ) )
+      
+      DO CASE
+         CASE cExt == "sqlite3"
+            Doc_SQLite( oFile[ F_NAME ] )
+         
+         CASE cExt == "sqlite"
+            Doc_SQLite( oFile[ F_NAME ] )
+         
+         CASE cExt == "fossil" 
+            Doc_SQLite( oFile[ F_NAME ] )
+		
+        CASE cExt == "fossil" 
+            Doc_SQLite( oFile[ F_NAME ] )
+			
+		 CASE cExt == "db3"
+            Doc_SQLite( oFile[ F_NAME ] )
+		
+        CASE cExt == "db"
+            Doc_SQLite( oFile[ F_NAME ] )
+         		
+         	
+			
+			
+      ENDCASE
+   NEXT
+RETURN
+
+Function Doc_SQLite( cDbFile )
+   LOCAL db, stmt, stmtCol, stmtIdx, stmtInfo
+   LOCAL cTabName, cIdxName, cCamposIdx, cIsUnique
+   LOCAL lHasIdx
+   LOCAL cDrive, cDir, cNome, cExt
+   LOCAL cOut := cDbFile+".md"
+   
+   hb_FNameSplit( cDbFile, @cDir, @cNome, @cExt )
+
+   nHandleDoc := fCreate( cOut )
+   IF nHandleDoc == -1
+      ? "Erro ao criar arquivo de documentacao."
+      RETURN
+   ENDIF
+
+   fWrite( nHandleDoc, "# ??? Dicionario de Estruturas de Dados "+ cNome+ "." +cExt + hb_eol() )
+   fWrite( nHandleDoc, "> Varredura automatica realizada em: " + DToC(Date()) + hb_eol() + hb_eol() )
+
+   // 1. Abertura do Banco
+   db := sqlite3_open( cDbFile )
+   
+   IF Empty( db )
+      fWrite( nHandleDoc, "### ? Erro ao abrir: " + cDbFile + hb_eol() )
+      RETURN
+   ENDIF
+
+   // 2. Iteração pelas Tabelas
+   stmt := sqlite3_prepare( db, "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'" )
+
+   DO WHILE sqlite3_step( stmt ) == SQLITE_ROW
+      cTabName := sqlite3_column_text( stmt, 1 )
+      
+      fWrite( nHandleDoc, hb_eol() + "#### Tabela: `" + cTabName + "`" + hb_eol() )
+      fWrite( nHandleDoc, "| Campo | Tipo | PK | NotNull |" + hb_eol() )
+      fWrite( nHandleDoc, "| :--- | :--- | :---: | :---: |" + hb_eol() )
+
+      // 3. Processamento de Colunas
+      stmtCol := sqlite3_prepare( db, "PRAGMA table_info('" + cTabName + "')" )
+      DO WHILE sqlite3_step( stmtCol ) == SQLITE_ROW
+         fWrite( nHandleDoc, "| " + sqlite3_column_text( stmtCol, 2 ) + ;
+                          " | " + sqlite3_column_text( stmtCol, 3 ) + ;
+                          " | " + iif( sqlite3_column_int( stmtCol, 6 ) == 1, "Sim", " " ) + ;
+                          " | " + iif( sqlite3_column_int( stmtCol, 4 ) == 1, "Sim", " " ) + " |" + hb_eol() )
+      ENDDO
+      sqlite3_finalize( stmtCol )
+
+      // 4. Processamento de Índices
+      fWrite( nHandleDoc, hb_eol() + "**Índices e Chaves:**" + hb_eol() )
+      stmtIdx := sqlite3_prepare( db, "PRAGMA index_list('" + cTabName + "')" )
+      lHasIdx := .F.
+
+      DO WHILE sqlite3_step( stmtIdx ) == SQLITE_ROW
+         lHasIdx   := .T.
+         cIdxName  := sqlite3_column_text( stmtIdx, 2 )
+         cIsUnique := iif( sqlite3_column_int( stmtIdx, 3 ) == 1, " (Único)", "" )
+         
+         // Busca campos que compõem este índice específico
+         stmtInfo   := sqlite3_prepare( db, "PRAGMA index_info('" + cIdxName + "')" )
+         cCamposIdx := ""
+         
+         DO WHILE sqlite3_step( stmtInfo ) == SQLITE_ROW
+            cCamposIdx += sqlite3_column_text( stmtInfo, 3 ) + ", "
+         ENDDO
+         sqlite3_finalize( stmtInfo )
+         
+         IF !Empty(cCamposIdx)
+            cCamposIdx := Left( cCamposIdx, Len(cCamposIdx) - 2 )
+            fWrite( nHandleDoc, "- **" + cIdxName + "**: `" + cCamposIdx + "`" + cIsUnique + hb_eol() )
+         ENDIF
+      ENDDO
+      
+      IF !lHasIdx
+         fWrite( nHandleDoc, "> *Nenhum índice definido.*" + hb_eol() )
+      ENDIF
+
+      sqlite3_finalize( stmtIdx )
+      fWrite( nHandleDoc, hb_eol() + "---" + hb_eol() )
+   ENDDO
+
+   sqlite3_finalize( stmt )
+   //sqlite3_close( db )
+   
+   fClose( nHandleDoc )
+RETURN
 
 // + EOF: sql2dbf.prg
 // +

@@ -101,6 +101,8 @@ Set(_SET_DATEFORMAT,"dd/mm/yyyy")
 SetCursor(.t.)
 Set(_SET_SCOREBOARD,.f.)
 
+//Doc_SQLite( "cep.sqlite")
+//DocMarkdow()
 
 public n_files
 public keystroke
