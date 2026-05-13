@@ -73,6 +73,7 @@ letodb.hbc
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg
 \develop\harbour\dbu\dbuxlsxml.prg
+\develop\harbour\dbu\dbu2md.prg
 #
 # sqlite
 #

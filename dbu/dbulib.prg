@@ -413,10 +413,12 @@ OPCAO(15,14,"&JSON                               ",74)  //J 8
 OPCAO(16,14,"SSV Semi Colon (;) &Ponto e Virgula ",80)  //P  9
 OPCAO(17,14,"CS&V Colon     (,) Virgula          ",86)  //V1 0
 OPCAO(18,14,"&UNL PSV       (|) Pipe             ",85)  //U 11
-OPCAO(19,14,"TSV            TA&B                 ",66)  //B 12
+OPCAO(19,14,"TSV            TA&B               ",66)  //B 12
 OPCAO(20,14,"S&QL   insert into                  ",81)  //Q 13
+OPCAO(21,14,"Mar&kdown                         ",75)  //K 14
+
 IF lincdbf
-   OPCAO(21,14,"DB&F                                ",70)   //F 14 70
+   OPCAO(21,14,"DB&F                                ",70)   //F 15
 ENDIF
 tdoc := menu(2,0)
 
@@ -448,6 +450,8 @@ CASE tDOC = 12
 CASE tDOC = 13   
    zEXPOREXT := "SQL" //-->5 delimitado , no insert into
 CASE tDOC = 14
+    zEXPOREXT :="MD"  //-->14 Mar&kdown MD   
+CASE tDOC = 15
    zEXPOREXT := "DBF"
 ENDCASE
 IF tDOC >= 9 .AND. tDOC <= 13
@@ -483,7 +487,7 @@ HB_dispbox(03,10,22,60,B_DOUBLE+" ")
 @ 05,12 say "CSV Colon      (,) Virgula         "         
 @ 06,12 say "UNL PSV        (|) Pipe            "         
 @ 07,12 say "TSV            TAB                 "         
-@ 08,12 say "XLS XML SQL JSON                   "         
+@ 08,12 say "XLS XML SQL JSON MD               "         
 
 @ 09,12 say "Formato"                                 
 @ 10,12 say "Delimitador ,;|#~ 9=(TAB)"               
@@ -524,7 +528,7 @@ ENDIF
 IF zEXPOREXT = "SQL"
    zDELIMITE := ","
 ENDIF
-IF zEXPOREXT = "JSON"
+IF zEXPOREXT = "JSON" 
    zDELIMITE := ""
 ENDIF
 RESTAA(aAMBIENTE)
@@ -578,8 +582,9 @@ RETURN lRETU
 *+
 *+
 *+
-function checkextEXP()  //",;|#~9" zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" .OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
-
+function checkextEXP()  //",;|#~9" zEXPOREXT="DLM" .OR. zEXPOREXT="CVS" .OR. zEXPOREXT="UNL" 
+                     //.OR. zEXPOREXT="XLS" .OR. zEXPOREXT="XML" .OR. zEXPOREXT="SQL" .OR. zEXPOREXT="JSON"
+                    //.OR. zEXPOREXT="MD"
 LOCAL lRETU
 zDELIMITE := " "
 zregSEP   := " "
@@ -605,6 +610,7 @@ DO CASE
     CASE zEXPOREXT = "SQL"
        zDELIMITE := ","
     CASE zEXPOREXT = "JSON"
+	CASE zEXPOREXT = "MD"
     OTHERWISE
    lRETU := .F.
 ENDCASE
@@ -659,7 +665,7 @@ IF nTIPOPR = 1
    LCOPIANAT := MDG("Copia Nativa(SIM) Interna(NAO)")
 ENDIF
 
-//nao mostrar tipo 14 dbf na escolha nao spbrepor na copia passando falso aqui
+//nao mostrar tipo 15 dbf na escolha nao spbrepor na copia passando falso aqui
 tDOC := pegtipodoc(.F.)
 pegparexp()
 
@@ -686,6 +692,9 @@ IF tDOC = 8   //JSON
    lCOPIANAT := .F.
 ENDIF
 IF tDOC = 13  //SQL
+   lCOPIANAT := .F.
+ENDIF
+IF tDOC = 14  //Mar&kdown MD
    lCOPIANAT := .F.
 ENDIF
 
@@ -752,7 +761,7 @@ CASE zREGSEP = chr(34) .OR. zREGSEP = chr(39)   //delimitador + aspas duplas asp
    MDT("Erro copiando dados")
 END
 //
-//tDOC=14
+//tDOC=15
 //
 CASE zEXPOREXT = "DBF"
 try

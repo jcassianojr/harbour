@@ -199,6 +199,8 @@ FUNCTION multidocs
            FAZERDBF( {|| Fazerxlsclass() }, .F.,,, cMASK )
       CASE tdoc = 7 .AND. cSUBTIPO="XML"      //xlm 
           FAZERDBF( {|| dbf2xml() }, .F.,,, cMASK )
+	  CASE tdoc = 14
+          FAZERDBF( {|| dbf2md() }, .F.,,, cMASK )	  
       OTHERWISE
            FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
    ENDCASE
@@ -276,7 +278,7 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK )
    MDS( "" )
 
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-// +
+// +F
 // +    Function GRAVADOC()
 // aVAL maior dos campos usado no tipo TEC=3 /TAM=2
 // lDOCCAB inclui cabecario

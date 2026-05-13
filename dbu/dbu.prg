@@ -331,6 +331,8 @@ FOR iLOOP := 1 TO LEN(aPARAM)
       multidocs(7,param1)
    case AT("/JSON",aPARAM[iLOOP]) > 0
       multidocs(8,param1)
+    case AT("/MD",aPARAM[iLOOP]) > 0
+      multidocs(14,param1)  
    case AT("/FIX",aPARAM[iLOOP]) > 0
       if mdg("Fixar? "+zdire) = "S"
          FAZERDBF({|| dbupack()},.t.,{|| copybkdbf(ARQUIVO)},{|| memopack(arquivo,.t.,.t.,RDDNOME(TIPODBF))},param1)
