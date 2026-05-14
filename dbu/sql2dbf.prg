@@ -813,6 +813,12 @@ FUNCTION export2sql( odb, cDBFFILE )
            "length INTEGER, " + ;
            "precision INTEGER)"
    miscsql( oDB, mSql )
+   
+   
+   // Metadados de Índices (A nova tabela)
+   miscsql( oDB, "CREATE TABLE IF NOT EXISTS index_metadata (" + ;
+              "table_name TEXT, index_name TEXT, expression TEXT, " + ;
+              "is_unique INTEGER, is_bag INTEGER)" )
 
 
    // Verifica se a tabela 
@@ -835,6 +841,9 @@ FUNCTION export2sql( odb, cDBFFILE )
 
 // 2. Limpar metadados antigos desta tabela específica (se houver)
    miscsql( oDB, "DELETE FROM table_metadata WHERE table_name = " + c2sql(cTablename) )
+   
+   // 1. LIMPA todos os metadados de índices desta tabela de uma vez só (fora do loop)
+  miscsql( oDB, "DELETE FROM index_metadata WHERE table_name = " + c2sql(cTablename) )
 
 
  dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .T. , .F. )
@@ -874,6 +883,9 @@ FUNCTION export2sql( odb, cDBFFILE )
 
    nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
    FOR j := 1 TO nIndexes
+       
+   
+   
       // CREATE INDEX idx_student_name ON Students (name);
       cINDEXNAME := dbOrderInfo( DBOI_NAME,, j )
       cINDEXNAME := StrTran( cINDEXNAME, "-", "_" )  // Tracos nao aceitos trocando por undescore
@@ -883,6 +895,19 @@ FUNCTION export2sql( odb, cDBFFILE )
       IF !miscsql( oDB, mSql )
          MemoWrit( "sql" + StrZero( j, 2, 0 ) + ".txt", msql )
       ENDIF
+      
+      cIdxName := dbOrderInfo( DBOI_NAME, , j )       // Nome do Tag (ex: "ID_CLI")
+      cKey     := dbOrderInfo( DBOI_EXPRESSION, , j ) // Expressão (ex: "NOME+DTOS(DATA)")
+      lIsUnique := dbOrderInfo( DBOI_UNIQUE, , j )    // Retorna .T. se for UNIQUE
+   
+     // A. Salva a "receita" para o retorno futuro ao DBF
+     mSql := "INSERT INTO index_metadata (table_name, index_name, expression, is_unique) VALUES (" + ;
+             c2sql(cTablename) + ", " + ;
+             c2sql(cIdxName) + ", " + ;
+             c2sql(cKey) + ", " + ;
+             iif( lIsUnique, "1", "0" ) + ")"
+     miscsql( oDB, mSql )
+        
    NEXT j
 
 
