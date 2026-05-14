@@ -805,6 +805,14 @@ FUNCTION export2sql( odb, cDBFFILE )
    cTablename := TIRAEXT( cDBFFILE )
 // use &cTablename.
 
+// 1. Garantir que a tabela de metadados exista
+   mSql := "CREATE TABLE IF NOT EXISTS table_metadata (" + ;
+           "table_name TEXT, " + ;
+           "column_name TEXT, " + ;
+           "original_type TEXT, " + ;
+           "length INTEGER, " + ;
+           "precision INTEGER)"
+   miscsql( oDB, mSql )
 
 
    // Verifica se a tabela 
@@ -825,12 +833,33 @@ FUNCTION export2sql( odb, cDBFFILE )
    ENDIF
 
 
+// 2. Limpar metadados antigos desta tabela específica (se houver)
+   miscsql( oDB, "DELETE FROM table_metadata WHERE table_name = " + c2sql(cTablename) )
+
 
  dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .T. , .F. )
   // USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
 // USE (cDBFFILE)  SHARED NEW //VIA  (cORIDRIVER)
 
    aStruct := dbStruct()
+
+
+// 5. Inserir metadados para cada campo
+   FOR i := 1 TO Len( aStruct )
+      mFldNm   := aStruct[ i, 1 ] // DBS_NAME
+      mFldType := aStruct[ i, 2 ] // DBS_TYPE
+      mFldLen  := aStruct[ i, 3 ] // DBS_LEN
+      mFldDec  := aStruct[ i, 4 ] // DBS_DEC
+
+      mSql := "INSERT INTO table_metadata (table_name, column_name, original_type, length, precision) VALUES (" + ;
+              c2sql(cTablename) + ", " + ;
+              c2sql(mFldNm) + ", " + ;
+              c2sql(mFldType) + ", " + ;
+              ltrim(str(mFldLen)) + ", " + ;
+              ltrim(str(mFldDec)) + ")"
+      miscsql( oDB, mSql )
+   NEXT
+
 
 // criado funcao para usar tambem no dbudoc
 
