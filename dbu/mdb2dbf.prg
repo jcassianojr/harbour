@@ -758,15 +758,9 @@ RETURN NIL
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function DBF2MDB()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
 
@@ -776,6 +770,52 @@ LOCAL cINDEXNAME
 LOCAL J
 local msql
 local lgravasql
+LOCAL cSqlFields, cSqlIndexes
+
+cSqlFields := ""
+cSqlIndexes := ""
+
+DO CASE
+   CASE cTIPOSQL == "SQLITE"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name TEXT, column_name TEXT, original_type TEXT, length INTEGER, precision INTEGER)"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name TEXT, index_name TEXT, expression TEXT, is_unique INTEGER)"
+
+   CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MYSQL64" .OR. cTIPOSQL == "MARIADB"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER)"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, is_unique INTEGER)"
+
+   CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER)"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, is_unique INTEGER)"
+
+   CASE lMDB .OR. lACCDB // MS ACCESS (MDB ou ACCDB)
+      // Access não aceita IF NOT EXISTS e exige colchetes em palavras reservadas
+      cSqlFields  := "CREATE TABLE table_metadata (table_name TEXT(50), column_name TEXT(50), original_type TEXT(1), [length] INTEGER, [precision] INTEGER)"
+      cSqlIndexes := "CREATE TABLE index_metadata (table_name TEXT(50), index_name TEXT(50), expression MEMO, is_unique INTEGER)"
+
+   CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
+      cSqlFields  := "IF OBJECT_ID('table_metadata', 'U') IS NULL " + ;
+                     "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INT, precision INT)"
+      cSqlIndexes := "IF OBJECT_ID('index_metadata', 'U') IS NULL " + ;
+                     "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression VARCHAR(MAX), is_unique INT)"
+
+ENDCASE
+
+// Execução dos comandos
+IF !Empty( cSqlFields )
+   // No caso do Access, usamos TRY/CATCH pois ele não tem 'IF NOT EXISTS'
+   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL
+      TRY
+         executacmd(cMDBARQ, cSqlFields)
+         executacmd(cMDBARQ, cSqlIndexes)
+      CATCH
+         // Tabelas já existem
+      END
+   ELSE
+      executacmd(cMDBARQ, cSqlFields)
+      executacmd(cMDBARQ, cSqlIndexes)
+   ENDIF
+ENDIF
 
 
 lgravasql := mdg("gravar sql")
@@ -787,18 +827,55 @@ nLASTREC := reccount()
 zei_fort(nLASTREC,,,0)
 cNOMETABELA := ALIAS()
 
+// 1. LIMPEZA DOS METADADOS (Geral para todos os bancos)
+// Limpa o que existia anteriormente para evitar duplicidade na re-importação
+executacmd( cMDBARQ, "DELETE FROM table_metadata WHERE table_name = " + c2sql(cNOMETABELA) )
+executacmd( cMDBARQ, "DELETE FROM index_metadata WHERE table_name = " + c2sql(cNOMETABELA) )
+
+// 2. INCLUSÃO DOS METADADOS DE CAMPOS (Estrutura do DBF)
+FOR i := 1 TO Len( aSTRU )
+   mFldNm   := aSTRU[ i, 1 ]
+   mFldType := aSTRU[ i, 2 ]
+   mFldLen  := aSTRU[ i, 3 ]
+   mFldDec  := aSTRU[ i, 4 ]
+
+   msql := "INSERT INTO table_metadata (table_name, column_name, original_type, length, precision) VALUES (" + ;
+           c2sql(cTablename) + ", " + ;
+           c2sql(mFldNm)    + ", " + ;
+           c2sql(mFldType)  + ", " + ;
+           ltrim(str(mFldLen)) + ", " + ;
+           ltrim(str(mFldDec)) + ")"
+   
+   executacmd( cMDBARQ, msql )
+NEXT
+
 nIndexes := dbORDERINFO(DBOI_ORDERCOUNT)
 FOR j := 1 TO nIndexes
    cINDEXNAME := dbORDERINFO(DBOI_NAME,,j)
    cINDEXNAME := StrTran(cINDEXNAME,"-","_")  //Tracos nao aceitos trocando por undescore
    msql       := "create index "+cINDEXNAME+" on "+cNometabela+" ( "+MDPCHAVEI(dbORDERINFO(DBOI_EXPRESSION,,j))+" ) "
    aadd(Aindices,msql)
+   
+   cIdxName  := dbOrderInfo( DBOI_NAME, , j )
+   cKey      := dbOrderInfo( DBOI_EXPRESSION, , j )
+   lIsUnique := dbOrderInfo( DBOI_UNIQUE, , j )
+   
+   // Salva a expressão literal (ex: "CODIGO+STR(SEQ,3)") para reconstrução posterior
+   msql := "INSERT INTO index_metadata (table_name, index_name, expression, is_unique) VALUES (" + ;
+           c2sql(cTablename) + ", " + ;
+           c2sql(cIdxName)   + ", " + ;
+           c2sql(cKey)       + ", " + ; 
+           iif( lIsUnique, "1", "0" ) + ")"
+           
+   executacmd( cMDBARQ, msql )
 NEXT j
 dbclosearea()
 
 MDT(cNOMETABELA)
 
 Set(_SET_DATEFORMAT,"yyyy-mm-dd")
+
+
 
 
 msql := ""
