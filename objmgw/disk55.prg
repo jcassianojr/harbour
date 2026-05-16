@@ -1,10 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : disk55.prg
-// +
-// +
 // +
 // +     Sistema:
 // +
@@ -14,13 +10,7 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:41 am
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
@@ -100,24 +90,12 @@
 // +
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
-// +рррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррр
-// +
-// +    Function convansi()
-// +
-// +рррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррр
-// +
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function convansi()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION convansi( ctexto )
 
@@ -128,24 +106,12 @@ FUNCTION convansi( ctexto )
 
    RETURN cTEXTO
 
-// +рррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррр
-// +
-// +    Function convoem()
-// +
-// +рррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррр
-// +
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function convoem()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION convoem( ctexto )
 
@@ -157,24 +123,11 @@ FUNCTION convoem( ctexto )
    RETURN cTEXTO
 
 
-// +рррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррр
-// +
-// +    Function str2html(cStr, lAnsi, loem )
-// +
-// +рррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррррр
-// +
-
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function str2html()
-// +
-// +
+// +    Function str2html(cStr, lAnsi, loem)
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION str2html( cStr, lAnsi, loem )
 
@@ -194,24 +147,11 @@ FUNCTION str2html( cStr, lAnsi, loem )
 
    RETURN cSTR
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function CAPFIRS2()
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function CAPFIRS2()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION CAPFIRS2( string )
 
@@ -236,25 +176,11 @@ FUNCTION CAPFIRS2( string )
 
    RETURN ret_string
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function SonumeroX(cInString,lPONTO,lVIRGULA)
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function SonumeroX()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION SonumeroX( cInString, lPONTO, lVIRGULA )
 
@@ -286,24 +212,11 @@ FUNCTION SonumeroX( cInString, lPONTO, lVIRGULA )
    RETURN cOutValue
 
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function TIRAOUT()
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function TIRAOUT()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION TIRAOUT( TEXTO )
 
@@ -315,24 +228,12 @@ FUNCTION TIRAOUT( TEXTO )
    RETURN texto
 
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-// +    Function GRVVAL()
-// +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function GRVVAL()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION GRVVAL( nVAL, nTAM, nDEC )
 
@@ -343,7 +244,7 @@ FUNCTION GRVVAL( nVAL, nTAM, nDEC )
 
    RETURN cVAR
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
 // +
 // +    Function data2STR(dData,cFOR,cSEP,cDIG) retorna uma data formatada
 // +    cFOR= DMA AMD MDA DMY YMD MDY ADM YDM SQL DMY/4 DMY2 DMY4 DMY-4
@@ -351,26 +252,16 @@ FUNCTION GRVVAL( nVAL, nTAM, nDEC )
 // +    cDIG 2 ou 4             (compatibilidade usar formato 5 digitos)
 // +    30/12/2O22 Inclusao MYS MYSQL 2000-12-01 e DHZ 2000-12-01  00:00:00
 // +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
 // +
 
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function data2str()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION data2str( dData, cFOR, cSEP, cDIG, cINI, cFIM )
 
    LOCAL cDIA    := cMES := cANO := cRETU := ""
    LOCAL cFORINI
 
+    dDATA := UniversalToDate( dDATA )
+	
    IF ValType( dDATA ) <> "D" .AND. ValType( dDATA ) <> "T"
       cDIA := "00"
       cMES := "00"
@@ -590,24 +481,12 @@ FUNCTION data2str( dData, cFOR, cSEP, cDIG, cINI, cFIM )
 
    RETURN cRETU
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function  str2data(cDATA,cFOR,cSEP,cDIG)
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function str2data()
-// +
-// +
+// +    Function str2data(cDATA,cFOR,cSEP,cDIG)
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION str2data( cDATA, cFOR, cSEP, cDIG )
 
@@ -679,27 +558,17 @@ FUNCTION str2data( cDATA, cFOR, cSEP, cDIG )
 
 
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function  DifDatas(dDataInicial,dDataFinal)
-// +    retorna quantidade de ano/mes/dias
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function DifDatas()
-// +
-// +
+// +    Function DifDatas((dDataInicial,dDataFinal)
+// +    etorna quantidade de ano/mes/dias
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION DifDatas( dDataInicial, dDataFinal )
+
+   dDataInicial := UniversalToDate( dDataInicial )
+   dDataFinal   := UniversalToDate( dDataFinal )
 
    v_dia  := v_mes := v_ano := 0
    v_anof := Year( dDataFinal )
@@ -733,29 +602,18 @@ FUNCTION DifDatas( dDataInicial, dDataFinal )
    RETURN ( v_ret )
 
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function DIGADATA() retorna uma data formatada
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function DIGADATA()
-// +
-// +
+// +    Function DIGADATA(dDATA, nDIA, nMES, nANO, cSEP) retorna uma data formatada
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION DIGADATA( dDATA, nDIA, nMES, nANO, cSEP )
 
    LOCAL cDIA := cMES := cANO := cRETU := ""
 
+   dDATA := UniversalToDate( dDATA )
    cDIA := StrZero( Day( dDATA ), 2 )
    cMES := StrZero( Month( dDATA ), 2 )
    cANO := StrZero( Year( dDATA ), 4 )
@@ -784,24 +642,12 @@ FUNCTION DIGADATA( dDATA, nDIA, nMES, nANO, cSEP )
 
    RETURN cRETU
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function Cmes() // VEM DATA RETORNA MES POR EXTENSO
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function Cmes()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION Cmes( ddata )
 
@@ -809,24 +655,11 @@ FUNCTION Cmes( ddata )
 
    RETURN retorno
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
 // +
 // +    Function Mmes()  VEM O NUMERO DO MES , RETORNA MES POR EXTENSO
 // +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function Mmes()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION Mmes( nmes )
 
@@ -836,49 +669,23 @@ FUNCTION Mmes( nmes )
 
    RETURN ( { "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }[ nMES ] )
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function Cdia()  VEM A DATA , RETORNA DIA POR EXTENSO
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function Cdia()
-// +
-// +
+// +    Function Cdia() VEM A DATA , RETORNA DIA POR EXTENSO
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION Cdia( ddata )
-
+    dDATA := UniversalToDate( dDATA )
    retorno := Ddia( DoW( ddata ) )
 
    RETURN retorno
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function Ddia()  VEM NUMERO DIA , RETORNA DIA POR EXTENSO
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function Ddia()
-// +
-// +
+// +    Function Ddia() VEM NUMERO DIA , RETORNA DIA POR EXTENSO
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION Ddia( ndia )
 
@@ -889,24 +696,11 @@ FUNCTION Ddia( ndia )
    RETURN ( { "Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado" }[ nDIA ] )
 
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function ctohora()
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 // +    Function CTOHORA()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION CTOHORA( cHORA AS STRING )
 
@@ -917,26 +711,13 @@ FUNCTION CTOHORA( cHORA AS STRING )
    RETURN Val( Chora )
 
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-// +    Function StrLogic()
-// +
-// +   30/12/2O22 Incluso opзoes Y N e 0 1 e T F
-// +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function StrLogic()
-// +
-// +
+// +    30/12/2O22 Incluso opзoes Y N e 0 1 e T F
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION StrLogic( cVAL, lDEFAULT )
 
@@ -972,24 +753,11 @@ FUNCTION StrLogic( cVAL, lDEFAULT )
    RETURN lDEFAULT
 
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-// +    Function Logic2Str(lValor,cFORMATO)
-// +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function Logic2Str()
-// +
-// +
+// +    Function Logic2Str(lValor,cFORMATO))
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION Logic2Str( lValor, cFORMATO )
 
@@ -1027,7 +795,7 @@ FUNCTION Logic2Str( lValor, cFORMATO )
    RETURN cRETURN
 
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function Strval()
 // +    cSEPDEC Numero .,
@@ -1036,21 +804,9 @@ FUNCTION Logic2Str( lValor, cFORMATO )
 // +
 // +    30/12/2022 utiliza logic2srt para logic
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function Strval()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION Strval( xdado, nLEN, nDEC, cSEPDEC, lESPACO )
 
    LOCAL retval := "", i, cVALTYPE
@@ -1120,25 +876,11 @@ FUNCTION Strval( xdado, nLEN, nDEC, cSEPDEC, lESPACO )
    RETURN ( retval )
 
 
-
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function CHOR()
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function CHOR()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION CHOR
 
@@ -1150,24 +892,11 @@ FUNCTION CHOR
 
    RETURN ( QT1 + QT3 )
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function BHOR()
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function BHOR()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION BHOR
 
@@ -1180,25 +909,12 @@ FUNCTION BHOR
    RETURN ( QT1 + QT3 )
 
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-// +    Function geotodec(cVAL,cHEM) convert posicao geo para decimal
-// +                      posicao, hemisferio
-// +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function geotodec()
-// +
-// +
+// +    Function geotodec(cVAL,cHEM) convert posicao geo para decimal)
+// +                      posicao, hemisferio 
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION geotodec( cVAL, cHEM )
 
@@ -1214,7 +930,7 @@ FUNCTION geotodec( cVAL, cHEM )
 
    RETURN nVAL
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function calcgeokm() calcula distancia dois ponto
 // +    exemplo  SP/RIO calcgeokm(geotodec("23325413","S"),geotodec("46380889","S"),geotodec("22541197","S"),geotodec("43122893","S")) ~=357KM
@@ -1225,21 +941,9 @@ FUNCTION geotodec( cVAL, cHEM )
 // +                 'K' is kilometers (default)
 // +                 'N' is nautical miles
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function calcgeokm()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION calcgeokm( lat1, lon1, lat2, lon2, unit )
 
    IF ValType( unit ) # "C"
@@ -1259,47 +963,21 @@ FUNCTION calcgeokm( lat1, lon1, lat2, lon2, unit )
 
    RETURN dist
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function deg2rad()
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function deg2rad()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION deg2rad( deg )
 
    RETURN ( deg * PI() / 180.0 )
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function rad2deg()
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function rad2deg()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION rad2deg( rad )
 
@@ -1344,39 +1022,20 @@ FUNCTION rad2deg( rad )
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function MinutoToHora()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION MinutoToHora( horas )
 
    RETURN Int( horas / 60 ) + ( Mod( horas, 60 ) / 100 )
 
 
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
+// +--------------------------------------------------------------------
 // +
 // +    Function aconvertend()
 // +
-// +ЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎЎ
-// +
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function aconvertend()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION aconvertend()
 
@@ -1417,5 +1076,72 @@ FUNCTION aconvertend()
 
    RETURN aCNV
 
+
+// +--------------------------------------------------------------------
+// +  Funзгo: UniversalToDate()
+// +  Objetivo: Garantir a leitura correta de datas em mъltiplos formatos
+// +            (DD/MM/YY, DD-MM-YYYY, DD.MM.YY, AAAAMMDD, YYYY-MM-DD)
+// +--------------------------------------------------------------------
+FUNCTION UniversalToDate( xData )
+
+   LOCAL dResult := CToD( "" )
+   LOCAL cFormatOrig := Set( _SET_DATEFORMAT, "dd/mm/yyyy" ) // Forзa padrгo interno temporбrio
+   LOCAL cData, cLimpa, nLen
+
+   // 1. Se jб for do tipo Data, retorna ela mesma
+   IF ValType( xData ) == "D"
+      Set( _SET_DATEFORMAT, cFormatOrig )
+      RETURN xData
+   ENDIF
+
+   // 2. Se for nulo ou nгo for string, retorna data vazia
+   IF ValType( xData ) <> "C" .OR. Empty( xData )
+      Set( _SET_DATEFORMAT, cFormatOrig )
+      RETURN dResult
+   ENDIF
+
+   cData := AllTrim( xData )
+
+   // 3. Trata o formato ISO muito comum em bancos de dados (YYYY-MM-DD)
+   //    Exemplo: "2026-05-16" vira "16/05/2026"
+   IF Len( cData ) == 10 .AND. SubStr( cData, 5, 1 ) == "-" .AND. SubStr( cData, 8, 1 ) == "-"
+      dResult := CToD( Right( cData, 2 ) + "/" + SubStr( cData, 6, 2 ) + "/" + Left( cData, 4 ) )
+      Set( _SET_DATEFORMAT, cFormatOrig )
+      RETURN dResult
+   ENDIF
+
+   // 4. Remove separadores comuns (barra, hнfen, ponto) para analisar os nъmeros limpos
+   cLimpa := StrTran( cData, "/", "" )
+   cLimpa := StrTran( cLimpa, "-", "" )
+   cLimpa := StrTran( cLimpa, ".", "" )
+   cLimpa := AllTrim( cLimpa )
+   nLen   := Len( cLimpa )
+
+   // 5. Identifica o formato pelo tamanho da string limpa
+   DO CASE
+   CASE nLen == 8
+      // Pode ser AAAAMMDD (DToS) ou DDMMYYYY
+      // Testamos primeiro AAAAMMDD (onde os 4 primeiros caracteres sгo o ano, ex: > 1900)
+      IF Val( Left( cLimpa, 4 ) ) > 1900
+         dResult := CToD( SubStr( cLimpa, 7, 2 ) + "/" + SubStr( cLimpa, 5, 2 ) + "/" + Left( cLimpa, 4 ) )
+      ELSE
+         // Se nгo for, assume DDMMYYYY
+         dResult := CToD( Left( cLimpa, 2 ) + "/" + SubStr( cLimpa, 3, 2 ) + "/" + Right( cLimpa, 4 ) )
+      ENDIF
+
+   CASE nLen == 6
+      // Formato DDMMYY (Ano com 2 dнgitos)
+      // O Harbour trata o centenбrio automaticamente baseado no SET EPOCH (padrгo geralmente 1950)
+      dResult := CToD( Left( cLimpa, 2 ) + "/" + SubStr( cLimpa, 3, 2 ) + "/" + Right( cLimpa, 2 ) )
+
+   OTHERWISE
+      // Tentativa padrгo caso caia em algo fora do comum
+      dResult := CToD( cData )
+   ENDCASE
+
+   // Restaura o formato de data original do sistema
+   Set( _SET_DATEFORMAT, cFormatOrig )
+
+   RETURN dResult
 // + EOF: disk55.prg
 // +

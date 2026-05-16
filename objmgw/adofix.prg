@@ -1,10 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : adofix.prg
-// +
-// +
 // +
 // +     Sistema:
 // +
@@ -14,29 +10,17 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:41 am
 // +
-// +
-// +
 // +--------------------------------------------------------------------
 // +
 
 
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 // +    Function FIX02()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION FIX02( cVALOR )
 
@@ -55,15 +39,9 @@ FUNCTION FIX02( cVALOR )
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function FIXINT()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION FIXINT( eVALOR )
 
@@ -72,15 +50,9 @@ FUNCTION FIXINT( eVALOR )
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function FIXNUM()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION FIXNUM( cCAMPO )
 
@@ -94,15 +66,9 @@ FUNCTION FIXNUM( cCAMPO )
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function FIXSTR()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION FIXSTR( cCAMPO, lTRIM )
 
@@ -118,81 +84,101 @@ FUNCTION FIXSTR( cCAMPO, lTRIM )
 
 
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function FIXDATS()
-// +
-// +
-// +
+// +  Função: FIXDATS()
+// +  Objetivo: Trata e limpa strings de datas vindas do Banco de Dados,
+// +            eliminando valores nulos ou padrões vazios de motores SQL.
+// +  Retorno:  cString - String contendo a data limpa ou string vazia.
 // +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION FIXDATS( cCAMPO )
+
+   LOCAL cLimpa
 
    IF ValType( cCAMPO ) <> "C"
       RETURN ""
    ENDIF
-   IF cCAMPO = '01/01/1900' .OR. TIRAOUT( cCAMPO ) = '01011900'
+
+   cCAMPO := AllTrim( cCAMPO )
+
+   // Identifica se é um padrão de data nula/vazia de banco (ex: 01/01/1900 ou zerados) 
+   IF cCAMPO == '01/01/1900'
       RETURN ""
    ENDIF
-// if TIRAOUT(cCAMPO)='00000101' //sqllite
-// RETURN ""
-// ENDIF
+
+   // Remove separadores para checar máscaras zeradas comuns em bancos
+   cLimpa := StrTran( cCAMPO, "/", "" )
+   cLimpa := StrTran( cLimpa, "-", "" )
+   cLimpa := StrTran( cLimpa, ".", "" )
+   cLimpa := Left( cLimpa, 8 ) // Pega apenas a porção da data, ignora a hora se houver
+
+   // Trata "01011900" ou marcas nulas do SQLite/MySQL ("00000101", "00000000") 
+   IF cLimpa == '01011900' .OR. cLimpa == '00000101' .OR. cLimpa == '00000000' .OR. Left(cLimpa, 4) == '0000'
+      RETURN ""
+   ENDIF
 
    RETURN cCAMPO
 
 
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function FIXDATA()
-// +
-// +
-// +
+// +  Função: FIXDATA()
+// +  Objetivo: Garante o retorno de um tipo DATA (D) válido para o Harbour,
+// +            interceptando variações de bancos de dados.
+// +  Retorno:  dData - Objeto do tipo Data (vazio ou preenchido).
 // +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION FIXDATA( cCAMPO )
 
-   IF ValType( cCAMPO ) <> 'C' .AND. ValType( cCAMPO ) <> 'D'
-      RETURN CToD( Space( 8 ) )
-   ELSE
-      IF ValType( cCAMPO ) = "D"
-         RETURN cCAMPO
-      ENDIF
-      cCAMPO := Left( cCAMPO, 10 )
-      cCAMPO := StrTran( cCAMPO, "-", "" )
-      cCAMPO := SToD( cCAMPO )
+   LOCAL dResult := CToD( "" )
+
+   // Se já vier como Data legítima do Driver/ODBC, passa direto 
+   IF ValType( cCAMPO ) == 'D' 
+      RETURN cCAMPO 
    ENDIF
 
-   RETURN cCAMPO
+   // Se não for caractere e nem data, aborta com data vazia 
+   IF ValType( cCAMPO ) <> 'C' 
+      RETURN dResult 
+   ENDIF
+
+   // Filtra e limpa registros textuais nulos usando a nova FIXDATS
+   cCAMPO := FIXDATS( cCAMPO )
+   
+   IF Empty( cCAMPO )
+      RETURN dResult
+   ENDIF
+
+   // Utiliza a função Universal centralizada do seu sistema (do disk55.prg)
+   // para converter strings bagunçadas com segurança
+   dResult := UniversalToDate( cCAMPO )
+
+   RETURN dResult
 
 
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function FIXLOGIC()
-// +
-// +
-// +
+// +  Função: FIXLOGIC()
+// +  Objetivo: Garante o retorno de um valor lógico booleano (.T. ou .F.)
+// +            tratando retornos lógicos, textuais ou numéricos de bancos.
+// +  Retorno:  Valor lógico (.T. ou .F.)
 // +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION FIXLOGIC( cCAMPO )
 
-   IF ValType( cCAMPO ) <> 'L'
-      RETURN .F.
+   LOCAL cType := ValType( cCAMPO )
+
+   // 1. Se já for lógico puro (ex: PostgreSQL ou ODBC bem configurado), retorna direto
+   IF cType == 'L'
+      RETURN cCAMPO
    ENDIF
 
-   RETURN cCAMPO
+   // 2. Se for numérico (comum no SQLite que armazena booleanos como 0 ou 1)
+   IF cType == 'N'
+      RETURN ( cCAMPO == 1 )
+   ENDIF
 
+   // 3. Se for caractere/texto, delega para a inteligência da StrLogic
+   IF cType == 'C'
+      RETURN StrLogic( AllTrim( cCAMPO ), .F. )
+   ENDIF
+
+   // Fallback de segurança para outros tipos (como NIL/NULL)
+   RETURN .F.
 
 // +--------------------------------------------------------------------
 // +
@@ -219,28 +205,12 @@ FUNCTION FIXHORA( cCampo )
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function DateToMySQL()
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 FUNCTION DateToMySQL( dDate )
-
    RETURN data2str( dDate, "MYS", "-", "4" )
-// LOCAL cString
-// cString := StrZero( Year( dDate ), 4 ) + "-" + StrZero( Month( dDate ), 2 ) + "-" + StrZero( Day( dDate ), 2 )
-// IF cString == "0000-00-00"
-// cString := "NULL"
-// ENDIF
-// RETURN cString
-
-
-// sqllite '0000-01-01 00:00:00''0000-01-01 00:00:00'
 
 // + EOF: adofix.prg
 // +
