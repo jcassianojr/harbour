@@ -751,6 +751,9 @@ FUNCTION StrLogic( cVAL, lDEFAULT )
    ENDSWITCH
 
    RETURN lDEFAULT
+   
+   
+   
 
 
 // +--------------------------------------------------------------------

@@ -1868,15 +1868,15 @@ case cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    //Driver={PostgreSQL ANSI};Server=IP address;Port=5432;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
    if empty(cDATABASEX)
       if loledb
-         cConn := "DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX   //+";pqopt={search_path=myschema,public}" //32 driver versao
+         cConn := "DRIVER={PostgreSQL ANSI};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX +"; ConnSettings=SET client_encoding TO 'WIN1252';"  //+";pqopt={search_path=myschema,public}" //32 driver versao
       else
-         cConn := "DRIVER={PostgreSQL ANSI(x64)};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //+";pqopt={search_path=myschema,public}"  //64 driver versao x64
+         cConn := "DRIVER={PostgreSQL ANSI(x64)};Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX +"; ConnSettings=SET client_encoding TO 'WIN1252';" //+";pqopt={search_path=myschema,public}"  //64 driver versao x64
       endif
    else
       if loledb
-         cConn := "DRIVER={PostgreSQL ANSI};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX   //+";pqopt={search_path=myschema,public}"  //32 driver versao
+         cConn := "DRIVER={PostgreSQL ANSI};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX +"; ConnSettings=SET client_encoding TO 'WIN1252';"  //+";pqopt={search_path=myschema,public}"  //32 driver versao
       else
-         cConn := "DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX  //+";pqopt={search_path=myschema,public}" //64 driver versao 964
+         cConn := "DRIVER={PostgreSQL ANSI(x64)};Database="+cDATABASEX+";Server="+cSERVERX+";Uid="+cUSERX+";Pwd="+cPASSX +"; ConnSettings=SET client_encoding TO 'WIN1252';" //+";pqopt={search_path=myschema,public}" //64 driver versao 964
       endif
    endif
 CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "SQL"

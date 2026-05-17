@@ -190,6 +190,17 @@ FUNCTION odbcimpdbf()
    cCONN       := GERACONN( cDATABASEX, .F. )
    dsFunctions := TODBC():New( cCONN )
    
+   if ! dsFunctions:lSuccess
+      Alert( "Falha na conexao ODBC no modulo dbuodbc!" )
+      return .f.
+   endif
+    
+    
+   if cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"  
+      dsFunctions:SetSQL( "SET search_path TO myschema, public; SET client_encoding TO 'WIN1252';" )
+      dsFunctions:ExecSQL()
+   endif
+   
    nCont := 0
 
   dsFunctions:SETSQL( Dialeto_begin() )
@@ -272,6 +283,16 @@ FUNCTION odbcexpdbf( ntipo )
    mdbtabela( cdatabasex )
    cCONN       := GERACONN( cDATABASEX, .F. )
    dsFunctions := TODBC():New( cCONN )
+    if ! dsFunctions:lSuccess
+      Alert( "Falha na conexao ODBC no modulo dbuodbc!" )
+      return .f.
+   endif
+   
+    if cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"  
+      dsFunctions:SetSQL( "SET search_path TO myschema, public; SET client_encoding TO 'WIN1252';" )
+      dsFunctions:ExecSQL()
+   endif
+   
    dsFunctions:SetSQL( "SELECT * FROM " + cTABELAX )
    dsFunctions:Open()
 
@@ -451,6 +472,16 @@ FUNCTION odbcexecsql( eCOMANDO )
    ENDIF
    cCONN       := GERACONN( cDATABASEX, .F. )
    dsFunctions := TODBC():New( cCONN )
+   if ! dsFunctions:lSuccess
+      Alert( "Falha na conexao ODBC no modulo dbuodbc!" )
+      return .f.
+   endif
+   
+    if cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"  
+      dsFunctions:SetSQL( "SET search_path TO myschema, public; SET client_encoding TO 'WIN1252';" )
+      dsFunctions:ExecSQL()
+   endif
+   
    nFIM        := Len( aCOMANDOS )
    FOR i := 1 TO nfim
       cCOMANDO := aCOMANDOS[ I ]

@@ -241,8 +241,8 @@ cCOMANDO:=""
    //        cCOMANDO =""
       CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0
            cCOMANDO ="SELECT last_insert_rowid()"
-   //   CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
-   //        cCOMANDO =""
+   /  CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+           cCOMANDO ="SELECT lastval();"
        CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
            cCOMANDO ="select LAST_INSERT_ID()"     
    ENDCASE
@@ -483,6 +483,19 @@ FUNCTION Dialeto_SQL( cSQLCNV )
       // Booleano: Converter .T. e .F. do Harbour
      cSQLCNV := StrTran( cSQLCNV, ".T.", "TRUE" )
      cSQLCNV := StrTran( cSQLCNV, ".F.", "FALSE" )
+     
+     // 2. Limpeza de datas vazias (Clipper adora '  /  /  ')
+      // O Postgres quebra se receber uma string vazia em um campo DATE.
+      cSQLCNV := StrTran( cSQLCNV, "'  /  /  '", "NULL" )
+      cSQLCNV := StrTran( cSQLCNV, "'00/00/0000'", "NULL" )
+
+      // 3. Funções do SQLite/Access para equivalentes Postgres
+      cSQLCNV := StrTran( cSQLCNV, "IIF(", "CASE WHEN " ) // Se usar IIF do Access, precisará expandir para CASE WHEN
+      cSQLCNV := StrTran( cSQLCNV, "NOW()", "CURRENT_TIMESTAMP" )
+      cSQLCNV := StrTran( cSQLCNV, "IFNULL(", "COALESCE(" ) // O SQLite usa IFNULL, o Pos
+     
+     
+     
       
    CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
       cSQLCNV := StrTran( cSQLCNV, "TODAY()", "GETDATE() " )

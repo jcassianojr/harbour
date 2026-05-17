@@ -500,6 +500,12 @@ FUNCTION mix_open()
       nCONN := rddInfo( RDDI_CONNECT, { "MYSQL", cSERVERX, cUSERX, cPASSX, cDATABASEX } )
    CASE cTIPOMIX = "PGSQL" .OR. cTIPOMIX = "PGSQL64"
       nCONN := rddInfo( RDDI_CONNECT, { "POSTGRESQL", cSERVERX, cUSERX, cPASSX, cDATABASEX } )
+      IF nConn > 0
+         // SE CONECTOU NO MIX, FORÇA O SCHEMA E ENCODING VIA INTERFACE RDD
+         // O comando RD_EXECUTE envia a instrução direto para a linha ativa do banco
+        rddInfo( RDDI_EXECUTE, "SET search_path TO myschema, public; SET client_encoding TO 'WIN1252';")
+      ENDIF
+      
    CASE cTIPOMIX = "SQLITE"
       nCONN := rddInfo( RDDI_CONNECT, { "SQLITE3", cDATABASEX } )
    CASE cTIPOMIX = "ORACLE"
@@ -509,6 +515,7 @@ FUNCTION mix_open()
       cCONN := GERACONN( cDATABASEX, .F. )  // Sqlmix usa driver no lugar de provider(adooledb) geraconn(cCAMBASE,lPROVIDER)
       nCONN := rddInfo( RDDI_CONNECT, { "ODBC", cCONN } )
    ENDCASE
+   
    IF !( nConn > 0 )
       mdt( "Erro ao connectar " + cServerx + " " + cstr( rddInfo( RDDI_ERROR ) ) + " Error" + cstr( rddInfo( RDDI_ERRORNO ) ) )
       nConn := 0
