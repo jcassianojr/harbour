@@ -1,0 +1,17 @@
+https://github.com/Kr00l/VBFLXGRD.git
+https://github.com/harbour/core.git
+https://github.com/Kr00l/VBCCR.git
+https://github.com/xxdoc/vbExtra 
+https://github.com/vszakats/hb.git
+https://github.com/JoseQuintas/sefazclass
+https://github.com/Kr00l/VBSQLite
+https://github.com/EduardoVB/NewTab
+https://github.com/marcosgambeta/sqlrddpp.git
+https://github.com/diegofazio/hbxlsxwriter
+https://github.com/jmcnamara/libxlsxwriter.git
+https://github.com/Kr00l/VBSQLite.git
+https://github.com/digikv/xlsx.git
+
+
+
+https://github.com/xHarbour-org/xharbour
