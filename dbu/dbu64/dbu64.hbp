@@ -85,6 +85,7 @@ letodb.hbc
 #
 \develop\harbour\dbu\adoxb.prg
 \develop\harbour\dbu\dbuadox.prg 
+\develop\harbour\dbu\dbu2md.prg
 #
 #
 \develop\harbour\dbu\dbuleto.prg 
@@ -111,4 +112,5 @@ letodb.hbc
 \develop\harbour\objmgw\wvgini.prg
 \develop\harbour\objmgw\adofix.prg
 \develop\harbour\objmgw\adoerror.prg
+\develop\harbour\objmgw\modeseguranca.prg
 teste.prg
