@@ -241,7 +241,7 @@ cCOMANDO:=""
    //        cCOMANDO =""
       CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0
            cCOMANDO ="SELECT last_insert_rowid()"
-   /  CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
            cCOMANDO ="SELECT lastval();"
        CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
            cCOMANDO ="select LAST_INSERT_ID()"     

@@ -975,21 +975,21 @@ CASE cTIPOSQL = "SQLITE"
    cDATABASEX := cMDBARQ
 CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
     .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "LETO"
+    cBANCOX := SPACE(30)
    cSERVERX := PADR(cSERVERX,30," ")
    cUSERX := PADR(cUSERX,30," ")
    cPASSX := PADR(cPASSX,30," ")
    HB_dispbox(3,22,22,55,B_DOUBLE+" ")
-   @ 04,23 SAY "Server"         
-   //@ 06,23 SAY "Database"
-   @ 08,23 SAY "user"           
-   @ 10,23 say "pass"           
-   @ 05,23 get cSERVERX         
-   //@ 07,23 gET cDATABASEX escolhido nao precisa digitar
+   @ 05,23 SAY "Banco"
+   @ 07,23 SAY "Server"         
+   @ 09,23 SAY "user"           
+   @ 11,23 say "pass"    
+   @ 05,23 GET cBANCOX   VALID buscachaves( cBANCOX )  
+   @ 07,23 get cSERVERX  
    @ 09,23 get cuserx         
    @ 11,23 get cpassx         
    READ
    cSERVERX := ALLTRIM(cSERVERX)
-   //cDATABASEX:=ALLTRIM(cDATABASEX) nao precisa digitar
    cuserx  := alltrim(cuserx)
    cpassx  := alltrim(cpassx)
    cMDBARQ := cDATABASEX
@@ -997,6 +997,26 @@ ENDCASE
 RETURN cMDBARQ
 
 
+*+--------------------------------------------------------------------\
+*+    Function buscachaves()
+*+--------------------------------------------------------------------\
+FUNCTION buscachaves( cNomeBanco )
+   LOCAL cSecaoCofre
+
+   // Se o usuário digitou algo manualmente no servidor, aceita e não busca no cofre
+   IF ! Empty( cNomeBanco)
+
+       // Garante que a seção do cofre será o nome do banco limpo em maiúsculas
+       cSecaoCofre := Upper( AllTrim( cNomeBanco ) )
+
+       // Busca as credenciais de forma segura no config.dat mascarado
+       cSERVERX := padr(LerDoCofre( cSecaoCofre, "Server" ),30)
+       cUSERX   := padr(LerDoCofre( cSecaoCofre, "User" ),30)
+       cPASSX   := padr(LerDoCofre( cSecaoCofre, "Password" ),30)
+    ENDIF   
+   
+
+   RETURN .T.
 
 *+--------------------------------------------------------------------
 *+
@@ -1817,6 +1837,19 @@ ENDIF
 IF vALTYPE(lPROVIDER) <> "L"
    lPROVIDER := .T.
 ENDIF
+
+IF Empty( cUSERX )
+      cUSERX := LerDoCofre( cSERVERX, "User" )
+   ENDIF
+
+   IF Empty( cPASSX )
+      cPASSX := LerDoCofre( cSERVERX, "Password" )
+   ENDIF
+   
+   IF Empty( cSERVERX )
+      cSERVERX := LerDoCofre( cSERVERX, "Server" )
+   ENDIF
+
 DO CASE
 
 CASE lMDB .OR. at(".MDB",upper(cCAMBASE)) > 0   ///cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .or. at(".MDB",upper(cCAMBASE))>0
