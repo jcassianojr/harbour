@@ -1,16 +1,44 @@
 $folder = Get-Location
-$files = Get-ChildItem -Path $folder -Filter *.mdb
-$files += Get-ChildItem -Path $folder -Filter *.accdb
+
+# Garante que os arquivos sejam tratados sempre como um Array/Lista
+$files = @(Get-ChildItem -Path $folder -Filter *.mdb)
+$files += @(Get-ChildItem -Path $folder -Filter *.accdb)
+
+# FunÁ„o auxiliar para mapear tipos numÈricos/texto do ADOX para o DBML
+function Mapear-TipoDBML ($typeNum, $definedSize) {
+    switch ($typeNum) {
+        2   { return "INTEGER" }         # adSmallInt
+        3   { return "INTEGER" }         # adInteger
+        4   { return "FLOAT" }           # adSingle
+        5   { return "DOUBLE" }          # adDouble
+        6   { return "DOUBLE" }          # adCurrency
+        7   { return "DATETIME" }        # adDate
+        11  { return "BOOLEAN" }         # adBoolean
+        17  { return "INTEGER" }         # adUnsignedTinyInt (Byte)
+        72  { return "VARCHAR(40)" }     # adGUID
+        128 { return "VARBINARY($definedSize)" } # adBinary
+        202 { return "VARCHAR($definedSize)" }   # adVarWChar (Texto Curto)
+        203 { return "LONGTEXT" }        # adLongVarWChar (Memo / Texto Longo)
+        default { return "LONGTEXT" }    # Fallback
+    }
+}
 
 foreach ($file in $files) {
+    if ($null -eq $file) { continue }
+    
     $ext = $file.Extension.Substring(1).ToLower()
-    Write-Host "Processando arquivo nativo: $($file.Name)"
+    Write-Host "Processando arquivo nativo com tabelas e indices sincronizados: $($file.Name)"
     
     $sqlFile = Join-Path $folder "$($file.BaseName)-$ext.sql"
+    $dbmlFile = Join-Path $folder "$($file.BaseName).dbml"
     
     "/* SCRIPT SQL DIALETO ACCESS - ORIGEM: $($file.Name) */" > $sqlFile
     "/* GERADO EM: $(Get-Date) */`n" >> $sqlFile
 
+    # Inicializa a string que guardar· a estrutura DBML
+    $dbmlContent = "/* ESTRUTURA DBML - ORIGEM: $($file.Name) */`r`n"
+    $dbmlContent += "/* GERADO EM: $(Get-Date) */`r`n`r`n"
+    
     if ($ext -eq "mdb") {
         $connString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=$($file.FullName);"
     } else {
@@ -22,112 +50,154 @@ foreach ($file in $files) {
     try {
         $connection.Open()
         
-        # Cria o cat√°logo ADOX para ler os √≠ndices nativos
+        # Cria o cat·logo ADOX vinculado ‡ conex„o atual
         $catalog = New-Object -ComObject "ADOX.Catalog"
         $catalog.ActiveConnection = $connection.ConnectionString
 
-        # --------------------------------------------------
-        # PASSO 1A: GERAR O DDL (TABELAS)
-        # --------------------------------------------------
-        "/* ============================================= */" >> $sqlFile
-        "/* PASSO 1A: ESTRUTURA DAS TABELAS (CREATE TABLE)*/" >> $sqlFile
-        "/* ============================================= */`n" >> $sqlFile
+        $tabelasProcessar = @()
 
+        # --------------------------------------------------
+        # PASSO 1: GERAR O DDL (TABELAS) E ESTRUTURA DBML VIA ADOX
+        # --------------------------------------------------
         foreach ($adoxTable in $catalog.Tables) {
-            if ($adoxTable.Type -ne "TABLE") { continue }
-            $tableName = $adoxTable.Name
-            
-            $ddl = "CREATE TABLE [$tableName] (`n"
-            $colLines = @()
+            if ($adoxTable.Type -eq "TABLE") {
+                $tableName = $adoxTable.Name
+                $tabelasProcessar += $tableName
 
-            foreach ($col in $adoxTable.Columns) {
-                $colName = $col.Name
-                $typeId = $col.Type
-                $colSize = $col.DefinedSize
-                
-                # Verifica propriedades de Autonumera√ß√£o e Nulo
-                $isAutoInc = $false
-                try { $isAutoInc = $col.Properties.Item("AutoIncrement").Value } catch {}
-                
-                $isNullable = ""
-                try { if ($col.Attributes -band 2) { $isNullable = "" } else { $isNullable = " NOT NULL" } } catch {}
-
-                $accessType = "TEXT(255)"
-                if ($isAutoInc) {
-                    $accessType = "COUNTER"
-                } else {
-                    switch ($typeId) {
-                        202 { $accessType = "TEXT($colSize)" } # adVarWChar
-                        203 { $accessType = "MEMO" }           # adLongVarWChar
-                        3   { $accessType = "LONG" }           # adInteger
-                        2   { $accessType = "INTEGER" }        # adSmallInt
-                        17  { $accessType = "BYTE" }           # adUnsignedTinyInt
-                        4   { $accessType = "SINGLE" }         # adSingle
-                        5   { $accessType = "DOUBLE" }         # adDouble
-                        6   { $accessType = "CURRENCY" }       # adCurrency
-                        7   { $accessType = "DATETIME" }       # adDate
-                        11  { $accessType = "BIT" }            # adBoolean
-                        72  { $accessType = "GUID" }           # adGUID
-                        205 { $accessType = "LONGBINARY" }     # adLongVarBinary
-                        Default { $accessType = "TEXT(255)" }
-                    }
-                }
-                $colLines += "    [$colName] $accessType$isNullable"
-            }
-            
-            $ddl += ($colLines -join ",`n") + "`n);"
-            $ddl >> $sqlFile
-            "`n" >> $sqlFile
-        }
-
-        # --------------------------------------------------
-        # PASSO 1B: GERAR OS INDICES NATIVOS (CREATE INDEX)
-        # --------------------------------------------------
-        "/* ============================================= */" >> $sqlFile
-        "/* PASSO 1B: INDICES DAS TABELAS (CREATE INDEX)  */" >> $sqlFile
-        "/* ============================================= */`n" >> $sqlFile
-
-        foreach ($adoxTable in $catalog.Tables) {
-            if ($adoxTable.Type -ne "TABLE") { continue }
-            $tableName = $adoxTable.Name
-
-            foreach ($index in $adoxTable.Indexes) {
-                # Ignora os √≠ndices internos criados automaticamente para ligar Foreign Keys 
-                if ($index.Name -match "^Reference" -or $index.Name -match "^PrimaryKey") {
-                    # Se preferir mapear explicitamente a Primary Key como comando separado:
+                # 1. Mapeia os campos da Chave Prim·ria primeiro
+                $pkFields = @()
+                foreach ($index in $adoxTable.Indexes) {
                     if ($index.PrimaryKey) {
-                        $idxCols = @()
-                        foreach ($col in $index.Columns) { $idxCols += "[$($col.Name)]" }
-                        $idxColsStr = $idxCols -join ", "
-                        "ALTER TABLE [$tableName] ADD CONSTRAINT [PK_$tableName] PRIMARY KEY ($idxColsStr);" >> $sqlFile
-                        continue
+                        foreach ($col in $index.Columns) {
+                            $pkFields += $col.Name
+                        }
                     }
                 }
 
-                $unique = if ($index.Unique) { "UNIQUE " } else { "" }
-                $idxCols = @()
-                foreach ($col in $index.Columns) {
-                    $descending = if ($col.SortOrder -eq 2) { " DESC" } else { "" }
-                    $idxCols += "[$($col.Name)]$descending"
-                }
-                $idxColsStr = $idxCols -join ", "
+                # Inicia a tabela no SQL e no DBML
+                "CREATE TABLE [$tableName] (" >> $sqlFile
+                $dbmlContent += "Table `"$tableName`" {`r`n"
                 
-                "CREATE $($unique)INDEX [$($index.Name)] ON [$tableName] ($idxColsStr);" >> $sqlFile
+                $colLines = @()
+
+                # 2. Varre as colunas e monta as propriedades b·sicas
+                foreach ($adoxCol in $adoxTable.Columns) {
+                    $colName = $adoxCol.Name
+                    $typeNum = $adoxCol.Type
+                    $definedSize = $adoxCol.DefinedSize
+                    
+                    $allowsNull = ($adoxCol.Attributes -band 2) -eq 2
+                    $nullText = if ($allowsNull) { "NULL" } else { "NOT NULL" }
+
+                    # Fluxo do SQL Nativo Original
+                    $sqlDataType = "MEMO"
+                    switch ($typeNum) {
+                        3   { $sqlDataType = "INT" }
+                        4   { $sqlDataType = "REAL" }
+                        5   { $sqlDataType = "DOUBLE" }
+                        6   { $sqlDataType = "MONEY" }
+                        7   { $sqlDataType = "DATETIME" }
+                        11  { $sqlDataType = "BIT" }
+                        17  { $sqlDataType = "BYTE" }
+                        128 { $sqlDataType = "LONGBINARY" }
+                        202 { $sqlDataType = "VARCHAR($definedSize)" }
+                        203 { $sqlDataType = "MEMO" }
+                    }
+                    $colLines += "  [$colName] $sqlDataType $nullText"
+
+                    # Fluxo de Mapeamento para os campos no DBML
+                    $dbmlType = Mapear-TipoDBML $typeNum $definedSize
+                    
+                    $dbmlProps = @()
+                    if ($pkFields -contains $colName) { $dbmlProps += "pk" }
+                    if (-not $allowsNull) { $dbmlProps += "not null" }
+                    
+                    try {
+                        $defaultVal = $adoxCol.Properties.Item("Default Value").Value
+                        if ($defaultVal -and $defaultVal.ToString() -notmatch "^\s*$") {
+                            $cleanDefault = $defaultVal.ToString().Replace('"', '').Replace("'", "")
+                            $dbmlProps += "default: $cleanDefault"
+                        }
+                    } catch {}
+
+                    $propsStr = ""
+                    if ($dbmlProps.Count -gt 0) {
+                        $propsStr = " [" + ($dbmlProps -join ", ") + "]"
+                    }
+
+                    $dbmlContent += "  `"$colName`" $dbmlType$propsStr`r`n"
+                }
+
+                # Fecha a estrutura principal da tabela no SQL (Colunas e PK)
+                $sqlFileText = $colLines -join ",`n"
+                if ($pkFields.Count -gt 0) {
+                    $pkStr = $pkFields -join ", "
+                    $sqlFileText += ",`n  CONSTRAINT [PK_$tableName] PRIMARY KEY ($pkStr)"
+                }
+                $sqlFileText += "`n);`n"
+                $sqlFileText >> $sqlFile
+
+                # 3. EXTRA«√O E SINCRONIZA«√O DOS INDEXES (Para DBML e para SQL)
+                $indexesBlock = @()
+                $sqlIndexesBlock = @()
+
+                foreach ($index in $adoxTable.Indexes) {
+                    # Ignora a PrimaryKey pois ela j· È criada dentro da instruÁ„o CONSTRAINT da tabela
+                    if (-not $index.PrimaryKey) {
+                        $indexCols = @()
+                        $sqlIndexCols = @()
+                        
+                        foreach ($col in $index.Columns) {
+                            $indexCols += $col.Name
+                            $sqlIndexCols += "[$($col.Name)]"
+                        }
+                        
+                        # Atributo ⁄nico (Unique Index) se aplic·vel
+                        $isUnique = if ($index.Unique) { "UNIQUE " } else { "" }
+
+                        if ($indexCols.Count -eq 1) {
+                            # Õndice simples
+                            $indexesBlock += "    $($indexCols[0])"
+                            $sqlIndexesBlock += "CREATE $($isUnique)INDEX [$($index.Name)] ON [$tableName] ($($sqlIndexCols[0]));"
+                        } elseif ($indexCols.Count -gt 1) {
+                            # Õndice composto
+                            $colsJoined = $indexCols -join ", "
+                            $sqlColsJoined = $sqlIndexCols -join ", "
+                            $indexesBlock += "    ($colsJoined)"
+                            $sqlIndexesBlock += "CREATE $($isUnique)INDEX [$($index.Name)] ON [$tableName] ($sqlColsJoined);"
+                        }
+                    }
+                }
+
+                # Escreve os Ìndices encontrados no arquivo DBML
+                if ($indexesBlock.Count -gt 0) {
+                    $dbmlContent += "`r`n  Indexes {`r`n"
+                    foreach ($idxLine in $indexesBlock) {
+                        $dbmlContent += "$idxLine`r`n"
+                    }
+                    $dbmlContent += "  }`r`n"
+                }
+
+                # Fecha a definiÁ„o da tabela no DBML
+                $dbmlContent += "}`r`n`r`n"
+
+                # Escreve os Ìndices encontrados de forma fÌsica no arquivo SQL
+                if ($sqlIndexesBlock.Count -gt 0) {
+                    foreach ($sqlIdxLine in $sqlIndexesBlock) {
+                        $sqlIdxLine >> $sqlFile
+                    }
+                    "`n" >> $sqlFile
+                }
             }
-            "" >> $sqlFile
         }
 
-        # --------------------------------------------------
-        # PASSO 2: GERAR OS INSERTS DOS DADOS
-        # --------------------------------------------------
-        "/* ============================================= */" >> $sqlFile
-        "/* PASSO 2: INSERCAO DOS DADOS (INSERT INTO)     */" >> $sqlFile
-        "/* ============================================= */`n" >> $sqlFile
+        # Grava o arquivo .dbml finalizado da base de dados atual
+        $dbmlContent | Out-File -FilePath $dbmlFile -Encoding utf8
 
-        foreach ($adoxTable in $catalog.Tables) {
-            if ($adoxTable.Type -ne "TABLE") { continue }
-            $tableName = $adoxTable.Name
-            
+        # --------------------------------------------------
+        # PASSO 2: EXPORTAR OS DADOS DO SQL (SUA L”GICA ORIGINAL)
+        # --------------------------------------------------
+        foreach ($tableName in $tabelasProcessar) {
             $command = $connection.CreateCommand()
             $command.CommandText = "SELECT * FROM [$tableName]"
             $reader = $command.ExecuteReader()
@@ -159,14 +229,15 @@ foreach ($file in $files) {
             $reader.Close()
             "`n" >> $sqlFile
         }
-        Write-Host " -> Gerado com sucesso: $($file.BaseName)-$ext.sql"
+        Write-Host " -> Gerados com sucesso: $($file.BaseName)-$ext.sql e $($file.BaseName).dbml"
     }
     catch {
         Write-Error "Erro no arquivo $($file.Name): $_"
     }
     finally {
         $connection.Close()
-        # Libera o objeto COM do ADOX da mem√≥ria
-        if ($catalog) { [System.Runtime.Interopservices.Marshal]::ReleaseComObject($catalog) | Out-Null }
+        if ($catalog) {
+            [System.Runtime.InteropServices.Marshal]::ReleaseComObject($catalog) | Out-Null
+        }
     }
 }
