@@ -72,6 +72,7 @@ cDATABASEX := Space(30)
 cUSERX     := Space(30)
 cPASSX     := Space(30)
 cTABELAX   := Space(30)
+cBANCOX   := Space(30)
 cPATH      :=""
 loledb     := .T.
 lMDB       := .F.

@@ -52,6 +52,7 @@ FUNCTION odbcmenu( cUSOSQL )
    cUSERX     := Space( 30 )
    cPASSX     := Space( 30 )
    cTABELAX   := Space( 30 )
+   cBANCOX   := Space(30)
    loledb     := .T.
    lMDB       := .F.
    lACCDB     := .F.

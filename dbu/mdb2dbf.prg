@@ -63,6 +63,7 @@ cDATABASEX := space(30)
 cUSERX     := SPACE(30)
 cPASSX     := SPACE(30)
 cTABELAX   := SPACE(30)
+cBANCOX   := Space(30)
 loledb     := .T.
 lmdb       := .f.
 laccdb     := .f.
@@ -964,18 +965,23 @@ DO CASE
 CASE lMDB   
    cMDBARQ    := win_GetOPENFileName(,"Arquivos de Destino",HB_CWD(),"Arquivos mdb","*.MDB",1)
    cDATABASEX := cMDBARQ
+    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
 CASE lACCDB   
    cMDBARQ    := win_GetOPENFileName(,"Arquivos de Destino",HB_CWD(),"Arquivos accdb","*.accdb",1)
    cDATABASEX := cMDBARQ
+    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
 CASE cTIPOSQL = "SQLITE"
    cMDBARQ := win_GetOpenFileName(,"SQLite Files",HB_CWD(),"SQLite",;
     {{'SQLite','*.sqlite'},{'SQLite db','*.DB'},;
     {'SQLite3','*.sqlite3'},{'SQLite db3','*.DB3'},;
     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
    cDATABASEX := cMDBARQ
+   cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
+   
+
 CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
     .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "LETO"
-    cBANCOX := SPACE(30)
+    cBANCOX := PADR(cBANCOX,30," ")
    cSERVERX := PADR(cSERVERX,30," ")
    cUSERX := PADR(cUSERX,30," ")
    cPASSX := PADR(cPASSX,30," ")

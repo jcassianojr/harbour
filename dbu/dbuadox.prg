@@ -1,10 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : dbuadox.prg
-// +
-// +
 // +
 // +     Sistema:
 // +
@@ -14,13 +10,7 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:06 am
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
@@ -60,6 +50,7 @@ FUNCTION adoxmenu( cUSOSQL )
    cUSERX     := Space( 30 )
    cPASSX     := Space( 30 )
    cTABELAX   := Space( 30 )
+   cBANCOX   := Space(30)
    loledb     := .T.
    lMDB       := .F.
    lACCDB     := .F.
