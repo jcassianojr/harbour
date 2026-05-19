@@ -1,17 +1,28 @@
+vb flexgrid
 https://github.com/Kr00l/VBFLXGRD.git
+harbour
 https://github.com/harbour/core.git
+vb common controls
 https://github.com/Kr00l/VBCCR.git
+vb extra
 https://github.com/xxdoc/vbExtra 
+harbour vszakats
 https://github.com/vszakats/hb.git
+sefazsql
 https://github.com/JoseQuintas/sefazclass
+vb sqllite
 https://github.com/Kr00l/VBSQLite
+vb newtab
 https://github.com/EduardoVB/NewTab
+harbour sqlrddpp
 https://github.com/marcosgambeta/sqlrddpp.git
+harbour hbxlswriter
 https://github.com/diegofazio/hbxlsxwriter
+lib xlswriter
 https://github.com/jmcnamara/libxlsxwriter.git
-https://github.com/Kr00l/VBSQLite.git
+harbour xlsx
 https://github.com/digikv/xlsx.git
-
-
-
+openads
+https://github.com/FiveTechSoft/OpenADS
+xharbour
 https://github.com/xHarbour-org/xharbour
