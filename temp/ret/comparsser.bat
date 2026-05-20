@@ -1,1 +1,0 @@
-hbmk2 main.prg wrtparser.prg -o testador_ret
