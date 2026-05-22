@@ -148,6 +148,39 @@ cCOMANDO:=""
    ENDCASE
 return cCOMANDO  
 
+// +--------------------------------------------------------------------
+// +    Function Dialeto_Operador( cOp )
+// +    Exemplo de uso: Dialeto_Operador("!=") ou Dialeto_Operador("<>")
+//// Antes:
+//cSql := "SELECT * FROM tabela WHERE campo " + cOperador + " 10"
+
+// Depois (mais seguro):
+//cSql := "SELECT * FROM tabela WHERE campo " + Dialeto_Operador(cOperador) + " 10"
+// +--------------------------------------------------------------------
+FUNCTION Dialeto_Operador( cOp )
+
+   LOCAL cNovoOp := cOp
+
+   DO CASE
+   // Padronização para MSSQL/SQLServer
+   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+      IF cOp = "!=" ; cNovoOp := "<>" ; ENDIF
+   
+   // Padronização para PostgreSQL
+   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
+      IF cOp = "<>" ; cNovoOp := "!=" ; ENDIF
+
+   // Padronização para SQLite
+   CASE cTIPOSQL = "SQLITE" .OR. At(".SQLITE", Upper(cdatabaseX)) > 0
+      // SQLite aceita ambos, mantemos o original ou forçamos um padrão
+      
+   // Padronização para MySQL/MariaDB
+   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
+      // MySQL aceita ambos, mas prefere != ou <>
+      
+   ENDCASE
+
+   RETURN cNovoOp
 
 // +--------------------------------------------------------------------
 // +

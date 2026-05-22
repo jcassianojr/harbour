@@ -1,10 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : mdb2dbf.prg
-*+
-*+
 *+
 *+     Sistema:
 *+
@@ -14,13 +10,7 @@
 *+
 *+     Copyright (c) 2024,  jcassiano
 *+
-*+     
-*+
-*+
-*+
 *+    Documentado em 28-Dez-2024 as 10:07 am
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
@@ -181,7 +171,9 @@ ENDIF
 //mssql sa
 //pgsal postgres 5432
 //oracle 
-//firebird  3050 sysdbf
+//firebird  3050 SYSDBA masterkey net://
+
+
 
 //
 // ajustes nomes de drivers para 32 e 64 bits
@@ -1122,6 +1114,8 @@ end
 oRS                := WIN_OLECreateObject('ADODB.RecordSet')
 oRS:CursorLocation := 3
 
+
+
 cCOMANDO := ""
 IF cTIPOINFO = "DATABASE"
    DO CASE
@@ -1137,6 +1131,42 @@ IF cTIPOINFO = "DATABASE"
        cCOMANDO := "SELECT name FROM pragma_database_list;"
    ENDCASE
 ENDIF
+
+
+/*
+ CASE SQLRDD_RDBMS_SYBASE
+      IF Empty(cOwner)
+         ::Exec("select name from sysobjects where type = N'U' order by name", .T., .T., @aRet)
+      ELSE
+         ::Exec("select name from sysobjects where type = N'U' and user_name(uid) = '" + cOwner + "' order by name", .T., .T., @aRet)
+      ENDIF
+      EXIT
+   CASE SQLRDD_RDBMS_POSTGR
+      IF Empty(cOwner)
+         ::Exec("select tablename from pg_tables where schemaname = 'public' order by tablename", .T., .T., @aRet)
+      ELSE
+         ::Exec("select tablename from pg_tables where schemaname = '" + cOwner + "' order by tablename", .T., .T., @aRet)
+      ENDIF
+      EXIT
+   CASE SQLRDD_RDBMS_ORACLE
+      IF Empty(cOwner)
+         ::Exec("select table_name from user_tables order by TABLE_NAME", .T., .T., @aRet)
+      ELSE
+         ::Exec("select TABLE_NAME from all_tables where owner = '" + cOwner + "' order by TABLE_NAME", .T., .T., @aRet)
+      ENDIF
+      EXIT
+   CASE SQLRDD_RDBMS_FIREBR5
+      IF Empty(cOwner)
+         ::Exec("select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 order by RDB$RELATION_NAME", .T., .T., @aRet)
+      ELSE
+         ::Exec("select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 AND RDB$OWNER_NAME = '" + cOwner + "' order by RDB$RELATION_NAME", .T., .T., @aRet)
+      ENDIF
+      EXIT
+ 
+*/
+
+
+
 IF cTIPOINFO = "TABELA"
    DO CASE
    CASE lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
@@ -1149,12 +1179,12 @@ IF cTIPOINFO = "TABELA"
       cCOMANDO := "SHOW TABLES"
       //SHOW TABLES FROM `information_schema`;
    CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      cCOMANDO := "SELECT tablename FROM pg_tables WHERE schemaname='public'"
+      cCOMANDO := "SELECT tablename FROM pg_tables WHERE schemaname='public'  order by tablename"
       //SELECT table_name  FROM information_schema.tables  WHERE table_type = 'BASE TABLE' AND table_schema='public'
    CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
       cCOMANDO := "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';"
     CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" 
-      cCOMANDO := "SELECT table_name  FROM user_tables"    //global SELECT owner, table_name  FROM all_tables
+      cCOMANDO := "SELECT table_name  FROM user_tables  order by TABLE_NAME"    //global SELECT owner, table_name  FROM all_tables
    endcase
 ENDIF
 IF cTIPOINFO = "ESTRUTURA"
