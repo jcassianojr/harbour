@@ -497,7 +497,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          CASE  ZANOFOR = "PGSQL" 
             cTEXTO := SqliteCreateTable( cARQ, aUSO, "PGSQL" )  
         CASE  ZANOFOR = "ORACLE" 
-            cTEXTO := SqliteCreateTable( cARQ, aUSO, "ORACLE" )      
+            cTEXTO := SSqliteCreateTable( cARQ, aUSO, "ORACLE" )      
          CASE  ZANOFOR = "MDB" .OR. ZANOFOR = "ACCESS"
             cTEXTO := SqliteCreateTable( cARQ, aUSO, "MDB" )
          CASE  ZANOFOR = "MSSQL"

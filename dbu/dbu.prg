@@ -465,8 +465,8 @@ ajuda_m := {"Ajuda"}
 ajuda_b := {.T.}
 
 abrir_m := {"Database","Indice","Visao","POSTGRESQL",;
- "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB"}
-abrir_b := array(12)
+ "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB","FIREBASE"}
+abrir_b := array(13)
 abrir_b[1] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[2] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
 abrir_b[3] = "sysfunc = 0 .AND. .NOT. box_open"
@@ -479,6 +479,7 @@ abrir_b[9] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[10] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[11] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[12] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[13] = "sysfunc = 0 .AND. .NOT. box_open"
 
 DECLARE criar_b[11]
 criar_m := {"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso",;
@@ -608,6 +609,8 @@ do while .T.
          MENUSQL("ORACLE")
       case M->func_sel = 12
          letomenu()
+      case M->func_sel = 13
+         MENUSQL("FIREBIRD")  
       endcase
       sysfunc := 0  //setar para nao retornar ficar em loop
    case M->sysfunc = 9  //utilitarios F9
@@ -676,6 +679,7 @@ do while .T.
           Sqltodos("POSTGRESQL")
           Sqltodos("ACCESS")
           Sqltodos("ORACLE")
+          sqltodos("FIREBIRD")
       
       case M->func_sel = 13
          //     MENUSQL("MARIADB")

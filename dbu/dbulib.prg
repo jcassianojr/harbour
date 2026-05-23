@@ -170,6 +170,9 @@ WHILE .T.
       mysqlmenu()
    CASE KEY = 1 .AND. cTIPOSQL = "SQLITE"
       sqlitemenu()
+   CASE KEY = 1 .AND. cTIPOSQL = "FIREBIRD"
+      Firebirdmenu()
+      
    CASE KEY = 1
       MDT("Sem clientelib para "+cTIPOSQL)
       //ADORDD ODBC
