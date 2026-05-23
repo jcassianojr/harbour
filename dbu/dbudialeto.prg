@@ -615,6 +615,128 @@ FUNCTION Dialeto_SQL( cSQLCNV )
    ENDCASE
 
    RETURN cSQLCNV
+   
+   
+// +--------------------------------------------------------------------
+// + Utilitário: FormataBlocoSql
+// + Objetivo: Embeleza e formata strings brutas de SQL (CREATE TABLE / INDEX)
+// +           Garante compatibilidade estrita, elimina duplicidade de ';'
+// +           e protege tipos com decimais como NUMERIC(5,2) ou DECIMAL(12,3)
+// +--------------------------------------------------------------------
+FUNCTION FormataBlocoSql( cTextoBruto )
+   // --- TODAS AS DECLARAÇÕES LOCAL RIGOROSAMENTE NO TOPO ---
+   LOCAL aLinhas          := hb_ATokens( cTextoBruto, .T. )
+   LOCAL cTextoFormatado  := ""
+   LOCAL cInstrucao       := ""
+   LOCAL cLinhaLimpa      := ""
+   LOCAL cHeader          := ""
+   LOCAL cMiolo           := ""
+   LOCAL cCampo           := ""
+   LOCAL aCampos          := {}
+   LOCAL i                := 0
+   LOCAL j                := 0
+   LOCAL nPosAbre         := 0
+   LOCAL nPosFecha        := 0
+   LOCAL nContCampo       := 0
 
+   // --- MIOLO DA FUNÇÃO: APENAS COMANDOS EXECUTÁVEIS ---
+   FOR i := 1 TO Len( aLinhas )
+      cLinhaLimpa := AllTrim( aLinhas[i] )
+
+      // Ignora linhas vazias, pontos e vírgulas isolados ou tags de seções
+      IF Empty( cLinhaLimpa ) .OR. cLinhaLimpa == ";" .OR. ( Left( cLinhaLimpa, 1 ) == "[" .AND. Right( cLinhaLimpa, 1 ) == "]" )
+         IF !Empty( cLinhaLimpa ) .AND. cLinhaLimpa != ";"
+            cTextoFormatado += cLinhaLimpa + hb_eol()
+         ENDIF
+         LOOP
+      ENDIF
+
+      // Limpa pontos e vírgulas residuais colados na linha antes de acumular
+      IF Right( cLinhaLimpa, 1 ) == ";"
+         cLinhaLimpa := Left( cLinhaLimpa, Len( cLinhaLimpa ) - 1 )
+         cLinhaLimpa := AllTrim( cLinhaLimpa )
+      ENDIF
+
+      // Acumula pedaços de strings para remontar o comando completo
+      cInstrucao += iif( Empty( cInstrucao ), "", " " ) + cLinhaLimpa
+
+      // Se não atingiu o delimitador final da estrutura, continua acumulando
+      IF ! ( "CREATE TABLE" $ Upper( cInstrucao ) ) .AND. ! ( "INDEX" $ Upper( cInstrucao ) ) .AND. ! ( "ALTER" $ Upper( cInstrucao ) )
+         LOOP
+      ENDIF
+
+      // --- TRATAMENTO DO CREATE TABLE ---
+      IF "CREATE TABLE" $ Upper( cInstrucao )
+         // Aguarda o fechamento do parêntese final da estrutura da tabela para processar
+         IF ! ( ")" $ cLinhaLimpa )
+            LOOP
+         ENDIF
+
+         nPosAbre  := At( "(", cInstrucao )
+         nPosFecha := Rat( ")", cInstrucao )
+
+         IF nPosAbre > 0
+            cHeader := Left( cInstrucao, nPosAbre ) 
+            cMiolo  := SubStr( cInstrucao, nPosAbre + 1, iif( nPosFecha > 0, nPosFecha - nPosAbre - 1, Len( cInstrucao ) ) )
+            
+            cTextoFormatado += AllTrim( cHeader ) + hb_eol()
+            
+            aCampos    := hb_ATokens( cMiolo, "," )
+            nContCampo := 0
+            
+            FOR j := 1 TO Len( aCampos )
+               cCampo := AllTrim( aCampos[j] )
+               
+               // === CORREÇÃO CRÍTICA PARA DECIMAIS EM HARBOUR ===
+               // Se houver um parêntese aberto "(" mas nenhum ")" fechando neste bloco do array,
+               // significa que a vírgula do decimal (ex: NUMERIC(5,2)) separou o campo.
+               // Juntamos com a próxima posição de forma limpa.
+               IF ( "(" $ cCampo ) .AND. ! ( ")" $ cCampo ) .AND. j < Len( aCampos )
+                  j++
+                  cCampo += "," + AllTrim( aCampos[j] )
+               ENDIF
+
+               IF !Empty( cCampo )
+                  nContCampo++
+                  IF nContCampo == 1
+                     cTextoFormatado += "    " + cCampo + hb_eol()
+                  ELSE
+                     cTextoFormatado += "    ," + cCampo + hb_eol()
+                  ENDIF
+               ENDIF
+            NEXT
+            
+            // Fecha o bloco da tabela perfeitamente com um único ponto e vírgula na mesma linha
+            cTextoFormatado += ") ;" + hb_eol()
+         ELSE
+            cTextoFormatado += cInstrucao + " ;" + hb_eol()
+         ENDIF
+
+         cInstrucao := "" 
+
+      // --- TRATAMENTO DE ÍNDICES ---
+      ELSEIF "CREATE" $ Upper( cInstrucao ) .AND. "INDEX" $ Upper( cInstrucao )
+         cInstrucao := StrTran( cInstrucao, " ;", "" )
+         cInstrucao := StrTran( cInstrucao, ";", "" )
+         
+         cTextoFormatado += AllTrim( cInstrucao ) + " ;" + hb_eol()
+         cInstrucao := ""
+         
+      // --- TRATAMENTO DE ALTER TABLE ---
+      ELSEIF "ALTER TABLE" $ Upper( cInstrucao )
+         cInstrucao := StrTran( cInstrucao, " ;", "" )
+         cInstrucao := StrTran( cInstrucao, ";", "" )
+         
+         cTextoFormatado += AllTrim( cInstrucao ) + " ;" + hb_eol()
+         cInstrucao := ""
+      ELSE
+         // Fallback estrutural seguro
+         cTextoFormatado += AllTrim( cInstrucao ) + " ;" + hb_eol()
+         cInstrucao := ""
+      ENDIF
+
+   NEXT
+
+RETURN cTextoFormatado
 // + EOF: dbudialeto.prg
 // +

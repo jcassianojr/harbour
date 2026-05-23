@@ -4,7 +4,7 @@
 // +
 // +     Sistema: DBU
 // +
-// +     Linguagem: Harbour
+// +     Linguagem: HarbourFF
 // +
 // +     Autor: jcassiano
 // +
@@ -1087,7 +1087,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
       CASE mFldType = "C" .AND. cTIPOSQL = "SQLITE"
          mSql += "TEXT "
       CASE mFldType = "C" .AND. cTIPOSQL = "FIREBIRD"
-         cTypeSql := "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"   
+         mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"   
       CASE mFldType = "C"
          mSql += "CHAR(" + LTrim( Str( mFldLen ) ) + ")"
          //
@@ -1131,7 +1131,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
          // T - TIME  HB_FT_TIME            8 
          //
       CASE mFldType = "T" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "FIREBIRD" ;
-                                 .OR. cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" .OR. cTIPOSQL = "FIREBIRD" )
+                                 .OR. cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"  )
          mSql += "TIMESTAMP"
       CASE mFldType = "T"
          mSql += "DATETIME"
@@ -1178,15 +1178,15 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
 
      CASE mFldType = "N" .AND. cTIPOSQL = "FIREBIRD"
          IF mFldDec > 0
-            cTypeSql := "DECIMAL(" + LTrim( Str( mFldLen ) ) + "," + LTrim( Str( mFldDec ) ) + ")"
+            mSql += "DECIMAL(" + LTrim( Str( mFldLen ) ) + "," + LTrim( Str( mFldDec ) ) + ")"
          ELSE
             // Adequação crucial para o Firebird não rejeitar o DDL
             IF mFldLen <= 4
-               cTypeSql := "SMALLINT"
+               mSql += "SMALLINT"
             ELSEIF mFldLen <= 9
-               cTypeSql := "INTEGER"
+               mSql += "INTEGER"
             ELSE
-               cTypeSql := "BIGINT"
+               mSql += "BIGINT"
             ENDIF
          ENDIF
 
@@ -1203,7 +1203,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
             mSql += "INTEGER default 0"
          ENDIF
 
-      CASE mFldType = "N" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "FIREBIRD" )
+      CASE mFldType = "N" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
          IF mFldDec > 0
             mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
          ELSE
@@ -1281,21 +1281,21 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
          mSql += "DOUBLE(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
       CASE mFldType = "B" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
          mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
-      CASE mFldType = "Y" .AND. ( cTIPOSQL = "FIREBIRD" )
+      CASE mFldType = "B" .AND. ( cTIPOSQL = "FIREBIRD" )
          mSql += "DECIMAL(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
          //
          // L = logico boleano bit HB_FT_LOGICAL         2 
          //
-      CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
+      CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" .OR. cTIPOSQL = "FIREBIRD" )
          mSql += "NUMBER (1)"
-      CASE mFldType = "L" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "FIREBIRD" )
+      CASE mFldType = "L" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "SQLITE"  )
          mSql += "BOOLEAN"
       CASE mFldType = "L" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
          mSql += "BIT"
       CASE mFldType = "L"
          mSql += "BOOL"
       CASE mFldType = "L" // Firebird, SQLite e Access operam com SMALLINT (0 ou 1)
-         cTypeSql := "SMALLINT"    
+         mSql += "SMALLINT"    
          //
          // M= memo TEXT LONGTEXT  HB_FT_MEMO            16 
          //
@@ -1318,7 +1318,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
          mSql += "VARBINARY"
       CASE mFldType = "G" .AND. ( llMDB .OR. llACCDB )
          mSql += "LONGBINARY"
-      CASE mFldType = "M" .AND. ( cTIPOSQL = "FIREBIRD" )
+      CASE mFldType = "G" .AND. ( cTIPOSQL = "FIREBIRD" )
          mSql += "BLOB SUB_TYPE 0"
       CASE mFldType = "G"
          mSql += "BLOB"
@@ -1351,19 +1351,19 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
          //HB_FT_AUTOINC         12     "+"
          //
       CASE mFldType = "+" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )   
-           Sql += " int  PRIMARY KEY AUTO_INCREMENT "
+           MSql += " int  PRIMARY KEY AUTO_INCREMENT "
       
        CASE mFldType = "+" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI")  
-           Sql += " NUMBER (10,0) GENERATED ALWAYS AS IDENTITY" 
+           MSql += " NUMBER (10,0) GENERATED ALWAYS AS IDENTITY" 
            
     CASE mFldType = "+" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )       
-           Sql += "serial4 "
+           MSql += "serial4 "
            
      CASE mFldType = "+" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )      
-           Sql += "int  identity "
+           MSql += "int  identity "
            
      CASE mFldType = "+" .AND. ( cTIPOSQL = "SQLITE")      
-           Sql += "integer primary key AUTOINCREMENT"
+           MSql += "integer primary key AUTOINCREMENT"
            
            
            
