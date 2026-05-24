@@ -48,6 +48,8 @@ cUSERX     := SPACE(30)
 cPASSX     := SPACE(30)
 cTABELAX   := SPACE(30)
 cBANCOX   := Space(30)
+cOWNERX   := Space(30)
+cPORTAX    :=SPACE(30)
 loledb     := .T.
 lmdb       := .f.
 laccdb     := .f.
@@ -152,29 +154,25 @@ function pegcfgbanco()
 
 
 IF cTIPOSQL="LETO"
-   cSERVERX   := PADR("//127.0.0.1:2812/",30," ")   //port 2812
+   cSERVERX   := PADR("//127.0.0.1:2812/",30," ")  
+   cPORTAX:= PADR("2812",30," ")
 ENDIF   
 
 IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-   cUSERX := PADR("root",30," ")   //mariadb port  3306
+   cUSERX := PADR("root",30," ")   
+   cPORTAX:= PADR("3306",30," ")
 ENDIF
 
 IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-   cUSERX := PADR("postgres",30," ") //pgssql port 5432
+   cUSERX := PADR("postgres",30," ") 
+   cPORTAX:= PADR("5432",30," ")
 ENDIF
 IF cTIPOSQL = "FIREBIRD"
-   cSERVERX := PADR("localhost", 30, " ")
-   cUSERX := PADR("SYSDBA",30," ")
+   cSERVERX := PADR("localhost", 30, " ")   //net://
+   cUSERX := PADR("SYSDBA",30," ")  //masterkey
+   cPORTAX:= PADR("3050",30," ")
+
 ENDIF
-
-
-
-//mariadb 3306
-//mysql 
-//mssql sa
-//pgsal postgres 5432
-//oracle 
-//firebird  3050 SYSDBA masterkey net://
 
 
 
@@ -407,7 +405,7 @@ aSTRU := dbstruct()
 //pois cria com tipos @ e M deixando o dbf com tipos incompativeis
 //criar opcao de criar o dbf tratado con mdbtables
 //importar via pipe ou outro
-IF tDOC = 14
+IF tDOC = 90
    aINDICES := {}
    IF lMDB .OR. lACCDB
       //Ainda nao implantado testes com catalog ver outras opcoes
@@ -655,64 +653,13 @@ ENDCASE
 return lRETU
 
 
-/*
-function opencmdbarq()
-local lRETU
-lRETU:=.T.
-DO CASE
-    CASE lMDB //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS" .OR. cTIPOSQL="MDB64" .OR. cTIPOSQL="ACCESS64"
-        if loledb
-           USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA
-        else
-           USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
-        endif 
-    CASE lACCDB //cTIPOSQL="ACCDB"  .OR. cTIPOSQL="ACCDB64" 
-         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA ACEOLEDB
-    CASE cTIPOSQL="SQLITE"  
-         USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQLITE
-    CASE cTIPOSQL="MYSQL" .or. cTIPOSQL="MYSQL64"
-        if loledb
-            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MYSQL    FROM cSERVERx  USER CUSERX PASSWORD CPASSX
-        else
-            USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MYSQL64  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
-        endif    
-    CASE cTIPOSQL="MARIADB"     
-        USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA MARIADB  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
-    CASE cTIPOSQL="MSSQL"   .OR. cTIPOSQL="SQLSERVER"    
-        USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA SQL  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
-    CASE cTIPOSQL="PGSQL" .or. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL" 
-        if loledb
-            TRY
-              USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA PGSQL    FROM cSERVERx  USER CUSERX PASSWORD CPASSX
-            catch oErR
-              MDT("Erro Abrindo")  
-              lRETU = .F.
-            END  
-        else
-            TRY
-              USE ( cMDBARQ ) VIA "ADORDD" TABLE cTABELA PGSQL64  FROM cSERVERx  USER CUSERX PASSWORD CPASSX
-            catch oErR
-              MDT("Erro Abrindo")  
-              lRETU = .F.  
-            END  
-        endif        
-ENDCASE
-return lRETU
-*/
-
 
 
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function mdbcria()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 function mdbcria()
 
@@ -1023,14 +970,21 @@ CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR.
    @ 07,23 SAY "Server"         
    @ 09,23 SAY "user"           
    @ 11,23 say "pass"    
+   @ 12,23 say "owener"
+   @ 13,23 say "port"
    @ 05,23 GET cBANCOX   VALID buscachaves( cBANCOX )  
    @ 07,23 get cSERVERX  
    @ 09,23 get cuserx         
-   @ 11,23 get cpassx         
+   @ 11,23 get cpassx
+   @ 12,23 get cownerx
+   @ 13,23 get cportx         
    READ
    cSERVERX := ALLTRIM(cSERVERX)
    cuserx  := alltrim(cuserx)
    cpassx  := alltrim(cpassx)
+   cowenrx:= alltrim(cownerx)
+   cportx   := alltrim(cportx)
+   
    cMDBARQ := cDATABASEX
 ENDCASE
 RETURN cMDBARQ
@@ -1052,6 +1006,8 @@ FUNCTION buscachaves( cNomeBanco )
        cSERVERX := padr(LerDoCofre( cSecaoCofre, "Server" ),30)
        cUSERX   := padr(LerDoCofre( cSecaoCofre, "User" ),30)
        cPASSX   := padr(LerDoCofre( cSecaoCofre, "Password" ),30)
+       cOwnerX   := padr(LerDoCofre( cSecaoCofre, "Owner" ),30)
+       cportaX   := padr(LerDoCofre( cSecaoCofre, "portax"),30)
     ENDIF   
    
 
@@ -1174,39 +1130,6 @@ IF cTIPOINFO = "DATABASE"
 ENDIF
 
 
-/*
- CASE SQLRDD_RDBMS_SYBASE
-      IF Empty(cOwner)
-         ::Exec("select name from sysobjects where type = N'U' order by name", .T., .T., @aRet)
-      ELSE
-         ::Exec("select name from sysobjects where type = N'U' and user_name(uid) = '" + cOwner + "' order by name", .T., .T., @aRet)
-      ENDIF
-      EXIT
-   CASE SQLRDD_RDBMS_POSTGR
-      IF Empty(cOwner)
-         ::Exec("select tablename from pg_tables where schemaname = 'public' order by tablename", .T., .T., @aRet)
-      ELSE
-         ::Exec("select tablename from pg_tables where schemaname = '" + cOwner + "' order by tablename", .T., .T., @aRet)
-      ENDIF
-      EXIT
-   CASE SQLRDD_RDBMS_ORACLE
-      IF Empty(cOwner)
-         ::Exec("select table_name from user_tables order by TABLE_NAME", .T., .T., @aRet)
-      ELSE
-         ::Exec("select TABLE_NAME from all_tables where owner = '" + cOwner + "' order by TABLE_NAME", .T., .T., @aRet)
-      ENDIF
-      EXIT
-   CASE SQLRDD_RDBMS_FIREBR5
-      IF Empty(cOwner)
-         ::Exec("select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 order by RDB$RELATION_NAME", .T., .T., @aRet)
-      ELSE
-         ::Exec("select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 AND RDB$OWNER_NAME = '" + cOwner + "' order by RDB$RELATION_NAME", .T., .T., @aRet)
-      ENDIF
-      EXIT
- 
-*/
-
-
 
 IF cTIPOINFO = "TABELA"
    DO CASE
@@ -1220,14 +1143,36 @@ IF cTIPOINFO = "TABELA"
       cCOMANDO := "SHOW TABLES"
       //SHOW TABLES FROM `information_schema`;
    CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      cCOMANDO := "SELECT tablename FROM pg_tables WHERE schemaname='public'  order by tablename"
+      if empty(cOwnerx)
+         cCOMANDO := "SELECT tablename FROM pg_tables WHERE schemaname='public'  order by tablename"
+      else
+          cCOMANDO := "select tablename from pg_tables where schemaname = '" + cOwnerx + "' order by tablename"
+      endif
+      
       //SELECT table_name  FROM information_schema.tables  WHERE table_type = 'BASE TABLE' AND table_schema='public'
    CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
       cCOMANDO := "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';"
     CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" 
-      cCOMANDO := "SELECT table_name  FROM user_tables  order by TABLE_NAME"    //global SELECT owner, table_name  FROM all_tables
+      if empty(cOwnerx)
+         cCOMANDO := "SELECT table_name  FROM user_tables  order by TABLE_NAME"    //global SELECT owner, table_name  FROM all_tables
+      else
+         cCOMANDO :="select TABLE_NAME from all_tables where owner = '" + cOwnerx + "' order by TABLE_NAME"
+      endif
     CASE cTIPOSQL = "FIREBIRD" 
-      cCOMANDO := "Select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 order by RDB$RELATION_NAME"  
+      if empty(cOwnerx)
+         cCOMANDO := "Select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 order by RDB$RELATION_NAME"  
+      else
+         cCOMANDO := "select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 AND RDB$OWNER_NAME = '" + cOwnerx + "' order by RDB$RELATION_NAME"
+      endif
+      
+       CASE cTIPOSQL = "SYBASE"
+      IF Empty(cOwner)
+         cCOMANDO := "select name from sysobjects where type = N'U' order by name"
+      ELSE
+         cCOMANDO := "select name from sysobjects where type = N'U' and user_name(uid) = '" + cOwnerx + "' order by name"
+      ENDIF
+
+         
    endcase
 ENDIF
 IF cTIPOINFO = "ESTRUTURA"

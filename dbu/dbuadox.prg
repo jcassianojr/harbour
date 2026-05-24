@@ -51,6 +51,8 @@ FUNCTION adoxmenu( cUSOSQL )
    cPASSX     := Space( 30 )
    cTABELAX   := Space( 30 )
    cBANCOX   := Space(30)
+   cOWNERX   := Space(30)
+   cPORTAX    :=SPACE(30)
    loledb     := .T.
    lMDB       := .F.
    lACCDB     := .F.
