@@ -30,6 +30,7 @@
 #require "sddmy"
 #require "sddpg"
 #require "sddsqlt3"
+#require "sddfb"
 //#require "sddoci"
 
 
@@ -45,6 +46,7 @@ REQUEST SDDODBC
 REQUEST SDDMY
 REQUEST SDDPG
 REQUEST SDDSQLITE3
+REQUEST SDDFB
 //REQUEST SDDOCI
 //REQUEST SDDOCI //compilou e abriu sem erro versao 1.77 incluido -locilib  e  sddoci.hbc no hpb
 //foram usadas compilacao independentes pelo bat da pasta harbour/contrib copiadas e pasta lib padrao
@@ -79,6 +81,8 @@ FUNCTION mixmenu( cUSOSQL )
    cPASSX     := Space( 30 )
    cTABELAX   := Space( 30 )
    cBANCOX   := Space(30)
+   cOWNERX   := Space(30)
+   cPORTAX    :=SPACE(30)
    loledb     := .T.
    lMDB       := .F.
    lACCDB     := .F.
@@ -111,8 +115,12 @@ FUNCTION mixmenu( cUSOSQL )
       OPENTIPOARQ()
    ENDIF
 
+// esoolhe o arquivos firebird
+   IF cTIPOSQL = "FIREBIRD"
+      OPENTIPOARQ()
+   ENDIF
 
-// sqlite mysql postgresql tem nativos e opcao para odbc
+// firebird sqlite mysql postgresql tem nativos e opcao para odbc
    IF cTIPOMIX <> "ODBC"
       IF ! mdg( "MIXRDD (SIM) MIXODBC (NAO)" )
          cTIPOMIX := "ODBC"
@@ -509,6 +517,9 @@ FUNCTION mix_open()
       
    CASE cTIPOMIX = "SQLITE"
       nCONN := rddInfo( RDDI_CONNECT, { "SQLITE3", cDATABASEX } )
+   CASE cTIPOMIX = "FIREBIRD"
+      nCONN := rddInfo( RDDI_CONNECT, { "FIREBIRD", cDATABASEX } )
+      
    CASE cTIPOMIX = "ORACLE"
       nCONN := rddInfo( RDDI_CONNECT, { "OCILIB", cSERVERX, cUSERX, cPASSX, cDATABASEX } )
    CASE cTIPOMIX = "ODBC"  // Cserver Conneccao

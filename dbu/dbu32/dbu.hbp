@@ -49,10 +49,12 @@ hbodbc.hbc
 rddsql.hbc
 sddodbc.hbc
 sddmy.hbc
+sddfb.hbc
 #sddpg.hbc
 sddsqlt3.hbc
 letodb.hbc
 #sddoci.hbc
+hbfbird.hbc
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
@@ -74,6 +76,7 @@ letodb.hbc
 \develop\harbour\dbu\dbudialeto.prg
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbu2md.prg
+\develop\harbour\dbu\dbufire.prg
 #
 # sqlite
 #

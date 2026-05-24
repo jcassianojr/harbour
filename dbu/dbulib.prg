@@ -170,6 +170,9 @@ WHILE .T.
       mysqlmenu()
    CASE KEY = 1 .AND. cTIPOSQL = "SQLITE"
       sqlitemenu()
+   CASE KEY = 1 .AND. cTIPOSQL = "FIREBIRD"
+      Firebirdmenu()
+      
    CASE KEY = 1
       MDT("Sem clientelib para "+cTIPOSQL)
       //ADORDD ODBC
@@ -439,7 +442,8 @@ CASE tDOC = 13
 CASE tDOC = 14
     zEXPOREXT :="MD"  //-->14 Mar&kdown MD   
 CASE tDOC = 15
-   zEXPOREXT := "DBF"
+   zEXPOREXT := "DBF"  //como vao incluindos novos tipos o dbf fica travando no 90 evitando a cada novo tipo verre fontes para correcao da posicao
+   tdoc=90 
 ENDCASE
 IF tDOC >= 9 .AND. tDOC <= 13
    checkextEXP()  //pega o delimitador zDELIMITE:

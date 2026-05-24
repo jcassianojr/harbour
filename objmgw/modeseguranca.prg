@@ -5,6 +5,48 @@
 
 STATIC cChaveMestra := "Diretoria@Segura#2026!bancos"
 
+FUNCTION parametrosLerDados()
+    LOCAL oStdIn
+    LOCAL cBuffer := SPACE(1024)
+    LOCAL cDadosRecebidos := ""
+    LOCAL nBytesLidos := 0
+
+    // Captura o objeto da entrada padrão
+    oStdIn := hb_GetStdIn()
+
+    IF oStdIn != NIL
+        // CORREÇÃO: Mudado para DO WHILE e a atribuição inline protegida por parênteses externos
+        DO WHILE ( nBytesLidos := oStdIn:Read( @cBuffer, 1024 ) ) > 0
+            
+            cDadosRecebidos += SUBSTR( cBuffer, 1, nBytesLidos )
+            cBuffer := SPACE(1024) // Limpa o buffer para a próxima rodada
+            
+        ENDDO // CORREÇÃO: Mudado de ENDWHILE para ENDDO
+    ENDIF
+
+RETURN cDadosRecebidos
+
+FUNCTION ParametrosEnviarDados( cCaminhoDestino, cDados )
+    LOCAL phProcess, nStdIn, nStdOut, nStdErr
+    
+    // Abre o processo destino capturando os handles de stream
+    phProcess := hb_processOpen( cCaminhoDestino, @nStdIn, @nStdOut, @nStdErr )
+    
+    IF phProcess != NIL
+        // Escreve os dados diretamente no pipe de entrada do destino
+        FWRITE( nStdIn, cDados )
+        
+        // Fecha o handle de escrita indicando fim do envio
+        FCLOSE( nStdIn )
+        FCLOSE( nStdOut )
+        FCLOSE( nStdErr )
+        
+        // Aguarda a finalização do processo para limpar a memória
+        hb_processValue( phProcess )
+    ENDIF
+RETURN NIL
+
+
 // Retorna o caminho do arquivo config.dat
 FUNCTION CaminhoArquivoCofre()
 LOCAL cCaminho := hb_DirBase()

@@ -7,7 +7,7 @@
 // +
 // +
 // +     Sistema:
-// +
+// +f
 // +     Linguagem: Harbour
 // +
 // +     Autor: jcassiano
@@ -193,7 +193,7 @@ FUNCTION VALCGC( cCNPJ, xTIPO, lMES, cUF )
 
 // +ÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝ
 // +
-// +    FUNCTION Valcpf()
+// +    FUNCTION Valcpf(xCPF, lMES)
 // +    CPF no 000.000.008-00
 // +1. Tocantins, Mato Grosso do Sul, Goias e Distrito Federal;
 // +2. Roraima,Amapa, Amazonas, Acre, Rondonia e Para;
@@ -209,18 +209,6 @@ FUNCTION VALCGC( cCNPJ, xTIPO, lMES, cUF )
 // +ÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝÝ
 // +
 
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function Valcpf(xCPF, lMES)
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION Valcpf( xCPF, lMES )
 
    LOCAL X, cDIGEST
@@ -609,6 +597,168 @@ FUNCTION VALCEI( wk_cei, Lmes )  // mascara="  .   .     /  "
    ENDIF
 
    RETURN .T.
+   
+   FUNCTION MascararNumGenerico( cNumero, nExibeInicio, nExibeFinal )
+    LOCAL cLimpo := ALLTRIM(cNumero)
+    LOCAL nLen   := LEN(cLimpo)
+    LOCAL cInicio, cFinal, cMeio
+    LOCAL nDigitosOcultos
+
+    // Se o parâmetro de exibição não for passado, define um padrão
+    IF VALTYPE(nExibeInicio) != "N"; nExibeInicio := 2; ENDIF
+    IF VALTYPE(nExibeFinal)  != "N"; nExibeFinal  := 2; ENDIF
+
+    // Se o número for muito curto para a máscara desejada, esconde apenas o miolo
+    IF nLen <= (nExibeInicio + nExibeFinal)
+        IF nLen > 2
+            // Garante que pelo menos o primeiro e o último fiquem visíveis
+            RETURN SUBSTR(cLimpo, 1, 1) + REPLICATE("*", nLen - 2) + SUBSTR(cLimpo, nLen, 1)
+        ELSE
+            RETURN REPLICATE("*", nLen) // Se for minúsculo (ex: 2 dígitos), esconde tudo
+        ENDIF
+    ENDIF
+
+    // Extrai as pontas visíveis
+    cInicio := SUBSTR(cLimpo, 1, nExibeInicio)
+    cFinal  := SUBSTR(cLimpo, nLen - nExibeFinal + 1, nExibeFinal)
+    
+    // Calcula quantos asteriscos o miolo vai precisar
+    nDigitosOcultos := nLen - nExibeInicio - nExibeFinal
+    cMeio   := REPLICATE("*", nDigitosOcultos)
+
+RETURN cInicio + cMeio + cFinal
+   
+   FUNCAO MascararCPF( cCPF )
+    // Remove pontos e traços temporariamente para garantir o tamanho (11 digitos)
+    cLimpo := LimparCaracteres( cCPF ) 
+    
+    // Pega os 3 primeiros e os 2 ultimos
+    cInicio := Substr( cLimpo, 1, 3 )
+    cFinal  := Substr( cLimpo, 10, 2 )
+    
+    // Monta a string mascarada de retorno
+    RETURN cInicio + ".***.***-" + cFinal
+
+/*
+ * Função para ofuscar CNPJ (Aceita o novo padrão Alfanumérico)
+ */
+FUNCTION MascaraCNPJ( cCnpjRaw )
+    LOCAL cCnpjLimpo := ""
+    LOCAL cCnpjMascarado := ""
+    LOCAL i, cChar
+    
+    // 1. Limpa a string removendo APENAS os caracteres de pontuação (ponto, barra, traço e espaços)
+    // Mantém tudo o que for número (0-9) e letra (A-Z)
+    FOR i := 1 TO LEN( cCnpjRaw )
+        cChar := UPPER( SUBSTR( cCnpjRaw, i, 1 ) )
+        
+        // Se for número ou letra, mantém no bloco limpo
+        IF ( cChar >= "0" .AND. cChar <= "9" ) .OR. ( cChar >= "A" .AND. cChar <= "Z" )
+            cCnpjLimpo += cChar
+        ENDIF
+    NEXT
+    
+    // 2. O CNPJ precisa ter exatamente 14 caracteres (seja letra ou número)
+    IF LEN( cCnpjLimpo ) != 14
+        RETURN cCnpjRaw 
+    ENDIF
+    
+    // 3. Monta a máscara preservando os extremos alfanuméricos e os dígitos finais
+    // Formato final: XX.***.***/****-XX
+    cCnpjMascarado := SUBSTR( cCnpjLimpo, 1, 2 )   + "." + ; // Mantém as 2 primeiras posições (letras ou números)
+                      "***.***"                     + "/" + ; // Ofusca o miolo da empresa
+                      "****"                        + "-" + ; // Ofusca o bloco de filial
+                      SUBSTR( cCnpjLimpo, 13, 2 )             // Mantém os 2 dígitos verificadores (sempre numéricos)
+
+RETURN cCnpjMascarado
+
+/*
+ * Função para ofuscar sobrenomes do meio em uma String de Nome
+ */
+FUNCTION MascararNome( cNomeRaw )
+    LOCAL cNomeTrimmed := ALLTRIM( cNomeRaw )
+    LOCAL aPalavras    := {}
+    LOCAL cNomeMascarado := ""
+    LOCAL nQtdPalavras := 0
+    LOCAL i
+    
+    // 1. Quebra o nome em um array de palavras usando o espaço como delimitador
+    aPalavras := HB_ATOKENS( cNomeTrimmed, " " )
+    nQtdPalavras := LEN( aPalavras )
+    
+    // 2. Se o nome tiver apenas 1 palavra, não há o que ofuscar
+    IF nQtdPalavras <= 1
+        RETURN cNomeTrimmed
+    ENDIF
+    
+    // 3. Se tiver exatamente 2 palavras (Ex: JORGE CASSIANO)
+    IF nQtdPalavras == 2
+        // Mantém a primeira e mascara a segunda com asteriscos do mesmo tamanho
+        cNomeMascarado := aPalavras[1] + " " + REPLICATE( "*", LEN( aPalavras[2] ) )
+        RETURN cNomeMascarado
+    ENDIF
+    
+    // 4. Se tiver 3 ou mais palavras (Ex: CARLOS ALBERTO DA SILVA SOUZA)
+    // Mantém a primeira palavra
+    cNomeMascarado := aPalavras[1] + " "
+    
+    // Varre o meio do nome aplicando asteriscos correspondentes ao tamanho de cada sobrenome
+    FOR i := 2 TO ( nQtdPalavras - 1 )
+        cNomeMascarado += REPLICATE( "*", LEN( aPalavras[i] ) ) + " "
+    NEXT
+    
+    // Adiciona a última palavra intacta no final
+    cNomeMascarado += aPalavras[ nQtdPalavras ]
+
+RETURN cNomeMascarado
+
+/*
+ * Função para ofuscar uma parte ALEATÓRIA da data (Dia, Mês ou Ano)
+ */
+FUNCTION OfuscarDataAleatoria( uDataRaw )
+    LOCAL cDataText := ""
+    LOCAL cDia, cMes, cAno
+    LOCAL nSorteio := 0
+    
+    // 1. Padroniza a entrada para String (DD/MM/AAAA)
+    IF VALTYPE( uDataRaw ) == "D"
+        cDataText := DTOC( uDataRaw )
+    ELSEIF VALTYPE( uDataRaw ) == "C"
+        cDataText := ALLTRIM( uDataRaw )
+    ELSE
+        RETURN uDataRaw
+    ENDIF
+    
+    // Valida o tamanho padrão de data
+    IF LEN( cDataText ) != 10
+        RETURN cDataText
+    ENDIF
+    
+    // 2. Separa os pedaços originais da string
+    cDia := SUBSTR( cDataText, 1, 2 )
+    cMes := SUBSTR( cDataText, 4, 2 )
+    cAno := SUBSTR( cDataText, 7, 4 )
+    
+    // 3. O PULO DO GATO: Sorteia um número entre 1 e 3
+    // 1 = Esconde Dia | 2 = Esconde Mês | 3 = Esconde Ano
+    nSorteio := HB_RANDINT( 1, 3 )
+    
+    // 4. Aplica a máscara baseada no sorteio dinâmico
+    DO CASE
+        CASE nSorteio == 1
+            // Esconde o Dia: **/MM/AAAA
+            cDia := "**"
+            
+        CASE nSorteio == 2
+            // Esconde o Mês: DD/**/AAAA
+            cMes := "**"
+            
+        CASE nSorteio == 3
+            // Esconde o Ano: DD/MM/****
+            cAno := "****"
+    ENDCASE
+
+RETURN cDia + "/" + cMes + "/" + cAno
 
 // + EOF: disk59.prg
 // +
