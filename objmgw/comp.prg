@@ -333,19 +333,45 @@ if !empty(aAMB[6])
 endif
 return .T.
 
-// ***************************************
+FUNCTION MascararEmail( cEmail )
+    LOCAL nPosAt := AT("@", cEmail)
+    LOCAL cUser := ""
+    LOCAL cDominio := ""
+    LOCAL cUserMascarado := ""
+    LOCAL nLenUser := 0
+
+    // Se não encontrar o @, não é um e-mail válido, retorna como está
+    IF nPosAt == 0
+        RETURN cEmail
+    ENDIF
+
+    // Separa o usuário do domínio
+    cUser := SUBSTR(cEmail, 1, nPosAt - 1)
+    cDominio := SUBSTR(cEmail, nPosAt) // Mantém o '@' junto com o domínio
+    nLenUser := LEN(cUser)
+
+    // Aplica a regra de máscara no usuário
+    IF nLenUser <= 2
+        // E-mails curtíssimos (ex: jg@gmail.com) -> j*@gmail.com
+        cUserMascarado := SUBSTR(cUser, 1, 1) + "*"
+        
+    ELSEIF nLenUser <= 4  // CORREÇÃO: Mudado de IF para ELSEIF
+        // E-mails curtos (ex: jorg@gmail.com) -> jo**@gmail.com
+        cUserMascarado := SUBSTR(cUser, 1, 2) + REPLICATE("*", nLenUser - 2)
+        
+    ELSE
+        // E-mails normais -> Mostra as 2 primeiras, fixa 4 asteriscos, e mostra a última
+        cUserMascarado := SUBSTR(cUser, 1, 2) + "****" + SUBSTR(cUser, nLenUser, 1)
+        
+    ENDIF // CORREÇÃO: Agora este único ENDIF fecha toda a estrutura corretamente
+
+RETURN cUserMascarado + cDominio
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function CheckEmail()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 FUNCTION CheckEmail(cEmail)
 
