@@ -160,25 +160,59 @@ FUNCTION FormataRG( Valor, cTIPO )
 
    RETURN cRETU
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function CheckRG(Valor, lMES,cTIPO,dDATANASC,cUF  )
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
 
+/*
+ * Funзгo inteligente para ofuscar RG (Identifica o padrгo antigo ou o novo unificado/CPF)
+ */
+FUNCTION MascararRG( cRgRaw )
+    LOCAL cRgLimpo := ""
+    LOCAL cRgMascarado := ""
+    LOCAL i, cChar, nLen
+    
+    // 1. Limpa a string deixando apenas nъmeros (RG antigo e CPF usam apenas nъmeros na essкncia)
+    FOR i := 1 TO LEN( cRgRaw )
+        cChar := SUBSTR( cRgRaw, i, 1 )
+        IF cChar >= "0" .AND. cChar <= "9"
+            cRgLimpo += cChar
+        ENDIF
+    NEXT
+    
+    nLen := LEN( cRgLimpo )
+    
+    // Se estiver vazio, devolve o que veio original
+    IF nLen == 0
+        RETURN cRgRaw
+    ENDIF
+
+    // 2. DESVIO INTELIGENTE BASEADO NO TAMANHO
+    
+    IF nLen == 11
+        // --- NOVO PADRГO: Identidade Nacional (CPF) ---
+        // Mбscara: XXX.***.***-XX
+        cRgMascarado := SUBSTR( cRgLimpo, 1, 3 ) + "." + ; // Mantйm os 3 primeiros
+                        "***.***"                 + "-" + ; // Oculta o miolo
+                        SUBSTR( cRgLimpo, 10, 2 )           // Mantйm os 2 ъltimos dнgitos
+                        
+    ELSE
+        // --- PADRГO ANTIGO: RG Estadual (7 a 9 dнgitos) ---
+        // Como varia por estado, mantemos visнveis os 2 primeiros caracteres e o ъltimo dнgito
+        IF nLen > 3
+            cRgMascarado := SUBSTR( cRgLimpo, 1, 2 ) + "." + ;
+                            REPLICATE( "*", nLen - 3 ) + "-" + ;
+                            SUBSTR( cRgLimpo, nLen, 1 )
+        ELSE
+            // Se o dado for curtнssimo/invбlido, apenas preenche com asteriscos
+            cRgMascarado := REPLICATE( "*", nLen )
+        ENDIF
+    ENDIF
+
+RETURN cRgMascarado
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function CheckRG()
-// +
-// +
+// +    Function CheckRG(Valor, lMES,cTIPO,dDATANASC,cUF )
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION CheckRG( Valor, lMES, cTIPO, dDATANASC, cUF )
 
@@ -326,26 +360,11 @@ FUNCTION CheckRG( Valor, lMES, cTIPO, dDATANASC, cUF )
    RETURN .T.
 
 
-
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+// +--------------------------------------------------------------------
 // +
 // +    Function PEGDDD(cTEL)
 // +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function PEGDDD()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION PEGDDD( cTEL )
 
