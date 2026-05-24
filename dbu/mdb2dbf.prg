@@ -171,9 +171,13 @@ IF cTIPOSQL = "FIREBIRD"
    cSERVERX := PADR("localhost", 30, " ")   //net://
    cUSERX := PADR("SYSDBA",30," ")  //masterkey
    cPORTAX:= PADR("3050",30," ")
-
 ENDIF
-
+IF cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
+   cPORTAX:= PADR("1521",30," ")
+ENDIF
+IF cTIPOSQL = "MSSQL"
+   cPORTAX:= PADR("1433",30," ")
+ENDIF
 
 
 //
@@ -586,7 +590,7 @@ CASE  cTIPOSQL = "FIREBIRD"
    hb_adoSetTable(cTABELA) 
    hb_adoSetEngine("FIREBIRD") 
    hb_adoSetUser(CUSERX) 
-  hb_adoSetPassword(CPASSX) 
+   hb_adoSetPassword(CPASSX) 
 
    dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
 CASE cTIPOSQL = "SQLITE"
@@ -896,7 +900,11 @@ endif
 
 cTABELA := cNOMETABELA  //publica usada o opencmdarq
 IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "PGSQL64"  //Dupla aspas maiuscula
-   cTABELA := CHR(34)+UPPER(cTABELA)+CHR(34)
+   IF EMPTY(COWNERX)
+      cTABELA := CHR(34)+UPPER(cTABELA)+CHR(34)
+   ELSE
+      cTABELA := CHR(34)+AllTrim(cOWNERX) + "." + cTABELA+CHR(34)
+   ENDIF   
 ENDIF
 
 if nLASTREC > 0   //nao importa se nao tiver registros
