@@ -26,3 +26,6 @@ openads
 https://github.com/FiveTechSoft/OpenADS
 xharbour
 https://github.com/xHarbour-org/xharbour
+combo printer extend
+https://github.com/fafalone/ucPrinterComboEx
+
