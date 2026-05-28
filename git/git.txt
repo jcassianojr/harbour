@@ -28,4 +28,6 @@ xharbour
 https://github.com/xHarbour-org/xharbour
 combo printer extend
 https://github.com/fafalone/ucPrinterComboEx
+ocilib 
+https://github.com/vrogier/ocilib
 
