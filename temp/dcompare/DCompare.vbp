@@ -1,0 +1,46 @@
+Type=Exe
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
+Reference=*\G{B691E011-1797-432E-907A-4D8C69339129}#6.1#0#..\..\..\..\Program Files (x86)\Common Files\System\ado\msado15.dll#Microsoft ActiveX Data Objects 6.1 Library
+Reference=*\G{00000600-0000-0010-8000-00AA006D2EA4}#6.0#0#..\..\..\..\Program Files (x86)\Common Files\System\ado\msadox.dll#Microsoft ADO Ext. 6.0 for DDL and Security
+Reference=*\G{CE4F61C1-7072-4180-9107-B38562AB6ABE}#167.0#0#..\..\..\..\WINDOWS\RC6.dll#RC6
+Object={F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0; COMDLG32.OCX
+Form=dcompare.frm
+Module=dcompareMain; dcompare.bas
+Module=criamdbaccdb; criamdbaccdb.bas
+Module=MdbRepComSimples; MdbRepComSimples.bas
+IconForm="dCompare"
+Startup="Sub Main"
+HelpFile=""
+Title="DCompare"
+ExeName32="DCompare.exe"
+Command32=""
+Name="vb6projectDcompare"
+HelpContextID="0"
+CompatibleMode="0"
+MajorVer=1
+MinorVer=0
+RevisionVer=0
+AutoIncrementVer=0
+ServerSupportFiles=0
+VersionCompanyName="*"
+CompilationType=-1
+OptimizationType=0
+FavorPentiumPro(tm)=0
+CodeViewDebugInfo=0
+NoAliasing=0
+BoundsCheck=0
+OverflowCheck=0
+FlPointCheck=0
+FDIVCheck=0
+UnroundedFP=0
+StartMode=0
+Unattended=0
+Retained=0
+ThreadPerObject=0
+MaxNumberOfThreads=1
+
+[MS Transaction Server]
+AutoRefresh=1
+
+[Rubberduck]
+ProjectId=6eb91f54-7ac0-4417-b36a-8586b726b3e2

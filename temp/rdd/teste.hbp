@@ -1,0 +1,19 @@
+# Configurações do Executável
+-L/devprg/hb64/contrib/hbsqlit3
+-I/devprg/hb64/contrib/hbsqlit3
+-n
+-es2
+
+# Bibliotecas Necessárias
+# hbsqlite3: Camada de comunicação com SQLite
+# hbusrrdd: Engine para User RDDs do Harbour
+#hbusrrdd.hbc
+hbsqlit3.hbc
+xhb.hbc
+
+# Fontes
+test_sl3.prg
+sqliterdd.prg
+
+
+-incpath=c:\devprg\hb64\contrib\hbsqlit3
