@@ -53,15 +53,16 @@ FUNCTION sqlitemenu()
 
    WHILE .T.
       hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
-      OPCAO( 4, 24, "&Criar base sqllite        ", 67 )   // c
-      OPCAO( 5, 24, "&VACUUM (PACK)             ", 86 )   // V
-      OPCAO( 6, 24, "&Importar  DBF             ", 73 )   // I
-      OPCAO( 7, 24, "&Exportar  DBF             ", 69 )   // E
-      OPCAO( 8, 24, "&Tabelas                   ", 84 )   // T
-      OPCAO( 9, 24, "&Apagar Tabela             ", 65 )   // A
-      OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F
-	  OPCAO( 11,24,"Mar&kdown documentacao       ", 75) //
-      OPCAO(12,24,"Trocar &Usuario/Senha     ",85)
+      OPCAO(  4, 24, "&Criar base sqllite        ", 67 )   // c
+      OPCAO(  5, 24, "&VACUUM (PACK)             ", 86 )   // V
+      OPCAO(  6, 24, "&Importar  DBF             ", 73 )   // I
+      OPCAO(  7, 24, "&Exportar  DBF             ", 69 )   // E
+      OPCAO(  8, 24, "&Tabelas                   ", 84 )   // T
+      OPCAO(  9, 24, "&Apagar Tabela             ", 65 )   // A
+      OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // f
+	  OPCAO( 11, 24, "Mar&kdown documentacao     ", 75) //
+      OPCAO( 12, 24, "Trocar &Usuario/Senha      ",85)  //u
+      OPCAO( 13, 24, "C&hecar integridade        ",72)   //h
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -107,7 +108,11 @@ FUNCTION sqlitemenu()
       { 'SQLite Fossil', '*.fossil' }, { 'All Files', '*.*' } }, 1 )
             Doc_SQLite(cFileName)
        CASE KEY = 9
-       trocasenhaarq()        
+             trocasenhaarq()        
+       CASE KEY = 10
+         IF selectdb()
+            check_sqlite( odb )
+         ENDIF      
             	  
       OTHERWISE
          RETURN
@@ -427,6 +432,15 @@ FUNCTION sqlitepack( db )
 endif   
 RETURN NIL  
 
+ FUNCTION check_sqlite( db )
+ IF !Empty( db )
+   // Armazena arquivos temporários na memória em vez de disco
+   if sqlite3_exec( db, "PRAGMA integrity_check" )  == SQLITE_OK
+         MDT( "Processo concluído com sucesso." )
+   ENDIF
+endif   
+RETURN NIL  
+
 
 // +--------------------------------------------------------------------
 // +
@@ -471,6 +485,8 @@ FUNCTION selectdb
       msgstop( 'You have to select a SQLite File!', 'SQLite File Selection' )
       RETURN lRETU
    ENDIF
+   
+   optimize_sqlite( odb )
 
    RETURN lRETU
 
