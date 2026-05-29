@@ -9,3 +9,10 @@ return
 
 function  SDDPG()
 return
+
+
+function FIREBIRDMENU()
+return
+
+function SDDFB()
+return

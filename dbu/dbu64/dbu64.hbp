@@ -36,6 +36,8 @@ sddsqlt3.hbc
 #sddoci.hbc
 
 letodb.hbc
+#hbfbird.hbc
+#sddfb.hbc
 
 
 \develop\harbour\dbu\DBU.PRG  
@@ -57,6 +59,7 @@ letodb.hbc
 \develop\harbour\dbu\dbuXLSclass.prg
 \develop\harbour\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbuxlsxml.prg
+#\develop\harbour\dbu\dbufire.prg
 #
 # sqlite compilado com fontes C nativo
 #
