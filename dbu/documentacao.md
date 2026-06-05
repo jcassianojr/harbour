@@ -1,5 +1,5 @@
 # 📘 Documentacao Tecnica do Projeto
-> Gerado em: 05/12/26 19:05:40
+> Gerado em: 06/05/26 17:21:53
 
 ## 🏗️ Estrutura de Modulos (PRGs)
 
@@ -49,6 +49,7 @@
 - Static Function ADO_ORDLSTADD()
 - Static Function ADO_ORDLSTCLEAR()
 - Static Function ADO_ORDCREATE()
+- Static Procedure ADO_REPORT_ERROR()
 - Static Function ADO_ORDDESTROY()
 - Static Function ADO_EVALBLOCK()
 - Static Function ADO_EXISTS()
@@ -70,6 +71,9 @@
 - Function hb_adoRddGetConnection()
 - Function hb_adoRddGetCatalog()
 - Function hb_adoRddGetRecordSet()
+- Static Function ADO_TRANSBEGIN()
+- Static Function ADO_TRANSCOMMIT()
+- Static Function ADO_TRANSROLLBACK()
 
 ### 📄 Arquivo: `adoxb.prg`
 - Function ADOSetRDD()
@@ -146,6 +150,10 @@
 - Function errindex()
 - Function errprinter()
 
+### 📄 Arquivo: `dbu2md.prg`
+- Function Dbf2md()
+- Function Doc_DBF_md()
+
 ### 📄 Arquivo: `dbuadox.prg`
 - Function adoxmenu()
 - Function adoxcriadatabase()
@@ -153,6 +161,9 @@
 - Function adoxexpdbf()
 - Function adoxdeltable()
 - Function adoxexecsql()
+
+### 📄 Arquivo: `dbuads.prg`
+- Function ADSConnection()
 
 ### 📄 Arquivo: `dbucnvmemo.prg`
 - Function convertmemo()
@@ -182,9 +193,15 @@
 - Function Dialeto_commit()
 - Function Dialeto_rollback()
 - Function Dialeto_DataBanco()
+- Function Dialeto_Operador()
+- Function Dialeto_DataHoraBanco()
+- Function Dialeto_DataVazia()
 - Function Dialeto_GetIdentity()
 - Function Dialeto_GetRowCount()
+- Function Dialeto_TopPrefix()
+- Function Dialeto_TopSuffix()
 - Function Dialeto_SQL()
+- Function FormataBlocoSql()
 
 ### 📄 Arquivo: `dbudoc.prg`
 - Function PEGTIPO2VAL()
@@ -198,6 +215,7 @@
 - Function dbuzap()
 - Function dbupack()
 - Function DBETODBF()
+- Function GERADBML()
 
 ### 📄 Arquivo: `dbuedi.prg`
 - Function EDITXT()
@@ -220,6 +238,14 @@
 - Static Function ExitKey()
 - Static Function FreshOrder()
 - Static Function Skipped()
+
+### 📄 Arquivo: `dbufire.prg`
+- Function Firebirdmenu()
+- Static Function fireconnect()
+- Function fireverinfo()
+- Function fireimpdbf()
+- Function fireexpdbf()
+- Function firedeltable()
 
 ### 📄 Arquivo: `dbuindx.prg`
 - Function make_ntx()
@@ -268,6 +294,7 @@
 - Function mix_Query()
 - Function mix_open()
 - Function mix_close()
+- Function mix_AFFECTEDROWS()
 - Function mix_Conn()
 - Function mixexpformat()
 
@@ -308,6 +335,7 @@
 ### 📄 Arquivo: `dbusincdbf.prg`
 - Function dBUsincdbf()
 - Function sortdbf()
+- Static Function ValidarCampos()
 - Function limparegdupdbf()
 
 ### 📄 Arquivo: `dbustru.prg`
@@ -418,13 +446,11 @@
 - Function do_openvew()
 - Function get_line()
 
-### 📄 Arquivo: `dbuxls.prg`
-- Function xlsOpen()
-- Function docOpen()
-- Function xlsClose()
-- Function docClose()
-- Function xlsWrite()
-- Function TB2Xls()
+### 📄 Arquivo: `dbuxlsclass.prg`
+- Procedure Fazerxlsclass()
+
+### 📄 Arquivo: `dbuxlsxml.prg`
+- Procedure Fazerxlsxlm()
 
 ### 📄 Arquivo: `dbuxml.prg`
 - Function Dbf2Xml()
@@ -443,6 +469,7 @@
 - Function mdbcria()
 - Function DBF2MDB()
 - Function OPENTIPOARQ()
+- Function buscachaves()
 - Function MDBIMPDBF()
 - Function MDBTABLES()
 - Function TipoDado2()
@@ -451,6 +478,9 @@
 - Function geraconn()
 - Function executacmd()
 - Function CreateAccessDatabase()
+- Function mdltodos()
+- Function sqltodos()
+- Function trocasenhaarq()
 
 ### 📄 Arquivo: `mysqlrdd.prg`
 - Function DBMYSQLCONNECTION()
@@ -511,6 +541,8 @@
 - Function C2SQL()
 - Function sqltablestru()
 - Function sqlitepack()
+- Function optimize_sqlite()
+- Function check_sqlite()
 - Function selectdb()
 - Function SqliteTables()
 - Function connect2db()
@@ -520,6 +552,18 @@
 - Function export2sql()
 - Function MDPCHAVEI()
 - Function SqliteCreateTable()
+- Function DocMarkdow()
+- Function Doc_SQLite()
+
+### 📄 Arquivo: `xlsxclass.prg`
+- Class WorkBook
+- Class DrawingML
+- Class WorkSheet
+- Static Function ColumnIndexToColumnLetter()
+- Static Procedure MyZip()
+- Static Function ReplaceAmp()
+- Static Function my_UnZipFile()
+- Static Function FilePath()
 
 ## 📊 Dicionario de Dados e Acessos
 
@@ -536,6 +580,10 @@
 > dbUseArea(.T.,(cDESDRIVER),(cNEWDBF),"aliasnovo",.F.,.F.)
 > dbUseArea(.T.,(cORIDRIVER),(cOLDDBF),"aliasantigo",.T.,.F.)
 > dbUseArea(.T.,(cDESDRIVER),(cNEWDBF),"aliasnovo",.F.,.F.)
+
+**Fonte:** `dbufire.prg`
+> Tables: dbUseArea(.T.,cORIDRIVER,cARQORI,cTABLE,.T.,.T.)
+> dbUseArea(.T.,"DBFCDX",cDESTINO,"DESTINO",.T.,.F.)
 
 **Fonte:** `dbuleto.prg`
 > Tables: dbUseArea(.T.,,cTABELAX,,.T.)
@@ -590,7 +638,7 @@
 ```mermaid
 graph TD
     dbuedit_prg --> REF()             <unresolved function>
-    adoxb_prg --> REF()             <unresolved function>
+    adoxb_prg --> __writecell()   <unresolved function>
     adoxb_prg --> _addnew()       <unresolved function>
     mysqlrdd_prg --> _append()       <unresolved function>
     adoxb_prg --> _bof()          <unresolved function>
@@ -624,7 +672,7 @@ graph TD
     adoxb_prg --> _movefirst()    <unresolved function>
     adoxb_prg --> _movelast()     <unresolved function>
     adoxb_prg --> _movenext()     <unresolved function>
-    dbumy_prg --> _new()          <unresolved function>
+    dbufire_prg --> _new()          <unresolved function>
     adordd_prg --> _open()         <unresolved function>
     adordd_prg --> _openschema()   <unresolved function>
     mysqlrdd_prg --> _recno()        <unresolved function>
@@ -723,10 +771,13 @@ graph TD
     adordd_prg --> ado_setlocate() in adordd.prg
     adordd_prg --> ado_setrel()    in adordd.prg
     adordd_prg --> ado_skipraw()   in adordd.prg
+    adordd_prg --> ado_transbegin( in adordd.prg
+    adordd_prg --> ado_transbegin( in adordd.prg
+    adordd_prg --> ado_transbegin( in adordd.prg
     adordd_prg --> ado_unlock()    in adordd.prg
     adordd_prg --> ado_zap()       in adordd.prg
-    dbulib_prg --> adssetfiletype( in rddads.lib
-    dbulib_prg --> adssetfiletype( in rddads.lib
+    dbulib_prg --> adssetfiletype( <unresolved function>
+    dbulib_prg --> adssetfiletype( <unresolved function>
     dbucopy_prg --> afull()         in dbuutil.prg
     dbu_prg --> alertx()        <unresolved function>
     dbu_prg --> all_fields()    in dbuutil.prg
@@ -739,12 +790,14 @@ graph TD
     dbuview_prg --> bar_menu()      in dbuview.prg
     dbuview_prg --> bline()         in dbuview.prg
     dbucopy_prg --> box_title()     in dbuutil.prg
-    dbumix_prg --> c2sql()         in sql2dbf.prg
+    mdb2dbf_prg --> buscachaves()   in mdb2dbf.prg
+    dbufire_prg --> c2sql()         in sql2dbf.prg
     sql2dbf_prg --> c2sqlts()       in sql2dbf.prg
     dbu_prg --> capprep()       in dbucopy.prg
     dbuview_prg --> channel()       in dbuview.prg
     dbulib_prg --> checkanofor()   in dbulib.prg
     dbulib_prg --> checkextexp()   in dbulib.prg
+    sql2dbf_prg --> check_sqlite()  in sql2dbf.prg
     dbuview_prg --> clear_dbf()     in dbuview.prg
     dbudoc_prg --> clscor()        <unresolved function>
     sql2dbf_prg --> connect2db()    in sql2dbf.prg
@@ -757,12 +810,13 @@ graph TD
     dbulib_prg --> copyto()        in dbulib.prg
     mdb2dbf_prg --> copyto()        in dbulib.prg
     mdb2dbf_prg --> createsqlitedb( in sql2dbf.prg
-    dbumix_prg --> cstr()          in xhb.lib
+    dbumix_prg --> cstr()          <unresolved function>
     dbuview_prg --> ctrl_key()      in dbuview.prg
     dbuview_prg --> c_search()      in dbuview.prg
     dbudoc_prg --> data2str()      <unresolved function>
-    dbuadox_prg --> dbdrop()        in harbour.lib
+    dbuadox_prg --> dbdrop()        <unresolved function>
     dbu_prg --> dbetodbf()      in dbudoc.prg
+    dbudoc_prg --> dbf2md()        in dbu2md.prg
     mdb2dbf_prg --> dbf2mdb()       in mdb2dbf.prg
     dbumy_prg --> dbf2mysql()     in dbumy.prg
     dbupg_prg --> dbf2pgsql()     in dbupg.prg
@@ -777,13 +831,17 @@ graph TD
     dbu_prg --> dburede()       in dbu.prg
     dbu_prg --> dbusincdbf()    in dbusincdbf.prg
     dbu_prg --> dbuzap()        in dbudoc.prg
-    dbu_prg --> decode()        in hbyaml.lib
+    dbu_prg --> decode()        <unresolved function>
     dbu_prg --> dehi_cur()      in dbuutil.prg
-    dbucopy_prg --> deletefile()    in hbct.lib
+    dbucopy_prg --> deletefile()    <unresolved function>
     dbumix_prg --> dialeto_begin() in dbudialeto.prg
     dbumix_prg --> dialeto_commit( in dbudialeto.prg
+    dbudoc_prg --> dialeto_commit( in dbudialeto.prg
     dbuutil_prg --> dim_fkey()      in dbuutil.prg
     dbuview_prg --> disp_relation() in dbuview.prg
+    dbudoc_prg --> docmarkdow()    in sql2dbf.prg
+    dbu2md_prg --> doc_dbf_md()    in dbu2md.prg
+    sql2dbf_prg --> doc_sqlite()    in sql2dbf.prg
     dbuedit_prg --> doget()         in dbuedit.prg
     dbuview_prg --> do_fsel()       in dbuview.prg
     dbuview_prg --> do_opendbf()    in dbuview.prg
@@ -803,9 +861,9 @@ graph TD
     dbuview_prg --> d_copy()        in dbuview.prg
     dbuedi_prg --> editarq()       <unresolved function>
     dbuedit_prg --> emptyfile()     in dbuedit.prg
-    dbu_prg --> encode()        in hbyaml.lib
+    dbu_prg --> encode()        <unresolved function>
     dbu_prg --> enter_rc()      in dbuutil.prg
-    adordd_prg --> errornew()      in harbour.lib
+    adordd_prg --> errornew()      <unresolved function>
     dbu_prg --> error_msg()     in dbuutil.prg
     dbuutil_prg --> error_off()     in dbuutil.prg
     mdb2dbf_prg --> execarqsql()    in mdb2dbf.prg
@@ -815,19 +873,32 @@ graph TD
     sql2dbf_prg --> export2sql()    in sql2dbf.prg
     sql2dbf_prg --> exportadbf()    in sql2dbf.prg
     dbu_prg --> fazerdbf()      in dbudoc.prg
+    dbudoc_prg --> fazerxlsclass() in dbuxlsclass.prg
+    dbudoc_prg --> fazerxlsxlm()   in dbuxlsxml.prg
     mdb2dbf_prg --> fdelim()        <unresolved function>
+    dbu2md_prg --> fielddec()      <unresolved function>
+    dbu2md_prg --> fieldlen()      <unresolved function>
+    dbu2md_prg --> fieldtype()     <unresolved function>
     dbustru_prg --> field_check()   in dbustru.prg
     dbustru_prg --> filebox()       in dbuutil.prg
     dbucopy_prg --> filelist()      in dbuutil.prg
     dbudoc_prg --> filenames()     <unresolved function>
+    dbulib_prg --> firebirdmenu()  in dbufire.prg
+    dbufire_prg --> fireconnect()   in dbufire.prg
+    dbufire_prg --> firedeltable()  in dbufire.prg
+    dbufire_prg --> fireexpdbf()    in dbufire.prg
+    dbufire_prg --> fireimpdbf()    in dbufire.prg
+    dbufire_prg --> fireverinfo()   in dbufire.prg
     mdb2dbf_prg --> fixint()        <unresolved function>
     dbupg_prg --> fixnum()        <unresolved function>
-    dbucopy_prg --> flinecount()    in xhb.lib
+    dbucopy_prg --> flinecount()    <unresolved function>
+    dbudoc_prg --> flinecount()    <unresolved function>
     mdb2dbf_prg --> freadline()     <unresolved function>
     dbuedit_prg --> freshorder()    in dbuedit.prg
     dbucopy_prg --> genfield()      in dbuutil.prg
-    dbumy_prg --> geracampodbf()  in mdb2dbf.prg
+    dbufire_prg --> geracampodbf()  in mdb2dbf.prg
     dbuadox_prg --> geraconn()      in mdb2dbf.prg
+    dbudoc_prg --> geradbml()      in dbudoc.prg
     dbu_prg --> geradoc()       in dbudoc.prg
     dbucopy_prg --> getfile()       in dbuutil.prg
     dbuxml_prg --> getxmlstring()  in dbuxml.prg
@@ -839,15 +910,16 @@ graph TD
     dbuview_prg --> get_ntx()       in dbuview.prg
     dbuview_prg --> get_relation()  in dbuview.prg
     dbudoc_prg --> gravadoc()      in dbudoc.prg
-    mdb2dbf_prg --> gravadoc()      in dbudoc.prg
-    mdb2dbf_prg --> gravadoc()      in dbudoc.prg
-    mdb2dbf_prg --> gravadoc()      in dbudoc.prg
+    mdb2dbf_prg --> gravarnocofre() <unresolved function>
+    adordd_prg --> gravarnocofre() <unresolved function>
+    mdb2dbf_prg --> gravarnocofre() <unresolved function>
+    mdb2dbf_prg --> gravarnocofre() <unresolved function>
+    mdb2dbf_prg --> gravarnocofre() <unresolved function>
     mdb2dbf_prg --> hb_adosettable( in adordd.prg
     mdb2dbf_prg --> hb_adosetuser() in adordd.prg
     dbulib_prg --> hb_alert()      in harbour.lib
     dbu_prg --> hb_aparams()    in harbour.lib
     dbumy_prg --> hb_ascan()      in harbour.lib
-    dbumy_prg --> hb_atokens()    in harbour.lib
     dbuutil_prg --> hb_bsubstr()    in harbour.lib
     dbu_prg --> hb_ctod()       in harbour.lib
     dbu_prg --> hb_ctot()       in harbour.lib
@@ -857,10 +929,11 @@ graph TD
     adordd_prg --> hb_default()    in harbour.lib
     dbuadox_prg --> hb_dispbox()    in harbour.lib
     dbu_prg --> hb_dtoc()       in harbour.lib
-    dbuleto_prg --> hb_eol()        in harbour.lib
+    adordd_prg --> hb_eol()        in harbour.lib
     adordd_prg --> hb_fileexists() in harbour.lib
+    mdb2dbf_prg --> hb_fnameext()   in harbour.lib
     adordd_prg --> hb_fnamesplit() in harbour.lib
-    dbuutil_prg --> hb_fopen()      in hbcommon.lib
+    dbuutil_prg --> hb_fopen()      <unresolved function>
     dbu_prg --> hb_gtinfo()     in harbour.lib
     dbuleto_prg --> hb_gzcompress() in harbour.lib
     dbu_prg --> hb_hour()       in harbour.lib
@@ -888,7 +961,8 @@ graph TD
     dbu_prg --> hb_ttoc()       in harbour.lib
     dbu_prg --> hb_tton()       in harbour.lib
     dbu_prg --> hb_ttos()       in harbour.lib
-    dbu_prg --> hb_version()    in harbour.lib
+    adordd_prg --> hb_valtostr()   in harbour.lib
+    dbu_prg --> hb_version()    <unresolved function>
     dbuleto_prg --> hb_zuncompress( in harbour.lib
     dbuutil_prg --> help()          in dbu.prg
     dbu_prg --> hi_cur()        in dbuutil.prg
@@ -897,24 +971,25 @@ graph TD
     dbuutil_prg --> itemlist()      in dbuutil.prg
     dbustru_prg --> key_ready()     in dbuutil.prg
     dbu_prg --> layout()        in dbulib.prg
+    mdb2dbf_prg --> lerdocofre()    <unresolved function>
     dbu_prg --> letomenu()      in dbuleto.prg
-    dbuleto_prg --> leto_connect()  <unresolved function>
-    dbuleto_prg --> leto_connect()  <unresolved function>
+    dbuleto_prg --> leto_connect()  in letodb.lib
+    dbuleto_prg --> leto_connect()  in letodb.lib
     dbuleto_prg --> leto_dbftosrv() in dbuleto.prg
     dbuleto_prg --> leto_deldbf()   in dbuleto.prg
-    dbuleto_prg --> leto_directory( <unresolved function>
-    dbuleto_prg --> leto_directory( <unresolved function>
+    dbuleto_prg --> leto_directory( in letodb.lib
+    dbuleto_prg --> leto_directory( in letodb.lib
     dbuleto_prg --> leto_errocon()  in dbuleto.prg
     dbuleto_prg --> leto_expformat( in dbuleto.prg
     dbuleto_prg --> leto_expformat( in dbuleto.prg
     dbuleto_prg --> leto_expformat( in dbuleto.prg
-    dbuleto_prg --> leto_ferase()   <unresolved function>
+    dbuleto_prg --> leto_ferase()   in letodb.lib
     dbuleto_prg --> leto_info()     in dbuleto.prg
-    dbuleto_prg --> leto_mgid()     <unresolved function>
-    dbuleto_prg --> leto_mglog()    <unresolved function>
+    dbuleto_prg --> leto_mgid()     in letodb.lib
+    dbuleto_prg --> leto_mglog()    in letodb.lib
     dbuleto_prg --> leto_srvtodbf() in dbuleto.prg
     dbuleto_prg --> leto_tables()   in dbuleto.prg
-    dbuleto_prg --> leto_udf()      <unresolved function>
+    dbuleto_prg --> leto_udf()      in letodb.lib
     dbu_prg --> limparegdupdbf( in dbusincdbf.prg
     dbuview_prg --> list_array()    in dbuview.prg
     dbuutil_prg --> lite_fkey()     in dbuutil.prg
@@ -933,6 +1008,7 @@ graph TD
     dbuadox_prg --> mdbtabela()     in mdb2dbf.prg
     dbuadox_prg --> mdbtables()     in mdb2dbf.prg
     dbu_prg --> mdg()           <unresolved function>
+    dbu_prg --> mdltodos()      in mdb2dbf.prg
     dbuadox_prg --> mdpchavei()     in sql2dbf.prg
     dbu_prg --> mds()           <unresolved function>
     dbuadox_prg --> mdt()           in dbulib.prg
@@ -1041,7 +1117,10 @@ graph TD
     dbuedit_prg --> ob_stabilize()  <unresolved function>
     dbuedit_prg --> ob_up()         <unresolved function>
     adordd_prg --> ob_up()         <unresolved function>
+    adordd_prg --> ob_up()         <unresolved function>
     mdb2dbf_prg --> oconn_close()   <unresolved function>
+    adordd_prg --> oconn_close()   <unresolved function>
+    adordd_prg --> oconn_close()   <unresolved function>
     adordd_prg --> oconn_close()   <unresolved function>
     adordd_prg --> oconn_close()   <unresolved function>
     adordd_prg --> oconn_close()   <unresolved function>
@@ -1052,66 +1131,75 @@ graph TD
     dbuodbc_prg --> odbcexpdbf()    in dbuodbc.prg
     dbuodbc_prg --> odbcimpdbf()    in dbuodbc.prg
     dbulib_prg --> odbcmenu()      in dbuodbc.prg
-    adordd_prg --> odbcmenu()      in dbuodbc.prg
+    adordd_prg --> oexcel_save()   <unresolved function>
     dbuadox_prg --> opcao()         <unresolved function>
     mdb2dbf_prg --> opencmdbarq()   in mdb2dbf.prg
     dbuadox_prg --> opentipoarq()   in mdb2dbf.prg
     dbustru_prg --> open_dbf()      in dbuview.prg
+    sql2dbf_prg --> open_dbf()      in dbuview.prg
+    dbumy_prg --> open_dbf()      in dbuview.prg
     dbumy_prg --> oquery2_eof()   <unresolved function>
     dbumy_prg --> oquery2_fcount( <unresolved function>
     dbumy_prg --> oquery2_getrow( <unresolved function>
     dbumy_prg --> oquery2_getrow( <unresolved function>
     dbumy_prg --> oquery2_skip()  <unresolved function>
-    dbumy_prg --> oquery_destroy( <unresolved function>
-    dbumy_prg --> oquery_eof()    <unresolved function>
+    dbufire_prg --> oquery_destroy( <unresolved function>
+    dbufire_prg --> oquery_eof()    <unresolved function>
     mysqlrdd_prg --> oquery_eof()    <unresolved function>
     pgrdd_prg --> oquery_fcount() <unresolved function>
     mysqlrdd_prg --> oquery_fcount() <unresolved function>
+    dbufire_prg --> oquery_fcount() <unresolved function>
     mysqlrdd_prg --> oquery_fcount() <unresolved function>
     mysqlrdd_prg --> oquery_fcount() <unresolved function>
     mysqlrdd_prg --> oquery_fcount() <unresolved function>
     dbumy_prg --> oquery_getrow() <unresolved function>
+    dbufire_prg --> oquery_getrow() <unresolved function>
+    dbufire_prg --> oquery_gotop()  <unresolved function>
+    dbufire_prg --> oquery_lastrec( <unresolved function>
     mysqlrdd_prg --> oquery_neterr() <unresolved function>
-    dbumy_prg --> oquery_skip()   <unresolved function>
-    dbumy_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
-    adordd_prg --> oquery_skip()   <unresolved function>
+    dbufire_prg --> oquery_skip()   <unresolved function>
+    dbumy_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
+    adordd_prg --> ordcount()      in harbour.lib
     dbumy_prg --> orow_fieldget() <unresolved function>
     mdb2dbf_prg --> ors_close()     <unresolved function>
     mdb2dbf_prg --> ors_fields()    <unresolved function>
     mdb2dbf_prg --> ors_movenext()  <unresolved function>
     mdb2dbf_prg --> ors_open()      <unresolved function>
     pgrdd_prg --> oserver_close() <unresolved function>
-    dbumy_prg --> oserver_close() <unresolved function>
-    dbumy_prg --> oserver_close() <unresolved function>
-    dbumy_prg --> oserver_close() <unresolved function>
-    dbumy_prg --> oserver_close() <unresolved function>
-    dbumy_prg --> oserver_close() <unresolved function>
+    dbufire_prg --> oserver_commit( <unresolved function>
+    dbumy_prg --> oserver_commit( <unresolved function>
+    dbumy_prg --> oserver_commit( <unresolved function>
+    dbumy_prg --> oserver_commit( <unresolved function>
+    dbumy_prg --> oserver_commit( <unresolved function>
+    dbufire_prg --> oserver_commit( <unresolved function>
+    dbufire_prg --> oserver_error() <unresolved function>
+    dbumy_prg --> oserver_error() <unresolved function>
+    dbufire_prg --> oserver_error() <unresolved function>
+    dbufire_prg --> oserver_error() <unresolved function>
     dbumy_prg --> oserver_error() <unresolved function>
     dbumy_prg --> oserver_error() <unresolved function>
-    dbupg_prg --> oserver_error() <unresolved function>
-    dbumy_prg --> oserver_error() <unresolved function>
-    dbumy_prg --> oserver_error() <unresolved function>
-    dbumy_prg --> oserver_neterr( <unresolved function>
+    dbufire_prg --> oserver_neterr( <unresolved function>
+    dbufire_prg --> oserver_query() <unresolved function>
     dbumy_prg --> oserver_query() <unresolved function>
-    dbumy_prg --> oserver_query() <unresolved function>
+    dbufire_prg --> oserver_query() <unresolved function>
+    dbufire_prg --> oserver_query() <unresolved function>
     dbumy_prg --> otable_append() <unresolved function>
     dbumy_prg --> otable_destroy( <unresolved function>
     dbumy_prg --> otable_error()  <unresolved function>
     dbupg_prg --> otable_error()  <unresolved function>
     dbumy_prg --> otable_error()  <unresolved function>
     dbumy_prg --> otable_neterr() <unresolved function>
-    dbuxls_prg --> otb_getcolumn() <unresolved function>
     mdb2dbf_prg --> oxcatalog_eof() <unresolved function>
     mdb2dbf_prg --> oxcatalog_eof() <unresolved function>
     mdb2dbf_prg --> oxcatalog_eof() <unresolved function>
@@ -1179,7 +1267,10 @@ graph TD
     sql2dbf_prg --> sortdbf()       in dbusincdbf.prg
     sql2dbf_prg --> sortdbf()       in dbusincdbf.prg
     sql2dbf_prg --> sortdbf()       in dbusincdbf.prg
+    sql2dbf_prg --> sortdbf()       in dbusincdbf.prg
+    sql2dbf_prg --> sortdbf()       in dbusincdbf.prg
     sql2dbf_prg --> sqlite3_errmsg( in hbsqlit3.lib
+    sql2dbf_prg --> sqlite3_exec()  in hbsqlit3.lib
     sql2dbf_prg --> sqlite3_exec()  in hbsqlit3.lib
     sql2dbf_prg --> sqlite3_exec()  in hbsqlit3.lib
     sql2dbf_prg --> sqlite3_exec()  in hbsqlit3.lib
@@ -1187,13 +1278,15 @@ graph TD
     sql2dbf_prg --> sqlite3_open()  in hbsqlit3.lib
     sql2dbf_prg --> sqlite3_open()  in hbsqlit3.lib
     sql2dbf_prg --> sqlite3_reset() in hbsqlit3.lib
-    dbuadox_prg --> sqlite3_reset() in hbsqlit3.lib
+    sql2dbf_prg --> sqlite3_step()  in hbsqlit3.lib
+    dbuadox_prg --> sqlite3_step()  in hbsqlit3.lib
     dbulib_prg --> sqlitemenu()    in sql2dbf.prg
     sql2dbf_prg --> sqlitepack()    in sql2dbf.prg
     sql2dbf_prg --> sqlitetables()  in sql2dbf.prg
     sql2dbf_prg --> sqlitetables()  in sql2dbf.prg
     sql2dbf_prg --> sqltablestru()  in sql2dbf.prg
     dbumix_prg --> sqltodbfstru()  in mdb2dbf.prg
+    dbu_prg --> sqltodos()      in mdb2dbf.prg
     adordd_prg --> sqltranslate()  in adordd.prg
     dbuedit_prg --> statline()      in dbuedit.prg
     dbu_prg --> stat_msg()      in dbuutil.prg
@@ -1204,6 +1297,7 @@ graph TD
     dbustru_prg --> stru_row()      in dbustru.prg
     dbudoc_prg --> strval()        <unresolved function>
     dbuedit_prg --> sysmenu()       in dbuutil.prg
+    dbufire_prg --> tfbserver()     in hbfbird.lib
     dbudoc_prg --> tipoc()         in dbudoc.prg
     mdb2dbf_prg --> tipodado2()     in mdb2dbf.prg
     dbu_prg --> tipodbfesc()    in dbulib.prg
@@ -1218,6 +1312,7 @@ graph TD
     dbucopy_prg --> to_ok()         in dbuutil.prg
     dbupg_prg --> tpqserver()     in hbpgsql.lib
     dbulib_prg --> trocaext()      <unresolved function>
+    dbufire_prg --> trocasenhaarq() in mdb2dbf.prg
     adoxb_prg --> typedat()       in adoxb.prg
     adordd_prg --> typedat()       in adoxb.prg
     adordd_prg --> ur_super_close( in hbusrrdd.lib
@@ -1248,14 +1343,11 @@ graph TD
     dbu_prg --> xgratxt()       <unresolved function>
     dbucopy_prg --> xkey_clear()    in dbuutil.prg
     dbucopy_prg --> xkey_norm()     in dbuutil.prg
-    dbudoc_prg --> xlsclose()      in dbuxls.prg
-    dbudoc_prg --> xlsopen()       in dbuxls.prg
-    dbudoc_prg --> xlswrite()      in dbuxls.prg
     dbu_prg --> xposdir()       <unresolved function>
     dbu_prg --> xposesq()       <unresolved function>
     dbu_prg --> xtirace()       <unresolved function>
     dbu_prg --> zei_fort()      <unresolved function>
-    dbustru_prg --> zei_fort()      <unresolved function>
+    dbustru_prg --> __copyfile()    <unresolved function>
     dbu_prg --> __setcentury()  <unresolved function>
     dbu_prg --> __xrestscreen() <unresolved function>
 ```

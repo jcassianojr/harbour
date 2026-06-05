@@ -1,12 +1,11 @@
 # 📘 Documentacao Tecnica do Projeto
-> Gerado em: 05/12/26 19:03:55
+> Gerado em: 06/05/26 17:17:13
 
 ## 🏗️ Estrutura de Modulos (PRGs)
 
 ### 📄 Arquivo: `cepruaimp.prg`
-- Function main()
+- Function Main()
 - Function tratacidade()
-- Function idbairro()
 - Function vertxt()
 
 ### 📄 Arquivo: `cepwebvia.prg`
@@ -28,7 +27,7 @@
 - Function OpenCepjason()
 
 ### 📄 Arquivo: `convcep.prg`
-- Function main()
+- Function Main()
 - Function JasonCountry()
 - Function pegnodojason()
 - Function help()
@@ -37,34 +36,34 @@
 ## 📊 Dicionario de Dados e Acessos
 
 **Fonte:** `cepruaimp.prg`
-> Tables: use cepruaerr new exclusive
-> use cepruaimp new exclusive
-> dbusearea(.T.,"DBFCDX",cARQUIVO,,.T.)
-> dbusearea(.T.,"DBFCDX",cARQRUA,,.T.)
-> dbusearea(.T.,"DBFCDX",cARQGEO,,.T.)
-> Indexes: index on UF+CIDADE+CEP tag ufcidade
-> index on RUA tag &cARQRUA.1
-> index on CEP tag &cARQRUA.2
-> index on CEP tag &cARQGEO.1
+> Tables: USE cepruaerr NEW EXCLUSIVE
+> USE cepruaimp NEW EXCLUSIVE
+> dbUseArea(.T.,"DBFCDX",cARQUIVO,,.T.)
+> dbUseArea(.T.,"DBFCDX",cARQRUA,,.T.)
+> dbUseArea(.T.,"DBFCDX",cARQGEO,,.T.)
+> Indexes: INDEX ON UF+CIDADE+CEP TAG ufcidade
+> INDEX ON RUA TAG &cARQRUA.1
+> INDEX ON CEP TAG &cARQRUA.2
+> INDEX ON CEP TAG &cARQGEO.1
 
 **Fonte:** `cepwebvia.prg`
-> Tables: use cepruaimp new exclusive
-> dbusearea(.T.,"DBFCDX",cFILECEP,,.F.)
-> Indexes: index on CEP tag cep
+> Tables: USE cepruaimp NEW EXCLUSIVE
+> dbUseArea(.T.,"DBFCDX",cFILECEP,,.F.)
+> Indexes: INDEX ON CEP TAG cep
 
 **Fonte:** `convcep.prg`
-> Tables: use md10imp new exclusive
-> use ce_f new exclusive
-> use md10imp new shared
-> Indexes: index on RUA tag &cFILECEP.1 EVAL ZEI_FORT(nLASTREC,,,1)
-> index on CEP tag &cFILECEP.2 EVAL ZEI_FORT(nLASTREC,,,1)
-> index on RUA tag &cARQRUA.1 EVAL ZEI_FORT(nLASTREC,,,1)
-> index on CEP tag &cARQRUA.2 EVAL ZEI_FORT(nLASTREC,,,1)
+> Tables: USE md10imp NEW EXCLUSIVE
+> USE ce_f NEW EXCLUSIVE
+> USE md10imp NEW SHARED
+> Indexes: INDEX ON RUA TAG &cFILECEP.1 EVAL ZEI_FORT(nLASTREC,,,1)
+> INDEX ON CEP TAG &cFILECEP.2 EVAL ZEI_FORT(nLASTREC,,,1)
+> INDEX ON RUA TAG &cARQRUA.1 EVAL ZEI_FORT(nLASTREC,,,1)
+> INDEX ON CEP TAG &cARQRUA.2 EVAL ZEI_FORT(nLASTREC,,,1)
 
 ## 🕸️ Diagrama de Relacionamento (Mermaid)
 ```mermaid
 graph TD
-    convcep_prg --> flinecount()    in xhb.lib
+    convcep_prg --> flinecount()    <unresolved function>
     convcep_prg --> hb_langselect() in harbour.lib
     convcep_prg --> jasoncountry()  in convcep.prg
     convcep_prg --> mdg()           <unresolved function>
