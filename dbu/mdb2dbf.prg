@@ -167,7 +167,7 @@ IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    cUSERX := PADR("postgres",30," ") 
    cPORTAX:= PADR("5432",30," ")
 ENDIF
-IF cTIPOSQL = "FIREBIRD"
+IF cTIPOSQL = "FIREBIRD"  .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" 
    cSERVERX := PADR("localhost", 30, " ")   //net://
    cUSERX := PADR("SYSDBA",30," ")  //masterkey
    cPORTAX:= PADR("3050",30," ")
@@ -194,7 +194,7 @@ IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    loledb := hb_Version(HB_VERSION_BITWIDTH) <> 64  //odbc 8.0(32b) odbc 9.0(64b)")
 ENDIF
 // No bloco de ajustes de drivers (linha ~200)
-IF cTIPOSQL == "FIREBIRD"
+IF cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    loledb := hb_Version(HB_VERSION_BITWIDTH) <> 64 // .T. se 32-bit, .F. se 64-bit
 ENDIf
 
@@ -586,7 +586,7 @@ CASE lACCDB
    hb_adoSetTable(cTABELA) 
    hb_adoSetEngine("ACEOLEDB") 
    dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
-CASE  cTIPOSQL = "FIREBIRD"
+CASE  cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    hb_adoSetTable(cTABELA) 
    hb_adoSetEngine("FIREBIRD") 
    hb_adoSetUser(CUSERX) 
@@ -678,7 +678,7 @@ CASE cTIPOSQL = "SQLITE"
     {{'SQLite','*.sqlite'},{'SQLite db','*.DB'},;
     {'SQLite3','*.sqlite3'},{'SQLite db3','*.DB3'},;
     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
-CASE cTIPOSQL = "FIREBIRD"
+CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
     {{'Firebird','*.gdb'},{'Firebird fdb','*.fDB'},;
      {'All Files','*.*'}},1)    
@@ -710,7 +710,7 @@ IF lMDB .OR. lACCDB
    //EXECUTACMD(cARQORI,"GRANT SELECT ON VIEW showtableS TO ADMIN,PUBLIC")
 ENDIF
 
-IF cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL == "FIRBIRD"
+IF cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    // Código necessário para disparar a criação do ficheiro .fdb em branco
    // Exemplo utilizando ADOX se suportado pelo driver:
    TRY
@@ -782,7 +782,7 @@ ENDCASE
 // ExecuÃ§Ã£o dos comandos
 IF !Empty( cSqlFields )
    // No caso do Access, usamos TRY/CATCH pois ele nÃ£o tem 'IF NOT EXISTS'
-   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. cTIPOSQL == "FIREBIRD"
+   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
       TRY
          executacmd(cMDBARQ, cSqlFields)
          executacmd(cMDBARQ, cSqlIndexes)
@@ -876,7 +876,7 @@ CASE lACCDB   // cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
 CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
    msql := SqliteCreateTable(cNOMETABELA,aSTRU,"MSSQL")
    executacmd(cMDBARQ,msql)
-CASE cTIPOSQL == "FIREBIRD"
+CASE cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    msql := SqliteCreateTable(cNOMETABELA, aSTRU, "FIREBIRD") // Certifique-se que sua SqliteCreateTable suporte este parâmetro
    executacmd(cMDBARQ, msql)   
 OTHERWISE
@@ -961,7 +961,7 @@ CASE cTIPOSQL = "SQLITE"
     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
    cDATABASEX := cMDBARQ
    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
-CASE cTIPOSQL = "FIREBIRD"
+CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    cMDBARQ := win_GetopenFileName(,"Firebase Files",HB_CWD(),"Firebase",;
     {{'Firebird','*.gdb'},{'Firebird fdb','*.fDB'},;
      {'All Files','*.*'}},1)      
@@ -1166,7 +1166,7 @@ IF cTIPOINFO = "TABELA"
       else
          cCOMANDO :="select TABLE_NAME from all_tables where owner = '" + cOwnerx + "' order by TABLE_NAME"
       endif
-    CASE cTIPOSQL = "FIREBIRD" 
+    CASE cTIPOSQL = "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" 
       if empty(cOwnerx)
          cCOMANDO := "Select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 order by RDB$RELATION_NAME"  
       else
@@ -1217,7 +1217,7 @@ IF cTIPOINFO = "__VERSION__"
       cCOMANDO := "SELECT @@VERSION"
    CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
       cCOMANDO := "SELECT Version() AS 'VER'"
-   CASE cTIPOSQL = "FIREBIRD"
+   CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
       cCOMANDO := "SELECT RDB$GET_CONTEXT('SYSTEM', 'ENGINE_VERSION') AS 'VER' FROM RDB$DATABASE"
    CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
       cCOMANDO := "SELECT sqlite_version() AS 'VER'"
@@ -1965,10 +1965,8 @@ CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "SQL"
    endif
 CASE cTIPOSQL = "DBASE"
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=dBASE IV;"
-CASE cTIPOSQL = "FIREBIRD"  // ADOGDB
+CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" 
    cCONN := "DRIVER=Firebird ODBC driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
-   //cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
-
 CASE cTIPOSQL = "PARADOX"   // ADOPX
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Paradox 5.x;"
 CASE cTIPOSQL == "XMLDB"  // ADOXML
