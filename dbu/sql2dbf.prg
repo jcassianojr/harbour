@@ -1142,6 +1142,14 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
           mSql += "TIMESTAMP"
        CASE mFldType = "@" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .or. cTIPOSQL = "SQLITE")   
           mSql += "DATETIME"
+      CASE mFldType = "@" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+            mSql += "DATETIME"
+      CASE mFldType = "@" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "TIMESTAMP"
+     CASE mFldType = "@" .AND. ( llMDB .OR. llACCDB  )
+         mSql += "DATETIME"
+       CASE mFldType = "@" .AND. ( cTIPOSQL = "FIREBIRD" )   
+          mSql += "TIMESTAMP"
          
          //
          // T - TIME  HB_FT_TIME            8 
@@ -1386,6 +1394,12 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
      CASE mFldType = "+" .AND. ( cTIPOSQL = "SQLITE")      
            MSql += "integer primary key AUTOINCREMENT"
            
+     CASE mFldType = "+" .AND. ( llMDB .OR. llACCDB )
+         mSql += "???"
+           
+     CASE mFldType = "+" .AND. ( cTIPOSQL = "FIREBIRD")      
+           MSql += "???"
+           
            //
            //tipo P picuture do ads adt
            //
@@ -1397,8 +1411,31 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
       CASE mFldType = "P" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
          mSql += "VARBINARY(" + hb_ntos( mFldLen ) + ")"
       CASE mFldType = "P" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
-         mSql += "BYTEA"  
+         mSql += "BYTEA" 
+      CASE mFldType = "P" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )   
+           MSql += "BLOB"
+     CASE mFldType = "P" .AND. ( llMDB .OR. llACCDB )
+         mSql += "???"
+     CASE mFldType = "P" .AND. ( cTIPOSQL = "FIREBIRD")      
+           MSql += "FOTO BLOB SUB_TYPE 0 SEGMENT SIZE 80"
          
+  
+     
+           //
+           //tipo Z rowversion do ads adt
+           //
+       CASE mFldType = "Z" .AND. ( cTIPOSQL = "SQLITE"  )
+         mSql += "???"
+      CASE mFldType = "P" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
+         mSql += "???"
+      CASE mFldType = "Z" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )   
+           MSql += "BIGINT"
+       CASE mFldType = "Z" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "???"    
+       CASE mFldType = "Z" .AND. ( llMDB .OR. llACCDB )
+         mSql += "???"  
+       CASE mFldType = "Z" .AND.  ( cTIPOSQL = "FIREBIRD")
+         mSql += "???"  
    
          //HB_FT_CURDOUBLE       14     "Z"
          //                
