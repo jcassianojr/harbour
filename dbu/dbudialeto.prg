@@ -1412,13 +1412,28 @@ CASE cType == "ROWVERSION" // O tipo rowversion do SQL Server
    nFieldDec    := 0   
 
 otherwise
-   //mantem  os dados enviados
 
 endcase
-//Inclusao rotina pegar max quando campo tamanho for zero
-
 aRETU := {cFieldName,cFieldType,nFieldLength,nFieldDec}
 return aRETU
+
+/*
+tipo ADS,Código/ID,Descrição,Equivalente DBF
+VARCHAR,V,String Variável,C
+CHAR,C,String Fixa,C
+MONEY,Y,Monetário (Exato),N
+DOUBLE,O,Ponto Flutuante,N
+INTEGER,I,Inteiro 32-bit,N
+SHORTINT,S,Inteiro 16-bit,N
+AUTOINC,+,Auto-incremento,N
+LOGICAL,L,Booleano,L
+DATE,D,Data,D
+TIMESTAMP,@,Data e Hora,C (ou @)
+MEMO,M,Texto Longo,M
+BLOB,W,Binário/Objetos,M / W
+MODIFIED,X,Timestamp Auto,N/A
+RAW,R,Binário Fixo,N/A
+*/
 
 FUNCTION GERACAMPOADT(cFieldName, cSqlType, nFieldLength, nFieldDec)
    LOCAL aRetu := {cFieldName, "C", 10, 0}
