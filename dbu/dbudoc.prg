@@ -176,6 +176,9 @@ FUNCTION multidocs
 
    IF ValType( cMASK ) # "C"
       cMASK := "*.DBF"
+       if TIPODBF=6 //USOVIA="ADSADT"
+         cMASK := "*.ADT"
+      ENDIF
    ENDIF
 
    IF tDOC = 0
@@ -247,6 +250,9 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK )
 
    IF ValType( cMASK ) # "C"
       cMASK := "*.DBF"
+      if TIPODBF=6 //USOVIA="ADSADT"
+         cMASK := "*.ADT"
+      ENDIF
    ENDIF
 
    IF At( "\", cMASK ) > 0  // o mascara tem caminho
@@ -988,6 +994,9 @@ FUNCTION DBETODBF( cMASK, lLAY, lCRIA )
 
    IF ValType( cMASK ) # "C"
       cMASK := "*.DBF"
+      if TIPODBF=6 //USOVIA="ADSADT" 
+         cMASK := "*.ADT"
+      ENDIF
    ENDIF
    IF ValType( lLAY ) # "L"
       lLAY := .T.

@@ -1,10 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : dbucnvmemo.prg
-*+
-*+
 *+
 *+     Sistema:
 *+
@@ -14,13 +10,8 @@
 *+
 *+     Copyright (c) 2024,  jcassiano
 *+
-*+     
-*+
-*+
 *+
 *+    Documentado em 28-Dez-2024 as 10:06 am
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
@@ -33,15 +24,9 @@
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function convertmemo()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 function convertmemo()
 
@@ -148,13 +133,14 @@ nORITIPO   := tipodbfesc()
 cORIDRIVER := RDDNOME(nORITIPO)
 cORIEXT    := hb_rddInfo(RDDI_TABLEEXT)   //a extensao do rdiinfo memo do destino vem com ponto
 cORIMEMO   := hb_rddInfo(RDDI_MEMOEXT)  //a extensao do origem memo do destino vem com ponto
+cORIEXTINDEX := hb_rddInfo(RDDI_ORDBAGEXT)
 
 alertx("escolha destino")
 nDESTIPO   := tipodbfesc()
 cDESDRIVER := RDDNOME(nDESTIPO)
 cDESEXT    := hb_rddInfo(RDDI_TABLEEXT)   //a extensao do rdiinfo memo do destino vem com ponto
 cDESMEMO   := hb_rddInfo(RDDI_MEMOEXT)  //a extensao do rdiinfo memo do destino vem com ponto
-
+cDESEXTINDEX := hb_rddInfo(RDDI_ORDBAGEXT)
 
 cBUSCA  := "*"+cORIEXT  //a extensao do rdiinfo memo do destino vem com ponto
 aARQDBF := directory(cBUSCA)
@@ -174,14 +160,16 @@ FOR XY := 1 TO LEN(aARQDBF)
    cARQNOME := tiraext(cARQNOME)
    cARQORI  := cARQNOME+cORIEXT
    cARQMEMO := cARQNOME+cORIMEMO
-
+   cARQINDEX:=cARQNOME+cORIEXTINDEX
 
    MDT("Fazendo copia de reserva: "+"old_"+cARQORI)
    filecopy(cARQORI,"old_"+cARQORI)
    filecopy(cARQMEMO,"old_"+cARQMEMO)
+   filecopy(cARQINDEX,"old_"+cARQINDEx)
 
    cOLDDBF := "old_"+cARQNOME
    cNEWDBF := "new_"+cARQNOME
+   
 
    MDT("abrindo arquivo antigo: "+cOLDDBF)
   // USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA (cORIDRIVER) //	via driver antigo utiliza aliasantigo mas o driver defaiult e o destino

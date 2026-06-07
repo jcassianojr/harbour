@@ -1355,9 +1355,14 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
       CASE mFldType = "W" .AND. ( cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
          mSql += "BLOB "
       CASE mFldType = "W" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
-         Sql += "IMAGE"
+         mSql += "IMAGE"
       CASE mFldType = "W" .AND. ( cTIPOSQL = "FIREBIRD" )
          mSql += "BLOB SUB_TYPE 0"
+      CASE mFldType = "W" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "BYTEA"     
+      CASE mFldType = "W" .AND. ( llMDB .OR. llACCDB )
+         mSql += "???"
+     
          
          //
          // HB_FT_ROWVER          11     "^"
@@ -1381,9 +1386,20 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
      CASE mFldType = "+" .AND. ( cTIPOSQL = "SQLITE")      
            MSql += "integer primary key AUTOINCREMENT"
            
+           //
+           //tipo P picuture do ads adt
+           //
            
            
-          //
+           
+       CASE mFldType = "P" .AND. ( cTIPOSQL = "SQLITE"  )
+         mSql += "BLOB "
+      CASE mFldType = "P" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
+         mSql += "VARBINARY(" + hb_ntos( mFldLen ) + ")"
+      CASE mFldType = "P" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "BYTEA"  
+         
+   
          //HB_FT_CURDOUBLE       14     "Z"
          //                
 
@@ -1396,7 +1412,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
          // define HB_FT_NONE            0
          //
       OTHERWISE
-         alertx( "Invalid Field Type: " + mFldType )
+         alertx( "Invalid Field Type: " + mFldType + " "+ cTIPOSQL )
          RETURN ""
       ENDCASE
    NEXT
