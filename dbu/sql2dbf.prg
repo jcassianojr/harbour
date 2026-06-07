@@ -1436,6 +1436,9 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
          mSql += "???"  
        CASE mFldType = "Z" .AND.  ( cTIPOSQL = "FIREBIRD")
          mSql += "???"  
+     CASE mFldType = "Z" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
+         mSql += "???"
+    
    
          //HB_FT_CURDOUBLE       14     "Z"
          //                
