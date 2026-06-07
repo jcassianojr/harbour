@@ -738,5 +738,760 @@ FUNCTION FormataBlocoSql( cTextoBruto )
    NEXT
 
 RETURN cTextoFormatado
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function SqliteCreateTable()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
+
+   LOCAL mSQL
+   LOCAL i
+   LOCAL llMDB
+   LOCAL llACCDB
+
+   IF ValType( cTIPOSQL ) <> "C"
+      cTIPOSQL := "SQLITE"
+   ENDIF
+   
+   
+   IF VALTYPE(cTablename)<>"C"
+      cTablename:=ALIAS()
+   ENDIF
+   IF VALTYPE(aStruct)<>"A"
+     aStruct:=DBSTRUCT()
+   ENDIF
+   
+    IF VALTYPE(lINDEX)<>"L"
+      lINDEX:=.F.
+   ENDIF
+  
+    IF VALTYPE(lPK)<>"L"
+      lPK:=.F.
+   ENDIF 
+   
+   llMDB:=.F.
+   llACCDB:=.F.
+   
+    IF cTIPOSQL = "MDB" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS64"
+       llMDB := .T.
+    ENDIF
+    IF cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64"
+       llACCDB := .T.
+    ENDIF
+
+   
+
+   msql := ""
+   IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"  // postgree e case sensitive deixando em maisuclav
+      cTABLENAME := Upper( cTABLENAME )
+   ENDIF
+   IF llMDB .OR. llACCDB
+      mSql := "CREATE TABLE " + cTablename + " ("
+   ELSE
+      mSql := "CREATE TABLE IF NOT EXISTS " + cTablename + " ("
+   ENDIF
+
+   FOR i := 1 TO Len( aStruct )
+      mFldNm   := aStruct[ i, DBS_NAME ]
+      mFldType := aStruct[ i, DBS_TYPE ]
+      mFldLen  := aStruct[ i, DBS_LEN ]
+      mFldDec  := aStruct[ i, DBS_DEC ]
+
+      IF i > 1
+         mSql += ", "
+      ENDIF
+      IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"   // postgreSQL e case sensitive deixando em maisuclas
+         mFldnm := Upper( mFldnm )
+      ENDIF
+      mSql += AllTrim( mFldnm ) + " "
+
+      DO CASE
+         //
+         // C  == Caracter  HB_FT_STRING          1 
+         //
+      CASE mFldType = "C" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
+         mSql += "VARCHAR2 (" + LTrim( Str( mFldLen ) ) + ")"
+      CASE mFldType = "C" .AND. ( llMDB .OR. llACCDB ;
+                                 .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"
+      CASE mFldType = "C" .AND. cTIPOSQL = "SQLITE"
+         mSql += "TEXT "
+      CASE mFldType = "C" .AND. cTIPOSQL = "FIREBIRD"
+         mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"   
+      CASE mFldType = "C"
+         mSql += "CHAR(" + LTrim( Str( mFldLen ) ) + ")"
+         //
+         //
+         // V = Varchar and Varchar (Binary) hB_FT_ANY             17  
+         //
+         //
+      CASE mFldType = "V" .AND. ( cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         IF mFldDec > 0
+            mSql += "TEXT(" + hb_ntos( mFldDec ) + ")"
+         ELSE
+            mSql += "TEXT "
+         ENDIF
+      CASE mFldType = "V" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "VARCHAR(" + hb_ntos( mFldDec ) + ")"
+      
+         
+         
+
+         //
+         // D = date     HB_FT_DATE            3 
+         //
+      CASE mFldType = "D" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "TIMESTAMP"
+
+      CASE mFldType = "D" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "DATETIME"
+      CASE mFldType = "D"
+         mSql += "DATE"
+  
+      //
+         /// @= datetime  HB_FT_TIMESTAMP       9 
+         //    
+      
+       CASE mFldType = "@" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI")   
+          mSql += "TIMESTAMP"
+       CASE mFldType = "@" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .or. cTIPOSQL = "SQLITE")   
+          mSql += "DATETIME"
+      CASE mFldType = "@" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+            mSql += "DATETIME"
+      CASE mFldType = "@" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "TIMESTAMP"
+     CASE mFldType = "@" .AND. ( llMDB .OR. llACCDB  )
+         mSql += "DATETIME"
+       CASE mFldType = "@" .AND. ( cTIPOSQL = "FIREBIRD" )   
+          mSql += "TIMESTAMP"
+         
+         //
+         // T - TIME  HB_FT_TIME            8 
+         //
+      CASE mFldType = "T" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "FIREBIRD" ;
+                                 .OR. cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"  )
+         mSql += "TIMESTAMP"
+      CASE mFldType = "T"
+         mSql += "DATETIME"
+
+
+      //
+         //HB_FT_MODTIME         10     "="
+         //
+         //
+
+         //
+         // N = NUMERIC   HB_FT_LONG            4  
+         // Inteiro
+         // numerico ->INTEGER LONG BIGINT
+         //
+         // com decimais
+         // Numerico ->FLOAT DOUBLE NUMERIC
+         //
+      CASE mFldType = "N" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
+         IF mFldDec > 0
+            mSql += "NUMBER(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")  DEFAULT 0"
+         ELSE
+            mSql += "NUMBER(" + hb_ntos( mFldLen ) + ")  DEFAULT 0"
+         ENDIF
+
+      CASE mFldType = "N" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         IF mFldDec > 0
+            mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+         ELSE
+            IF mFldLen <= 9
+               DO CASE
+               CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
+                  mSQL += "INTEGER"
+               OTHERWISE
+                  mSql += "INT"  // INTEGER("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+               ENDCASE
+            ELSE
+               DO CASE
+               OTHERWISE
+                  mSql += "BIGINT"   // "bigint("+hb_ntos(mFldLen)+")" verificar se aceita int(size) ou usar numeric(size,0)
+               ENDCASE
+            ENDIF
+         ENDIF
+
+     CASE mFldType = "N" .AND. cTIPOSQL = "FIREBIRD"
+         IF mFldDec > 0
+            mSql += "DECIMAL(" + LTrim( Str( mFldLen ) ) + "," + LTrim( Str( mFldDec ) ) + ")"
+         ELSE
+            // Adequação crucial para o Firebird não rejeitar o DDL
+            IF mFldLen <= 4
+               mSql += "SMALLINT"
+            ELSEIF mFldLen <= 9
+               mSql += "INTEGER"
+            ELSE
+               mSql += "BIGINT"
+            ENDIF
+         ENDIF
+
+      CASE mFldType = "N" .AND. ( llMDB .OR. llACCDB )
+         IF mFldDec > 0
+            mSql += "DOUBLE"
+         ELSE
+            mSql += "LONG"
+         ENDIF
+      CASE mFldType = "N" .AND. cTIPOSQL = "SQLITE"
+         IF mFldDec > 0
+            mSql += "FLOAT"
+         ELSE
+            mSql += "INTEGER default 0"
+         ENDIF
+
+      CASE mFldType = "N" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
+         IF mFldDec > 0
+            mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+         ELSE
+            IF mFldLen <= 9
+               mSql += "INTEGER(" + hb_ntos( mFldLen ) + ")"
+               if cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+                   mSql += " default 0"
+               endif
+            ELSE
+               mSql += "bigint(" + hb_ntos( mFldLen ) + ")"
+            ENDIF
+         ENDIF
+         //
+         // F= float  HB_FT_FLOAT           5 
+         //
+      CASE  mFldType = "F" .AND. ( llMDB .OR. llACCDB )
+         mSql += "DOUBLE"
+      CASE mFldType = "F" .AND. cTIPOSQL = "SQLITE"
+         mSql += "REAL "
+      CASE mFldType = "F" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "FLOAT(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "F" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "F" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "DECIMAL(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "F"
+         mSql += "FLOAT "
+       CASE mFldType = "" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI")    
+         //verificar se aqui e realmente so as decimais 
+         mSql += "FLOAT ("+ hb_ntos( mFldDec ) + ")  DEFAULT 0"
+         //
+         // Y= CURRENCY MOEDA  HB_FT_CURRENCY        13 
+         //
+      CASE mFldType = "Y" .AND. cTIPOSQL = "SQLITE"
+         IF mFldDec > 0
+            mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+         ELSE
+            mSql += "NUMERIC(" + hb_ntos( mFldLen ) + ")"
+         ENDIF
+      CASE mFldType = "Y" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "Y" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "MONEY "
+      CASE mFldType = "Y" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "FIREBIRD" )
+         mSql += "DECIMAL(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+
+      CASE mFldType = "Y"
+         mSql += "FLOAT"
+         //
+         // I = integer LONG HB_FT_INTEGER         6  
+         //
+      CASE mFldType = "I" .AND. ( llMDB .OR. llACCDB )
+         mSql += "LONG"
+      CASE mFldType = "I" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "INT " 
+       CASE mFldType = "I" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
+         mSql += "INT  default 0"
+       CASE mFldType = "I" .AND. ( cTIPOSQL = "SQLITE")          
+         mSql += "INTEGER  default 0"
+      CASE mFldType = "I" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )  
+         mSql += "INT  default 0 "
+      CASE mFldType = "I" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI")   
+        mSql += "NUMBER(" + hb_ntos( mFldLen ) + ",0)  DEFAULT 0"
+        
+      CASE mFldType = "I"
+         mSql += "INTEGER"
+         //
+         // B = double HB_FT_DOUBLE          7 
+         //
+      CASE mFldType = "B"
+         mSql += "DOUBLE"
+      CASE mFldType = "B" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "FLOAT"
+      CASE mFldType = "B" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "DOUBLE(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "B" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+      CASE mFldType = "B" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "DECIMAL(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+         //
+         // L = logico boleano bit HB_FT_LOGICAL         2 
+         //
+      CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" .OR. cTIPOSQL = "FIREBIRD" )
+         mSql += "NUMBER (1)"
+      CASE mFldType = "L" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "SQLITE"  )
+         mSql += "BOOLEAN"
+      CASE mFldType = "L" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "BIT"
+      CASE mFldType = "L"
+         mSql += "BOOL"
+      CASE mFldType = "L" // Firebird, SQLite e Access operam com SMALLINT (0 ou 1)
+         mSql += "SMALLINT"    
+         //
+         // M= memo TEXT LONGTEXT  HB_FT_MEMO            16 
+         //
+      CASE mFldType = "M" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
+         mSql += "CLOB"
+      CASE mFldType = "M" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "TEXT"
+      CASE mFldType = "M" .AND. ( llMDB .OR. llACCDB )
+         mSql += "LONGTEXT"
+      CASE mFldType = "M" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "BLOB SUB_TYPE TEXT" //"BLOB SUB_TYPE 1"
+      CASE mFldType = "M"
+         mSql += "TEXT"
+         //
+         // G = blob LONGBINARY  HB_FT_OLE             20  
+         //
+      CASE mFldType = "G" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "BYTEA"
+      CASE mFldType = "G" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "VARBINARY"
+      CASE mFldType = "G" .AND. ( llMDB .OR. llACCDB )
+         mSql += "LONGBINARY"
+      CASE mFldType = "G" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "BLOB SUB_TYPE 0"
+      CASE mFldType = "G"
+         mSql += "BLOB"
+          //
+         // Q = Varbinary  HB_FT_VARLENGTH       15  
+         //
+      CASE mFldType = "Q" .AND. cTIPOSQL = "SQLITE"
+         mSql += "BLOB "
+      CASE mFldType = "Q" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "VARBINARY(" + hb_ntos( mFldLen ) + ")"
+      CASE mFldType = "Q" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "BYTEA"
+      CASE mFldType = "Q" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "BLOB SUB_TYPE 0"
+         //
+         // W = Blob  HB_FT_BLOB            19
+         //
+      CASE mFldType = "W" .AND. ( cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         mSql += "BLOB "
+      CASE mFldType = "W" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         mSql += "IMAGE"
+      CASE mFldType = "W" .AND. ( cTIPOSQL = "FIREBIRD" )
+         mSql += "BLOB SUB_TYPE 0"
+      CASE mFldType = "W" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "BYTEA"     
+      CASE mFldType = "W" .AND. ( llMDB .OR. llACCDB )
+         mSql += "OLEOBJECT"
+     
+         
+         //
+         // HB_FT_ROWVER          11     "^"
+         //
+ 
+          //
+         //HB_FT_AUTOINC         12     "+"
+         //
+      CASE mFldType = "+" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )   
+           MSql += " int  PRIMARY KEY AUTO_INCREMENT "
+      
+       CASE mFldType = "+" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI")  
+           MSql += " NUMBER (10,0) GENERATED ALWAYS AS IDENTITY" 
+           
+    CASE mFldType = "+" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )       
+           MSql += "serial4 "
+           
+     CASE mFldType = "+" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )      
+           MSql += "int  identity "
+           
+     CASE mFldType = "+" .AND. ( cTIPOSQL = "SQLITE")      
+           MSql += "integer primary key AUTOINCREMENT"
+           
+     CASE mFldType = "+" .AND. ( llMDB .OR. llACCDB )
+         mSql += "COUNTER"
+           
+     CASE mFldType = "+" .AND. ( cTIPOSQL = "FIREBIRD")      
+           MSql += "INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY"
+           
+           //
+           //tipo P picuture do ads adt
+           //
+           
+           
+           
+       CASE mFldType = "P" .AND. ( cTIPOSQL = "SQLITE"  )
+         mSql += "BLOB "
+      CASE mFldType = "P" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
+         mSql += "VARBINARY(" + hb_ntos( mFldLen ) + ")"
+      CASE mFldType = "P" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "BYTEA" 
+      CASE mFldType = "P" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )   
+           MSql += "BLOB"
+     CASE mFldType = "P" .AND. ( llMDB .OR. llACCDB )
+         mSql += "OLEOBJECT"
+     CASE mFldType = "P" .AND. ( cTIPOSQL = "FIREBIRD")      
+           MSql += "BLOB SUB_TYPE 0"
+         
+  
+     
+           //
+           //tipo Z rowversion do ads adt
+           //
+       CASE mFldType = "Z" .AND. ( cTIPOSQL = "SQLITE"  )
+         mSql += "INTEGER DEFAULT 0"
+      CASE mFldType = "Z" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
+         mSql += "rowversion"
+      CASE mFldType = "Z" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )   
+           MSql += "BIGINT"
+       CASE mFldType = "Z" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         mSql += "BIGINT DEFAULT 0"    
+       CASE mFldType = "Z" .AND. ( llMDB .OR. llACCDB )
+         mSql += "LONG"  
+       CASE mFldType = "Z" .AND.  ( cTIPOSQL = "FIREBIRD")
+         mSql += "BIGINT DEFAULT 0"  
+     CASE mFldType = "Z" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
+         mSql += "rowversion"
+    
+   
+         //HB_FT_CURDOUBLE       14     "Z"
+         //                
+
+         //
+         //  HB_FT_IMAGE           18     "P"                
+         //
+         
+         // invalido
+         //
+         // define HB_FT_NONE            0
+         //
+      OTHERWISE
+         alertx( "Invalid Field Type: " + mFldType + " "+ cTIPOSQL )
+         RETURN ""
+      ENDCASE
+   NEXT
+   mSql += ") "+HB_OSNEWLINE()
+   IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
+      mSql += " COLLATE='latin1_swedish_ci' "+HB_OSNEWLINE()
+      mSql += " ENGINE=InnoDB "+HB_OSNEWLINE()
+   ENDIF
+   mSql += " ; "
+   mSQL +=HB_OSNEWLINE()
+   
+   IF lINDEX
+      cPKCHAVE  :=""
+      nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
+      mSQL    +=  hb_osNewLine()
+      FOR j = 1 TO  nIndexes
+          cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
+          cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
+          cSQLINDEX := "create index " + cINDEXNAME + " on " + cTABLENAME + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;"
+          mSQL += cSQLINDEX + hb_osNewLine()
+          IF J=1
+             cPKCHAVE=MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) )
+          ENDIF
+     NEXT j
+      mSQL +=HB_OSNEWLINE()
+      IF lPK .AND. .NOT. EMPTY(cPKCHAVE)
+         mSQL +="ALTER TABLE " + cTABLENAME + " ADD PRIMARY KEY(" + cPKCHAVE + ") ;"+HB_OSNEWLINE()
+      ENDIF
+   ENDIF
+
+   RETURN msql
+   
+   
+ *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function geracampodbf()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+function geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)
+
+local aRETU
+local cSUBTIPO
+
+IF TIPODBF=6 //USOVIA="ADSADT"
+   RETURN geracampoadt(cFieldName,cFieldType,nFieldLength,nFieldDec)
+ENDIF
+aRETU := {cFieldName,cFieldType,nFieldLength,nFieldDec}
+
+
+
+cTYPE    := cFieldType
+cSUBTIPO := ""
+IF SUBSTR(cTYPE,2,1) = ":"  //sqlimix manda tipo e subtipo exemplos N:i   C:CU  @:D
+   cFieldType := SUBSTR(cTYPE,1,1)
+   cSUBTIPO   := SUBSTR(cTYPE,3)
+   cTYPE      := SUBSTR(cTYPE,1,1)
+ENDIF
+
+do case
+
+   //
+   // numeric(l,d) decimal(l,d)  number(l,d) o tamanho esta entre parentes
+   //
+CASE AT("(",cTYPE) > 0 .AND. AT(")",cTYPE) > 0 .AND. AT(",",cTYPE) > 0 .AND. (AT("NUMERIC",UPPER(CTYPE)) > 0 .OR. AT("DECIMAL",UPPER(CTYPE)) > 0 .OR. AT("NUMBER",UPPER(CTYPE)) > 0)
+   cTMPSIZE     := SUBSTR(cTYPE,AT("(",cTYPE)+1)
+   cTMPSIZE     := SUBSTR(cTMPSIZE,1,AT(",",cTMPSIZE) - 1)
+   nFieldLength := val(cTMPSIZE)
+   cTMPSIZE     := SUBSTR(cTYPE,AT(",",cTYPE)+1)
+   cTMPSIZE     := SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE) - 1)
+   nFieldDec    := val(cTMPSIZE)
+   cFieldType   := 'N'
+
+
+   //
+   //  tyniint(n) int(n) number(n) tamanho esta entre parentes
+   //
+case AT("(",cTYPE) > 0 .AND. AT(")",cTYPE) > 0 .AND. AT(",",cTYPE) = 0 .AND. (AT("INT",UPPER(CTYPE)) > 0 .or. AT("NUMBER",UPPER(CTYPE)) > 0)
+   cTMPSIZE     := SUBSTR(cTYPE,AT("(",cTYPE)+1)
+   cTMPSIZE     := SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE) - 1)
+   nFieldLength := VAL(cTMPSIZE)
+   cFieldType   := 'N'
+   nFieldDec    := 0
+
+
+   //
+   // varchar(n) char(n) text(n)  VARCHAR2(n) o tamanho esta entre parentes
+   //
+case AT("(",cTYPE) > 0 .AND. AT(")",cTYPE) > 0 .AND. (AT("CHAR",UPPER(CTYPE)) > 0 .OR. AT("TEXT",UPPER(CTYPE)) > 0 .OR. AT("VARCHAR2",UPPER(CTYPE)) > 0)
+   cTMPSIZE     := SUBSTR(cTYPE,AT("(",cTYPE)+1)
+   cTMPSIZE     := SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE) - 1)
+   nFieldLength := VAL(cTMPSIZE)
+   cFieldType   := 'C'
+   nFieldDec    := 0
+
+
+case cType == "TINYINT"
+   cFieldType   := 'N'
+   nFieldLength := 2
+   nFieldDec    := 0
+
+
+case cType == "INT2" .OR. cType == "SMALLINT"
+   cFieldType   := 'N'
+   nFieldLength := 4
+   nFieldDec    := 0
+
+case cType == "INT" .or. cType == "MEDIUMINT"
+   cFieldType   := 'N'
+   nFieldLength := 8
+   nFieldDec    := 0
+
+
+case cType == "INTEGER" .OR. cType == "INT4" .OR. cType == "SERIAL"
+   cFieldType   := 'N'
+   nFieldLength := 8
+   nFieldDec    := 0
+
+case cType == "BIGINT" .OR. cType == "INT8" .OR. cType == "BIGSERIAL"
+   cFieldType   := 'N'
+   nFieldLength := 16
+   nFieldDec    := 0
+
+
+//no sqllite tem a vezes aparece so DECIMAL nao especificado a precisao DECIMAL(n,d)
+case cType == "DOUBLE PRECISION" .or. cType == "FLOAT8"  .OR. cType == "DECIMAL" 
+   cFieldType   := 'N'
+   nFieldLength := 19
+   nFieldDec    := 9
+
+case cType == "MONEY"
+   cFieldType   := 'N'
+   nFieldLength := 12
+   nFieldDec    := 2
+
+case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == "FLOAT4"
+   cFieldType   := 'N'
+   nFieldLength := 14
+   nFieldDec    := 5
+
+
+case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE' .or. cType == 'TIMESTAMP' ;
+    .OR. cType == "D" .OR. cType == "TYPE_TIMESTAMP" .or. cType == "TYPE_DATE"
+   cFieldType   := 'D'
+   nFieldLength := 8
+   nFieldDec    := 0
+
+case cType == "@"   //Datetime opcao mudar como texto ou datetime futuramente
+   cFieldType   := 'D'
+   nFieldLength := 8
+   nFieldDec    := 0
+
+case cType == "BOOL" .or. cType == 'BOOLEAN'
+   cFieldType   := 'L'
+   nFieldLength := 1
+   nFieldDec    := 0
+
+CASE cType == "CLOB" .AND. (cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI")  //Memo mas tratando com char(250)
+   cFieldType   := 'C'
+   nFieldLength := 250
+   nFieldDec    := 0
+
+
+CASE cType == "TEXT" .AND. (cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL")   //Memo mas tratando com char(250)
+   cFieldType   := 'C'
+   nFieldLength := 250
+   nFieldDec    := 0
+
+CASE cType == "LONGTEXT" .OR. cType == "M" .OR. cType == "WLONGVARCHAR"   //Memo mas tratando com char(250)
+   cFieldType   := 'C'
+   nFieldLength := 250
+   nFieldDec    := 0
+   //
+   // TEXT SEM tamanho memo
+   //
+case AT("(",cTYPE) = 0 .AND. AT(")",cTYPE) = 0 .AND. AT("TEXT",UPPER(CTYPE)) > 0
+   nFieldLength := 10
+   cFieldType   := 'M'
+   nFieldDec    := 0
+
+   //
+   // numeric sem ()
+   //
+case AT("(",cTYPE) = 0 .AND. AT(")",cTYPE) = 0 .AND. AT("NUMERIC",UPPER(CTYPE)) > 0
+   cFieldType := 'N'
+   IF nFieldLength = 0  //atribui 8 padrao integer caso nao foi passado
+      nFieldLength := 8
+      nFieldDec    := 0
+   ENDIF
+
+   //
+   // postgresql varchar bpchar CHARACTER
+   //
+CASE cType == "VARCHAR" .OR. cType == "BPCHAR" .OR. AT("CHARACTER",UPPER(CTYPE)) > 0 .OR. cType == "WVARCHAR" .OR. cType == "WCHAR"
+   cFieldType := 'C'
+   nFieldDec  := 0
+
+
+CASE cType == "NAME"
+   cFieldType   := 'C'
+   nFieldLength := 64
+   nFieldDec    := 0
+
+CASE cType == "C" .AND. nFieldLength > 250  //alguns longchar vem comprimento 65535 estudando mudar para memo por enquanto C 250
+   nFieldLength := 250
+
+   //
+   // Inteiro sub numerico troca para numerico
+   //
+CASE cType == "I" .AND. cSUBTIPO == "N"
+   cFieldType := 'N'
+
+CASE cType == "OID"
+   cFieldType   := 'N'
+   nFieldLength := 19
+   nFieldDec    := 0
+   
+// Adicionar ao seu DO CASE:
+CASE cType == "BYTEA" .OR. cType == "BLOB" .OR. cType == "IMAGE" .OR. cType == "VARBINARY"
+   cFieldType   := 'M'
+   nFieldLength := 10
+   nFieldDec    := 0
+
+// Tratamento específico para o ROWVERSION (Tipo Z do ADS)
+CASE cType == "ROWVERSION" // O tipo rowversion do SQL Server
+   cFieldType   := 'C'
+   nFieldLength := 8
+   nFieldDec    := 0   
+
+otherwise
+   //mantem  os dados enviados
+
+endcase
+//Inclusao rotina pegar max quando campo tamanho for zero
+
+aRETU := {cFieldName,cFieldType,nFieldLength,nFieldDec}
+return aRETU
+
+FUNCTION GERACAMPOADT(cFieldName, cSqlType, nFieldLength, nFieldDec)
+   LOCAL aRetu := {cFieldName, "C", 10, 0}
+   LOCAL cType := AllTrim(cSqlType)
+   LOCAL cUpper := Upper(cType)
+   LOCAL cTmpSize
+
+   // 1. Tipos com Tamanho entre Parênteses: (L,D) ou (N)
+   // Numeric, Decimal, Number, Int, Tinyint, Varchar, Char, Text, Varchar2
+   IF AT("(", cType) > 0 .AND. AT(")", cType) > 0
+      cTmpSize := SUBSTR(cType, AT("(", cType) + 1, AT(")", cType) - AT("(", cType) - 1)
+      
+      IF AT(",", cTmpSize) > 0 // Caso (L,D)
+         nFieldLength := VAL(SUBSTR(cTmpSize, 1, AT(",", cTmpSize) - 1))
+         nFieldDec    := VAL(SUBSTR(cTmpSize, AT(",", cTmpSize) + 1))
+         RETURN {cFieldName, "N", nFieldLength, nFieldDec}
+      ELSE // Caso (N)
+         nFieldLength := VAL(cTmpSize)
+         IF AT("CHAR", cUpper) > 0 .OR. AT("TEXT", cUpper) > 0
+            RETURN {cFieldName, "C", nFieldLength, 0}
+         ELSE
+            RETURN {cFieldName, "N", nFieldLength, 0}
+         ENDIF
+      ENDIF
+   ENDIF
+
+   // 2. Cases Específicos e Exclusivos de Bancos
+   DO CASE
+      // Numéricos Inteiros
+      CASE cUpper == "TINYINT" ; RETURN {cFieldName, "N", 2, 0}
+      CASE cUpper == "INT2" .OR. cUpper == "SMALLINT" ; RETURN {cFieldName, "N", 4, 0}
+      CASE cUpper == "INT" .OR. cUpper == "MEDIUMINT" ; RETURN {cFieldName, "N", 8, 0}
+      CASE cUpper == "INTEGER" .OR. cUpper == "INT4" .OR. cUpper == "SERIAL" ; RETURN {cFieldName, "N", 8, 0}
+      CASE cUpper == "BIGINT" .OR. cUpper == "INT8" .OR. cUpper == "BIGSERIAL" ; RETURN {cFieldName, "N", 16, 0}
+      CASE cUpper == "OID" ; RETURN {cFieldName, "N", 10, 0}
+      
+      // Reais e Ponto Flutuante
+      CASE cUpper == "DOUBLE PRECISION" .OR. cUpper == "FLOAT8" ; RETURN {cFieldName, "N", 19, 9}
+      CASE cUpper == "REAL" .OR. cUpper == "FLOAT" .OR. cUpper == "DOUBLE" .OR. cUpper == "FLOAT4" ; RETURN {cFieldName, "N", 14, 5}
+      CASE cUpper == "MONEY" ; RETURN {cFieldName, "N", 12, 2}
+      
+      // Datas, Horas e Timestamps
+      CASE cUpper == "DATE" .OR. cUpper == "DATETIME" .OR. cUpper == "SHORTDATE" .OR. cUpper == "TIMESTAMP" ;
+           .OR. cUpper == "D" .OR. cUpper == "TYPE_TIMESTAMP" .OR. cUpper == "TYPE_DATE" 
+           RETURN {cFieldName, "@", 8, 0}
+      CASE cUpper == "@" ; RETURN {cFieldName, "@", 8, 0}
+      
+      // Lógicos
+      CASE cUpper == "BOOL" .OR. cUpper == "BOOLEAN" ; RETURN {cFieldName, "L", 1, 0}
+      
+      // Memo, Textos Longos e BLOBs
+      CASE cUpper == "CLOB" .OR. cUpper == "TEXT" .OR. cUpper == "LONGTEXT" .OR. cUpper == "M" .OR. cUpper == "WLONGVARCHAR" 
+           RETURN {cFieldName, "M", 10, 0}
+      CASE cUpper == "BYTEA" .OR. cUpper == "BLOB" .OR. cUpper == "IMAGE" .OR. cUpper == "VARBINARY" 
+           RETURN {cFieldName, "P", Max(10, nFieldLength), 0}
+      
+      // Específicos do ADS
+      CASE cUpper == "ROWVERSION" ; RETURN {cFieldName, "Z", 8, 0}
+      CASE cUpper == "W" ; RETURN {cFieldName, "W", 10, 0}
+      CASE cUpper == "IDENTITY" ; RETURN {cFieldName, "+", 10, 0}
+      
+      // Tratamento para VARCHAR, BPCHAR, CHARACTER (Compatibilidade Postgres/Oracle)
+      CASE cUpper == "VARCHAR" .OR. cUpper == "BPCHAR" .OR. AT("CHARACTER", cUpper) > 0 .OR. cUpper == "WVARCHAR" .OR. cUpper == "WCHAR" .OR. cUpper == "NAME"
+         RETURN {cFieldName, "C", Max(1, nFieldLength), 0}
+
+      // Fallback para campos C grandes ou tipos desconhecidos
+      CASE cUpper == "C" .AND. nFieldLength > 250 ; RETURN {cFieldName, "M", 10, 0}
+      CASE cUpper == "I" .AND. cType == "I:N" ; RETURN {cFieldName, "N", 10, 0}
+
+      OTHERWISE
+         RETURN {cFieldName, "C", Max(10, nFieldLength), 0}
+   ENDCASE
+RETURN aRetu
+
 // + EOF: dbudialeto.prg
 // +
