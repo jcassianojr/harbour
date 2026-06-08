@@ -54,15 +54,9 @@ RETURN eVAR
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function LAYOUT()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 function LAYOUT()
 
@@ -77,8 +71,8 @@ next
 TRY
 @ MAXROW() - 3,0 say "RDD("+zUSOVIA+") Extensao("+hb_rddInfo(RDDI_TABLEEXT)+") Memo("+hb_rddInfo(RDDI_MEMOEXT)+") Index("+hb_rddInfo(RDDI_ORDBAGEXT)+")"         
 END
-@ MAXROW() - 2,0 say "Exportar Para("+ZEXPOREXT+") Delimitador("+ZDELIMITE+")"                                                                                               
-@ MAXROW() - 1,0 say "Sepador Decimal("+ZDECSIM+") Oem Ansi("+ZCNVCHAR+") Separador Registro("+Zregsep+")"+" Ano("+ZANOFOR+ZANOSEP+ZANOTAM+") Logico("+zSEPLOGIC+")"         
+@ MAXROW() - 2,0 say "Exportar Para("+ZEXPOREXT+") Delimitador("+ZDELIMITE+") Oem Ansi("+ZCNVCHAR+")"                                                                                               
+@ MAXROW() - 1,0 say "Sepador Decimal("+ZDECSIM+") Separador Registro("+Zregsep+")"+" Ano("+ALLTRIM(ZANOFOR)+ZANOSEP+ZANOTAM+") Logico("+zSEPLOGIC+")"         
 
 return .T.
 
@@ -224,20 +218,20 @@ OPCAO( 4,24,"DBF&NTX   DBF NTX DBT     ",78)   //N 1 DBFNTX DBF/DBFFPT/DBFNTX
 OPCAO( 5,24,"DBF&CDX   DBF CDX FPT     ",67)   //C 2 DBFCDX DBF/DBFFPT/HB_CDXRDD
 OPCAO( 6,24,"&ADSCDX   DBF CDX FPT     ",65)   //A 3 ADSCDX
 OPCAO( 7,24,"ADSNT&X   DBF NTX DBT     ",88)   //X 4 ADSNTX
-OPCAO( 8,24,"ADSVF&P   VFP CDX FPT     ",80)   //P 5 ADSVFP
+OPCAO( 8,24,"ADSVF&P   DBF CDX FPT     ",80)   //P 5 ADSVFP
 OPCAO( 9,24,"ADSAD&T   ADT ADI ADM     ",84)   //T 6 ADSADT
 OPCAO(10,24,"D&BTCDX   DBF CDX DBT     ",66)  //B 7 DBTCDX DBFCDX/DBFFPT/DBTCDX
 OPCAO(11,24,"&SMTCDX   DBF CDX SMT     ",83)  //S 8 DBFCDX/DBFFPT/SMTCDX
 OPCAO(12,24,"&FPTCDX   DBF CDX FPT     ",70)  //F 9 FPTCDX DBFCDX/DBFFPT/FPTCDX
 OPCAO(13,24,"S&IXCDX   DBF CDX FPT     ",73)  //I 10 SIXCDX
 OPCAO(14,24,"&DBFNSX   DBF NSX MST     ",68)  //D 11 DBFNSX DBF/DBFFPT/DBFNSX
-OPCAO(15,24,"DBFB&LOB          DBV     ",76)  //L 12 DBFBLOB DBF/DBFFPT/DBFBLOB
-OPCAO(16,24,"&HSCDX    HS  CDX FPT     ",72)  //H 13 HSCDX  DBFCDX/HSCDX
-OPCAO(17,24,"&RLCDX    RL  CDX FPT     ",82)  //R 14 RLCDX  DBFCDX/RLCDX
-OPCAO(18,24,"&VFPCDX   VFP CDX FPT     ",86)  //V 15 VFPCDX DBFCDX/DBFFPT/VFPCDX
-OPCAO(19,24,"B&MDBFCDX     CXD FPT     ",77)  //M 16 BMDBFCDX DBFCDX
-OPCAO(20,24,"BMDBFNSX      NSX FPT     ",49)  //1 17 BMDBFNSX DBFNSX
-OPCAO(21,24,"BMDBFNTX      NTX FPT     ",50)  //2 18 BMDBFNTX DBFNTX
+OPCAO(15,24,"DBFB&LOB  DBF     DBV     ",76)  //L 12 DBFBLOB DBF/DBFFPT/DBFBLOB
+OPCAO(16,24,"&HSCDX    DBF CDX FPT     ",72)  //H 13 HSCDX  DBFCDX/HSCDX
+OPCAO(17,24,"&RLCDX    DBF CDX FPT     ",82)  //R 14 RLCDX  DBFCDX/RLCDX
+OPCAO(18,24,"&VFPCDX   DBF CDX FPT     ",86)  //V 15 VFPCDX DBFCDX/DBFFPT/VFPCDX
+OPCAO(19,24,"B&MDBFCDX DBF CXD FPT     ",77)  //M 16 BMDBFCDX DBFCDX
+OPCAO(20,24,"BMDBFNSX  DBF NSX FPT     ",49)  //1 17 BMDBFNSX DBFNSX
+OPCAO(21,24,"BMDBFNTX  DBF NTX FPT     ",50)  //2 18 BMDBFNTX DBFNTX
 
 
 KEY := menu(2,0)
@@ -252,33 +246,11 @@ layout()
 return TIPODBF
 
 
-
-/*
-rddregister hb_rddRegister
-rdd    super       fonte        memo
-
--nondbf problemas con linha so chr(13) ou so chr(10) outro limitadores
-FCOMMA             fcomma.prg
-ARRAYRDD           arrayrdd.prg
-LOGRDD             logrdd.prg
-SDF                sdf1.prg
-DELIM              delim1.prg
-
-
-*/
-
-
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function RDDNOME()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 FUNCTION RDDNOME(nTIPODBF)
 
@@ -613,11 +585,7 @@ RETURN lRETU
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function copiardbfpara()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
