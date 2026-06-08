@@ -39,13 +39,13 @@ FUNCTION dBUsincdbf()
    tipodbfesc()
    nORITIPO   := TIPODBF
    cORIDRIVER := RDDNOME( TIPODBF )
-   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
 
    alertX( "escolha destino" )
    tipodbfesc()
    nDESTIPO   := TIPODBF
    cDESDRIVER := RDDNOME( TIPODBF )
-   cARQDES    := win_GetOpenFileName(, "Arquivos de Destino", hb_cwd(), "Arquivos de Destino", "*.dbf", 1 )
+   cARQDES    := win_GetOpenFileName(, "Arquivos de Destino", hb_cwd(), "Arquivos de Destino", "*."+TABLEEXT, 1 )
    lAPAGA     := MDG( "Apagar Dados do Arquivo de Destino" )
    lREPL      := .F.
    IF lAPAGA
@@ -58,7 +58,7 @@ FUNCTION dBUsincdbf()
    ENDIF
 
    MDT( "Fazendo copia de reserva: " + "old_" + cARQDES )
-   filecopy( cARQDES, trocaext( cARQDES, "_old.dbf" ) )
+   filecopy( cARQDES, trocaext( cARQDES, "_old."+TABLEEXT ) )
 
    MDT( "abrindo arquivo de origen: " + cARQORI )
    //USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
@@ -145,13 +145,13 @@ FUNCTION sortdbf()
    tipodbfesc()
    nORITIPO   := TIPODBF
    cORIDRIVER := RDDNOME( TIPODBF )
-   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
 
    alertX( "escolha destino" )
    tipodbfesc()
    nDESTIPO   := TIPODBF
    cDESDRIVER := RDDNOME( TIPODBF )
-   cARQDES    := trocaext( cARQORI, "_sorted.dbf" )
+   cARQDES    := trocaext( cARQORI, "_sorted."+TABLEEXT )
 
    @ MaxRow()-1, 0      SAY "Digite os Campos separados por virgula  (,)"
    @ MaxRow(), 1 GET cSORTED
@@ -235,12 +235,12 @@ FUNCTION limparegdupdbf()
    tipodbfesc()
    nORITIPO   := TIPODBF
    cORIDRIVER := RDDNOME( TIPODBF )
-   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
 
    lPACK := MDG( "Fazer pack(remove registros marcados para apagar) apos a checagem" )
 
    MDT( "Fazendo copia de reserva: " + "old_" + cARQORI )
-   filecopy( cARQORI, trocaext( cARQORI, "_old.dbf" ) )
+   filecopy( cARQORI, trocaext( cARQORI, "_old."+TABLEEXT ) )
 
    MDT( "abrindo arquivo de origem: " + cARQORI )
    //USE ( cARQORI ) ALIAS ORIGEM EXCLUSIVE NEW VIA ( cORIDRIVER )

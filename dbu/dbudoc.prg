@@ -175,10 +175,7 @@ FUNCTION multidocs
    PARA tDOC, cMASK           // Passara outra funcao manter aqui para ficar como priv
 
    IF ValType( cMASK ) # "C"
-      cMASK := "*.DBF"
-       if TIPODBF=6 //USOVIA="ADSADT"
-         cMASK := "*.ADT"
-      ENDIF
+      cMASK := "*."+TABLEEXT
    ENDIF
 
    IF tDOC = 0
@@ -249,10 +246,7 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK )
    LOCAL cCAMMASK  := Space( 100 )
 
    IF ValType( cMASK ) # "C"
-      cMASK := "*.DBF"
-      if TIPODBF=6 //USOVIA="ADSADT"
-         cMASK := "*.ADT"
-      ENDIF
+      cMASK := "*."+TABLEEXT
    ENDIF
 
    IF At( "\", cMASK ) > 0  // o mascara tem caminho
@@ -600,7 +594,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       ENDIF
       cTEXTO += 'ENDFILE' + cLIN
       cTEXTO +=  cLIN
-      cTEXTO += "[" + Upper( AllTrim( carq ) ) + ".DBF]" + clin
+      cTEXTO += "[" + Upper( AllTrim( carq ) ) + "."+TABLEEXT+"]" + clin
       cTEXTO += "CAMINHO=" + hb_cwd() + clin
       cTEXTO += "DRIVER=" + rddName() + clin
       cTEXTO += "NUMMAINTAINED=" + Str( nIndexes, 1 ) + cLIN
@@ -993,10 +987,7 @@ FUNCTION dbupack()
 FUNCTION DBETODBF( cMASK, lLAY, lCRIA )
 
    IF ValType( cMASK ) # "C"
-      cMASK := "*.DBF"
-      if TIPODBF=6 //USOVIA="ADSADT" 
-         cMASK := "*.ADT"
-      ENDIF
+      cMASK := "*."+TABLEEXT
    ENDIF
    IF ValType( lLAY ) # "L"
       lLAY := .T.

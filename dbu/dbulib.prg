@@ -286,81 +286,83 @@ LOCAL USOVIA
 IF VALTYPE(nTIPODBF) <> "N"
    nTIPODBF := TIPODBF  //Atribui a publica se nao for passado
 ENDIF
+TABLEEXT:="DBF"
 do case
-case nTIPODBF = 1
-   USOVIA := "DBFNTX"
-   rddSetDefault("DBFNTX")
-case nTIPODBF = 2
-   USOVIA := "DBFCDX"
-   rddsetdefault("DBFCDX")
-case nTIPODBF = 3
-   USOVIA := "ADSCDX"
-   rddSetDefault("ADSCDX")
-   AdsSetServerType(ADS_LOCAL_SERVER)
-   AdsSetFileType(ADS_CDX)
-case nTIPODBF = 4
-   USOVIA := "ADSNTX"
-   rddSetDefault("ADSNTX")
-   AdsSetServerType(ADS_LOCAL_SERVER)
-   AdsSetFileType(ADS_NTX)
-case nTIPODBF = 5
-   USOVIA := "ADSVFP"
-   rddSetDefault("ADSVFP")
-   AdsSetServerType(ADS_LOCAL_SERVER)
-   AdsSetFileType(ADS_VFP)
-case nTIPODBF = 6
-   USOVIA := "ADSADT"
-   rddSetDefault("ADSADT")
-   AdsSetServerType(ADS_LOCAL_SERVER)
-   AdsSetFileType(ADS_ADT)
-case nTIPODBF = 7
-   USOVIA := "DBTCDX"
-   rddSetDefault("DBTCDX")
-case nTIPODBF = 8
-   USOVIA := "SMTCDX"
-   rddSetDefault("SMTCDX")
-case nTIPODBF = 9
-   USOVIA := "FPTCDX"
-   rddSetDefault("FPTCDX")
-case nTIPODBF = 10
-   USOVIA := "SIXCDX"
-   rddSetDefault("SIXCDX")
-case nTIPODBF = 11
-   USOVIA := "DBFNSX"
-   rddSetDefault("DBFNSX")
-case nTIPODBF = 12
-   USOVIA := "DBFBLOB"
-   rddSetDefault("DBFBLOB")
-case nTIPODBF = 13
-   USOVIA := "HSCDX"
-   rddSetDefault("HSCDX")
-case nTIPODBF = 14
-   USOVIA := "RLCDX"
-   rddSetDefault("RLCDX")
-case nTIPODBF = 15
-   USOVIA := "VFPCDX"
-   rddSetDefault("VFPCDX")
-case nTIPODBF = 16
-   USOVIA := "BMDBFCDX"
-   rddSetDefault("BMDBFCDX")
-case nTIPODBF = 17
-   USOVIA := "BMDBFNSX"
-   rddSetDefault("BMDBFNSX")
-case nTIPODBF = 18
-   USOVIA := "BMDBFNTX"
-   rddSetDefault("BMDBFNTX")
-   
-case nTIPODBF = 90   
-   USOVIA := "LETO"
-   rddSetDefault("LETO")
-case nTIPODBF = 91  
-   USOVIA := "SQLMIX"
-   rddSetDefault("SQLMIX")
-      
-   
-otherwise
-   USOVIA := "DBFCDX"
-   rddsetdefault("DBFCDX")
+    case nTIPODBF = 1
+       USOVIA := "DBFNTX"
+       rddSetDefault("DBFNTX")
+    case nTIPODBF = 2
+       USOVIA := "DBFCDX"
+       rddsetdefault("DBFCDX")
+    case nTIPODBF = 3
+       USOVIA := "ADSCDX"
+       rddSetDefault("ADSCDX")
+       AdsSetServerType(ADS_LOCAL_SERVER)
+       AdsSetFileType(ADS_CDX)
+    case nTIPODBF = 4
+       USOVIA := "ADSNTX"
+       rddSetDefault("ADSNTX")
+       AdsSetServerType(ADS_LOCAL_SERVER)
+       AdsSetFileType(ADS_NTX)
+    case nTIPODBF = 5
+       USOVIA := "ADSVFP"
+       rddSetDefault("ADSVFP")
+       AdsSetServerType(ADS_LOCAL_SERVER)
+       AdsSetFileType(ADS_VFP)
+    case nTIPODBF = 6
+       USOVIA   := "ADSADT"
+       TABLEEXT :="ADT"
+       rddSetDefault("ADSADT")
+       AdsSetServerType(ADS_LOCAL_SERVER)
+       AdsSetFileType(ADS_ADT)
+    case nTIPODBF = 7
+       USOVIA := "DBTCDX"
+       rddSetDefault("DBTCDX")
+    case nTIPODBF = 8
+       USOVIA := "SMTCDX"
+       rddSetDefault("SMTCDX")
+    case nTIPODBF = 9
+       USOVIA := "FPTCDX"
+       rddSetDefault("FPTCDX")
+    case nTIPODBF = 10
+       USOVIA := "SIXCDX"
+       rddSetDefault("SIXCDX")
+    case nTIPODBF = 11
+       USOVIA := "DBFNSX"
+       rddSetDefault("DBFNSX")
+    case nTIPODBF = 12
+       USOVIA := "DBFBLOB"
+       rddSetDefault("DBFBLOB")
+    case nTIPODBF = 13
+       USOVIA := "HSCDX"
+       rddSetDefault("HSCDX")
+    case nTIPODBF = 14
+       USOVIA := "RLCDX"
+       rddSetDefault("RLCDX")
+    case nTIPODBF = 15
+       USOVIA := "VFPCDX"
+       rddSetDefault("VFPCDX")
+    case nTIPODBF = 16
+       USOVIA := "BMDBFCDX"
+       rddSetDefault("BMDBFCDX")
+    case nTIPODBF = 17
+       USOVIA := "BMDBFNSX"
+       rddSetDefault("BMDBFNSX")
+    case nTIPODBF = 18
+       USOVIA := "BMDBFNTX"
+       rddSetDefault("BMDBFNTX")
+       
+    case nTIPODBF = 90   
+       USOVIA := "LETO"
+       rddSetDefault("LETO")
+    case nTIPODBF = 91  
+       USOVIA := "SQLMIX"
+       rddSetDefault("SQLMIX")
+          
+       
+    otherwise
+       USOVIA := "DBFCDX"
+       rddsetdefault("DBFCDX")
 endcase
 zusovia := USOVIA
 layout()
@@ -647,9 +649,9 @@ tipodbfesc()
 nORITIPO   := TIPODBF
 cORIDRIVER := RDDNOME(TIPODBF)
 if nTIPOPR = 1
-   cARQORI := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*.dbf",1)
+   cARQORI := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*."+TABLEEXT,1)
 else
-   cDESTINO := win_GetOpenFileName(,"Arquivos de Destino",HB_CWD(),"Arquivos de destino","*.dbf",1)
+   cDESTINO := win_GetOpenFileName(,"Arquivos de Destino",HB_CWD(),"Arquivos de destino","*."+TABLEEXT,1)
 endif
 LCOPIANAT := .F.
 IF nTIPOPR = 1

@@ -1050,7 +1050,7 @@ FUNCTION open_dbf
          IF ! Empty( M->filename )
 
             IF !( RAt( ".", M->filename ) > RAt( hb_ps(), M->filename ) )
-               filename := M->filename + ".dbf"
+               filename := M->filename + "."+TABLEEXT
 
             ENDIF
 
@@ -1075,7 +1075,7 @@ FUNCTION open_dbf
          ENDIF
 
       ELSE
-         ret_val := filebox( ".dbf", "dbf_list", "dopen_titl", ;
+         ret_val := filebox( "."+TABLEEXT, "dbf_list", "dopen_titl", ;
             "do_opendbf", .F., 8 ) <> 0
 
       ENDIF
@@ -2703,7 +2703,7 @@ FUNCTION do_creavew
 
    DBUREDE( view_file, "ddbbuuuu", ABERTURA )
 
-   FErase( "ddbbuuuu.dbf" )
+   FErase( "ddbbuuuu."+TABLEEXT )
 
    netrecapp()
    field->item_name := "cur_dir"

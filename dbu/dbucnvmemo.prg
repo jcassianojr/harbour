@@ -63,7 +63,7 @@ FOR XY := 1 TO LEN(aARQMEMOS)
    cARQORISEMEXT := tiraext(cARQORIMEMO)
 
    MDT("Fazendo copia de reserva: "+"old_"+cARQORISEMEXT)
-   if ! filecopy(cARQORISEMEXT+".dbf","old_"+cARQORISEMEXT+".dbf")
+   if ! filecopy(cARQORISEMEXT+"."+TABLEEXT,"old_"+cARQORISEMEXT+"."+TABLEEXT)
      ALERTX("Erro ao criar backup do DBF: " + cARQORISEMEXT)
      RETURN .F.
    ENDIF
@@ -89,8 +89,8 @@ FOR XY := 1 TO LEN(aARQMEMOS)
    RDDNOME(nOLDTIPO)  //retorna tipo anterior
    RETURN .F.
 end
-IF file(cNEWDBF+".DBF") .AND. file(cNEWDBF+cDESMEMO)  // ".FPT" a extensao do rdiinfo memo do destino
-   MDT("copia efetuada:"+cNEWDBF+".DBF"+" "+cNEWDBF+cDESMEMO)
+IF file(cNEWDBF+"."+TABLEEXT) .AND. file(cNEWDBF+cDESMEMO)  // ".FPT" a extensao do rdiinfo memo do destino
+   MDT("copia efetuada:"+cNEWDBF+"."+TABLEEXT+" "+cNEWDBF+cDESMEMO)
 ENDIF
 
 dbUseArea( .T., (cDESDRIVER), (cNEWDBF), "aliasnovo", .F. , .F. )

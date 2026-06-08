@@ -197,7 +197,7 @@ HELPARQ  := "DBUHELP"
 READVAR  := ""
 ABERTURA := .T.
 TIPODBF  := 2   //dbfcdx
-
+TABLEEXT := "DBF"
 
 aPARAM := HB_aParams()
 FOR iLOOP := 1 TO LEN(aPARAM)
@@ -311,7 +311,7 @@ endif
 FOR iLOOP := 1 TO LEN(aPARAM)
    do case
    case AT("/XMLA",aPARAM[iLOOP]) > 0
-      multidocs(1,"*.dbf")
+      multidocs(1,"*."+TABLEEXT)
       //           FAZERDBF( {|| dbf2xml() }, .F. ,,,param1)
 
    case AT("/TEC",aPARAM[iLOOP]) > 0
@@ -538,11 +538,11 @@ util_b := {.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.,.T.}
 //     util_b[x]:="EMPTY(cur_dbf)"
 //next x
 
-DECLARE dbf_list[adir("*.dbf")+20]
+DECLARE dbf_list[adir("*."+TABLEEXT)+20]
 DECLARE ntx_list[adir("*"+XEXT())+20]
 DECLARE vew_list[adir("*.vew")+20]
 
-array_dir("*.dbf",dbf_list)
+array_dir("*."+TABLEEXT,dbf_list)
 array_dir("*"+XEXT(),ntx_list)
 array_dir("*.vew",vew_list)
 
@@ -563,8 +563,8 @@ if .not. empty(com_line)
       endif
    case file(com_line+".vew")
       com_line += ".vew"
-   case file(com_line+".dbf")
-      com_line += ".dbf"
+   case file(com_line+"."+TABLEEXT)
+      com_line += "."+TABLEEXT
    otherwise
       com_line := ""
    endcase
@@ -846,10 +846,10 @@ do while .T.
          DBUDIR()
       endif
       LAYOUT()
-      DECLARE dbf_list[adir("*.dbf")+20]
+      DECLARE dbf_list[adir("*."+TABLEEXT)+20]
       DECLARE ntx_list[adir("*"+XEXT())+20]
       DECLARE vew_list[adir("*.vew")+20]
-      array_dir("*.dbf",dbf_list)
+      array_dir("*."+TABLEEXT,dbf_list)
       array_dir("*"+XEXT(),ntx_list)
       array_dir("*.vew",vew_list)
       cur_area := 0
@@ -1079,7 +1079,7 @@ if valtype(cARQ) # "C"
    ALERTX("Funcao DBUREDE, Nome do Arquivo nao e Caracter")
    retu .F.
 endif
-if (!HB_FILEEXISTS(cARQ)) .and. (!HB_FILEEXISTS(cARQ+".dbf"))
+if (!HB_FILEEXISTS(cARQ)) .and. (!HB_FILEEXISTS(cARQ+"."+TABLEEXT))
    ALERTX("Arquivo de Dados Nao Encontado")
    retu .F.
 endif

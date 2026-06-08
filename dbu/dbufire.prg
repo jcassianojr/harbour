@@ -159,7 +159,7 @@ mdt( "Escolha o DBF de Origem" )
 tipodbfesc()
 nORITIPO   := TIPODBF
 cORIDRIVER := RDDNOME( TIPODBF )
-cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
 
 IF Empty( cARQORI )
    RETURN .F.

@@ -428,7 +428,7 @@ cEXTENSAO := LOWER(cEXTENSAO)
 //public cADORDD := iif( cRDDName=NIL, "DBASE", cRDDName )
 StrConnection := ""
 StrDriver     := ADORDDDefault()
-if StrDriver = "DBASE"  //.DBF
+if StrDriver = "DBASE"  
    StrConnection := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+StrDatabase+";Extended Properties=dBASE IV;"
 endif
 if StrDriver = "ACCESS" .OR. StrDriver = "MDB" .OR. cEXTENSAO == ".mdb"   // ADOMDB .MDB

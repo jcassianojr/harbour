@@ -165,7 +165,7 @@ FUNCTION modi_stru
 
       stat_msg( "Lendo Estrutura do Arquivo" )
       stru_name := M->cur_dbf
-      temparq   := trocaext( stru_name, "_stru.dbf" )
+      temparq   := trocaext( stru_name, "_stru."+TABLEEXT )
 
       SELECT ( M->cur_area )
 
@@ -181,8 +181,8 @@ FUNCTION modi_stru
    ELSE
 
 
-      stru_name := WIN_GETSAVEFILENAME(, "Novo Arquivo", hb_cwd(), "dbf", "*.txt", 1,, "novoarquivo.dbf" )
-      temparq   := trocaext( stru_name, "_stru.dbf" )
+      stru_name := WIN_GETSAVEFILENAME(, "Novo Arquivo", hb_cwd(), "dbf", "*.txt", 1,, "novoarquivo."+TABLEEXT )
+      temparq   := trocaext( stru_name, "_stru."+TABLEEXT )
 
       SELECT 10
       // __dbCreate( temparq,,, .F., ) //CREATE &temparq
@@ -865,7 +865,7 @@ FUNCTION modi_stru
          is_insert := .F.
          filename  := stru_name
 
-         IF filebox( ".dbf", "dbf_list", "stru_title", ;
+         IF filebox( "."+TABLEEXT, "dbf_list", "stru_title", ;
                "do_modstru", .T., 13 ) <> 0
             stru_name := filename
 
@@ -918,8 +918,6 @@ FUNCTION modi_stru
    ENDIF
    dbCloseArea()
    FErase( temparq )
-// ferase( temparq + ".dbf" )
-// ferase( temparq + ".TMP" )
    stat_msg( "" )
 
    RestScreen( 8, 20, 23, 59, M->wstru_buff )
@@ -1270,7 +1268,7 @@ FUNCTION do_modstru
       rec1 := RecNo()
       dbCloseArea()
 
-      add_name := ! hb_FileExists( name( filename ) + ".dbf" )
+      add_name := ! hb_FileExists( name( filename ) + "."+TABLEEXT )
 
       IF File( filename )
          new_name := " "
@@ -1287,8 +1285,8 @@ FUNCTION do_modstru
          ENDIF
 
 
-         name_bak  := trocaext( filename, "_temp.dbf" )   // substr( filename, 1, rat( hb_ps(), filename ) ) +  substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) + ".bak"
-         name_temp := trocaext( temparq, "_temp.dbf" )  // substr( filename, 1, rat( hb_ps(), filename ) ) +  temparq + ".bak"
+         name_bak  := trocaext( filename, "_temp."+TABLEEXT )   // substr( filename, 1, rat( hb_ps(), filename ) ) +  substr( FILENAME, 1, at( ".", FILENAME ) - 1 ) + ".bak"
+         name_temp := trocaext( temparq, "_temp."+TABLEEXT )  // substr( filename, 1, rat( hb_ps(), filename ) ) +  temparq + ".bak"
 
          cORIMEMO := hb_rddInfo( RDDI_MEMOEXT )
 
@@ -1397,7 +1395,7 @@ FUNCTION do_modstru
          CREATE &filename FROM &temparq
          dbCloseArea()
 
-         IF At( ".dbf", Lower( filename ) ) = Len( filename ) - 3 .AND. hb_FileExists( name( filename ) + ".dbf" ) .AND. add_name
+         IF At( "."+TABLEEXT, Lower( filename ) ) = Len( filename ) - 3 .AND. hb_FileExists( name( filename ) + "."+TABLEEXT ) .AND. add_name
             i := afull( dbf_list ) + 1
 
             IF i <= Len( dbf_list )

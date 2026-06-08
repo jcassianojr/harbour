@@ -53,10 +53,6 @@ FUNCTION Dbf2Xml()  // Requer Area Aberta
    LOCAL dwBytesWritten
    LOCAL i
 
-// if !dbusearea( TRUE, "DBFCDX", DbfFile + ".dbf",, TRUE )
-// ALERTX( "Erro Abrindo DBF" )
-// retu
-// endif
    sAlias := Upper( Alias() )
    sXML   := sAlias + ".xml"
 

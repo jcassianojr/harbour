@@ -371,7 +371,7 @@ FUNCTION dbf2pgsql()
    tipodbfesc()
    nORITIPO   := TIPODBF
    cORIDRIVER := RDDNOME( TIPODBF )
-   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
    IF File( cARQORI )
       hb_FNameSplit( cARQORI, nil, @cTable, NIL )
       cTABLE := AllTrim( cTABLE )

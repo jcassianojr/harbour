@@ -289,7 +289,7 @@ return .t.
 *+
 FUNCTION LETO_DBFTOSRV(cSrvAddr)
 
-cARQORI   := win_GetOpenFileName(,"Arquivos de Origem",hb_cwd(),"Arquivos de Origem","*.dbf",1)
+cARQORI   := win_GetOpenFileName(,"Arquivos de Origem",hb_cwd(),"Arquivos de Origem","*."+TABLEEXT,1)
 cCAMINHO  := ""
 cARQUIVO  := ""
 cEXTENSAO := ""
@@ -472,7 +472,7 @@ nConnect := LETO_CONNECT(cSrvAddr)
 
 IF nConnect >= 0
 
-   aRETU := leto_directory("*.DBF")
+   aRETU := leto_directory("*."+TABLEEXT)
 
    FOR i := 1 TO Len(aRETU)
       AAdd(aRESULT,aRETU[i,1])

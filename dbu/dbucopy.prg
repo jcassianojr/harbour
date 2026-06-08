@@ -129,7 +129,7 @@ FUNCTION capprep
       height  := 11
 
       files   := "dbf_list"
-      def_ext := ".dbf"
+      def_ext := "."+TABLEEXT
 
       fi_done := "not_empty('filename')"
 
@@ -833,7 +833,7 @@ FUNCTION tog_sdf
          cur_el  := 1
          rel_row := 0
          files   := "dbf_list"
-         def_ext := ".dbf"
+         def_ext := "."+TABLEEXT
          filelist( 1 )
 
       ELSE
@@ -909,7 +909,7 @@ FUNCTION tog_delim
          cur_el  := 1
          rel_row := 0
          files   := "dbf_list"
-         def_ext := ".dbf"
+         def_ext := "."+TABLEEXT
          filelist( 1 )
 
       ELSE

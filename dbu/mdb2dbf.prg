@@ -118,7 +118,7 @@ WHILE .T.
           lDOCDAD:=MDG( "Gravar Dados" )
           lDOCRECNO:=.F. //MDG( "Incluir Recno()/ID" )
           cSUBTIPO:="SQL"
-          cMASK:="*.DBF"
+          cMASK:="*."+TABLEEXT
           FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
         else
           sqltodos(cTIPOSQL)
@@ -1043,7 +1043,7 @@ mdt("escolha origem")
 tipodbfesc()
 nORITIPO   := TIPODBF
 cORIDRIVER := RDDNOME(TIPODBF)
-cARQORI    := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*.dbf",1)
+cARQORI    := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*."+TABLEEXT,1)
 IF FILE(cARQORI)
    DBF2MDB(cMDBARQ,cARQORI)
    RDDNOME(nOLDTIPO)  //retorna tipo anterior
