@@ -67,7 +67,7 @@ for n := 2 to len(func_title)
    @  1,( 9 * n) - 18 say padc(func_title[n],9)         
 next
 @  2,0 say replicate("-",80)         
-//alguns rdd nao tem RDDI_TABLEEXT RDDI_MEMOEX RDDI_ORDBAGEXT
+//alguns rdd nao tem RDDI_TABLEEXT RDDI_MEMOEX RDDI_ORDBAGEXT usando try para ignonar
 TRY
 @ MAXROW() - 3,0 say "RDD("+zUSOVIA+") Extensao("+hb_rddInfo(RDDI_TABLEEXT)+") Memo("+hb_rddInfo(RDDI_MEMOEXT)+") Index("+hb_rddInfo(RDDI_ORDBAGEXT)+")"         
 END
@@ -330,13 +330,21 @@ do case
     case nTIPODBF = 91  
        USOVIA := "SQLMIX"
        rddSetDefault("SQLMIX")
-          
-       
     otherwise
        USOVIA := "DBFCDX"
        rddsetdefault("DBFCDX")
 endcase
 zusovia := USOVIA
+//Algumas rdd nao tem hb_rddinfo usando try para ignonar 
+TRY
+  //TABLEEXT :=strtran(hb_rddInfo(RDDI_TABLEEXT),".","") Fixado nos case so tem dbf adt
+END
+TRY
+   MEMOEXT:=strtran(hb_rddInfo(RDDI_MEMOEXT),".","") 
+END
+TRY
+   INDIEXT:=strtran(hb_rddInfo(RDDI_ORDBAGEXT),".","")       
+END
 layout()
 RETURN USOVIA
 

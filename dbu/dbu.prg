@@ -160,11 +160,13 @@ public zANOTAM    := "2"
 public zANOFOR    := "DMA"+SPACE(7)
 public zANOSEP    := "/"
 public zCNVCHAR   := "N"
-public zMEMOEXT   := ".CDX"
 public zusovia    := "DBFCDX"
 public zREGSEP    := " "
-
-
+public ABERTURA := .T.
+public TIPODBF  := 2        //dbfcdx
+public TABLEEXT := "DBF"   //hb_rddInfo(RDDI_TABLEEXT)
+public MEMOEXT  := "FPT"    //hb_rddInfo(RDDI_MEMOEXT)
+public INDIEXT  := "CDX"   //hb_rddInfo(RDDI_ORDBAGEXT)
 
 clear
 
