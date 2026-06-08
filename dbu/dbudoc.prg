@@ -598,7 +598,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += "CAMINHO=" + hb_cwd() + clin
       cTEXTO += "DRIVER=" + rddName() + clin
       cTEXTO += "NUMMAINTAINED=" + Str( nIndexes, 1 ) + cLIN
-      cTEXTO += "MAINTAIN0=" + cARQ + ".CDX" + cLIN
+      cTEXTO += "MAINTAIN0=" + cARQ + XEXT() + cLIN
       cINDEXTEXTO := ""
       IF nIndexes > 0
          FOR j = 1 TO  nIndexes

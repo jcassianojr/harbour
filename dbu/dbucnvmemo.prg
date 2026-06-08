@@ -227,7 +227,11 @@ IF file(cNEWDBF+cDESEXT)
            cINDEXCHAVE:= ACHAVES[J]
            MDT("Criando Indice: "+cINDEXNAME+" "+cINDEXCHAVE)
            try
-              INDEX ON &cINDEXCHAVE TAG &cINDEXNAME//TO &cARQINDEX
+              IF EINDEXCOMPOUND()
+                 INDEX ON &cINDEXCHAVE TAG &cINDEXNAME//TO &cARQINDEX
+              ELSE
+                 INDEX ON &cINDEXCHAVE TO &cARQINDEX
+              ENDIF   
            catch oERROR
               ALERT(cINDEXNAME+" "+cINDEXCHAVE)
            end

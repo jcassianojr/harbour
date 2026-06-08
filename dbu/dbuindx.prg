@@ -319,7 +319,7 @@ FUNCTION do_index
 
       nLASTREC := LastRec()
       zei_fort( nLASTREC,,, 0 )
-      IF tipodbf = 1 .OR. tipodbf = 3  // .or. tipodbf = 5
+      IF .NOT. EINDEXCOMPOUND() // < descendente
          IF Left( K_EXP, 1 ) # "<"
             //INDEX ON &k_exp TO &filename eval zei_fort( nLASTREC,,, 1 )
             ordCondSet(,,,, {|| zei_fort( nLASTREC,,, 1 )},, RecNo(),,,,,,,,,,,,, ) ; ordCreate( filename,, k_exp, {|| &k_exp}, )

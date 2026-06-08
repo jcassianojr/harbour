@@ -116,21 +116,37 @@ retuRN .t.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function XEXT()
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 function XEXT
+LOCAL cEXT
+cEXT:=""
+TRY
+  CEXT:=hb_rddInfo(RDDI_ORDBAGEXT)
+END
+RETURN cEXT  
 
-return hb_rddInfo(RDDI_ORDBAGEXT)
-
-
+*+--------------------------------------------------------------------
+*+
+*+    Function EINDEXCOMPOUND()
+*+
+*+--------------------------------------------------------------------
+*+
+FUNCTION EINDEXCOMPOUND()
+LOCAL cEXT
+LOCAL lRETU
+lRETU:=.T.
+cEXT:=""
+TRY
+  cEXT:=hb_rddInfo(RDDI_ORDBAGEXT)
+END
+cEXT:=UPPER(STRTRAN(cEXT,".",""))
+IF cEXT="NDX" .OR. cEXT="NTX" .OR. cEXT="IDX"
+   lRETU:=.F.
+ENDIF
+RETURN lRETU
 
 *+--------------------------------------------------------------------
 *+

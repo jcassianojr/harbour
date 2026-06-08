@@ -2125,7 +2125,7 @@ FUNCTION ntx_key
 
    IF File( M->filename )
 
-      IF Lower( XEXT() ) = ".ntx"
+      IF .not. EINDEXCOMPOUND() //Lower( XEXT() ) = ".ntx" .or. ndx idx
          k_pos := 23
 
       ELSE
