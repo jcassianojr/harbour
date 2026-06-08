@@ -210,19 +210,51 @@ FUNCtion tipodbfesc
 local aAMBIENTE
 LOCAL KEY
 
+/* indices
+.NTX   Single NATIVE  DBFNTX Nantucket Clipper / CA-Clipper / Harbour Native Harbour RDD. One key per file. Full DESCEND, FOR, UNIQUE support.
+.CDX Compound NATIVE  DBFCDX FoxPro / Visual FoxPro / Harbour Multi-tag compound index. Fully supported. VFP CDX compatible.
+.NSX Compound NATIVE  DBFNSX Harbour native (modern) Harbour's own compound index. Recommended for new apps. Better perf than NTX.
+.NDX Single   NATIVE  DBFNDX dBASE III / FoxBASE Oldest format. Supported via DBFNDX. Functional but avoid in new projects.
+.MDX Compound PARTIAL DBFMDX* dBASE IV / dBASE 5 Partial support. DBFMDX not actively maintained. Test before use.
+.IDX Single   NATIVE  DBFCDX FoxPro 2.x Simple FoxPro index. DBFCDX handles read/write correctly.
+.DB   —    NOT SUPP.  — Borland Paradox NOT a DBF index. Proprietary Paradox format. ODBC/BDE access only.
+.BAG compound PARTIAL SIXRDD* HiPer-Six / Six Driver HiPer-Six compound index. Requires external SIXRDD.
+*/
+
+/* memos
+.DBT NATIVE dBASE III / dBASE IV / Clipper / CA-Clipper Most common legacy memo. Full support via DBFNTX and DBFCDX.
+.FPT NATIVE FoxPro 2.x / Visual FoxPro Fully supported by DBFCDX. Handles MEMO, GENERAL and PICTURE fields.
+.SMT PARTIAL HiPer-Six Proprietary HiPer-Six memo. Partial read via SIXRDD. Avoid.
+.DBV NOT SUPP. dBASE 5 for Windows dBASE 5 memo. Not natively supported. ODBC access only. 
+*/
+
+/* drives
+DBFNTX NATIVE   0x02/0x03/0x83   .NTX       .DBT     Legacy Clipper/CA-Clipper systems. Maintenance and migration.
+DBFCDX NATIVE   0x30/0xF5       .CDX/.IDX  .FPT      FoxPro/VFP interop. New apps needing compound indexes. Strongly recommended.
+DBFNSX NATIVE   0x03            .NSX       .DBT/.FPT Pure  Harbour native. Best choice for new Harbour applications.
+DBFNDX NATIVE   0x02/0x03       .NDX       .DBT      dBASE III/FoxBASE compatibility. Avoid in modern production code.
+DBFMDX PARTIAL  0x43/0x63/0x8B  .MDX       .DBT      dBASE IV MDX. Partial support. Read legacy files only, avoid index creation.
+SIXRDD EXTERNAL 0xE5            .BAG/.NTX  .SMT      External HiPer-Six library. Not bundled with Harbour. Legacy-specific only.
+LETO   NATIVE   any             any        any       Remote DBF over network (leto server). Works on top of DBFNTX/CDX/NSX.
+SQLRDD NATIVE   —               —          —         SQL access (MySQL, PostgreSQL, SQLite, MSSQL) using xBase syntax.
+*/
+
+
+
+
 //KEY= TIPODBF //posiciona pela escolha anterior
 aAMBIENTE := SALVAA()
 HB_dispbox(03,10,22,60,B_DOUBLE+" ")
 @ 03,24 SAY "DRIVER    ARQ IND MEMO"         
-OPCAO( 4,24,"DBF&NTX   DBF NTX DBT     ",78)   //N 1 DBFNTX DBF/DBFFPT/DBFNTX
-OPCAO( 5,24,"DBF&CDX   DBF CDX FPT     ",67)   //C 2 DBFCDX DBF/DBFFPT/HB_CDXRDD
-OPCAO( 6,24,"&ADSCDX   DBF CDX FPT     ",65)   //A 3 ADSCDX
-OPCAO( 7,24,"ADSNT&X   DBF NTX DBT     ",88)   //X 4 ADSNTX
-OPCAO( 8,24,"ADSVF&P   DBF CDX FPT     ",80)   //P 5 ADSVFP
-OPCAO( 9,24,"ADSAD&T   ADT ADI ADM     ",84)   //T 6 ADSADT
-OPCAO(10,24,"D&BTCDX   DBF CDX DBT     ",66)  //B 7 DBTCDX DBFCDX/DBFFPT/DBTCDX
-OPCAO(11,24,"&SMTCDX   DBF CDX SMT     ",83)  //S 8 DBFCDX/DBFFPT/SMTCDX
-OPCAO(12,24,"&FPTCDX   DBF CDX FPT     ",70)  //F 9 FPTCDX DBFCDX/DBFFPT/FPTCDX
+OPCAO( 4,24,"DBF&NTX   DBF NTX DBT     ",78)  //N  1 DBFNTX DBF/DBFFPT/DBFNTX
+OPCAO( 5,24,"DBF&CDX   DBF CDX FPT     ",67)  //C  2 DBFCDX DBF/DBFFPT/HB_CDXRDD
+OPCAO( 6,24,"&ADSCDX   DBF CDX FPT     ",65)  //A  3 ADSCDX
+OPCAO( 7,24,"ADSNT&X   DBF NTX DBT     ",88)  //X  4 ADSNTX
+OPCAO( 8,24,"ADSVF&P   DBF CDX FPT     ",80)  //P  5 ADSVFP
+OPCAO( 9,24,"ADSAD&T   ADT ADI ADM     ",84)  //T  6 ADSADT
+OPCAO(10,24,"D&BTCDX   DBF CDX DBT     ",66)  //B  7 DBTCDX DBFCDX/DBFFPT/DBTCDX
+OPCAO(11,24,"&SMTCDX   DBF CDX SMT     ",83)  //S  8 DBFCDX/DBFFPT/SMTCDX
+OPCAO(12,24,"&FPTCDX   DBF CDX FPT     ",70)  //F  9 FPTCDX DBFCDX/DBFFPT/FPTCDX
 OPCAO(13,24,"S&IXCDX   DBF CDX FPT     ",73)  //I 10 SIXCDX
 OPCAO(14,24,"&DBFNSX   DBF NSX MST     ",68)  //D 11 DBFNSX DBF/DBFFPT/DBFNSX
 OPCAO(15,24,"DBFB&LOB  DBF     DBV     ",76)  //L 12 DBFBLOB DBF/DBFFPT/DBFBLOB
