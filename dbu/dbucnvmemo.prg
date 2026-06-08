@@ -124,7 +124,9 @@ RESTAA(aAMBIENTE)
 *+
 function converttipo()
 
-
+aINDICES  :={}
+aCHAVES   = {}
+nINDEXES  :=0
 aAMBIENTE := SALVAA()
 nOLDTIPO  := TIPODBF
 
@@ -174,19 +176,28 @@ FOR XY := 1 TO LEN(aARQDBF)
    MDT("abrindo arquivo antigo: "+cOLDDBF)
   // USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA (cORIDRIVER) //	via driver antigo utiliza aliasantigo mas o driver defaiult e o destino
   dbUseArea( .T., (cORIDRIVER), (cOLDDBF), "aliasantigo", .T. , .F. )
+   nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
+   aINDICES  :={}
+   aCHAVES   = {}
+   FOR j := 1 TO nIndexes
+      cINDEXNAME := dbOrderInfo( DBOI_NAME,, j )
+      cINDEXCHAVE:= dbOrderInfo( DBOI_EXPRESSION,, j ) 
+      AAdd( Aindices, cINDEXNAME )
+      AADD( aCHAVES,cINDEXCHAVE)
+   NEXT j
 
 
    MDT("copiando estrutura")
    IF lSTRUEXT
       try
-      COPY STRUCTURE TO (cNEWDBF) //criando a estrutura usa o rdddefauld destino ultimo atribuido
+         COPY STRUCTURE TO (cNEWDBF) //criando a estrutura usa o rdddefauld destino ultimo atribuido
       catch oERROR
-      alertx("Erro Criando nova strutura")
-      RESTAA(aAMBIENTE)
-      TIPODBF := nOLDTIPO
-      RDDNOME(nOLDTIPO)   //retorna tipo anterior
-      RETURN .F.
-   end
+         alertx("Erro Criando nova strutura")
+         RESTAA(aAMBIENTE)
+         TIPODBF := nOLDTIPO
+         RDDNOME(nOLDTIPO)   //retorna tipo anterior
+        RETURN .F.
+     end
 ELSE
    aESTRUTURA := dbStruct()   //cria matriz com a estrura
    dbcreate(cNEWDBF,aESTRUTURA,cDESDRIVER,.F.)
@@ -208,6 +219,22 @@ IF file(cNEWDBF+cDESEXT)
    zei_fort(nLASTREC,,,0)
 
    APPEND FROM (cOLDDBF) VIA(cORIDRIVER) while zei_fort(nLASTREC,,,1)   //"	via driver antigo
+   
+   cARQINDEX:=cNEWDBF+cDESEXTINDEX
+   IF nIndexes>0
+       FOR j := 1 TO nIndexes
+           cINDEXNAME := Aindices[J]
+           cINDEXCHAVE:= ACHAVES[J]
+           MDT("Criando Indice: "+cINDEXNAME+" "+cINDEXCHAVE)
+           try
+              INDEX ON &cINDEXCHAVE TAG &cINDEXNAME//TO &cARQINDEX
+           catch oERROR
+              ALERT(cINDEXNAME+" "+cINDEXCHAVE)
+           end
+          
+          
+       NEXT j
+   ENDIF    
 ENDIF
 
 DBCLOSEALL()
