@@ -826,19 +826,28 @@ FUNCTION export2sql( odb, cDBFFILE )
 // use &cTablename.
 
 // 1. Garantir que a tabela de metadados exista
+   // Metadados de Campos (Tabela table_metadata atualizada)
    mSql := "CREATE TABLE IF NOT EXISTS table_metadata (" + ;
-           "table_name TEXT, " + ;
-           "column_name TEXT, " + ;
-           "original_type TEXT, " + ;
-           "length INTEGER, " + ;
-           "precision INTEGER)"
+        "table_name TEXT, " + ;
+        "column_name TEXT, " + ;
+        "original_type TEXT, " + ;
+        "length INTEGER, " + ;
+        "precision INTEGER, " + ;
+        "is_nullable INTEGER, " + ;      // Indica se aceita valores NULL (0=Não, 1=Sim)
+        "field_visual_picture TEXT)"     // Guarda a máscara visual padrão do DBF (ex: '@E 999,999.99')
    miscsql( oDB, mSql )
    
    
-   // Metadados de Índices (A nova tabela)
-   miscsql( oDB, "CREATE TABLE IF NOT EXISTS index_metadata (" + ;
-              "table_name TEXT, index_name TEXT, expression TEXT, " + ;
-              "is_unique INTEGER, is_bag INTEGER)" )
+   // Metadados de Índices (Tabela index_metadata atualizada)
+    mSqlIndex := "CREATE TABLE IF NOT EXISTS index_metadata (" + ;
+                 "table_name TEXT, " + ;
+                 "index_name TEXT, " + ;
+                 "expression TEXT, " + ;         // Expressão original em Harbour (ex: 'CODIGO+DTOS(DATA)')
+                 "sql_expression TEXT, " + ;     // Expressão traduzida para o Banco (ex: 'codigo || to_char(data, ...)')
+                 "filter_expression TEXT, " + ;  // Expressão condicional do FOR (ex: '!DELETED()' ou 'ATIVO==.T.')
+                 "is_unique INTEGER, " + ;
+                 "is_bag INTEGER)"
+    miscsql( oDB, mSqlIndex )
 
 
    // Verifica se a tabela 

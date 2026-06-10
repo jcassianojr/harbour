@@ -752,49 +752,63 @@ cSqlIndexes := ""
 
 DO CASE
    CASE cTIPOSQL == "SQLITE"
-      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name TEXT, column_name TEXT, original_type TEXT, length INTEGER, precision INTEGER)"
-      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name TEXT, index_name TEXT, expression TEXT, is_unique INTEGER)"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name TEXT, column_name TEXT, original_type TEXT, length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture TEXT)"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name TEXT, index_name TEXT, expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
    CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MYSQL64" .OR. cTIPOSQL == "MARIADB"
-      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER)"
-      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, is_unique INTEGER)"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
    CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
-      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER)"
-      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, is_unique INTEGER)"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
    CASE lMDB .OR. lACCDB // MS ACCESS (MDB ou ACCDB)
-      // Access nÃ£o aceita IF NOT EXISTS e exige colchetes em palavras reservadas
-      cSqlFields  := "CREATE TABLE table_metadata (table_name TEXT(50), column_name TEXT(50), original_type TEXT(1), [length] INTEGER, [precision] INTEGER)"
-      cSqlIndexes := "CREATE TABLE index_metadata (table_name TEXT(50), index_name TEXT(50), expression MEMO, is_unique INTEGER)"
+      // Access não aceita IF NOT EXISTS e exige colchetes em palavras reservadas. Usa TEXT(tamanho) e MEMO para textos longos.
+      cSqlFields  := "CREATE TABLE table_metadata (table_name TEXT(50), column_name TEXT(50), original_type TEXT(1), [length] INTEGER, [precision] INTEGER, is_nullable INTEGER, field_visual_picture TEXT(250))"
+      cSqlIndexes := "CREATE TABLE index_metadata (table_name TEXT(50), index_name TEXT(50), expression MEMO, sql_expression MEMO, filter_expression MEMO, is_unique INTEGER, is_bag INTEGER)"
 
    CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
+      // SQL Server exige verificação via OBJECT_ID e usa VARCHAR(MAX) para blocos grandes de texto, além de INT ao invés de INTEGER.
       cSqlFields  := "IF OBJECT_ID('table_metadata', 'U') IS NULL " + ;
-                     "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INT, precision INT)"
+                     "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INT, precision INT, is_nullable INT, field_visual_picture VARCHAR(250))"
       cSqlIndexes := "IF OBJECT_ID('index_metadata', 'U') IS NULL " + ;
-                     "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression VARCHAR(MAX), is_unique INT)"
-  // No primeiro DO CASE de DBF2MDB() (Tabelas de Metadados)
-   CASE cTIPOSQL == "FIREBIRD"
-       cSqlFields  := "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER)"
-       cSqlIndexes := "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression BLOB SUB_TYPE TEXT, is_unique INTEGER)"
-ENDCASE
+                     "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression VARCHAR(MAX), sql_expression VARCHAR(MAX), filter_expression VARCHAR(MAX), is_unique INT, is_bag INT)"
 
-// ExecuÃ§Ã£o dos comandos
+   CASE cTIPOSQL == "FIREBIRD"
+      // Firebird não possui IF NOT EXISTS por padrão em DDL simples e exige BLOB SUB_TYPE TEXT para textos longos/expressões.
+      cSqlFields  := "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
+      cSqlIndexes := "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression BLOB SUB_TYPE TEXT, sql_expression BLOB SUB_TYPE TEXT, filter_expression BLOB SUB_TYPE TEXT, is_unique INTEGER, is_bag INTEGER)"
+   ENDCASE
+
+
+// Execução dos comandos de criação das tabelas de metadados
 IF !Empty( cSqlFields )
-   // No caso do Access, usamos TRY/CATCH pois ele nÃ£o tem 'IF NOT EXISTS'
-   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+   
+   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. ;
+      cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR. cTIPOSQL = "GDB"
+      
+      // Tenta criar a tabela de metadados de campos de forma isolada
       TRY
          executacmd(cMDBARQ, cSqlFields)
+      CATCH
+         // Tabela 'table_metadata' já existe ou erro ignorado com segurança
+      END
+      
+      // Tenta criar a tabela de metadados de índices de forma isolada
+      TRY
          executacmd(cMDBARQ, cSqlIndexes)
       CATCH
-         // Tabelas jÃ¡ existem
+         // Tabela 'index_metadata' já existe ou erro ignorado com segurança
       END
+      
    ELSE
+      // Bancos que suportam "IF NOT EXISTS" ou validação nativa (SQLite, MySQL, PostgreSQL, SQL Server)
       executacmd(cMDBARQ, cSqlFields)
       executacmd(cMDBARQ, cSqlIndexes)
    ENDIF
+   
 ENDIF
-
 
 lgravasql := mdg("gravar sql")
 aINDICES  := {}
@@ -810,43 +824,137 @@ cNOMETABELA := ALIAS()
 executacmd( cMDBARQ, "DELETE FROM table_metadata WHERE table_name = " + c2sql(cNOMETABELA) )
 executacmd( cMDBARQ, "DELETE FROM index_metadata WHERE table_name = " + c2sql(cNOMETABELA) )
 
-// 2. INCLUSÃƒO DOS METADADOS DE CAMPOS (Estrutura do DBF)
+
+// 2. INCLUSÃO DOS METADADOS DE CAMPOS (Estrutura do DBF)
 FOR i := 1 TO Len( aSTRU )
    mFldNm   := aSTRU[ i, 1 ]
    mFldType := aSTRU[ i, 2 ]
    mFldLen  := aSTRU[ i, 3 ]
    mFldDec  := aSTRU[ i, 4 ]
 
-   msql := "INSERT INTO table_metadata (table_name, column_name, original_type, length, precision) VALUES (" + ;
-           c2sql(cTablename) + ", " + ;
-           c2sql(mFldNm)    + ", " + ;
-           c2sql(mFldType)  + ", " + ;
-           ltrim(str(mFldLen)) + ", " + ;
-           ltrim(str(mFldDec)) + ")"
+   // Regra para is_nullable: Campos auto-incrementais (+) não aceitam nulo (0). 
+   // Os demais campos aceitam nulo (1) por padrão de compatibilidade SQL.
+   nIsNullable := iif( mFldType == "+", 0, 1 )
+
+   // Monta uma máscara visual padrão baseada nas características do campo DBF
+   // Dentro do loop de gravação de metadados de campos (aSTRU):
+   nIsNullable := 1
+   cVisualPic  := ""
+
+   DO CASE
+   CASE mFldType == "+"
+      nIsNullable := 0 // Auto-incremento nunca é nulo
+      cVisualPic  := "99999999"
+      
+   CASE mFldType == "I" // Inteiro nativo do ADS
+      cVisualPic  := Replicate("9", mFldLen)
+      
+   CASE mFldType == "T" // Time/Timestamp do ADS
+      cVisualPic  := "99/99/9999 99:99:99"
+      
+   CASE mFldType == "D"
+      cVisualPic  := "99/99/9999"
+      
+   CASE mFldType == "L"
+      cVisualPic  := "Y"
+   ENDCASE
+
+   // Monta o INSERT alimentando a nova estrutura de metadados estendida
+   msql := "INSERT INTO table_metadata (table_name, column_name, original_type, length, precision, is_nullable, field_visual_picture) VALUES (" + ;
+           c2sql(cTablename)   + ", " + ;
+           c2sql(mFldNm)       + ", " + ;
+           c2sql(mFldType)     + ", " + ;
+           LTrim(Str(mFldLen)) + ", " + ;
+           LTrim(Str(mFldDec)) + ", " + ;
+           LTrim(Str(nIsNullable)) + ", " + ; // Salva 0 ou 1
+           c2sql(cVisualPic)   + ")"          // Salva a máscara padrão gerada
    
    executacmd( cMDBARQ, msql )
 NEXT
 
+
 nIndexes := dbORDERINFO(DBOI_ORDERCOUNT)
 FOR j := 1 TO nIndexes
-   cINDEXNAME := dbORDERINFO(DBOI_NAME,,j)
-   cINDEXNAME := StrTran(cINDEXNAME,"-","_")  //Tracos nao aceitos trocando por undescore
-   msql       := "create index "+cINDEXNAME+" on "+cNometabela+" ( "+MDPCHAVEI(dbORDERINFO(DBOI_EXPRESSION,,j))+" ) "
-   aadd(Aindices,msql)
+   // Inicialização correta dos tipos de variáveis a cada iteração
+   cINDEXNAME := ""
+   cKey       := ""
+   lIsUnique  := .F.  // Correção: Deve iniciar como Booleano (.F.) e não String ("")
+   cFilter    := ""   // Inicia vazio, caso a RDD não suporte DBOI_CONDITION
    
-   cIdxName  := dbOrderInfo( DBOI_NAME, , j )
-   cKey      := dbOrderInfo( DBOI_EXPRESSION, , j )
-   lIsUnique := dbOrderInfo( DBOI_UNIQUE, , j )
+  // Tenta ler o Nome do Índice
+   TRY
+      cINDEXNAME := dbORDERINFO(DBOI_NAME,,j)
+   CATCH
+      cINDEXNAME := "" // Fallback caso a RDD não consiga expor o nome
+   END   
    
-   // Salva a expressÃ£o literal (ex: "CODIGO+STR(SEQ,3)") para reconstruÃ§Ã£o posterior
-   msql := "INSERT INTO index_metadata (table_name, index_name, expression, is_unique) VALUES (" + ;
-           c2sql(cTablename) + ", " + ;
-           c2sql(cIdxName)   + ", " + ;
-           c2sql(cKey)       + ", " + ; 
-           iif( lIsUnique, "1", "0" ) + ")"
-           
-   executacmd( cMDBARQ, msql )
+   // Garante a remoção de espaços antes de testar se está vazio
+   cINDEXNAME := AllTrim(cINDEXNAME)
+   
+   // Se a RDD não retornou um nome válido, usa o fallback sequencial (obrigatório para todos os bancos)
+   IF Empty( cINDEXNAME )
+      cINDEXNAME := "IDX_" + AllTrim(cTablename) + "_" + AllTrim(Str(j))
+   ELSE
+      // Se a RDD retornou um nome (ex: "CODIGO"), prefixamos o nome da tabela 
+      // APENAS nos bancos com escopo global de índice (SQLite e PostgreSQL)
+      IF cTIPOSQL == "SQLITE" .OR. cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
+         cINDEXNAME := "IDX_" + AllTrim(cTablename) + "_" + cINDEXNAME
+      ELSE
+         // Para os outros bancos (MySQL, SQL Server), mantemos o nome original da TAG do DBF,
+         // mas adicionamos o prefixo "IDX_" por boa prática de sintaxe SQL (opcional, se preferir tire o "IDX_")
+         cINDEXNAME := "IDX_" + cINDEXNAME 
+      ENDIF
+   ENDIF   
+
+   // Trata caracteres inválidos (traços e espaços) no nome final gerado
+   cINDEXNAME := StrTran(cINDEXNAME, "-", "_") 
+   cINDEXNAME := StrTran(cINDEXNAME, " ", "_")
+   
+   // Tenta ler a Expressão da Chave
+   TRY
+      cKey := dbOrderInfo( DBOI_EXPRESSION, , j )
+   CATCH
+      cKey := ""
+   END
+   
+   // Tenta ler a propriedade de Unicidade
+   TRY  
+      lIsUnique := dbOrderInfo( DBOI_UNIQUE, , j )
+   CATCH
+      lIsUnique := .F. // Fallback padrão seguro
+   END
+   
+   // Tenta ler a Condição de Filtro (O comando FOR)
+   TRY  
+      cFilter := dbOrderInfo( DBOI_CONDITION, , j ) 
+   CATCH
+      cFilter := "" // Se a RDD não suportar filtros (ex: DBFNTX antiga), assume vazio com segurança
+   END  
+   
+   // Só processa e grava se a RDD conseguir extrair uma expressão de chave válida
+   IF .NOT. Empty( cKey )
+      
+      // Transforma a chave Harbour em colunas SQL separadas por vírgula
+      cSqlExpr := MDPCHAVEI( cKey ) 
+      
+      // Gera o comando físico de criação do índice usando a expressão tratada
+      msql := "CREATE INDEX " + cINDEXNAME + " ON " + cNometabela + " ( " + cSqlExpr + " ) "
+      AAdd(Aindices, msql)
+      
+      // Monta o INSERT alimentando a estrutura de metadados expandida de forma segura
+      msql := "INSERT INTO index_metadata (table_name, index_name, expression, sql_expression, filter_expression, is_unique, is_bag) VALUES (" + ;
+              c2sql(cTablename) + ", " + ;
+              c2sql(cINDEXNAME) + ", " + ; 
+              c2sql(cKey)       + ", " + ; 
+              c2sql(cSqlExpr)   + ", " + ; 
+              c2sql(cFilter)    + ", " + ; 
+              iif( lIsUnique, "1", "0" ) + ", " + ; // Agora totalmente seguro contra erros de tipo
+              "1)"                         
+              
+      executacmd( cMDBARQ, msql )
+   ENDIF 
 NEXT j
+
 dbclosearea()
 
 MDT(cNOMETABELA)
@@ -1123,6 +1231,8 @@ oRS:CursorLocation := 3
 
 cCOMANDO := ""
 IF cTIPOINFO = "DATABASE"
+   cCOMANDO :=Dialeto_ShowDatabases()
+/*
    DO CASE
    CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
       cCOMANDO := "SHOW DATABASES;"
@@ -1136,8 +1246,8 @@ IF cTIPOINFO = "DATABASE"
        cCOMANDO := "SELECT name FROM pragma_database_list;"
    ENDCASE
 ENDIF
-
-
+*/
+ENDIF
 
 IF cTIPOINFO = "TABELA"
    DO CASE
@@ -1186,7 +1296,7 @@ ENDIF
 IF cTIPOINFO = "ESTRUTURA"
    DO CASE
    CASE lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-      //Implantar possivelmente com catalogx
+      //Implantado abaixo com  catalogx
    CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
       cCOMANDO := "PRAGMA table_info( "+cTABELA+")"
    CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
@@ -1212,6 +1322,9 @@ IF cTIPOINFO = "__INDEX__"
    ENDCASE
 ENDIF
 IF cTIPOINFO = "__VERSION__"
+   cCOMANDO :=Dialeto_Version()
+
+   /*
    DO CASE
    CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
       cCOMANDO := "SELECT @@VERSION"
@@ -1224,6 +1337,8 @@ IF cTIPOINFO = "__VERSION__"
    CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
       cCOMANDO := "SELECT version()"
    ENDCASE
+   */
+   
 ENDIF
 
 

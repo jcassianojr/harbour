@@ -47,6 +47,10 @@ FUNCTION Dialeto_begin(cTipo)
       cCOMANDO := "BEGIN TRANSACTION;"
    CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
       cCOMANDO := "BEGIN;"
+    CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
+           cCOMANDO ="SET TRANSACTION READ WRITE;"        
+      
+      
    ENDCASE
 
    RETURN cCOMANDO
@@ -262,24 +266,93 @@ return cCOMANDO
 // +
 // +   
 
-Function Dialeto_GetIdentity()
+Function Dialeto_GetIdentity() // AS LAST_ID; facilita implantacao pois todos voltam lat_id
 LOCAL cCOMANDO
 cCOMANDO:=""
   DO CASE
       CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
-           cCOMANDO ="select @@IDENTITY"
+           cCOMANDO ="select @@IDENTITY  AS LAST_ID;"
       CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
-           cCOMANDO ="select LAST_INSERT_ID()"
+           cCOMANDO ="select LAST_INSERT_ID() AS LAST_ID;"
    //   CASE cTIPOSQL="FIREBIRD"
    //        cCOMANDO =""
       CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0
-           cCOMANDO ="SELECT last_insert_rowid()"
+           cCOMANDO ="SELECT last_insert_rowid()  AS LAST_ID;"
       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
-           cCOMANDO ="SELECT lastval();"
+           cCOMANDO ="SELECT lastval() AS LAST_ID;"
        CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
-           cCOMANDO ="select LAST_INSERT_ID()"     
+           cCOMANDO ="select LAST_INSERT_ID()  AS LAST_ID;"     
    ENDCASE
 return cCOMANDO
+
+// +--------------------------------------------------------------------
+// +
+// +    Function Dialeto_ShowDatabases()
+// +
+// +    Retorna o comando SQL para listar as bases de dados/schemas
+// +    Padroniza o retorno com o alias "DB_NAME"
+// +
+// +--------------------------------------------------------------------
+FUNCTION Dialeto_ShowDatabases(cTipo)
+   LOCAL cCOMANDO := ""
+   
+   hb_Default( @cTipo, cTIPOSQL ) // Usa a global como fallback
+
+   DO CASE
+   CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+      // O MySQL não aceita bem alias direto no SHOW DATABASES se usado de forma simples,
+      // para garantir o alias padronizado em consultas relacionais estritas, podemos usar a information_schema:
+      cCOMANDO := "SELECT SCHEMA_NAME AS DB_NAME FROM INFORMATION_SCHEMA.SCHEMATA;"  //"SHOW DATABASES;"
+
+   CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+      cCOMANDO := "SELECT datname AS DB_NAME FROM pg_database WHERE datistemplate = false;"
+
+   CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+      cCOMANDO := "SELECT name AS DB_NAME FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb');"
+
+   CASE cTipo == "ORACLE" .OR. cTipo == "OCI" 
+      // No Oracle, o conceito de "Database" equivale mais ao "User/Schema" aberto
+      cCOMANDO := "SELECT username AS DB_NAME FROM dba_users WHERE account_status = 'OPEN' ORDER BY username;"
+
+   CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0    
+      cCOMANDO := "SELECT name AS DB_NAME FROM pragma_database_list;"
+
+   CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB"
+      // No Firebird, por arquitetura, ele não lista outros bancos nativamente via SQL (cada arquivo FDB é isolado).
+      // O padrão para retornar o alias do banco conectado na sessão atual é:
+      cCOMANDO := "SELECT RDB$GET_CONTEXT('SYSTEM', 'DB_NAME') AS DB_NAME FROM RDB$DATABASE;"
+   ENDCASE
+
+RETURN cCOMANDO
+
+
+FUNCTION Dialeto_Version(cTipo)
+   LOCAL cCOMANDO := ""
+   
+   hb_Default( @cTipo, cTIPOSQL ) // Usa a global como fallback
+
+   DO CASE
+   CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+      cCOMANDO := "SELECT @@VERSION AS VER;"
+
+   CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+      cCOMANDO := "SELECT VERSION() AS VER;"
+
+   CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB"
+      // Em SQL padrão, apelidos de colunas usam aspas duplas ou nenhuma aspa.
+      cCOMANDO := 'SELECT RDB$GET_CONTEXT("SYSTEM", "ENGINE_VERSION") AS VER FROM RDB$DATABASE;'
+
+   CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+      cCOMANDO := "SELECT sqlite_version() AS VER;"
+
+   CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+      cCOMANDO := "SELECT VERSION() AS VER;"
+
+   CASE cTipo == "ORACLE" .OR. cTipo == "OCI"
+      cCOMANDO := "SELECT BANNER AS VER FROM V$VERSION WHERE ROWNUM = 1;"
+   ENDCASE
+
+RETURN cCOMANDO
 
 // +--------------------------------------------------------------------
 // +
@@ -1109,10 +1182,10 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK)
            MSql += " NUMBER (10,0) GENERATED ALWAYS AS IDENTITY" 
            
     CASE mFldType = "+" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )       
-           MSql += "serial4 "
+           MSql += "SERIAL "
            
      CASE mFldType = "+" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )      
-           MSql += "int  identity "
+           MSql += "INT IDENTITY(1,1)"
            
      CASE mFldType = "+" .AND. ( cTIPOSQL = "SQLITE")      
            MSql += "integer primary key AUTOINCREMENT"
