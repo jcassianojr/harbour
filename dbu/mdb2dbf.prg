@@ -1182,6 +1182,9 @@ local cFieldType   := ''
 local nFieldLength := 0
 local nFieldDec    := 0
 local lopen
+LOCAL cSchema
+LOCAL cSchemaSQL
+LOCAL cUserOracle
 Lopen        := .F.
 lARQMDBACCDB := .F.
 cCOMANDO     := ""
@@ -1291,23 +1294,78 @@ IF cTIPOINFO = "TABELA"
    ENDCASE
 ENDIF
 IF cTIPOINFO = "ESTRUTURA"
-   DO CASE
+DO CASE
    CASE lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
       //Implantado abaixo com  catalogx
-   CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
-      cCOMANDO := "PRAGMA table_info( "+cTABELA+")"
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SHOW COLUMNS FROM "+cTABELA
-   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      cCOMANDO := "SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
-      cCOMANDO += " FROM   information_schema.columns "
-      cCOMANDO += " WHERE   table_name = '"+UPPER(cTABELA)+"' ORDER BY ordinal_position ;"
-      //nome tabela em maiusculo postgresql e case sensitive
+  
+   CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+      // PRAGMA table_info retorna: cid, name, type, notnull, dflt_value, pk
+      // Como o SQLite não aceita aliases em PRAGMAs diretamente, a sua camada de dados
+      // deverá ler os campos nativos do pragma ("name", "type") ou usamos uma query vazia de metadados:
+      cCOMANDO := "SELECT name AS FIELD_NAME, type AS DATA_TYPE, 0 AS FIELD_LEN, 0 AS FIELD_DEC FROM pragma_table_info('" + cTabela + "');"
+
+   CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+      // Em vez de SHOW COLUMNS (que gera colunas dinâmicas), usamos a information_schema para fixar os aliases
+      if Empty( cOwnerx )
+         cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                     "COALESCE(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
+                     "COALESCE(NUMERIC_SCALE, 0) AS FIELD_DEC " + ;
+                     "FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = DATABASE() ORDER BY ORDINAL_POSITION;"
+      else
+         cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                     "COALESCE(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
+                     "COALESCE(NUMERIC_SCALE, 0) AS FIELD_DEC " + ;
+                     "FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = '" + cOwnerx + "' ORDER BY ORDINAL_POSITION;"
+      endif
+
+   CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+      // PostgreSQL diferencia maiúsculas de minúsculas. Geralmente tabelas ficam em minúsculo no Postgres.
+      // udt_name ou data_type mapeados perfeitamente
+       //nome tabela em maiusculo postgresql e case sensitive
       //udt_name melhor retorno mas tambem tras data_type caso necesario
       //where table_schema='public'  tras todas as tabelas do usurio(public)
-   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-      cCOMANDO := "select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='"+cTABELA+"'"
-   endcase
+   
+      
+      cSchema := iif( Empty(cOwnerx), "public", cOwnerx )
+      cCOMANDO := "SELECT column_name AS FIELD_NAME, udt_name AS DATA_TYPE, " + ;
+                  "COALESCE(character_maximum_length, numeric_precision) AS FIELD_LEN, " + ;
+                  "COALESCE(numeric_scale, 0) AS FIELD_DEC " + ;
+                  "FROM information_schema.columns " + ;
+                  "WHERE LOWER(table_name) = '" + Lower(cTabela) + "' AND table_schema = '" + cSchema + "' " + ;
+                  "ORDER BY ordinal_position;"
+
+   CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+      cSchemaSQL := iif( Empty(cOwnerx), "dbo", cOwnerx )
+      cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                  "ISNULL(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
+                  "ISNULL(NUMERIC_SCALE, 0) AS FIELD_DEC " + ;
+                  "FROM INFORMATION_SCHEMA.COLUMNS " + ;
+                  "WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = '" + cSchemaSQL + "' " + ;
+                  "ORDER BY ORDINAL_POSITION;"
+
+   CASE cTipo == "ORACLE" .OR. cTipo == "OCI"
+      cUserOracle := iif( Empty(cOwnerx), "USER_TAB_COLUMNS", "ALL_TAB_COLUMNS" )
+      cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                  "DATA_LENGTH AS FIELD_LEN, COALESCE(DATA_SCALE, 0) AS FIELD_DEC " + ;
+                  "FROM " + cUserOracle + " WHERE TABLE_NAME = '" + Upper(cTabela) + "' " + ;
+                  iif( !Empty(cOwnerx), "AND OWNER = '" + Upper(cOwnerx) + "' ", "" ) + ;
+                  "ORDER BY COLUMN_ID;"
+
+   CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB"
+      // O Firebird exige um JOIN complexo no catálogo do sistema para extrair os tipos amigáveis
+      cCOMANDO := "SELECT TRIM(F.RDB$FIELD_NAME) AS FIELD_NAME, " + ;
+                  "CASE T.RDB$FIELD_TYPE " + ;
+                  "  WHEN 7 THEN 'SMALLINT' WHEN 8 THEN 'INTEGER' WHEN 16 THEN 'BIGINT' " + ;
+                  "  WHEN 10 THEN 'FLOAT' WHEN 27 THEN 'DOUBLE PRECISION' " + ;
+                  "  WHEN 14 THEN 'CHAR' WHEN 37 THEN 'VARCHAR' WHEN 40 THEN 'CSTRING' " + ;
+                  "  WHEN 12 THEN 'DATE' WHEN 13 THEN 'TIME' WHEN 35 THEN 'TIMESTAMP' " + ;
+                  "  WHEN 261 THEN 'BLOB' END AS DATA_TYPE, " + ;
+                  "T.RDB$FIELD_LENGTH AS FIELD_LEN, COALESCE(T.RDB$FIELD_SCALE, 0) * -1 AS FIELD_DEC " + ;
+                  "FROM RDB$RELATION_FIELDS F " + ;
+                  "JOIN RDB$FIELDS T ON F.RDB$FIELD_SOURCE = T.RDB$FIELD_NAME " + ;
+                  "WHERE F.RDB$RELATION_NAME = '" + Upper(cTabela) + "' " + ;
+                  "ORDER BY F.RDB$FIELD_POSITION;"
+   ENDCASE
 ENDIF
 IF cTIPOINFO = "CCAMPOSQL"
    cCOMANDO := cCAMPOSQL
@@ -1320,22 +1378,6 @@ IF cTIPOINFO = "__INDEX__"
 ENDIF
 IF cTIPOINFO = "__VERSION__"
    cCOMANDO :=Dialeto_Version()
-
-   /*
-   DO CASE
-   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-      cCOMANDO := "SELECT @@VERSION"
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SELECT Version() AS 'VER'"
-   CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
-      cCOMANDO := "SELECT RDB$GET_CONTEXT('SYSTEM', 'ENGINE_VERSION') AS 'VER' FROM RDB$DATABASE"
-   CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
-      cCOMANDO := "SELECT sqlite_version() AS 'VER'"
-   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      cCOMANDO := "SELECT version()"
-   ENDCASE
-   */
-   
 ENDIF
 
 
@@ -1373,43 +1415,42 @@ IF lOPEN
          AADD(aRETU,ors:fields(0) :value)   //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
       ENDIF
       IF cTIPOINFO = "ESTRUTURA"
+        
          cFieldName   := ''
          cFieldType   := ''
          nFieldLength := 0
          nFieldDec    := 0
+         eDEFAULT     := ''
+         nNotNull     := 0
 
-         // eDEFAULT :=""
-         //inclusao valores default geracampo posicao 5 futuro correcao de nulls na importacao
-         //
-         DO CASE
-         CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
-            //table info colunas
-            //cid, name, type, "notnull", dflt_value, pk
-            // 1    2     3      4           5         6
-            // 0    1     2      3           4         5 ->posicao no recordset
-            cFieldName := upper(alltrim(ors:fields(1) :value))
-            cFieldType := upper(alltrim(ors:fields(2) :value))
-            AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-         CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-            //table info colunas
-            // field, type, null, key, default,extra
-            // 1      2     3      4      5      6
-            // 0      1     2      3      4      5 ->posicao no recordset
-            cFieldName := upper(alltrim(ors:fields(0) :value))
-            cFieldType := upper(alltrim(ors:fields(1) :value))
-            AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-         CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-            cFieldName   := upper(alltrim(ors:fields(0) :value))  //column_name
-            cFieldType   := upper(alltrim(ors:fields(1) :value))  // data_type
-            nFieldLength := fixnum(ors:fields(2) :value)  //tamanho string character_maximum_length
-            if fixnum(ors:fields(3) :value) > 0   //tamannho numeric
-               nFieldLength := fixnum(ors:fields(3) :value)   //numeric_precision
-               nFieldDec    := fixnum(ors:fields(4) :value)   //numeric_scale
-            endif
-            AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-         CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-            //implantar   catalog? outra?
-         ENDCASE
+         // Como a nossa 'Dialeto_ShowColumns()' padronizou o retorno usando ALIASES ("AS ..."),
+         // não precisamos mais de um CASE para separar a leitura dos campos por banco!
+         // Todos os SGBDs agora devolvem as mesmas colunas textuais em 'ors'.
+         
+         TRY
+            // Captura segura por nome do alias unificado
+            cFieldName   := Upper(AllTrim( hb_valToStr(ors:Fields("FIELD_NAME"):Value) ))
+            cFieldType   := Upper(AllTrim( hb_valToStr(ors:Fields("DATA_TYPE"):Value) ))
+            nFieldLength := fixnum( ors:Fields("FIELD_LEN"):Value )
+            nFieldDec    := fixnum( ors:Fields("FIELD_DEC"):Value )
+         CATCH
+            // Tratamento de contingência para o SQLite antigo (caso o PRAGMA nativo ignore aliases)
+            IF cTIPOSQL == "SQLITE" .OR. At(".SQLITE", Upper(cdatabase)) > 0
+               TRY
+                  cFieldName   := Upper(AllTrim( hb_valToStr(ors:Fields("name"):Value) ))
+                  cFieldType   := Upper(AllTrim( hb_valToStr(ors:Fields("type"):Value) ))
+                  nFieldLength := 0
+                  nFieldDec    := 0
+               CATCH
+                  cFieldName   := ""
+               END
+            ENDIF
+         END
+
+         // Se o metadado for válido, adiciona ao array de retorno estruturado para o DBF
+         IF !Empty(cFieldName)
+            AADD(aRETU, geracampodbf(cFieldName, cFieldType, nFieldLength, nFieldDec))
+         ENDIF
 
       ENDIF
       IF cTIPOINFO = "__INDEX__"
