@@ -1232,66 +1232,63 @@ oRS:CursorLocation := 3
 cCOMANDO := ""
 IF cTIPOINFO = "DATABASE"
    cCOMANDO :=Dialeto_ShowDatabases()
-/*
-   DO CASE
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SHOW DATABASES;"
-   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      cCOMANDO := "SELECT datname FROM pg_database;"
-   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-      cCOMANDO := "SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb') "
-   CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" 
-       cCOMANDO := "SELECT username  FROM dba_users  WHERE account_status = 'OPEN'  ORDER BY username;"
-   CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0    
-       cCOMANDO := "SELECT name FROM pragma_database_list;"
-   ENDCASE
-ENDIF
-*/
 ENDIF
 
 IF cTIPOINFO = "TABELA"
-   DO CASE
-   CASE lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-      cCOMANDO := "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
-       +" and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
-       +" order by MSysObjects.name "
-   CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
-      cCOMANDO := "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name"
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SHOW TABLES"
-      //SHOW TABLES FROM `information_schema`;
-   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      if empty(cOwnerx)
-         cCOMANDO := "SELECT tablename FROM pg_tables WHERE schemaname='public'  order by tablename"
-      else
-          cCOMANDO := "select tablename from pg_tables where schemaname = '" + cOwnerx + "' order by tablename"
-      endif
-      
-      //SELECT table_name  FROM information_schema.tables  WHERE table_type = 'BASE TABLE' AND table_schema='public'
-   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-      cCOMANDO := "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';"
-    CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" 
-      if empty(cOwnerx)
-         cCOMANDO := "SELECT table_name  FROM user_tables  order by TABLE_NAME"    //global SELECT owner, table_name  FROM all_tables
-      else
-         cCOMANDO :="select TABLE_NAME from all_tables where owner = '" + cOwnerx + "' order by TABLE_NAME"
-      endif
-    CASE cTIPOSQL = "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" 
-      if empty(cOwnerx)
-         cCOMANDO := "Select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 order by RDB$RELATION_NAME"  
-      else
-         cCOMANDO := "select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 AND RDB$OWNER_NAME = '" + cOwnerx + "' order by RDB$RELATION_NAME"
-      endif
-      
-       CASE cTIPOSQL = "SYBASE"
-      IF Empty(cOwner)
-         cCOMANDO := "select name from sysobjects where type = N'U' order by name"
-      ELSE
-         cCOMANDO := "select name from sysobjects where type = N'U' and user_name(uid) = '" + cOwnerx + "' order by name"
-      ENDIF
+    DO CASE
+       CASE "ACCESS" $ cTipo .OR. "MDB" $ cTipo .OR. "ACCDB" $ cTipo
+          cCOMANDO := "SELECT MSysObjects.name AS TABLE_NAME FROM MSysObjects WHERE MSysObjects.type IN (1,4,6) " + ;
+                      "AND MSysObjects.name NOT LIKE '~*' AND MSysObjects.name NOT LIKE 'MSys%' " + ;
+                      "ORDER BY MSysObjects.name;"
 
-         
-   endcase
+       CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+          cCOMANDO := "SELECT name AS TABLE_NAME FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;"
+
+       CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+          // Permite o uso padronizado do alias "TABLE_NAME" e aceita filtrar por banco/schema (cOwnerx)
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT table_name AS TABLE_NAME FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = DATABASE() ORDER BY table_name;"
+          else
+             cCOMANDO := "SELECT table_name AS TABLE_NAME FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = '" + cOwnerx + "' ORDER BY table_name;"
+          endif
+
+       CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT tablename AS TABLE_NAME FROM pg_tables WHERE schemaname='public' ORDER BY tablename;"
+          else
+             cCOMANDO := "SELECT tablename AS TABLE_NAME FROM pg_tables WHERE schemaname = '" + cOwnerx + "' ORDER BY tablename;"
+          endif
+          
+       CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT TABLE_NAME AS TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;"
+          else
+             cCOMANDO := "SELECT TABLE_NAME AS TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '" + cOwnerx + "' ORDER BY TABLE_NAME;"
+          endif
+
+       CASE cTipo == "ORACLE" .OR. cTipo == "OCI" 
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT table_name AS TABLE_NAME FROM user_tables ORDER BY TABLE_NAME;"
+          else
+             cCOMANDO := "SELECT table_name AS TABLE_NAME FROM all_tables WHERE owner = '" + Upper(cOwnerx) + "' ORDER BY TABLE_NAME;"
+          endif
+
+       CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB" 
+          // RDB$SYSTEM_FLAG = 0 traz apenas tabelas criadas pelo usuário (ignora tabelas do sistema do Firebird)
+          // TRIM() remove espaços em branco à direita que o Firebird gera nativamente nos metadados
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT TRIM(RDB$RELATION_NAME) AS TABLE_NAME FROM RDB$RELATIONS WHERE COALESCE(RDB$SYSTEM_FLAG, 0) = 0 AND RDB$VIEW_BLR IS NULL ORDER BY RDB$RELATION_NAME;"
+          else
+             cCOMANDO := "SELECT TRIM(RDB$RELATION_NAME) AS TABLE_NAME FROM RDB$RELATIONS WHERE COALESCE(RDB$SYSTEM_FLAG, 0) = 0 AND RDB$VIEW_BLR IS NULL AND RDB$OWNER_NAME = '" + cOwnerx + "' ORDER BY RDB$RELATION_NAME;"
+          endif
+          
+       CASE cTipo == "SYBASE"
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT name AS TABLE_NAME FROM sysobjects WHERE type = N'U' ORDER BY name;"
+          else
+             cCOMANDO := "SELECT name AS TABLE_NAME FROM sysobjects WHERE type = N'U' AND USER_NAME(uid) = '" + cOwnerx + "' ORDER BY name;"
+          endif
+   ENDCASE
 ENDIF
 IF cTIPOINFO = "ESTRUTURA"
    DO CASE
