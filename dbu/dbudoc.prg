@@ -473,12 +473,15 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       
       // Grava os indices
       IF tDOC = 7 .AND. cSUBTIPO = "ISO"     //xlm
-         nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
-         FOR j = 1 TO  nIndexes
+         
+         aINDICES:=GeraINDICES()
+        nIndexes := LEN(aINDICES)
+        FOR j := 1 TO nIndexes
             cTEXTO += "<Indice>" + cLIN
-            cTEXTO += "<Chave>" + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + "</Chave>" + CLIN
+            cTEXTO += "<Chave>" + aINDICES[J,6]  + "</Chave>" + CLIN
             cTEXTO += "</Indice>" + cLIN
-         NEXT j
+        NEXT j
+         
       ENDIF
 
       // cabecario sql  nao precisa loop nos fields
@@ -526,15 +529,14 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             cTEXTO += ") ; "  + cLIN
          ENDCASE
 
+        cTEXTO    +=  hb_osNewLine()
+        aINDICES:=GeraINDICES()
+        nIndexes := LEN(aINDICES)
+        FOR j := 1 TO nIndexes
+            cTEXTO += aINDICES[J,1]  + hb_osNewLine() //Create index
+        NEXT j
         
-         nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
-         cTEXTO    +=  hb_osNewLine()
-         FOR j = 1 TO  nIndexes
-            cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
-            cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
-            cSQLINDEX := "create index " + cINDEXNAME + " on " + cARQ + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;"
-            cTEXTO += cSQLINDEX + hb_osNewLine()
-         NEXT j
+         
       ENDIF
    ENDIF
 
@@ -578,20 +580,29 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
    
    IF tDOC = 4    // dbe
       cTEXTO += 'ENDDEF' + cLIN
-      nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
+      
+      
+     // AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
+     //                1     2          3          4      5      6        7       8   
+      
+      aINDICES:=GeraINDICES()
+      nIndexes := LEN(aINDICES)
       IF nIndexes > 0
          cTEXTO += 'DEFINDEX ' + Upper( cARQ ) + cLIN
          FOR j = 1 TO  nIndexes
-            cTEXTO += "   "
-            cTEXTO += dbOrderInfo( DBOI_NAME, ,  j )
             cTEXTO += " "
-            cTEXTO += dbOrderInfo( DBOI_EXPRESSION, ,  j )
+            cTEXTO += aINDICES[J,4]
             cTEXTO += " "
-            cTEXTO += MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) )
+            cTEXTO += aINDICES[J,5]
+            cTEXTO += " "
+            cTEXTO += aINDICES[J,6]
             cTEXTO += clin
          NEXT j
          cTEXTO += 'ENDINDEX' + cLIN
       ENDIF
+      
+      
+      
       cTEXTO += 'ENDFILE' + cLIN
       cTEXTO +=  cLIN
       cTEXTO += "[" + Upper( AllTrim( carq ) ) + "."+TABLEEXT+"]" + clin
@@ -600,16 +611,23 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += "NUMMAINTAINED=" + Str( nIndexes, 1 ) + cLIN
       cTEXTO += "MAINTAIN0=" + cARQ + XEXT() + cLIN
       cINDEXTEXTO := ""
+      
+      aINDICES:=GeraINDICES()
+      nIndexes := LEN(aINDICES)
+
+      AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
+     //             1     2          3          4      5      6        7       8   
+      
       IF nIndexes > 0
          FOR j = 1 TO  nIndexes
-            cTEXTO += "TAG"   + Str( j - 1, 1 ) + "=" + dbOrderInfo( DBOI_NAME, ,  j ) + clin
-            cTEXTO += "INDEX" + Str( j - 1, 1 ) + "=" + dbOrderInfo( DBOI_EXPRESSION, ,  j ) + clin
-            cTEXTO += "INDEXFIELDS" + Str( j - 1, 1 ) + "=" + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + clin
-            cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
-            cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
-            cINDEXTEXTO += "create index " + cINDEXNAME + " on " + cARQ + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;" + clin
+            cTEXTO += "TAG"   + Str( j - 1, 1 ) + "=" +  aINDICES[J,4] + clin
+            cTEXTO += "INDEX" + Str( j - 1, 1 ) + "=" +  aINDICES[J,5] + clin
+            cTEXTO += "INDEXFIELDS" + Str( j - 1, 1 ) + "=" +  aINDICES[J,6] + clin
+            cINDEXTEXTO +=  aINDICES[J,1] + clin
          NEXT j
       ENDIF
+      
+      
       cTEXTO += clin + "[SQLITE]"
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "SQLITE" ))
       CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
@@ -1093,16 +1111,19 @@ NEXT K
 //    NOVODOC [name: "NOVODOC"]
 //    (TIPO, NUMERO) [name: "TIPONUMERO"]
 //  }
- nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
+
+
+     //AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
+     //              1     2          3          4      5      6        7       8   
+
+aINDICES:=GeraINDICES()
+nIndexes := LEN(aINDICES)
 IF nIndexes>0
     cLINHA+="  Indexes {" +HB_OSNEWLINE()
          FOR j = 1 TO  nIndexes
-            cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
-            cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
-            cLINHA+= " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) "
+            cINDEXNAME := aINDICESx[J,4]
+            cLINHA+= " ( " + aINDICESx[J,6] + " ) "
             cLINHA+= " [name: "+CHR(34)+cINDEXNAME+CHR(34)+"]" +HB_OSNEWLINE() 
-            //cSQLINDEX := "create index " + cINDEXNAME + " on " + cARQ + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;"
-            //cTEXTO += cSQLINDEX + hb_osNewLine()
          NEXT j 
     cLINHA+= HB_OSNEWLINE()     
     cLINHA+=" }" +HB_OSNEWLINE()     

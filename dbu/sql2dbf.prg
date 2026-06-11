@@ -826,19 +826,28 @@ FUNCTION export2sql( odb, cDBFFILE )
 // use &cTablename.
 
 // 1. Garantir que a tabela de metadados exista
+   // Metadados de Campos (Tabela table_metadata atualizada)
    mSql := "CREATE TABLE IF NOT EXISTS table_metadata (" + ;
-           "table_name TEXT, " + ;
-           "column_name TEXT, " + ;
-           "original_type TEXT, " + ;
-           "length INTEGER, " + ;
-           "precision INTEGER)"
+        "table_name TEXT, " + ;
+        "column_name TEXT, " + ;
+        "original_type TEXT, " + ;
+        "length INTEGER, " + ;
+        "precision INTEGER, " + ;
+        "is_nullable INTEGER, " + ;      // Indica se aceita valores NULL (0=Não, 1=Sim)
+        "field_visual_picture TEXT)"     // Guarda a máscara visual padrão do DBF (ex: '@E 999,999.99')
    miscsql( oDB, mSql )
    
    
-   // Metadados de Índices (A nova tabela)
-   miscsql( oDB, "CREATE TABLE IF NOT EXISTS index_metadata (" + ;
-              "table_name TEXT, index_name TEXT, expression TEXT, " + ;
-              "is_unique INTEGER, is_bag INTEGER)" )
+   // Metadados de Índices (Tabela index_metadata atualizada)
+    mSqlIndex := "CREATE TABLE IF NOT EXISTS index_metadata (" + ;
+                 "table_name TEXT, " + ;
+                 "index_name TEXT, " + ;
+                 "expression TEXT, " + ;         // Expressão original em Harbour (ex: 'CODIGO+DTOS(DATA)')
+                 "sql_expression TEXT, " + ;     // Expressão traduzida para o Banco (ex: 'codigo || to_char(data, ...)')
+                 "filter_expression TEXT, " + ;  // Expressão condicional do FOR (ex: '!DELETED()' ou 'ATIVO==.T.')
+                 "is_unique INTEGER, " + ;
+                 "is_bag INTEGER)"
+    miscsql( oDB, mSqlIndex )
 
 
    // Verifica se a tabela 
@@ -901,33 +910,21 @@ FUNCTION export2sql( odb, cDBFFILE )
    ENDIF
 
 
-   nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
+   aINDICES:=GeraINDICES()
+   nIndexes := LEN(aINDICES)
    FOR j := 1 TO nIndexes
-       
+      msql := aINDICES[J,1]  //Create index
+      
+      IF ! miscsql( oDB, mSql )
+         MemoWrit( "sql" + StrZero( j, 2, 0 ) + ".txt", msql )
+      ENDIF
    
-   
-      // CREATE INDEX idx_student_name ON Students (name);
-      cINDEXNAME := dbOrderInfo( DBOI_NAME,, j )
-      cINDEXNAME := StrTran( cINDEXNAME, "-", "_" )  // Tracos nao aceitos trocando por undescore
-      msql       := "create index " + cINDEXNAME + " on " + cTablename + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION,, j ) ) + " ) ;"
-      // DbOrderInfo( <nDefine> , <cIndexFile> , <nOrder_or_cIndexName> , <xNewSetting> ) -> xCurrentSetting
-      // AAdd( aNtxNames ,  dbORDERINFO( DBOI_NAME , ,  j )+" - "+dbORDERINFO( DBOI_EXPRESSION , ,  j ) )
-      IF !miscsql( oDB, mSql )
+      msql := aINDICES[J,2]  //metadado
+      
+      IF ! miscsql( oDB, mSql )
          MemoWrit( "sql" + StrZero( j, 2, 0 ) + ".txt", msql )
       ENDIF
       
-      cIdxName := dbOrderInfo( DBOI_NAME, , j )       // Nome do Tag (ex: "ID_CLI")
-      cKey     := dbOrderInfo( DBOI_EXPRESSION, , j ) // Expressão (ex: "NOME+DTOS(DATA)")
-      lIsUnique := dbOrderInfo( DBOI_UNIQUE, , j )    // Retorna .T. se for UNIQUE
-   
-     // A. Salva a "receita" para o retorno futuro ao DBF
-     mSql := "INSERT INTO index_metadata (table_name, index_name, expression, is_unique) VALUES (" + ;
-             c2sql(cTablename) + ", " + ;
-             c2sql(cIdxName) + ", " + ;
-             c2sql(cKey) + ", " + ;
-             iif( lIsUnique, "1", "0" ) + ")"
-     miscsql( oDB, mSql )
-        
    NEXT j
 
 

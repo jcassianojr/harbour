@@ -752,49 +752,63 @@ cSqlIndexes := ""
 
 DO CASE
    CASE cTIPOSQL == "SQLITE"
-      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name TEXT, column_name TEXT, original_type TEXT, length INTEGER, precision INTEGER)"
-      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name TEXT, index_name TEXT, expression TEXT, is_unique INTEGER)"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name TEXT, column_name TEXT, original_type TEXT, length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture TEXT)"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name TEXT, index_name TEXT, expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
    CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MYSQL64" .OR. cTIPOSQL == "MARIADB"
-      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER)"
-      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, is_unique INTEGER)"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
    CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
-      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER)"
-      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, is_unique INTEGER)"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
    CASE lMDB .OR. lACCDB // MS ACCESS (MDB ou ACCDB)
-      // Access nÃ£o aceita IF NOT EXISTS e exige colchetes em palavras reservadas
-      cSqlFields  := "CREATE TABLE table_metadata (table_name TEXT(50), column_name TEXT(50), original_type TEXT(1), [length] INTEGER, [precision] INTEGER)"
-      cSqlIndexes := "CREATE TABLE index_metadata (table_name TEXT(50), index_name TEXT(50), expression MEMO, is_unique INTEGER)"
+      // Access não aceita IF NOT EXISTS e exige colchetes em palavras reservadas. Usa TEXT(tamanho) e MEMO para textos longos.
+      cSqlFields  := "CREATE TABLE table_metadata (table_name TEXT(50), column_name TEXT(50), original_type TEXT(1), [length] INTEGER, [precision] INTEGER, is_nullable INTEGER, field_visual_picture TEXT(250))"
+      cSqlIndexes := "CREATE TABLE index_metadata (table_name TEXT(50), index_name TEXT(50), expression MEMO, sql_expression MEMO, filter_expression MEMO, is_unique INTEGER, is_bag INTEGER)"
 
    CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
+      // SQL Server exige verificação via OBJECT_ID e usa VARCHAR(MAX) para blocos grandes de texto, além de INT ao invés de INTEGER.
       cSqlFields  := "IF OBJECT_ID('table_metadata', 'U') IS NULL " + ;
-                     "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INT, precision INT)"
+                     "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INT, precision INT, is_nullable INT, field_visual_picture VARCHAR(250))"
       cSqlIndexes := "IF OBJECT_ID('index_metadata', 'U') IS NULL " + ;
-                     "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression VARCHAR(MAX), is_unique INT)"
-  // No primeiro DO CASE de DBF2MDB() (Tabelas de Metadados)
-   CASE cTIPOSQL == "FIREBIRD"
-       cSqlFields  := "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER)"
-       cSqlIndexes := "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression BLOB SUB_TYPE TEXT, is_unique INTEGER)"
-ENDCASE
+                     "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression VARCHAR(MAX), sql_expression VARCHAR(MAX), filter_expression VARCHAR(MAX), is_unique INT, is_bag INT)"
 
-// ExecuÃ§Ã£o dos comandos
+   CASE cTIPOSQL == "FIREBIRD"
+      // Firebird não possui IF NOT EXISTS por padrão em DDL simples e exige BLOB SUB_TYPE TEXT para textos longos/expressões.
+      cSqlFields  := "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
+      cSqlIndexes := "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression BLOB SUB_TYPE TEXT, sql_expression BLOB SUB_TYPE TEXT, filter_expression BLOB SUB_TYPE TEXT, is_unique INTEGER, is_bag INTEGER)"
+   ENDCASE
+
+
+// Execução dos comandos de criação das tabelas de metadados
 IF !Empty( cSqlFields )
-   // No caso do Access, usamos TRY/CATCH pois ele nÃ£o tem 'IF NOT EXISTS'
-   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+   
+   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. ;
+      cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR. cTIPOSQL = "GDB"
+      
+      // Tenta criar a tabela de metadados de campos de forma isolada
       TRY
          executacmd(cMDBARQ, cSqlFields)
+      CATCH
+         // Tabela 'table_metadata' já existe ou erro ignorado com segurança
+      END
+      
+      // Tenta criar a tabela de metadados de índices de forma isolada
+      TRY
          executacmd(cMDBARQ, cSqlIndexes)
       CATCH
-         // Tabelas jÃ¡ existem
+         // Tabela 'index_metadata' já existe ou erro ignorado com segurança
       END
+      
    ELSE
+      // Bancos que suportam "IF NOT EXISTS" ou validação nativa (SQLite, MySQL, PostgreSQL, SQL Server)
       executacmd(cMDBARQ, cSqlFields)
       executacmd(cMDBARQ, cSqlIndexes)
    ENDIF
+   
 ENDIF
-
 
 lgravasql := mdg("gravar sql")
 aINDICES  := {}
@@ -810,43 +824,63 @@ cNOMETABELA := ALIAS()
 executacmd( cMDBARQ, "DELETE FROM table_metadata WHERE table_name = " + c2sql(cNOMETABELA) )
 executacmd( cMDBARQ, "DELETE FROM index_metadata WHERE table_name = " + c2sql(cNOMETABELA) )
 
-// 2. INCLUSÃƒO DOS METADADOS DE CAMPOS (Estrutura do DBF)
+
+// 2. INCLUSÃO DOS METADADOS DE CAMPOS (Estrutura do DBF)
 FOR i := 1 TO Len( aSTRU )
    mFldNm   := aSTRU[ i, 1 ]
    mFldType := aSTRU[ i, 2 ]
    mFldLen  := aSTRU[ i, 3 ]
    mFldDec  := aSTRU[ i, 4 ]
 
-   msql := "INSERT INTO table_metadata (table_name, column_name, original_type, length, precision) VALUES (" + ;
-           c2sql(cTablename) + ", " + ;
-           c2sql(mFldNm)    + ", " + ;
-           c2sql(mFldType)  + ", " + ;
-           ltrim(str(mFldLen)) + ", " + ;
-           ltrim(str(mFldDec)) + ")"
+   // Regra para is_nullable: Campos auto-incrementais (+) não aceitam nulo (0). 
+   // Os demais campos aceitam nulo (1) por padrão de compatibilidade SQL.
+   nIsNullable := iif( mFldType == "+", 0, 1 )
+
+   // Monta uma máscara visual padrão baseada nas características do campo DBF
+   // Dentro do loop de gravação de metadados de campos (aSTRU):
+   nIsNullable := 1
+   cVisualPic  := ""
+
+   DO CASE
+   CASE mFldType == "+"
+      nIsNullable := 0 // Auto-incremento nunca é nulo
+      cVisualPic  := "99999999"
+      
+   CASE mFldType == "I" // Inteiro nativo do ADS
+      cVisualPic  := Replicate("9", mFldLen)
+      
+   CASE mFldType == "T" // Time/Timestamp do ADS
+      cVisualPic  := "99/99/9999 99:99:99"
+      
+   CASE mFldType == "D"
+      cVisualPic  := "99/99/9999"
+      
+   CASE mFldType == "L"
+      cVisualPic  := "Y"
+   ENDCASE
+
+   // Monta o INSERT alimentando a nova estrutura de metadados estendida
+   msql := "INSERT INTO table_metadata (table_name, column_name, original_type, length, precision, is_nullable, field_visual_picture) VALUES (" + ;
+           c2sql(cTablename)   + ", " + ;
+           c2sql(mFldNm)       + ", " + ;
+           c2sql(mFldType)     + ", " + ;
+           LTrim(Str(mFldLen)) + ", " + ;
+           LTrim(Str(mFldDec)) + ", " + ;
+           LTrim(Str(nIsNullable)) + ", " + ; // Salva 0 ou 1
+           c2sql(cVisualPic)   + ")"          // Salva a máscara padrão gerada
    
    executacmd( cMDBARQ, msql )
 NEXT
 
-nIndexes := dbORDERINFO(DBOI_ORDERCOUNT)
+aINDICES:=GeraINDICES()
+nIndexes := LEN(aINDICES)
 FOR j := 1 TO nIndexes
-   cINDEXNAME := dbORDERINFO(DBOI_NAME,,j)
-   cINDEXNAME := StrTran(cINDEXNAME,"-","_")  //Tracos nao aceitos trocando por undescore
-   msql       := "create index "+cINDEXNAME+" on "+cNometabela+" ( "+MDPCHAVEI(dbORDERINFO(DBOI_EXPRESSION,,j))+" ) "
-   aadd(Aindices,msql)
-   
-   cIdxName  := dbOrderInfo( DBOI_NAME, , j )
-   cKey      := dbOrderInfo( DBOI_EXPRESSION, , j )
-   lIsUnique := dbOrderInfo( DBOI_UNIQUE, , j )
-   
-   // Salva a expressÃ£o literal (ex: "CODIGO+STR(SEQ,3)") para reconstruÃ§Ã£o posterior
-   msql := "INSERT INTO index_metadata (table_name, index_name, expression, is_unique) VALUES (" + ;
-           c2sql(cTablename) + ", " + ;
-           c2sql(cIdxName)   + ", " + ;
-           c2sql(cKey)       + ", " + ; 
-           iif( lIsUnique, "1", "0" ) + ")"
-           
-   executacmd( cMDBARQ, msql )
+    msql := aINDICES[J,1]  //Create index
+    executacmd( cMDBARQ, msql )
+    msql := aINDICES[J,2]   //insert into metadata
+    executacmd( cMDBARQ, msql )
 NEXT j
+
 dbclosearea()
 
 MDT(cNOMETABELA)
@@ -1074,6 +1108,15 @@ local cFieldType   := ''
 local nFieldLength := 0
 local nFieldDec    := 0
 local lopen
+LOCAL cSchema
+LOCAL cSchemaSQL
+LOCAL cUserOracle
+LOCAL cSchemaMY
+LOCAL cSchemaPG
+LOCAL cCHAVENAME  := ""
+LOCAL cCHAVECAMPO := ""
+
+
 Lopen        := .F.
 lARQMDBACCDB := .F.
 cCOMANDO     := ""
@@ -1123,107 +1166,183 @@ oRS:CursorLocation := 3
 
 cCOMANDO := ""
 IF cTIPOINFO = "DATABASE"
-   DO CASE
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SHOW DATABASES;"
-   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      cCOMANDO := "SELECT datname FROM pg_database;"
-   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-      cCOMANDO := "SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb') "
-   CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" 
-       cCOMANDO := "SELECT username  FROM dba_users  WHERE account_status = 'OPEN'  ORDER BY username;"
-   CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0    
-       cCOMANDO := "SELECT name FROM pragma_database_list;"
-   ENDCASE
+   cCOMANDO :=Dialeto_ShowDatabases()
 ENDIF
-
-
 
 IF cTIPOINFO = "TABELA"
-   DO CASE
-   CASE lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-      cCOMANDO := "select MSysObjects.name from MSysObjects where MSysObjects.type In (1,4,6) " ;
-       +" and MSysObjects.name not like '~*'   and MSysObjects.name not like 'MSys%' " ;
-       +" order by MSysObjects.name "
-   CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
-      cCOMANDO := "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name"
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SHOW TABLES"
-      //SHOW TABLES FROM `information_schema`;
-   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      if empty(cOwnerx)
-         cCOMANDO := "SELECT tablename FROM pg_tables WHERE schemaname='public'  order by tablename"
-      else
-          cCOMANDO := "select tablename from pg_tables where schemaname = '" + cOwnerx + "' order by tablename"
-      endif
-      
-      //SELECT table_name  FROM information_schema.tables  WHERE table_type = 'BASE TABLE' AND table_schema='public'
-   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-      cCOMANDO := "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';"
-    CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" 
-      if empty(cOwnerx)
-         cCOMANDO := "SELECT table_name  FROM user_tables  order by TABLE_NAME"    //global SELECT owner, table_name  FROM all_tables
-      else
-         cCOMANDO :="select TABLE_NAME from all_tables where owner = '" + cOwnerx + "' order by TABLE_NAME"
-      endif
-    CASE cTIPOSQL = "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" 
-      if empty(cOwnerx)
-         cCOMANDO := "Select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 order by RDB$RELATION_NAME"  
-      else
-         cCOMANDO := "select RDB$RELATION_NAME from RDB$RELATIONS where RDB$FLAGS = 1 AND RDB$OWNER_NAME = '" + cOwnerx + "' order by RDB$RELATION_NAME"
-      endif
-      
-       CASE cTIPOSQL = "SYBASE"
-      IF Empty(cOwner)
-         cCOMANDO := "select name from sysobjects where type = N'U' order by name"
-      ELSE
-         cCOMANDO := "select name from sysobjects where type = N'U' and user_name(uid) = '" + cOwnerx + "' order by name"
-      ENDIF
+    DO CASE
+       CASE "ACCESS" $ cTipo .OR. "MDB" $ cTipo .OR. "ACCDB" $ cTipo
+          cCOMANDO := "SELECT MSysObjects.name AS TABLE_NAME FROM MSysObjects WHERE MSysObjects.type IN (1,4,6) " + ;
+                      "AND MSysObjects.name NOT LIKE '~*' AND MSysObjects.name NOT LIKE 'MSys%' " + ;
+                      "ORDER BY MSysObjects.name;"
 
-         
-   endcase
+       CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+          cCOMANDO := "SELECT name AS TABLE_NAME FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;"
+
+       CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+          // Permite o uso padronizado do alias "TABLE_NAME" e aceita filtrar por banco/schema (cOwnerx)
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT table_name AS TABLE_NAME FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = DATABASE() ORDER BY table_name;"
+          else
+             cCOMANDO := "SELECT table_name AS TABLE_NAME FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = '" + cOwnerx + "' ORDER BY table_name;"
+          endif
+
+       CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT tablename AS TABLE_NAME FROM pg_tables WHERE schemaname='public' ORDER BY tablename;"
+          else
+             cCOMANDO := "SELECT tablename AS TABLE_NAME FROM pg_tables WHERE schemaname = '" + cOwnerx + "' ORDER BY tablename;"
+          endif
+          
+       CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT TABLE_NAME AS TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;"
+          else
+             cCOMANDO := "SELECT TABLE_NAME AS TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '" + cOwnerx + "' ORDER BY TABLE_NAME;"
+          endif
+
+       CASE cTipo == "ORACLE" .OR. cTipo == "OCI" 
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT table_name AS TABLE_NAME FROM user_tables ORDER BY TABLE_NAME;"
+          else
+             cCOMANDO := "SELECT table_name AS TABLE_NAME FROM all_tables WHERE owner = '" + Upper(cOwnerx) + "' ORDER BY TABLE_NAME;"
+          endif
+
+       CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB" 
+          // RDB$SYSTEM_FLAG = 0 traz apenas tabelas criadas pelo usuário (ignora tabelas do sistema do Firebird)
+          // TRIM() remove espaços em branco à direita que o Firebird gera nativamente nos metadados
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT TRIM(RDB$RELATION_NAME) AS TABLE_NAME FROM RDB$RELATIONS WHERE COALESCE(RDB$SYSTEM_FLAG, 0) = 0 AND RDB$VIEW_BLR IS NULL ORDER BY RDB$RELATION_NAME;"
+          else
+             cCOMANDO := "SELECT TRIM(RDB$RELATION_NAME) AS TABLE_NAME FROM RDB$RELATIONS WHERE COALESCE(RDB$SYSTEM_FLAG, 0) = 0 AND RDB$VIEW_BLR IS NULL AND RDB$OWNER_NAME = '" + cOwnerx + "' ORDER BY RDB$RELATION_NAME;"
+          endif
+          
+       CASE cTipo == "SYBASE"
+          if Empty( cOwnerx )
+             cCOMANDO := "SELECT name AS TABLE_NAME FROM sysobjects WHERE type = N'U' ORDER BY name;"
+          else
+             cCOMANDO := "SELECT name AS TABLE_NAME FROM sysobjects WHERE type = N'U' AND USER_NAME(uid) = '" + cOwnerx + "' ORDER BY name;"
+          endif
+   ENDCASE
 ENDIF
 IF cTIPOINFO = "ESTRUTURA"
-   DO CASE
+DO CASE
    CASE lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
-      //Implantar possivelmente com catalogx
-   CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
-      cCOMANDO := "PRAGMA table_info( "+cTABELA+")"
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SHOW COLUMNS FROM "+cTABELA
-   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      cCOMANDO := "SELECT   column_name,  udt_name,   character_maximum_length,   numeric_precision,  numeric_scale ,  data_type "
-      cCOMANDO += " FROM   information_schema.columns "
-      cCOMANDO += " WHERE   table_name = '"+UPPER(cTABELA)+"' ORDER BY ordinal_position ;"
-      //nome tabela em maiusculo postgresql e case sensitive
+      //Implantado abaixo com  catalogx
+  
+   CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+      // PRAGMA table_info retorna: cid, name, type, notnull, dflt_value, pk
+      // Como o SQLite não aceita aliases em PRAGMAs diretamente, a sua camada de dados
+      // deverá ler os campos nativos do pragma ("name", "type") ou usamos uma query vazia de metadados:
+      cCOMANDO := "SELECT name AS FIELD_NAME, type AS DATA_TYPE, 0 AS FIELD_LEN, 0 AS FIELD_DEC FROM pragma_table_info('" + cTabela + "');"
+
+   CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+      // Em vez de SHOW COLUMNS (que gera colunas dinâmicas), usamos a information_schema para fixar os aliases
+      if Empty( cOwnerx )
+         cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                     "COALESCE(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
+                     "COALESCE(NUMERIC_SCALE, 0) AS FIELD_DEC " + ;
+                     "FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = DATABASE() ORDER BY ORDINAL_POSITION;"
+      else
+         cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                     "COALESCE(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
+                     "COALESCE(NUMERIC_SCALE, 0) AS FIELD_DEC " + ;
+                     "FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = '" + cOwnerx + "' ORDER BY ORDINAL_POSITION;"
+      endif
+
+   CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+      // PostgreSQL diferencia maiúsculas de minúsculas. Geralmente tabelas ficam em minúsculo no Postgres.
+      // udt_name ou data_type mapeados perfeitamente
+       //nome tabela em maiusculo postgresql e case sensitive
       //udt_name melhor retorno mas tambem tras data_type caso necesario
       //where table_schema='public'  tras todas as tabelas do usurio(public)
-   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-      cCOMANDO := "select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='"+cTABELA+"'"
-   endcase
+   
+      
+      cSchema := iif( Empty(cOwnerx), "public", cOwnerx )
+      cCOMANDO := "SELECT column_name AS FIELD_NAME, udt_name AS DATA_TYPE, " + ;
+                  "COALESCE(character_maximum_length, numeric_precision) AS FIELD_LEN, " + ;
+                  "COALESCE(numeric_scale, 0) AS FIELD_DEC " + ;
+                  "FROM information_schema.columns " + ;
+                  "WHERE LOWER(table_name) = '" + Lower(cTabela) + "' AND table_schema = '" + cSchema + "' " + ;
+                  "ORDER BY ordinal_position;"
+
+   CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+      cSchemaSQL := iif( Empty(cOwnerx), "dbo", cOwnerx )
+      cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                  "ISNULL(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
+                  "ISNULL(NUMERIC_SCALE, 0) AS FIELD_DEC " + ;
+                  "FROM INFORMATION_SCHEMA.COLUMNS " + ;
+                  "WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = '" + cSchemaSQL + "' " + ;
+                  "ORDER BY ORDINAL_POSITION;"
+
+   CASE cTipo == "ORACLE" .OR. cTipo == "OCI"
+      cUserOracle := iif( Empty(cOwnerx), "USER_TAB_COLUMNS", "ALL_TAB_COLUMNS" )
+      cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                  "DATA_LENGTH AS FIELD_LEN, COALESCE(DATA_SCALE, 0) AS FIELD_DEC " + ;
+                  "FROM " + cUserOracle + " WHERE TABLE_NAME = '" + Upper(cTabela) + "' " + ;
+                  iif( !Empty(cOwnerx), "AND OWNER = '" + Upper(cOwnerx) + "' ", "" ) + ;
+                  "ORDER BY COLUMN_ID;"
+
+   CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB"
+      // O Firebird exige um JOIN complexo no catálogo do sistema para extrair os tipos amigáveis
+      cCOMANDO := "SELECT TRIM(F.RDB$FIELD_NAME) AS FIELD_NAME, " + ;
+                  "CASE T.RDB$FIELD_TYPE " + ;
+                  "  WHEN 7 THEN 'SMALLINT' WHEN 8 THEN 'INTEGER' WHEN 16 THEN 'BIGINT' " + ;
+                  "  WHEN 10 THEN 'FLOAT' WHEN 27 THEN 'DOUBLE PRECISION' " + ;
+                  "  WHEN 14 THEN 'CHAR' WHEN 37 THEN 'VARCHAR' WHEN 40 THEN 'CSTRING' " + ;
+                  "  WHEN 12 THEN 'DATE' WHEN 13 THEN 'TIME' WHEN 35 THEN 'TIMESTAMP' " + ;
+                  "  WHEN 261 THEN 'BLOB' END AS DATA_TYPE, " + ;
+                  "T.RDB$FIELD_LENGTH AS FIELD_LEN, COALESCE(T.RDB$FIELD_SCALE, 0) * -1 AS FIELD_DEC " + ;
+                  "FROM RDB$RELATION_FIELDS F " + ;
+                  "JOIN RDB$FIELDS T ON F.RDB$FIELD_SOURCE = T.RDB$FIELD_NAME " + ;
+                  "WHERE F.RDB$RELATION_NAME = '" + Upper(cTabela) + "' " + ;
+                  "ORDER BY F.RDB$FIELD_POSITION;"
+   ENDCASE
 ENDIF
 IF cTIPOINFO = "CCAMPOSQL"
    cCOMANDO := cCAMPOSQL
 ENDIF
 IF cTIPOINFO = "__INDEX__"
-   DO CASE
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SHOW INDEXES FROM "+cTABELA
+  DO CASE
+   CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+      // Em vez de SHOW INDEXES (que dificulta aliases), usamos a STATISTICS da information_schema
+      cSchemaMY := iif( Empty(cOwnerx), "DATABASE()", "'" + cOwnerx + "'" )
+      cCOMANDO := "SELECT INDEX_NAME AS INDEX_NAME, COLUMN_NAME AS COLUMN_NAME " + ;
+                  "FROM INFORMATION_SCHEMA.STATISTICS " + ;
+                  "WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = " + cSchemaMY + " " + ;
+                  "ORDER BY INDEX_NAME, SEQ_IN_INDEX;"
+
+   CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+      // No Postgres precisamos cruzar o catálogo interno para extrair os nomes das colunas de forma ordenada
+      cSchemaPG := iif( Empty(cOwnerx), "public", cOwnerx )
+      cCOMANDO := "SELECT t.relname AS INDEX_NAME, a.attname AS COLUMN_NAME " + ;
+                  "FROM pg_class t " + ;
+                  "JOIN pg_index ix ON t.oid = ix.indexrelid " + ;
+                  "JOIN pg_class i ON i.oid = ix.indrelid " + ;
+                  "JOIN pg_attribute a ON a.attrelid = t.oid " + ;
+                  "JOIN pg_namespace n ON n.oid = i.relnamespace " + ;
+                  "WHERE LOWER(i.relname) = '" + Lower(cTabela) + "' AND n.nspname = '" + cSchemaPG + "' " + ;
+                  "ORDER BY t.relname, a.attnum;"
+
+   CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+      // Consulta padrão na sys.indexes do SQL Server
+      cCOMANDO := "SELECT ind.name AS INDEX_NAME, col.name AS COLUMN_NAME " + ;
+                  "FROM sys.indexes ind " + ;
+                  "JOIN sys.index_columns ic ON ind.object_id = ic.object_id AND ind.index_id = ic.index_id " + ;
+                  "JOIN sys.columns col ON ic.object_id = col.object_id AND ic.column_id = col.column_id " + ;
+                  "JOIN sys.tables t ON ind.object_id = t.object_id " + ;
+                  "WHERE t.name = '" + cTabela + "' AND ind.is_primary_key = 0 " + ;
+                  "ORDER BY ind.name, ic.key_ordinal;"
+
+   CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+      // Nota: O SQLite exige comandos em lote ou PRAGMA. Para leitura via Recordset genérico, 
+      // o mais seguro é ler os metadados diretamente da tabela sqlite_master caso queira a query pura,
+      // mas o comando pragma nativo é: "PRAGMA index_list('" + cTabela + "')"
+      cCOMANDO := "SELECT name AS INDEX_NAME, '' AS COLUMN_NAME FROM sqlite_master WHERE type='index' AND tbl_name='" + cTabela + "';"
    ENDCASE
 ENDIF
 IF cTIPOINFO = "__VERSION__"
-   DO CASE
-   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-      cCOMANDO := "SELECT @@VERSION"
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SELECT Version() AS 'VER'"
-   CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
-      cCOMANDO := "SELECT RDB$GET_CONTEXT('SYSTEM', 'ENGINE_VERSION') AS 'VER' FROM RDB$DATABASE"
-   CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
-      cCOMANDO := "SELECT sqlite_version() AS 'VER'"
-   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      cCOMANDO := "SELECT version()"
-   ENDCASE
+   cCOMANDO :=Dialeto_Version()
 ENDIF
 
 
@@ -1261,53 +1380,73 @@ IF lOPEN
          AADD(aRETU,ors:fields(0) :value)   //ors:fields(0) inicia as colunas com zero ou pelo nome da coluna fields("name")
       ENDIF
       IF cTIPOINFO = "ESTRUTURA"
+        
          cFieldName   := ''
          cFieldType   := ''
          nFieldLength := 0
          nFieldDec    := 0
+         eDEFAULT     := ''
+         nNotNull     := 0
 
-         // eDEFAULT :=""
-         //inclusao valores default geracampo posicao 5 futuro correcao de nulls na importacao
-         //
-         DO CASE
-         CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cdatabase)) > 0
-            //table info colunas
-            //cid, name, type, "notnull", dflt_value, pk
-            // 1    2     3      4           5         6
-            // 0    1     2      3           4         5 ->posicao no recordset
-            cFieldName := upper(alltrim(ors:fields(1) :value))
-            cFieldType := upper(alltrim(ors:fields(2) :value))
-            AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-         CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-            //table info colunas
-            // field, type, null, key, default,extra
-            // 1      2     3      4      5      6
-            // 0      1     2      3      4      5 ->posicao no recordset
-            cFieldName := upper(alltrim(ors:fields(0) :value))
-            cFieldType := upper(alltrim(ors:fields(1) :value))
-            AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-         CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-            cFieldName   := upper(alltrim(ors:fields(0) :value))  //column_name
-            cFieldType   := upper(alltrim(ors:fields(1) :value))  // data_type
-            nFieldLength := fixnum(ors:fields(2) :value)  //tamanho string character_maximum_length
-            if fixnum(ors:fields(3) :value) > 0   //tamannho numeric
-               nFieldLength := fixnum(ors:fields(3) :value)   //numeric_precision
-               nFieldDec    := fixnum(ors:fields(4) :value)   //numeric_scale
-            endif
-            AADD(aRETU,geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec))
-         CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-            //implantar   catalog? outra?
-         ENDCASE
+         // Como a nossa 'Dialeto_ShowColumns()' padronizou o retorno usando ALIASES ("AS ..."),
+         // não precisamos mais de um CASE para separar a leitura dos campos por banco!
+         // Todos os SGBDs agora devolvem as mesmas colunas textuais em 'ors'.
+         
+         TRY
+            // Captura segura por nome do alias unificado
+            cFieldName   := Upper(AllTrim( hb_valToStr(ors:Fields("FIELD_NAME"):Value) ))
+            cFieldType   := Upper(AllTrim( hb_valToStr(ors:Fields("DATA_TYPE"):Value) ))
+            nFieldLength := fixnum( ors:Fields("FIELD_LEN"):Value )
+            nFieldDec    := fixnum( ors:Fields("FIELD_DEC"):Value )
+         CATCH
+            // Tratamento de contingência para o SQLite antigo (caso o PRAGMA nativo ignore aliases)
+            IF cTIPOSQL == "SQLITE" .OR. At(".SQLITE", Upper(cdatabase)) > 0
+               TRY
+                  cFieldName   := Upper(AllTrim( hb_valToStr(ors:Fields("name"):Value) ))
+                  cFieldType   := Upper(AllTrim( hb_valToStr(ors:Fields("type"):Value) ))
+                  nFieldLength := 0
+                  nFieldDec    := 0
+               CATCH
+                  cFieldName   := ""
+               END
+            ENDIF
+         END
+
+         // Se o metadado for válido, adiciona ao array de retorno estruturado para o DBF
+         IF !Empty(cFieldName)
+            AADD(aRETU, geracampodbf(cFieldName, cFieldType, nFieldLength, nFieldDec))
+         ENDIF
 
       ENDIF
       IF cTIPOINFO = "__INDEX__"
-         DO CASE
-         CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-            //1table,2non_unique,3key_name,4_seq_in_index.5column_name....
-            cCHAVENAME  := upper(alltrim(ors:fields(3) :value))
-            cCHAVECAMPO := upper(alltrim(ors:fields(5) :value))
-            AADD(aRETU,{cCHAVENAME,cCHAVECAMPO})
-         ENDCASE
+        cCHAVENAME  := ""
+        cCHAVECAMPO := ""
+
+           // Graças aos aliases fixos da Dialeto_ShowIndexes(), 
+           // NÃO precisamos mais separar a leitura por "CASE cTIPOSQL" !
+           TRY
+              cCHAVENAME  := Upper(AllTrim( hb_valToStr(ors:Fields("INDEX_NAME"):Value) ))
+              cCHAVECAMPO := Upper(AllTrim( hb_valToStr(ors:Fields("COLUMN_NAME"):Value) ))
+           CATCH
+              // Contingência para o SQLite se o driver do PRAGMA nativo for utilizado diretamente
+              IF cTIPOSQL == "SQLITE" .OR. At(".SQLITE", Upper(cdatabase)) > 0
+                 TRY
+                    cCHAVENAME  := Upper(AllTrim( hb_valToStr(ors:Fields("name"):Value) ))
+                    cCHAVECAMPO := "" // Índices do SQLite puro exigem um segundo passo (index_info) se lidos via pragma nativo
+                 CATCH
+                    cCHAVENAME  := ""
+                 END
+              ENDIF
+           END
+
+           // Se capturou um índice válido, adiciona ao array de retorno do Harbour
+           IF !Empty(cCHAVENAME)
+              // Retorna o par { Nome_Do_Indice, Coluna_Do_Banco }
+              AADD(aRETU, { cCHAVENAME, cCHAVECAMPO })
+           ENDIF
+
+
+
       ENDIF
 
 

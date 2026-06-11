@@ -392,15 +392,18 @@ FUNCTION dbf2mysql()
          RETURN .F.
       ENDIF
 
+     //               1     2          3          4      5      6        7       8  
+     //AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique}) 
+     
+     aINDICES:=GeraINDICES()
+     nIndexes := LEN(aINDICES)
+     FOR j := 1 TO nIndexes
+        cINDEXNAME  :=aINDICES[j,4]
+        cCHAVES     :=aINDICES[j,6]
+        aFNAMES    := hb_ATokens( cCHAVES, "," )
+        oSERVER:CreateIndex( cINDEXNAME, cTable, aFNames, .F. )
+     NEXT j
 
-      nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
-      FOR j := 1 TO nIndexes
-         cINDEXNAME := dbOrderInfo( DBOI_NAME,, j )
-         cINDEXNAME := StrTran( cINDEXNAME, "-", "_" )   // Tracos nao aceitos trocando por undescore
-         cCHAVES    := MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION,, j ) )
-         aFNAMES    := hb_ATokens( cCHAVES, "," )
-         oSERVER:CreateIndex( cINDEXNAME, cTable, aFNames, .F. )
-      NEXT j
 
       // Initialize MySQL table
       oTable := oServer:Query( "SELECT * FROM " + cTable + " LIMIT 1" )

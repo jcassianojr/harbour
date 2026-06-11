@@ -173,15 +173,14 @@ aSTRU    := dbStruct()
 nLASTREC := RecCount()
 zei_fort( nLASTREC,,, 0 )
 
-// Mapeia índices existentes para recriá-los no Firebird
-nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
-FOR i := 1 TO nIndexes
-   cINDEXNAME := dbOrderInfo( DBOI_NAME,, i )
-   cINDEXNAME := StrTran( cINDEXNAME, "-", "_" )
-   cINDEXUSO  := MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION,, i ) )
-   msql       := "CREATE INDEX " + cINDEXNAME + " ON " + cTABLE + " ( " + cINDEXUSO + " )"
-   AAdd( aINDICES, msql )
-NEXT i
+
+ aINDICESx:=GeraINDICES()
+    nIndexes := LEN(aINDICESx)
+    FOR j := 1 TO nIndexes
+        msql := aINDICESx[J,1]  //Create index
+        AAdd( Aindices, msql )
+    NEXT j
+
 
 // Conecta nativamente via classe TFBServer
 oServer := fireconnect()
