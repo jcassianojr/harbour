@@ -1423,80 +1423,153 @@ MODIFIED,X,Timestamp Auto,N/A
 RAW,R,Binário Fixo,N/A
 */
 
-FUNCTION GERACAMPOADT(cFieldName, cSqlType, nFieldLength, nFieldDec)
-   LOCAL aRetu := {cFieldName, "C", 10, 0}
-   LOCAL cType := AllTrim(cSqlType)
-   LOCAL cUpper := Upper(cType)
-   LOCAL cTmpSize
+/*   subtipos sqlmix
+Grupo 'N' (Numéricos)
 
-   // 1. Tipos com Tamanho entre Parênteses: (L,D) ou (N)
-   // Numeric, Decimal, Number, Int, Tinyint, Varchar, Char, Text, Varchar2
+    N:i ou N:I ? Numeric : Integer. Significa que no Harbour ele é tratado como Numérico (Array de estrutura), mas no banco SQL ele deve ser mapeado como um INTEGER puro (sem decimais, ocupando menos espaço e processando mais rápido que um NUMERIC/DECIMAL).
+
+    N:+ ou N:A ? Numeric : Auto-increment / Serial. Indica que o campo numérico é a chave auto-incrementada da tabela (como o SERIAL do Postgres ou INT AUTO_INCREMENT do MySQL).
+
+    N:s ? Numeric : Smallint. Mapeia para inteiros curtos de 2 bytes.
+
+Grupo 'C' (Caracteres)
+
+    C:CU ? Character : Code/Unicode (ou Custom/Upper). Geralmente usado para indicar que o campo armazena strings textuais texturizadas ou que possui tratamento de Collation específico (como UTF8 ou CASE INSENSITIVE) no banco de dados, ou que armazena dados binários convertidos.
+
+    C:V ? Character : Varchar. Diferencia um campo CHAR (tamanho fixo, completa com espaços) de um VARCHAR (tamanho variável) no banco de dados.
+
+Grupo '@' ou 'D' (Datas e Horas)
+
+    @:D ou D:T ? Date/TimeStamp : DateTime. O Harbour nativo (DBF) usa o tipo D apenas para data (AAAA-MM-DD). O subtipo avisa ao driver SQLMIX para buscar ou gravar também a hora, minuto e segundo (DATETIME ou TIMESTAMP no SQL).
+*/
+*+--------------------------------------------------------------------
+*+
+*+ Function GERACAMPOADT()
+*+
+*+--------------------------------------------------------------------
+FUNCTION GERACAMPOADT(cFieldName, cSqlType, nFieldLength, nFieldDec)
+
+   LOCAL aRetu
+   LOCAL cType    := UPPER(AllTrim(cSqlType)) // Padroniza em caixa alta para evitar falhas de case
+   LOCAL cSUBTIPO := ""
+   LOCAL cTmpSize, cSubSize
+
+   // Garante inicializações seguras de tamanho caso venham zeradas
+   nFieldLength := If(ValType(nFieldLength) <> "N", 0, nFieldLength)
+   nFieldDec    := If(ValType(nFieldDec) <> "N", 0, nFieldDec)
+   cFieldName   := AllTrim(cFieldName)
+
+   // TRATAMENTO EXCLUSIVO SQLIMIX (Ex: N:i, C:CU, @:D)
+   IF SUBSTR(cType, 2, 1) == ":"  
+      cSUBTIPO := SUBSTR(cType, 3)
+      cType    := SUBSTR(cType, 1, 1)
+   ENDIF
+
+   // 1. EXTRAÇÃO DE TAMANHO: Tipos com Tamanho entre Parênteses Ex: VARCHAR(50) ou NUMERIC(10,2)
    IF AT("(", cType) > 0 .AND. AT(")", cType) > 0
-      cTmpSize := SUBSTR(cType, AT("(", cType) + 1, AT(")", cType) - AT("(", cType) - 1)
+      cTmpSize := SUBSTR(cType, AT("(", cType) + 1)
+      cTmpSize := SUBSTR(cTmpSize, 1, AT(")", cTmpSize) - 1)
       
-      IF AT(",", cTmpSize) > 0 // Caso (L,D)
+      IF AT(",", cTmpSize) > 0 // Caso de decimais como (10,2)
          nFieldLength := VAL(SUBSTR(cTmpSize, 1, AT(",", cTmpSize) - 1))
          nFieldDec    := VAL(SUBSTR(cTmpSize, AT(",", cTmpSize) + 1))
-         RETURN {cFieldName, "N", nFieldLength, nFieldDec}
-      ELSE // Caso (N)
+         
+         // Se for um tipo numérico explicitado com tamanho
+         IF "NUMERIC" $ cType .OR. "DECIMAL" $ cType .OR. "NUMBER" $ cType
+            RETURN {cFieldName, "N", nFieldLength, nFieldDec}
+         ENDIF
+      ELSE // Caso de tamanho único como (50)
          nFieldLength := VAL(cTmpSize)
-         IF AT("CHAR", cUpper) > 0 .OR. AT("TEXT", cUpper) > 0
-            RETURN {cFieldName, "C", nFieldLength, 0}
-         ELSE
+         
+         IF "CHAR" $ cType .OR. "TEXT" $ cType .OR. "VARCHAR" $ cType .OR. "BPCHAR" $ cType
+            // Na ADT, campos caracter normais podem ter até 255 posições. Acima disso, usamos Memo.
+            IF nFieldLength > 255
+               RETURN {cFieldName, "M", 10, 0}
+            ELSE
+               RETURN {cFieldName, "C", nFieldLength, 0}
+            ENDIF
+         ELSEIF "INT" $ cType .OR. "NUMBER" $ cType
             RETURN {cFieldName, "N", nFieldLength, 0}
          ENDIF
       ENDIF
    ENDIF
 
-   // 2. Cases Específicos e Exclusivos de Bancos
+   // 2. CASES ESPECÍFICOS: Avaliação de tipos sem restrição por parênteses
    DO CASE
-      // Numéricos Inteiros
-      CASE cUpper == "TINYINT" ; RETURN {cFieldName, "N", 2, 0}
-      CASE cUpper == "INT2" .OR. cUpper == "SMALLINT" ; RETURN {cFieldName, "N", 4, 0}
-      CASE cUpper == "INT" .OR. cUpper == "MEDIUMINT" ; RETURN {cFieldName, "N", 8, 0}
-      CASE cUpper == "INTEGER" .OR. cUpper == "INT4" .OR. cUpper == "SERIAL" ; RETURN {cFieldName, "N", 8, 0}
-      CASE cUpper == "BIGINT" .OR. cUpper == "INT8" .OR. cUpper == "BIGSERIAL" ; RETURN {cFieldName, "N", 16, 0}
-      CASE cUpper == "OID" ; RETURN {cFieldName, "N", 10, 0}
+      
+      // Numéricos Inteiros (Mapeados para tamanhos compatíveis na ADT)
+      CASE cType == "TINYINT"
+           RETURN {cFieldName, "N", 3, 0}
+
+      CASE cType $ "INT2|SMALLINT"
+           RETURN {cFieldName, "N", 5, 0}
+
+      CASE cType $ "INT|MEDIUMINT|INTEGER|INT4"
+           RETURN {cFieldName, "N", 10, 0}
+
+      CASE cType $ "BIGINT|INT8|BIGSERIAL|OID"
+           RETURN {cFieldName, "N", 19, 0}
+      
+      // Auto-incrementos nativos da ADT
+      CASE cType $ "SERIAL|IDENTITY|+"
+           RETURN {cFieldName, "+", 10, 0}
       
       // Reais e Ponto Flutuante
-      CASE cUpper == "DOUBLE PRECISION" .OR. cUpper == "FLOAT8" ; RETURN {cFieldName, "N", 19, 9}
-      CASE cUpper == "REAL" .OR. cUpper == "FLOAT" .OR. cUpper == "DOUBLE" .OR. cUpper == "FLOAT4" ; RETURN {cFieldName, "N", 14, 5}
-      CASE cUpper == "MONEY" ; RETURN {cFieldName, "N", 12, 2}
+      CASE cType $ "DOUBLE PRECISION|FLOAT8|DECIMAL"
+           RETURN {cFieldName, "N", 19, 9}
+
+      CASE cType $ "REAL|FLOAT|DOUBLE|FLOAT4"
+           RETURN {cFieldName, "N", 14, 5}
+
+      CASE cType == "MONEY"
+           RETURN {cFieldName, "N", 14, 2}
       
-      // Datas, Horas e Timestamps
-      CASE cUpper == "DATE" .OR. cUpper == "DATETIME" .OR. cUpper == "SHORTDATE" .OR. cUpper == "TIMESTAMP" ;
-           .OR. cUpper == "D" .OR. cUpper == "TYPE_TIMESTAMP" .OR. cUpper == "TYPE_DATE" 
+      // Datas, Horas e Timestamps -> ADT suporta o tipo nativo '@' (TimeStamp)
+      CASE cType $ "DATE|DATETIME|SHORTDATE|TIMESTAMP|D|TYPE_TIMESTAMP|TYPE_DATE|@"
            RETURN {cFieldName, "@", 8, 0}
-      CASE cUpper == "@" ; RETURN {cFieldName, "@", 8, 0}
       
       // Lógicos
-      CASE cUpper == "BOOL" .OR. cUpper == "BOOLEAN" ; RETURN {cFieldName, "L", 1, 0}
+      CASE cType $ "BOOL|BOOLEAN"
+           RETURN {cFieldName, "L", 1, 0}
       
-      // Memo, Textos Longos e BLOBs
-      CASE cUpper == "CLOB" .OR. cUpper == "TEXT" .OR. cUpper == "LONGTEXT" .OR. cUpper == "M" .OR. cUpper == "WLONGVARCHAR" 
+      // Memo e Textos Longos (Aproveitando que a ADT aceita múltiplos campos Memos sem problemas)
+      CASE cType $ "CLOB|TEXT|LONGTEXT|M|WLONGVARCHAR"
            RETURN {cFieldName, "M", 10, 0}
-      CASE cUpper == "BYTEA" .OR. cUpper == "BLOB" .OR. cUpper == "IMAGE" .OR. cUpper == "VARBINARY" 
-           RETURN {cFieldName, "P", Max(10, nFieldLength), 0}
       
-      // Específicos do ADS
-      CASE cUpper == "ROWVERSION" ; RETURN {cFieldName, "Z", 8, 0}
-      CASE cUpper == "W" ; RETURN {cFieldName, "W", 10, 0}
-      CASE cUpper == "IDENTITY" ; RETURN {cFieldName, "+", 10, 0}
+      // Imagens e Objetos Binários Grandes (Blobs) -> Mapeia para tipo 'P' (Picture/Blob) ou 'W'
+      CASE cType $ "BYTEA|BLOB|IMAGE|VARBINARY"
+           RETURN {cFieldName, "P", If(nFieldLength == 0, 10, nFieldLength), 0}
       
-      // Tratamento para VARCHAR, BPCHAR, CHARACTER (Compatibilidade Postgres/Oracle)
-      CASE cUpper == "VARCHAR" .OR. cUpper == "BPCHAR" .OR. AT("CHARACTER", cUpper) > 0 .OR. cUpper == "WVARCHAR" .OR. cUpper == "WCHAR" .OR. cUpper == "NAME"
-         RETURN {cFieldName, "C", Max(1, nFieldLength), 0}
+      // Tipos específicos/exclusivos do ecossistema ADS/ADT
+      CASE cType == "ROWVERSION"
+           RETURN {cFieldName, "Z", 8, 0}
 
-      // Fallback para campos C grandes ou tipos desconhecidos
-      CASE cUpper == "C" .AND. nFieldLength > 250 ; RETURN {cFieldName, "M", 10, 0}
-      CASE cUpper == "I" .AND. cType == "I:N" ; RETURN {cFieldName, "N", 10, 0}
+      CASE cType == "W"
+           RETURN {cFieldName, "W", If(nFieldLength == 0, 10, nFieldLength), 0}
+      
+      // Tratamento genérico de strings sem parênteses (Varchar, Character, etc.)
+      CASE cType $ "VARCHAR|BPCHAR|WVARCHAR|WCHAR|NAME" .OR. "CHARACTER" $ cType
+           nFieldLength := If(nFieldLength == 0, 250, nFieldLength)
+           IF nFieldLength > 255
+              RETURN {cFieldName, "M", 10, 0}
+           ENDIF
+           RETURN {cFieldName, "C", nFieldLength, 0}
+
+      // Fallbacks herdados da lógica original e do tratamento SQLIMIX
+      CASE cType == "C" .AND. nFieldLength > 255
+           RETURN {cFieldName, "M", 10, 0}
+
+      CASE cType == "I" .AND. cSUBTIPO == "N"
+           RETURN {cFieldName, "N", 10, 0}
 
       OTHERWISE
-         RETURN {cFieldName, "C", Max(10, nFieldLength), 0}
+           // Retorno padrão seguro se cair em um tipo desconhecido
+           nFieldLength := If(nFieldLength == 0, 10, nFieldLength)
+           RETURN {cFieldName, "C", nFieldLength, 0}
+
    ENDCASE
+
 RETURN aRetu
-
-
 // AJUSTE: Passamos cTablename e cTIPOSQL como parâmetros para a função
 FUNCTION GeraINDICES( cTablename )
 LOCAL aDUPLA
