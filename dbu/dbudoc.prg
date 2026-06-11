@@ -580,20 +580,29 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
    
    IF tDOC = 4    // dbe
       cTEXTO += 'ENDDEF' + cLIN
-      nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
+      
+      
+     // AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
+     //                1     2          3          4      5      6        7       8   
+      
+      aINDICES:=GeraINDICES()
+      nIndexes := LEN(aINDICES)
       IF nIndexes > 0
          cTEXTO += 'DEFINDEX ' + Upper( cARQ ) + cLIN
          FOR j = 1 TO  nIndexes
-            cTEXTO += "   "
-            cTEXTO += dbOrderInfo( DBOI_NAME, ,  j )
             cTEXTO += " "
-            cTEXTO += dbOrderInfo( DBOI_EXPRESSION, ,  j )
+            cTEXTO += aINDICES[J,4]
             cTEXTO += " "
-            cTEXTO += MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) )
+            cTEXTO += aINDICES[J,5]
+            cTEXTO += " "
+            cTEXTO += aINDICES[J,6]
             cTEXTO += clin
          NEXT j
          cTEXTO += 'ENDINDEX' + cLIN
       ENDIF
+      
+      
+      
       cTEXTO += 'ENDFILE' + cLIN
       cTEXTO +=  cLIN
       cTEXTO += "[" + Upper( AllTrim( carq ) ) + "."+TABLEEXT+"]" + clin
