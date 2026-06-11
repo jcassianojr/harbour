@@ -473,12 +473,15 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       
       // Grava os indices
       IF tDOC = 7 .AND. cSUBTIPO = "ISO"     //xlm
-         nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
-         FOR j = 1 TO  nIndexes
+         
+         aINDICES:=GeraINDICES()
+        nIndexes := LEN(aINDICES)
+        FOR j := 1 TO nIndexes
             cTEXTO += "<Indice>" + cLIN
-            cTEXTO += "<Chave>" + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + "</Chave>" + CLIN
+            cTEXTO += "<Chave>" + aINDICES[J,6]  + "</Chave>" + CLIN
             cTEXTO += "</Indice>" + cLIN
-         NEXT j
+        NEXT j
+         
       ENDIF
 
       // cabecario sql  nao precisa loop nos fields
