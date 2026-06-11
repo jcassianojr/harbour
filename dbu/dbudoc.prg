@@ -1111,16 +1111,19 @@ NEXT K
 //    NOVODOC [name: "NOVODOC"]
 //    (TIPO, NUMERO) [name: "TIPONUMERO"]
 //  }
- nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
+
+
+     //AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
+     //              1     2          3          4      5      6        7       8   
+
+aINDICES:=GeraINDICES()
+nIndexes := LEN(aINDICES)
 IF nIndexes>0
     cLINHA+="  Indexes {" +HB_OSNEWLINE()
          FOR j = 1 TO  nIndexes
-            cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
-            cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
-            cLINHA+= " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) "
+            cINDEXNAME := aINDICESx[J,4]
+            cLINHA+= " ( " + aINDICESx[J,6] + " ) "
             cLINHA+= " [name: "+CHR(34)+cINDEXNAME+CHR(34)+"]" +HB_OSNEWLINE() 
-            //cSQLINDEX := "create index " + cINDEXNAME + " on " + cARQ + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;"
-            //cTEXTO += cSQLINDEX + hb_osNewLine()
          NEXT j 
     cLINHA+= HB_OSNEWLINE()     
     cLINHA+=" }" +HB_OSNEWLINE()     
