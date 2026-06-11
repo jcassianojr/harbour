@@ -70,15 +70,19 @@ FUNCTION Dbf2md()
                  AllTrim(Str(FieldLen(nI))) + " | " + AllTrim(Str(FieldDec(nI))) + " |" + hb_eol() )
       NEXT
 
-      // LISTAR ÍNDICES REAIS
-      IF dbOrderInfo( DBOI_ORDERCOUNT ) > 0
-         fWrite( nHandle, hb_eol() + "**Índices vinculados:**" + hb_eol() )
-         FOR nI := 1 TO dbOrderInfo( DBOI_ORDERCOUNT )
-            cTag  := dbOrderInfo( DBOI_NAME, , nI )
-            cExpr := dbOrderInfo( DBOI_EXPRESSION, , nI )
-            fWrite( nHandle, "- Tag: `" + cTag + "` Expressão: `" + cExpr + "`" + hb_eol() )
-         NEXT
-      ENDIF
+
+ //               1     2          3          4           5      6        7       8  
+     //AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique}) 
+     
+     aINDICES:=GeraINDICES()
+     nIndexes := LEN(aINDICES)
+     IF nINDEXES>0
+        fWrite( nHandle, hb_eol() + "**Índices vinculados:**" + hb_eol() )
+     ENDIF
+     FOR j := 1 TO nIndexes
+        fWrite( nHandle, "- Tag: `" + aINDICES[j,4] + "` Expressão: `" + aINDICES[j,5] + "`" + hb_eol() )
+     NEXT j
+
 
       dbCloseArea()
       fWrite( nHandle, hb_eol() + "---" + hb_eol() )

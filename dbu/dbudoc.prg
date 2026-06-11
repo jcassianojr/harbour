@@ -526,15 +526,14 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             cTEXTO += ") ; "  + cLIN
          ENDCASE
 
+        cTEXTO    +=  hb_osNewLine()
+        aINDICES:=GeraINDICES()
+        nIndexes := LEN(aINDICES)
+        FOR j := 1 TO nIndexes
+            cTEXTO += aINDICES[J,1]  + hb_osNewLine() //Create index
+        NEXT j
         
-         nIndexes  :=  dbOrderInfo( DBOI_ORDERCOUNT )
-         cTEXTO    +=  hb_osNewLine()
-         FOR j = 1 TO  nIndexes
-            cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
-            cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
-            cSQLINDEX := "create index " + cINDEXNAME + " on " + cARQ + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;"
-            cTEXTO += cSQLINDEX + hb_osNewLine()
-         NEXT j
+         
       ENDIF
    ENDIF
 
