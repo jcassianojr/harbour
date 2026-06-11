@@ -397,15 +397,16 @@ FUNCTION dbf2pgsql()
          RETURN .F.
       ENDIF
 
-
-      nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
+      aINDICES:=GeraINDICES()
+      nIndexes := LEN(aINDICES)
       FOR j := 1 TO nIndexes
-         cINDEXNAME := dbOrderInfo( DBOI_NAME,, j )
-         cINDEXNAME := StrTran( cINDEXNAME, "-", "_" )   // Tracos nao aceitos trocando por undescore
-         cCHAVES    := MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION,, j ) )
-         msql       := "create index " + cINDEXNAME + " on " + ctable + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION,, j ) ) + " ) "
-         oSERVER:execute( msql )
+          msql := aINDICES[J,1]  //Create index
+          oSERVER:execute( msql )
+          //msql := aINDICES[J,2]   //insert into metadata
+          //oSERVER:execute( msql )
       NEXT j
+
+
 
       // Initialize pgSQL table necessario para getblankrow ter um registro para montar a strutura
       oTable := oServer:Query( "SELECT * FROM " + Chr( 34 ) + Lower( cTable ) + Chr( 34 ) + " LIMIT 1" )   // dupla aspas tenta minuscula
