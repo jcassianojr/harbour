@@ -611,16 +611,23 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += "NUMMAINTAINED=" + Str( nIndexes, 1 ) + cLIN
       cTEXTO += "MAINTAIN0=" + cARQ + XEXT() + cLIN
       cINDEXTEXTO := ""
+      
+      aINDICES:=GeraINDICES()
+      nIndexes := LEN(aINDICES)
+
+      AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
+     //             1     2          3          4      5      6        7       8   
+      
       IF nIndexes > 0
          FOR j = 1 TO  nIndexes
-            cTEXTO += "TAG"   + Str( j - 1, 1 ) + "=" + dbOrderInfo( DBOI_NAME, ,  j ) + clin
-            cTEXTO += "INDEX" + Str( j - 1, 1 ) + "=" + dbOrderInfo( DBOI_EXPRESSION, ,  j ) + clin
-            cTEXTO += "INDEXFIELDS" + Str( j - 1, 1 ) + "=" + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + clin
-            cINDEXNAME := dbOrderInfo( DBOI_NAME, ,  j )
-            cINDEXNAME := StrTran( cINDEXNAME, "-", "_"  )  // Tracos nao aceitos trocando por undescore
-            cINDEXTEXTO += "create index " + cINDEXNAME + " on " + cARQ + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION, ,  j ) ) + " ) ;" + clin
+            cTEXTO += "TAG"   + Str( j - 1, 1 ) + "=" +  aINDICES[J,4] + clin
+            cTEXTO += "INDEX" + Str( j - 1, 1 ) + "=" +  aINDICES[J,5] + clin
+            cTEXTO += "INDEXFIELDS" + Str( j - 1, 1 ) + "=" +  aINDICES[J,6] + clin
+            cINDEXTEXTO +=  aINDICES[J,1] + clin
          NEXT j
       ENDIF
+      
+      
       cTEXTO += clin + "[SQLITE]"
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "SQLITE" ))
       CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
