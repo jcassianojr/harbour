@@ -1211,200 +1211,198 @@ RETURN mSql
 *+
 *+
 *+
-function geracampodbf(cFieldName,cFieldType,nFieldLength,nFieldDec)
+*+--------------------------------------------------------------------
+*+
+*+ Function geracampodbf()
+*+
+*+--------------------------------------------------------------------
+function geracampodbf(cFieldName, cFieldType, nFieldLength, nFieldDec)
 
 local aRETU
-local cSUBTIPO
+local cSUBTIPO, cTYPE, cTMPSIZE
 
-IF TIPODBF=6 //USOVIA="ADSADT"
-   RETURN geracampoadt(cFieldName,cFieldType,nFieldLength,nFieldDec)
+
+
+// Validação original para drivers ADS
+IF type("TIPODBF") == "N" .AND. TIPODBF == 6
+   RETURN geracampoadt(cFieldName, cFieldType, nFieldLength, nFieldDec)
 ENDIF
-aRETU := {cFieldName,cFieldType,nFieldLength,nFieldDec}
 
+// Padroniza o nome do campo
+cFieldName := AllTrim(cFieldName)
 
-
-cTYPE    := cFieldType
+cTYPE    := UPPER(cFieldType) // Evita falhas com minúsculas vindas do banco (ex: "int", "text")
 cSUBTIPO := ""
-IF SUBSTR(cTYPE,2,1) = ":"  //sqlimix manda tipo e subtipo exemplos N:i   C:CU  @:D
-   cFieldType := SUBSTR(cTYPE,1,1)
-   cSUBTIPO   := SUBSTR(cTYPE,3)
-   cTYPE      := SUBSTR(cTYPE,1,1)
+
+// Trata se vier no formato SQLIMIX (Ex: N:i, C:CU, @:D)
+IF SUBSTR(cTYPE, 2, 1) = ":"  
+   cFieldType := SUBSTR(cTYPE, 1, 1)
+   cSUBTIPO   := SUBSTR(cTYPE, 3)
+   cTYPE      := SUBSTR(cTYPE, 1, 1)
 ENDIF
 
 do case
 
    //
-   // numeric(l,d) decimal(l,d)  number(l,d) o tamanho esta entre parentes
+   // numeric(l,d) decimal(l,d) number(l,d) - O tamanho está entre parênteses
    //
-CASE AT("(",cTYPE) > 0 .AND. AT(")",cTYPE) > 0 .AND. AT(",",cTYPE) > 0 .AND. (AT("NUMERIC",UPPER(CTYPE)) > 0 .OR. AT("DECIMAL",UPPER(CTYPE)) > 0 .OR. AT("NUMBER",UPPER(CTYPE)) > 0)
-   cTMPSIZE     := SUBSTR(cTYPE,AT("(",cTYPE)+1)
-   cTMPSIZE     := SUBSTR(cTMPSIZE,1,AT(",",cTMPSIZE) - 1)
-   nFieldLength := val(cTMPSIZE)
-   cTMPSIZE     := SUBSTR(cTYPE,AT(",",cTYPE)+1)
-   cTMPSIZE     := SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE) - 1)
-   nFieldDec    := val(cTMPSIZE)
-   cFieldType   := 'N'
-
-
-   //
-   //  tyniint(n) int(n) number(n) tamanho esta entre parentes
-   //
-case AT("(",cTYPE) > 0 .AND. AT(")",cTYPE) > 0 .AND. AT(",",cTYPE) = 0 .AND. (AT("INT",UPPER(CTYPE)) > 0 .or. AT("NUMBER",UPPER(CTYPE)) > 0)
-   cTMPSIZE     := SUBSTR(cTYPE,AT("(",cTYPE)+1)
-   cTMPSIZE     := SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE) - 1)
-   nFieldLength := VAL(cTMPSIZE)
-   cFieldType   := 'N'
-   nFieldDec    := 0
-
+   CASE AT("(", cTYPE) > 0 .AND. AT(")", cTYPE) > 0 .AND. AT(",", cTYPE) > 0 .AND. ;
+        ( "NUMERIC" $ cTYPE .OR. "DECIMAL" $ cTYPE .OR. "NUMBER" $ cTYPE )
+        
+        cTMPSIZE     := SUBSTR(cTYPE, AT("(", cTYPE) + 1)
+        cTMPSIZE     := SUBSTR(cTMPSIZE, 1, AT(",", cTMPSIZE) - 1)
+        nFieldLength := val(cTMPSIZE)
+        cTMPSIZE     := SUBSTR(cTYPE, AT(",", cTYPE) + 1)
+        cTMPSIZE     := SUBSTR(cTMPSIZE, 1, AT(")", cTMPSIZE) - 1)
+        nFieldDec    := val(cTMPSIZE)
+        cFieldType   := 'N'
 
    //
-   // varchar(n) char(n) text(n)  VARCHAR2(n) o tamanho esta entre parentes
+   // tinyint(n) int(n) number(n) - Tamanho inteiro entre parênteses
    //
-case AT("(",cTYPE) > 0 .AND. AT(")",cTYPE) > 0 .AND. (AT("CHAR",UPPER(CTYPE)) > 0 .OR. AT("TEXT",UPPER(CTYPE)) > 0 .OR. AT("VARCHAR2",UPPER(CTYPE)) > 0)
-   cTMPSIZE     := SUBSTR(cTYPE,AT("(",cTYPE)+1)
-   cTMPSIZE     := SUBSTR(cTMPSIZE,1,AT(")",cTMPSIZE) - 1)
-   nFieldLength := VAL(cTMPSIZE)
-   cFieldType   := 'C'
-   nFieldDec    := 0
-
-
-case cType == "TINYINT"
-   cFieldType   := 'N'
-   nFieldLength := 2
-   nFieldDec    := 0
-
-
-case cType == "INT2" .OR. cType == "SMALLINT"
-   cFieldType   := 'N'
-   nFieldLength := 4
-   nFieldDec    := 0
-
-case cType == "INT" .or. cType == "MEDIUMINT"
-   cFieldType   := 'N'
-   nFieldLength := 8
-   nFieldDec    := 0
-
-
-case cType == "INTEGER" .OR. cType == "INT4" .OR. cType == "SERIAL"
-   cFieldType   := 'N'
-   nFieldLength := 8
-   nFieldDec    := 0
-
-case cType == "BIGINT" .OR. cType == "INT8" .OR. cType == "BIGSERIAL"
-   cFieldType   := 'N'
-   nFieldLength := 16
-   nFieldDec    := 0
-
-
-//no sqllite tem a vezes aparece so DECIMAL nao especificado a precisao DECIMAL(n,d)
-case cType == "DOUBLE PRECISION" .or. cType == "FLOAT8"  .OR. cType == "DECIMAL" 
-   cFieldType   := 'N'
-   nFieldLength := 19
-   nFieldDec    := 9
-
-case cType == "MONEY"
-   cFieldType   := 'N'
-   nFieldLength := 12
-   nFieldDec    := 2
-
-case cType == "REAL" .or. cType == "FLOAT" .or. cType == "DOUBLE" .or. cType == "FLOAT4"
-   cFieldType   := 'N'
-   nFieldLength := 14
-   nFieldDec    := 5
-
-
-case cType == "DATE" .or. cType == 'DATETIME' .or. cType == 'SHORTDATE' .or. cType == 'TIMESTAMP' ;
-    .OR. cType == "D" .OR. cType == "TYPE_TIMESTAMP" .or. cType == "TYPE_DATE"
-   cFieldType   := 'D'
-   nFieldLength := 8
-   nFieldDec    := 0
-
-case cType == "@"   //Datetime opcao mudar como texto ou datetime futuramente
-   cFieldType   := 'D'
-   nFieldLength := 8
-   nFieldDec    := 0
-
-case cType == "BOOL" .or. cType == 'BOOLEAN'
-   cFieldType   := 'L'
-   nFieldLength := 1
-   nFieldDec    := 0
-
-CASE cType == "CLOB" .AND. (cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI")  //Memo mas tratando com char(250)
-   cFieldType   := 'C'
-   nFieldLength := 250
-   nFieldDec    := 0
-
-
-CASE cType == "TEXT" .AND. (cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL")   //Memo mas tratando com char(250)
-   cFieldType   := 'C'
-   nFieldLength := 250
-   nFieldDec    := 0
-
-CASE cType == "LONGTEXT" .OR. cType == "M" .OR. cType == "WLONGVARCHAR"   //Memo mas tratando com char(250)
-   cFieldType   := 'C'
-   nFieldLength := 250
-   nFieldDec    := 0
-   //
-   // TEXT SEM tamanho memo
-   //
-case AT("(",cTYPE) = 0 .AND. AT(")",cTYPE) = 0 .AND. AT("TEXT",UPPER(CTYPE)) > 0
-   nFieldLength := 10
-   cFieldType   := 'M'
-   nFieldDec    := 0
+   CASE AT("(", cTYPE) > 0 .AND. AT(")", cTYPE) > 0 .AND. AT(",", cTYPE) == 0 .AND. ;
+        ( "INT" $ cTYPE .OR. "NUMBER" $ cTYPE )
+        
+        cTMPSIZE     := SUBSTR(cTYPE, AT("(", cTYPE) + 1)
+        cTMPSIZE     := SUBSTR(cTMPSIZE, 1, AT(")", cTMPSIZE) - 1)
+        nFieldLength := VAL(cTMPSIZE)
+        cFieldType   := 'N'
+        nFieldDec    := 0
 
    //
-   // numeric sem ()
+   // varchar(n) char(n) text(n) VARCHAR2(n) bpchar(n) - O tamanho está entre parênteses
    //
-case AT("(",cTYPE) = 0 .AND. AT(")",cTYPE) = 0 .AND. AT("NUMERIC",UPPER(CTYPE)) > 0
-   cFieldType := 'N'
-   IF nFieldLength = 0  //atribui 8 padrao integer caso nao foi passado
-      nFieldLength := 8
-      nFieldDec    := 0
-   ENDIF
+   CASE AT("(", cTYPE) > 0 .AND. AT(")", cTYPE) > 0 .AND. ;
+        ( "CHAR" $ cTYPE .OR. "TEXT" $ cTYPE .OR. "VARCHAR2" $ cTYPE .OR. "BPCHAR" $ cTYPE )
+        
+        cTMPSIZE     := SUBSTR(cTYPE, AT("(", cTYPE) + 1)
+        cTMPSIZE     := SUBSTR(cTMPSIZE, 1, AT(")", cTMPSIZE) - 1)
+        nFieldLength := VAL(cTMPSIZE)
+        cFieldType   := 'C'
+        nFieldDec    := 0
+        
+        // Mantém sua lógica: Se estourar o limite de caractere do DBF, trunca no tamanho seguro
+        IF nFieldLength > 250
+           nFieldLength := 250
+        ENDIF
 
-   //
-   // postgresql varchar bpchar CHARACTER
-   //
-CASE cType == "VARCHAR" .OR. cType == "BPCHAR" .OR. AT("CHARACTER",UPPER(CTYPE)) > 0 .OR. cType == "WVARCHAR" .OR. cType == "WCHAR"
-   cFieldType := 'C'
-   nFieldDec  := 0
+   // Tipos Inteiros Puros do SQL
+   CASE cType == "TINYINT"
+        cFieldType   := 'N'
+        nFieldLength := 3
+        nFieldDec    := 0
 
+   CASE cType $ "INT2|SMALLINT"
+        cFieldType   := 'N'
+        nFieldLength := 5
+        nFieldDec    := 0
 
-CASE cType == "NAME"
-   cFieldType   := 'C'
-   nFieldLength := 64
-   nFieldDec    := 0
+   CASE cType $ "INT|MEDIUMINT|INTEGER|INT4|SERIAL"
+        cFieldType   := 'N'
+        nFieldLength := 10
+        nFieldDec    := 0
 
-CASE cType == "C" .AND. nFieldLength > 250  //alguns longchar vem comprimento 65535 estudando mudar para memo por enquanto C 250
-   nFieldLength := 250
+   CASE cType $ "BIGINT|INT8|BIGSERIAL|OID"
+        cFieldType   := 'N'
+        nFieldLength := 19
+        nFieldDec    := 0
 
-   //
-   // Inteiro sub numerico troca para numerico
-   //
-CASE cType == "I" .AND. cSUBTIPO == "N"
-   cFieldType := 'N'
+   // Ponto Flutuante e Decimais Genéricos
+   CASE cType $ "DOUBLE PRECISION|FLOAT8|DECIMAL" 
+        cFieldType   := 'N'
+        nFieldLength := 19
+        nFieldDec    := 9
 
-CASE cType == "OID"
-   cFieldType   := 'N'
-   nFieldLength := 19
-   nFieldDec    := 0
+   CASE cType == "MONEY"
+        cFieldType   := 'N'
+        nFieldLength := 14
+        nFieldDec    := 2
+
+   CASE cType $ "REAL|FLOAT|DOUBLE|FLOAT4"
+        cFieldType   := 'N'
+        nFieldLength := 14
+        nFieldDec    := 5
+
+   // Datas e Horas
+   CASE cType $ "DATE|DATETIME|SHORTDATE|TIMESTAMP|D|TYPE_TIMESTAMP|TYPE_DATE|@"
+        cFieldType   := 'D'
+        nFieldLength := 8
+        nFieldDec    := 0
+
+   // Lógicos
+   CASE cType $ "BOOL|BOOLEAN"
+        cFieldType   := 'L'
+        nFieldLength := 1
+        nFieldDec    := 0
+
+   // VOLTANDO À SUA LÓGICA ORIGINAL:
+   // Mapeia textos longos para Caracter ('C') limitado a 250 para proteger RDDs com problemas em múltiplos Memos.
+   CASE cType $ "CLOB|LONGTEXT|M|WLONGVARCHAR"
+        cFieldType   := 'C'
+        nFieldLength := 250
+        nFieldDec    := 0
+
+   CASE cType == "TEXT" .AND. (cTIPOSQL $ "SQLITE|PGSQL|PGSQL64|POSTGRESQL")
+        cFieldType   := 'C'
+        nFieldLength := 250
+        nFieldDec    := 0
+
+   // Fallback para instâncias de TEXT puras sem parênteses
+   CASE AT("(", cTYPE) == 0 .AND. "TEXT" $ cTYPE
+        cFieldType   := 'M'
+        nFieldLength := 10
+        nFieldDec    := 0
+
+   // Numéricos sem definição de tamanho em parênteses
+   CASE AT("(", cTYPE) == 0 .AND. "NUMERIC" $ cTYPE
+        cFieldType := 'N'
+        IF nFieldLength == 0  
+           nFieldLength := 10
+           nFieldDec    := 0
+        ENDIF
+
+   // Tipos Caracteres sem tamanho específico informado
+   CASE cType $ "VARCHAR|BPCHAR|CHARACTER|WVARCHAR|WCHAR"
+        cFieldType := 'C'
+        IF nFieldLength == 0 .OR. nFieldLength > 250
+           nFieldLength := 250 
+        ENDIF
+        nFieldDec  := 0
+
+   CASE cType == "NAME"
+        cFieldType   := 'C'
+        nFieldLength := 64
+        nFieldDec    := 0
+
+   // Se o tipo original já for caractere ('C') mas vier estourado do banco SQL
+   CASE cType == "C" .AND. nFieldLength > 250
+        nFieldLength := 250
+
+   // Ajuste para sub-tipagem SQLIMIX
+   CASE cType == "I" .AND. cSUBTIPO == "N"
+        cFieldType := 'N'
    
-// Adicionar ao seu DO CASE:
-CASE cType == "BYTEA" .OR. cType == "BLOB" .OR. cType == "IMAGE" .OR. cType == "VARBINARY"
-   cFieldType   := 'M'
-   nFieldLength := 10
-   nFieldDec    := 0
+   // Binários / Blobs e Imagens convertidos para Memo padrão
+   CASE cType $ "BYTEA|BLOB|IMAGE|VARBINARY"
+        cFieldType   := 'M'
+        nFieldLength := 10
+        nFieldDec    := 0
 
-// Tratamento específico para o ROWVERSION (Tipo Z do ADS)
-CASE cType == "ROWVERSION" // O tipo rowversion do SQL Server
-   cFieldType   := 'C'
-   nFieldLength := 8
-   nFieldDec    := 0   
+   // Controle de concorrência / Rowversion do SQL Server
+   CASE cType == "ROWVERSION" 
+        cFieldType   := 'C'
+        nFieldLength := 8
+        nFieldDec    := 0   
 
-otherwise
-
+   otherwise
+        // Mantém a estrutura recebida se cair em um tipo desconhecido
+        cFieldType   := if(Empty(cFieldType), "C", cFieldType)
+        nFieldLength := if(nFieldLength == 0, 10, if(nFieldLength > 250 .AND. cFieldType == "C", 250, nFieldLength))
 endcase
-aRETU := {cFieldName,cFieldType,nFieldLength,nFieldDec}
+
+// Monta e retorna o array final estruturado para o DBSTRUCT()
+aRETU := { cFieldName, cFieldType, nFieldLength, nFieldDec }
+
 return aRETU
 
 /*
@@ -1499,43 +1497,58 @@ FUNCTION GERACAMPOADT(cFieldName, cSqlType, nFieldLength, nFieldDec)
 RETURN aRetu
 
 
-FUNCTION GeraINDICES()
+// AJUSTE: Passamos cTablename e cTIPOSQL como parâmetros para a função
+FUNCTION GeraINDICES( cTablename )
 LOCAL aDUPLA
+LOCAL j, nIndexes, cINDEXNAME, cKey, lIsUnique, cFilter, cSqlExpr, msql, msqlMETA
+LOCAL llMDB, llACCDB
+
 aDUPLA:={}
+
+
+IF ValType( cTablename ) <> "C"
+   cTablename := Alias()
+ENDIF
+
+// Ajusta caixa alta para o Postgres
+IF cTIPOSQL $ "PGSQL|PGSQL64|POSTGRESQL"  
+   cTablename := Upper( cTablename )
+ENDIF
+
+llMDB  := ( cTIPOSQL $ "MDB|ACCESS|MDB64|ACCESS64" )
+llACCDB := ( cTIPOSQL $ "ACCDB|ACCDB64" )
+
 nIndexes := dbORDERINFO(DBOI_ORDERCOUNT)
+
 FOR j := 1 TO nIndexes
    // Inicialização correta dos tipos de variáveis a cada iteração
    cINDEXNAME := ""
    cKey       := ""
-   lIsUnique  := .F.  // Correção: Deve iniciar como Booleano (.F.) e não String ("")
-   cFilter    := ""   // Inicia vazio, caso a RDD não suporte DBOI_CONDITION
+   lIsUnique  := .F.  
+   cFilter    := ""   
    
-  // Tenta ler o Nome do Índice
+   // Tenta ler o Nome do Índice
    TRY
       cINDEXNAME := dbORDERINFO(DBOI_NAME,,j)
    CATCH
-      cINDEXNAME := "" // Fallback caso a RDD não consiga expor o nome
+      cINDEXNAME := "" 
    END   
    
-   // Garante a remoção de espaços antes de testar se está vazio
    cINDEXNAME := AllTrim(cINDEXNAME)
    
-   // Se a RDD não retornou um nome válido, usa o fallback sequencial (obrigatório para todos os bancos)
+   // Se a RDD não retornou um nome válido, usa o fallback sequencial
    IF Empty( cINDEXNAME )
       cINDEXNAME := "IDX_" + AllTrim(cTablename) + "_" + AllTrim(Str(j))
    ELSE
-      // Se a RDD retornou um nome (ex: "CODIGO"), prefixamos o nome da tabela 
-      // APENAS nos bancos com escopo global de índice (SQLite e PostgreSQL)
-      IF cTIPOSQL == "SQLITE" .OR. cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
+      // Ajuste de escopo global de nomes de índice
+      IF cTIPOSQL $ "SQLITE|PGSQL|PGSQL64|POSTGRESQL"
          cINDEXNAME := "IDX_" + AllTrim(cTablename) + "_" + cINDEXNAME
       ELSE
-         // Para os outros bancos (MySQL, SQL Server), mantemos o nome original da TAG do DBF,
-         // mas adicionamos o prefixo "IDX_" por boa prática de sintaxe SQL (opcional, se preferir tire o "IDX_")
          cINDEXNAME := "IDX_" + cINDEXNAME 
       ENDIF
    ENDIF   
 
-   // Trata caracteres inválidos (traços e espaços) no nome final gerado
+   // Trata caracteres inválidos no nome final gerado
    cINDEXNAME := StrTran(cINDEXNAME, "-", "_") 
    cINDEXNAME := StrTran(cINDEXNAME, " ", "_")
    
@@ -1550,14 +1563,14 @@ FOR j := 1 TO nIndexes
    TRY  
       lIsUnique := dbOrderInfo( DBOI_UNIQUE, , j )
    CATCH
-      lIsUnique := .F. // Fallback padrão seguro
+      lIsUnique := .F. 
    END
    
-   // Tenta ler a Condição de Filtro (O comando FOR)
+   // Tenta ler a Condição de Filtro (O comando FOR do índice)
    TRY  
       cFilter := dbOrderInfo( DBOI_CONDITION, , j ) 
    CATCH
-      cFilter := "" // Se a RDD não suportar filtros (ex: DBFNTX antiga), assume vazio com segurança
+      cFilter := "" 
    END  
    
    // Só processa e grava se a RDD conseguir extrair uma expressão de chave válida
@@ -1565,7 +1578,6 @@ FOR j := 1 TO nIndexes
       
       // Transforma a chave Harbour em colunas SQL separadas por vírgula
       cSqlExpr := MDPCHAVEI( cKey ) 
-      
       
       // SOLUÇÃO PARA O PROBLEMA DO "IF NOT EXISTS" NO INDEX:
       IF cTIPOSQL $ "SQLITE|PGSQL|PGSQL64|POSTGRESQL"
@@ -1576,22 +1588,21 @@ FOR j := 1 TO nIndexes
          msql := "CREATE " + iif(lIsUnique, "UNIQUE ", "") + "INDEX " + cINDEXNAME + " ON " + cTablename + " ( " + cSqlExpr + " ) ;"
       ENDIF
       
-      
-      // Monta o INSERT alimentando a estrutura de metadados expandida de forma segura
+      // Monta o INSERT alimentando a estrutura de metadados
       msqlMETA := "INSERT INTO index_metadata (table_name, index_name, expression, sql_expression, filter_expression, is_unique, is_bag) VALUES (" + ;
-              c2sql(cTablename) + ", " + ;
-              c2sql(cINDEXNAME) + ", " + ; 
-              c2sql(cKey)       + ", " + ; 
-              c2sql(cSqlExpr)   + ", " + ; 
-              c2sql(cFilter)    + ", " + ; 
-              iif( lIsUnique, "1", "0" ) + ", " + ; // Agora totalmente seguro contra erros de tipo
-              "1)"                         
-     AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
-     //             1     2          3          4      5      6        7       8      
+                  c2sql(cTablename) + ", " + ;
+                  c2sql(cINDEXNAME) + ", " + ; 
+                  c2sql(cKey)       + ", " + ; 
+                  c2sql(cSqlExpr)   + ", " + ; 
+                  c2sql(cFilter)    + ", " + ; 
+                  iif( lIsUnique, "1", "0" ) + ", " + ; 
+                  "1);"                                 
+                        
+      AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
    ENDIF 
 NEXT j
-return aDUPLA
 
+RETURN aDUPLA
 
 // + EOF: dbudialeto.prg
 // +
