@@ -1185,6 +1185,12 @@ local lopen
 LOCAL cSchema
 LOCAL cSchemaSQL
 LOCAL cUserOracle
+LOCAL cSchemaMY
+LOCAL cSchemaPG
+LOCAL cCHAVENAME  := ""
+LOCAL cCHAVECAMPO := ""
+
+
 Lopen        := .F.
 lARQMDBACCDB := .F.
 cCOMANDO     := ""
@@ -1371,9 +1377,42 @@ IF cTIPOINFO = "CCAMPOSQL"
    cCOMANDO := cCAMPOSQL
 ENDIF
 IF cTIPOINFO = "__INDEX__"
-   DO CASE
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := "SHOW INDEXES FROM "+cTABELA
+  DO CASE
+   CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+      // Em vez de SHOW INDEXES (que dificulta aliases), usamos a STATISTICS da information_schema
+      cSchemaMY := iif( Empty(cOwnerx), "DATABASE()", "'" + cOwnerx + "'" )
+      cCOMANDO := "SELECT INDEX_NAME AS INDEX_NAME, COLUMN_NAME AS COLUMN_NAME " + ;
+                  "FROM INFORMATION_SCHEMA.STATISTICS " + ;
+                  "WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = " + cSchemaMY + " " + ;
+                  "ORDER BY INDEX_NAME, SEQ_IN_INDEX;"
+
+   CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+      // No Postgres precisamos cruzar o catálogo interno para extrair os nomes das colunas de forma ordenada
+      cSchemaPG := iif( Empty(cOwnerx), "public", cOwnerx )
+      cCOMANDO := "SELECT t.relname AS INDEX_NAME, a.attname AS COLUMN_NAME " + ;
+                  "FROM pg_class t " + ;
+                  "JOIN pg_index ix ON t.oid = ix.indexrelid " + ;
+                  "JOIN pg_class i ON i.oid = ix.indrelid " + ;
+                  "JOIN pg_attribute a ON a.attrelid = t.oid " + ;
+                  "JOIN pg_namespace n ON n.oid = i.relnamespace " + ;
+                  "WHERE LOWER(i.relname) = '" + Lower(cTabela) + "' AND n.nspname = '" + cSchemaPG + "' " + ;
+                  "ORDER BY t.relname, a.attnum;"
+
+   CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+      // Consulta padrão na sys.indexes do SQL Server
+      cCOMANDO := "SELECT ind.name AS INDEX_NAME, col.name AS COLUMN_NAME " + ;
+                  "FROM sys.indexes ind " + ;
+                  "JOIN sys.index_columns ic ON ind.object_id = ic.object_id AND ind.index_id = ic.index_id " + ;
+                  "JOIN sys.columns col ON ic.object_id = col.object_id AND ic.column_id = col.column_id " + ;
+                  "JOIN sys.tables t ON ind.object_id = t.object_id " + ;
+                  "WHERE t.name = '" + cTabela + "' AND ind.is_primary_key = 0 " + ;
+                  "ORDER BY ind.name, ic.key_ordinal;"
+
+   CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+      // Nota: O SQLite exige comandos em lote ou PRAGMA. Para leitura via Recordset genérico, 
+      // o mais seguro é ler os metadados diretamente da tabela sqlite_master caso queira a query pura,
+      // mas o comando pragma nativo é: "PRAGMA index_list('" + cTabela + "')"
+      cCOMANDO := "SELECT name AS INDEX_NAME, '' AS COLUMN_NAME FROM sqlite_master WHERE type='index' AND tbl_name='" + cTabela + "';"
    ENDCASE
 ENDIF
 IF cTIPOINFO = "__VERSION__"
@@ -1454,13 +1493,34 @@ IF lOPEN
 
       ENDIF
       IF cTIPOINFO = "__INDEX__"
-         DO CASE
-         CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-            //1table,2non_unique,3key_name,4_seq_in_index.5column_name....
-            cCHAVENAME  := upper(alltrim(ors:fields(3) :value))
-            cCHAVECAMPO := upper(alltrim(ors:fields(5) :value))
-            AADD(aRETU,{cCHAVENAME,cCHAVECAMPO})
-         ENDCASE
+        cCHAVENAME  := ""
+        cCHAVECAMPO := ""
+
+           // Graças aos aliases fixos da Dialeto_ShowIndexes(), 
+           // NÃO precisamos mais separar a leitura por "CASE cTIPOSQL" !
+           TRY
+              cCHAVENAME  := Upper(AllTrim( hb_valToStr(ors:Fields("INDEX_NAME"):Value) ))
+              cCHAVECAMPO := Upper(AllTrim( hb_valToStr(ors:Fields("COLUMN_NAME"):Value) ))
+           CATCH
+              // Contingência para o SQLite se o driver do PRAGMA nativo for utilizado diretamente
+              IF cTIPOSQL == "SQLITE" .OR. At(".SQLITE", Upper(cdatabase)) > 0
+                 TRY
+                    cCHAVENAME  := Upper(AllTrim( hb_valToStr(ors:Fields("name"):Value) ))
+                    cCHAVECAMPO := "" // Índices do SQLite puro exigem um segundo passo (index_info) se lidos via pragma nativo
+                 CATCH
+                    cCHAVENAME  := ""
+                 END
+              ENDIF
+           END
+
+           // Se capturou um índice válido, adiciona ao array de retorno do Harbour
+           IF !Empty(cCHAVENAME)
+              // Retorna o par { Nome_Do_Indice, Coluna_Do_Banco }
+              AADD(aRETU, { cCHAVENAME, cCHAVECAMPO })
+           ENDIF
+
+
+
       ENDIF
 
 
