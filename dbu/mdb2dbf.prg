@@ -872,87 +872,13 @@ FOR i := 1 TO Len( aSTRU )
    executacmd( cMDBARQ, msql )
 NEXT
 
-
-nIndexes := dbORDERINFO(DBOI_ORDERCOUNT)
+aINDICES:=GeraINDICES()
+nIndexes := LEN(aINDICES)
 FOR j := 1 TO nIndexes
-   // Inicialização correta dos tipos de variáveis a cada iteração
-   cINDEXNAME := ""
-   cKey       := ""
-   lIsUnique  := .F.  // Correção: Deve iniciar como Booleano (.F.) e não String ("")
-   cFilter    := ""   // Inicia vazio, caso a RDD não suporte DBOI_CONDITION
-   
-  // Tenta ler o Nome do Índice
-   TRY
-      cINDEXNAME := dbORDERINFO(DBOI_NAME,,j)
-   CATCH
-      cINDEXNAME := "" // Fallback caso a RDD não consiga expor o nome
-   END   
-   
-   // Garante a remoção de espaços antes de testar se está vazio
-   cINDEXNAME := AllTrim(cINDEXNAME)
-   
-   // Se a RDD não retornou um nome válido, usa o fallback sequencial (obrigatório para todos os bancos)
-   IF Empty( cINDEXNAME )
-      cINDEXNAME := "IDX_" + AllTrim(cTablename) + "_" + AllTrim(Str(j))
-   ELSE
-      // Se a RDD retornou um nome (ex: "CODIGO"), prefixamos o nome da tabela 
-      // APENAS nos bancos com escopo global de índice (SQLite e PostgreSQL)
-      IF cTIPOSQL == "SQLITE" .OR. cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
-         cINDEXNAME := "IDX_" + AllTrim(cTablename) + "_" + cINDEXNAME
-      ELSE
-         // Para os outros bancos (MySQL, SQL Server), mantemos o nome original da TAG do DBF,
-         // mas adicionamos o prefixo "IDX_" por boa prática de sintaxe SQL (opcional, se preferir tire o "IDX_")
-         cINDEXNAME := "IDX_" + cINDEXNAME 
-      ENDIF
-   ENDIF   
-
-   // Trata caracteres inválidos (traços e espaços) no nome final gerado
-   cINDEXNAME := StrTran(cINDEXNAME, "-", "_") 
-   cINDEXNAME := StrTran(cINDEXNAME, " ", "_")
-   
-   // Tenta ler a Expressão da Chave
-   TRY
-      cKey := dbOrderInfo( DBOI_EXPRESSION, , j )
-   CATCH
-      cKey := ""
-   END
-   
-   // Tenta ler a propriedade de Unicidade
-   TRY  
-      lIsUnique := dbOrderInfo( DBOI_UNIQUE, , j )
-   CATCH
-      lIsUnique := .F. // Fallback padrão seguro
-   END
-   
-   // Tenta ler a Condição de Filtro (O comando FOR)
-   TRY  
-      cFilter := dbOrderInfo( DBOI_CONDITION, , j ) 
-   CATCH
-      cFilter := "" // Se a RDD não suportar filtros (ex: DBFNTX antiga), assume vazio com segurança
-   END  
-   
-   // Só processa e grava se a RDD conseguir extrair uma expressão de chave válida
-   IF .NOT. Empty( cKey )
-      
-      // Transforma a chave Harbour em colunas SQL separadas por vírgula
-      cSqlExpr := MDPCHAVEI( cKey ) 
-      
-      // Gera o comando físico de criação do índice usando a expressão tratada
-      msql := "CREATE INDEX " + cINDEXNAME + " ON " + cNometabela + " ( " + cSqlExpr + " ) "
-      AAdd(Aindices, msql)
-      
-      // Monta o INSERT alimentando a estrutura de metadados expandida de forma segura
-      msql := "INSERT INTO index_metadata (table_name, index_name, expression, sql_expression, filter_expression, is_unique, is_bag) VALUES (" + ;
-              c2sql(cTablename) + ", " + ;
-              c2sql(cINDEXNAME) + ", " + ; 
-              c2sql(cKey)       + ", " + ; 
-              c2sql(cSqlExpr)   + ", " + ; 
-              c2sql(cFilter)    + ", " + ; 
-              iif( lIsUnique, "1", "0" ) + ", " + ; // Agora totalmente seguro contra erros de tipo
-              "1)"                         
-              
-      executacmd( cMDBARQ, msql )
-   ENDIF 
+    msql := aINDICES[J,1]  //Create index
+    executacmd( cMDBARQ, msql )
+    msql := aINDICES[J,2]   //insert into metadata
+    executacmd( cMDBARQ, msql )
 NEXT j
 
 dbclosearea()

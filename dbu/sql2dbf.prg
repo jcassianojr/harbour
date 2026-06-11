@@ -910,33 +910,21 @@ FUNCTION export2sql( odb, cDBFFILE )
    ENDIF
 
 
-   nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
+   aINDICES:=GeraINDICES()
+   nIndexes := LEN(aINDICES)
    FOR j := 1 TO nIndexes
-       
+      msql := aINDICES[J,1]  //Create index
+      
+      IF ! miscsql( oDB, mSql )
+         MemoWrit( "sql" + StrZero( j, 2, 0 ) + ".txt", msql )
+      ENDIF
    
-   
-      // CREATE INDEX idx_student_name ON Students (name);
-      cINDEXNAME := dbOrderInfo( DBOI_NAME,, j )
-      cINDEXNAME := StrTran( cINDEXNAME, "-", "_" )  // Tracos nao aceitos trocando por undescore
-      msql       := "create index " + cINDEXNAME + " on " + cTablename + " ( " + MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION,, j ) ) + " ) ;"
-      // DbOrderInfo( <nDefine> , <cIndexFile> , <nOrder_or_cIndexName> , <xNewSetting> ) -> xCurrentSetting
-      // AAdd( aNtxNames ,  dbORDERINFO( DBOI_NAME , ,  j )+" - "+dbORDERINFO( DBOI_EXPRESSION , ,  j ) )
-      IF !miscsql( oDB, mSql )
+      msql := aINDICES[J,2]  //metadado
+      
+      IF ! miscsql( oDB, mSql )
          MemoWrit( "sql" + StrZero( j, 2, 0 ) + ".txt", msql )
       ENDIF
       
-      cIdxName := dbOrderInfo( DBOI_NAME, , j )       // Nome do Tag (ex: "ID_CLI")
-      cKey     := dbOrderInfo( DBOI_EXPRESSION, , j ) // Expressão (ex: "NOME+DTOS(DATA)")
-      lIsUnique := dbOrderInfo( DBOI_UNIQUE, , j )    // Retorna .T. se for UNIQUE
-   
-     // A. Salva a "receita" para o retorno futuro ao DBF
-     mSql := "INSERT INTO index_metadata (table_name, index_name, expression, is_unique) VALUES (" + ;
-             c2sql(cTablename) + ", " + ;
-             c2sql(cIdxName) + ", " + ;
-             c2sql(cKey) + ", " + ;
-             iif( lIsUnique, "1", "0" ) + ")"
-     miscsql( oDB, mSql )
-        
    NEXT j
 
 
