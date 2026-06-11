@@ -176,16 +176,19 @@ FOR XY := 1 TO LEN(aARQDBF)
    MDT("abrindo arquivo antigo: "+cOLDDBF)
   // USE (cOLDDBF) ALIAS aliasantigo SHARED NEW VIA (cORIDRIVER) //	via driver antigo utiliza aliasantigo mas o driver defaiult e o destino
   dbUseArea( .T., (cORIDRIVER), (cOLDDBF), "aliasantigo", .T. , .F. )
-   nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
-   aINDICES  :={}
+  
+     aINDICES  :={}
    aCHAVES   = {}
-   FOR j := 1 TO nIndexes
-      cINDEXNAME := dbOrderInfo( DBOI_NAME,, j )
-      cINDEXCHAVE:= dbOrderInfo( DBOI_EXPRESSION,, j ) 
-      AAdd( Aindices, cINDEXNAME )
-      AADD( aCHAVES,cINDEXCHAVE)
-   NEXT j
-
+ 
+  //               1     2          3          4         5      6        7       8  
+     //AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique}) 
+   aINDICESx:=GeraINDICES()
+    nIndexes := LEN(aINDICESx)
+    FOR j := 1 TO nIndexes
+      AAdd( Aindices, aINDICESx[J,4] )
+      AADD( aCHAVES , aINDICESx[J,5] )
+    NEXT j
+  
 
    MDT("copiando estrutura")
    IF lSTRUEXT
