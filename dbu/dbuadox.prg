@@ -171,14 +171,13 @@ FUNCTION adoximpdbf()
    dbUseArea( .T., cORIDRIVER, cARQORI, cTABLE, .T., .T. )
    aSTRU := dbStruct()
 
-   nIndexes := dbOrderInfo( DBOI_ORDERCOUNT )
-   FOR j := 1 TO nIndexes
-      cINDEXNAME := dbOrderInfo( DBOI_NAME,, j )
-      cINDEXNAME := StrTran( cINDEXNAME, "-", "_" )  // Tracos nao aceitos trocando por undescore
-      cINDEXUSO  := MDPCHAVEI( dbOrderInfo( DBOI_EXPRESSION,, j ) )
-      msql       := "create index " + cINDEXNAME + " on " + cTABLE + " ( " + cINDEXUSO + " ) "
-      AAdd( Aindices, msql )
-   NEXT j
+    aINDICESx:=GeraINDICES()
+    nIndexes := LEN(aINDICESx)
+    FOR j := 1 TO nIndexes
+        msql := aINDICESx[J,1]  //Create index
+        AAdd( Aindices, msql )
+    NEXT j
+
 
    msql := SqliteCreateTable( cTABLE, aSTRU, cTIPOSQL )
    adoxexecsql( msql )
