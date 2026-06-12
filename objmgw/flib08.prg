@@ -841,13 +841,27 @@ ENDIF
 @ 17,10 GET cCORPOMSG                               
 READCUR()
 
+
+sContaAtiva =PROFILESTRING("PRINTER.INI",ZUSER,"CONTAEMAIL","")  //nome para buscar no cofre
+If sContaAtiva = "" 
+    sContaAtiva = "PADRAO"   //usa email padrao
+End 
+cFROM      :=PROFILESTRING("PRINTER.INI",sContaAtiva,"ENDERECOEMAIL","")  //endereco do email do usuario ou do padrao envio
+cCAMAPP   := PROFILESTRING("PRINTER.INI",sContaAtiva,"APPEMAIL","")+" "    //"C:\Program Files\Mozilla Thunderbird\thunderbird.exe "
+
+cSERVERIP  :=lerDoCofre(sContaAtiva, "SmtpServer")
+nPORT      :=LerDoCofre(sContaAtiva, "SmtpPort")
+cUSER      :=LerDoCofre(sContaAtiva, "EmailUser") 
+cPASS      :=LerDoCofre(sContaAtiva, "EmailPassword") 
+cPOP       :=LerDoCofre(sContaAtiva, "PopServer") 
+
+/*
 cSERVERIP := PROFILESTRING("PRINTER.INI","EMAIL","SERVER")
 nPORT     := VAL(PROFILESTRING("PRINTER.INI","EMAIL","PORTA"))
-cFROM     := PROFILESTRING("PRINTER.INI","EMAIL","FROM")
 cUSER     := PROFILESTRING("PRINTER.INI","EMAIL","USUARIO")
 cPASS     := PROFILESTRING("PRINTER.INI","EMAIL","SENHA")
 cPOP      := PROFILESTRING("PRINTER.INI","EMAIL","POP")
-cCAMAPP   := PROFILESTRING("PRINTER.INI","EMAIL","APP")+" "    //"C:\Program Files\Mozilla Thunderbird\thunderbird.exe "
+*/
 
 cTO := ALLTRIM(cTO)
 cTO := lower(cTO)
