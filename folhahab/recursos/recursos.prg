@@ -45,6 +45,9 @@ FUNCTION main
 
    MVINFOConfTela( "Recursos - Modulo de Utilidades" )
 
+
+//   ALERT(ProfileString("FOLHA.INI","MPOINT","CONECCAO",""))
+
    hb_langSelect( 'PT' )
    hb_idleState()
    netregosok()
@@ -137,6 +140,8 @@ FUNCTION main
 
 
    INFOR( "RECURNTX", "DBF+NTX+STR(SEQ,3)", "RECURNTX", .T. )
+
+
 
    RECUMENU()  // CHAMA O MENU
    RETU NIL

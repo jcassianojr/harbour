@@ -889,9 +889,10 @@ cTELA := savescreen(6,0,17,80)
 CLSBOX(6,0,17,80)
 
    HB_dispbox(6,0,17,79,B_DOUBLE+" ")
-   oPCAO(07,01," &SendMail ",73)   //S
-   oPCAO(08,01," &MAPI     ",65)   //M
-   oPCAO(09,01," &APP      ",69)   //A
+   oPCAO(07,01," &SendMail   ",73)   //S
+   oPCAO(08,01," &MAPI       ",65)   //M
+   oPCAO(09,01," &APP        ",69)   //A
+   oPCAO(10,01," hb&NFeEmail ",78)   // N - Nova opção incluída
    nOPCAO := menu(,0)
 restscreen(6,0,17,80,cTELA)   
    
@@ -954,6 +955,67 @@ IF nOPCAO=3
    lVAR := .t.
 
 
+
+
+ENDIF
+
+
+IF nOPCAO=4
+// Instancia o objeto da classe hbnfeemail
+   oEmail := hbNFeEmail():New()
+
+   // Converte para minúsculo e limpa espaços para garantir a comparação automatizada
+   cServerLower := AllTrim( Lower( cServer ) )
+
+   // DESCOBERTA E ESCOPO AUTOMÁTICO ADADEQUADO AO SERVER DO INI
+   DO CASE
+      CASE "gmail" $ cServerLower
+         // Se no INI estiver smtp.gmail.com ou similar
+         // O método UseGmail já configura internamente a porta 465, SSL direto e associa o From ao usuário [cite: 11, 12, 13]
+         oEmail:UseGmail( cUser, cPass ) 
+
+      CASE "office365" $ cServerLower .OR. "outlook" $ cServerLower
+         // Se no INI estiver smtp.office365.com ou smtp.mail.outlook.com
+         // O método UseMicrosoft365 configura os canais internos da Microsoft (Porta 587, TLS, SSL) [cite: 16, 17, 100]
+         oEmail:UseMicrosoft365( cUser, cPass )
+
+      CASE "brevo" $ cServerLower
+         // Se no INI estiver smtp-relay.brevo.com
+         // O método UseBrevo aceita: cSmtpLogin, cSmtpKey, cFrom, nPorta [cite: 114]
+         oEmail:UseBrevo( cUser, cPass, cFrom, nPorta ) 
+
+      OTHERWISE
+         // Servidor genérico do INI (Ex: mail.seudominio.com.br, smtp.terra.com.br, etc) [cite: 74]
+         // Passa os parâmetros explícitos lidos do seu INI
+         // Parâmetros: cServer, nPorta, cUsuario, cSenha, lSSL, lTLS 
+         oEmail:UseSMTP( cServer, nPorta, cUser, cPass, (nPorta == 465), (nPorta == 587) )
+   ENDCASE
+
+   // Preenche os dados dinâmicos recebidos nos parâmetros da função
+   oEmail:cSubject  := cASSUNTO
+   oEmail:cMsgTexto := cCORPOMSG
+   
+   // Se cFrom estiver populado diferentemente do padrão mapeado nos métodos, força o do INI [cite: 13, 16, 18]
+   IF ! Empty( cFrom )
+      oEmail:cFrom := cFrom
+   ENDIF
+
+   // Adiciona o destinatário (Supondo que você use uma variável global ou passe no bloco)
+   // oEmail:AddTo( cDESTINATARIO ) [cite: 107]
+
+   // Adiciona o anexo passado no parâmetro se ele existir fisicamente
+   IF ! Empty( cARQ ) .AND. File( cARQ )
+      oEmail:AddFile( cARQ ) 
+   ENDIF
+
+   // Executa o Envio via CDO Component [cite: 62, 107]
+   aRet := oEmail:Execute()
+
+   IF ! aRet["OK"] 
+      // Trate o erro conforme a sua estrutura de mensagens (Ex: MsgStop, AlertX, etc)
+      Alert( "Erro no envio pelo provedor [" + aRet["Provider"] + "]: " + aRet["MsgErro"] )
+      RETURN .F.
+   ENDIF
 
 
 ENDIF

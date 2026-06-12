@@ -1,26 +1,17 @@
 // +--------------------------------------------------------------------
 // +
 // +
-// +
 // +    Programa  : disk59.prg
 // +
-// +
-// +
 // +     Sistema:
-// +f
+// +
 // +     Linguagem: Harbour
 // +
 // +     Autor: jcassiano
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:41 am
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
@@ -628,7 +619,9 @@ FUNCTION VALCEI( wk_cei, Lmes )  // mascara="  .   .     /  "
 
 RETURN cInicio + cMeio + cFinal
    
-   FUNCAO MascararCPF( cCPF )
+  
+ /*  
+FUNCAO MascararCPF( cCPF )
     // Remove pontos e traços temporariamente para garantir o tamanho (11 digitos)
     cLimpo := LimparCaracteres( cCPF ) 
     
@@ -637,9 +630,10 @@ RETURN cInicio + cMeio + cFinal
     cFinal  := Substr( cLimpo, 10, 2 )
     
     // Monta a string mascarada de retorno
-    RETURN cInicio + ".***.***-" + cFinal
-
+RETURN cInicio + ".***.***-" + cFinal
 /*
+
+
  * Função para ofuscar CNPJ (Aceita o novo padrão Alfanumérico)
  */
 FUNCTION MascaraCNPJ( cCnpjRaw )

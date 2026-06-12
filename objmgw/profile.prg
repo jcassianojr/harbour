@@ -44,39 +44,131 @@
 #include "FileIO.ch"
 #include "Set.ch"
 
-// +--------------------------------------------------------------------
-// +  Funcao: ProfileString()
-// +  Parametros: cFile    - O nome do arquivo .INI a ser usado
-// +              cSection - A secao da qual sera feita a leitura
-// +              cKey     - A chave/identificador a ser buscado
-// +              cDefault - O valor padrao caso nao seja encontrado (opcional)
-// +
-// +  Retorno:    cString  - A string lida do arquivo.
-// +--------------------------------------------------------------------
-FUNCTION ProfileString( cFile, cSection, cKey, cDefault )
+// +--------------------------------------------------------------------+
+// +  Função: ProfileString() - ULTRA RESILIENTE (Ignora erros de INI)
+// +--------------------------------------------------------------------+
+FUNCTION ProfileString( cINIFile, cSection, cKey, cDefault )
 
-   LOCAL cString
+   LOCAL cConteudo, aLinhas, cLinha, nI
+   LOCAL lNaSecao := .F.
+   LOCAL nPosIgual
+   LOCAL cChaveAtual, cValorAtual
 
-   // Garante que se o valor padrao for omitido, seja uma string vazia
-   IF cDefault == NIL
+   IF ValType( cDefault ) <> "C"
       cDefault := ""
    ENDIF
 
-   // Se nenhuma extensao for fornecida para o arquivo, assume .INI
-   IF RAt( ".", cFile ) == 0
-      cFile := Upper( AllTrim( cFile ) ) + ".INI"
+   IF RAt( ".", cINIFile ) == 0
+      cINIFile := Upper( AllTrim( cINIFile ) ) + ".INI"
    ENDIF
 
-   // As funcoes nativas do Harbour nao precisam dos colchetes [] na secao.
-   // Caso o seu codigo antigo envie com eles, limpamos aqui para evitar falhas.
+   // Garante padronização sem colchetes e em maiúsculo para busca
+   cSection := Upper( StrTran( StrTran( cSection, "[", "" ), "]", "" ) )
+   cKey     := Upper( AllTrim( cKey ) )
+
+   IF ! File( cINIFile )
+      RETURN cDefault
+   ENDIF
+
+   // Lê o arquivo inteiro para a memória
+   cConteudo := MemoRead( cINIFile )
+   
+   // Quebra o arquivo em um array de linhas (suporta CR+LF ou apenas LF)
+   aLinhas := hb_RegExSplit( hb_Eol(), cConteudo )
+   IF Len( aLinhas ) == 0
+      aLinhas := hb_RegExSplit( Chr(10), cConteudo )
+   ENDIF
+
+   FOR nI := 1 TO Len( aLinhas )
+      cLinha := AllTrim( aLinhas[nI] )
+
+      // Ignora linhas vazias ou comentários legítimos do arquivo INI
+      IF Empty( cLinha ) .OR. Left( cLinha, 1 ) == ";" .OR. Left( cLinha, 1 ) == "#"
+         LOOP
+      ENDIF
+
+      // Detecta se entramos na seção procurada ex: [MPOINT]
+      IF Left( cLinha, 1 ) == "[" .AND. Right( cLinha, 1 ) == "]"
+         IF Upper( StrTran( StrTran( cLinha, "[", "" ), "]", "" ) ) == cSection
+            lNaSecao := .T.
+         ELSE
+            lNaSecao := .F. // Saiu da seção procurada e entrou em outra
+         ENDIF
+         LOOP
+      ENDIF
+
+      // Se estiver dentro da seção correta, processa a chave
+      IF lNaSecao
+         nPosIgual := At( "=", cLinha )
+         IF nPosIgual > 0
+            cChaveAtual := Upper( AllTrim( Left( cLinha, nPosIgual - 1 ) ) )
+            
+            // Se achou a chave ex: "CONECCAO"
+            IF cChaveAtual == cKey
+               cValorAtual := SubStr( cLinha, nPosIgual + 1 )
+               RETURN AllTrim( cValorAtual )
+            ENDIF
+         ENDIF
+      ENDIF
+   NEXT
+
+   RETURN cDefault
+
+// +--------------------------------------------------------------------+
+// +  Função: SetProfile() - CORRIGIDA NATIVA SEM LIBS EXTRAS
+// +--------------------------------------------------------------------+
+FUNCTION SetProfile( cINIFile, cSection, cKey, xValue )
+
+   LOCAL hIni
+   LOCAL cNewValue
+   LOCAL cType := ValType( xValue )
+
+   DO CASE
+   CASE cType == "C"
+      cNewValue := xValue
+   CASE cType == "N"
+      cNewValue := AllTrim( Str( xValue ) )
+   CASE cType == "L"
+      cNewValue := if( xValue, "1", "0" )
+   CASE cType == "D"
+      cNewValue := DToS( xValue )
+   OTHERWISE
+      cNewValue := ""
+   ENDCASE
+
    cSection := StrTran( cSection, "[", "" )
    cSection := StrTran( cSection, "]", "" )
 
-   // Utiliza a API nativa de alta performance do Harbour
-   cString := GetPvProfString( cSection, cKey, cDefault, cFile )
+   IF RAt( ".", cINIFile ) == 0
+      cINIFile := Upper( AllTrim( cINIFile ) ) + ".INI"
+   ENDIF
 
-   RETURN cString
+   // Se o arquivo já existe, lê o conteúdo atual para não apagar outras seções
+   IF File( cINIFile )
+      hIni := hb_IniRead( cINIFile )
+   ELSE
+      hIni := {=>}
+   ENDIF
 
+   // Se a seção não existir no Hash, cria ela
+   IF ! HHasKey( hIni, cSection )
+      hIni[ cSection ] := {=>}
+   ENDIF
+
+   // Altera ou adiciona a chave com o novo valor
+   hIni[ cSection ][ cKey ] := cNewValue
+
+   // Salva de volta no arquivo de forma nativa e limpa
+   RETURN hb_IniWrite( cINIFile, hIni )
+
+// +--------------------------------------------------------------------+
+// +  Função: ProfileString() - UNIFICADA E CORRIGIDA PARA HARBOUR
+// +  Parâmetros: cINIFile  - O nome do arquivo .INI a ser usado
+// +              cSection  - A secao da qual sera feita a leitura
+// +              cKey      - A chave/identificador a ser buscado
+// +              cDefault  - O valor padrao caso nao seja encontrado (opcional)
+// +  Retorno:    cVAL      - A string lida do arquivo.
+// +--------------------------------------------------------------------+
 
 // +--------------------------------------------------------------------
 // +  Funcao: ProfileNum()
@@ -132,54 +224,6 @@ FUNCTION ProfileDate( cFile, cSection, cKey, dDefault )
 
    RETURN dDate
 
-
-// +--------------------------------------------------------------------
-// +  Funcao: SetProfile()
-// +  Parametros: cFile    - O nome do arquivo .INI a ser usado
-// +              cSection - A secao onde o valor sera gravado
-// +              cKey     - A chave/identificador a ser gravado ou atualizado
-// +              xValue   - O novo valor a ser escrito
-// +
-// +  Retorno:    .T. se gravado com sucesso, .F. caso contrario.
-// +--------------------------------------------------------------------
-FUNCTION SetProfile( cFile, cSection, cKey, xValue )
-
-   LOCAL lRetCode
-   LOCAL cType
-   LOCAL cNewValue
-
-   // Se nenhuma extensao for fornecida para o arquivo, assume .INI
-   IF RAt( ".", cFile ) == 0
-      cFile := Upper( AllTrim( cFile ) ) + ".INI"
-   ENDIF
-
-   // Remove os colchetes se existirem para compatibilidade com o Harbour nativo
-   cSection := StrTran( cSection, "[", "" )
-   cSection := StrTran( cSection, "]", "" )
-
-   cType := ValType( xValue )
-
-   DO CASE
-   CASE cType == "C"
-      cNewValue := xValue
-
-   CASE cType == "N"
-      cNewValue := AllTrim( Str( xValue ) )
-
-   CASE cType == "L"
-      cNewValue := if( xValue, "1", "0" )
-
-   CASE cType == "D"
-      cNewValue := DToS( xValue ) // Mantem o formato original AAAAMMDD
-
-   OTHERWISE
-      cNewValue := ""
-   ENDCASE
-
-   // Grava diretamente no arquivo usando a engine do Harbour e retorna .T. ou .F.
-   lRetCode := WritePvProfString( cSection, cKey, cNewValue, cFile )
-
-   RETURN lRetCode
 
 
 // +--------------------------------------------------------------------
