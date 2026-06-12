@@ -34,6 +34,8 @@ sddmy.hbc
 sddpg.hbc
 sddsqlt3.hbc
 #sddoci.hbc
+sddfb.hbc
+hbfbird.hbc
 
 letodb.hbc
 
@@ -89,6 +91,7 @@ letodb.hbc
 #
 #
 \develop\harbour\dbu\dbuleto.prg 
+\develop\harbour\dbu\dbufire.prg
 #
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  
