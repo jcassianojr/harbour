@@ -677,6 +677,7 @@ cORIDRIVER := RDDNOME(TIPODBF)
 tDOC := pegtipodoc(.F.)
 IF nTIPOPR = 2
    IF zEXPOREXT = "DBF" .OR. zEXPOREXT = "SDF" .OR. zEXPOREXT = "DLM" .OR. zEXPOREXT = "CSV" .OR. zEXPOREXT = "UNL" .OR. zEXPOREXT = "PSV" .OR. zEXPOREXT = "TSV" .OR. zEXPOREXT = "SSV"
+   ELSE
       MDT("Ainda nao disponivel para "+zEXPOREXT)
       RETURN
    ENDIF
