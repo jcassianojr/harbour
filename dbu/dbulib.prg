@@ -672,6 +672,20 @@ endif
 tipodbfesc()
 nORITIPO   := TIPODBF
 cORIDRIVER := RDDNOME(TIPODBF)
+
+//nao mostrar tipo 15 dbf na escolha nao spbrepor na copia passando falso aqui
+tDOC := pegtipodoc(.F.)
+IF nTIPOPR = 2
+   IF zEXPOREXT = "DBF" .OR. zEXPOREXT = "SDF" .OR. zEXPOREXT = "DLM" .OR. zEXPOREXT = "CSV" .OR. zEXPOREXT = "UNL" .OR. zEXPOREXT = "PSV" .OR. zEXPOREXT = "TSV" .OR. zEXPOREXT = "SSV"
+      MDT("Ainda nao disponivel para "+zEXPOREXT)
+      RETURN
+   ENDIF
+ENDIF
+
+pegparexp()
+
+
+
 if nTIPOPR = 1
    cARQORI := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*."+TABLEEXT,1)
 else
@@ -682,38 +696,42 @@ IF nTIPOPR = 1
    LCOPIANAT := MDG("Copia Nativa(SIM) Interna(NAO)")
 ENDIF
 
-//nao mostrar tipo 15 dbf na escolha nao spbrepor na copia passando falso aqui
-tDOC := pegtipodoc(.F.)
-pegparexp()
+lCONTINUA:=.T.
 
-
-//
 // formatos nao disponiveis no copy to (nativa)
 //
 IF tDOC = 1   //XML
-   lCOPIANAT := .F.
+   lCONTINUA := .F.
 ENDIF
 IF tDOC = 2   //TAM
-   lCOPIANAT := .F.
+   lCONTINUA := .F.
 ENDIF
 IF tDOC = 3   //TEC
-   lCOPIANAT := .F.
+   lCONTINUA := .F.
 ENDIF
 IF tDOC = 4   //DBE
-   lCOPIANAT := .F.
+   lCONTINUA := .F.
 ENDIF
 IF tDOC = 7   //XML
-   lCOPIANAT := .F.
+   lCONTINUA := .F.
 ENDIF
 IF tDOC = 8   //JSON
-   lCOPIANAT := .F.
+   lCONTINUA := .F.
 ENDIF
 IF tDOC = 13  //SQL
-   lCOPIANAT := .F.
+   lCONTINUA := .F.
 ENDIF
 IF tDOC = 14  //Mar&kdown MD
-   lCOPIANAT := .F.
+   lCONTINUA := .F.
 ENDIF
+
+
+IF lCOPIANAT.AND.lCONTINUA
+ELSE
+   MDT("Ainda nao disponivel nativa para "+zEXPOREXT)
+   RETURN
+ENDIF
+
 
 IF nTIPOPR = 1
    IF .NOT. lCOPIANAT
@@ -721,7 +739,7 @@ IF nTIPOPR = 1
    ENDIF
 ENDIF
 
-IF nTIPOPR = 1
+IF nTIPOPR = 1 //Exportar
    IF LCOPIANAT
       cDESTINO := TROCAEXT(cARQORI,zEXPOREXT)
       MDT("abrindo arquivo de origem: "+cARQORI)
@@ -733,17 +751,13 @@ IF nTIPOPR = 1
       multidocs(nTIPDOC,cARQORI)
    ENDIF
 ENDIF
-IF nTIPOPR = 2
-   IF zEXPOREXT = "DBF" .OR. zEXPOREXT = "SDF" .OR. zEXPOREXT = "DLM" .OR. zEXPOREXT = "CSV" .OR. zEXPOREXT = "UNL" .OR. zEXPOREXT = "PSV" .OR. zEXPOREXT = "TSV" .OR. zEXPOREXT = "SSV"
-      cARQORI := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*."+zEXPOREXT,1)
-      MDT("abrindo arquivo de destino: "+cDESTINO)
-      //USE (cDESTINO) ALIAS DESTINO EXCLUSIVE NEW VIA (cORIDRIVER)
-      dbUseArea( .T., (cORIDRIVER), (cDESTINO), "DESTINO", .F. , .F. )
-      APPENDFROM(cARQORI)
-      dbcloseall()
-   ELSE
-      MDT("Ainda nao disponivel para "+zEXPOREXT)
-   ENDIF
+IF nTIPOPR = 2 //Importar
+   cARQORI := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*."+zEXPOREXT,1)
+    MDT("abrindo arquivo de destino: "+cDESTINO)
+    //USE (cDESTINO) ALIAS DESTINO EXCLUSIVE NEW VIA (cORIDRIVER)
+    dbUseArea( .T., (cORIDRIVER), (cDESTINO), "DESTINO", .F. , .F. )
+    APPENDFROM(cARQORI)
+    dbcloseall()
 ENDIF
 
 RESTAA(aAMBIENTE)
