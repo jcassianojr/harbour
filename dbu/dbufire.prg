@@ -31,7 +31,6 @@ FUNCTION Firebirdmenu()
 LOCAL aAMBIENTE
 LOCAL KEY
 
-cTIPOSQL := "FIREBIRD"  // Passa para privada usadas nas funcoes abaixo 
 
  /*
  LOCAL cServer := "localhost:"
@@ -62,9 +61,12 @@ cPATH      := ""
 loledb     := .T. 
 lMDB       := .F. 
 lACCDB     := .F. 
+lFDB       := .T.
 
 cOLDRDD     := RDDSETDEFAULT("") 
 nOLDTIPORDD := TIPODBF 
+cTIPOSQL := "FIREBIRD"  // Passa para privada usadas nas funcoes abaixo 
+
 
 // Busca as credenciais e o caminho do banco dinamicamente via cofre do sistema
 pegcfgbanco() 

@@ -64,6 +64,7 @@ FUNCTION pgsqlmenu()
    loledb := hb_Version( HB_VERSION_BITWIDTH ) <> 64   // mdg("User sim=odbc 8.0(32b) nao=odbc 9.0(64b)")
    lMDB   := .F.
    lACCDB := .F.
+   lFDB   := .F.
 
    OPENTIPOARQ()
 

@@ -48,6 +48,7 @@ FUNCTION sqlitemenu()
    loledb    := hb_Version( HB_VERSION_BITWIDTH ) <> 64
    lMDB      := .F.
    lACCDB    := .F.
+   lFDB       := .F.
    cTIPOSQL  := "SQLITE"
    aAMBIENTE := SALVAA()
 

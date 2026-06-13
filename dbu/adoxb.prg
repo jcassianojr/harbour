@@ -444,8 +444,8 @@ if StrDriver = "PGSQL" .OR. StrDriver = "POSTGRESQL"
    StrConnection := "DRIVER={PostgreSQL ANSI};Server="+StrDatabase+";Uid="+StrUsuario+";Pwd="+StrSenha  //+";pqopt={search_path=myschema,public}" //32 driver versao
 endif
 if StrDriver = "FIREBIRD" .or. cEXTENSAO == ".fgb" .or. cEXTENSAO == ".gdb"   // ADOGDB
-   //StrConnection := "DRIVER=Firebird/InterBase(r) driver; UID="+StrUsuario+"; PWD="+StrSenha+"; DBNAME="+StrDatabase
-   StrConnection := "DRIVER=Firebird ODBC driver; UID="+StrUsuario+"; PWD="+StrSenha+"; DBNAME="+StrDatabase
+   StrConnection := "DRIVER=Firebird/InterBase(r) driver; UID="+StrUsuario+"; PWD="+StrSenha+"; DBNAME="+StrDatabase
+   //StrConnection := "DRIVER=Firebird ODBC driver; UID="+StrUsuario+"; PWD="+StrSenha+"; DBNAME="+StrDatabase
 endif
 if StrDriver = "MYSQL"  // ADOMySQL
    StrConnection := "Driver={MySQL ODBC 8.0 ANSI Driver};database="+StrDatabase+;

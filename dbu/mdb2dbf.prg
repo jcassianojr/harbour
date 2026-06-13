@@ -53,7 +53,7 @@ cPORTAX    :=SPACE(30)
 loledb     := .T.
 lmdb       := .f.
 laccdb     := .f.
-
+lFDB       := .f.
 
 pegcfgbanco()
 
@@ -167,7 +167,7 @@ IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    cUSERX := PADR("postgres",30," ") 
    cPORTAX:= PADR("5432",30," ")
 ENDIF
-IF cTIPOSQL = "FIREBIRD"  .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" 
+IF cTIPOSQL = "FIREBIRD"  .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR.  cTIPOSQL ="IB" 
    cSERVERX := PADR("localhost", 30, " ")   //net://
    cUSERX := PADR("SYSDBA",30," ")  //masterkey
    cPORTAX:= PADR("3050",30," ")
@@ -193,10 +193,10 @@ ENDIF
 IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    loledb := hb_Version(HB_VERSION_BITWIDTH) <> 64  //odbc 8.0(32b) odbc 9.0(64b)")
 ENDIF
-// No bloco de ajustes de drivers (linha ~200)
-IF cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
-   loledb := hb_Version(HB_VERSION_BITWIDTH) <> 64 // .T. se 32-bit, .F. se 64-bit
-ENDIf
+// No bloco de ajustes de drivers (linha ~200) 32 bits 64 bits driver mesmo nome
+//IF cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"  .OR.  cTIPOSQL ="IB"
+//   loledb := hb_Version(HB_VERSION_BITWIDTH) <> 64 // .T. se 32-bit, .F. se 64-bit
+//ENDIf
 
 //
 //mariadb mesmo nome de driver para 32 e 64 bits
@@ -225,8 +225,10 @@ lACCDB := .F.
 IF cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64"
    lACCDB := .T.
 ENDIF
-
-
+lFDB   := .F.
+IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR.  cTIPOSQL ="IB"
+   lFDB   := .T.
+ENDIF
 return .t.
 
 
@@ -586,7 +588,7 @@ CASE lACCDB
    hb_adoSetTable(cTABELA) 
    hb_adoSetEngine("ACEOLEDB") 
    dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
-CASE  cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+CASE  lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    hb_adoSetTable(cTABELA) 
    hb_adoSetEngine("FIREBIRD") 
    hb_adoSetUser(CUSERX) 
@@ -671,14 +673,14 @@ function mdbcria()
 DO CASE
 CASE lMDB
    cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos mdb","*.MDB",1)
-CASE lACDB
+CASE lACCDB
    cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos accdb","*.accdb",1)
 CASE cTIPOSQL = "SQLITE"
    cARQORI := win_GetsaveFileName(,"SQLite Files",HB_CWD(),"SQLite",;
     {{'SQLite','*.sqlite'},{'SQLite db','*.DB'},;
     {'SQLite3','*.sqlite3'},{'SQLite db3','*.DB3'},;
     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
-CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
     {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
      {'All Files','*.*'}},1)    
@@ -710,12 +712,14 @@ IF lMDB .OR. lACCDB
    //EXECUTACMD(cARQORI,"GRANT SELECT ON VIEW showtableS TO ADMIN,PUBLIC")
 ENDIF
 
-IF cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+IF lFDB //cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    // Código necessário para disparar a criação do ficheiro .fdb em branco
    // Exemplo utilizando ADOX se suportado pelo driver:
    TRY
       oCatalog := win_OleCreateObject("ADOX.Catalog")
-      oCatalog:Create("DRIVER=Firebird ODBC driver;Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
+      oCatalog:Create("DRIVER=Firebird/InterBase(r) driver;Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
+      //oCatalog:Create("DRIVER=Firebird ODBC driver;Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
+      
       oCatalog := NIL
    CATCH
       MDT("Erro ao criar base de dados Firebird")
@@ -786,7 +790,7 @@ DO CASE
 IF !Empty( cSqlFields )
    
    IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. ;
-      cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR. cTIPOSQL = "GDB"
+      cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR. cTIPOSQL = "GDB" .OR. cTIPOSQL = "IB"
       
       // Tenta criar a tabela de metadados de campos de forma isolada
       TRY
@@ -818,6 +822,7 @@ aSTRU    := DBSTRUCT()
 nLASTREC := reccount()
 zei_fort(nLASTREC,,,0)
 cNOMETABELA := ALIAS()
+ctablename  := cNOMETABELA
 
 // 1. LIMPEZA DOS METADADOS (Geral para todos os bancos)
 // Limpa o que existia anteriormente para evitar duplicidade na re-importaÃ§Ã£o
@@ -910,7 +915,7 @@ CASE lACCDB   // cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
 CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
    msql := SqliteCreateTable(cNOMETABELA,aSTRU,"MSSQL")
    executacmd(cMDBARQ,msql)
-CASE cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+CASE lFDB //cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    msql := SqliteCreateTable(cNOMETABELA, aSTRU, "FIREBIRD") // Certifique-se que sua SqliteCreateTable suporte este parâmetro
    executacmd(cMDBARQ, msql)   
 OTHERWISE
@@ -995,7 +1000,7 @@ CASE cTIPOSQL = "SQLITE"
     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
    cDATABASEX := cMDBARQ
    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
-CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    cMDBARQ := win_GetopenFileName(,"Firebase Files",HB_CWD(),"Firebase",;
     {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
      {'All Files','*.*'}},1)      
@@ -1014,21 +1019,21 @@ IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. c
    @ 07,23 SAY "Server"         
    @ 09,23 SAY "user"           
    @ 11,23 say "pass"    
-   @ 12,23 say "owener"
-   @ 13,23 say "port"
-   @ 05,23 GET cBANCOX   VALID buscachaves( cBANCOX )  
-   @ 07,23 get cSERVERX  
-   @ 09,23 get cuserx         
-   @ 11,23 get cpassx
-   @ 12,23 get cownerx
-   @ 13,23 get cportax         
+   @ 13,23 say "owner"
+   @ 15,23 say "port"
+   @ 06,23 GET cBANCOX   VALID buscachaves( cBANCOX )  
+   @ 08,23 get cSERVERX  
+   @ 10,23 get cuserx         
+   @ 12,23 get cpassx
+   @ 14,23 get cownerx
+   @ 16,23 get cportax         
    READ
    cSERVERX := ALLTRIM(cSERVERX)
    cuserx  := alltrim(cuserx)
    cpassx  := alltrim(cpassx)
    cowenrx:= alltrim(cownerx)
    cportax   := alltrim(cportax)
-   IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+   IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"  .OR.  cTIPOSQL ="IB"
    ELSE
      cMDBARQ := cDATABASEX
    ENDIF  
@@ -1234,7 +1239,7 @@ IF cTIPOINFO = "TABELA"
              cCOMANDO := "SELECT table_name AS TABLE_NAME FROM all_tables WHERE owner = '" + Upper(cOwnerx) + "' ORDER BY TABLE_NAME;"
           endif
 
-       CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB" 
+       CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB" .OR. cTipo == "IB" 
           // RDB$SYSTEM_FLAG = 0 traz apenas tabelas criadas pelo usuário (ignora tabelas do sistema do Firebird)
           // TRIM() remove espaços em branco à direita que o Firebird gera nativamente nos metadados
           if Empty( cOwnerx )
@@ -1309,7 +1314,7 @@ DO CASE
                   iif( !Empty(cOwnerx), "AND OWNER = '" + Upper(cOwnerx) + "' ", "" ) + ;
                   "ORDER BY COLUMN_ID;"
 
-   CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB"
+   CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB" .OR. cTipo == "IB"
       // O Firebird exige um JOIN complexo no catálogo do sistema para extrair os tipos amigáveis
       cCOMANDO := "SELECT TRIM(F.RDB$FIELD_NAME) AS FIELD_NAME, " + ;
                   "CASE T.RDB$FIELD_TYPE " + ;
@@ -1935,8 +1940,9 @@ CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "SQL"
    endif
 CASE cTIPOSQL = "DBASE"
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=dBASE IV;"
-CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" 
-   cCONN := "DRIVER=Firebird ODBC driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR. cTipo == "IB" 
+   //cCONN := "DRIVER=Firebird ODBC driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+   CONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
 CASE cTIPOSQL = "PARADOX"   // ADOPX
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Paradox 5.x;"
 CASE cTIPOSQL == "XMLDB"  // ADOXML
@@ -2104,9 +2110,9 @@ IF !hb_FileExists(cDataBase)
       oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cDataBase+";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False")
    CASE cEXTENSAO == ".db" .OR. cTIPOSQL == "PARADOX"
       oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cDataBase+";Extended Properties='Paradox 5.x';")
-   CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cTIPOSQL == "FIREBIRD"
-      //oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
-      oCatalog:Create("DRIVER=Firebird ODBC driver;Uid="+cUserName+";Pwd="+cPassword+";DbName="+cDataBase+";")
+   CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. cTIPOSQL == "FIREBIRD"
+      oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
+      //oCatalog:Create("DRIVER=Firebird ODBC driver;Uid="+cUserName+";Pwd="+cPassword+";DbName="+cDataBase+";")
 
    endcase
    oCatalog := NIL  //NULL_OBJECT
@@ -2150,10 +2156,7 @@ LOCAL lValido      := .F.
 // 1. Validação estrita por Tag de Banco de Dados ou Extensão
 cExtensao := Lower( hb_FNameExt( cDATABASEX ) )
 
-IF cTIPOSQL $ "SQLITE#ACCESS#MDB#ACCDB"
-   lValido := .T.
-ELSEIF cTIPOSQL == "FIREBIRD" .AND. ( cExtensao $ ".fdb#.gdb#.fgb" )
-   // Só aceita Firebird se estiver apontando para um arquivo local válido
+IF cTIPOSQL $ "SQLITE#ACCESS#MDB#ACCDB" .or. (cTIPOSQL == "FIREBIRD" .AND. cExtensao $ ".fdb#.gdb#.ib" ) 
    lValido := .T.
 ENDIF
 

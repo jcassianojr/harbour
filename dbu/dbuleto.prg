@@ -80,6 +80,7 @@ cPATH      :=""
 loledb     := .T.
 lMDB       := .F.
 lACCDB     := .F.
+lFDB       := .F.
 
 cOLDRDD     := RDDSETDEFAULT("LETO")
 nOLDTIPORDD := TIPODBF

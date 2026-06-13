@@ -233,14 +233,14 @@ STATIC FUNCTION ADO_CREATE( nWA, aOpenInfo )
       ENDIF
       oConnection:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
 
-   CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. Upper( cDbEngine ) == "FIREBIRD"
+   CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".IB" .OR. Upper( cDbEngine ) == "FIREBIRD"
       IF !hb_FileExists( cDataBase )
-         // oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
-         oCatalog:Create( "Driver=Firebird ODBC driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
+         oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
+         //oCatalog:Create( "Driver=Firebird ODBC driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
 
       ENDIF
-      // oConnection:Open( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
-      oConnection:Open( "Driver=Firebird ODBC driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
+      oConnection:Open( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
+      //oConnection:Open( "Driver=Firebird ODBC driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
 
       oConnection:CursorLocation := adUseClient
 
@@ -511,17 +511,17 @@ STATIC FUNCTION ADO_OPEN( nWA, aOpenInfo )
             ";User ID=" + aWAData[ WA_USERNAME ] + ;
             ";Password=" + aWAData[ WA_PASSWORD ] )
 
-      CASE cENGINE == "FIREBIRD" .OR. cEXTENSAO == ".fgb" .OR. cEXTENSAO == ".gdb"
-         // '  aWAData[ WA_CONNECTION ]:Open( "Driver=Firebird/InterBase(r) driver;" + ;
-         // "Persist Security Info=False" + ;
-         // ";Uid=" + aWAData[ WA_USERNAME ] + ;
-         // ";Pwd=" + aWAData[ WA_PASSWORD ] + ;
-         // ";DbName=" + aOpenInfo[ UR_OI_NAME ] )
-         aWAData[ WA_CONNECTION ]:Open( "Driver=Firebird ODBC driver;" + ;
-            "Persist Security Info=False" + ;
-            ";Uid=" + aWAData[ WA_USERNAME ] + ;
-            ";Pwd=" + aWAData[ WA_PASSWORD ] + ;
-            ";DbName=" + aOpenInfo[ UR_OI_NAME ] )
+      CASE cENGINE == "FIREBIRD" .OR. cEXTENSAO == ".fgb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".IB"
+            aWAData[ WA_CONNECTION ]:Open( "Driver=Firebird/InterBase(r) driver;" + ;
+                "Persist Security Info=False" + ;
+                ";Uid=" + aWAData[ WA_USERNAME ] + ;
+                ";Pwd=" + aWAData[ WA_PASSWORD ] + ;
+                ";DbName=" + aOpenInfo[ UR_OI_NAME ] )
+         //aWAData[ WA_CONNECTION ]:Open( "Driver=Firebird ODBC driver;" + ;
+         //   "Persist Security Info=False" + ;
+         //   ";Uid=" + aWAData[ WA_USERNAME ] + ;
+         //   ";Pwd=" + aWAData[ WA_PASSWORD ] + ;
+         //   ";DbName=" + aOpenInfo[ UR_OI_NAME ] )
 
       ENDCASE
    ELSE

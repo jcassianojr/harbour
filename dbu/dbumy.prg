@@ -58,6 +58,7 @@ FUNCTION mysqlmenu()
    loledb     := hb_Version( HB_VERSION_BITWIDTH ) <> 64
    lMDB       := .F.
    lACCDB     := .F.
+   lFDB       := .F.
    cSERVERX   := "localhost" + Space( 21 )
    cUSERX     := PadR( "root", 30, " " )
    cDATABASEX := Space( 30 )

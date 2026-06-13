@@ -86,6 +86,7 @@ FUNCTION mixmenu( cUSOSQL )
    loledb     := .T.
    lMDB       := .F.
    lACCDB     := .F.
+   lFDB       := .F.
 
    pegcfgbanco()
    cTIPOMIX := cTIPOSQL

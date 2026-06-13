@@ -58,6 +58,7 @@ cPORTAX    :=SPACE(30)
    loledb     := .T.
    lMDB       := .F.
    lACCDB     := .F.
+   lFDB       := .F.
 
    pegcfgbanco()
 
