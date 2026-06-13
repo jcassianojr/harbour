@@ -680,7 +680,7 @@ CASE cTIPOSQL = "SQLITE"
     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
 CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
-    {{'Firebird','*.gdb'},{'Firebird fdb','*.fDB'},;
+    {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
      {'All Files','*.*'}},1)    
 ENDCASE
 
@@ -997,12 +997,14 @@ CASE cTIPOSQL = "SQLITE"
    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
 CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
    cMDBARQ := win_GetopenFileName(,"Firebase Files",HB_CWD(),"Firebase",;
-    {{'Firebird','*.gdb'},{'Firebird fdb','*.fDB'},;
+    {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
      {'All Files','*.*'}},1)      
    cDATABASEX := cMDBARQ
    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
-CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
-    .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "LETO"
+ENDCASE
+
+IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
+    .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "LETO" .OR. cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
     cBANCOX := PADR(cBANCOX,30," ")
    cSERVERX := PADR(cSERVERX,30," ")
    cUSERX := PADR(cUSERX,30," ")
@@ -1019,16 +1021,19 @@ CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR.
    @ 09,23 get cuserx         
    @ 11,23 get cpassx
    @ 12,23 get cownerx
-   @ 13,23 get cportx         
+   @ 13,23 get cportax         
    READ
    cSERVERX := ALLTRIM(cSERVERX)
    cuserx  := alltrim(cuserx)
    cpassx  := alltrim(cpassx)
    cowenrx:= alltrim(cownerx)
-   cportx   := alltrim(cportx)
-   
-   cMDBARQ := cDATABASEX
-ENDCASE
+   cportax   := alltrim(cportax)
+   IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+   ELSE
+     cMDBARQ := cDATABASEX
+   ENDIF  
+ENDIF
+
 RETURN cMDBARQ
 
 
@@ -1051,7 +1056,28 @@ FUNCTION buscachaves( cNomeBanco )
        cOwnerX   := padr(LerDoCofre( cSecaoCofre, "Owner" ),30)
        cportaX   := padr(LerDoCofre( cSecaoCofre, "portax"),30)
     ENDIF   
-   
+   IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"  .OR.  cTIPOSQL ="IB"
+       //cServer := "localhost:"
+       //cDatabase
+       //cUser := "SYSDBA"
+       //cPass := "masterkey"
+       //nPageSize := 1024
+       //cCharSet := "ASCII"
+       //
+       nDialect := 1
+       
+      IF EMPTY(cSERVERX)
+         cSERVERX :=""
+      ENDIF
+      IF EMPTY(cUSERX)
+         cUSERX   := "SYSDBA"
+      ENDIF
+      IF EMPTY(cPASSX)
+         cPASSX   := "masterkey"
+      ENDIF
+      
+      
+   ENDIF
 
    RETURN .T.
 

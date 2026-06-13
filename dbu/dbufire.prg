@@ -33,11 +33,27 @@ LOCAL KEY
 
 cTIPOSQL := "FIREBIRD"  // Passa para privada usadas nas funcoes abaixo 
 
+ /*
+ LOCAL cServer := "localhost:"
+   LOCAL cDatabase
+   LOCAL cUser := "SYSDBA"
+   LOCAL cPass := "masterkey"
+   LOCAL nPageSize := 1024
+   LOCAL cCharSet := "ASCII"
+   LOCAL nDialect := 1
+   LOCAL cName
+ */  
+
+nPageSize := 1024
+cCharSet := "ASCII"
+nDialect := 1
+
+
 aAMBIENTE  := SALVAA() 
-cSERVERX   := SPACE(30) 
+cSERVERX   := PADR("localhost",30)  // localhost:cARQUIVO no connection
 cDATABASEX := Space(30) 
-cUSERX     := Space(30) 
-cPASSX     := Space(30) 
+cUSERX     :=  PADR("SYSDBA",30)
+cPASSX     := PADR("masterkey",30)
 cTABELAX   := Space(30) 
 cBANCOX    := Space(30) 
 cOWNERX   := Space(30)
@@ -60,18 +76,19 @@ WHILE .T.
    hb_DispBox(3,22,22,55,B_DOUBLE+" ") 
    @ 03,24 SAY "FIREBIRD"+" "+ALLTRIM(cSERVERX) 
    
-   OPCAO(4,24,"&Versao Info               ",86)   // V [cite: 5]
-   OPCAO(5,24,"&Tabelas                   ",84)   // T [cite: 5]
-   OPCAO(6,24,"&Importar  DBF             ",73)   // I [cite: 5]
-   OPCAO(7,24,"&Exportar  DBF             ",69)   // E [cite: 5, 6]
+   OPCAO(4,24,"&Criar Database            ",67)   // c 
+   OPCAO(5,24,"&Tabelas                   ",84)   // T 
+   OPCAO(6,24,"&Importar  DBF             ",73)   // I 
+   OPCAO(7,24,"&Exportar  DBF             ",69)   // E 
    OPCAO(8,24,"&Apagar Tabela             ",65)   // A 
    OPCAO(9,24,"Exportar &Formatos         ",70)   // F 
    OPCAO(10,24,"Trocar &Usuario/Senha     ",85)
+   OPCAO(11,24,"&Versao Info               ",86)   // V 
    
    KEY := menu(1,0) 
    DO CASE
    CASE KEY = 1
-      fireverinfo()
+      firecreate()
    CASE KEY = 2
       mdbtabela( cDATABASEX )
    CASE KEY = 3
@@ -84,6 +101,9 @@ WHILE .T.
       fireexpdbf( 2 )
    CASE KEY = 7
        trocasenhaarq()   
+   CASE KEY = 8
+      fireverinfo()
+       
    OTHERWISE
       EXIT 
    ENDCASE
@@ -98,6 +118,9 @@ LAYOUT()
 
 RETURN .T. 
 
+function firecreate()
+    FBCreateDB( AllTrim(cSERVERX) + ":" + AllTrim(cDATABASEX), cUSERX, cPASSX, nPageSize, cCharSet, nDialect )
+return .T.
 
 // +--------------------------------------------------------------------
 // +    Function fireconnect()
