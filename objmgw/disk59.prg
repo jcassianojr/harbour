@@ -754,5 +754,20 @@ FUNCTION OfuscarDataAleatoria( uDataRaw )
 
 RETURN cDia + "/" + cMes + "/" + cAno
 
+
+   
+FUNCTION MascararCPF( cCPF )
+    // Remove pontos e traços temporariamente para garantir o tamanho (11 digitos)
+    cLimpo := TIRAOUT( cCPF ) 
+    
+    // Pega os 3 primeiros e os 2 ultimos
+    cInicio := Substr( cLimpo, 1, 3 )
+    cFinal  := Substr( cLimpo, 10, 2 )
+    
+    // Monta a string mascarada de retorno
+RETURN cInicio + ".***.***-" + cFinal
+
+
+
 // + EOF: disk59.prg
 // +
