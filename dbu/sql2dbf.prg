@@ -209,39 +209,62 @@ FUNCTION exportadbf( db, ntipo )
 // +
 // +
 // +
-Function C2SQLTS (dpDate,cpTime)
+FUNCTION C2SQLTS( dpDate, cpTime )
+   LOCAL cDate := ""
+   LOCAL cTime := ""
+   LOCAL cRetu := ""
 
-LOCAL cDate := ""
-LOCAL cTime := ""
-LOCAL cRetu := ""
+   // Se for SQLite e o valor estiver vazio/nulo, já retorna string vazia de imediato
+   IF cTIPOSQL == "SQLITE" .AND. Empty( dpDate )
+      RETURN "''"
+   ENDIF
 
-	If Pcount () == 0
+   IF PCount() == 0
+      cDate := DToS( Date() )
+      cTime := Time()
+   ELSE
+      DO CASE
+         CASE PCount() == 1
+            // Se o dado for um Timestamp nativo ("@"), desmembramos a data e hora dele
+            IF ValType( dpDate ) == "@"
+               cDate := DToS( TToD( dpDate ) ) // Extrai a Data pura
+               cTime := TToC( dpDate )         // Converte para String de Hora
+               
+               // Se a conversão trouxer a data junto na string, pega apenas o pedaço da hora
+               IF " " $ cTime
+                  cTime := AllTrim( SubStr( cTime, At( " ", cTime ) + 1 ) )
+               ENDIF
+               IF Empty( cTime )
+                  cTime := "00:00:00"
+               ENDIF
+            ELSE
+               cDate := DToS( dpDate )
+               cTime := "23:59:59"
+            ENDIF
+            
+         CASE PCount() == 2
+            IF ValType( dpDate ) == "@"
+               cDate := DToS( TToD( dpDate ) )
+            ELSE
+               cDate := DToS( dpDate )
+            ENDIF
+            cTime := AllTrim( cpTime )
+      ENDCASE
+   ENDIF
 
-		cDate := DtoS (Date ())
-		cTime := Time ()
+   // Se a data acabou ficando vazia após os desmembramentos
+   IF Empty( cDate )
+      IF cTIPOSQL == "SQLITE"
+         RETURN "''"
+      ELSE
+         RETURN "NULL"
+      ENDIF
+   ENDIF
 
-	Else
-	
-		DO Case
-		
-			Case Pcount () == 1
-			
-				cDate := DtoS (dpDate)
-				cTime := "23:59:59"
-				
-			Case Pcount () == 2
-		
-				cDate := DtoS (dpDate)
-				cTime := AllTrim (cpTime)
-				
-		EndCase
-		
-	EndIf
-	
-	cRetu := "'"+subStr(cDate,1,4)+"-"+subStr(cDate,5,2)+"-"+subStr(cDate,7,2)+" "+cTime+"'"
+   // Monta o formato padrão internacional: 'YYYY-MM-DD HH:MM:SS'
+   cRetu := "'" + SubStr( cDate, 1, 4 ) + "-" + SubStr( cDate, 5, 2 ) + "-" + SubStr( cDate, 7, 2 ) + " " + cTime + "'"
 
-Return cRetu
-
+RETURN cRetu
 
 // +--------------------------------------------------------------------
 // +
@@ -256,45 +279,68 @@ Return cRetu
 // +
 // +
 FUNCTION C2SQL( Value )
-
    LOCAL cValue := ""
    LOCAL cdate  := ""
 
    DO CASE
        CASE ValType( Value ) == "N"
           cValue := AllTrim( Str( Value ) )
-       CASE ValType( Value ) == "@"    //Datetime
-           cValue :=C2SQLTS( Value)
+
+       CASE ValType( Value ) == "@"    // Datetime
+          cValue := C2SQLTS( Value )
+
        CASE ValType( Value ) == "D"
           IF ! Empty( Value )
              cdate  := DToS( value )
              cValue := "'" + SubStr( cDate, 1, 4 ) + "-" + SubStr( cDate, 5, 2 ) + "-" + SubStr( cDate, 7, 2 ) + "'"
           ELSE
-             cValue := "''"
+             // Se for SQLite, retorna '' conforme a estrutura NOT NULL DEFAULT ''
+             // Para outros bancos, mantém o comportamento original caso prefira NULL
+             IF cTIPOSQL == "SQLITE"
+                cValue := "''"
+             ELSE
+                cValue := "NULL"
+             ENDIF
           ENDIF
+
        CASE ValType( Value ) $ "CM"
           IF Empty( Value )
-             cValue := "''"
+             IF cTIPOSQL == "SQLITE"
+                cValue := "''"
+             ELSE
+                cValue := "NULL"
+             ENDIF
           ELSE
              cVALUE := VALUE
-             // troca caracteres ',() usados pelo sql language
+             
+              //mantendo ansi mas analisarei se a necessario realmente mudar para uf8 visto que deu muitos problemas no vo com truncamento de dados
+             // Aplica a conversão UTF-8 estritamente para o SQLite tratar acentuação
+             //IF cTIPOSQL == "SQLITE"
+             //   cVALUE := hb_StrToUTF8( cVALUE )
+             //ENDIF
+
+             // Troca caracteres ',() usados pelo sql language
              cVALUE := StrTran( cVALUE, "'", " " )
              cVALUE := StrTran( cVALUE, ",", " " )
              cVALUE := StrTran( cVALUE, "(", " " )
              cVALUE := StrTran( cVALUE, ")", " " )
-             //cVALUE := StrTran( cvalue, "'", "''" )   //  dobra ' acima removendo evitar erros de fechamento string quando ' esta no meio da string
-             cVALUE := StrTran( cVALUE, "\", "\\" )   //  inclui nova barra pois e considerada escape no insert into
+             cVALUE := StrTran( cVALUE, "\", "\\" )   // inclui nova barra pois e considerada escape no insert into
              cVALUE := AllTrim( cVALUE ) 
              cValue := "'" + cvalue + "'"
           ENDIF
+
        CASE ValType( Value ) == "L"
-          cValue := AllTrim( Str( iif( Value == .F., 0, 1 ) ) )
+          IF cTIPOSQL == "SQLITE"
+             cValue := AllTrim( Str( iif( Value == .F., 0, 1 ) ) )
+          ELSE
+             cValue := iif( Value == .F., ".F.", ".T." )
+          ENDIF
+
    OTHERWISE
-      cValue := "''"   // NOTE: Here we lose values we cannot convert
+      cValue := iif( cTIPOSQL == "SQLITE", "''", "NULL" )
    ENDCASE
 
 RETURN cValue
-
 
 
 // +--------------------------------------------------------------------

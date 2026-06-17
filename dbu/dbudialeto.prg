@@ -940,15 +940,18 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "VARCHAR2 (" + LTrim( Str( mFldLen ) ) + ")"
          CASE mFldType = "C" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
             mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"
+        // INSERÇÃO DO DEFAULT VAZIO PARA STRING NO SQLITE
          CASE mFldType = "C" .AND. cTIPOSQL = "SQLITE"
-            mSql += "TEXT "
+            mSql += "TEXT NOT NULL DEFAULT ''"    
          CASE mFldType = "C" .AND. cTIPOSQL = "FIREBIRD"
             mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"   
          CASE mFldType = "C"
             mSql += "CHAR(" + LTrim( Str( mFldLen ) ) + ")"
 
          // Varchar (V)
-         CASE mFldType = "V" .AND. ( cTIPOSQL = "SQLITE" .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
+         CASE mFldType = "V" .AND. cTIPOSQL = "SQLITE"
+            mSql += "TEXT NOT NULL DEFAULT ''"
+         CASE mFldType = "V" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
             IF mFldDec > 0
                mSql += "TEXT(" + hb_ntos( mFldDec ) + ")"
             ELSE
@@ -958,6 +961,9 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "VARCHAR(" + hb_ntos( mFldDec ) + ")"
       
          // Date (D)
+         // INSERÇÃO DO DEFAULT VAZIO PARA DATA NO SQLITE
+         CASE mFldType = "D" .AND. cTIPOSQL = "SQLITE"
+            mSql += "DATE NOT NULL DEFAULT ''"
          CASE mFldType = "D" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
             mSql += "TIMESTAMP"
          CASE mFldType = "D" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
