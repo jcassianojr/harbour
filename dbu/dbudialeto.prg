@@ -938,9 +938,12 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
          // Caracter (C)
          CASE mFldType = "C" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
             mSql += "VARCHAR2 (" + LTrim( Str( mFldLen ) ) + ")"
-         CASE mFldType = "C" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         CASE mFldType = "C" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
             mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"
-        // INSERÇÃO DO DEFAULT VAZIO PARA STRING NO SQLITE
+         CASE mFldType = "C" .AND. ( llMDB .OR. llACCDB  )
+            mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ") DEFAULT ''"
+
+
          CASE mFldType = "C" .AND. cTIPOSQL = "SQLITE"
             mSql += "TEXT NOT NULL DEFAULT ''"    
          CASE mFldType = "C" .AND. cTIPOSQL = "FIREBIRD"
@@ -1029,9 +1032,9 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
 
          CASE mFldType = "N" .AND. ( llMDB .OR. llACCDB )
             IF mFldDec > 0
-               mSql += "DOUBLE"
+               mSql += "DOUBLE DEFAULT 0"
             ELSE
-               mSql += "LONG"
+               mSql += "LONG DEFAULT 0"
             ENDIF
             
          CASE mFldType = "N" .AND. cTIPOSQL = "SQLITE"
@@ -1089,7 +1092,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
          
          // Integer (I)
          CASE mFldType = "I" .AND. ( llMDB .OR. llACCDB )
-            mSql += "LONG"
+            mSql += "LONG DEFAULT 0"
          CASE mFldType = "I" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
             mSql += "INT " 
          CASE mFldType = "I" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
@@ -1121,7 +1124,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
          CASE mFldType = "L" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "SQLITE"  )
             mSql += "BOOLEAN"
          CASE mFldType = "L" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
-            mSql += "BIT"
+            mSql += "BIT DEFAULT 0"
          CASE mFldType = "L"
             mSql += "BOOL"
 
@@ -1388,7 +1391,7 @@ do case
 
    // VOLTANDO À SUA LÓGICA ORIGINAL:
    // Mapeia textos longos para Caracter ('C') limitado a 250 para proteger RDDs com problemas em múltiplos Memos.
-   CASE cType $ "CLOB|LONGTEXT|M|WLONGVARCHAR"
+   CASE cType $ "CLOB|LONGTEXT|M|WLONGVARCHAR|LONGCHAR|MEMO|LONGVARCHAR"
         cFieldType   := 'C'
         nFieldLength := 250
         nFieldDec    := 0
