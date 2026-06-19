@@ -167,6 +167,7 @@ public TIPODBF  := 2        //dbfcdx
 public TABLEEXT := "DBF"   //hb_rddInfo(RDDI_TABLEEXT)
 public MEMOEXT  := "FPT"    //hb_rddInfo(RDDI_MEMOEXT)
 public INDIEXT  := "CDX"   //hb_rddInfo(RDDI_ORDBAGEXT)
+public cTIPOSQL := ""
 
 clear
 

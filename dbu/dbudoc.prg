@@ -584,7 +584,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       
      // AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
      //                1     2          3          4      5      6        7       8   
-      
+      cTIPOSQL:="DBF"
       aINDICES:=GeraINDICES()
       nIndexes := LEN(aINDICES)
       IF nIndexes > 0
@@ -615,7 +615,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       aINDICES:=GeraINDICES()
       nIndexes := LEN(aINDICES)
 
-      AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
+      //AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
      //             1     2          3          4      5      6        7       8   
       
       IF nIndexes > 0
@@ -627,10 +627,12 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          NEXT j
       ENDIF
       
-      
+      //SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
+      //gerando os indexex novamente pois os nomes dos fariam conforme o cTIPOSQL
+      cTIPOSQL:="SQLITE"
       cTEXTO += clin + "[SQLITE]"
-      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "SQLITE" ))
-      CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "SQLITE",.T. ))
+     // CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
       CTEXTO += clin + "PRAGMA temp_store = MEMORY ; " //
       CTEXTO += clin + "PRAGMA cache_size = 2000 ; " //Aumenta o tamanho do cache (ex: 2000 páginas)
       CTEXTO += clin + "PRAGMA journal_mode = WAL ; " //Modo WAL (Write-Ahead Logging) - Muito mais rápido para inserções e permite leitura e escrita simultâneas
@@ -638,27 +640,33 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       CTEXTO += clin + "PRAGMA auto_vacuum = INCREMENTAL ; "  //Armazena arquivos temporários na memória em vez de disco
       CTEXTO += clin + "PRAGMA page_size = 4096 ; " //
       CTEXTO += clin + "PRAGMA mmap_size = 300000000 ; "
-     CTEXTO += clin + "PRAGMA busy_timeout = 5000 ; "
-      
+      CTEXTO += clin + "PRAGMA busy_timeout = 5000 ; "
+      CTEXTO += clin
+      cTIPOSQL:="MSSQL"
       cTEXTO += clin + "[MSSQL]"
-      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "MSSQL" ))
-      CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "MSSQL",.T. ))
+      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTIPOSQL:="MYSQL"
       cTEXTO += clin + "[MYSQL]"
-      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "MYSQL" ))
-      CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "MYSQL",.T. ))
+      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTIPOSQL:="POSTGRESQL"
       cTEXTO += clin + "[POSTGRESQL]"
-      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "POSTGRESQL" ))
-      CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "POSTGRESQL",.T. ))
+      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTIPOSQL:="ACCESS"
       cTEXTO += clin + "[ACCESS]"
-      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "ACCESS" ))
-      CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "ACCESS",.T. ))
+      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTIPOSQL:="ORACLE"
       cTEXTO += clin + "[ORACLE]"
-      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "ORACLE" ))
-      CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "ORACLE",.T. ))
+      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTIPOSQL:="FIREBIRD"
       cTEXTO += clin + "[FIREBIRD]"
-      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "FIREBIRD" ))
-      CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
-      
+      cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "FIREBIRD",.T. ))
+      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      cTIPOSQL:=""
       //
       CTEXTO += GERADBML(cARQ,aESTRU)
 
@@ -1121,8 +1129,8 @@ nIndexes := LEN(aINDICES)
 IF nIndexes>0
     cLINHA+="  Indexes {" +HB_OSNEWLINE()
          FOR j = 1 TO  nIndexes
-            cINDEXNAME := aINDICESx[J,4]
-            cLINHA+= " ( " + aINDICESx[J,6] + " ) "
+            cINDEXNAME := aINDICES[J,4]
+            cLINHA+= " ( " + aINDICES[J,6] + " ) "
             cLINHA+= " [name: "+CHR(34)+cINDEXNAME+CHR(34)+"]" +HB_OSNEWLINE() 
          NEXT j 
     cLINHA+= HB_OSNEWLINE()     

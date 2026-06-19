@@ -751,38 +751,40 @@ local msql
 local lgravasql
 LOCAL cSqlFields, cSqlIndexes
 
+
+
 cSqlFields := ""
 cSqlIndexes := ""
 
 DO CASE
    CASE cTIPOSQL == "SQLITE"
-      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name TEXT, column_name TEXT, original_type TEXT, length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture TEXT)"
-      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name TEXT, index_name TEXT, expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (nome_tabela TEXT, column_name TEXT, original_type TEXT, tamanho INTEGER, precisao INTEGER, is_nullable INTEGER, field_visual_picture TEXT)"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (nome_tabela TEXT, index_name TEXT, expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
    CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MYSQL64" .OR. cTIPOSQL == "MARIADB"
-      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
-      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (nome_tabela VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), tamanho INTEGER, precisao INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (nome_tabela VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
    CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
-      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
-      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
+      cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (nome_tabela VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), tamanho INTEGER, precisao INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
+      cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (nome_tabela VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
    CASE lMDB .OR. lACCDB // MS ACCESS (MDB ou ACCDB)
       // Access não aceita IF NOT EXISTS e exige colchetes em palavras reservadas. Usa TEXT(tamanho) e MEMO para textos longos.
-      cSqlFields  := "CREATE TABLE table_metadata (table_name TEXT(50), column_name TEXT(50), original_type TEXT(1), [length] INTEGER, [precision] INTEGER, is_nullable INTEGER, field_visual_picture TEXT(250))"
-      cSqlIndexes := "CREATE TABLE index_metadata (table_name TEXT(50), index_name TEXT(50), expression MEMO, sql_expression MEMO, filter_expression MEMO, is_unique INTEGER, is_bag INTEGER)"
+      cSqlFields  := "CREATE TABLE table_metadata (nome_tabela TEXT(50), column_name TEXT(50), original_type TEXT(1), [tamanho] INTEGER, [precisao] INTEGER, is_nullable INTEGER, field_visual_picture TEXT(250))"
+      cSqlIndexes := "CREATE TABLE index_metadata (nome_tabela TEXT(50), index_name TEXT(50), expression MEMO, sql_expression MEMO, filter_expression MEMO, is_unique INTEGER, is_bag INTEGER)"
 
    CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
       // SQL Server exige verificação via OBJECT_ID e usa VARCHAR(MAX) para blocos grandes de texto, além de INT ao invés de INTEGER.
       cSqlFields  := "IF OBJECT_ID('table_metadata', 'U') IS NULL " + ;
-                     "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INT, precision INT, is_nullable INT, field_visual_picture VARCHAR(250))"
+                     "CREATE TABLE table_metadata (nome_tabela VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), tamanho INT, precisao INT, is_nullable INT, field_visual_picture VARCHAR(250))"
       cSqlIndexes := "IF OBJECT_ID('index_metadata', 'U') IS NULL " + ;
-                     "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression VARCHAR(MAX), sql_expression VARCHAR(MAX), filter_expression VARCHAR(MAX), is_unique INT, is_bag INT)"
+                     "CREATE TABLE index_metadata (nome_tabela VARCHAR(50), index_name VARCHAR(50), expression VARCHAR(MAX), sql_expression VARCHAR(MAX), filter_expression VARCHAR(MAX), is_unique INT, is_bag INT)"
 
    CASE cTIPOSQL == "FIREBIRD"
       // Firebird não possui IF NOT EXISTS por padrão em DDL simples e exige BLOB SUB_TYPE TEXT para textos longos/expressões.
-      cSqlFields  := "CREATE TABLE table_metadata (table_name VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), length INTEGER, precision INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
-      cSqlIndexes := "CREATE TABLE index_metadata (table_name VARCHAR(50), index_name VARCHAR(50), expression BLOB SUB_TYPE TEXT, sql_expression BLOB SUB_TYPE TEXT, filter_expression BLOB SUB_TYPE TEXT, is_unique INTEGER, is_bag INTEGER)"
+      cSqlFields  := "CREATE TABLE table_metadata (nome_tabela VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), tamanho INTEGER, precisao INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
+      cSqlIndexes := "CREATE TABLE index_metadata (nome_tabela VARCHAR(50), index_name VARCHAR(50), expression BLOB SUB_TYPE TEXT, sql_expression BLOB SUB_TYPE TEXT, filter_expression BLOB SUB_TYPE TEXT, is_unique INTEGER, is_bag INTEGER)"
    ENDCASE
 
 
@@ -826,8 +828,8 @@ ctablename  := cNOMETABELA
 
 // 1. LIMPEZA DOS METADADOS (Geral para todos os bancos)
 // Limpa o que existia anteriormente para evitar duplicidade na re-importaÃ§Ã£o
-executacmd( cMDBARQ, "DELETE FROM table_metadata WHERE table_name = " + c2sql(cNOMETABELA) )
-executacmd( cMDBARQ, "DELETE FROM index_metadata WHERE table_name = " + c2sql(cNOMETABELA) )
+executacmd( cMDBARQ, "DELETE FROM table_metadata WHERE nome_tabela = " + c2sql(cNOMETABELA) )
+executacmd( cMDBARQ, "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cNOMETABELA) )
 
 
 // 2. INCLUSÃO DOS METADADOS DE CAMPOS (Estrutura do DBF)
@@ -865,7 +867,7 @@ FOR i := 1 TO Len( aSTRU )
    ENDCASE
 
    // Monta o INSERT alimentando a nova estrutura de metadados estendida
-   msql := "INSERT INTO table_metadata (table_name, column_name, original_type, length, precision, is_nullable, field_visual_picture) VALUES (" + ;
+   msql := "INSERT INTO table_metadata (nome_tabela, column_name, original_type, tamanho, precisao, is_nullable, field_visual_picture) VALUES (" + ;
            c2sql(cTablename)   + ", " + ;
            c2sql(mFldNm)       + ", " + ;
            c2sql(mFldType)     + ", " + ;
@@ -873,6 +875,9 @@ FOR i := 1 TO Len( aSTRU )
            LTrim(Str(mFldDec)) + ", " + ;
            LTrim(Str(nIsNullable)) + ", " + ; // Salva 0 ou 1
            c2sql(cVisualPic)   + ")"          // Salva a máscara padrão gerada
+   IF lGRAVASQL .AND. .NOT. EMPTY(msql)
+      HB_MEMOWRIT(cNOMETABELA+"_tablemeta_"+cTIPOSQL+".sql",Msql,.F.)
+   ENDIF
    
    executacmd( cMDBARQ, msql )
 NEXT
@@ -880,8 +885,8 @@ NEXT
 aINDICES:=GeraINDICES()
 nIndexes := LEN(aINDICES)
 FOR j := 1 TO nIndexes
-    msql := aINDICES[J,1]  //Create index
-    executacmd( cMDBARQ, msql )
+//    msql := aINDICES[J,1]  //Create index abaixo apos criacao da tabela
+ //   executacmd( cMDBARQ, msql )
     msql := aINDICES[J,2]   //insert into metadata
     executacmd( cMDBARQ, msql )
 NEXT j
@@ -926,15 +931,14 @@ IF lGRAVASQL .AND. .NOT. EMPTY(msql)
 ENDIF
 
 if len(aindices) > 0
-   //Cria do os indices append from nao faz
-   Executacmd(cMDBARQ,Aindices)   //Executa comando unico ou array de comandos
-   IF lGRAVASQL
-      msql := ""
-      for ii := 1 to len(aINDICES)
-         mSQL += aINDICEs[II]+" ; "+HB_OSNEWLINE()
-      next ii
-      HB_MEMOWRIT(cNOMETABELA+"_createindex_"+cTIPOSQL+".sql",mSQL,.f.)
-   endif
+    msql := ""
+    for ii := 1 to len(aINDICES)
+        executacmd(cMDBARQ, aINDICEs[II,1])
+        mSQL += aINDICEs[II,1]+HB_OSNEWLINE()
+    next ii
+    IF lGRAVASQL
+       HB_MEMOWRIT(cNOMETABELA+"_createindex_"+cTIPOSQL+".sql",mSQL,.f.)
+    endif  
 endif
 
 cTABELA := cNOMETABELA  //publica usada o opencmdarq

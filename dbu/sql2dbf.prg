@@ -875,11 +875,11 @@ FUNCTION export2sql( odb, cDBFFILE )
 // 1. Garantir que a tabela de metadados exista
    // Metadados de Campos (Tabela table_metadata atualizada)
    mSql := "CREATE TABLE IF NOT EXISTS table_metadata (" + ;
-        "table_name TEXT, " + ;
+        "nome_tabela TEXT, " + ;
         "column_name TEXT, " + ;
         "original_type TEXT, " + ;
-        "length INTEGER, " + ;
-        "precision INTEGER, " + ;
+        "tamanho INTEGER, " + ;
+        "precisao INTEGER, " + ;
         "is_nullable INTEGER, " + ;      // Indica se aceita valores NULL (0=Não, 1=Sim)
         "field_visual_picture TEXT)"     // Guarda a máscara visual padrão do DBF (ex: '@E 999,999.99')
    miscsql( oDB, mSql )
@@ -887,7 +887,7 @@ FUNCTION export2sql( odb, cDBFFILE )
    
    // Metadados de Índices (Tabela index_metadata atualizada)
     mSqlIndex := "CREATE TABLE IF NOT EXISTS index_metadata (" + ;
-                 "table_name TEXT, " + ;
+                 "nome_tabela TEXT, " + ;
                  "index_name TEXT, " + ;
                  "expression TEXT, " + ;         // Expressão original em Harbour (ex: 'CODIGO+DTOS(DATA)')
                  "sql_expression TEXT, " + ;     // Expressão traduzida para o Banco (ex: 'codigo || to_char(data, ...)')
@@ -916,10 +916,10 @@ FUNCTION export2sql( odb, cDBFFILE )
 
 
 // 2. Limpar metadados antigos desta tabela específica (se houver)
-   miscsql( oDB, "DELETE FROM table_metadata WHERE table_name = " + c2sql(cTablename) )
+   miscsql( oDB, "DELETE FROM table_metadata WHERE nome_tabela = " + c2sql(cTablename) )
    
    // 1. LIMPA todos os metadados de índices desta tabela de uma vez só (fora do loop)
-  miscsql( oDB, "DELETE FROM index_metadata WHERE table_name = " + c2sql(cTablename) )
+  miscsql( oDB, "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTablename) )
 
 
  dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .T. , .F. )
@@ -936,7 +936,7 @@ FUNCTION export2sql( odb, cDBFFILE )
       mFldLen  := aStruct[ i, 3 ] // DBS_LEN
       mFldDec  := aStruct[ i, 4 ] // DBS_DEC
 
-      mSql := "INSERT INTO table_metadata (table_name, column_name, original_type, length, precision) VALUES (" + ;
+      mSql := "INSERT INTO table_metadata (nome_tabela, column_name, original_type, tamanho, precisao) VALUES (" + ;
               c2sql(cTablename) + ", " + ;
               c2sql(mFldNm) + ", " + ;
               c2sql(mFldType) + ", " + ;

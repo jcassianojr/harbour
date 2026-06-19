@@ -1205,7 +1205,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
    mSql += ") " + HB_OSNEWLINE()
    
    IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      mSql += " ENGINE=InnoDB DEFAULT CHARSET=latin1 " + HB_OSNEWLINE()
+      mSql += " ENGINE=InnoDB DEFAULT CHARSET=latin1 ; " + HB_OSNEWLINE()
    ENDIF
    mSql += " ; " + HB_OSNEWLINE()
    
@@ -1662,15 +1662,18 @@ FOR j := 1 TO nIndexes
    
    // Se a RDD não retornou um nome válido, usa o fallback sequencial
    IF Empty( cINDEXNAME )
-      cINDEXNAME := "IDX_" + AllTrim(cTablename) + "_" + AllTrim(Str(j))
+      cINDEXNAME :=  AllTrim(cTablename) + "_" + AllTrim(Str(j))
    ELSE
       // Ajuste de escopo global de nomes de índice
       IF cTIPOSQL $ "SQLITE|PGSQL|PGSQL64|POSTGRESQL"
-         cINDEXNAME := "IDX_" + AllTrim(cTablename) + "_" + cINDEXNAME
+         cINDEXNAME :=  AllTrim(cTablename) + "_" + cINDEXNAME
       ELSE
-         cINDEXNAME := "IDX_" + cINDEXNAME 
+         cINDEXNAME :=   cINDEXNAME 
       ENDIF
    ENDIF   
+   IF cTIPOSQL<>"DBF" .AND. ! EMPTY(cTIPOSQL)
+      cINDEXNAME := "IDX_"+cINDEXNAME 
+   ENDIF
 
    // Trata caracteres inválidos no nome final gerado
    cINDEXNAME := StrTran(cINDEXNAME, "-", "_") 
@@ -1713,7 +1716,7 @@ FOR j := 1 TO nIndexes
       ENDIF
       
       // Monta o INSERT alimentando a estrutura de metadados
-      msqlMETA := "INSERT INTO index_metadata (table_name, index_name, expression, sql_expression, filter_expression, is_unique, is_bag) VALUES (" + ;
+      msqlMETA := "INSERT INTO index_metadata (nome_tabela, index_name, expression, sql_expression, filter_expression, is_unique, is_bag) VALUES (" + ;
                   c2sql(cTablename) + ", " + ;
                   c2sql(cINDEXNAME) + ", " + ; 
                   c2sql(cKey)       + ", " + ; 
