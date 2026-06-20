@@ -2046,6 +2046,70 @@ oConn:Close()
 oConn := NIL
 RETURN .t.
 
+FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
+
+    LOCAL oCatalog
+    LOCAL cEXTENSAO, cDIRETORIO, cNAME
+
+    cNAME      := ""
+    cEXTENSAO  := ""
+    cDIRETORIO := ""
+
+    hb_FNameSplit(cDatabase, @cDIRETORIO, @cName, @cEXTENSAO)
+    cEXTENSAO := LOWER(cEXTENSAO)
+
+    // Ajustes de segurança conforme sua lógica original 
+    IIF(cPassword == NIL, cPassword := "''", NIL)
+    IIF(lEncrypt == NIL, lEncrypt := .F., NIL)
+
+    // Bloco isolado para tratar a criação do objeto COM [cite: 5, 20]
+    TRY
+        oCatalog := CreateObject("ADOX.Catalog.2.8") 
+    CATCH
+        // Fallback caso a versão 2.8 não esteja registrada
+        TRY
+            oCatalog := CreateObject("ADOX.Catalog")
+        CATCH
+            ? "Erro: Classe ADOX.Catalog não registrada no sistema."
+            RETURN NIL
+        END
+    END
+
+    IF !hb_FileExists(cDatabase)
+       DO CASE
+          CASE lACCDB .OR. cEXTENSAO == ".accdb"
+             oCatalog:Create("Provider=Microsoft.ACE.OLEDB.12.0;" + ;
+              "Data Source=" + cDatabase + ";" + ;
+              "JET OLEDB:Engine Type=6;")
+
+          CASE lMDB .OR. cEXTENSAO == ".mdb"
+             IF loledb // 32 bits mdb [cite: 23]
+                oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;" + ;
+                 "Data Source=" + cDatabase + ";" + ;
+                 "JET OLEDB:Engine Type=5;") 
+             ELSE
+                oCatalog:Create("Provider=Microsoft.ACE.OLEDB.12.0;" + ;
+                 "Data Source=" + cDatabase + ";" + ;
+                 "JET OLEDB:Engine Type=5;") 
+             ENDIF
+
+          CASE cTIPOSQL = "SQLITE" .OR. cEXTENSAO == ".sqlite" .OR. cEXTENSAO == ".sqlite3" .OR. cEXTENSAO == ".fossil" .OR. cEXTENSAO == ".db3"
+             oCatalog:Create("DRIVER=SQLite3 ODBC Driver;Database=" + cDatabase) 
+
+          CASE cTIPOSQL = "XLS" .OR. cEXTENSAO == ".xls"
+             oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False") 
+
+          CASE cEXTENSAO == ".db" .OR. cTIPOSQL == "PARADOX"
+             oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Paradox 5.x';")
+
+          CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. cTIPOSQL == "FIREBIRD"
+             oCatalog:Create("Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
+
+       ENDCASE
+    ENDIF
+
+    oCatalog := NIL
+    RETURN NIL
 
 
 *+--------------------------------------------------------------------
@@ -2060,7 +2124,7 @@ RETURN .t.
 *+
 *+
 *+
-FUNCTION CreateAccessDatabase(cDatabase,cUserName,cPassword,lEncrypt)
+FUNCTION CreateAccessDatabaseold(cDatabase,cUserName,cPassword,lEncrypt)
 
 
 LOCAL oCatalog  // AS ADOX.Catalog
