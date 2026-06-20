@@ -178,7 +178,12 @@ ENDIF
 IF cTIPOSQL = "MSSQL"
    cPORTAX:= PADR("1433",30," ")
 ENDIF
-
+IF cTIPOSQL == "PARADOX"
+   // Geralmente não usa porta, pois acessa arquivos locais ou pasta
+   cSERVERX := PADR("localhost", 30, " ") 
+   cUSERX   := SPACE(30)
+   cPORTAX  := SPACE(30)
+ENDIF
 
 //
 // ajustes nomes de drivers para 32 e 64 bits
@@ -216,6 +221,11 @@ ENDIF
 IF cTIPOSQL = "LETO"
    OPENTIPOARQ()
 ENDIF
+
+IF cTIPOSQL = "PARADOX"
+   OPENTIPOARQ()
+ENDIF
+
 
 lMDB := .F.
 IF cTIPOSQL = "MDB" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS64"
@@ -632,29 +642,34 @@ CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
 CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    if loledb
       TRY
-      hb_adoSetTable(cTABELA) 
-      hb_adoSetEngine("PGSQL") 
-      hb_adoSetServer(cSERVERx) 
-      hb_adoSetUser(CUSERX) 
-      hb_adoSetPassword(CPASSX) 
-      dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
+        hb_adoSetTable(cTABELA) 
+        hb_adoSetEngine("PGSQL") 
+        hb_adoSetServer(cSERVERx) 
+        hb_adoSetUser(CUSERX) 
+        hb_adoSetPassword(CPASSX) 
+        dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
       catch oErR
-      MDT("Erro Abrindo")
-      lRETU := .F.
-   END
-else
-   TRY
-   hb_adoSetTable(cTABELA) 
-   hb_adoSetEngine("PGSQL64") 
-   hb_adoSetServer(cSERVERx) 
-   hb_adoSetUser(CUSERX) 
-   hb_adoSetPassword(CPASSX) 
+        MDT("Erro Abrindo")
+        lRETU := .F.
+      END
+   else
+      TRY
+        hb_adoSetTable(cTABELA) 
+        hb_adoSetEngine("PGSQL64") 
+        hb_adoSetServer(cSERVERx) 
+        hb_adoSetUser(CUSERX) 
+        hb_adoSetPassword(CPASSX) 
+        dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
+      catch oErR
+        MDT("Erro Abrindo")
+        lRETU := .F.
+     END
+   endif
+CASE cTIPOSQL == "PARADOX"
+   hb_adoSetTable(cTABELA)
+   // Verifique se o seu ADORDD suporta "PARADOX" ou se requer "MSDASQL" com DSN
+   hb_adoSetEngine("PARADOX") 
    dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
-   catch oErR
-   MDT("Erro Abrindo")
-   lRETU := .F.
-END
-endif
 ENDCASE
 return lRETU
 
@@ -671,19 +686,21 @@ function mdbcria()
 
 
 DO CASE
-CASE lMDB
-   cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos mdb","*.MDB",1)
-CASE lACCDB
-   cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos accdb","*.accdb",1)
-CASE cTIPOSQL = "SQLITE"
-   cARQORI := win_GetsaveFileName(,"SQLite Files",HB_CWD(),"SQLite",;
-    {{'SQLite','*.sqlite'},{'SQLite db','*.DB'},;
-    {'SQLite3','*.sqlite3'},{'SQLite db3','*.DB3'},;
-    {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
-CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
-   cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
-    {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
-     {'All Files','*.*'}},1)    
+    CASE lMDB
+       cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos mdb","*.MDB",1)
+    CASE lACCDB
+       cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos accdb","*.accdb",1)
+    CASE cTIPOSQL = "SQLITE"
+       cARQORI := win_GetsaveFileName(,"SQLite Files",HB_CWD(),"SQLite",;
+        {{'SQLite','*.sqlite'},{'SQLite db','*.DB'},;
+        {'SQLite3','*.sqlite3'},{'SQLite db3','*.DB3'},;
+        {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
+    CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+       cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
+        {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
+         {'All Files','*.*'}},1)  
+    CASE cTIPOSQL == "PARADOX"
+       cARQORI := win_GetSAVEFileName(,"Arquivos Paradox",HB_CWD(),"Paradox","*.db",1)     
 ENDCASE
 
 
@@ -731,6 +748,11 @@ ENDIF
 IF cTIPOSQL = "SQLITE"
    createSqlitedb()
 ENDIF
+IF cTIPOSQL == "PARADOX"
+   //cARQORI := win_GetSAVEFileName(,"Arquivos Paradox",HB_CWD(),"Paradox","*.db",1)
+   // Adicionar lógica de criação se o driver permitir (via ADOX ou SQL)
+ENDIF
+
 RETURN NIL
 
 
@@ -1010,6 +1032,15 @@ CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
      {'All Files','*.*'}},1)      
    cDATABASEX := cMDBARQ
    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
+CASE cTIPOSQL == "PARADOX"
+    cDATABASEX := win_GetOPENFileName(,"Selecione o arquivo Paradox",,"Arquivo DB|*.db",,"*.db")
+    
+    IF !Empty(cDATABASEX)
+        // Separa caminho da pasta e nome do arquivo
+        cCAMBASE := hb_FNameDir( cDATABASEX )    // ex: C:\DADOS\
+        cTABELAX  := hb_FNameName( cDATABASEX )   // ex: CLIENTES (sem .db)
+    ENDIF
+   
 ENDCASE
 
 IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
@@ -2134,88 +2165,6 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
     oCatalog := NIL
     RETURN NIL
 
-
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-*+    Function CreateAccessDatabase()
-*+
-*+
-*+
-*+--------------------------------------------------------------------
-*+
-*+
-*+
-FUNCTION CreateAccessDatabaseold(cDatabase,cUserName,cPassword,lEncrypt)
-
-
-LOCAL oCatalog  // AS ADOX.Catalog
-LOCAL cEXTENSAO
-LOCAL cDIRETORIO
-LOCAL cNAME
-
-cNAME      := ""
-cEXTENSAO  := ""
-cDIRETORIO := ""
-
-
-hb_FNameSplit(cDataBase,@cDIRETORIO,@cName,@CEXTENSAO)
-cEXTENSAO := LOWER(cEXTENSAO)
-
-
-IIF(cPassword == NIL,cPassword := "''",NIL)
-IIF(lEncrypt == NIL,lEncrypt := .F.,NIL)
-
-oCatalog := WIN_OLECreateObject("ADOX.Catalog")   //CreateObject( "ADOX.Catalog" )
-
-/* OLEDB:Engine Type=5
-   Unknown 0
-   Jet 1.0            1
-   Jet 1.1            2
-   Jet 2.0            3
-   Jet 3.x(97)        4
-   Jet 4.x(2000)      5
-   JetEngineType_Ace12 = 6
-  */
-
-IF !hb_FileExists(cDataBase)
-   do case
-   case lACCDB .OR. cEXTENSAO == ".accdb"
-      oCatalog:Create("Provider=Microsoft.ACE.OLEDB.12;"+;
-       "Data Source="+cDatabase+";"+;
-       "JET OLEDB:Engine Type=6;")
-   CASE lMDB .OR. cEXTENSAO == ".mdb"
-      if loledb   //32 bits mdb
-         oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;"+;
-          "Data Source="+cDatabase+";"+;
-          "JET OLEDB:Engine Type=5;")
-      else
-         oCatalog:Create("Provider=Microsoft.ACE.OLEDB.12;"+;
-          "Data Source="+cDatabase+";"+;
-          "JET OLEDB:Engine Type=5;")
-      ENDIF
-   CASE cTIPOSQL = "SQLITE" .or. cEXTENSAO == ".sqlite" .or. cEXTENSAO == ".sqlite3" .or. cEXTENSAO == ".fossil" .or. cEXTENSAO == ".db3"
-      oCatalog:Create("DRIVER=SQLite3 ODBC Driver;Database="+cDataBase)
-   CASE cTIPOSQL = "XLS" .or. cEXTENSAO == ".xls"
-      oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cDataBase+";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False")
-   CASE cEXTENSAO == ".db" .OR. cTIPOSQL == "PARADOX"
-      oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cDataBase+";Extended Properties='Paradox 5.x';")
-   CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. cTIPOSQL == "FIREBIRD"
-      oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
-      //oCatalog:Create("DRIVER=Firebird ODBC driver;Uid="+cUserName+";Pwd="+cPassword+";DbName="+cDataBase+";")
-
-   endcase
-   oCatalog := NIL  //NULL_OBJECT
-endif
-/* exemplo pass e ou encripitado
-   oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;" +;
-                    "Data Source=" + cDatabase + ";" +;
-                    "JET OLEDB:Database Password=" + cPassWord + ";" +;
-                    "JET OLEDB:Engine Type=5;" +;
-                    "JET OLEDB:Encrypt Database=" + IIF(lEncrypt, "TRUE", "FALSE" ) )
-*/
-RETURN
 
 
 function mdltodos()
