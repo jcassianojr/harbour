@@ -1,10 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : dbu.prg
-*+
-*+
 *+
 *+     Sistema:
 *+
@@ -14,12 +10,7 @@
 *+
 *+     Copyright (c) 2024,  jcassiano
 *+
-*+     
-*+
-*+
-*+
 *+    Documentado em 28-Dez-2024 as 10:06 am
-*+
 *+
 *+
 *+--------------------------------------------------------------------
@@ -468,8 +459,8 @@ ajuda_m := {"Ajuda"}
 ajuda_b := {.T.}
 
 abrir_m := {"Database","Indice","Visao","POSTGRESQL",;
- "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB","FIREBASE"}
-abrir_b := array(13)
+ "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB","FIREBIRD","PARADOX"}
+abrir_b := array(14)
 abrir_b[1] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[2] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
 abrir_b[3] = "sysfunc = 0 .AND. .NOT. box_open"
@@ -483,6 +474,8 @@ abrir_b[10] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[11] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[12] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[13] = "sysfunc = 0 .AND. .NOT. box_open"
+abrir_b[14] = "sysfunc = 0 .AND. .NOT. box_open"
+
 
 DECLARE criar_b[11]
 criar_m := {"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso",;
@@ -614,6 +607,8 @@ do while .T.
          letomenu()
       case M->func_sel = 13
          MENUSQL("FIREBIRD")  
+       case M->func_sel = 14
+         MENUSQL("PARADOX")    
       endcase
       sysfunc := 0  //setar para nao retornar ficar em loop
    case M->sysfunc = 9  //utilitarios F9
@@ -683,17 +678,13 @@ do while .T.
           Sqltodos("ACCESS")
           Sqltodos("ORACLE")
           sqltodos("FIREBIRD")
+          //sqltodos("PARADOX")
       
       case M->func_sel = 13
-         //     MENUSQL("MARIADB")
       case M->func_sel = 14
-         //     MENUSQL("MYSQL")
       case M->func_sel = 15
-         //     MENUSQL("MDB")
       case M->func_sel = 16
-         //    MENUSQL("ACCDB")
       case M->func_sel = 17
-         //    MENUSQL("MSSQL")
 
 
       endcase

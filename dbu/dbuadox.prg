@@ -62,6 +62,18 @@ FUNCTION adoxmenu( cUSOSQL )
 
 // Cria variaveis e inicializa obrigatorio
    ADOSetRDD( cTIPOSQL )
+   
+   /*
+   ADOSetRDD( "ACCESS" )  seta tipo conecao
+   ADOFile( "clientes" ) verifica arquivo ou tabela
+   ADOEXECUTE(cSQL)
+   ADOCopy2DBF() nao implantado
+   ADOIndex( "clientes", "nome", "CliNome", .t. )
+   DOSetOrder( 1 )
+   ADOAlias()
+   ADOSORT()
+   ADOSETFILTER()
+   */
 
    WHILE .T.
       hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )

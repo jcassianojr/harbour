@@ -92,7 +92,7 @@ FUNCTION mixmenu( cUSOSQL )
    cTIPOMIX := cTIPOSQL
 
 // Mariadb MSSQL nao tem nativo
-   IF cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+   IF cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PARADOX"
       cTIPOMIX := "ODBC"
    ENDIF
 
@@ -100,6 +100,7 @@ FUNCTION mixmenu( cUSOSQL )
    IF cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
       cTIPOMIX := "ODBC"
    ENDIF
+   
 
 // access mdb accdb nao tem nativo
    IF Lmdb .OR. laccdb
@@ -127,6 +128,8 @@ FUNCTION mixmenu( cUSOSQL )
          cTIPOMIX := "ODBC"
       ENDIF
    ENDIF
+   
+   
 
 // Usando mdtabela depois criar nativa sqlmix
 // precisa retornar rdd se for usar de charmar ddSetDefault( "SQLMIX" ) novamente nao ter connecao aberta sqlmix tambem

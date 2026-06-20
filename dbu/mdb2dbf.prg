@@ -1836,7 +1836,7 @@ RETURN if(nTIPORETORNO = 1,nDBFFieldType,cDBFFieldType)
 *+
 *+
 *+
-FUNCTION geraconn(cCAMBASE,lPROVIDER)
+FUNCTION geraconn(cCAMBASE,lPROVIDER,StrUsuario,StrSenha,StrServer,StrPort)
 
 LOCAL cCONN
 LOCAL cSQLUSER
@@ -1849,7 +1849,8 @@ IF vALTYPE(lPROVIDER) <> "L"
    lPROVIDER := .T.
 ENDIF
 
-IF Empty( cUSERX )
+
+   IF Empty( cUSERX )
       cUSERX := LerDoCofre( cSERVERX, "User" )
    ENDIF
 
@@ -1860,6 +1861,28 @@ IF Empty( cUSERX )
    IF Empty( cSERVERX )
       cSERVERX := LerDoCofre( cSERVERX, "Server" )
    ENDIF
+   
+   IF Empty( cPORTAX )
+      cPORTAX := LerDoCofre( cSERVERX, "Porta" )
+   ENDIF
+   
+
+   IF Empty( cUSERX ) .and. ! empty(StrUsuario)
+      cUSERX := StrUsuario
+   ENDIF
+
+   IF Empty( cPASSX ) .and. ! empty(StrSenha)
+      cPASSX := StrSenha
+   ENDIF
+   
+   IF Empty( cSERVERX ) .and. ! empty(StrServer)
+      cSERVERX := StrServer
+   ENDIF
+
+   IF Empty( cPORTAX ) .and. ! empty(StrPort)
+      cPORTAX := StrPort
+   ENDIF
+
 
 DO CASE
 
