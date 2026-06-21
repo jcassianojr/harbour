@@ -49,9 +49,11 @@ FUNCTION ParadoxCreateTable( cTablename, aStruct, cPrimaryKey )
          ENDCASE
       NEXT
 
+
+      /*
       // --- CRIAÇÃO DA CHAVE PRIMÁRIA ---
       oIndex := CreateObject( "ADOX.Index" )
-      oIndex:Name       := "ChavePrimaria"
+      oIndex:Name       := "PK01"
       oIndex:PrimaryKey := .T.
       oIndex:Unique     := .T.
       
@@ -64,6 +66,7 @@ FUNCTION ParadoxCreateTable( cTablename, aStruct, cPrimaryKey )
       
       
       oTable:Indexes:Append( oIndex )
+      */
 
       // Salva no catálogo
       oCat:Tables:Append( oTable )
@@ -72,6 +75,7 @@ FUNCTION ParadoxCreateTable( cTablename, aStruct, cPrimaryKey )
 
    CATCH oErr
       MDT( "Erro na criação: " + oErr:Description )
+      HB_MEMOWRIT("erro.txt",oErr:Description)
    END
 RETURN lSuccess
 
@@ -92,13 +96,14 @@ FUNCTION DBF2Paradox( cDbfOrigem, cParadoxDestino )
    USE (cDbfOrigem) ALIAS ORIGEM SHARED NEW
    aStruct := dbStruct()
    
+   /*
    // 1. Verifica quantos índices existem no CDX/NTX
    nTotalIndices := dbOrderInfo(DBOI_ORDERCOUNT)
    
    // 2. Se houver pelo menos um índice, pega a expressão dele
    IF nTotalIndices > 0
       cPrimaryKey := MDPCHAVEI(dbOrderInfo( DBOI_EXPRESSION, , 1 ))
-      alert(cPrimaryKey)
+     // alert(cPrimaryKey)
    ENDIF
    
    // 3. Fallback: Se não houver índice ou a expressão for vazia, 
@@ -106,9 +111,10 @@ FUNCTION DBF2Paradox( cDbfOrigem, cParadoxDestino )
    IF Empty( cPrimaryKey )
       cPrimaryKey := aStruct[1][1]
    ENDIF
+   */
    
    // 2. Cria a estrutura [cite: 3, 7]
-   IF !ParadoxCreateTable( cParadoxDestino, aStruct,cPrimaryKey )
+   IF !ParadoxCreateTable( cParadoxDestino, aStruct) //,cPrimaryKey )
       DBCLOSEAREA()
       RETURN .F.
    ENDIF
@@ -123,22 +129,62 @@ FUNCTION DBF2Paradox( cDbfOrigem, cParadoxDestino )
    oConn:Open()
 
    // 4. Abre o Recordset [cite: 4]
+   /*
    oRs := CreateObject( "ADODB.Recordset" )
    //oRs:Open( hb_FNameName(cParadoxDestino), oConn, 1, 3 ) 
    oRs:CursorLocation := 3 // adUseClient (Força o uso de cursor em memória, evitando bloqueios do disco)
    oRs:Open( "SELECT * FROM " + hb_FNameName(cParadoxDestino), oConn, 2, 3 )
    
    //oRs:Open( hb_FNameName(cParadoxDestino), oConn, 2, 4 )
+   */
+   
+   oRs := CreateObject( "ADODB.Recordset" )
+   //oRs:Open( hb_FNameName(cParadoxDestino), oConn, 1, 3 ) 
+   oRs:CursorLocation := 3 // adUseClient (Força o uso de cursor em memória, evitando bloqueios do disco)
+   //oRs:Open( "SELECT * FROM " + hb_FNameName(cParadoxDestino), oConn, 1, 2 )
+  oRs:Open( hb_FNameName(cParadoxDestino), oConn, 1, 2 )
 
    // 5. Loop de migração [cite: 5]
    SELECT ORIGEM
    DbGoTop()
    WHILE !Eof()
+      /*
+      mSql := "INSERT INTO " + hb_FNameName(cParadoxDestino) + " VALUES "
+      msql := msql + "("
+      FOR i := 1 TO Len( aStruct )
+         mFldNm := aStruct[ i, DBS_NAME ]
+         IF i > 1
+            mSql += ", "
+         ENDIF
+         mSql += c2sql( &mFldNm )
+      NEXT
+      mSql += ")"
+      oConn:Execute(MSQL)
+      */
+      
+      /*
+      cCAMPOS:=""
+      cVALORES:=""
+      // Dentro do seu loop de gravação:
+      FOR nI := 1 TO Len( aStruct )
+         cCampos  += "[" + AllTrim(aStruct[nI][1]) + "],"
+         cValores += "'" + hb_ValToStr(FieldGet(nI)) + "',"
+      NEXT
+      cCampos  := Left(cCampos, Len(cCampos)-1)
+      cValores := Left(cValores, Len(cValores)-1)
+
+      // O uso de colchetes no nome da tabela e nos campos é OBRIGATÓRIO no Paradox via Jet
+      cSql := "INSERT INTO [" + hb_FNameName(cParadoxDestino)  + "] (" + cCampos + ") VALUES (" + cValores + ")"
+      oConn:Execute( cSql )
+      */
+      
+      
       oRs:AddNew()
       FOR nI := 1 TO Len( aStruct )
          oRs:Fields( aStruct[nI][1] ):Value := FieldGet( nI )
       NEXT
       oRs:Update()
+      
       DbSkip()
    ENDDO
 
