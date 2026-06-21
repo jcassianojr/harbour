@@ -668,7 +668,7 @@ CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
 CASE cTIPOSQL == "PARADOX"
    hb_adoSetTable(cTABELA)
    // Verifique se o seu ADORDD suporta "PARADOX" ou se requer "MSDASQL" com DSN
-   hb_adoSetEngine("PARADOX") 
+   hb_adoSetEngine("PARADOX")
    dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
 ENDCASE
 return lRETU
@@ -749,6 +749,15 @@ IF cTIPOSQL = "SQLITE"
    createSqlitedb()
 ENDIF
 IF cTIPOSQL == "PARADOX"
+   //Character	Alpha	O Paradox limita campos Alpha a no máximo 255 caracteres.
+   //Numeric	Number	Corresponde a números de ponto flutuante de 15 dígitos.
+   //Logical	Logical	O Paradox possui um campo nativo Logical (exibe como T/F).
+   //Date	Date	Compatibilidade total entre DBF e Paradox.
+   //Memo	Memo	O Paradox gerencia Memos em um arquivo .mb anexo ao .db.
+   //Integer	Short / Long	O Paradox diferencia Short (16-bit) e Long (32-bit).
+   //Float	Number	O tipo Number do Paradox é o padrão para precisão decimal.
+
+    ParadoxCreateTable( cARQORI, aStruct )
    //cARQORI := win_GetSAVEFileName(,"Arquivos Paradox",HB_CWD(),"Paradox","*.db",1)
    // Adicionar lógica de criação se o driver permitir (via ADOX ou SQL)
 ENDIF
@@ -1145,7 +1154,11 @@ nORITIPO   := TIPODBF
 cORIDRIVER := RDDNOME(TIPODBF)
 cARQORI    := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*."+TABLEEXT,1)
 IF FILE(cARQORI)
-   DBF2MDB(cMDBARQ,cARQORI)
+   IF cTIPOSQL="PARADOX"
+      DBF2Paradox( cARQORI)//DBF2Paradox( cARQORI, cParadoxDestino )
+   ELSE
+     DBF2MDB(cMDBARQ,cARQORI)
+   ENDIF
    RDDNOME(nOLDTIPO)  //retorna tipo anterior
 ENDIF
 
@@ -2002,6 +2015,11 @@ CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR. cT
    //cCONN := "DRIVER=Firebird ODBC driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
    CONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
 CASE cTIPOSQL = "PARADOX"   // ADOPX
+    cCAMBASE := hb_FNameDir( cCAMBASE ) 
+   // Verifica se a pasta termina com barra, caso contrário o Jet OLEDB pode falhar
+   IF Right( AllTrim( cCAMBASE ), 1 ) != "\" .AND. Right( AllTrim( cCAMBASE ), 1 ) != "/"
+      cCAMBASE += "\"
+   ENDIF
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Paradox 5.x;"
 CASE cTIPOSQL == "XMLDB"  // ADOXML
    cCONN := "Provider=MSPersist"
@@ -2154,7 +2172,8 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
              oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False") 
 
           CASE cEXTENSAO == ".db" .OR. cTIPOSQL == "PARADOX"
-             oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Paradox 5.x';")
+             //oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Paradox 5.x';")
+             //ParadoxCreateTable( cTablename, aStruct ) e por arquivo nao cria um database o database e uma pasta 
 
           CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. cTIPOSQL == "FIREBIRD"
              oCatalog:Create("Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
@@ -2242,6 +2261,9 @@ ENDIF
 
 RESTAA(aTELA)
 RETURN .T.
+
+
+
 
 *+ EOF: mdb2dbf.prg
 *+

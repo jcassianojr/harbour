@@ -228,12 +228,13 @@ STATIC FUNCTION ADO_CREATE( nWA, aOpenInfo )
       oConnection:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False" )
 
    CASE cEXTENSAO == ".db" .OR. Upper( cDbEngine ) == "PARADOX"
-      IF !hb_FileExists( cDataBase )
-         oCatalog:Create( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
+     // Verifica se a pasta termina com barra, caso contrário o Jet OLEDB pode falhar
+      IF Right( AllTrim( cDIRETORIO ), 1 ) != "\" .AND. Right( AllTrim( cDIRETORIO ), 1 ) != "/"
+        cDIRETORIO += "\"
       ENDIF
-      oConnection:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
+      oConnection:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDIRETORIO + ";Extended Properties='Paradox 5.x';" )
 
-   CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".IB" .OR. Upper( cDbEngine ) == "FIREBIRD"
+   CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. Upper( cDbEngine ) == "FIREBIRD"
       IF !hb_FileExists( cDataBase )
          oCatalog:Create( "Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
          //oCatalog:Create( "Driver=Firebird ODBC driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDataBase + ";" )
@@ -459,8 +460,15 @@ STATIC FUNCTION ADO_OPEN( nWA, aOpenInfo )
          aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Extended Properties=dBASE IV;User ID=Admin;Password=;" )
 
       CASE cEXTENSAO == ".db" .OR. cENGINE == "PARADOX"
-         aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Extended Properties='Paradox 5.x';" )
-
+           cDataBase := hb_FNameDir( aOpenInfo[ UR_OI_NAME ]  ) 
+           // Verifica se a pasta termina com barra, caso contrário o Jet OLEDB pode falhar
+          IF Right( AllTrim( cDataBase ), 1 ) != "\" .AND. Right( AllTrim( cDataBase ), 1 ) != "/"
+             cDataBase += "\"
+          ENDIF
+      
+         //aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Extended Properties='Paradox 5.x';" )
+         aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
+   
       CASE cENGINE == "MARIADB"
          aWAData[ WA_CONNECTION ]:Open( "DRIVER={MariaDB ODBC 3.2 Driver};" + ;
             "server=" + aWAData[ WA_SERVER ] + ;
@@ -511,7 +519,7 @@ STATIC FUNCTION ADO_OPEN( nWA, aOpenInfo )
             ";User ID=" + aWAData[ WA_USERNAME ] + ;
             ";Password=" + aWAData[ WA_PASSWORD ] )
 
-      CASE cENGINE == "FIREBIRD" .OR. cEXTENSAO == ".fgb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".IB"
+      CASE cENGINE == "FIREBIRD" .OR. cEXTENSAO == ".fgb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib"
             aWAData[ WA_CONNECTION ]:Open( "Driver=Firebird/InterBase(r) driver;" + ;
                 "Persist Security Info=False" + ;
                 ";Uid=" + aWAData[ WA_USERNAME ] + ;

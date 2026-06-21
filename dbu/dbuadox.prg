@@ -180,6 +180,11 @@ FUNCTION adoximpdbf()
    cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
    hb_FNameSplit( cARQORI, nil, @cTable, NIL )
    cTABLE := AllTrim( cTABLE )
+   
+   IF cTIPOSQL="PARADOX"
+      DBF2Paradox( cARQORI)
+      RETURN
+   ENDIF   
 
    dbUseArea( .T., cORIDRIVER, cARQORI, cTABLE, .T., .T. )
    aSTRU := dbStruct()
