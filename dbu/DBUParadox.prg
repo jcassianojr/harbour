@@ -1,5 +1,156 @@
+#include "dbstruct.ch"
 #INCLUDE "TRY.CH"
+#INCLUDE "DBINFO.CH"
+
+FUNCTION ParadoxCreateTable( cTablename, aStruct, cPrimaryKey )
+   LOCAL oConn, oCat, oTable, nI, oIndex, cField
+   LOCAL cDir  := hb_FNameDir( cTablename )
+   LOCAL cFile := hb_FNameName( cTablename )
+   LOCAL lSuccess := .F.
+
+   // Se não passar a chave, usa o primeiro campo
+   IF Empty( cPrimaryKey )
+      cPrimaryKey := aStruct[1][1]
+   ENDIF
+
+   TRY
+      oConn := CreateObject( "ADODB.Connection" )
+      oConn:ConnectionString := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDir + ";Extended Properties=Paradox 5.x;"
+      oConn:Open()
+
+      oCat := CreateObject( "ADOX.Catalog" )
+      oCat:ActiveConnection := oConn
+
+      // Tenta remover se existir para evitar erro de objeto duplicado
+      TRY ; oCat:Tables:Delete( cFile ) ; CATCH ; END
+
+      oTable := CreateObject( "ADOX.Table" )
+      oTable:Name := cFile
+
+      // --- ADICIONA AS COLUNAS COM DO CASE LEGÍVEL ---
+      FOR nI := 1 TO Len( aStruct )
+         cField := aStruct[nI][1]
+         
+         DO CASE
+            CASE aStruct[nI][2] == "C"
+               oTable:Columns:Append( cField, 130, aStruct[nI][3] ) // 130 = adWChar
+            
+            CASE aStruct[nI][2] == "N"
+               oTable:Columns:Append( cField, 5 )                  // 5 = adDouble
+            
+            CASE aStruct[nI][2] == "D"
+               oTable:Columns:Append( cField, 7 )                  // 7 = adDate
+            
+            CASE aStruct[nI][2] == "L"
+               oTable:Columns:Append( cField, 11 )                 // 11 = adBoolean
+            
+            CASE aStruct[nI][2] == "M"
+               oTable:Columns:Append( cField, 203 )                // 203 = adVarWChar (Memo)
+         ENDCASE
+      NEXT
+
+      // --- CRIAÇÃO DA CHAVE PRIMÁRIA ---
+      oIndex := CreateObject( "ADOX.Index" )
+      oIndex:Name       := "ChavePrimaria"
+      oIndex:PrimaryKey := .T.
+      oIndex:Unique     := .T.
+      
+      // Adiciona os campos (se a variável vier com vírgulas, trate antes)
+     // Se cPrimaryKey for "NUMERO,SUB", o append abaixo deve ser feito em loop
+     aCampos := hb_ATokens( cPrimaryKey, "," )
+     FOR nJ := 1 TO Len( aCampos )
+        oIndex:Columns:Append( AllTrim( aCampos[nJ] ) )
+      NEXT
+      
+      
+      oTable:Indexes:Append( oIndex )
+
+      // Salva no catálogo
+      oCat:Tables:Append( oTable )
+      lSuccess := .T.
+      oConn:Close()
+
+   CATCH oErr
+      MDT( "Erro na criação: " + oErr:Description )
+   END
+RETURN lSuccess
+
 FUNCTION DBF2Paradox( cDbfOrigem, cParadoxDestino )
+   LOCAL oConn, oRs, nI, aStruct, cConnString
+   
+   // Lógica de destino automático [cite: 1, 7]
+   IF Empty( cParadoxDestino )
+      cParadoxDestino := hb_FNameDir( cDbfOrigem ) + hb_FNameName( cDbfOrigem ) + ".db"
+   ENDIF
+   
+   // 1. Abre o DBF original
+   IF !File( cDbfOrigem )
+      MDT( "Arquivo DBF não encontrado: " + cDbfOrigem )
+      RETURN .F.
+   ENDIF
+
+   USE (cDbfOrigem) ALIAS ORIGEM SHARED NEW
+   aStruct := dbStruct()
+   
+   // 1. Verifica quantos índices existem no CDX/NTX
+   nTotalIndices := dbOrderInfo(DBOI_ORDERCOUNT)
+   
+   // 2. Se houver pelo menos um índice, pega a expressão dele
+   IF nTotalIndices > 0
+      cPrimaryKey := MDPCHAVEI(dbOrderInfo( DBOI_EXPRESSION, , 1 ))
+      alert(cPrimaryKey)
+   ENDIF
+   
+   // 3. Fallback: Se não houver índice ou a expressão for vazia, 
+   // usamos o primeiro campo da estrutura como chave (segurança absoluta)
+   IF Empty( cPrimaryKey )
+      cPrimaryKey := aStruct[1][1]
+   ENDIF
+   
+   // 2. Cria a estrutura [cite: 3, 7]
+   IF !ParadoxCreateTable( cParadoxDestino, aStruct,cPrimaryKey )
+      DBCLOSEAREA()
+      RETURN .F.
+   ENDIF
+
+   // 3. Conexão Manual para Testes
+   // Substitua o caminho abaixo pelo caminho real da pasta onde o arquivo .db será criado
+   cConnString := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + hb_FNameDir( cParadoxDestino ) + ";Extended Properties=Paradox 5.x;"
+   
+   oConn := CreateObject( "ADODB.Connection" )
+   oConn:ConnectionString := cConnString
+   oConn:Mode := 3 // adModeReadWrite
+   oConn:Open()
+
+   // 4. Abre o Recordset [cite: 4]
+   oRs := CreateObject( "ADODB.Recordset" )
+   //oRs:Open( hb_FNameName(cParadoxDestino), oConn, 1, 3 ) 
+   oRs:CursorLocation := 3 // adUseClient (Força o uso de cursor em memória, evitando bloqueios do disco)
+   oRs:Open( "SELECT * FROM " + hb_FNameName(cParadoxDestino), oConn, 2, 3 )
+   
+   //oRs:Open( hb_FNameName(cParadoxDestino), oConn, 2, 4 )
+
+   // 5. Loop de migração [cite: 5]
+   SELECT ORIGEM
+   DbGoTop()
+   WHILE !Eof()
+      oRs:AddNew()
+      FOR nI := 1 TO Len( aStruct )
+         oRs:Fields( aStruct[nI][1] ):Value := FieldGet( nI )
+      NEXT
+      oRs:Update()
+      DbSkip()
+   ENDDO
+
+   // 6. Limpeza [cite: 6]
+   oRs:Close()
+   oConn:Close()
+   DBCLOSEAREA()
+   
+   MDT( "Migração concluída com sucesso!" )
+RETURN .T.
+
+FUNCTION DBF2Paradoxadordd( cDbfOrigem, cParadoxDestino, cPrimaryKey  )
    LOCAL aStruct, nI, oConn, oCat, oTable, oRs
    LOCAL cDir 
    LOCAL cFile 
@@ -71,60 +222,3 @@ RETURN .T.
 
 
 
-FUNCTION ParadoxCreateTable( cTablename, aStruct )
-   LOCAL oConn, oCat, oTable, nI, cField
-   LOCAL cDir := hb_FNameDir( cTablename ) // Pasta onde o .db será criado
-   LOCAL cFile := hb_FNameName( cTablename )
-   LOCAL lSuccess := .F.
-   
-  // "C"	Character	130 (adWChar)
-//"N"	Number	5 (adDouble)
-//"D"	Date	7 (adDate)
-//"L"	Logical	11 (adBoolean)
-//"M"	Memo	130 (com tamanho 0 ou grande)
-
-   TRY
-      // 1. Cria a conexão ADO
-      oConn := CreateObject( "ADODB.Connection" )
-      oConn:ConnectionString := geraconn(cTABLENAME)//"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDir + ";Extended Properties=Paradox 5.x;"
-      oConn:Open()
-
-      // 2. Cria o Catálogo ADOX (para manipular DDL/Estrutura)
-      oCat := CreateObject( "ADOX.Catalog" )
-      oCat:ActiveConnection := oConn
-
-      // 3. Define a Tabela
-      oTable := CreateObject( "ADOX.Table" )
-      oTable:Name := cFile
-
-      // 4. Adiciona as colunas baseadas no aStruct
-      FOR nI := 1 TO Len( aStruct )
-         cField := aStruct[nI][DBS_NAME]
-         
-         // Tradução simples de tipos Harbour para ADOX
-         // 130 = adWChar, 5 = adDouble, 7 = adDate, 11 = adBoolean
-         DO CASE
-            CASE aStruct[nI][DBS_TYPE] == "C"
-               oTable:Columns:Append( cField, 130, aStruct[nI][DBS_LEN] )
-            CASE aStruct[nI][DBS_TYPE] == "N"
-               oTable:Columns:Append( cField, 5 )
-            CASE aStruct[nI][DBS_TYPE] == "D"
-               oTable:Columns:Append( cField, 7 )
-            CASE aStruct[nI][DBS_TYPE] == "L"
-               oTable:Columns:Append( cField, 11 ) 
-            CASE aStruct[nI][DBS_TYPE] == "M"
-              // Memo: 203 (adLongVarWChar) - O Paradox cria automaticamente o arquivo .mb
-              oTable:Columns:Append( cField, 203 )   
-         ENDCASE
-      NEXT
-
-      // 5. Salva a tabela no Catálogo
-      oCat:Tables:Append( oTable )
-      lSuccess := .T.
-
-   CATCH
-      MDT( "Erro ao criar tabela Paradox via ADOX: " + oConn:Errors(0):Description )
-   END
-   
-   oConn:Close()
-RETURN lSuccess
