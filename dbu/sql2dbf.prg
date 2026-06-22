@@ -61,9 +61,8 @@ FUNCTION sqlitemenu()
       OPCAO(  8, 24, "&Tabelas                   ", 84 )   // T
       OPCAO(  9, 24, "&Apagar Tabela             ", 65 )   // A
       OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // f
-	  OPCAO( 11, 24, "Mar&kdown documentacao     ", 75) //
-      OPCAO( 12, 24, "Trocar &Usuario/Senha      ",85)  //u
-      OPCAO( 13, 24, "C&hecar integridade        ",72)   //h
+	  OPCAO( 11, 24, "Mar&kdown documentacao     ", 75)   //K
+      OPCAO( 12, 24, "C&hecar integridade        ", 72)   //h
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -109,8 +108,6 @@ FUNCTION sqlitemenu()
       { 'SQLite Fossil', '*.fossil' }, { 'All Files', '*.*' } }, 1 )
             Doc_SQLite(cFileName)
        CASE KEY = 9
-             trocasenhaarq()        
-       CASE KEY = 10
          IF selectdb()
             check_sqlite( odb )
          ENDIF      

@@ -146,14 +146,13 @@ WHILE .T.
    hb_DispBox(3,22,22,55,B_DOUBLE+" ") 
    @ 03,24 SAY "FIREBIRD"+" "+ALLTRIM(cSERVERX) 
    
-   OPCAO(4,24,"&Criar Database            ",67)   // c 
-   OPCAO(5,24,"&Tabelas                   ",84)   // T 
-   OPCAO(6,24,"&Importar  DBF             ",73)   // I 
-   OPCAO(7,24,"&Exportar  DBF             ",69)   // E 
-   OPCAO(8,24,"&Apagar Tabela             ",65)   // A 
-   OPCAO(9,24,"Exportar &Formatos         ",70)   // F 
-   OPCAO(10,24,"Trocar &Usuario/Senha     ",85)
-   OPCAO(11,24,"&Versao Info               ",86)   // V 
+   OPCAO( 4,24,"&Criar Database            ",67)   // c 
+   OPCAO( 5,24,"&Tabelas                   ",84)   // T 
+   OPCAO( 6,24,"&Importar  DBF             ",73)   // I 
+   OPCAO( 7,24,"&Exportar  DBF             ",69)   // E 
+   OPCAO( 8,24,"&Apagar Tabela             ",65)   // A 
+   OPCAO( 9,24,"Exportar &Formatos         ",70)   // F 
+   OPCAO(10,24,"&Versao Info               ",86)   // V 
    
    KEY := menu(1,0) 
    DO CASE
@@ -170,8 +169,6 @@ WHILE .T.
    CASE KEY = 6
       fireexpdbf( 2 )
    CASE KEY = 7
-       trocasenhaarq()   
-   CASE KEY = 8
       fireverinfo()
        
    OTHERWISE
@@ -188,9 +185,12 @@ LAYOUT()
 
 RETURN .T. 
 
+// +--------------------------------------------------------------------
+// +    Function firecreate()
+// +--------------------------------------------------------------------
 function firecreate()
     cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
-        {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
+        {{'Firebird fdb','*.fdb'},{'Firebird gdb','*.gdb'},{'Firebird ib','*.ib'},;
          {'All Files','*.*'}},1)  
    cDATABASEX := cARQORI
    cBANCOX:=hb_FNameSplit(cARQORI,NIL,cBANCOX,NIL)
@@ -556,7 +556,7 @@ FUNCTION fireexecuteSQL( eCOMANDO, lTRANS, lMES )
    ENDIF
    FOR i := 1 TO nfim
       cCOMANDO := aCOMANDOS[ I ]
-      oServer:Execute( cSQL )
+      oServer:Execute( cCOMANDO )
    NEXT i
    IF lTRANS
       oServer:Commit()

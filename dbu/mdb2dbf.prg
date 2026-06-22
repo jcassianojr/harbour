@@ -53,6 +53,12 @@ lmdb       := .f.
 laccdb     := .f.
 lFDB       := .f.
 
+//usado pelo firebirdcreate
+nPageSize := 1024
+cCharSet := "ASCII"
+nDialect := 1
+
+
 pegcfgbanco()
 
 WHILE .T.
@@ -86,9 +92,7 @@ WHILE .T.
    OPCAO(8,24,"&Database Selecionar       ",68)   //D 68
    OPCAO(9,24,"&Exportar  DBF             ",69)   //E 69
    OPCAO(10,24,"&SQL Create DBF           ",83)   //S 83
-   
-   OPCAO(11,24,"DBF &TO DBML               ",84)   //T 85
-   OPCAO(12,24,"Trocar &Usuario/Senha     ",85)
+   OPCAO(11,24,"DBF &TO DBML              ",84)   //T 85
    
    KEY := menu(1,0)
    DO CASE
@@ -123,9 +127,6 @@ WHILE .T.
         endif  
    CASE KEY=8
         mdltodos() 
-   CASE KEY=9
-        trocasenhaarq()  
-          
    OTHERWISE
       EXIT
    ENDCASE
@@ -228,13 +229,9 @@ IF cTIPOSQL = "MYSQL" .or. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. c
    mdbdatabases()
 ENDIF
 
-
-
-
 IF cTIPOSQL = "LETO"
    OPENTIPOARQ()
 ENDIF
-
 IF cTIPOSQL = "PARADOX"
    OPENTIPOARQ()
 ENDIF
@@ -249,15 +246,9 @@ return .t.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function ExecArqSql()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 function ExecArqSql
 
@@ -685,7 +676,10 @@ return lRETU
 *+--------------------------------------------------------------------
 *+
 function mdbcria()
-
+if  lFDB //usando nativa erro com catalgo
+   firecreate()
+   return
+endif
 DO CASE
     CASE lMDB
        cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos mdb","*.MDB",1)
@@ -698,7 +692,7 @@ DO CASE
         {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
     CASE lFDB 
        cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
-        {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
+        {{'Firebird fdb','*.fdb'},{'Firebird gdb','*.gdb'},{'Firebird ib','*.ib'},;
          {'All Files','*.*'}},1)  
     CASE cTIPOSQL == "PARADOX"
        cARQORI := win_GetSAVEFileName(,"Arquivos Paradox",HB_CWD(),"Paradox","*.db",1)     
@@ -743,6 +737,11 @@ IF lFDB
    CATCH
       MDT("Erro ao criar base de dados Firebird")
    END
+   //CREATE DATABASE 'novo_banco_win1252.fdb' //CREATE DATABASE 'C:\temp\novobanco.fdb'
+   //USER 'SYSDBA' PASSWORD 'masterkey'
+   //DEFAULT CHARACTER SET WIN1252
+   //COLLATION PT_BR;
+   
 ENDIF
 
 
@@ -802,7 +801,7 @@ DO CASE
       cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (nome_tabela VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), tamanho INTEGER, precisao INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
       cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (nome_tabela VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
 
-   CASE lMDB .OR. lACCDB // MS ACCESS (MDB ou ACCDB)
+   CASE lMDB .OR. lACCDB 
       // Access não aceita IF NOT EXISTS e exige colchetes em palavras reservadas. Usa TEXT(tamanho) e MEMO para textos longos.
       cSqlFields  := "CREATE TABLE table_metadata (nome_tabela TEXT(50), column_name TEXT(50), original_type TEXT(1), [tamanho] INTEGER, [precisao] INTEGER, is_nullable INTEGER, field_visual_picture TEXT(250))"
       cSqlIndexes := "CREATE TABLE index_metadata (nome_tabela TEXT(50), index_name TEXT(50), expression MEMO, sql_expression MEMO, filter_expression MEMO, is_unique INTEGER, is_bag INTEGER)"
@@ -824,7 +823,7 @@ DO CASE
 // Execução dos comandos de criação das tabelas de metadados
 IF !Empty( cSqlFields )
    
-   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. lFDB 
+   IF lMDB .OR. lACCDB  .OR. lFDB 
       
       // Tenta criar a tabela de metadados de campos de forma isolada
       TRY
@@ -943,10 +942,10 @@ CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
 CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    msql := SqliteCreateTable(cNOMETABELA,aSTRU,"PGSQL")
    executacmd(cMDBARQ,msql)
-CASE lMDB   //cTIPOSQL="MDB" .OR. cTIPOSQL="ACCESS"
+CASE lMDB   
    msql := SqliteCreateTable(cNOMETABELA,aSTRU,"MDB")
    executacmd(cMDBARQ,msql)
-CASE lACCDB   // cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
+CASE lACCDB   
    msql := SqliteCreateTable(cNOMETABELA,aSTRU,"ACCDB")
    executacmd(cMDBARQ,msql)
 CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
@@ -1038,7 +1037,7 @@ CASE cTIPOSQL = "SQLITE"
    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
 CASE lFDB 
    cMDBARQ := win_GetopenFileName(,"Firebase Files",HB_CWD(),"Firebase",;
-    {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
+    {{'Firebird fdb','*.fdb'},{'Firebird gdb','*.gdb'},{'Firebird ib','*.ib'},;
      {'All Files','*.*'}},1)      
    cDATABASEX := cMDBARQ
    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
@@ -1251,7 +1250,7 @@ ENDIF
 
 IF cTIPOINFO = "TABELA"
     DO CASE
-       CASE "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL
+       CASE lMDB .OR. lACCDB 
           cCOMANDO := "SELECT MSysObjects.name AS TABLE_NAME FROM MSysObjects WHERE MSysObjects.type IN (1,4,6) " + ;
                       "AND MSysObjects.name NOT LIKE '~*' AND MSysObjects.name NOT LIKE 'MSys%' " + ;
                       "ORDER BY MSysObjects.name;"
@@ -1307,7 +1306,7 @@ IF cTIPOINFO = "TABELA"
 ENDIF
 IF cTIPOINFO = "ESTRUTURA"
 DO CASE
-   CASE lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+   CASE lARQMDBACCDB  
       //Implantado abaixo com  catalogx
   
    CASE cTIPOSQL == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
@@ -1539,7 +1538,7 @@ ENDIF
 if LEN(aRETU) = 0 .AND. cTIPOINFO = "TABELA"
    //necessario nova conecaro
    //nao funcionou criando olecreate adox.catalog
-   IF lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+   IF lARQMDBACCDB  
       oXConection := win_oleCreateObject("ADODB.Connection")
       oXConection:Open(CCONN)
       oXCatalog := oXConection:OpenSchema(adSchemaTables)
@@ -1554,7 +1553,7 @@ if LEN(aRETU) = 0 .AND. cTIPOINFO = "TABELA"
 endif
 
 if LEN(aRETU) = 0 .AND. cTIPOINFO = "ESTRUTURA"
-   IF lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+   IF lARQMDBACCDB  
       //nao funcionou criando olecreate adox.catalog
       //necessario nova conecaro
       oXConection := win_oleCreateObject("ADODB.Connection")
@@ -1601,7 +1600,7 @@ endif
 
 
 if LEN(aRETU) = 0 .AND. cTIPOINFO = "__INDEX__"
-   IF lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
+   IF lARQMDBACCDB  
       //nao funcionou criando olecreate adox.catalog
       //necessario nova conecaro
       oXConection := win_oleCreateObject("ADODB.Connection")
@@ -1871,20 +1870,15 @@ RETURN if(nTIPORETORNO = 1,nDBFFieldType,cDBFFieldType)
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
-*+    Function geraconn()
-*+
-*+
+*+    Function geraconn(cCAMBASE,lPROVIDER,StrUsuario,StrSenha,StrServer,StrPort)
 *+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 FUNCTION geraconn(cCAMBASE,lPROVIDER,StrUsuario,StrSenha,StrServer,StrPort)
 
 LOCAL cCONN
 LOCAL cSQLUSER
+LOCAL cCAMDIR
 cConn    := ""
 cSQLUSER := ""
 IF VALTYPE(cCAMBASE) <> "C"   //ser for database nao tem caminho usa cservex
@@ -1893,6 +1887,11 @@ ENDIF
 IF vALTYPE(lPROVIDER) <> "L"
    lPROVIDER := .T.
 ENDIF
+
+    cCAMDIR := hb_FNameDir( cCAMBASE ) 
+    IF Right( AllTrim( cCAMDIR ), 1 ) != "\" .AND. Right( AllTrim( cCAMDIR ), 1 ) != "/"
+      cCAMDIR += "\"
+   ENDIF
 
 
    IF Empty( cUSERX )
@@ -2011,18 +2010,13 @@ CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "SQL"
       ENDIF
    endif
 CASE cTIPOSQL = "DBASE"
-   cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=dBASE IV;"
+   cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=dBASE IV;"
 CASE lFDB 
    //cCONN := "DRIVER=Firebird ODBC driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
    //cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
    cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
 CASE cTIPOSQL = "PARADOX"   // ADOPX
-    cCAMBASE := hb_FNameDir( cCAMBASE ) 
-   // Verifica se a pasta termina com barra, caso contrário o Jet OLEDB pode falhar
-   IF Right( AllTrim( cCAMBASE ), 1 ) != "\" .AND. Right( AllTrim( cCAMBASE ), 1 ) != "/"
-      cCAMBASE += "\"
-   ENDIF
-   cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=Paradox 5.x;"
+   cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=Paradox 5.x;"
 CASE cTIPOSQL == "XMLDB"  // ADOXML
    cCONN := "Provider=MSPersist"
 CASE cTIPOSQL == "XML"  // ADOXML
@@ -2045,20 +2039,11 @@ ENDCASE
 RETURN cConn
 
 
-
-
-
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function executacmd()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 Function executacmd(cCAMBASE,eCOMANDO)
 
@@ -2119,6 +2104,13 @@ next i
 oConn:Close()
 oConn := NIL
 RETURN .t.
+
+*+--------------------------------------------------------------------
+*+
+*+    Function CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
+*+
+*+--------------------------------------------------------------------
+*+
 
 FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
 
@@ -2190,82 +2182,31 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
 
 
 
+*+--------------------------------------------------------------------
+*+
+*+    Function mdltodos()
+*+
+*+--------------------------------------------------------------------
+*+
+
 function mdltodos()
 cTEXTO:=""
 FAZERDBF( {|| cTEXTO+=GERADBML(,,.F.) }, .F. )
 hb_MemoWrit("estrutura.DBML", cTEXTO ) 
 RETURN .T.
 
+*+--------------------------------------------------------------------
+*+
+*+    Function sqltodos(cTIPOSQL)
+*+
+*+--------------------------------------------------------------------
+*+
+
 function sqltodos(cTIPOSQL)
 cTEXTO:=""
 FAZERDBF( {|| cTEXTO+=FormataBlocoSql(SqliteCreateTable( , , cTIPOSQL,.T.,.T. )) }, .F. )
 hb_MemoWrit(cTIPOSQL+".sql", cTEXTO ) 
 RETURN .T.
-
-// +--------------------------------------------------------------------
-// +    Function trocasenhaarq()
-// +    Objetivo: Centralizar a troca de credenciais APENAS para bancos
-// +              baseados em arquivos físicos locais (Tags selecionadas)
-// +--------------------------------------------------------------------
-FUNCTION trocasenhaarq()
-LOCAL aTELA
-LOCAL cNovoUser    := PADR(AllTrim(cUSERX), 30, " ")
-LOCAL cNovaPass    := PADR(AllTrim(cPASSX), 30, " ")
-LOCAL cSessaoCofre := ""
-LOCAL cNomeArquivo := ""
-LOCAL cExtensao    := ""
-LOCAL lValido      := .F.
-
-// 1. Validação estrita por Tag de Banco de Dados ou Extensão
-cExtensao := Lower( hb_FNameExt( cDATABASEX ) )
-
-IF cTIPOSQL $ "SQLITE#ACCESS#MDB#ACCDB" .or. (lFDB .AND. cExtensao $ ".fdb#.gdb#.ib" ) 
-   lValido := .T.
-ENDIF
-
-IF !lValido
-   MDT( "Seguranca de arquivo nao disponivel para o banco: " + cTIPOSQL )
-   RETURN .F.
-ENDIF
-
-// 2. Extração do nome do arquivo para servir de Seção (Ex: PROCESSO)
-IF !Empty( cDATABASEX )
-   hb_FNameSplit( cDATABASEX, NIL, @cNomeArquivo, NIL )
-   IF !Empty( cNomeArquivo )
-      cSessaoCofre := Upper( AllTrim( cNomeArquivo ) )
-   ENDIF
-ENDIF
-
-IF Empty( cSessaoCofre )
-   MDT( "Selecione o arquivo de dados antes de alterar as credenciais." )
-   RETURN .F.
-ENDIF
-
-aTELA := SALVAA()
-
-hb_DispBox( 10, 15, 16, 70, B_DOUBLE + " " )
-@ 10, 17 SAY " Credenciais [" + cTIPOSQL + "] - Cofre: [" + cSessaoCofre + "] "
-
-@ 12, 17 SAY "Arquivo.:" + PadR( cNomeArquivo + cExtensao, 35 )
-@ 13, 17 SAY "Usuario.:" GET cNovoUser PICTURE "@!"
-@ 14, 17 SAY "Senha...:" GET cNovaPass
-
-READ
-
-IF LastKey() != 27 // Confirmação (Não pressionou ESC)
-   cUSERX := cNovoUser
-   cPASSX := cNovaPass
-   
-   // Gravação criptografada no config.dat baseada na tag/nome isolado
-   GravarNoCofre( cSessaoCofre, "USER",     AllTrim( cUSERX ) )
-   GravarNoCofre( cSessaoCofre, "PASSWORD", AllTrim( cPASSX ) )
-   
-   MDT("Dados salvos com sucesso no cofre [" + cSessaoCofre + "]!")
-ENDIF
-
-RESTAA(aTELA)
-RETURN .T.
-
 
 
 
