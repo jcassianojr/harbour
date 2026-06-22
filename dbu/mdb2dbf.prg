@@ -1,6 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+    Programa  : mdb2dbf.prg
+*+    Programa  : mdb2dbf.prgF
 *+
 *+     Sistema:
 *+
@@ -327,13 +327,19 @@ RETURN aResult
 function mdbtabela(cMDBARQ)
 
 local nChoices
+local aResult
 nChoices := 0
+aResult:={}
+IF cTIPOSQL="PARADOX"
+ //  ALERT("MDB TABELA"+cMDBARQ)
+   RETURN
+ENDIF   
 IF VALTYPE(cMDBARQ) = "A"
    aResult := cMDBARQ
 ELSE
    aResult := MDBTABLES(cMDBARQ)
 ENDIF
-IF LEN(aResult) > 0
+IF LEN(aResult) > 0 
    HB_dispbox(3,22,22,55,B_DOUBLE+" ")
    nChoices := ACHOICE(4,23,21,54,aResult)
 ENDIF
@@ -367,6 +373,10 @@ cMDBARQ := OPENTIPOARQ()
 
 mdbtabela(cMDBARQ)
 
+//IF cTIPOSQL="PARADOX"
+  // ALERT("MDBEXP TAB"+cTABELAX)
+   //ALERT("MDBEXP ARQ"+cMDBARQ)
+//ENDIF   
 cTABELA := cTABELAX
 
 IF EMPTY(cTABELA)
@@ -1023,33 +1033,31 @@ DO CASE
 CASE lMDB   
    cMDBARQ    := win_GetOPENFileName(,"Arquivos de Destino",HB_CWD(),"Arquivos mdb","*.MDB",1)
    cDATABASEX := cMDBARQ
-    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
+    hb_FNameSplit(cMDBARQ,NIL,@cBANCOX,NIL)
 CASE lACCDB   
    cMDBARQ    := win_GetOPENFileName(,"Arquivos de Destino",HB_CWD(),"Arquivos accdb","*.accdb",1)
    cDATABASEX := cMDBARQ
-    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
+    hb_FNameSplit(cMDBARQ,NIL,@cBANCOX,NIL)
 CASE cTIPOSQL = "SQLITE"
    cMDBARQ := win_GetOpenFileName(,"SQLite Files",HB_CWD(),"SQLite",;
     {{'SQLite','*.sqlite'},{'SQLite db','*.DB'},;
     {'SQLite3','*.sqlite3'},{'SQLite db3','*.DB3'},;
     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
    cDATABASEX := cMDBARQ
-   cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
+    hb_FNameSplit(cMDBARQ,NIL,@cBANCOX,NIL)
 CASE lFDB 
    cMDBARQ := win_GetopenFileName(,"Firebase Files",HB_CWD(),"Firebase",;
     {{'Firebird fdb','*.fdb'},{'Firebird gdb','*.gdb'},{'Firebird ib','*.ib'},;
      {'All Files','*.*'}},1)      
-   cDATABASEX := cMDBARQ
-   cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
+    cDATABASEX := cMDBARQ
+    hb_FNameSplit(cMDBARQ,NIL,@cBANCOX,NIL)
 CASE cTIPOSQL == "PARADOX"
-    cDATABASEX := win_GetOPENFileName(,"Selecione o arquivo Paradox",,"Arquivo DB|*.db",,"*.db")
-    
-    IF !Empty(cDATABASEX)
-        // Separa caminho da pasta e nome do arquivo
-        cCAMBASE := hb_FNameDir( cDATABASEX )    // ex: C:\DADOS\
-        cTABELAX  := hb_FNameName( cDATABASEX )   // ex: CLIENTES (sem .db)
-    ENDIF
-   
+    cMDBARQ := win_GetOPENFileName(,"Selecione o arquivo Paradox",,"Arquivo DB|*.db",,"*.db")
+    cDATABASEX := cMDBARQ
+    HB_FNameSplit( cMDBARQ, NIL , @cTABELAX , NIL ) 
+    //ALERT(cDATABASEX)
+    //ALERT(cTABELAX)
+    //ALERT(cMDBARQ)
 ENDCASE
 
 IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
@@ -1195,6 +1203,9 @@ LOCAL cSchemaPG
 LOCAL cCHAVENAME  := ""
 LOCAL cCHAVECAMPO := ""
 
+IF cTIPOSQL == "PARADOX"
+   RETURN //Nao implantado
+ENDIF
 
 Lopen        := .F.
 lARQMDBACCDB := .F.
@@ -2016,7 +2027,10 @@ CASE lFDB
    //cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
    cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
 CASE cTIPOSQL = "PARADOX"   // ADOPX
+   ALERT(cCAMBASE)
+   ALERT(CCAMDIR)
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=Paradox 5.x;"
+   ALERT(cCONN)
 CASE cTIPOSQL == "XMLDB"  // ADOXML
    cCONN := "Provider=MSPersist"
 CASE cTIPOSQL == "XML"  // ADOXML

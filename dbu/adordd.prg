@@ -463,11 +463,13 @@ STATIC FUNCTION ADO_OPEN( nWA, aOpenInfo )
 
       CASE cEXTENSAO == ".db" .OR. cENGINE == "PARADOX"
            cDataBase := hb_FNameDir( aOpenInfo[ UR_OI_NAME ]  ) 
+           //ALERT("RDD ANTES"+cDATABASE)
+           
            // Verifica se a pasta termina com barra, caso contrário o Jet OLEDB pode falhar
           IF Right( AllTrim( cDataBase ), 1 ) != "\" .AND. Right( AllTrim( cDataBase ), 1 ) != "/"
              cDataBase += "\"
           ENDIF
-      
+         //ALERT("RDD DEPOIS"+cDATABASE)
          //aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + aOpenInfo[ UR_OI_NAME ] + ";Extended Properties='Paradox 5.x';" )
          aWAData[ WA_CONNECTION ]:Open( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDataBase + ";Extended Properties='Paradox 5.x';" )
    
