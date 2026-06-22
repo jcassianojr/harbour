@@ -18,7 +18,46 @@
 #include "dbstruct.ch"
 #INCLUDE "TRY.CH"
 #INCLUDE "DBINFO.CH"
+#include "hbwin.ch"
 
+
+
+FUNCTION IsDriverInstalled( cDriverName )
+   LOCAL lRet     := .F.
+   LOCAL cKeyPure := "HKLM\SOFTWARE\ODBC\ODBCINST.INI\ODBC Drivers\" + cDriverName
+   LOCAL cKeyWow  := "HKLM\SOFTWARE\WOW6432Node\ODBC\ODBCINST.INI\ODBC Drivers\" + cDriverName
+   LOCAL uValue
+
+   // 1. Tenta ler o registro padrão de 32 bits
+   uValue := win_regRead( cKeyPure )
+   IF HB_IsString( uValue ) .AND. uValue == "Installed"
+      lRet := .T.
+   ENDIF
+
+   // 2. Se não encontrou, tenta ler a ramificação WOW6432Node (Windows 64 bits)
+   IF !lRet
+      uValue := win_regRead( cKeyWow )
+      IF HB_IsString( uValue ) .AND. uValue == "Installed"
+         lRet := .T.
+      ENDIF
+   ENDIF
+
+RETURN lRet
+
+FUNCTION DriverFirebird() //"+DriverFirebird()+"
+LOCAL cDriverFirebird
+cDriverFirebird:=""
+    If IsDriverInstalled("Firebird ODBC Driver") 
+       cDriverFirebird = "Firebird ODBC Driver"
+    Else
+       If IsDriverInstalled("Firebird/InterBase(r) driver") 
+          cDriverFirebird = "Firebird/InterBase(r) driver"
+       EndIf
+    EndIf
+    IF EMPTY(cDriverFirebird)
+       cDriverFirebird = "Firebird ODBC Driver"
+    ENDIF
+RETURN cDriverFirebird
 // +--------------------------------------------------------------------
 // +
 // +

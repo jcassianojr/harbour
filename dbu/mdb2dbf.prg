@@ -20,9 +20,7 @@
 #INCLUDE "TRY.CH"
 #INCLUDE "DBINFO.CH"
 #INCLUDE "hbVER.CH"
-
 #require "rddado"
-
 #include "adordd.ch"
 
 REQUEST ADORDD
@@ -152,6 +150,18 @@ return nil
 *+
 function pegcfgbanco()
 
+lMDB := .F.
+IF cTIPOSQL = "MDB" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS64"
+   lMDB := .T.
+ENDIF
+lACCDB := .F.
+IF cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64"
+   lACCDB := .T.
+ENDIF
+lFDB   := .F.
+IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR.  cTIPOSQL ="IB"
+   lFDB   := .T.
+ENDIF
 
 IF cTIPOSQL="LETO"
    cSERVERX   := PADR("//127.0.0.1:2812/",30," ")  
@@ -167,7 +177,7 @@ IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    cUSERX := PADR("postgres",30," ") 
    cPORTAX:= PADR("5432",30," ")
 ENDIF
-IF cTIPOSQL = "FIREBIRD"  .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR.  cTIPOSQL ="IB" 
+IF lFDB  //cTIPOSQL = "FIREBIRD"  .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR.  cTIPOSQL ="IB" 
    cSERVERX := PADR("localhost", 30, " ")   //net://
    cUSERX := PADR("SYSDBA",30," ")  //masterkey
    cPORTAX:= PADR("3050",30," ")
@@ -218,6 +228,9 @@ IF cTIPOSQL = "MYSQL" .or. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. c
    mdbdatabases()
 ENDIF
 
+
+
+
 IF cTIPOSQL = "LETO"
    OPENTIPOARQ()
 ENDIF
@@ -225,20 +238,10 @@ ENDIF
 IF cTIPOSQL = "PARADOX"
    OPENTIPOARQ()
 ENDIF
+IF lFDB  //cTIPOSQL = "FIREBIRD"
+   OPENTIPOARQ()
+ENDIF
 
-
-lMDB := .F.
-IF cTIPOSQL = "MDB" .OR. cTIPOSQL = "ACCESS" .OR. cTIPOSQL = "MDB64" .OR. cTIPOSQL = "ACCESS64"
-   lMDB := .T.
-ENDIF
-lACCDB := .F.
-IF cTIPOSQL = "ACCDB" .OR. cTIPOSQL = "ACCDB64"
-   lACCDB := .T.
-ENDIF
-lFDB   := .F.
-IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR.  cTIPOSQL ="IB"
-   lFDB   := .T.
-ENDIF
 return .t.
 
 
@@ -684,7 +687,7 @@ return lRETU
 *+
 function mdbcria()
 
-
+//ALERT("cria")
 DO CASE
     CASE lMDB
        cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos mdb","*.MDB",1)
@@ -696,6 +699,7 @@ DO CASE
         {'SQLite3','*.sqlite3'},{'SQLite db3','*.DB3'},;
         {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
     CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+  //     ALERT("escolher")
        cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
         {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
          {'All Files','*.*'}},1)  
@@ -730,11 +734,13 @@ IF lMDB .OR. lACCDB
 ENDIF
 
 IF lFDB //cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+   //alert("criar")
    // Código necessário para disparar a criação do ficheiro .fdb em branco
    // Exemplo utilizando ADOX se suportado pelo driver:
    TRY
       oCatalog := win_OleCreateObject("ADOX.Catalog")
-      oCatalog:Create("DRIVER=Firebird/InterBase(r) driver;Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
+      oCatalog:Create("DRIVER="+DriverFirebird()+";Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
+      //oCatalog:Create("DRIVER=Firebird/InterBase(r) driver;Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
       //oCatalog:Create("DRIVER=Firebird ODBC driver;Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
       
       oCatalog := NIL
@@ -755,7 +761,7 @@ IF cTIPOSQL == "PARADOX"
    //Date	Date	Compatibilidade total entre DBF e Paradox.
    //Memo	Memo	O Paradox gerencia Memos em um arquivo .mb anexo ao .db.
    //Integer	Short / Long	O Paradox diferencia Short (16-bit) e Long (32-bit).
-   //Float	Number	O tipo Number do Paradox é o padrão para precisão decimal.
+   //FFFFloat	Number	O tipo Number do Paradox é o padrão para precisão decimal.
 
     ParadoxCreateTable( cARQORI, aStruct )
    //cARQORI := win_GetSAVEFileName(,"Arquivos Paradox",HB_CWD(),"Paradox","*.db",1)
@@ -823,7 +829,7 @@ DO CASE
 IF !Empty( cSqlFields )
    
    IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. ;
-      cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR. cTIPOSQL = "GDB" .OR. cTIPOSQL = "IB"
+       lFDB //cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR. cTIPOSQL = "GDB" .OR. cTIPOSQL = "IB"
       
       // Tenta criar a tabela de metadados de campos de forma isolada
       TRY
@@ -1053,7 +1059,7 @@ CASE cTIPOSQL == "PARADOX"
 ENDCASE
 
 IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
-    .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "LETO" .OR. cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+    .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "LETO" .OR. lFDB //.OR. cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
     cBANCOX := PADR(cBANCOX,30," ")
    cSERVERX := PADR(cSERVERX,30," ")
    cUSERX := PADR(cUSERX,30," ")
@@ -1077,7 +1083,7 @@ IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. c
    cpassx  := alltrim(cpassx)
    cowenrx:= alltrim(cownerx)
    cportax   := alltrim(cportax)
-   IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"  .OR.  cTIPOSQL ="IB"
+   IF lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"  .OR.  cTIPOSQL ="IB"
    ELSE
      cMDBARQ := cDATABASEX
    ENDIF  
@@ -1105,7 +1111,7 @@ FUNCTION buscachaves( cNomeBanco )
        cOwnerX   := padr(LerDoCofre( cSecaoCofre, "Owner" ),30)
        cportaX   := padr(LerDoCofre( cSecaoCofre, "portax"),30)
     ENDIF   
-   IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"  .OR.  cTIPOSQL ="IB"
+   IF lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"  .OR.  cTIPOSQL ="IB"
        //cServer := "localhost:"
        //cDatabase
        //cUser := "SYSDBA"
@@ -1250,15 +1256,15 @@ ENDIF
 
 IF cTIPOINFO = "TABELA"
     DO CASE
-       CASE "ACCESS" $ cTipo .OR. "MDB" $ cTipo .OR. "ACCDB" $ cTipo
+       CASE "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL
           cCOMANDO := "SELECT MSysObjects.name AS TABLE_NAME FROM MSysObjects WHERE MSysObjects.type IN (1,4,6) " + ;
                       "AND MSysObjects.name NOT LIKE '~*' AND MSysObjects.name NOT LIKE 'MSys%' " + ;
                       "ORDER BY MSysObjects.name;"
 
-       CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+       CASE cTIPOSQL == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
           cCOMANDO := "SELECT name AS TABLE_NAME FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;"
 
-       CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+       CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MYSQL64" .OR. cTIPOSQL == "MARIADB"
           // Permite o uso padronizado do alias "TABLE_NAME" e aceita filtrar por banco/schema (cOwnerx)
           if Empty( cOwnerx )
              cCOMANDO := "SELECT table_name AS TABLE_NAME FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = DATABASE() ORDER BY table_name;"
@@ -1266,28 +1272,28 @@ IF cTIPOINFO = "TABELA"
              cCOMANDO := "SELECT table_name AS TABLE_NAME FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = '" + cOwnerx + "' ORDER BY table_name;"
           endif
 
-       CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+       CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
           if Empty( cOwnerx )
              cCOMANDO := "SELECT tablename AS TABLE_NAME FROM pg_tables WHERE schemaname='public' ORDER BY tablename;"
           else
              cCOMANDO := "SELECT tablename AS TABLE_NAME FROM pg_tables WHERE schemaname = '" + cOwnerx + "' ORDER BY tablename;"
           endif
           
-       CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+       CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
           if Empty( cOwnerx )
              cCOMANDO := "SELECT TABLE_NAME AS TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;"
           else
              cCOMANDO := "SELECT TABLE_NAME AS TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '" + cOwnerx + "' ORDER BY TABLE_NAME;"
           endif
 
-       CASE cTipo == "ORACLE" .OR. cTipo == "OCI" 
+       CASE cTIPOSQL == "ORACLE" .OR. cTIPOSQL == "OCI" 
           if Empty( cOwnerx )
              cCOMANDO := "SELECT table_name AS TABLE_NAME FROM user_tables ORDER BY TABLE_NAME;"
           else
              cCOMANDO := "SELECT table_name AS TABLE_NAME FROM all_tables WHERE owner = '" + Upper(cOwnerx) + "' ORDER BY TABLE_NAME;"
           endif
 
-       CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB" .OR. cTipo == "IB" 
+       CASE lFDB //cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL == "FDB" .OR. cTIPOSQL == "GDB" .OR. cTIPOSQL == "IB" 
           // RDB$SYSTEM_FLAG = 0 traz apenas tabelas criadas pelo usuário (ignora tabelas do sistema do Firebird)
           // TRIM() remove espaços em branco à direita que o Firebird gera nativamente nos metadados
           if Empty( cOwnerx )
@@ -1296,7 +1302,7 @@ IF cTIPOINFO = "TABELA"
              cCOMANDO := "SELECT TRIM(RDB$RELATION_NAME) AS TABLE_NAME FROM RDB$RELATIONS WHERE COALESCE(RDB$SYSTEM_FLAG, 0) = 0 AND RDB$VIEW_BLR IS NULL AND RDB$OWNER_NAME = '" + cOwnerx + "' ORDER BY RDB$RELATION_NAME;"
           endif
           
-       CASE cTipo == "SYBASE"
+       CASE cTIPOSQL == "SYBASE"
           if Empty( cOwnerx )
              cCOMANDO := "SELECT name AS TABLE_NAME FROM sysobjects WHERE type = N'U' ORDER BY name;"
           else
@@ -1309,13 +1315,13 @@ DO CASE
    CASE lARQMDBACCDB  //lMDB .OR. lACCDB .or. at(".MDB",upper(cdatabase))>0 .or. at(".ACCDB",upper(cdatabase))>0
       //Implantado abaixo com  catalogx
   
-   CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+   CASE cTIPOSQL == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
       // PRAGMA table_info retorna: cid, name, type, notnull, dflt_value, pk
       // Como o SQLite não aceita aliases em PRAGMAs diretamente, a sua camada de dados
       // deverá ler os campos nativos do pragma ("name", "type") ou usamos uma query vazia de metadados:
       cCOMANDO := "SELECT name AS FIELD_NAME, type AS DATA_TYPE, 0 AS FIELD_LEN, 0 AS FIELD_DEC FROM pragma_table_info('" + cTabela + "');"
 
-   CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+   CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MYSQL64" .OR. cTIPOSQL == "MARIADB"
       // Em vez de SHOW COLUMNS (que gera colunas dinâmicas), usamos a information_schema para fixar os aliases
       if Empty( cOwnerx )
          cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
@@ -1329,7 +1335,7 @@ DO CASE
                      "FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = '" + cOwnerx + "' ORDER BY ORDINAL_POSITION;"
       endif
 
-   CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+   CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
       // PostgreSQL diferencia maiúsculas de minúsculas. Geralmente tabelas ficam em minúsculo no Postgres.
       // udt_name ou data_type mapeados perfeitamente
        //nome tabela em maiusculo postgresql e case sensitive
@@ -1345,7 +1351,7 @@ DO CASE
                   "WHERE LOWER(table_name) = '" + Lower(cTabela) + "' AND table_schema = '" + cSchema + "' " + ;
                   "ORDER BY ordinal_position;"
 
-   CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+   CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
       cSchemaSQL := iif( Empty(cOwnerx), "dbo", cOwnerx )
       cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
                   "ISNULL(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
@@ -1354,7 +1360,7 @@ DO CASE
                   "WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = '" + cSchemaSQL + "' " + ;
                   "ORDER BY ORDINAL_POSITION;"
 
-   CASE cTipo == "ORACLE" .OR. cTipo == "OCI"
+   CASE cTIPOSQL == "ORACLE" .OR. cTIPOSQL == "OCI"
       cUserOracle := iif( Empty(cOwnerx), "USER_TAB_COLUMNS", "ALL_TAB_COLUMNS" )
       cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
                   "DATA_LENGTH AS FIELD_LEN, COALESCE(DATA_SCALE, 0) AS FIELD_DEC " + ;
@@ -1362,7 +1368,7 @@ DO CASE
                   iif( !Empty(cOwnerx), "AND OWNER = '" + Upper(cOwnerx) + "' ", "" ) + ;
                   "ORDER BY COLUMN_ID;"
 
-   CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB" .OR. cTipo == "IB"
+   CASE lFDB //cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL == "FDB" .OR. cTIPOSQL == "GDB" .OR. cTIPOSQL == "IB"
       // O Firebird exige um JOIN complexo no catálogo do sistema para extrair os tipos amigáveis
       cCOMANDO := "SELECT TRIM(F.RDB$FIELD_NAME) AS FIELD_NAME, " + ;
                   "CASE T.RDB$FIELD_TYPE " + ;
@@ -1383,7 +1389,7 @@ IF cTIPOINFO = "CCAMPOSQL"
 ENDIF
 IF cTIPOINFO = "__INDEX__"
   DO CASE
-   CASE cTipo == "MYSQL" .OR. cTipo == "MYSQL64" .OR. cTipo == "MARIADB"
+   CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MYSQL64" .OR. cTIPOSQL == "MARIADB"
       // Em vez de SHOW INDEXES (que dificulta aliases), usamos a STATISTICS da information_schema
       cSchemaMY := iif( Empty(cOwnerx), "DATABASE()", "'" + cOwnerx + "'" )
       cCOMANDO := "SELECT INDEX_NAME AS INDEX_NAME, COLUMN_NAME AS COLUMN_NAME " + ;
@@ -1391,7 +1397,7 @@ IF cTIPOINFO = "__INDEX__"
                   "WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = " + cSchemaMY + " " + ;
                   "ORDER BY INDEX_NAME, SEQ_IN_INDEX;"
 
-   CASE cTipo == "PGSQL" .OR. cTipo == "PGSQL64" .OR. cTipo == "POSTGRESQL"
+   CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
       // No Postgres precisamos cruzar o catálogo interno para extrair os nomes das colunas de forma ordenada
       cSchemaPG := iif( Empty(cOwnerx), "public", cOwnerx )
       cCOMANDO := "SELECT t.relname AS INDEX_NAME, a.attname AS COLUMN_NAME " + ;
@@ -1403,7 +1409,7 @@ IF cTIPOINFO = "__INDEX__"
                   "WHERE LOWER(i.relname) = '" + Lower(cTabela) + "' AND n.nspname = '" + cSchemaPG + "' " + ;
                   "ORDER BY t.relname, a.attnum;"
 
-   CASE cTipo == "MSSQL" .OR. cTipo == "SQLSERVER"
+   CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
       // Consulta padrão na sys.indexes do SQL Server
       cCOMANDO := "SELECT ind.name AS INDEX_NAME, col.name AS COLUMN_NAME " + ;
                   "FROM sys.indexes ind " + ;
@@ -1413,7 +1419,7 @@ IF cTIPOINFO = "__INDEX__"
                   "WHERE t.name = '" + cTabela + "' AND ind.is_primary_key = 0 " + ;
                   "ORDER BY ind.name, ic.key_ordinal;"
 
-   CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
+   CASE cTIPOSQL == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
       // Nota: O SQLite exige comandos em lote ou PRAGMA. Para leitura via Recordset genérico, 
       // o mais seguro é ler os metadados diretamente da tabela sqlite_master caso queira a query pura,
       // mas o comando pragma nativo é: "PRAGMA index_list('" + cTabela + "')"
@@ -2011,9 +2017,11 @@ CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "SQL"
    endif
 CASE cTIPOSQL = "DBASE"
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=dBASE IV;"
-CASE cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR. cTipo == "IB" 
+CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR. cTipo == "IB" 
    //cCONN := "DRIVER=Firebird ODBC driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
-   CONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+   //cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+   cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+  ALERT(cCONN) 
 CASE cTIPOSQL = "PARADOX"   // ADOPX
     cCAMBASE := hb_FNameDir( cCAMBASE ) 
    // Verifica se a pasta termina com barra, caso contrário o Jet OLEDB pode falhar
@@ -2175,8 +2183,10 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
              //oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Paradox 5.x';")
              //ParadoxCreateTable( cTablename, aStruct ) e por arquivo nao cria um database o database e uma pasta 
 
-          CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. cTIPOSQL == "FIREBIRD"
-             oCatalog:Create("Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
+          CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. lFDB //.OR. cTIPOSQL == "FIREBIRD"
+            // oCatalog:Create("Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
+            // oCatalog:Create("Driver=Firebird ODBC Driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
+             oCatalog:Create("Driver="+DriverFirebird()+";Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
 
        ENDCASE
     ENDIF
@@ -2215,7 +2225,7 @@ LOCAL lValido      := .F.
 // 1. Validação estrita por Tag de Banco de Dados ou Extensão
 cExtensao := Lower( hb_FNameExt( cDATABASEX ) )
 
-IF cTIPOSQL $ "SQLITE#ACCESS#MDB#ACCDB" .or. (cTIPOSQL == "FIREBIRD" .AND. cExtensao $ ".fdb#.gdb#.ib" ) 
+IF cTIPOSQL $ "SQLITE#ACCESS#MDB#ACCDB" .or. (lFDB .AND. cExtensao $ ".fdb#.gdb#.ib" ) 
    lValido := .T.
 ENDIF
 

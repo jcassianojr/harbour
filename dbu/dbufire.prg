@@ -22,6 +22,51 @@
 
 #require "hbfbird"
 
+ /*
+  oServer := TFBServer():New( cServer + cDatabase, cUser, cPass, nDialect )
+  oServer:NetErr() ? oServer:Error()
+  oServer:ListTables()
+  oServer:TableExists( "TEST" )
+  oServer:Execute( "DROP TABLE Test" )
+  oServer:StartTransaction()
+  oServer:Commit()
+  oServer:Query( "SELECT code, dept, name, sales, salary, creation FROM test" )
+   aStruct := oServer:TableStruct( "test" )
+   aKey := oQuery:GetKeyField()
+  ? "Fields: ", oQuery:FCount(), "Primary Key: ", aKey[ 1 ]
+   oRow := oQuery:Blank()
+
+   ? ;
+      oRow:FCount(), ;
+      oRow:FieldPos( "code" ), ;
+      oRow:FieldGet( 1 ), ;
+      oRow:FieldName( 1 ), ;
+      oRow:FieldType( 1 ), ;
+      oRow:FieldDec( 1 ), ;
+      oRow:FieldLen( 1 ), ;
+      Len( oRow:Getkeyfield() )
+
+   oRow:FieldPut( 1, 150 )
+   oRow:FieldPut( 2, "MY TEST" )
+
+   ? oRow:FieldGet( 1 ), oRow:FieldGet( 2 )
+
+   ? oServer:Append( oRow )
+
+   ? oServer:Delete( oQuery:blank(), "code = 200" )
+
+   DO WHILE oQuery:Fetch()
+      oRow := oQuery:getrow()
+     oRow:FieldGet( oRow:FieldPos( "code" ) ), ;
+    oQuery:Skip()
+
+ 
+   oQuery:Destroy()
+
+   oServer:Destroy()
+
+
+*/
 
 // +--------------------------------------------------------------------
 // +    Function firebirdmenu()
@@ -71,8 +116,8 @@ cTIPOSQL := "FIREBIRD"  // Passa para privada usadas nas funcoes abaixo
 // Busca as credenciais e o caminho do banco dinamicamente via cofre do sistema
 pegcfgbanco() 
 
-// Seleção do arquivo físico .fdb se aplicável à rotina local
-OPENTIPOARQ()
+// Seleção do arquivo físico .fdb se aplicável à rotina local pegcfgbanco ja chama opentiparq quando e firebird
+//OPENTIPOARQ()
 
 WHILE .T.
    hb_DispBox(3,22,22,55,B_DOUBLE+" ") 
@@ -92,7 +137,7 @@ WHILE .T.
    CASE KEY = 1
       firecreate()
    CASE KEY = 2
-      mdbtabela( cDATABASEX )
+      fireTABELAS() //mdbtabela( cDATABASEX )  
    CASE KEY = 3
       fireimpdbf()
    CASE KEY = 4
@@ -121,7 +166,13 @@ LAYOUT()
 RETURN .T. 
 
 function firecreate()
-    FBCreateDB( AllTrim(cSERVERX) + ":" + AllTrim(cDATABASEX), cUSERX, cPASSX, nPageSize, cCharSet, nDialect )
+    cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
+        {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
+         {'All Files','*.*'}},1)  
+   cDATABASEX := cARQORI
+   cBANCOX:=hb_FNameSplit(cARQORI,NIL,cBANCOX,NIL)
+
+    FBCreateDB( AllTrim(cSERVERX) + ":" + AllTrim(cARQORI), cUSERX, cPASSX, nPageSize, cCharSet, nDialect )
 return .T.
 
 // +--------------------------------------------------------------------
@@ -169,6 +220,23 @@ ELSE
 ENDIF
 
 RETURN .T.
+
+// +--------------------------------------------------------------------
+// +    Function fireTABELAS()
+// +--------------------------------------------------------------------
+FUNCTION fireTABELAS()
+LOCAL oServer
+
+oServer := fireconnect()
+IF oServer != NIL
+   mdbtabela(oServer:ListTables()) //mdbtabela( cDATABASEX ) 
+   oServer:Destroy()
+ELSE
+   MDT( "Falha ao obter informacoes do servidor." )
+ENDIF
+
+RETURN .T.
+
 
 // +--------------------------------------------------------------------
 // +    Function fireimpdbf()
@@ -276,12 +344,14 @@ LOCAL aSTRU := {}
 LOCAL aVALOR
 LOCAL i, nFIM, cFieldName, cFieldType, nFieldLength, nFieldDec, cDESTINO, eVALOR
 
-mdbtabela( cDATABASEX )
 
 oServer := fireconnect()
 IF oServer == NIL
    RETURN .F.
 ENDIF
+
+mdbtabela(oServer:ListTables()) //mdbtabela( cDATABASEX ) 
+
 
 oQuery := oServer:Query( "SELECT * FROM " + AllTrim(cTABELAX) )
 IF oServer:NetErr()
@@ -388,14 +458,15 @@ RETURN .T.
 // +--------------------------------------------------------------------
 FUNCTION firedeltable()
 LOCAL oServer
-
-mdbtabela( cDATABASEX )
-IF !MDG( "Apagar Tabela " + AllTrim(cTABELAX) + "?" )
+LOCAL X
+LOCAL aTABLES
+oServer := fireconnect()
+IF oServer == NIL
    RETURN .F.
 ENDIF
 
-oServer := fireconnect()
-IF oServer == NIL
+mdbtabela(oServer:ListTables())  //mdbtabela( cDATABASEX )  
+IF !MDG( "Apagar Tabela " + AllTrim(cTABELAX) + "?" )
    RETURN .F.
 ENDIF
 
