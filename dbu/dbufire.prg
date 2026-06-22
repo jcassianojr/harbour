@@ -23,6 +23,29 @@
 #require "hbfbird"
 
  /*
+ converter utf para ansi bak novoansi restaurar do bak
+ gbak -b -v -t seu_banco_utf8.fdb backup_utf8.fbk
+ CREATE DATABASE 'novo_banco_win1252.fdb' //CREATE DATABASE 'C:\temp\novobanco.fdb'
+ USER 'SYSDBA' PASSWORD 'masterkey'
+DEFAULT CHARACTER SET WIN1252
+COLLATION PT_BR;
+gbak -c -v -rep backup_utf8.fbk novo_banco_win1252.fdb
+ 
+ -- Verifica todos os character sets disponíveis
+SELECT * FROM RDB$CHARACTER_SETS;
+
+SELECT 
+    S.RDB$CHARACTER_SET_NAME AS CharSet,
+    C.RDB$COLLATION_NAME AS Collation
+FROM RDB$CHARACTER_SETS S
+JOIN RDB$COLLATIONS C ON S.RDB$CHARACTER_SET_ID = C.RDB$CHARACTER_SET_ID
+WHERE S.RDB$CHARACTER_SET_NAME IN ('WIN1252', 'UTF8')
+ORDER BY 1, 2;
+
+
+isql -u SYSDBA -p masterkey
+CONNECT 'C:\caminho\seu_banco.fdb' USER 'SYSDBA' PASSWORD 'masterkey';
+ 
   oServer := TFBServer():New( cServer + cDatabase, cUser, cPass, nDialect )
   oServer:NetErr() ? oServer:Error()
   oServer:ListTables()
@@ -173,6 +196,12 @@ function firecreate()
    cBANCOX:=hb_FNameSplit(cARQORI,NIL,cBANCOX,NIL)
 
     FBCreateDB( AllTrim(cSERVERX) + ":" + AllTrim(cARQORI), cUSERX, cPASSX, nPageSize, cCharSet, nDialect )
+    
+    fireexecuteSQL({"DEFAULT CHARACTER SET WIN1252","COLLATION PT_BR;"})
+    
+    
+    //DEFAULT CHARACTER SET WIN1252
+    //COLLATION PT_BR;
 return .T.
 
 // +--------------------------------------------------------------------
@@ -424,6 +453,10 @@ DO WHILE !oQuery:Eof()
          eVALOR := ""
       ENDIF
    ENDIF
+   
+   IF hb_UTF8Len(eVALOR) != Len(eVALOR)
+      eVALOR := hb_UTF8ToStr(eVALOR)  //hb_StrToUTF8(cString)
+   ENDIF   
       
       // Limpeza de strings e caracteres de controle oriundos do banco
       IF ValType( eVALOR ) == "C" .OR. ValType( eVALOR ) == "M"
@@ -489,3 +522,46 @@ ENDIF
 
 oServer:Destroy()
 RETURN .T.
+
+
+FUNCTION fireexecuteSQL( eCOMANDO, lTRANS, lMES )
+
+   LOCAL aCOMANDOS := {}
+   LOCAL nFIM
+   LOCAL i
+   LOCAL lRet
+   LOCAL oServer
+
+
+   lRET := .T.
+   IF ValType( LMES ) <> "L"
+      lMES := .F.
+   ENDIF
+   IF ValType( lTRANS ) <> "L"
+      lTRANS := .F.
+   ENDIF
+   
+   IF ValType( eCOMANDO ) = "C"
+      AAdd( aCOMANDOS, eCOMANDO )
+   ELSE
+      aCOMANDOS := eCOMANDO
+   ENDIF
+   nFIM := Len( aCOMANDOS )
+   oServer := fireconnect()
+   IF oServer == NIL
+      RETURN .F.
+   ENDIF
+   IF lTRANS
+      oServer:StartTransaction()
+   ENDIF
+   FOR i := 1 TO nfim
+      cCOMANDO := aCOMANDOS[ I ]
+      oServer:Execute( cSQL )
+   NEXT i
+   IF lTRANS
+      oServer:Commit()
+   ENDIF
+   oServer:Destroy()
+   RETURN lRet
+
+
