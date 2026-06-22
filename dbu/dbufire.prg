@@ -137,7 +137,7 @@ WHILE .T.
    CASE KEY = 1
       firecreate()
    CASE KEY = 2
-      fireTABELAS() //mdbtabela( cDATABASEX )  
+      fireTABELAS() 
    CASE KEY = 3
       fireimpdbf()
    CASE KEY = 4
@@ -224,17 +224,24 @@ RETURN .T.
 // +--------------------------------------------------------------------
 // +    Function fireTABELAS()
 // +--------------------------------------------------------------------
-FUNCTION fireTABELAS()
+FUNCTION fireTABELAS(lNATIVE)
 LOCAL oServer
 
-oServer := fireconnect()
-IF oServer != NIL
-   mdbtabela(oServer:ListTables()) //mdbtabela( cDATABASEX ) 
-   oServer:Destroy()
-ELSE
-   MDT( "Falha ao obter informacoes do servidor." )
+IF VALTYPE(lNATIVE)<>"L" //testar a native nao esta trazendo a array
+   lNATIVE:=.F.
 ENDIF
 
+IF lNATIVE
+    oServer := fireconnect()
+    IF oServer != NIL
+       mdbtabela(oServer:ListTables())  
+       oServer:Destroy()
+    ELSE
+       MDT( "Falha ao obter informacoes do servidor." )
+    ENDIF
+ELSE
+   mdbtabela( cDATABASEX ) //via ado 
+ENDIF
 RETURN .T.
 
 
@@ -350,7 +357,7 @@ IF oServer == NIL
    RETURN .F.
 ENDIF
 
-mdbtabela(oServer:ListTables()) //mdbtabela( cDATABASEX ) 
+fireTABELAS() 
 
 
 oQuery := oServer:Query( "SELECT * FROM " + AllTrim(cTABELAX) )
@@ -364,7 +371,9 @@ nLASTREC := oQuery:LastRec()
 zei_fort( nLASTREC,,, 0 )
 
 // Obtém metadados da tabela do Firebird e converte em dbStruct compatível
-aStructInfo := oQuery:GetStruct()
+//aStructInfo := oQuery:GetStruct() //voltando matriz vazia
+aStructInfo := MDBTABLES(cDATABASEX,cTABELAX)
+
 nFIM        := Len( aStructInfo )
 
 FOR i := 1 TO nFIM
@@ -375,6 +384,7 @@ FOR i := 1 TO nFIM
    
    AAdd( aSTRU, geracampodbf( cFieldName, cFieldType, nFieldLength, nFieldDec ) )
 NEXT i
+
 
 cDESTINO := AllTrim(cTABELAX) + "_FIREBIRD"
 
@@ -465,7 +475,7 @@ IF oServer == NIL
    RETURN .F.
 ENDIF
 
-mdbtabela(oServer:ListTables())  //mdbtabela( cDATABASEX )  
+fireTABELAS() 
 IF !MDG( "Apagar Tabela " + AllTrim(cTABELAX) + "?" )
    RETURN .F.
 ENDIF

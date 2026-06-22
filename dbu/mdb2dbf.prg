@@ -177,7 +177,7 @@ IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
    cUSERX := PADR("postgres",30," ") 
    cPORTAX:= PADR("5432",30," ")
 ENDIF
-IF lFDB  //cTIPOSQL = "FIREBIRD"  .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR.  cTIPOSQL ="IB" 
+IF lFDB 
    cSERVERX := PADR("localhost", 30, " ")   //net://
    cUSERX := PADR("SYSDBA",30," ")  //masterkey
    cPORTAX:= PADR("3050",30," ")
@@ -238,7 +238,7 @@ ENDIF
 IF cTIPOSQL = "PARADOX"
    OPENTIPOARQ()
 ENDIF
-IF lFDB  //cTIPOSQL = "FIREBIRD"
+IF lFDB  
    OPENTIPOARQ()
 ENDIF
 
@@ -387,7 +387,7 @@ IF EMPTY(cTABELA)
 ENDIF
 
 IF nTIPO = 1
-   tdoc      := 14  //dbf
+   tdoc      := 90  //dbf
    zEXPOREXT := "DBF"
 ENDIF
 
@@ -424,7 +424,7 @@ aSTRU := dbstruct()
 //pois cria com tipos @ e M deixando o dbf com tipos incompativeis
 //criar opcao de criar o dbf tratado con mdbtables
 //importar via pipe ou outro
-IF tDOC = 90
+IF tDOC = 90 .OR. zEXPOREXT = "DBF"
    aINDICES := {}
    IF lMDB .OR. lACCDB
       //Ainda nao implantado testes com catalog ver outras opcoes
@@ -454,7 +454,6 @@ IF tDOC = 90
                cCAMPOSINDEX := cCAMPOSINDEX+","+aINDICES[I,2]
             ENDIF
          ENDIF
-         //          alert(Cchaveindex+" "+CCAMPOSINDEX)
       NEXT I
    ENDIF
    cALIASDBF := ALIAS()
@@ -601,7 +600,7 @@ CASE lACCDB
    hb_adoSetTable(cTABELA) 
    hb_adoSetEngine("ACEOLEDB") 
    dbUseArea(.F.,"ADORDD",(cMDBARQ),,.T.,.F.)
-CASE  lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+CASE  lFDB 
    hb_adoSetTable(cTABELA) 
    hb_adoSetEngine("FIREBIRD") 
    hb_adoSetUser(CUSERX) 
@@ -687,7 +686,6 @@ return lRETU
 *+
 function mdbcria()
 
-//ALERT("cria")
 DO CASE
     CASE lMDB
        cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos mdb","*.MDB",1)
@@ -698,8 +696,7 @@ DO CASE
         {{'SQLite','*.sqlite'},{'SQLite db','*.DB'},;
         {'SQLite3','*.sqlite3'},{'SQLite db3','*.DB3'},;
         {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
-    CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
-  //     ALERT("escolher")
+    CASE lFDB 
        cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
         {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
          {'All Files','*.*'}},1)  
@@ -733,8 +730,7 @@ IF lMDB .OR. lACCDB
    //EXECUTACMD(cARQORI,"GRANT SELECT ON VIEW showtableS TO ADMIN,PUBLIC")
 ENDIF
 
-IF lFDB //cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
-   //alert("criar")
+IF lFDB 
    // Código necessário para disparar a criação do ficheiro .fdb em branco
    // Exemplo utilizando ADOX se suportado pelo driver:
    TRY
@@ -828,8 +824,7 @@ DO CASE
 // Execução dos comandos de criação das tabelas de metadados
 IF !Empty( cSqlFields )
    
-   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. ;
-       lFDB //cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL = "FDB" .OR. cTIPOSQL = "GDB" .OR. cTIPOSQL = "IB"
+   IF "ACCESS" $ cTIPOSQL .OR. "MDB" $ cTIPOSQL .OR. "ACCDB" $ cTIPOSQL .OR. lFDB 
       
       // Tenta criar a tabela de metadados de campos de forma isolada
       TRY
@@ -957,7 +952,7 @@ CASE lACCDB   // cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64"
 CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
    msql := SqliteCreateTable(cNOMETABELA,aSTRU,"MSSQL")
    executacmd(cMDBARQ,msql)
-CASE lFDB //cTIPOSQL == "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+CASE lFDB 
    msql := SqliteCreateTable(cNOMETABELA, aSTRU, "FIREBIRD") // Certifique-se que sua SqliteCreateTable suporte este parâmetro
    executacmd(cMDBARQ, msql)   
 OTHERWISE
@@ -1041,7 +1036,7 @@ CASE cTIPOSQL = "SQLITE"
     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
    cDATABASEX := cMDBARQ
    cBANCOX:=hb_FNameSplit(cMDBARQ,NIL,cBANCOX,NIL)
-CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+CASE lFDB 
    cMDBARQ := win_GetopenFileName(,"Firebase Files",HB_CWD(),"Firebase",;
     {{'Firebird gdb','*.gdb'},{'Firebird fdb','*.fDB'},;
      {'All Files','*.*'}},1)      
@@ -1059,7 +1054,7 @@ CASE cTIPOSQL == "PARADOX"
 ENDCASE
 
 IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
-    .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "LETO" .OR. lFDB //.OR. cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"
+    .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "LETO" .OR. lFDB 
     cBANCOX := PADR(cBANCOX,30," ")
    cSERVERX := PADR(cSERVERX,30," ")
    cUSERX := PADR(cUSERX,30," ")
@@ -1083,7 +1078,7 @@ IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. c
    cpassx  := alltrim(cpassx)
    cowenrx:= alltrim(cownerx)
    cportax   := alltrim(cportax)
-   IF lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"  .OR.  cTIPOSQL ="IB"
+   IF lFDB 
    ELSE
      cMDBARQ := cDATABASEX
    ENDIF  
@@ -1111,7 +1106,7 @@ FUNCTION buscachaves( cNomeBanco )
        cOwnerX   := padr(LerDoCofre( cSecaoCofre, "Owner" ),30)
        cportaX   := padr(LerDoCofre( cSecaoCofre, "portax"),30)
     ENDIF   
-   IF lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB"  .OR.  cTIPOSQL ="IB"
+   IF lFDB 
        //cServer := "localhost:"
        //cDatabase
        //cUser := "SYSDBA"
@@ -1293,7 +1288,7 @@ IF cTIPOINFO = "TABELA"
              cCOMANDO := "SELECT table_name AS TABLE_NAME FROM all_tables WHERE owner = '" + Upper(cOwnerx) + "' ORDER BY TABLE_NAME;"
           endif
 
-       CASE lFDB //cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL == "FDB" .OR. cTIPOSQL == "GDB" .OR. cTIPOSQL == "IB" 
+       CASE lFDB 
           // RDB$SYSTEM_FLAG = 0 traz apenas tabelas criadas pelo usuário (ignora tabelas do sistema do Firebird)
           // TRIM() remove espaços em branco à direita que o Firebird gera nativamente nos metadados
           if Empty( cOwnerx )
@@ -1368,7 +1363,7 @@ DO CASE
                   iif( !Empty(cOwnerx), "AND OWNER = '" + Upper(cOwnerx) + "' ", "" ) + ;
                   "ORDER BY COLUMN_ID;"
 
-   CASE lFDB //cTIPOSQL == "FIREBIRD" .OR. cTIPOSQL == "FDB" .OR. cTIPOSQL == "GDB" .OR. cTIPOSQL == "IB"
+   CASE lFDB 
       // O Firebird exige um JOIN complexo no catálogo do sistema para extrair os tipos amigáveis
       cCOMANDO := "SELECT TRIM(F.RDB$FIELD_NAME) AS FIELD_NAME, " + ;
                   "CASE T.RDB$FIELD_TYPE " + ;
@@ -2017,11 +2012,10 @@ CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "SQL"
    endif
 CASE cTIPOSQL = "DBASE"
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Extended Properties=dBASE IV;"
-CASE lFDB //cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR. cTipo == "IB" 
+CASE lFDB 
    //cCONN := "DRIVER=Firebird ODBC driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
    //cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
    cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
-  ALERT(cCONN) 
 CASE cTIPOSQL = "PARADOX"   // ADOPX
     cCAMBASE := hb_FNameDir( cCAMBASE ) 
    // Verifica se a pasta termina com barra, caso contrário o Jet OLEDB pode falhar
@@ -2183,7 +2177,7 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
              //oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Paradox 5.x';")
              //ParadoxCreateTable( cTablename, aStruct ) e por arquivo nao cria um database o database e uma pasta 
 
-          CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. lFDB //.OR. cTIPOSQL == "FIREBIRD"
+          CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. lFDB 
             // oCatalog:Create("Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
             // oCatalog:Create("Driver=Firebird ODBC Driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
              oCatalog:Create("Driver="+DriverFirebird()+";Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 

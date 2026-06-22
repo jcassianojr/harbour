@@ -1336,6 +1336,16 @@ ENDIF
 
 do case
 
+  // Ajuste para sub-tipagem SQLIMIX
+   CASE cType == "I" .AND. cSUBTIPO == "N"
+        cFieldType := 'N' 
+
+   //ja esta tipado C,D,N,M,L
+   CASE LEN(cTYPE) =1 
+        IF cType == "C" .AND. (nFieldLength=0 .OR. nFieldLength > 250)
+           nFieldLength := 250
+        ENDIF 
+
    //
    // numeric(l,d) decimal(l,d) number(l,d) - O tamanho está entre parênteses
    //
@@ -1375,7 +1385,7 @@ do case
         nFieldDec    := 0
         
         // Mantém sua lógica: Se estourar o limite de caractere do DBF, trunca no tamanho seguro
-        IF nFieldLength > 250
+        IF nFieldLength=0 .OR. nFieldLength > 250
            nFieldLength := 250
         ENDIF
 
@@ -1400,7 +1410,7 @@ do case
         nFieldLength := 19
         nFieldDec    := 0
 
-   // Ponto Flutuante e Decimais Genéricos
+   // Ponto Flutuante e Decimais Genéricos //MUDANDO A Logica entrava aqui quando o tipo era "C"
    CASE cType $ "DOUBLE PRECISION|FLOAT8|DECIMAL" 
         cFieldType   := 'N'
         nFieldLength := 19
@@ -1432,12 +1442,16 @@ do case
    // Mapeia textos longos para Caracter ('C') limitado a 250 para proteger RDDs com problemas em múltiplos Memos.
    CASE cType $ "CLOB|LONGTEXT|M|WLONGVARCHAR|LONGCHAR|MEMO|LONGVARCHAR"
         cFieldType   := 'C'
-        nFieldLength := 250
+        IF nFieldLength=0 .OR. nFieldLength > 250
+           nFieldLength := 250
+        ENDIF   
         nFieldDec    := 0
 
    CASE cType == "TEXT" .AND. (cTIPOSQL $ "SQLITE|PGSQL|PGSQL64|POSTGRESQL")
         cFieldType   := 'C'
-        nFieldLength := 250
+        IF nFieldLength=0 .OR. nFieldLength > 250
+           nFieldLength := 250
+        ENDIF   
         nFieldDec    := 0
 
    // Fallback para instâncias de TEXT puras sem parênteses
@@ -1467,14 +1481,6 @@ do case
         nFieldLength := 64
         nFieldDec    := 0
 
-   // Se o tipo original já for caractere ('C') mas vier estourado do banco SQL
-   CASE cType == "C" .AND. nFieldLength > 250
-        nFieldLength := 250
-
-   // Ajuste para sub-tipagem SQLIMIX
-   CASE cType == "I" .AND. cSUBTIPO == "N"
-        cFieldType := 'N'
-   
    // Binários / Blobs e Imagens convertidos para Memo padrão
    CASE cType $ "BYTEA|BLOB|IMAGE|VARBINARY"
         cFieldType   := 'M'

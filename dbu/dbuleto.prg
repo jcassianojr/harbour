@@ -149,7 +149,6 @@ cARQUIVO  := TIRAEXT(cARQORI)
 cEXTMEMO  := ".FPT"
 cEXTINDEX := ".CDX"
 nConnect  := LETO_CONNECT(cSrvAddr)
-altd()
 IF nConnect >= 0
    IF .NOT. File(cARQORI)
       Leto_FCopyFromSrv(cARQORI,cARQORI)
@@ -261,7 +260,6 @@ cDESTINO := cTABELAX+"_"+cTIPOSQL+"_leto."+zEXPOREXT
 MDT(cDESTINO)
 MDT("abrindo arquivo de origem: "+cTABELAX)
 nConnect := LETO_CONNECT(cSrvAddr)
-altd()
 IF nConnect >= 0
    //DBUseArea( <lNewArea> , <cDriver> , <cName>, <xcAlias> , <lShared> , <lReadOnly>,<cCodePage>,<nConnection> ) -> lSuccess
    dbUseArea(.T.,,cTABELAX,,.T.)

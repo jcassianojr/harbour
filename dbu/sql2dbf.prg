@@ -740,7 +740,6 @@ FUNCTION export2dbf( ODB1, cNEWTABLE, Ntipo )
         // ------------------------------------
 
 
-       //  altd()
          aTMP := geracampodbf( cFieldName, cFieldType, nFieldLength, nFieldDec )
 
 
