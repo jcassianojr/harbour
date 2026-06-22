@@ -56,7 +56,7 @@ lFDB       := .f.
 //usado pelo firebirdcreate
 nPageSize := 1024
 cCharSet := "ASCII"
-nDialect := 1
+nDialect := 3 //deixe com 1 caso de erro criacao com 3
 
 
 pegcfgbanco()
@@ -1066,6 +1066,8 @@ IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. c
    cSERVERX := PADR(cSERVERX,30," ")
    cUSERX := PADR(cUSERX,30," ")
    cPASSX := PADR(cPASSX,30," ")
+   cownerX := PADR(cownerX,30," ")
+   cPASSX := PADR(cPASSX,30," ")
    HB_dispbox(3,22,22,55,B_DOUBLE+" ")
    @ 05,23 SAY "Banco"
    @ 07,23 SAY "Server"         
@@ -1107,11 +1109,11 @@ FUNCTION buscachaves( cNomeBanco )
        cSecaoCofre := Upper( AllTrim( cNomeBanco ) )
 
        // Busca as credenciais de forma segura no config.dat mascarado
-       cSERVERX := padr(LerDoCofre( cSecaoCofre, "Server" ),30)
-       cUSERX   := padr(LerDoCofre( cSecaoCofre, "User" ),30)
-       cPASSX   := padr(LerDoCofre( cSecaoCofre, "Password" ),30)
-       cOwnerX   := padr(LerDoCofre( cSecaoCofre, "Owner" ),30)
-       cportaX   := padr(LerDoCofre( cSecaoCofre, "portax"),30)
+       cSERVERX := padr(LerDoCofre( cSecaoCofre, "Server",cSERVERX ),30)
+       cUSERX   := padr(LerDoCofre( cSecaoCofre, "User",cUSERX ),30)
+       cPASSX   := padr(LerDoCofre( cSecaoCofre, "Password",cPASSX ),30)
+       cOwnerX   := padr(LerDoCofre( cSecaoCofre, "Owner",cOwnerX ),30)
+       cportaX   := padr(LerDoCofre( cSecaoCofre, "portax",cportaX),30)
     ENDIF   
    IF lFDB 
        //cServer := "localhost:"
@@ -1121,18 +1123,19 @@ FUNCTION buscachaves( cNomeBanco )
        //nPageSize := 1024
        //cCharSet := "ASCII"
        //
-       nDialect := 1
        
       IF EMPTY(cSERVERX)
-         cSERVERX :=""
+         cSERVERX :=padr("localhost",30)
       ENDIF
       IF EMPTY(cUSERX)
-         cUSERX   := "SYSDBA"
+         cUSERX   := padr("SYSDBA",30)
       ENDIF
       IF EMPTY(cPASSX)
-         cPASSX   := "masterkey"
+         cPASSX   := padr("masterkey",30)
       ENDIF
-      
+       IF EMPTY(cportaX)
+         cportaX   := padr("3050",30)
+      ENDIF
       
    ENDIF
 
@@ -1906,19 +1909,19 @@ ENDIF
 
 
    IF Empty( cUSERX )
-      cUSERX := LerDoCofre( cSERVERX, "User" )
+      cUSERX := LerDoCofre( cSERVERX, "User" ,cUSERX)
    ENDIF
 
    IF Empty( cPASSX )
-      cPASSX := LerDoCofre( cSERVERX, "Password" )
+      cPASSX := LerDoCofre( cSERVERX, "Password" ,cPASSX)
    ENDIF
    
    IF Empty( cSERVERX )
-      cSERVERX := LerDoCofre( cSERVERX, "Server" )
+      cSERVERX := LerDoCofre( cSERVERX, "Server" ,cSERVERX)
    ENDIF
    
    IF Empty( cPORTAX )
-      cPORTAX := LerDoCofre( cSERVERX, "Porta" )
+      cPORTAX := LerDoCofre( cSERVERX, "Porta" ,cPORTAX)
    ENDIF
    
 

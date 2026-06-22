@@ -113,8 +113,10 @@ LOCAL KEY
 
 nPageSize := 1024
 cCharSet := "ASCII"
-nDialect := 1
-
+nDialect := 3 //deixando com 1 caso de erro criacao com 3
+//Dialeto 1 Focado em compatibilidade retroativa (InterBase 6.0 ou inferior).
+//Dialeto 2 Criado como uma zona de transição para ajudar programadores na migração do Dialeto 1 para o 3.
+//Dialeto 3 É o padrão moderno e o recomendado para todos os novos sistemas.
 
 aAMBIENTE  := SALVAA() 
 cSERVERX   := PADR("localhost",30)  // localhost:cARQUIVO no connection
@@ -188,7 +190,7 @@ RETURN .T.
 // +--------------------------------------------------------------------
 // +    Function firecreate()
 // +--------------------------------------------------------------------
-function firecreate()
+function firecreate(nDIAUSO)
     cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
         {{'Firebird fdb','*.fdb'},{'Firebird gdb','*.gdb'},{'Firebird ib','*.ib'},;
          {'All Files','*.*'}},1)  
@@ -197,7 +199,7 @@ function firecreate()
 
     FBCreateDB( AllTrim(cSERVERX) + ":" + AllTrim(cARQORI), cUSERX, cPASSX, nPageSize, cCharSet, nDialect )
     
-    fireexecuteSQL({"DEFAULT CHARACTER SET WIN1252","COLLATION PT_BR;"})
+   //fireexecuteSQL({"DEFAULT CHARACTER SET WIN1252","COLLATION PT_BR;"})
     
     
     //DEFAULT CHARACTER SET WIN1252

@@ -53,10 +53,14 @@ LOCAL cCaminho := hb_DirBase()
 RETURN cCaminho + "config.dat"
 
 // --- FUNÇÃO PARA DESCRIPTOGRAFAR ---
-FUNCTION LerDoCofre( cSecaoBanco, cChave )
+FUNCTION LerDoCofre( cSecaoBanco, cChave, cPADRAO )
 LOCAL hIni, cBufferHex := "", cBufferBin := ""
 LOCAL hProv := 0, hHash := 0, hKey := 0
 LOCAL nLen, i, cResult := ""
+
+IF VALTYPE(cPADRAO)<>"C"
+   cPADRAO:=""
+ENDIF
 
 // 1. Lê o arquivo estruturado usando a função nativa do Harbour
 IF File( CaminhoArquivoCofre() )
@@ -96,6 +100,9 @@ IF WIN_CryptAcquireContext( @hProv, NIL, NIL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT
         WIN_CryptDestroyHash( hHash )
     ENDIF
     WIN_CryptReleaseContext( hProv, 0 )
+ENDIF
+IF EMPTY(cResult)
+   cResult:=cPADRAO
 ENDIF
 
 RETURN AllTrim( cResult )
