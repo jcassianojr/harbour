@@ -1,0 +1,25 @@
+-m -n -w3 -es2
+
+sefazclass_produto_core.hbc
+hbhpdf.hbc
+hbzebra.hbc
+
+
+-i../include
+-L../lib
+-lsefazclass
+-lhbwin
+-lhbct
+-lhbhpdf
+-lhbzebra
+-lcrypt32
+-lcryptui
+-ladvapi32
+-lwinhttp
+
+
+
+-odemo_danfe_simplificado
+
+demo_danfe_simplificado.prg
+

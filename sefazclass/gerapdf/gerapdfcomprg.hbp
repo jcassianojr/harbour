@@ -57,15 +57,7 @@ d:\develop\harbour\sefazclass\source\ze_sefaz_nferetenvio.prg
 d:\develop\harbour\sefazclass\source\ze_sefaz_nfestatus.prg
 d:\develop\harbour\sefazclass\source\ze_sefazclass.prg
 d:\develop\harbour\sefazclass\source\ze_xmlfunc.prg
-# d:\develop\harbour\sefazclass\source\ze_sefazassina.prg
-# d:\develop\harbour\sefazclass\source\ze_sefazcapicom.prg
-#d:\develop\harbour\sefazclass\source\ze_sefazdacte.prg
-#d:\develop\harbour\sefazclass\source\ze_sefazdadfe.prg
-#d:\develop\harbour\sefazclass\source\ze_sefazdaevento.prg
-#d:\develop\harbour\sefazclass\source\ze_sefazdamdfe.prg
-#d:\develop\harbour\sefazclass\source\ze_sefazdanfce.prg
-#d:\develop\harbour\sefazclass\source\ze_sefazdanfe.prg
-#d:\develop\harbour\sefazclass\source\ze_sefazxmlclass.prg
+d:\develop\harbour\sefazclass\source\ZE_SEFAZ_NFEEVENTODATAENTREGA.prg
 d:\develop\harbour\sefazclass\source\ze_sefaz_setup.prg
 d:\develop\harbour\sefazclass\source\ze_sefaz_pdf_comum.prg
 d:\develop\harbour\sefazclass\source\ze_sefaz_pdf_cte.prg

@@ -1,0 +1,45 @@
+<nfeProc>
+  <NFe>
+    <infNFe Id="NFe35260612123123000112550020000000011000000010">
+      <ide>
+        <mod>55</mod>
+        <serie>002</serie>
+        <nNF>000000001</nNF>
+        <dhEmi>2026-06-08T10:30:00-03:00</dhEmi>
+      </ide>
+      <emit>
+        <CNPJ>12123123000112</CNPJ>
+        <xNome>TECNOSET RIO INFORMATICA</xNome>
+        <IE>123123123123</IE>
+        <enderEmit>
+          <xLgr>Rua Tamoios</xLgr>
+          <nro>100</nro>
+          <xBairro>Centro</xBairro>
+          <xMun>Sao Paulo</xMun>
+          <UF>SP</UF>
+          <CEP>12345123</CEP>
+          <fone>11900000000</fone>
+        </enderEmit>
+      </emit>
+      <dest>
+        <CNPJ>12123123000112</CNPJ>
+        <xNome>TECNOSET RIO INFORMATICA</xNome>
+        <IE>123123123123</IE>
+        <enderDest>
+          <UF>SP</UF>
+        </enderDest>
+      </dest>
+      <total>
+        <ICMSTot>
+          <vNF>299.00</vNF>
+        </ICMSTot>
+      </total>
+    </infNFe>
+  </NFe>
+  <protNFe>
+    <infProt>
+      <nProt>135260000000001</nProt>
+    </infProt>
+  </protNFe>
+</nfeProc>
+
