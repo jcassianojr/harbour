@@ -8,8 +8,10 @@ vb extra
 https://github.com/xxdoc/vbExtra 
 harbour vszakats
 https://github.com/vszakats/hb.git
-sefazsql
+sefazclass
 https://github.com/JoseQuintas/sefazclass
+sefazclass fork
+https://github.com/malcarli1/sefazclass
 vb sqllite
 https://github.com/Kr00l/VBSQLite
 vb newtab
