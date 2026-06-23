@@ -30,4 +30,6 @@ combo printer extend
 https://github.com/fafalone/ucPrinterComboEx
 ocilib 
 https://github.com/vrogier/ocilib
+sqllite4vb
+https://github.com/dzzie/sqllite4vb
 
