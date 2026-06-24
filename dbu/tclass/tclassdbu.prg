@@ -1,6 +1,6 @@
 // +--------------------------------------------------------------------
 // +    Programa  : dbutclass.prg
-// +    Objetivo  : Reimplementacao do dbumix.prg usando TDatabase OOP
+// +    Objetivo  : TDatabase OOP
 // +--------------------------------------------------------------------
 
 #include "simpleio.ch"
@@ -16,10 +16,10 @@
 FUNCTION tclassmenu( cUSOSQL )
       PUBLIC oDb
       aAMBIENTE  := SALVAA() 
-      cSERVERX   := PADR("localhost",30)  // localhost:cARQUIVO no connection
+      cSERVERX   := Space(30) // localhost:cARQUIVO no connection
       cDATABASEX := Space(30) 
-      cUSERX     :=  PADR("SYSDBA",30)
-      cPASSX     := PADR("masterkey",30)
+      cUSERX     := Space(30)
+      cPASSX     := Space(30)
       cTABELAX   := Space(30) 
       cBANCOX    := Space(30) 
       cOWNERX   := Space(30)
