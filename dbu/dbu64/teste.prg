@@ -1,9 +1,3 @@
-//function MYSQLMENU()
-//return 
-
-//function SDDMY()
-//return
-
 function PGSQLMENU()
 return
 
@@ -12,6 +6,9 @@ return
 
 
 function FIREBIRDMENU()
+return
+
+function firecreate()
 return
 
 function SDDFB()
