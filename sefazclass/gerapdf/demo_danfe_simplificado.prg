@@ -1,6 +1,9 @@
 PROCEDURE Main()
 
-   LOCAL cXml, cHtmlFile := "danfe_simplificado.html", cPdfFile := "danfe_simplificado.pdf"
+   LOCAL cXml
+   LOCAL cHtmlFile:= "danfe_simplificado.html"
+   local cPdfFile := "danfe_simplificado.pdf"
+   local cTxtFile := "danfe_simplificado.txt"
    LOCAL cRet
 
    IF hb_ArgC() >= 1
@@ -22,5 +25,8 @@ PROCEDURE Main()
       ? "PDF erro..:", cRet
    ENDIF
 
+   hb_MemoWrit( cTxtFile, SefazDanfeSimplificadoTexto( cXml ) )   
+   
+   ? "Texto gerado:", cTxtFile 
 RETURN
 

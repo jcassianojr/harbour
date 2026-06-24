@@ -9,4 +9,4 @@ del *.xml
 del *.md
 del *.sqlite
 del *.log
-
+del *.csv

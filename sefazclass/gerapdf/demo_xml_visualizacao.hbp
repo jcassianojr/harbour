@@ -1,0 +1,6 @@
+-m -n -w3 -es2
+
+-odemo_xml_visualizacao
+
+demo_xml_visualizacao.prg
+ze_xmlviewer.prg

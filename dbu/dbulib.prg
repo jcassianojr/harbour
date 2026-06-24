@@ -673,9 +673,9 @@ tipodbfesc()
 nORITIPO   := TIPODBF
 cORIDRIVER := RDDNOME(TIPODBF)
 
-//nao mostrar tipo 15 dbf na escolha nao spbrepor na copia passando falso aqui
+//nao mostrar tipo 90 dbf na escolha nao spbrepor na copia passando falso aqui
 tDOC := pegtipodoc(.F.)
-IF nTIPOPR = 2
+IF nTIPOPR = 2 // append from somente nativo anexar
    IF zEXPOREXT = "DBF" .OR. zEXPOREXT = "SDF" .OR. zEXPOREXT = "DLM" .OR. zEXPOREXT = "CSV" .OR. zEXPOREXT = "UNL" .OR. zEXPOREXT = "PSV" .OR. zEXPOREXT = "TSV" .OR. zEXPOREXT = "SSV"
    ELSE
       MDT("Ainda nao disponivel para "+zEXPOREXT)
@@ -694,44 +694,50 @@ else
 endif
 LCOPIANAT := .F.
 IF nTIPOPR = 1
-   LCOPIANAT := MDG("Copia Nativa(SIM) Interna(NAO)")
+   LCOPIANAT := MDG("Copia Nativa(copy to)(SIM) Interna(gerada)(NAO)")
 ENDIF
+IF nTIPOPR = 2 //Extensoes tratadas acima fica so nativa quando o tipo 2 anexar
+   LCOPIANAT := .T.
+ENDIF
+
 
 lCONTINUA:=.T.
 
+
 // formatos nao disponiveis no copy to (nativa)
 //
-IF tDOC = 1   //XML
-   lCONTINUA := .F.
-ENDIF
-IF tDOC = 2   //TAM
-   lCONTINUA := .F.
-ENDIF
-IF tDOC = 3   //TEC
-   lCONTINUA := .F.
-ENDIF
-IF tDOC = 4   //DBE
-   lCONTINUA := .F.
-ENDIF
-IF tDOC = 7   //XML
-   lCONTINUA := .F.
-ENDIF
-IF tDOC = 8   //JSON
-   lCONTINUA := .F.
-ENDIF
-IF tDOC = 13  //SQL
-   lCONTINUA := .F.
-ENDIF
-IF tDOC = 14  //Mar&kdown MD
-   lCONTINUA := .F.
+IF nTIPOPR = 1 .AND. lCOPIANAT //copia nativas
+  IF tDOC = 1   //XML
+     lCONTINUA := .F.
+  ENDIF
+  IF tDOC = 2   //TAM
+     lCONTINUA := .F.
+  ENDIF
+  IF tDOC = 3   //TEC
+     lCONTINUA := .F.
+  ENDIF
+  IF tDOC = 4   //DBE
+     lCONTINUA := .F.
+  ENDIF
+  IF tDOC = 7   //XML
+     lCONTINUA := .F.
+  ENDIF
+  IF tDOC = 8   //JSON
+     lCONTINUA := .F.
+  ENDIF
+  IF tDOC = 13  //SQL
+     lCONTINUA := .F.
+  ENDIF
+  IF tDOC = 14  //Mar&kdown MD
+     lCONTINUA := .F.
+  ENDIF
+  IF .not. lCONTINUA
+    MDT("formato nao disponivel nativa para "+zEXPOREXT)
+    RETURN
+
+  endif
 ENDIF
 
-
-IF lCOPIANAT.AND.lCONTINUA
-ELSE
-   MDT("Ainda nao disponivel nativa para "+zEXPOREXT)
-   RETURN
-ENDIF
 
 
 IF nTIPOPR = 1
@@ -740,7 +746,7 @@ IF nTIPOPR = 1
    ENDIF
 ENDIF
 
-IF nTIPOPR = 1 //Exportar
+IF nTIPOPR = 1 //Exportar copy to ou gerado
    IF LCOPIANAT
       cDESTINO := TROCAEXT(cARQORI,zEXPOREXT)
       MDT("abrindo arquivo de origem: "+cARQORI)
@@ -752,7 +758,7 @@ IF nTIPOPR = 1 //Exportar
       multidocs(nTIPDOC,cARQORI)
    ENDIF
 ENDIF
-IF nTIPOPR = 2 //Importar
+IF nTIPOPR = 2 //Importar append from so nativo
    cARQORI := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*."+zEXPOREXT,1)
     MDT("abrindo arquivo de destino: "+cDESTINO)
     //USE (cDESTINO) ALIAS DESTINO EXCLUSIVE NEW VIA (cORIDRIVER)
