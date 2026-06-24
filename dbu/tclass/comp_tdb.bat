@@ -8,3 +8,4 @@ set PATH=%HB_PATH%bin\mingw\;%HB_MINGW%bin\
 set C_INCLUDE_PATH=c:\harbour\hb3rd\mysql\include;c:\harbour\hb3rd\pgsql\include
 set LIBRARY_PATH=c:\harbour\hb3rd\mysql\lib;c:\harbour\hb3rd\pgsql\lib
 hbmk2.exe Tdbclass.hbp
+rem hbmk2.exe Tdbclass32.hbp
