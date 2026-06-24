@@ -130,7 +130,7 @@ FUNCTION odbccriadatabase()
       IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
          odbcexecsql( "CREATE DATABASE IF NOT EXISTS " + Cnewdatabasex )
       ENDIF
-      IF cTIPOSQL = "SQLITE" .OR. lMDB .OR. lACCDB
+      IF cTIPOSQL = "SQLITE" .OR. lMDB .OR. lACCDB .OR. lFDB
          mdbcria()
       ENDIF
    ENDIF
