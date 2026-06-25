@@ -1,7 +1,18 @@
-#-console
-#-gtwin
-#-inc
-#-warn=yes
+# Pastas de inclusão c
+-cflag=-Ic:\harbour\hb3rd\mysql-x64\include
+-cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
+
+# Pastas de inclusão
+-incpath=c:\harbour\hb3rd\mysql-x64\include
+-incpath=c:\harbour\hb3rd\pgsql-x64\include
+
+# Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
+-Lc:\harbour\hb3rd\mysql-x64\lib
+-Lc:\harbour\hb3rd\pgsql-x64\lib
+
+# Dependências (libs)
+-llibmysql
+-lpq
 
 -gtwvg
 -gui
@@ -117,4 +128,11 @@ letodb.hbc
 \develop\harbour\objmgw\adofix.prg
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
-dumypg.prg
+c:\develop\harbour\dbu\tclass\tclassdbu.prg
+c:\develop\harbour\dbu\tclass\Tdbclass.prg
+c:\develop\harbour\dbu\tclass\cocoa_mysql.c
+c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
+
+
+dumyfb.prg
+#dumypgsdd.prg
