@@ -1,0 +1,30 @@
+# Pastas de inclusão c
+-cflag=-Ic:\harbour\hb3rd\mysql-x64\include
+-cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
+
+# Pastas de inclusão
+-incpath=c:\harbour\hb3rd\mysql-x64\include
+-incpath=c:\harbour\hb3rd\pgsql-x64\include
+
+# Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
+-Lc:\harbour\hb3rd\mysql-x64\lib
+-Lc:\harbour\hb3rd\pgsql-x64\lib
+
+# Dependências (libs)
+-llibmysql
+-lpq
+
+-hblib
+-inc
+
+# Define o diretório de saída baseado na arquitetura e plataforma do compilador atual
+-o./lib/${hb_target}/tdbclasslib
+
+# Define o arquivo .hbx no mesmo local
+-hbx=./lib/${hb_target}/tdbclass.hbx
+
+hbsqlit3.hbc
+
+Tdbclass.prg
+cocoa_mysql.c
+cocoa_pgsql.c

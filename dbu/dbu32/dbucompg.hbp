@@ -186,9 +186,9 @@ hbfbird.hbc
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
 #
-# tbclass
+#       ---   tbclass   ---
 #
+c:\develop\harbour\dbu\dbutclass.prg
 c:\develop\harbour\dbu\tclass\Tdbclass.prg
-c:\develop\harbour\dbu\tclass\tclassdbu.prg
 c:\develop\harbour\dbu\tclass\cocoa_mysql.c
 c:\develop\harbour\dbu\tclass\cocoa_pgsql.c

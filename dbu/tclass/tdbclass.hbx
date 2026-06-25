@@ -1,0 +1,55 @@
+/* --------------------------------------------------------------------
+ * NOTE: You can add manual override which functions to include or
+ *       exclude from automatically generated EXTERNAL/DYNAMIC list.
+ *          Syntax: // HB_FUNC_INCLUDE <func>
+ *                  // HB_FUNC_EXCLUDE <func>
+ */
+
+/* --------------------------------------------------------------------
+ * WARNING: Automatically generated code below. DO NOT EDIT! (except casing)
+ *          Regenerate using hbmk2 '-hbx=' option.
+ */
+
+#ifndef __HBEXTERN_CH__TDBCLASS__
+#define __HBEXTERN_CH__TDBCLASS__
+
+#if defined( __HBEXTREQ__ ) .OR. defined( __HBEXTERN__TDBCLASS__ANNOUNCE )
+   ANNOUNCE __HBEXTERN__TDBCLASS__
+#endif
+
+#if defined( __HBEXTREQ__ ) .OR. defined( __HBEXTERN__TDBCLASS__REQUEST )
+   #command DYNAMIC <fncs,...> => EXTERNAL <fncs>
+#endif
+
+DYNAMIC HBMYSQL_CLOSE
+DYNAMIC HBMYSQL_ERROR
+DYNAMIC HBMYSQL_EXEC
+DYNAMIC HBMYSQL_FIELDS
+DYNAMIC HBMYSQL_LASTID
+DYNAMIC HBMYSQL_OPEN
+DYNAMIC HBMYSQL_QUERY
+DYNAMIC HBMYSQL_TABLES
+DYNAMIC HBPGSQL_CLOSE
+DYNAMIC HBPGSQL_ERROR
+DYNAMIC HBPGSQL_EXEC
+DYNAMIC HBPGSQL_FIELDS
+DYNAMIC HBPGSQL_LASTID
+DYNAMIC HBPGSQL_OPEN
+DYNAMIC HBPGSQL_QUERY
+DYNAMIC HBPGSQL_TABLES
+DYNAMIC TDATABASE
+DYNAMIC TDBFTABLE
+DYNAMIC TFIREBIRD
+DYNAMIC TMARIADB
+DYNAMIC TMONGODB
+DYNAMIC TMYSQL
+DYNAMIC TORACLE
+DYNAMIC TPOSTGRESQL
+DYNAMIC TSQLITE
+DYNAMIC TSQLSERVER
+
+#if defined( __HBEXTREQ__ ) .OR. defined( __HBEXTERN__TDBCLASS__REQUEST )
+   #uncommand DYNAMIC <fncs,...> => EXTERNAL <fncs>
+#endif
+
+#endif

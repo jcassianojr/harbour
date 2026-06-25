@@ -131,7 +131,10 @@ letodb.hbc
 dumypg.prg
 #fbird_wrappers.prg
 
-c:\develop\harbour\dbu\tclass\tclassdbu.prg
+#
+#       ---   tbclass   ---
+#
+c:\develop\harbour\dbu\dbutclass.prg
 c:\develop\harbour\dbu\tclass\Tdbclass.prg
 c:\develop\harbour\dbu\tclass\cocoa_mysql.c
 c:\develop\harbour\dbu\tclass\cocoa_pgsql.c

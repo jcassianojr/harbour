@@ -117,3 +117,11 @@ letodb.hbc
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
 c:\develop\harbour\dbu\dbu64\dumyfb.prg
+
+#
+#       ---   tbclass   ---
+#
+c:\develop\harbour\dbu\dbutclass.prg
+c:\develop\harbour\dbu\tclass\Tdbclass.prg
+c:\develop\harbour\dbu\tclass\cocoa_mysql.c
+c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
