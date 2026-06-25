@@ -43,18 +43,15 @@ hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
 #
-#ads
+#  adt adi adm ads
 #
 rddads.hbc
 #
-#dbf com dbm
+#  dbf com dbm
 #
 rddbm.hbc
-
-#teste com direto abaixo
-#rddado.hbc
 #
-#nativas sqlite,libmysql,libpg,odbc
+#  nativas sqlite,libmysql,libpg,odbc
 #
 hbsqlit3.hbc
 hbmysql.hbc
@@ -68,64 +65,102 @@ sddodbc.hbc
 sddmy.hbc
 sddpg.hbc
 sddsqlt3.hbc
-letodb.hbc
-#sddoci.hbc
-hbfbird.hbc
 sddfb.hbc
+# 
+# leto
+#
+letodb.hbc
+# 
+# firebird
+#
+hbfbird.hbc
+
+#
+# dbu
+#
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
-\develop\harbour\dbu\dbuxml.prg
 \develop\harbour\dbu\dbucopy.prg
-\develop\harbour\dbu\dbudoc.prg  
 \develop\harbour\dbu\dbuedi.prg
 \develop\harbour\dbu\dbuedit.prg
-#\develop\harbour\dbu\dbuger.prg
 \develop\harbour\dbu\dbuindx.prg
 \develop\harbour\dbu\dbulib.prg 
 \develop\harbour\dbu\dbustru.prg
 \develop\harbour\dbu\dbuutil.prg 
 \develop\harbour\dbu\dbuver.prg
 \develop\harbour\dbu\dbuview.prg
-\develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg
+
+#
+# exportacao formatos
+#
+
+\develop\harbour\dbu\dbuXLSclass.prg
+\develop\harbour\dbu\XLSXClass.prg
+\develop\harbour\dbu\dbudoc.prg  
+\develop\harbour\dbu\dbuxml.prg
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbu2md.prg
+
+#
+# firebird
+#
+
 \develop\harbour\dbu\dbufire.prg
+
+#
+# paradox
+#
+
 \develop\harbour\dbu\dbUparadox.prg
+
 #
 # sqlite
 #
+
 \develop\harbour\dbu\sql2dbf.prg 
+
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
+
 \develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
+
 #
 # mysql libmysql
 #
+
 \develop\harbour\dbu\dbumy.prg  
 \develop\harbour\dbu\dbumyexp.prg 
 \develop\harbour\dbu\mysqlrdd.prg 
+
 #
 # postgresql libpg
 #
+
 \develop\harbour\dbu\dbupg.prg
 \develop\harbour\dbu\dbupgexp
 \develop\harbour\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
+# odbc
 #
 \develop\harbour\dbu\dbuodbc.prg 
+#
+# adox
 #
 \develop\harbour\dbu\adoxb.prg   
 \develop\harbour\dbu\dbuadox.prg 
 #
+#leto
+#
 \develop\harbour\dbu\dbuleto.prg 
+#
+# funcoes de apoio
 #
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  
@@ -150,8 +185,10 @@ sddfb.hbc
 \develop\harbour\objmgw\adofix.prg
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
-
-
+#
+# tbclass
+#
 c:\develop\harbour\dbu\tclass\Tdbclass.prg
+c:\develop\harbour\dbu\tclass\tclassdbu.prg
 c:\develop\harbour\dbu\tclass\cocoa_mysql.c
 c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
