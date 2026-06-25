@@ -30,15 +30,38 @@ FUNCTION tclassmenu( cUSOSQL )
       lACCDB     := .F. 
       lFDB       := .T.
 
+   DO CASE
+      CASE cTIPOSQL == "MYSQL"
+      CASE cTIPOSQL == "MARIADB"
+      CASE cTIPOSQL == "SQLITE"
+      CASE cTIPOSQL == "PGSQL"
+      CASE cTIPOSQL == "MSSQL"
+      CASE lFDB //Firebird 
+      CASE cTIPOSQL == "ORACLE"
+       //CASE cTIPOSQL == "MONGODB"   
+       //   oDb := TMongoDB():New()
+       OTHERWISE
+         ALERT("Nao suportado")
+         RETURN
+      // Adicionar outros conforme classes implementadas
+   ENDCASE
+
+
+
+
       cOLDRDD     := RDDSETDEFAULT("") 
       nOLDTIPORDD := TIPODBF 
 
 
       cTIPOSQL := cUSOSQL
+
+
+
    
     // Busca as credenciais e o caminho do banco dinamicamente via cofre do sistema
      pegcfgbanco() 
 
+  
    
 
    WHILE .T.
@@ -96,7 +119,7 @@ FUNCTION tclass_open()
           oDb:cPassword :=   cPASSX
           oDb:nPort     :=  VAL(cPORTAX)
       CASE cTIPOSQL == "MSSQL"
-           oDb := TSQLServerL():New()
+           oDb := TSQLServer():New()
            oDb:cServer   := cSERVERX
           oDb:cDatabase :=  cDATABASEX 
           oDb:cUser     :=   cUSERX
@@ -118,7 +141,8 @@ FUNCTION tclass_open()
           oDb:nPort     :=  VAL(cPORTAX)    
        //CASE cTIPOSQL == "MONGODB"   
        //   oDb := TMongoDB():New()
-              
+       OTHERWISE
+         ALERT("Nao suportado")
  
       // Adicionar outros conforme classes implementadas
    ENDCASE
@@ -136,27 +160,15 @@ FUNCTION tclass_open()
 // +    Executa comandos SQL contidos em um arquivo de texto.
 // +--------------------------------------------------------------------
 FUNCTION tclass_exec_script( cArquivoSQL )
-   LOCAL nHandle, cLinha, cScript := ""
+LOCAL cCOMANDO := ""
+LOCAL cARQIMP  := ""
+cARQIMP := win_GetOPENFileName(,"Arquivos SQL",HB_CWD(),"Arquivos SQL","*.SQL",1)
 
-   IF !File( cArquivoSQL )
-      Alert( "Arquivo não encontrado: " + cArquivoSQL )
-      RETURN .F.
-   ENDIF
-
-   nHandle := FOpen( cArquivoSQL, 0 ) // Abre em modo leitura
-   tclass_open()
-
-   WHILE !FEOF( nHandle )
-      cLinha := FReadLn( nHandle ) // Lê linha a linha
-      IF !Empty( AllTrim( cLinha ) )
-         // Executa cada linha como um comando individual
-         oDb:Execute( cLinha )
-      ENDIF
-   ENDDO
-
-   FClose( nHandle )
-   tclass_close()
-   MDT( "Script executado com sucesso!" )
+IF FILE(cARQIMP)
+   //nao pode ser linha a linha pois um comando pode estar em mais de uma linha
+   cCOMANDO:=MEMOREAD(cARQIMP)
+   tclass_exec_script(cCOMANDO)
+endif
 RETURN .T.
 
 
@@ -445,13 +457,20 @@ ENDIF
       FOR i := 1 TO nFIM
          eVALOR := oDb:FieldGet(i)
          
-         // Tratamento de Nulos
-         IF eVALOR == NIL
-            IF aSTRU[i, DBS_TYPE] == "C"; eVALOR := Space(aSTRU[i, DBS_LEN]); 
-            ELSEIF aSTRU[i, DBS_TYPE] == "N"; eVALOR := 0; 
-            ELSEIF aSTRU[i, DBS_TYPE] == "D"; eVALOR := CToD(""); 
-            ELSEIF aSTRU[i, DBS_TYPE] == "L"; eVALOR := .F.; ENDIF
-         ENDIF
+            // CORREÇÃO: Tratamento preventivo de valores Nulos (NULL) vindos do Firebird
+    IF eVALOR == NIL
+      IF aSTRU[i, DBS_TYPE] == "C"
+         eVALOR := Space( aSTRU[i, DBS_LEN] )
+      ELSEIF aSTRU[i, DBS_TYPE] == "N"
+         eVALOR := 0
+      ELSEIF aSTRU[i, DBS_TYPE] == "D"
+         eVALOR := CToD("")
+      ELSEIF aSTRU[i, DBS_TYPE] == "L"
+         eVALOR := .F.
+      ELSEIF aSTRU[i, DBS_TYPE] == "M"
+         eVALOR := ""
+      ENDIF
+   ENDIF
 
          // Tratamento de String/UTF8
          IF ValType( eVALOR ) == "C"

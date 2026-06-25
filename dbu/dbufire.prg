@@ -155,6 +155,7 @@ WHILE .T.
    OPCAO( 8,24,"&Apagar Tabela             ",65)   // A 
    OPCAO( 9,24,"Exportar &Formatos         ",70)   // F 
    OPCAO(10,24,"&Versao Info               ",86)   // V 
+   OPCAO(11,24,"Executar arquivo &SQL      ",83)   //S 83
    
    KEY := menu(1,0) 
    DO CASE
@@ -172,6 +173,9 @@ WHILE .T.
       fireexpdbf( 2 )
    CASE KEY = 7
       fireverinfo()
+   CASE KEY = 8
+      fireExecArqSql()
+         
        
    OTHERWISE
       EXIT 
@@ -525,6 +529,28 @@ ENDIF
 oServer:Destroy()
 RETURN .T.
 
+
+ *+--------------------------------------------------------------------
+*+
+*+    Function fireExecArqSql()
+*+
+*+--------------------------------------------------------------------
+*+
+function fireExecArqSql()
+
+LOCAL cCOMANDO := ""
+LOCAL cARQIMP  := ""
+
+cARQIMP := win_GetOPENFileName(,"Arquivos SQL",HB_CWD(),"Arquivos SQL","*.SQL",1)
+//cARQORI := OPENTIPOARQ()
+
+IF FILE(cARQIMP)
+   //nao pode ser linha a linha pois um comando pode estar em mais de uma linha
+   cCOMANDO:=MEMOREAD(cARQIMP)
+   oServer := fireconnect()
+   fireexecuteSQL(cCOMANDO)
+   oServer:Destroy()
+endif
 
 FUNCTION fireexecuteSQL( eCOMANDO, lTRANS, lMES )
 

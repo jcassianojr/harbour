@@ -78,13 +78,14 @@ FUNCTION mysqlmenu()
    WHILE .T.
       hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
       @ 03, 24 SAY cDATABASEX
-      OPCAO( 4, 24, "&Criar database            ", 67 )   // C
-      OPCAO( 5, 24, "&Database Selecionar       ", 68 )   // D
-      OPCAO( 6, 24, "&Importar  DBF             ", 73 )   // I
-      OPCAO( 7, 24, "&Tabelas                   ", 84 )   // T
-      OPCAO( 8, 24, "&Exportar  DBF             ", 69 )   // E
-      OPCAO( 9, 24, "&Apagar Tabela             ", 65 )   // A
-      OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F
+      OPCAO(  4, 24, "&Criar database            ", 67 )   // C
+      OPCAO(  5, 24, "&Database Selecionar       ", 68 )   // D
+      OPCAO(  6, 24, "&Importar  DBF             ", 73 )   // I
+      OPCAO(  7, 24, "&Tabelas                   ", 84 )   // T
+      OPCAO(  8, 24, "&Exportar  DBF             ", 69 )   // E
+      OPCAO(  9, 24, "&Apagar Tabela             ", 65 )   // A
+      OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F 
+      OPCAO( 11, 24, "Executar arquivo &SQL      ", 83)   //S 83
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -101,6 +102,8 @@ FUNCTION mysqlmenu()
          MYDELTABLE()
       CASE KEY = 7
          myexpformat()
+      CASE KEY = 8
+        myExecArqSql()   
       OTHERWISE
          RETURN
       ENDCASE
@@ -242,6 +245,8 @@ FUNCTION mysqlnewdatabase()
    ENDIF
 
    RETURN .T.
+   
+   
 
 
 // +--------------------------------------------------------------------
@@ -440,6 +445,26 @@ FUNCTION dbf2mysql()
 
    RETURN .T.
 
+ *+--------------------------------------------------------------------
+*+
+*+    Function myExecArqSql()
+*+
+*+--------------------------------------------------------------------
+*+
+function myExecArqSql()
+
+LOCAL cCOMANDO := ""
+LOCAL cARQIMP  := ""
+
+cARQIMP := win_GetOPENFileName(,"Arquivos SQL",HB_CWD(),"Arquivos SQL","*.SQL",1)
+//cARQORI := OPENTIPOARQ()
+
+IF FILE(cARQIMP)
+   //nao pode ser linha a linha pois um comando pode estar em mais de uma linha
+   cCOMANDO:=MEMOREAD(cARQIMP)
+   oServer:Query(cCOMANDO)
+endif
+return .t.
 
 
 

@@ -253,34 +253,14 @@ return .t.
 function ExecArqSql
 
 LOCAL cCOMANDO := ""
-LOCAL aCOMANDO := {}
 LOCAL cARQIMP  := ""
-LOCAL nFILEUSO
-LOCAL cDELIM
-LOCAL cLINHA
 
 cARQIMP := win_GetOPENFileName(,"Arquivos SQL",HB_CWD(),"Arquivos SQL","*.SQL",1)
-cARQORI := OPENTIPOARQ()
+//cARQORI := OPENTIPOARQ()
 
 IF FILE(cARQIMP)
-   nLASTREC := FLINECOUNT(cARQIMP)
-   zei_fort(nLASTREC,,,0)
-
-   cDELIM   := FDELIM(cARQIMP,1024)   //acha o delimitador chr(13)+chr(10) dos ou chr(10) linux usado abaixo no freadline
-   nFILEuso := FOPEN(cARQIMP)   //abre o arquivo
-   WHILE .T.
-      cLINHA := FREADLINE(nFILEuso,1024,.T.,cDELIM)   //FREADLINE (handle, line_len,lremchrexp,cDELI)
-
-      AADD(aCOMANDO,cLINHA)
-
-      IF cLINHA = '__FINAL__'   //freadline retorna __FINAL__   quando nao e mais linhas
-         EXIT
-      ENDIF
-
-      zei_fort(nLASTREC,,,1)
-
-   enddo
-   fclose(nFILEuso)   //fecha o arquivo
+   //nao pode ser linha a linha pois um comando pode estar em mais de uma linha
+   cCOMANDO:=MEMOREAD(cARQIMP)
    executacmd(cARQORI,aCOMANDO)
 endif
 return .t.
@@ -288,15 +268,9 @@ return .t.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function mdbdatabases()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 function mdbdatabases()
 
@@ -314,15 +288,9 @@ RETURN aResult
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function mdbtabela()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 function mdbtabela(cMDBARQ)
 
@@ -349,15 +317,9 @@ RETURN aResult
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function MDBEXP()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 function MDBEXP(nTIPO)
 
@@ -499,15 +461,9 @@ return nil
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function sqltodbfstru()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 function sqltodbfstru(aStruct)
 

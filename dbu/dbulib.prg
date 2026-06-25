@@ -172,6 +172,7 @@ WHILE .T.
    OPCAO(6,24,"&RDD SQLMIX          ",82)   //R
    OPCAO(7,24,"&ODBC                ",79)   //D
    OPCAO(8,24,"ADO&X ODBC           ",88)   //X
+   OPCAO(9,24,"&Tclass              ",84)   //t
    KEY := menu(1,0)
    DO CASE
    CASE KEY = 1 .AND. cTIPOSQL = "PGSQL"
@@ -197,6 +198,8 @@ WHILE .T.
       //ADOX
    CASE KEY = 5
       adoxmenu(cTIPOSQL)
+  CASE KEY = 6
+      tclassmenu(cTIPOSQL)   
    OTHERWISE
       RETURN
    ENDCASE

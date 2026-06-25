@@ -14,10 +14,11 @@
 -lpq
 
 -hblib
+-inc
 
--olib32/tclass
+-otdbclass
 
--hbx=lib32/tclass.hbx
+-hbx=tdbclass.hbx
 
 hbsqlit3.hbc
 

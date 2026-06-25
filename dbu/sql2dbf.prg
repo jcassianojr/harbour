@@ -63,6 +63,7 @@ FUNCTION sqlitemenu()
       OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // f
 	  OPCAO( 11, 24, "Mar&kdown documentacao     ", 75)   //K
       OPCAO( 12, 24, "C&hecar integridade        ", 72)   //h
+      OPCAO( 13, 24, "Executar arquivo &SQL      ",83)   //S 83
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -111,6 +112,8 @@ FUNCTION sqlitemenu()
          IF selectdb()
             check_sqlite( odb )
          ENDIF      
+        CASE KEY = 10
+           SqliteArqSql()  
             	  
       OTHERWISE
          RETURN
@@ -122,6 +125,28 @@ FUNCTION sqlitemenu()
 
    RETURN NIL
 
+
+// +--------------------------------------------------------------------
+// +
+// +    Function SqliteArqSql()
+// +
+// +--------------------------------------------------------------------
+// +
+
+function SqliteArqSql()
+
+LOCAL cCOMANDO := ""
+LOCAL cARQIMP  := ""
+
+cARQIMP := win_GetOPENFileName(,"Arquivos SQL",HB_CWD(),"Arquivos SQL","*.SQL",1)
+//cARQORI := OPENTIPOARQ()
+
+IF FILE(cARQIMP)
+   //nao pode ser linha a linha pois um comando pode estar em mais de uma linha
+   cCOMANDO:=MEMOREAD(cARQIMP)
+   sqlite3_exec( db, cCOMANDO ) 
+endif
+return .t.
 
 
 // +--------------------------------------------------------------------
