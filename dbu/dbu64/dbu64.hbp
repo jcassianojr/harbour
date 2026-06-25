@@ -128,8 +128,8 @@ letodb.hbc
 \develop\harbour\objmgw\adofix.prg
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
-teste.prg
-
+dumypg.prg
+dumyfb.prg
 c:\develop\harbour\dbu\tclass\Tdbclass.prg
 c:\develop\harbour\dbu\tclass\cocoa_mysql.c
 c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
