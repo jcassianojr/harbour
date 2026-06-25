@@ -129,6 +129,7 @@ letodb.hbc
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
 dumypg.prg
+#fbird_wrappers.prg
 
 c:\develop\harbour\dbu\tclass\tclassdbu.prg
 c:\develop\harbour\dbu\tclass\Tdbclass.prg
