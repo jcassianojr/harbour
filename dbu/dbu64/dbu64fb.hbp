@@ -45,7 +45,7 @@ sddmy.hbc
 #sddpg.hbc
 sddsqlt3.hbc
 #sddoci.hbc
-sddfb.hbc
+#sddfb.hbc
 hbfbird.hbc
 
 letodb.hbc
@@ -129,7 +129,8 @@ letodb.hbc
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
 dumypg.prg
-#fbird_wrappers.prg
+dumyfbsdd.prg
+fbird_wrappers.prg
 
 #
 #       ---   tbclass   ---
