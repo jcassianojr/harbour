@@ -980,6 +980,9 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
       mSql += AllTrim( mFldnm ) + " "
 
       DO CASE
+        CASE (mFldNm == "SR_DELETED") .AND. ( cTIPOSQL == "FIREBIRD" )      
+            MSql += " SR_DELETED CHAR(1) "
+      
          // Campo Auto-incremento / SR_RECNO unificado para MySQL/MariaDB
          CASE (mFldType = "+" .OR. mFldNm == "SR_RECNO") .AND. ( cTIPOSQL $ "MYSQL|MYSQL64|MARIADB" )   
             MSql += " INT NOT NULL DEFAULT 0 "
