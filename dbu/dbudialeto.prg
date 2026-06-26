@@ -502,6 +502,63 @@ return cCOMANDO
 */
 
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +    Function Dialeto_concat()
+// +
+// +--------------------------------------------------------------------
+// +   
+
+Function Dialeto_concat()
+LOCAL cCOMANDO
+cCOMANDO:=""
+// +  || (MySQL:
+  DO CASE
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+           cCOMANDO =""
+      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+           cCOMANDO =""
+      CASE cTIPOSQL="FIREBIRD"
+           cCOMANDO =""
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0
+           cCOMANDO =""
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+           cCOMANDO =""
+       CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
+           cCOMANDO =""     
+   ENDCASE
+return cCOMANDO
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +    Function Dialeto_condicionais()
+// +
+// +--------------------------------------------------------------------
+// +   
+
+Function Dialeto_condicionais()
+LOCAL cCOMANDO
+cCOMANDO:=""
+// .not. .or. .AND. //harbour usa ponto(.)
+  DO CASE
+      CASE cTIPOSQL="MSSQL" .OR. cTIPOSQL="SQLSERVER"
+           cCOMANDO =""
+      CASE cTIPOSQL="MYSQL" .OR. cTIPOSQL="MYSQL64"  .OR. cTIPOSQL="MARIADB"
+           cCOMANDO =""
+      CASE cTIPOSQL="FIREBIRD"
+           cCOMANDO =""
+      CASE cTIPOSQL="SQLITE" .or. at(".SQLITE",upper(cdatabaseX))>0
+           cCOMANDO =""
+      CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
+           cCOMANDO =""
+       CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
+           cCOMANDO =""     
+   ENDCASE
+return cCOMANDO
+
+
 
 
 // +--------------------------------------------------------------------
@@ -1601,6 +1658,16 @@ FUNCTION GERACAMPOADT(cFieldName, cSqlType, nFieldLength, nFieldDec)
 
    // 2. CASES ESPECÍFICOS: Avaliação de tipos sem restrição por parênteses
    DO CASE
+   
+     // Ajuste para sub-tipagem SQLIMIX
+     CASE cType == "I" .AND. cSUBTIPO == "N"
+            cFieldType := 'N' 
+
+    //ja esta tipado C,D,N,M,L
+    CASE LEN(cTYPE) =1 
+        IF cType == "C" .AND. (nFieldLength=0 .OR. nFieldLength > 250)
+           nFieldLength := 250
+        ENDIF 
       
       // Numéricos Inteiros (Mapeados para tamanhos compatíveis na ADT)
       CASE cType == "TINYINT"
