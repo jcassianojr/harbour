@@ -202,6 +202,20 @@ FUNCTION FIXHORA( cCampo )
    RETURN cCAMPO
 
 
+FUNCTION FIXESCAPECODES( cText )
+   LOCAL c
+
+   IF cText == NIL .OR. ValType( cText ) != "C"
+      RETURN ""
+   ENDIF
+
+   c := cText
+   c := StrTran( c, "\", "\\" )
+   c := StrTran( c, '"', '\"' )
+   c := StrTran( c, Chr(13), '\r' )
+   c := StrTran( c, Chr(10), '\n' )
+   c := StrTran( c, Chr(9), '\t' )
+RETURN c
 
 // +--------------------------------------------------------------------
 // +

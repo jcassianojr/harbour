@@ -21,6 +21,123 @@
 #include "hbwin.ch"
 
 
+FUNCTION ConverterEmptyParaSQL( cSQL )
+   LOCAL nPos, nInicio, nFim, cCampo, cSubst, lNot, nTamRemover
+   
+   // Loop para processar todas as ocorrências
+   DO WHILE (At("EMPTY(", Upper(cSQL)) > 0)
+      nPos := At("EMPTY(", Upper(cSQL))
+      
+      // Analisa o contexto anterior para ver se é NOT ou !
+      lNot := DetectarNegacao(cSQL, nPos)
+      
+      // Identifica o conteúdo dentro dos parênteses
+      nInicio := At("(", SubStr(cSQL, nPos)) + nPos - 1
+      nFim    := At(")", SubStr(cSQL, nInicio))
+      
+      IF nFim > 0
+         nFim += nInicio - 1
+         cCampo := AllTrim(SubStr(cSQL, nInicio + 1, nFim - nInicio - 1))
+         
+         // Define quanto remover da string original
+         // Se for NOT, removemos o "NOT" e o "EMPTY("
+         // Se for "!", removemos o "!" e o "EMPTY("
+         IF lNot
+            // Busca o início real para remover o NOT ou o !
+            // Se tem "NOT", remove 3 chars, se "!", remove 1
+            nTamRemover := IIF(At("NOT", Upper(SubStr(cSQL, Max(1, nPos-4), 4))) > 0, 3, 1)
+            cSQL := Stuff(cSQL, nPos - nTamRemover, (nFim - (nPos - nTamRemover) + 1), "")
+         ELSE
+            cSQL := Stuff(cSQL, nPos, (nFim - nPos + 1), "")
+         ENDIF
+         
+         // Insere o fragmento SQL no lugar
+         cSubst := GerarFragmentoSQL(cCampo, lNot)
+         cSQL := SubStr(cSQL, 1, nPos - 1 - IIF(lNot, nTamRemover, 0)) + cSubst + SubStr(cSQL, nPos - IIF(lNot, nTamRemover, 0))
+         
+      ELSE
+         EXIT 
+      ENDIF
+   ENDDO
+RETURN cSQL
+
+FUNCTION DetectarNegacao( cSQL, nPos )
+   LOCAL cPrecedente := ""
+   LOCAL lNot := .F.
+   
+   // Verifica até 10 caracteres antes de EMPTY(
+   IF nPos > 5
+      cPrecedente := AllTrim(Upper(SubStr(cSQL, nPos - 5, 5)))
+   ELSE
+      cPrecedente := AllTrim(Upper(SubStr(cSQL, 1, nPos - 1)))
+   ENDIF
+
+   // Checa se termina com "!" ou "NOT"
+   IF Right(cPrecedente, 1) == "!" .OR. Right(cPrecedente, 3) == "NOT"
+      lNot := .T.
+   ENDIF
+   
+RETURN lNot
+
+FUNCTION GerarFragmentoSQL(cCampo, lNot)
+   LOCAL cRet := ""
+   
+   // A lógica de "Vazio" varia conforme o dialeto:
+   // - Alguns tratam '' como NULL (Oracle)
+   // - Alguns exigem a verificação explícita de string vazia
+   
+   IF lNot
+      // Lógica para !EMPTY(campo) -> IS NOT NULL
+      DO CASE
+         CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
+            cRet := " ( " + cCampo + " IS NOT NULL AND " + cCampo + " <> '' ) "
+            
+         CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "POSTGRESQL"
+            cRet := " ( " + cCampo + " IS NOT NULL AND " + cCampo + " <> '' ) "
+            
+         CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MARIADB"
+            cRet := " ( " + cCampo + " IS NOT NULL AND " + cCampo + " <> '' ) "
+            
+         CASE cTIPOSQL == "SQLITE"
+            cRet := " ( " + cCampo + " IS NOT NULL AND " + cCampo + " <> '' ) "
+            
+         CASE cTIPOSQL == "FIREBIRD"
+            cRet := " ( " + cCampo + " IS NOT NULL AND " + cCampo + " <> '' ) "
+            
+         CASE cTIPOSQL == "ORACLE"
+            cRet := " ( " + cCampo + " IS NOT NULL ) "
+            
+         OTHERWISE // Padrão ANSI (Compatível com a maioria)
+            cRet := " ( " + cCampo + " IS NOT NULL AND " + cCampo + " <> '' ) "
+      ENDCASE
+   ELSE
+      // Lógica para EMPTY(campo) -> IS NULL
+      DO CASE
+         CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
+            cRet := " ( " + cCampo + " IS NULL OR " + cCampo + " = '' ) "
+            
+         CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "POSTGRESQL"
+            cRet := " ( " + cCampo + " IS NULL OR " + cCampo + " = '' ) "
+            
+         CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MARIADB"
+            cRet := " ( " + cCampo + " IS NULL OR " + cCampo + " = '' ) "
+            
+         CASE cTIPOSQL == "SQLITE"
+            cRet := " ( " + cCampo + " IS NULL OR " + cCampo + " = '' ) "
+            
+         CASE cTIPOSQL == "FIREBIRD"
+            // Firebird tem uma particularidade: '' às vezes é tratado como NULL
+            cRet := " ( " + cCampo + " IS NULL OR " + cCampo + " = '' ) "
+            
+         CASE cTIPOSQL == "ORACLE"
+            cRet := " ( " + cCampo + " IS NULL ) "
+            
+         OTHERWISE // Padrão ANSI
+            cRet := " ( " + cCampo + " IS NULL OR " + cCampo + " = '' ) "
+      ENDCASE
+   ENDIF
+   
+RETURN cRet
 
 FUNCTION IsDriverInstalled( cDriverName )
    LOCAL lRet     := .F.
@@ -546,6 +663,7 @@ return cSQLCNV
 FUNCTION Dialeto_SQL( cSQLCNV )
    //Removendo os pontos do harbour
    cSQLCNV := Dialeto_condicionais(cSQLCNV)
+   cSQLCNV := ConverterEmptyParaSQL( cSQLCNV )
    
    DO CASE
    CASE cTIPOSQL = "SQLITE"
