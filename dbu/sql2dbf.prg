@@ -1,10 +1,10 @@
 // +--------------------------------------------------------------------
 // +
-// +    Programa  : sql2dbf.prg
+// +    Programa  : sqlite.prg
 // +
-// +     Sistema: DBU
+// +     Sistema: DBU - sqlite nativo hbsqlit3
 // +
-// +     Linguagem: HarbourFF
+// +     Linguagem: Harbour
 // +
 // +     Autor: jcassiano
 // +
@@ -81,7 +81,8 @@ FUNCTION sqlitemenu()
             cORIDRIVER := RDDNOME( TIPODBF )
             cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
             IF File( cARQORI )
-               export2sql( odb, cARQORI )
+               lincdados:=mdg("Incluir Dados")
+               export2sql( odb, cARQORI,lincdados )
                RDDNOME( nOLDTIPO )   // retorna tipo anterior
             ENDIF
          ENDIF
@@ -875,7 +876,7 @@ FUNCTION miscsql( dbo1, qstr )
 // +
 // +
 // +
-FUNCTION export2sql( odb, cDBFFILE )
+FUNCTION export2sql( odb, cDBFFILE, lincdados )
 
    LOCAL aStruct := {}, i, j, mFldNm, mFldtype, mFldLen, mFldDec, mSql
    LOCAL totrec, nrec, nIndexes
@@ -888,6 +889,10 @@ FUNCTION export2sql( odb, cDBFFILE )
    IF ! File( cDBFFILE )
       RETURN NIL
    ENDIF
+   
+   if valtype(lincdados)<>"L"
+      lincdados:=.T.
+   endif
 
 
    cTablename := TIRAEXT( cDBFFILE )
@@ -995,35 +1000,36 @@ FUNCTION export2sql( odb, cDBFFILE )
       
    NEXT j
 
+   IF lincdados
+       nLASTREC := RecCount()  // NetRegCount(cOLDDBF)
+       zei_fort( nLASTREC,,, 0 )
+       dbGoTop()
+       IF !miscsql( oDB, 'begin transaction' )
+          RETURN NIL
+       ENDIF
+       DO WHILE !Eof()
+          zei_fort( nLASTREC,,, 1 )
 
-   nLASTREC := RecCount()  // NetRegCount(cOLDDBF)
-   zei_fort( nLASTREC,,, 0 )
-   dbGoTop()
-   IF !miscsql( oDB, 'begin transaction' )
-      RETURN NIL
-   ENDIF
-   DO WHILE !Eof()
-      zei_fort( nLASTREC,,, 1 )
-
-      mSql := "INSERT INTO " + cTablename + " VALUES "
-      msql := msql + "("
-      FOR i := 1 TO Len( aStruct )
-         mFldNm := aStruct[ i, DBS_NAME ]
-         IF i > 1
-            mSql += ", "
-         ENDIF
-         mSql += c2sql( &mFldNm )
-      NEXT
-      mSql += ")"
-      IF ! miscsql( oDB, mSql )
-         alertx( "Problem in Query: " + mSql )
-         RETURN NIL
-      ENDIF
-      dbSkip()
-   ENDDO
-   IF !miscsql( oDB, 'end transaction' )
-      RETURN NIL
-   ENDIF
+          mSql := "INSERT INTO " + cTablename + " VALUES "
+          msql := msql + "("
+          FOR i := 1 TO Len( aStruct )
+             mFldNm := aStruct[ i, DBS_NAME ]
+             IF i > 1
+                mSql += ", "
+             ENDIF
+             mSql += c2sql( &mFldNm )
+          NEXT
+          mSql += ")"
+          IF ! miscsql( oDB, mSql )
+             alertx( "Problem in Query: " + mSql )
+             RETURN NIL
+          ENDIF
+          dbSkip()
+       ENDDO
+       IF !miscsql( oDB, 'end transaction' )
+          RETURN NIL
+       ENDIF
+   endif   
    dbCloseAll()
 
    RETURN NIL
