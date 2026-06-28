@@ -130,7 +130,7 @@ letodb.hbc
 \develop\harbour\objmgw\modeseguranca.prg
 dumypg.prg
 dumyfbsdd.prg
-fbird_wrappers.prg
+#fbird_wrappers.prg
 
 #
 #       ---   tbclass   ---
