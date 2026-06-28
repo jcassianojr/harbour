@@ -18,6 +18,7 @@
 
 
 #include "HBGTINFO.CH"
+#include "hbgtwvg.ch"
 REQUEST HB_GT_WVG_DEFAULT
 REQUEST HB_LANG_PT
 REQUEST HB_CODEPAGE_PTISO
@@ -25,7 +26,8 @@ REQUEST DBFCDX
 
 #include "INKEY.CH"
 #include "tshead.ch"
-
+#include "try.ch"
+//rem #include "wvg.ch"
 
 // +--------------------------------------------------------------------
 // +
@@ -40,7 +42,7 @@ REQUEST DBFCDX
 // +
 // +
 FUNCTION main
-
+   LOCAL oMenu, oSubMenu, oItem
    PUBLIC BUSCA
 
    MVINFOConfTela( "Recursos - Modulo de Utilidades" )
@@ -143,10 +145,68 @@ FUNCTION main
 
 
 
+   /*
+// Cria a barra de menu
+    oMenu := WvgMenu():New( , , .T. ) // .T. indica que é uma barra de menu
+
+    // Cria um submenu
+    oSubMenu := WvgMenu():New( oMenu )
+    oSubMenu:AddItem( "Opção 1", {|| QOut("Você escolheu a Opção 1") } )
+    oSubMenu:AddItem( "Opção 2", {|| QOut("Você escolheu a Opção 2") } )
+    oSubMenu:AddItem( "-", NIL ) // Linha separadora
+    oSubMenu:AddItem( "Sair", {|| Quit() } )
+
+    // Adiciona o submenu ao menu principal
+    oMenu:AddItem( "Arquivo", oSubMenu )
+
+    // Exibe o menu
+    oMenu:Display()
+
+    // Loop de eventos
+    DO WHILE .T.
+        Inkey(0)
+    ENDDO
+*/
+
+/*
+// Tente apenas criar o objeto sem adicionar nada, para testar a carga da lib
+    TRY
+        oMenu := WvgMenu():New( , , .T. )
+        QOut("Classe WvgMenu carregada com sucesso!")
+        oMenu:Destroy()
+    CATCH
+        QOut("Erro: Classe WvgMenu nao encontrada na linkagem.")
+    END
+  */
+  
+  // 1. Criar o Menu Principal (barra superior)
+   // Cria o menu principal
+   // oMenu := WvgMenu():New( , , .T. )
+
+    // Cria o submenu (o 2º parâmetro NIL é para indicar que não é barra)
+    //oSubMenu := WvgMenu():New( oMenu, .F. )
+
+    // TENTE ESTA SINTAXE: AddItem( cCaption, nID, bAction )
+    // O '101' é um ID numérico que você inventa para o item
+    //oSubMenu:AddItem( "Opção 1", 101, {|| QOut("Clicou na Opção 1") } )
+    //oSubMenu:AddItem( "Sair",    102, {|| Quit() } )
+
+    // Adiciona o submenu ao principal
+    //oMenu:AddItem( "Arquivo", oSubMenu )
+
+    //oMenu:Display()
+
+    //DO WHILE .T.
+    //    Inkey(0)
+    //ENDDO
+    
+
    RECUMENU()  // CHAMA O MENU
    RETU NIL
 
-
+function quit()
+quit
+return
 
 // +--------------------------------------------------------------------
 // +
