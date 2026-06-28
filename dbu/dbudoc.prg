@@ -241,20 +241,32 @@ FUNCTION multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, cARQDIC, aESTRU )
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // +
 
-FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK )
+FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK,LOPEN )
 
    LOCAL cCAMMASK  := Space( 100 )
+   LOCAL cCAMFILE  := Space( 50 )
+   LOCAL cCAMEXT   := Space( 10 )
 
-   IF ValType( cMASK ) # "C"
+   IF ValType( cMASK ) # "C" .OR. EMPTY(cMASK )
       cMASK := "*."+TABLEEXT
    ENDIF
-
-   IF At( "\", cMASK ) > 0  // o mascara tem caminho
-      hb_FNameSplit( cMASK, @cCAMMASK, NIL, NIL )
+   
+   IF VALTyPE(lSHARE)<>"L"
+      lSHARE:=.F.
    ENDIF
-   cCAMMASK := AllTrim( cCAMMASK )
+   
+   IF VALTyPE(lOPEN)<>"L"
+      lOPEN:=.T.
+   ENDIF
+   
+   IF At( "\", cMASK ) > 0  // pega o caminho quando a mascara  vem c:\temp\uso.dbf  c:\temp\*.dbf filenames so retorna o nome
+      hb_FNameSplit( cMASK, @cCAMMASK, @cCAMFILE, @cCAMEXT )
+   ENDIF
+   cCAMMASK := AllTrim( cCAMMASK )  //sava o caminho
 
-   MATDBF := FILENAMES( cMASK )
+   
+   
+   MATDBF := FILENAMES( cMASK ) //abre a mascara ou o caminho
    nARQ   := Len( MATDBF )
    IF nARQ > 0
       FOR w := 1 TO nARQ
@@ -264,12 +276,16 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK )
          ENDIF
          IF ValType( bUSO ) = "B"
             IF File( cCAMMASK + ARQUIVO )
-               MDS( "Arquivo: " + cCAMMASK + ARQUIVO )
-               DBUREDE( cCAMMASK + ARQUIVO,, lSHARE )
+               MDS( "Arquivo: " + cCAMMASK + ARQUIVO )  //Remonta o caminho
+               IF lOPEN
+                  DBUREDE( cCAMMASK + ARQUIVO,, lSHARE ) //abre o caminho
+               ENDIF   
                nLASTREC := LastRec()
                zei_fort( nLASTREC,,, 0 )
                Eval( bUSO,, {|| zei_fort( nLASTREC,,, 1 ) } )
-               dbCloseArea()
+               IF lOPEN
+                  dbCloseArea()
+               ENDIF    
             ENDIF
          ENDIF
          IF ValType( bPOS ) = "B"

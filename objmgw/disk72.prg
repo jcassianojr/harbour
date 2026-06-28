@@ -1,10 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Programa  : disk72.prg
-// +
-// +
 // +
 // +     Sistema:
 // +
@@ -14,13 +10,7 @@
 // +
 // +     Copyright (c) 2024,  jcassiano
 // +
-// +
-// +
-// +
-// +
 // +    Documentado em 28-Dez-2024 as 10:41 am
-// +
-// +
 // +
 // +--------------------------------------------------------------------
 // +
@@ -36,18 +26,12 @@
 // +
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function FILENAMES() hb_FNameSplit(cPATHFILENAME_EXT , @cCAMINHO, cARQUIVO, cEXTENSAO )
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
 
 // +--------------------------------------------------------------------
 // +
 // +
 // +
-// +    Function FILENAMES()
+// +    Function FILENAMES() 
 // +
 // +
 // +
@@ -56,46 +40,39 @@
 // +
 // +
 FUNCTION FILENAMES( GRUPO, cCASE )
-
-   LOCAL DIR
-   LOCAL RET_ARRAY
+   LOCAL aARQUIVOS
    LOCAL X
+   LOCAL nLEN
+   
 
    IF ValType( cCASE ) <> "C"
       cCASE := ""
    ENDIF
-   RET_ARRAY := Array( Len( DIR := Directory( GRUPO ) ) )
-   FOR X := 1 TO Len( DIR )
-      DO CASE
-      CASE cCASE = 'U'
-         RET_ARRAY[ X ] := Upper( DIR[ X, 1 ] )
-      CASE cCASE = 'L'
-         RET_ARRAY[ X ] := Lower( DIR[ X, 1 ] )
-      CASE cCASE = ''
-         RET_ARRAY[ X ] := DIR[ X, 1 ]
-      ENDCASE
-   NEXT X
-   RETU RET_ARRAY
+   aRETU:={}
+   aARQUIVOS:={}
+   X:=0
+   nLEN:=0
+   
+   aARQUIVOS := hb_Directory( GRUPO ) 
+   nLEN      := LEN(aARQUIVOS)
+   FOR X := 1 TO nLEN
+        DO CASE
+           CASE cCASE = 'U'
+                AADD(aRETU,Upper( aARQUIVOS[ X, 1 ] ))
+           CASE cCASE = 'L'
+                AADD(aRETU,Lower( aARQUIVOS[ X, 1 ] ))
+           OTHERWISE
+                AADD(aRETU,       aARQUIVOS[ X, 1 ]  )   
+        ENDCASE 
+    NEXT X
+    RETURN aRETU
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+
+// +--------------------------------------------------------------------
 // +
 // +    Function TIRAEXT(cFile, cEXT) hb_FNameSplit(cPATHFILENAME_EXT , @cCAMINHO, cARQUIVO, cEXTENSAO )
 // +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-
-
 // +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function TIRAEXT()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
 // +
 
 FUNCTION TIRAEXT( cFile, cEXT )  // Arquivo teste.txt ->teste se cext="tmp" test.tmp
@@ -111,26 +88,12 @@ FUNCTION TIRAEXT( cFile, cEXT )  // Arquivo teste.txt ->teste se cext="tmp" test
    ENDIF
    RETU cFileName
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function TROCAEXT ''compatibilizar chamada com chamada trocaext ja em alguns programa evitando trocar o nome da funcao e evitar que nao exista
-// +
-// hb_FNameSplit(cPATHFILENAME_EXT , @cCAMINHO, cARQUIVO, cEXTENSAO )
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
-// +    Function TROCAEXT()
-// +
-// +
+// +    Function TROCAEXT()  'compatibilizar chamada com chamada trocaext ja em alguns programa evitando trocar o nome da funcao e evitar que nao exista
 // +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 
 FUNCTION TROCAEXT( cFile, cEXT )
@@ -138,24 +101,12 @@ FUNCTION TROCAEXT( cFile, cEXT )
    RETURN TIRAEXT( cFile, cEXT )
 
 
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Function DELETAARQ() hb_FNameSplit(cPATHFILENAME_EXT , @cCAMINHO, cARQUIVO, cEXTENSAO )
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function DELETAARQ()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION DELETAARQ( cGRUPO )
 
@@ -170,7 +121,3 @@ FUNCTION DELETAARQ( cGRUPO )
       FErase( aRETU[ X ] )
    NEXT X
 
-// + EOF: DISK72.PRG
-
-// + EOF: disk72.prg
-// +
