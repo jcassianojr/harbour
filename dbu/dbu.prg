@@ -70,11 +70,6 @@ REQUEST BMDBFNTX  //-18 BMDBFNTX DBFNTX
 *+
 FUNCTION MAIN()
 
-// Isso forçará a criação de um arquivo de log se o programa iniciar
- //  hb_memoWrit( "debug_start.txt", "O programa iniciou em: " + dtoc(date()) + " " + time() )
-   
-   // Redireciona erros para um arquivo
-//   ErrorBlock( {|e| hb_memoWrit( "erro_fatal.txt", e:description ), Break(e)} )
 
 
 netregosok()
@@ -92,8 +87,6 @@ Set(_SET_DATEFORMAT,"dd/mm/yyyy")
 SetCursor(.t.)
 Set(_SET_SCOREBOARD,.f.)
 
-//Doc_SQLite( "cep.sqlite")
-//DocMarkdow()
 
 public n_files
 public keystroke
@@ -274,7 +267,6 @@ SetKey(96,{|| AC_CRASE()})
 SetKey(126,{|| AC_TIL()})
 SetKey(K_ALT_S,{|| ACENTUA := !ACENTUA,ALERTX("Acentuacao: "+if(acentua,"ligada","desligada"))})  //usar {|| ACENTUA := ! ACENTUA, mds(if(acentua,"ligado","desligado")) }
 SetKey(K_F12,{|| __SetCentury(!__SetCentury()),alertX("Seculos em Datas: "+if(__SetCentury(),"ligado","desligado"))})   //usar {|| __SetCentury( ! __SetCentury() ) , mds(if(__SetCentury(),"ligado","desligado")) }
-//SetKey( K_F1, {|| HELP() } )  //checar alguns nao tem help
 
 
 lVERTXT := .T.

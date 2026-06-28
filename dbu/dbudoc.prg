@@ -261,6 +261,9 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK,LOPEN )
    
    IF At( "\", cMASK ) > 0  // pega o caminho quando a mascara  vem c:\temp\uso.dbf  c:\temp\*.dbf filenames so retorna o nome
       hb_FNameSplit( cMASK, @cCAMMASK, @cCAMFILE, @cCAMEXT )
+      IF ! EMPTY(cCAMMASK) .AND. EMPTY(cCAMEXT)
+         cMASK:=cCAMMASK+"*."+TABLEEXT
+      ENDIF
    ENDIF
    cCAMMASK := AllTrim( cCAMMASK )  //sava o caminho
 

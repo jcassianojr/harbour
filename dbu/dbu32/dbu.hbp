@@ -151,6 +151,8 @@ hbfbird.hbc
 \develop\harbour\objmgw\adoerror.prg
 testepg.prg
 \develop\harbour\objmgw\modeseguranca.prg
+\develop\harbour\objmgw\escolherpasta.prg
+
 
 c:\develop\harbour\dbu\dbutclass.prg
 c:\develop\harbour\dbu\tclass\Tdbclass.prg
