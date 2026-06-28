@@ -943,7 +943,7 @@ FUNCTION export2sql( odb, cDBFFILE )
   miscsql( oDB, "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTablename) )
 
 
- dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .T. , .F. )
+ dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), , .T. , .F. )  //dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .T. , .F. )
   // USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
 // USE (cDBFFILE)  SHARED NEW //VIA  (cORIDRIVER)
 
@@ -978,7 +978,7 @@ FUNCTION export2sql( odb, cDBFFILE )
    ENDIF
 
 
-   aINDICES:=GeraINDICES()
+   aINDICES:=GeraINDICES(cTABLENAME)
    nIndexes := LEN(aINDICES)
    FOR j := 1 TO nIndexes
       msql := aINDICES[J,1]  //Create index

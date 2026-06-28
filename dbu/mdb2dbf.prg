@@ -713,7 +713,9 @@ ENDIF
 
 //cria com create native
 IF cTIPOSQL = "SQLITE"
-   createSqlitedb()
+   //createSqlitedb()
+   HB_MEMOWRIT(cARQORI,"")
+   //so criar o arquivo ja e entendido pelo sqlite
 ENDIF
 IF cTIPOSQL == "PARADOX"
    //Character	Alpha	O Paradox limita campos Alpha a no máximo 255 caracteres.
