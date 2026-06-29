@@ -86,13 +86,13 @@ WHILE .T.
    else
       OPCAO(4,24,"&Criar arquivo              ",67)   //c 67
    endif
-   OPCAO(5,24,"Executar arquivo &SQL      ",83)   //S 83
-   OPCAO(6,24,"&Importar  DBF             ",73)   //I 73
-   OPCAO(7,24,"Exportar Tabela &Formatos  ",69)   //F 70
-   OPCAO(8,24,"&Database Selecionar       ",68)   //D 68
-   OPCAO(9,24,"&Exportar  DBF             ",69)   //E 69
-   OPCAO(10,24,"&SQL Create DBF           ",83)   //S 83
-   OPCAO(11,24,"DBF &TO DBML              ",84)   //T 85
+   OPCAO( 5,24,"Executar arquivo &SQL     ",83)   //S 83 
+   OPCAO( 6,24,"&Importar  DBF            ",73)   //I 73 
+   OPCAO( 7,24,"Exportar Tabela &Formatos ",69)   //F 70 
+   OPCAO( 8,24,"&Database Selecionar      ",68)   //D 68 
+   OPCAO( 9,24,"&Exportar  DBF            ",69)   //E 69 
+   OPCAO(10,24,"DBF para &Scrit           ",83)   //S 83 
+   OPCAO(11,24,"DBF para D&BML            ",84)   //B 66
    
    KEY := menu(1,0)
    DO CASE
@@ -180,8 +180,9 @@ IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
 ENDIF
 IF lFDB 
    cSERVERX := PADR("localhost", 30, " ")   //net://
-   cUSERX := PADR("SYSDBA",30," ")  //masterkey
+   cUSERX := PADR("SYSDBA",30," ")  
    cPORTAX:= PADR("3050",30," ")
+   //cPASSX   := padr("masterkey",30) abaixo apos ler do cofre atribui se estiver vazia
 ENDIF
 IF cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
    cPORTAX:= PADR("1521",30," ")
@@ -1013,9 +1014,6 @@ CASE cTIPOSQL == "PARADOX"
     cMDBARQ := win_GetOPENFileName(,"Selecione o arquivo Paradox",,"Arquivo DB|*.db",,"*.db")
     cDATABASEX := cMDBARQ
     HB_FNameSplit( cMDBARQ, NIL , @cTABELAX , NIL ) 
-    //ALERT(cDATABASEX)
-    //ALERT(cTABELAX)
-    //ALERT(cMDBARQ)
 ENDCASE
 
 IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
@@ -1073,28 +1071,8 @@ FUNCTION buscachaves( cNomeBanco )
        cOwnerX   := padr(LerDoCofre( cSecaoCofre, "Owner",cOwnerX ),30)
        cportaX   := padr(LerDoCofre( cSecaoCofre, "portax",cportaX),30)
     ENDIF   
-   IF lFDB 
-       //cServer := "localhost:"
-       //cDatabase
-       //cUser := "SYSDBA"
-       //cPass := "masterkey"
-       //nPageSize := 1024
-       //cCharSet := "ASCII"
-       //
-       
-      IF EMPTY(cSERVERX)
-         cSERVERX :=padr("localhost",30)
-      ENDIF
-      IF EMPTY(cUSERX)
-         cUSERX   := padr("SYSDBA",30)
-      ENDIF
-      IF EMPTY(cPASSX)
-         cPASSX   := padr("masterkey",30)
-      ENDIF
-       IF EMPTY(cportaX)
-         cportaX   := padr("3050",30)
-      ENDIF
-      
+   IF lFDB .AND. EMPTY(cPASSX)
+      cPASSX   := padr("masterkey",30)
    ENDIF
 
    RETURN .T.
@@ -2157,6 +2135,7 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
 
 
 
+//FAZERDBF(bUSO, lSHARE[.F.], bPRE, bPOS, cMASK["*."+TABLEEXT],LOPEN[.T.])
 *+--------------------------------------------------------------------
 *+
 *+    Function mdltodos()
@@ -2165,8 +2144,16 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
 *+
 
 function mdltodos()
+LOCAL cPASTA
+cPASTA:=SelectFolder()
+IF ! EMPTY(cPASTA)
+   cPASTA+="\*."+TABLEEXT
+   //Alert(cPASTA)
+ENDIF
 cTEXTO:=""
-FAZERDBF( {|| cTEXTO+=GERADBML(,,.F.) }, .F. )
+//FAZERDBF(bUSO               , lSHARE[.F.] , bPRE, bPOS, cMASK["*."+TABLEEXT],LOPEN[.T.])
+
+FAZERDBF( {|| cTEXTO+=GERADBML(,,.F.) }, .F.,     ,     , cPASTA)
 hb_MemoWrit("estrutura.DBML", cTEXTO ) 
 RETURN .T.
 
@@ -2178,10 +2165,18 @@ RETURN .T.
 *+
 
 function sqltodos(cTIPOSQL)
+LOCAL cPASTA
+cPASTA:=SelectFolder()
+IF ! EMPTY(cPASTA)
+   cPASTA+="\*."+TABLEEXT
+ //  Alert(cPASTA)
+ENDIF
 cTEXTO:=""
-FAZERDBF( {|| cTEXTO+=FormataBlocoSql(SqliteCreateTable( , , cTIPOSQL,.T.,.T. )) }, .F. )
+//FAZERDBF(bUSO                                                           , lSHARE[.F.] , bPRE, bPOS, cMASK["*."+TABLEEXT],LOPEN[.T.])
+FAZERDBF( {|| cTEXTO+=FormataBlocoSql(SqliteCreateTable( , , cTIPOSQL,.T.,.T. )) }, .F. ,     ,     ,cPASTA)
 hb_MemoWrit(cTIPOSQL+".sql", cTEXTO ) 
 RETURN .T.
+
 
 
 

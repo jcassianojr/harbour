@@ -5,7 +5,7 @@
 // +    Functions: Function GERADOC()
 // +               Function multidocs()
 // +               Function multidocg()
-// +               Function FAZERDBF()
+// +               Function FAZERDBF(bUSO, lSHARE[.F.], bPRE, bPOS, cMASK["*."+TABLEEXT],LOPEN[.T.])
 // +               Function GRAVADOC()
 // +               Function TIPOC()
 // +
@@ -235,7 +235,7 @@ FUNCTION multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, cARQDIC, aESTRU )
 
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // +
-// +    Function FAZERDBF()
+// +    Function FAZERDBF(bUSO, lSHARE[.F.], bPRE, bPOS, cMASK["*."+TABLEEXT],LOPEN[.T.])
 // +
 // +
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
