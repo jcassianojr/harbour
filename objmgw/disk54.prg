@@ -76,6 +76,10 @@
 
 FUNCTION Acentuar( cTIPO )
    LOCAL cBUS, cDEST, nPOS, yKEY, kkey, xkey
+   
+   IF ! ACENTUA
+      RETURN
+   ENDIF
 
    DO CASE
    CASE cTIPO = "AGU"
@@ -129,9 +133,9 @@ RETURN NIL
 // +
 FUNCTION AC_AGUDO
 
-   SET KEY 39 to
+ //  SET KEY 39 to
    ACENTUAR( "AGU" )
-   SetKey( 39, {|| AC_AGUDO() } )
+ //  SetKey( 39, {|| AC_AGUDO() } )
    RETURN
 
 
