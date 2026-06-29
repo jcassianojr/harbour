@@ -115,7 +115,7 @@ FUNCTION convansi( ctexto )
 // +
 FUNCTION convoem( ctexto )
 
-   IF ValType( cTEXTO ) # "C"
+  IF ValType( cTEXTO ) # "C"
       RETU cTEXTO
    ENDIF
    cTEXTO := win_ansitooem( cTEXTO )   // HB_ansitooem(cTEXTO)

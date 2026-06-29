@@ -18,21 +18,59 @@
 
 // +--------------------------------------------------------------------
 // +
-// +    Function FIX02()
+// +    Function FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP)
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION FIX02( cVALOR )
+FUNCTION FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
 
    IF Empty( cVALOR )
       RETURN ""
    ENDIF
-   IF ValType( cVALOR ) <> "C"
+
+   IF ValType( cVALOR ) <> "C"  //Tenta converter para string com o strval
+      cVALOR:=Strval(cVALOR)
+   ENDIF
+
+   IF ValType( cVALOR ) <> "C" //senao convert volta vazio
       RETURN ""
    ENDIF
-   cVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), cVALOR, " " )
-   cVALOR := RANGEREPL( Chr( 127 ), Chr( 255 ), cVALOR, " " )
-   cVALOR := AllTrim( cVALOR )
+   IF ValType( lLOW ) <> "L"
+      lLOW:=.T.
+   ENDIF
+   IF ValType( lUP ) <> "L"
+      lUP:=.T.
+   ENDIF
+   IF ValType( lUTF ) <> "L"
+      lUTF:=.T.
+   ENDIF
+   IF ValType( lACE ) <> "L"
+      lACE:=.F.
+   ENDIF
+   IF ValType( lESP ) <> "L"
+      lESP:=.T.
+   ENDIF
+   
+   
+   IF lUTF //Ajusta utf primeiro
+      IF hb_UTF8Len(cVALOR) != Len(cVALOR)
+         cVALOR := hb_UTF8ToStr(cVALOR)  //hb_StrToUTF8(cString)
+      ENDIF 
+      
+   ENDIF      
+   
+   IF lLOW //caracter inferior
+      cVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), cVALOR, " " )
+   ENDIF
+   IF lACE //remove os acentos antes dos caracter superior
+      cVALOR := TIRACE(cVALOR)   
+   ENDIF   
+   IF lUP
+      cVALOR := RANGEREPL( Chr( 127 ), Chr( 255 ), cVALOR, " " )
+   ENDIF
+   IF lESP
+      cVALOR := AllTrim( cVALOR )
+   ENDIF   
 
    RETURN cVALOR
 
@@ -63,24 +101,18 @@ FUNCTION FIXNUM( cCAMPO )
    RETURN cCAMPO
 
 
-
 // +--------------------------------------------------------------------
 // +
 // +    Function FIXSTR()
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION FIXSTR( cCAMPO, lTRIM )
-
-   IF ValType( cCAMPO ) <> "C"
-      RETURN ""
+FUNCTION FIXSTR( cCAMPO, lESP)
+   IF ValType(  lESP ) <> 'L'
+      lESP := .F.
    ENDIF
-   IF ValType( lTRIM ) <> 'L'
-      lTRIM := .F.
-   ENDIF
-
-   RETURN IF( lTRIM, AllTrim( cCAMPO ), cCAMPO )
-
+   RETURN FixSRTExtendido( cCAMPO, .F., .F. ,.F., .F., lESP )
+   //     FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
 
 
 // +--------------------------------------------------------------------
@@ -182,15 +214,9 @@ FUNCTION FIXLOGIC( cCAMPO )
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function FIXHORA()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION FIXHORA( cCampo )
 
@@ -201,6 +227,13 @@ FUNCTION FIXHORA( cCampo )
 
    RETURN cCAMPO
 
+
+// +--------------------------------------------------------------------
+// +
+// +    Function FIXESCAPECODES( cText )
+// +
+// +--------------------------------------------------------------------
+// +
 
 FUNCTION FIXESCAPECODES( cText )
    LOCAL c
