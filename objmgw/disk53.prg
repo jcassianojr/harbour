@@ -43,13 +43,66 @@
 // +               Function Convmini()
 // +               Function Convmais()
 // +               Function CHARCONV()
-// +               Function CHARCNVMT()
 // +               FUNCTION tirace2()
 // +
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 
 #include "INKEY.CH"
 
+#define CHR_A_AGUDO 193 // Б
+#define CHR_a_AGUDO 225 // б
+#define CHR_E_AGUDO 201 // Й
+#define CHR_e_AGUDO 233 // й
+#define CHR_I_AGUDO 205 // Н
+#define CHR_i_AGUDO 237 // н
+#define CHR_O_AGUDO 211 // У
+#define CHR_o_AGUDO 243 // у
+#define CHR_U_AGUDO 218 // Ъ
+#define CHR_u_AGUDO 250 // ъ
+#define CHR_C_CEDIL 199 // З
+#define CHR_c_CEDIL 231 // з
+#define CHR_A_TIL   195 // Г
+#define CHR_a_TIL   227 // г
+#define CHR_O_TIL   213 // Х
+#define CHR_o_TIL   245 // х
+#define CHR_N_TIL   209 // С
+#define CHR_n_TIL   241 // с
+#define CHR_A_CIRC  194 // В
+#define CHR_a_CIRC  226 // в
+#define CHR_E_CIRC  202 // К
+#define CHR_e_CIRC  234 // к
+#define CHR_I_CIRC  206 // О
+#define CHR_i_CIRC  238 // о
+#define CHR_O_CIRC  212 // Ф
+#define CHR_o_CIRC  244 // ф
+#define CHR_U_CIRC  219 // Ы
+#define CHR_u_CIRC  251 // ы
+#define CHR_A_TREM  196 // Д
+#define CHR_a_TREM  228 // д
+#define CHR_E_TREM  203 // Л
+#define CHR_e_TREM  235 // л
+#define CHR_I_TREM  207 // П
+#define CHR_i_TREM  239 // п
+#define CHR_O_TREM  214 // Ц
+#define CHR_o_TREM  246 // ц
+#define CHR_U_TREM  220 // Ь
+#define CHR_u_TREM  252 // ь
+#define CHR_A_CRASE 192 // А
+#define CHR_a_CRASE 224 // а
+#define CHR_E_CRASE 200 // И
+#define CHR_e_CRASE 232 // и
+#define CHR_I_CRASE 204 // М
+#define CHR_i_CRASE 236 // м
+#define CHR_O_CRASE 210 // Т
+#define CHR_o_CRASE 242 // т
+#define CHR_U_CRASE 217 // Щ
+#define CHR_u_CRASE 249 // щ
+#define CHR_ORD_FEM  170 // Є Ordinal Feminino
+#define CHR_ORD_MASC 186 // є Ordinal Masculino
+#define CHR_GRAU     176 // ° Grau (Temperatura/Geogrбfico)
+#define CHR_COPY     169 // © Copyright
+#define CHR_REG      174 // ® Registrado
+#define CHR_SECAO    167 // § Seзгo
 
 // +--------------------------------------------------------------------
 // +
@@ -577,20 +630,30 @@ FUNCTION CHARCONV( cTEXTO, eORI, eDES )
 
    IF ValType( eORI ) = "C"
       DO CASE
-      CASE eORI = "OEM" .AND. eDES = "ANSI"
-         cTEXTO := convansi( ctexto )
-      CASE eORI = "ANSI" .AND. eDES = "OEM"
-         cTEXTO := convoem( cTEXTO )
-      OTHERWISE
-         aORI := CHARCNVMT( eORI )
-         aDES := CHARCNVMT( eDES )
-         nLEN := Len( aORI )
-         FOR X := 1 TO nLEN
-            cTEXTO := StrTran( cTEXTO, aORI[ X ], aDES[ X ] )
-         NEXT
-      ENDCASE
+            CASE eORI = "OEM" .AND. eDES = "ANSI"
+               cTEXTO := convansi( ctexto )
+            CASE eORI = "ANSI" .AND. eDES = "OEM"
+               cTEXTO := convoem( cTEXTO )
+            CASE eORI = "UACENTO" //converte acentos minusculos para maisuculos PTISO
+               cTEXTO := ConverterAcentos( cTexto, "UACENTO" )
+            CASE eORI = "UACETIR"  //remove acentos maisculos  PTISO
+               cTEXTO := ConverterAcentos( cTexto, "UACETIR" )        
+             CASE eORI = "LACENTO"  //converte acentos maisculos para minusculos PTISO
+               cTEXTO := ConverterAcentos( cTexto, "LACENTO" )
+            CASE eORI = "LACETIR"   //remove acentos minusculos PTISO
+               cTEXTO := ConverterAcentos( cTexto, "LACETIR" ) 
+            CASE eORI = "TIRACE" 
+               cTEXTO := TIRACE( cTexto ) 
+            OTHERWISE
+               aORI := CHARCNVMT( eORI )  //Monta array origem
+               aDES := CHARCNVMT( eDES )  //Monta array destino
+               nLEN := Len( aORI )
+               FOR X := 1 TO nLEN
+                  cTEXTO := StrTran( cTEXTO, aORI[ X ], aDES[ X ] )
+               NEXT
+        ENDCASE
    ENDIF
-   IF ValType( eORI ) = "A"
+   IF ValType( eORI ) = "A" .AND. ValType( eDES ) = "A"
       nLEN := Len( eORI )
       FOR X := 1 TO nLEN
          cTEXTO := StrTran( cTEXTO, eORI[ X ], eDES[ X ] )
@@ -614,16 +677,18 @@ FUNCTION CHARCNVMT( eCNV )
    areturn := {}
    IF ValType( eCNV ) = "C"
       DO CASE
-         // OEM ANSI FUNCOES PADROES HARBOUR na CHARCONV acima
-      CASE eCNV = "UACENTO"
-         eCNV := "·ФЮглЂµђЦай¶ТЧвкЗеҐЋУШ™љЏ"
-      CASE eCNV = "UACETIR"
-         eCNV := "AEIOUCAEIOUAEIOUAONAEIOUA"
-      CASE eCNV = "LACENTO"
-         eCNV := "…ЉЌ•—‡ ‚ЎўЈѓ€Њ“–Жд¤„‰‹”Ѓ†"
-      CASE eCNV = "LACETIR"
-         eCNV := "aeioucaeiouaeiouaonaeioua"
-      ENDCASE
+     CASE eCNV = "UACENTO" // Retorna Array com acentuadas maiъsculas
+         aRETU := { Chr(CHR_A_AGUDO), Chr(CHR_E_AGUDO), Chr(CHR_I_AGUDO), Chr(CHR_O_AGUDO), Chr(CHR_U_AGUDO), Chr(CHR_C_CEDIL), Chr(CHR_A_TIL), Chr(CHR_O_TIL), Chr(CHR_A_CIRC), Chr(CHR_E_CIRC), Chr(CHR_O_CIRC), Chr(CHR_U_CIRC), Chr(CHR_A_CRASE) }
+
+      CASE eCNV = "UACETIR" // Retorna Array correspondente SEM acento (Maiъsculas)
+         aRETU := { "A", "E", "I", "O", "U", "C", "A", "O", "A", "E", "O", "U", "A" }
+
+      CASE eCNV = "LACENTO" // Retorna Array com acentuadas minъsculas
+         aRETU := { Chr(CHR_a_AGUDO), Chr(CHR_e_AGUDO), Chr(CHR_i_AGUDO), Chr(CHR_o_AGUDO), Chr(CHR_u_AGUDO), Chr(CHR_c_CEDIL), Chr(CHR_a_TIL), Chr(CHR_o_TIL), Chr(CHR_a_CIRC), Chr(CHR_e_CIRC), Chr(CHR_o_CIRC), Chr(CHR_u_CIRC), Chr(CHR_a_CRASE) }
+
+      CASE eCNV = "LACETIR" // Retorna Array correspondente SEM acento (Minъsculas)
+         aRETU := { "a", "e", "i", "o", "u", "c", "a", "o", "a", "e", "o", "u", "a" }
+      ENDCASE   
    ENDIF
    IF ValType( eCNV ) = "A"
       areturn := eCNV
@@ -632,9 +697,9 @@ FUNCTION CHARCNVMT( eCNV )
       nLEN := Len( eCNV )
       FOR X := 1 TO nLEN
          DO CASE
-         CASE SubStr( eCNV, X, 1 ) = "Э"
+         CASE SubStr( eCNV, X, 1 ) = chr(170)   // Є Ordinal Feminino
             AAdd( aRETU, "a." )
-         CASE SubStr( eCNV, X, 1 ) = "х"
+         CASE SubStr( eCNV, X, 1 ) = chr(186)  // є Ordinal Masculino
             AAdd( aRETU, "o." )
          OTHERWISE
             AAdd( aRETU, SubStr( eCNV, X, 1 ) )
@@ -644,6 +709,37 @@ FUNCTION CHARCNVMT( eCNV )
 
    RETURN aRETU
 
+
+FUNCTION ConverterAcentos( cTexto, cAcao ) //usando ptiso do define 
+   LOCAL aOri := {}, aDes := {}, i
+   
+   // Definiзгo dos mapeamentos baseados em CHR()
+   LOCAL aMaiAcent := { Chr(CHR_A_AGUDO), Chr(CHR_E_AGUDO), Chr(CHR_I_AGUDO), Chr(CHR_O_AGUDO), Chr(CHR_U_AGUDO), ;
+                        Chr(CHR_C_CEDIL), Chr(CHR_A_TIL),   Chr(CHR_O_TIL),   Chr(CHR_N_TIL),   Chr(CHR_A_CIRC), ;
+                        Chr(CHR_E_CIRC),  Chr(CHR_I_CIRC),  Chr(CHR_O_CIRC),  Chr(CHR_U_CIRC),  Chr(CHR_A_TREM), ;
+                        Chr(CHR_A_CRASE) }
+
+   LOCAL aMinAcent := { Chr(CHR_a_AGUDO), Chr(CHR_e_AGUDO), Chr(CHR_i_AGUDO), Chr(CHR_o_AGUDO), Chr(CHR_u_AGUDO), ;
+                        Chr(CHR_c_CEDIL), Chr(CHR_a_TIL),   Chr(CHR_o_TIL),   Chr(CHR_n_TIL),   Chr(CHR_a_CIRC), ;
+                        Chr(CHR_e_CIRC),  Chr(CHR_i_CIRC),  Chr(CHR_o_CIRC),  Chr(CHR_u_CIRC),  Chr(CHR_a_TREM), ;
+                        Chr(CHR_a_CRASE) }
+
+   LOCAL aSemAcentMAI := { "A", "E", "I", "O", "U", "C", "A", "O", "N", "A", "E", "I", "O", "U", "A", "A" }
+   LOCAL aSemAcentmin := { "a", "e", "i", "o", "u", "c", "a", "o", "n", "a", "e", "i", "o", "u", "a", "a" }
+
+   DO CASE
+      CASE cAcao == "UACETIR"   ; aOri := aMaiAcent ; aDes := aSemAcentMAI
+      CASE cAcao == "LACETIR"   ; aOri := aMinAcent ; aDes := aSemAcentmin
+      CASE cAcao == "UACENTO"  ; aOri := aMinAcent ; aDes := aMaiAcent
+      CASE cAcao == "LACENTO"  ; aOri := aMaiAcent ; aDes := aMinAcent
+   ENDCASE
+
+   // Aplica as trocas
+   FOR i := 1 TO Len(aOri)
+      cTexto := StrTran(cTexto, aOri[i], aDes[i])
+   NEXT
+
+RETURN cTexto
 
 // +--------------------------------------------------------------------
 // +

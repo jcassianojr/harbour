@@ -200,52 +200,52 @@ FUNCTION liga_acento
    RETURN
 
 
-// +--------------------------------------------------------------------
-// +
-// +    Function Acento()
-// +
-// +--------------------------------------------------------------------
-// +
-
 FUNCTION Acento( texto )
 
-   LOCAL ag   := Chr( 8 ) + Chr( 39 )
-   LOCAL ti   := Chr( 8 ) + Chr( 126 )
-   LOCAL cr   := Chr( 8 ) + Chr( 96 )
-   LOCAL ci   := Chr( 8 ) + Chr( 94 )
-   LOCAL ce   := Chr( 8 ) + Chr( 44 )
+   LOCAL ag   := Chr( 8 ) + Chr( 39 ) // Agudo
+   LOCAL ti   := Chr( 8 ) + Chr( 126 ) // Til
+   LOCAL cr   := Chr( 8 ) + Chr( 96 )  // Crase
+   LOCAL ci   := Chr( 8 ) + Chr( 94 )  // Circunflexo
+   LOCAL ce   := Chr( 8 ) + Chr( 44 )  // Cedilha
    LOCAL sp   := 0
    LOCAL X
-   LOCAL aORI := { " ", "‚", "¡", "¢", "£", ;
-      "µ", "", "Ö", "à", "é", ;
-      "ƒ", "ˆ", "“", "…", "·", ;
-      "‡", "€", "¶", "Ò", "â", ;
-      "Æ", "„", "ä", "”", "Ç", "Ž", "™", "å" }
+
+   // Usando os #define criados anteriormente para compor o array
+   LOCAL aORI := { Chr(CHR_a_AGUDO), Chr(CHR_e_AGUDO), Chr(CHR_i_AGUDO), Chr(CHR_o_AGUDO), Chr(CHR_u_AGUDO), ;
+                   Chr(CHR_A_AGUDO), Chr(CHR_E_AGUDO), Chr(CHR_I_AGUDO), Chr(CHR_O_AGUDO), Chr(CHR_U_AGUDO), ;
+                   Chr(CHR_a_CIRC),  Chr(CHR_e_CIRC),  Chr(CHR_o_CIRC),  Chr(CHR_a_CRASE), Chr(CHR_A_CRASE), ;
+                   Chr(CHR_c_CEDIL), Chr(CHR_C_CEDIL), Chr(CHR_A_CIRC),  Chr(CHR_E_CIRC),  Chr(CHR_O_CIRC), ;
+                   Chr(CHR_a_TIL),   Chr(CHR_A_TIL),   Chr(CHR_o_TIL),   Chr(CHR_O_TIL),   Chr(CHR_A_TIL), ;
+                   Chr(CHR_A_TIL),   Chr(CHR_O_TIL),   Chr(CHR_O_TIL) }
+
+   // Nota: Mantive a correspondência lógica dos seus índices originais
    LOCAL aDES := { "a" + ag, "e" + ag, "i" + ag, "o" + ag, "u" + ag, ;
-      "A" + ag, "E" + ag, "I" + ag, "O" + ag, "U" + ag, ;
-      "a" + ci, "e" + ci, "o" + ci, "a" + cr, "A" + cr, ;
-      "c" + ce, "C" + ce, "A" + ci, "E" + ci, "O" + ci, ;
-      "a" + ti, "a" + ti, "o" + ti, "o" + ti, "A" + ti, "A" + ti, "O" + ti, "O" + ti }
+                   "A" + ag, "E" + ag, "I" + ag, "O" + ag, "U" + ag, ;
+                   "a" + ci, "e" + ci, "o" + ci, "a" + cr, "A" + cr, ;
+                   "c" + ce, "C" + ce, "A" + ci, "E" + ci, "O" + ci, ;
+                   "a" + ti, "a" + ti, "o" + ti, "o" + ti, "A" + ti, ;
+                   "A" + ti, "O" + ti, "O" + ti }
 
    IF ValType( TEXTO ) # "C"
-      RETU TEXTO
+      RETURN texto
    ENDIF
-   IF Type( "nTIPSPO" ) # "U"  // Nao passado tipo spoll
-      RETU TEXTO
+   
+   // Verifica nTIPSPO (se existir)
+   IF Type( "nTIPSPO" ) == "U" .OR. ! (nTIPSPO >= 2 .AND. nTIPSPO <= 4)
+      RETURN texto
    ENDIF
-   IF nTIPSPO <> 2 .AND. nTIPSPO <> 3 .AND. nTIPSPO <> 4   // LPT1 LPT2 LPT3
-      RETU TEXTO
-   ENDIF
+
    FOR X := 1 TO Len( aORI )
       IF At( aORI[ X ], texto ) > 0
          texto := StrTran( texto, aORI[ X ], aDES[ X ] )
          sp++
       ENDIF
    NEXT
+   
    IF sp > 0
       texto += Space( sp )
    ENDIF
+   
    RETURN ( texto )
-
 // + EOF: disk54.prg
 // +
