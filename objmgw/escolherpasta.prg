@@ -48,32 +48,3 @@ FUNCTION SelectFolder( cTitle, cInitialPath, lAllowNewFolder )
    END
 
 RETURN cPath
-
-FUNCTION SelectFolderold( cTitle )
-   LOCAL oShell, oFolder, cPath := ""
-
-   // Padrão caso não seja enviado um título
-   IF Empty( cTitle )
-      cTitle := "Selecione uma pasta"
-   ENDIF
-
-   // Cria o objeto Shell.Application (COM)
-   TRY
-      oShell := CreateObject( "Shell.Application" )
-      
-      // 0 = Desktop, 16 = BROWSEINFO flags (BIF_RETURNONLYFSDIRS)
-      // O método BrowseForFolder(hwnd, title, options, root)
-      oFolder := oShell:BrowseForFolder( 0, cTitle, 16 )
-
-      IF ValType( oFolder ) == "O"
-         // Pega o caminho real (o objeto Self retorna o caminho)
-         cPath := oFolder:Self:Path
-      ENDIF
-   CATCH
-      // Tratamento caso o COM não esteja disponível ou ocorra erro
-      cPath := ""
-   END
-
-RETURN cPath
-
-RETURN
