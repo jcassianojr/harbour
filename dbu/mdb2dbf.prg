@@ -1843,23 +1843,9 @@ ENDIF
       cCAMDIR += "\"
    ENDIF
 
-
-   IF Empty( cUSERX )
-      cUSERX := LerDoCofre( cSERVERX, "User" ,cUSERX)
+   IF ! EMPTY (cBANCOX)
+      buscachaves( cBANCOX )
    ENDIF
-
-   IF Empty( cPASSX )
-      cPASSX := LerDoCofre( cSERVERX, "Password" ,cPASSX)
-   ENDIF
-   
-   IF Empty( cSERVERX )
-      cSERVERX := LerDoCofre( cSERVERX, "Server" ,cSERVERX)
-   ENDIF
-   
-   IF Empty( cPORTAX )
-      cPORTAX := LerDoCofre( cSERVERX, "Porta" ,cPORTAX)
-   ENDIF
-   
 
    IF Empty( cUSERX ) .and. ! empty(StrUsuario)
       cUSERX := StrUsuario
@@ -1959,6 +1945,8 @@ CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "SQL"
          cCONN := "Driver={SQL Server};Server="+cSERVERX+cSQLUSER
       ENDIF
    endif
+CASE cTIPOSQL = "JETFOX"
+   cCONN = "Provider=VFPOLEDB.1;Data Source=" + cCAMDIR + ";Mode=ReadWrite|Share Deny None;Persist Security Info=False;Collating Sequence=MACHINE;DELETED=True;"  //'NULL=NO"
 CASE cTIPOSQL = "DBASE"
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=dBASE IV;"
 CASE lFDB 
@@ -1966,10 +1954,10 @@ CASE lFDB
    //cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
    cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
 CASE cTIPOSQL = "PARADOX"   // ADOPX
-   ALERT(cCAMBASE)
-   ALERT(CCAMDIR)
+   //ALERT(cCAMBASE)
+   //ALERT(CCAMDIR)
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=Paradox 5.x;"
-   ALERT(cCONN)
+   //ALERT(cCONN)
 CASE cTIPOSQL == "XMLDB"  // ADOXML
    cCONN := "Provider=MSPersist"
 CASE cTIPOSQL == "XML"  // ADOXML
