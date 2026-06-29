@@ -166,16 +166,22 @@ FUNCTION PegcsUB( tDOC )
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // +
 // +    Function multidocs()
+// +    PARA tDOC, cMASK           // Passara outra funcao manter aqui para ficar como priv
 // +
 // +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // +
 
 FUNCTION multidocs
 
-   PARA tDOC, cMASK           // Passara outra funcao manter aqui para ficar como priv
+   PARA tDOC, cMASK           // Passara outra funcao manter aqui para ficar como private
+   LOCAL cPASTA
 
    IF ValType( cMASK ) # "C"
       cMASK := "*."+TABLEEXT
+      cPASTA:=SelectFolder()
+      IF ! EMPTY(cPASTA)
+         cMASK :=cPASTA + "\" + cMASK
+      ENDIF
    ENDIF
 
    IF tDOC = 0
