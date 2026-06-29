@@ -1,5 +1,5 @@
 # 📘 Documentacao Tecnica do Projeto
-> Gerado em: 05/12/26 19:18:55
+> Gerado em: 06/29/26 14:47:22
 
 ## 🏗️ Estrutura de Modulos (PRGs)
 
@@ -7,7 +7,7 @@
 - Function ShowAdoError()
 
 ### 📄 Arquivo: `adofix.prg`
-- Function FIX02()
+- Function FixSRTExtendido()
 - Function FIXINT()
 - Function FIXNUM()
 - Function FIXSTR()
@@ -15,6 +15,7 @@
 - Function FIXDATA()
 - Function FIXLOGIC()
 - Function FIXHORA()
+- Function FIXESCAPECODES()
 - Function DateToMySQL()
 
 ### 📄 Arquivo: `cepsutil.prg`
@@ -23,9 +24,6 @@
 - Function IRRFIBGE()
 - Function coduf()
 - Function tratanome()
-
-### 📄 Arquivo: `classecurl.prg`
-- Class oSyg_curl
 
 ### 📄 Arquivo: `comp.prg`
 - Function hb_fopen()
@@ -41,6 +39,7 @@
 - Function Hotinkey()
 - Function SALVAA()
 - Function RESTAA()
+- Function MascararEmail()
 - Function CheckEmail()
 - Function rmacro()
 - Function ArqLogDataHora()
@@ -51,6 +50,9 @@
 - Function MsgStop()
 - Function ALERTX()
 - Function shellexecprint()
+- Function ShellExecuteOpen()
+- Function ArraytoTexto()
+- Function WaitProcess()
 
 ### 📄 Arquivo: `disk51.prg`
 - Function Ext()
@@ -85,14 +87,15 @@
 - Function tirace()
 - Function CHARCONV()
 - Function CHARCNVMT()
+- Function ConverterAcentos()
 - Function tirace2()
 
 ### 📄 Arquivo: `disk54.prg`
+- Function Acentuar()
 - Function AC_AGUDO()
 - Function AC_CRASE()
 - Function AC_TIL()
 - Function AC_CIRC()
-- Function Acentuar()
 - Function liga_acento()
 - Function Acento()
 
@@ -124,6 +127,7 @@
 - Function rad2deg()
 - Function MinutoToHora()
 - Function aconvertend()
+- Function UniversalToDate()
 
 ### 📄 Arquivo: `disk56.prg`
 - Function SCROLLBARNEW()
@@ -145,6 +149,11 @@
 - Function CNPJCPFPICT()
 - Function CNPJCPFVAL()
 - Function VALCEI()
+- Function MascararNumGenerico()
+- Function MascaraCNPJ()
+- Function MascararNome()
+- Function OfuscarDataAleatoria()
+- Function MascararCPF()
 
 ### 📄 Arquivo: `disk61.prg`
 - Function imparq()
@@ -180,6 +189,7 @@
 
 ### 📄 Arquivo: `disk71.prg`
 - Function FormataRG()
+- Function MascararRG()
 - Function CheckRG()
 - Function PEGDDD()
 - Function PEGTEL()
@@ -196,13 +206,13 @@
 - Function TROCAEXT()
 - Function DELETAARQ()
 
+### 📄 Arquivo: `escolherpasta.prg`
+- Function SelectFolder()
+- Function SelectFolderold()
+
 ### 📄 Arquivo: `feriado.prg`
 - Function DomingoDePascoa()
 - Function TercaDeCarnaval()
-
-### 📄 Arquivo: `fileversioinfo.prg`
-- Procedure Main()
-- Function GetVersionString()
 
 ### 📄 Arquivo: `flib04hab.prg`
 - Function INFOR()
@@ -265,6 +275,11 @@
 ### 📄 Arquivo: `f_tempfi.prg`
 - Function TMPFILE()
 
+### 📄 Arquivo: `hbnfeemail.prg`
+- Class hbNFeEmail
+- Static Function HbNfeEmailJoin()
+- Static Function HbNfeEmailDefault()
+
 ### 📄 Arquivo: `mlib06.prg`
 - Function LERMOUSE()
 
@@ -277,9 +292,17 @@
 - Function BASBRO()
 - Function fmemoline()
 
-### 📄 Arquivo: `mmouseN.prg`
+### 📄 Arquivo: `mmousen.prg`
 - Function OPCAO()
 - Function menu()
+
+### 📄 Arquivo: `modeseguranca.prg`
+- Function parametrosLerDados()
+- Function ParametrosEnviarDados()
+- Function CaminhoArquivoCofre()
+- Function LerDoCofre()
+- Function GravarNoCofre()
+- Function ExcluirBanco()
 
 ### 📄 Arquivo: `netdbf.prg`
 - Function netregosok()
@@ -305,9 +328,9 @@
 
 ### 📄 Arquivo: `profile.prg`
 - Function ProfileString()
+- Function SetProfile()
 - Function ProfileNum()
 - Function ProfileDate()
-- Function SetProfile()
 - Function ProfileLogical()
 
 ### 📄 Arquivo: `validaie.prg`
@@ -345,17 +368,10 @@
 
 ## 📊 Dicionario de Dados e Acessos
 
-**Fonte:** `f_makedb.prg`
-> Indexes: INDEX ON &cCHAVEDBF TAG &cTAG TO &dbf_name
-
 **Fonte:** `f_mmopac.prg`
 > Tables: dbUseArea(.T.,,cARQNOME,,.F.)
 > USE &temp_file
-> USE
-
-**Fonte:** `flib04hab.prg`
-> Indexes: INDEX ON &mCHAVE TO &mINDICE EVAL ZEI_FORT(nLASTREC,,,1)
-> INDEX ON &mCHAVE TAG &mTAG. EVAL ZEI_FORT(nLASTREC,,,1)
+> dbUseArea(.F.,,temp_file,,.F.,.F.)
 
 **Fonte:** `netdbf.prg`
 > Tables: dbUseArea(lNEW,cDRIVER,cARQ,,lSHA,lREAD)
@@ -369,15 +385,16 @@ graph TD
     flib08_prg --> _send()         <unresolved function>
     flib08_prg --> _send()         <unresolved function>
     flib08_prg --> _settimeouts()  <unresolved function>
-    flib08_prg --> _settimeouts()  <unresolved function>
+    flib08_prg --> _update()       <unresolved function>
     disk54_prg --> acentuar()      in disk54.prg
-    disk55_prg --> acos()          in hbct.lib
+    disk55_prg --> acos()          <unresolved function>
     disk54_prg --> ac_agudo()      in disk54.prg
     disk54_prg --> ac_circ()       in disk54.prg
     disk54_prg --> ac_crase()      in disk54.prg
     disk54_prg --> ac_til()        in disk54.prg
     adoerror_prg --> alertx()        in comp.prg
     adoerror_prg --> arqlogdatahora( in comp.prg
+    flib08_prg --> arraytotexto()  in comp.prg
     mlib16_prg --> basbro()        in mlib16.prg
     disk53_prg --> bhor()          in disk55.prg
     disk68_prg --> calcdig()       in disk68.prg
@@ -393,10 +410,11 @@ graph TD
     disk55_prg --> cmes()          in disk55.prg
     disk59_prg --> cnpj_novo()     in disk59.prg
     disk53_prg --> convansi()      in disk55.prg
+    disk53_prg --> convansi()      in disk55.prg
     disk53_prg --> convmais()      in disk53.prg
     disk53_prg --> convmini()      in disk53.prg
     disk53_prg --> convoem()       in disk55.prg
-    disk55_prg --> cos()           in hbct.lib
+    disk55_prg --> cos()           <unresolved function>
     disk68_prg --> dac10()         in disk68.prg
     adofix_prg --> data2str()      in disk55.prg
     flib08_prg --> dbfview()       in mlib16.prg
@@ -405,16 +423,16 @@ graph TD
     f_encode_prg --> decode()        in f_encode.prg
     disk55_prg --> deg2rad()       in disk55.prg
     f_readtx_prg --> disp_array()    in f_readtx.prg
-    feriado_prg --> do()            in harbour.lib
+    feriado_prg --> do()            <unresolved function>
     f_encode_prg --> encode()        in f_encode.prg
     f_makedb_prg --> errouso()       in f_makedb.prg
-    disk53_prg --> expand()        in hbct.lib
+    disk53_prg --> expand()        <unresolved function>
     disk51_prg --> extx()          in disk51.prg
     flib08_prg --> fazspcchr()     in flib08.prg
     flib08_prg --> fileconvert()   in flib08.prg
-    disk57_prg --> filecopy()      in hbct.lib
+    disk57_prg --> filecopy()      <unresolved function>
     disk72_prg --> filenames()     in disk72.prg
-    disk53_prg --> filesize()      in hbct.lib
+    disk53_prg --> filesize()      <unresolved function>
     flib08_prg --> filetoemail()   in flib08.prg
     flib08_prg --> filetohtml()    in flib08.prg
     flib08_prg --> filetopdf()     in pdf.prg
@@ -424,10 +442,12 @@ graph TD
     disk64_prg --> fileviewg()     in mlib16.prg
     flib08_prg --> filezebrapdf()  in flib08.prg
     f_readtx_prg --> fill_array()    in f_readtx.prg
+    adofix_prg --> fixdats()       in adofix.prg
+    adofix_prg --> fixnum()        in adofix.prg
     adofix_prg --> fixnum()        in adofix.prg
     adofix_prg --> fixstr()        in adofix.prg
-    pdf_prg --> flinecount()    in xhb.lib
-    disk71_prg --> floor()         in hbclipsm.lib
+    pdf_prg --> flinecount()    <unresolved function>
+    disk71_prg --> floor()         <unresolved function>
     mlib16_prg --> fmemoline()     in mlib16.prg
     disk71_prg --> formatacpf()    in disk59.prg
     disk71_prg --> formatatel()    in disk71.prg
@@ -437,14 +457,18 @@ graph TD
     disk70_prg --> gravacampo()    in disk70.prg
     disk70_prg --> gravaerro()     in disk70.prg
     disk57_prg --> hbeditor()      in harbour.lib
-    flib08_prg --> hb_atokens()    in harbour.lib
+    flib08_prg --> hbnfeemail()    <unresolved function>
+    disk59_prg --> hb_atokens()    in harbour.lib
     disk52_prg --> hb_cwd()        in harbour.lib
+    comp_prg --> hb_cwd()        in harbour.lib
+    disk72_prg --> hb_directory()  in harbour.lib
     comp_prg --> hb_dispbox()    in harbour.lib
     mlib16_prg --> hb_feof()       in harbour.lib
     mlib16_prg --> hb_fgoto()      in hbmisc.lib
     mlib16_prg --> hb_fgotop()     in hbmisc.lib
     disk70_prg --> hb_fileexists() in harbour.lib
     mlib16_prg --> hb_flastrec()   in hbmisc.lib
+    f_ismemo_prg --> hb_fnameextset( in harbour.lib
     disk72_prg --> hb_fnamesplit() in harbour.lib
     disk61_prg --> hb_fopen()      in comp.prg
     pdf_prg --> hb_freadline()  in xhb.lib
@@ -452,20 +476,31 @@ graph TD
     mlib16_prg --> hb_fskip()      in hbmisc.lib
     mlib16_prg --> hb_fuse()       in hbmisc.lib
     wvgini_prg --> hb_gtinfo()     in harbour.lib
+    comp_prg --> hb_idlesleep()  in harbour.lib
     disk53_prg --> hb_keyclear()   in harbour.lib
     disk52_prg --> hb_memoread()   in harbour.lib
     adoerror_prg --> hb_memowrit()   in harbour.lib
     disk55_prg --> hb_ntos()       in harbour.lib
     pdf_prg --> hb_oemtoansi()  in harbour.lib
+    comp_prg --> hb_parnl()      in extend.md
+    comp_prg --> hb_processopen( in harbour.lib
+    comp_prg --> hb_processopen( in harbour.lib
+    disk59_prg --> hb_randint()    in harbour.lib
     f_makedb_prg --> hb_rddinfo()    in harbour.lib
     comp_prg --> hb_regexlike()  in harbour.lib
+    disk68_prg --> hb_regexlike()  in harbour.lib
+    profile_prg --> hb_regexsplit() in harbour.lib
     flib08_prg --> hb_sendmail()   in hbtip.lib
+    comp_prg --> hb_strshrink()  in harbour.lib
     disk55_prg --> hb_strtoexp()   in harbour.lib
     disk55_prg --> hb_tstostr()    in harbour.lib
     comp_prg --> hb_username()   in harbour.lib
-    disk53_prg --> hb_utf8tostr()  in harbour.lib
+    adofix_prg --> hb_utf8len()    in harbour.lib
+    adofix_prg --> hb_utf8tostr()  in harbour.lib
     adoerror_prg --> hb_valtoexp()   in harbour.lib
+    disk68_prg --> hb_valtostr()   in harbour.lib
     disk66_prg --> help()          in disk52.prg
+    profile_prg --> hhaskey()       in xhb.lib
     f_readtx_prg --> hotinkey()      in comp.prg
     pdf_prg --> hpdf_addpage()  in hbhpdf.lib
     pdf_prg --> hpdf_free()     in hbhpdf.lib
@@ -492,6 +527,7 @@ graph TD
     f_ismemo_prg --> infotipodbf()   in f_ismemo.prg
     flib08_prg --> isimpressora()  in flib08.prg
     f_makedb_prg --> ismemo()        in f_ismemo.prg
+    flib08_prg --> lerdocofre()    in modeseguranca.prg
     f_readtx_prg --> lermouse()      in mlib06.prg
     f_makedb_prg --> loadstru()      in f_makedb.prg
     disk55_prg --> logic2str()     in disk55.prg
@@ -536,6 +572,12 @@ graph TD
     adoerror_prg --> ocon_errors()   <unresolved function>
     disk57_prg --> ocon_errors()   <unresolved function>
     disk57_prg --> oeditor_edit()  <unresolved function>
+    flib08_prg --> oemail_addfile( <unresolved function>
+    flib08_prg --> oemail_execute( <unresolved function>
+    flib08_prg --> oemail_execute( <unresolved function>
+    flib08_prg --> oemail_execute( <unresolved function>
+    flib08_prg --> oemail_execute( <unresolved function>
+    flib08_prg --> oemail_usesmtp( <unresolved function>
     flib08_prg --> opcao()         in mmousen.prg
     flib08_prg --> oprinter_bold() <unresolved function>
     flib08_prg --> oprinter_bold() <unresolved function>
@@ -570,30 +612,33 @@ graph TD
     disk56_prg --> scrollbarnew()  in disk56.prg
     netdbf_prg --> sdvpegpos()     in netdbf.prg
     flib08_prg --> shellexecprint( in comp.prg
+    flib08_prg --> shellexecprint( in comp.prg
     disk55_prg --> sin()           in hbct.lib
-    adofix_prg --> stod()          in harbour.lib
+    disk55_prg --> stod()          in harbour.lib
     flib08_prg --> str2html()      in disk55.prg
-    netdbf_prg --> strlogic()      in disk55.prg
-    disk53_prg --> strval()        in disk55.prg
+    adofix_prg --> strlogic()      in disk55.prg
+    adofix_prg --> strval()        in disk55.prg
     disk55_prg --> tip_strtohtml() in hbtip.lib
-    cepsutil_prg --> tirace()        in disk53.prg
+    adofix_prg --> tirace()        in disk53.prg
     disk53_prg --> tirace2()       in disk53.prg
     disk72_prg --> tiraext()       in disk72.prg
-    adofix_prg --> tiraout()       in disk55.prg
+    disk59_prg --> tiraout()       in disk55.prg
     flib08_prg --> tmpfile()       in f_tempfi.prg
     disk55_prg --> tokenupper()    in hbct.lib
     comp_prg --> toleauto()      in hbwin.lib
     pdf_prg --> trocaext()      in disk72.prg
+    adofix_prg --> trocaext()      in disk72.prg
     disk59_prg --> valcei()        in disk59.prg
     disk59_prg --> valcgc()        in disk59.prg
     disk59_prg --> valcpf()        in disk59.prg
     validaie_prg --> validie()       <unresolved function>
     disk53_prg --> vertxt()        in disk64.prg
     disk61_prg --> video()         in comp.prg
-    netdbf_prg --> waitperiod()    in hbct.lib
-    comp_prg --> waitperiod()    in hbct.lib
-    comp_prg --> waitperiod()    in hbct.lib
-    flib08_prg --> win32prn()      <unresolved function>
+    netdbf_prg --> waitperiod()    <unresolved function>
+    flib08_prg --> waitprocess()   in comp.prg
+    comp_prg --> waitprocess()   in comp.prg
+    comp_prg --> waitprocess()   in comp.prg
+    flib08_prg --> win32prn()      in xhb.lib
     cepsutil_prg --> win_ansitooem() in hbwin.lib
     disk53_prg --> win_ansitooem() in hbwin.lib
     disk53_prg --> win_ansitooem() in hbwin.lib
