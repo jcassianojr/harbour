@@ -81,9 +81,11 @@ IF lDOCDAD
         //   ? cPOS
            evalor:=HB_FIELDGET(I)
            IF VALTYPE(evalor)="C"
-              evalor := RANGEREPL( Chr( 0 ), Chr( 31 ), evalor, " " ) 
-              evalor := TIRACE(evalor)
-              evalor := ALLTRIM(evalor)
+              //evalor := RANGEREPL( Chr( 0 ), Chr( 31 ), evalor, " " ) 
+              //evalor := TIRACE(evalor)
+              //evalor := ALLTRIM(evalor)
+            eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )
+            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
            ENDIF
            if .NOT. EMPTY(evalor)
               oSheet1:Cell(cCOMP+cPOS, evalor )

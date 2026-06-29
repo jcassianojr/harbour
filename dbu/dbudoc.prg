@@ -454,7 +454,10 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                Str( aESTRU[ X, 4 ], 2 ) + cLIN
          CASE tDOC = 5  .AND. cSUBTIPO <> "SQL"  //delimitado
             cCAMPO := AllTrim( cCAMPO )
-            cCAMPO := RANGEREPL( Chr( 0 ), Chr( 31 ), cCAMPO, " " ) // Remove caracteres de controle
+            //cCAMPO := RANGEREPL( Chr( 0 ), Chr( 31 ), cCAMPO, " " ) // Remove caracteres de controle
+            cCAMPO := FixSRTExtendido( cCAMPO , .T. , .T. , .T. , .T. , .T. )
+            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
+            
             IF lDOCDAD
                cTEXTO +=  AllTrim( cCAMPO ) + ZDELIMITE // clin no final
             ELSE
@@ -801,8 +804,10 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
                // String ou memo
                //
             CASE cFieldType = "C" .OR. cFieldType = "M"
-               nVAL := AllTrim( STRVAL( nVAL ) )
-               nVAL := RANGEREPL( Chr( 0 ), Chr( 31 ), nVAL, " " ) // Remove caracteres de controle
+               //nVAL := AllTrim( STRVAL( nVAL ) ) //Estendido trata nval
+               //nVAL := RANGEREPL( Chr( 0 ), Chr( 31 ), nVAL, " " ) // Remove caracteres de controle
+                nVAL := FixSRTExtendido( nVAL , .T. , .T. , .T. , .T. , .T. )
+            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
                DO CASE
                CASE zCNVCHAR = "O"
                   nVAL := win_ANSIToOEM( nVAL ) // HB_ansitooem(nVAL)

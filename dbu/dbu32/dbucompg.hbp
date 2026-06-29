@@ -96,7 +96,6 @@ hbfbird.hbc
 #
 # exportacao formatos
 #
-
 \develop\harbour\dbu\dbuXLSclass.prg
 \develop\harbour\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbudoc.prg  
@@ -107,8 +106,7 @@ hbfbird.hbc
 #
 # firebird
 #
-
-\develop\harbour\dbu\dbufire.prg
+develop\harbour\dbu\dbufire.prg
 
 #
 # paradox
@@ -130,7 +128,7 @@ hbfbird.hbc
 \develop\harbour\dbu\mdb2dbf.prg
 
 #
-# mysql libmysql
+#       ---    mysql libmysql
 #
 
 \develop\harbour\dbu\dbumy.prg  
@@ -138,25 +136,24 @@ hbfbird.hbc
 \develop\harbour\dbu\mysqlrdd.prg 
 
 #
-# postgresql libpg
+#       ---    postgresql libpg
 #
-
 \develop\harbour\dbu\dbupg.prg
 \develop\harbour\dbu\dbupgexp
 \develop\harbour\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
-# odbc
+#       ---    odbc
 #
 \develop\harbour\dbu\dbuodbc.prg 
 #
-# adox
+#       ---    adox
 #
 \develop\harbour\dbu\adoxb.prg   
 \develop\harbour\dbu\dbuadox.prg 
 #
-#leto
+#       ---   leto
 #
 \develop\harbour\dbu\dbuleto.prg 
 #
@@ -185,6 +182,7 @@ hbfbird.hbc
 \develop\harbour\objmgw\adofix.prg
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
+\develop\harbour\objmgw\escolherpasta.prg
 #
 #       ---   tbclass   ---
 #

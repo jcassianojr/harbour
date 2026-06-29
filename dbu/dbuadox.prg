@@ -328,13 +328,15 @@ FUNCTION adoxexpdbf( ntipo )
       FOR I := 1 TO nFIM
          cCAMPO := aSTRU[ i, DBS_NAME ]
          eVALOR := ADOField( Ccampo )
-         IF ValType( eVALOR ) = "C" .AND. SubStr( eVALOR, 5, 1 ) = "-" .AND. SubStr( eVALOR, 8, 1 ) = "-"
+         IF ValType( eVALOR ) = "C" .AND. SubStr( eVALOR, 5, 1 ) = "-" .AND. SubStr( eVALOR, 8, 1 ) = "-" //Data vindo como string
             eVALOR := SubStr( eVALOR, 6, 2 ) + "/" + SubStr( eVALOR, 9, 2 ) + "/" + SubStr( eVALOR, 1, 4 )
             eVALOR := CToD( eVALOR )
          ENDIF
          IF ValType( eVALOR ) = "C" .OR. ValType( eVALOR ) = "M"
-            eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )   // Remove caracteres de controle
-            eVALOR := TIRACE( eVALOR )
+            eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )
+            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
+            //eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )   // Remove caracteres de controle
+            //eVALOR := TIRACE( eVALOR )
          ENDIF
          IF !Empty( eVALOR )
             FieldPut( I, eVALOR )

@@ -231,7 +231,7 @@ FUNCTION tratanome( mNOME, lANSI, lACEN, lRANG )
    IF nPOS > 0
       mNOME := SubStr( mNOME, 1, nPOS - 1 )
    ENDIF
-   IF lRANG  // remove nao carateres numero e simbolos
+   IF lRANG  // remove nao carateres numero e simbolos //analisar implantacao fixstrextend 
       mNOME := RANGEREPL( Chr( 0 ), Chr( 31 ), mNOME, " " )
       mNOME := RANGEREPL( Chr( 127 ), Chr( 255 ), mNOME, " " )
    ENDIF

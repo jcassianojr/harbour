@@ -111,7 +111,7 @@ FUNCTION FREADLINE( handle, line_len, lremchrexp, cDELI )
          FSeek( handle, ( num_bytes * -1 ) + line_end + 1, 1 )  // como chr(13)+chr(10) sao dois caracteres precisa somar +1
       ENDIF
       // E retorna a linha atual.
-      IF lREMCHREXP
+      IF lREMCHREXP //nao usar fixstrextend as funcoes que leem a informacao ira tratar
          cRETU := SubStr( buffer, 1, line_end - 1 )
          cRETU := RANGEREPL( Chr( 0 ), Chr( 9 ), cRETU, " " )   // CHR(13)+CHR(10)
          cRETU := RANGEREPL( Chr( 11 ), Chr( 12 ), cRETU, " " )   // Line Feed Manter

@@ -634,7 +634,7 @@ FUNC MONTATAB( cNOMETAB, cNOMEARR1, cNOMEARR2, cSTR1, cSTR2 )
 // +
 // +
 
-FUNC IMP( cCOD, cIMP )
+FUNCTION IMP( cCOD, cIMP )
 
    LOCAL cCODRET := ""
    LOCAL DBF_USO := Alias()
@@ -659,7 +659,7 @@ FUNC IMP( cCOD, cIMP )
    IF !Empty( cCODRET )
       cCODRET := &cCODRET.
       IF Type( "nTIPSPO" ) # "U" .AND. ( nTIPSPO = 1 .OR. nTIPSPO > 5 )
-         cCODRET := RANGEREPL( Chr( 0 ), Chr( 31 ), cCODRET, "" )
+         cCODRET := RANGEREPL( Chr( 0 ), Chr( 31 ), cCODRET, "" ) //nao usar fixstrextend pois os codigos da impressora podem ser diversos
       ENDIF
       IF At( "CHR(", cCODRET ) > 0
          IF nTIPSPO = 1 .OR. nTIPSPO > 5   // video txt txtwin rtf html pdf

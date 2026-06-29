@@ -474,9 +474,11 @@ ENDIF
 
          // Tratamento de String/UTF8
          IF ValType( eVALOR ) == "C"
-            IF hb_UTF8Len(eVALOR) != Len(eVALOR); eVALOR := hb_UTF8ToStr(eVALOR); ENDIF
-            eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )
-            eVALOR := TIRACE( eVALOR )
+            //IF hb_UTF8Len(eVALOR) != Len(eVALOR); eVALOR := hb_UTF8ToStr(eVALOR); ENDIF
+            //eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )
+            //eVALOR := TIRACE( eVALOR )
+            eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )
+            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
          ENDIF
          
          IF !Empty( eVALOR ); FieldPut( i, eVALOR ); ENDIF

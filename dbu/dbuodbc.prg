@@ -422,8 +422,10 @@ FUNCTION odbcexpdbf( ntipo )
             eVALOR := CToD( eVALOR )
          ENDIF
          IF ValType( eVALOR ) = "C" .OR. ValType( eVALOR ) = "M"
-            eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )   // Remove caracteres de controle
-            eVALOR := TIRACE( eVALOR )
+            //eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )   // Remove caracteres de controle
+            //eVALOR := TIRACE( eVALOR )
+               eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )
+            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
          ENDIF
          IF !Empty( eVALOR )
             FieldPut( I, eVALOR )

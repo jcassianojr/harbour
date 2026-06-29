@@ -466,8 +466,10 @@ DO WHILE !oQuery:Eof()
       
       // Limpeza de strings e caracteres de controle oriundos do banco
       IF ValType( eVALOR ) == "C" .OR. ValType( eVALOR ) == "M"
-         eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )
-         eVALOR := TIRACE( eVALOR )
+         eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )
+            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
+         //eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )
+         //eVALOR := TIRACE( eVALOR )
       ENDIF
       
       IF !Empty( eVALOR )

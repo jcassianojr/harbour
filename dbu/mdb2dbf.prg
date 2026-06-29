@@ -438,9 +438,11 @@ IF tDOC = 90 .OR. zEXPOREXT = "DBF"
             eVALOR := CTOD(eVALOR)
          ENDIF
          if valtype(eVALOR) = "C" .OR. valtype(eVALOR) = "M"
-            eVALOR := RANGEREPL(chr(0),chr(31),eVALOR," ")  //Remove caracteres de controle
-            eVALOR := TIRACE(eVALOR)
-            eVALOR := ALLTRIM(eVALOR)
+            //eVALOR := RANGEREPL(chr(0),chr(31),eVALOR," ")  //Remove caracteres de controle
+            //eVALOR := TIRACE(eVALOR)
+            //eVALOR := ALLTRIM(eVALOR)
+               eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )
+            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
          ENDIF
          IF !EMPTY(eVALOR)
             nPOSDBF := FieldPos(aVALOR[I,2])
