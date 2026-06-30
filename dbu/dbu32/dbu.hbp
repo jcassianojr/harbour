@@ -1,16 +1,16 @@
-# Pastas de inclusão c
--cflag=-Ic:\harbour\hb3rd\mysql\include
--cflag=-Ic:\harbour\hb3rd\pgsql\include
+# Pastas de inclusão c necessarias se compilar com fontes tclass nao usando tclass.hbc
+#-cflag=-Ic:\harbour\hb3rd\mysql\include
+#-cflag=-Ic:\harbour\hb3rd\pgsql\include
 
-# Pastas de inclusão
--incpath=c:\harbour\hb3rd\mysql\include
--incpath=c:\harbour\hb3rd\pgsql\include
+# Pastas de inclusão necessarias se compilar com fintes tclass nao usando tclass.hbc
+#-incpath=c:\harbour\hb3rd\mysql\include
+#-incpath=c:\harbour\hb3rd\pgsql\include
 
-# Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
+# Pastas de bibliotecas requerida pela tclass
 -Lc:\harbour\hb3rd\mysql\lib
 -Lc:\harbour\hb3rd\pgsql\lib
 
-# Dependências (libs)
+# Dependências (libs) requerida pela tclass
 -llibmysql
 -lpq
 
@@ -18,19 +18,8 @@
 -gui
 -lng=pt_BR
 
-#-vcshead=vcshead.ch
-#-tshead=tshead.ch
-
-#-manifest=dbu.Manifest  comentado erro compilacao 32 bits
-
 \develop\harbour\dbu\dbu.rc
 
-
-#-ldflags=--enable-stdcall-fixup
-#-ldflags=-Wl,--allow-multiple-definition -s -static
-#Use --enable-stdcall-fixup to disable these warnings
-#Use --disable-stdcall-fixup to disable these fixups
-#-locilib
 -m -n -w0 -es2 -ge1
 
 hbct.hbc
@@ -71,6 +60,8 @@ sddsqlt3.hbc
 letodb.hbc
 #sddoci.hbc
 hbfbird.hbc
+
+Tdbclass.hbc
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
@@ -127,6 +118,8 @@ hbfbird.hbc
 #
 \develop\harbour\dbu\dbuleto.prg 
 #
+c:\develop\harbour\dbu\dbutclass.prg
+
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  
 \develop\harbour\objmgw\disk54.prg
@@ -153,9 +146,8 @@ testepg.prg
 \develop\harbour\objmgw\modeseguranca.prg
 \develop\harbour\objmgw\escolherpasta.prg
 
-
-c:\develop\harbour\dbu\dbutclass.prg
-c:\develop\harbour\dbu\tclass\Tdbclass.prg
-c:\develop\harbour\dbu\tclass\cocoa_mysql.c
-c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
+# necessarias se compilar com tclass nao usando tclass.hbc
+#c:\develop\harbour\dbu\tclass\Tdbclass.prg
+#c:\develop\harbour\dbu\tclass\cocoa_mysql.c
+#c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
 
