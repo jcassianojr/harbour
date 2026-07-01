@@ -22,74 +22,6 @@
 
 #require "hbfbird"
 
- /*
- converter utf para ansi bak novoansi restaurar do bak
- gbak -b -v -t seu_banco_utf8.fdb backup_utf8.fbk
- CREATE DATABASE 'novo_banco_win1252.fdb' //CREATE DATABASE 'C:\temp\novobanco.fdb'
- USER 'SYSDBA' PASSWORD 'masterkey'
-DEFAULT CHARACTER SET WIN1252
-COLLATION PT_BR;
-gbak -c -v -rep backup_utf8.fbk novo_banco_win1252.fdb
- 
- -- Verifica todos os character sets disponíveis
-SELECT * FROM RDB$CHARACTER_SETS;
-
-SELECT 
-    S.RDB$CHARACTER_SET_NAME AS CharSet,
-    C.RDB$COLLATION_NAME AS Collation
-FROM RDB$CHARACTER_SETS S
-JOIN RDB$COLLATIONS C ON S.RDB$CHARACTER_SET_ID = C.RDB$CHARACTER_SET_ID
-WHERE S.RDB$CHARACTER_SET_NAME IN ('WIN1252', 'UTF8')
-ORDER BY 1, 2;
-
-
-isql -u SYSDBA -p masterkey
-CONNECT 'C:\caminho\seu_banco.fdb' USER 'SYSDBA' PASSWORD 'masterkey';
- 
-  oServer := TFBServer():New( cServer + cDatabase, cUser, cPass, nDialect )
-  oServer:NetErr() ? oServer:Error()
-  oServer:ListTables()
-  oServer:TableExists( "TEST" )
-  oServer:Execute( "DROP TABLE Test" )
-  oServer:StartTransaction()
-  oServer:Commit()
-  oServer:Query( "SELECT code, dept, name, sales, salary, creation FROM test" )
-   aStruct := oServer:TableStruct( "test" )
-   aKey := oQuery:GetKeyField()
-  ? "Fields: ", oQuery:FCount(), "Primary Key: ", aKey[ 1 ]
-   oRow := oQuery:Blank()
-
-   ? ;
-      oRow:FCount(), ;
-      oRow:FieldPos( "code" ), ;
-      oRow:FieldGet( 1 ), ;
-      oRow:FieldName( 1 ), ;
-      oRow:FieldType( 1 ), ;
-      oRow:FieldDec( 1 ), ;
-      oRow:FieldLen( 1 ), ;
-      Len( oRow:Getkeyfield() )
-
-   oRow:FieldPut( 1, 150 )
-   oRow:FieldPut( 2, "MY TEST" )
-
-   ? oRow:FieldGet( 1 ), oRow:FieldGet( 2 )
-
-   ? oServer:Append( oRow )
-
-   ? oServer:Delete( oQuery:blank(), "code = 200" )
-
-   DO WHILE oQuery:Fetch()
-      oRow := oQuery:getrow()
-     oRow:FieldGet( oRow:FieldPos( "code" ) ), ;
-    oQuery:Skip()
-
- 
-   oQuery:Destroy()
-
-   oServer:Destroy()
-
-
-*/
 
 // +--------------------------------------------------------------------
 // +    Function firebirdmenu()
@@ -112,7 +44,7 @@ LOCAL KEY
  */  
 
 nPageSize := 1024
-cCharSet := "ASCII"
+cCharSet := "ISO8859_1" //"ASCII"
 nDialect := 3 //deixando com 1 caso de erro criacao com 3
 //Dialeto 1 Focado em compatibilidade retroativa (InterBase 6.0 ou inferior).
 //Dialeto 2 Criado como uma zona de transição para ajudar programadores na migração do Dialeto 1 para o 3.
@@ -256,29 +188,64 @@ ENDIF
 
 RETURN .T.
 
+FUNCTION GetTablesFB( oServer )
+   LOCAL oQuery
+   LOCAL aTables := {}
+   LOCAL cSQL := "SELECT CAST(RDB$RELATION_NAME AS VARCHAR(31)) AS TABLE_NAME " + ;
+                 "FROM RDB$RELATIONS " + ;
+                 "WHERE COALESCE(RDB$SYSTEM_FLAG, 0) = 0 " + ;
+                 "AND RDB$VIEW_BLR IS NULL " + ;
+                 "ORDER BY RDB$RELATION_NAME"
+
+   oQuery := oServer:Query( cSQL )
+   
+   IF oQuery != NIL
+      WHILE !oQuery:Eof()
+         oRow := oQuery:GetRow()
+         // Adiciona o nome da tabela à matriz
+         eVALOR:=ALLTRIM(oRow:FieldGet( 1 ))
+         AAdd( aTables,eVALOR  )// oQuery:FieldGet( 1 ) )
+         oQuery:Skip()
+      ENDDO
+      oQuery:Destroy()
+   ENDIF
+
+RETURN aTables
+
 // +--------------------------------------------------------------------
 // +    Function fireTABELAS()
 // +--------------------------------------------------------------------
-FUNCTION fireTABELAS(lNATIVE)
-LOCAL oServer
-
-IF VALTYPE(lNATIVE)<>"L" //testar a native nao esta trazendo a array
-   lNATIVE:=.F.
-ENDIF
-
-IF lNATIVE
-    oServer := fireconnect()
-    IF oServer != NIL
-       mdbtabela(oServer:ListTables())  
-       oServer:Destroy()
-    ELSE
-       MDT( "Falha ao obter informacoes do servidor." )
-    ENDIF
-ELSE
-   mdbtabela( cDATABASEX ) //via ado 
-ENDIF
+FUNCTION fireTABELAS()
+mdbtabela( cDATABASEX )
 RETURN .T.
 
+
+FUNCTION fireTABELASTESTE( lNATIVE )
+   LOCAL oServer, aTABELAS := {}
+
+   IF VALTYPE( lNATIVE ) <> "L"
+      lNATIVE := .T.
+   ENDIF
+
+   IF lNATIVE
+      oServer := fireconnect()
+      IF oServer != NIL
+         // Substituindo o oServer:ListTables() pela nossa nova função
+         aTABELAS := GetTablesFB( oServer )
+         
+         IF !Empty( aTABELAS )
+            mdbtabela( aTABELAS ) // Passa a matriz populada para sua rotina de interface
+         ELSE
+            MDT( "Nenhuma tabela encontrada." )
+         ENDIF
+         
+         oServer:Destroy()
+      ENDIF
+   ELSE
+      mdbtabela( cDATABASEX )
+   ENDIF
+   
+RETURN .T.
 
 // +--------------------------------------------------------------------
 // +    Function fireimpdbf()
@@ -435,8 +402,9 @@ oQuery:GoTop()
 DO WHILE !oQuery:Eof()
    aVALOR := {}
    
+   oRow := oQuery:GetRow()
    FOR i := 1 TO nFIM
-      AAdd( aVALOR, oQuery:FieldGet( i ) )
+      AAdd( aVALOR,oRow:FieldGet( i )) //oQuery:FieldGet( i ) )
    NEXT i
    
    dbSelectArea( "DESTINO" )
