@@ -613,10 +613,13 @@ return lRETU
 *+--------------------------------------------------------------------
 *+
 function mdbcria()
-if  lFDB //usando nativa erro com catalgo
-   firecreate()
-   return
-endif
+LOCAL cCONN
+cCONN:=""
+//ajustado criacao com catalogo senao pode ser retornada pela forma nativa
+//if  lFDB //usando nativa erro com catalgo
+//   firecreate()
+//   return
+//endif
 DO CASE
     CASE lMDB
        cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos mdb","*.MDB",1)
@@ -662,32 +665,17 @@ IF lMDB .OR. lACCDB
 ENDIF
 
 IF lFDB 
-   // Código necessário para disparar a criação do ficheiro .fdb em branco
-   // Exemplo utilizando ADOX se suportado pelo driver:
-   TRY
-      oCatalog := win_OleCreateObject("ADOX.Catalog")
-      oCatalog:Create("DRIVER="+DriverFirebird()+";Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
-      //oCatalog:Create("DRIVER=Firebird/InterBase(r) driver;Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
-      //oCatalog:Create("DRIVER=Firebird ODBC driver;Uid=SYSDBA;Pwd=masterkey;DbName=" + AllTrim(cARQORI) + ";")
-      
-      oCatalog := NIL
-   CATCH
-      MDT("Erro ao criar base de dados Firebird")
-   END
-   //CREATE DATABASE 'novo_banco_win1252.fdb' //CREATE DATABASE 'C:\temp\novobanco.fdb'
-   //USER 'SYSDBA' PASSWORD 'masterkey'
-   //DEFAULT CHARACTER SET WIN1252
-   //COLLATION PT_BR;
-   
+   CreateAccessDatabase(cARQORI)
 ENDIF
 
 
-//cria com create native
+//basta criar o arquivo ja e entendido pelo sqlite
 IF cTIPOSQL = "SQLITE"
-   //createSqlitedb()
-   HB_MEMOWRIT(cARQORI,"")
-   //so criar o arquivo ja e entendido pelo sqlite
+    IF ! hb_FileExists(cARQORI)
+       HB_MEMOWRIT(cARQORI,"")
+    ENDIF   
 ENDIF
+
 IF cTIPOSQL == "PARADOX"
    //Character	Alpha	O Paradox limita campos Alpha a no máximo 255 caracteres.
    //Numeric	Number	Corresponde a números de ponto flutuante de 15 dígitos.
@@ -2061,7 +2049,7 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
         END
     END
 
-    IF !hb_FileExists(cDatabase)
+    IF ! hb_FileExists(cDatabase)
        DO CASE
           CASE lACCDB .OR. cEXTENSAO == ".accdb"
              oCatalog:Create("Provider=Microsoft.ACE.OLEDB.12.0;" + ;
@@ -2090,10 +2078,13 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
              //ParadoxCreateTable( cTablename, aStruct ) e por arquivo nao cria um database o database e uma pasta 
 
           CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. lFDB 
-            // oCatalog:Create("Driver=Firebird/InterBase(r) driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
-            // oCatalog:Create("Driver=Firebird ODBC Driver;Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
-             oCatalog:Create("Driver="+DriverFirebird()+";Uid=" + cUserName + ";Pwd=" + cPassword + ";DbName=" + cDatabase + ";") 
-
+               cConn := "DRIVER=" + DriverFirebird() + ";" + ;
+               "Uid=SYSDBA;" + ;
+               "Pwd=masterkey;" + ;
+               "DbName=" + AllTrim(cARQORI) + ";" + ;
+               "CHARSET=ISO8859_1;" + ; // Define o Character Set
+              "DIALECT=3;"        // Define o Dialeto (sempre use 3 para Firebird moderno)
+              oCatalog:Create(cConn)
        ENDCASE
     ENDIF
 
