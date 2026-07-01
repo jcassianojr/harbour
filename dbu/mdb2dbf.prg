@@ -704,29 +704,10 @@ ENDIF
 
 RETURN NIL
 
-
-
-*+--------------------------------------------------------------------
-*+
-*+    Function DBF2MDB()
-*+
-*+--------------------------------------------------------------------
-*+
-FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
-
-local aINDICES
-LOCAL nINDICES
-LOCAL cINDEXNAME
-LOCAL J
-local msql
-local lgravasql
+FUNCTION GeraSQLMetadata()
 LOCAL cSqlFields, cSqlIndexes
-
-
-
 cSqlFields := ""
 cSqlIndexes := ""
-
 DO CASE
    CASE cTIPOSQL == "SQLITE"
       cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (nome_tabela TEXT, column_name TEXT, original_type TEXT, tamanho INTEGER, precisao INTEGER, is_nullable INTEGER, field_visual_picture TEXT)"
@@ -757,6 +738,31 @@ DO CASE
       cSqlFields  := "CREATE TABLE table_metadata (nome_tabela VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), tamanho INTEGER, precisao INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
       cSqlIndexes := "CREATE TABLE index_metadata (nome_tabela VARCHAR(50), index_name VARCHAR(50), expression BLOB SUB_TYPE TEXT, sql_expression BLOB SUB_TYPE TEXT, filter_expression BLOB SUB_TYPE TEXT, is_unique INTEGER, is_bag INTEGER)"
    ENDCASE
+RETURN {cSqlFields,cSqlIndexes}
+
+
+
+*+--------------------------------------------------------------------
+*+
+*+    Function DBF2MDB()
+*+
+*+--------------------------------------------------------------------
+*+
+FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
+
+local aINDICES
+LOCAL nINDICES
+LOCAL cINDEXNAME
+LOCAL J
+local msql
+local lgravasql
+LOCAL cSqlFields, cSqlIndexes
+LOCAL aRETUMETA
+
+aRETUMETA:=GeraSQLMetadata()
+cSqlFields  :=aRETUMETA[1] 
+cSqlIndexes := aRETUMETA[2]
+
 
 
 // Execução dos comandos de criação das tabelas de metadados

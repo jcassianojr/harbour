@@ -896,31 +896,19 @@ FUNCTION export2sql( odb, cDBFFILE, lincdados )
 
 
    cTablename := TIRAEXT( cDBFFILE )
-// use &cTablename.
 
-// 1. Garantir que a tabela de metadados exista
-   // Metadados de Campos (Tabela table_metadata atualizada)
-   mSql := "CREATE TABLE IF NOT EXISTS table_metadata (" + ;
-        "nome_tabela TEXT, " + ;
-        "column_name TEXT, " + ;
-        "original_type TEXT, " + ;
-        "tamanho INTEGER, " + ;
-        "precisao INTEGER, " + ;
-        "is_nullable INTEGER, " + ;      // Indica se aceita valores NULL (0=Não, 1=Sim)
-        "field_visual_picture TEXT)"     // Guarda a máscara visual padrão do DBF (ex: '@E 999,999.99')
-   miscsql( oDB, mSql )
-   
-   
-   // Metadados de Índices (Tabela index_metadata atualizada)
-    mSqlIndex := "CREATE TABLE IF NOT EXISTS index_metadata (" + ;
-                 "nome_tabela TEXT, " + ;
-                 "index_name TEXT, " + ;
-                 "expression TEXT, " + ;         // Expressão original em Harbour (ex: 'CODIGO+DTOS(DATA)')
-                 "sql_expression TEXT, " + ;     // Expressão traduzida para o Banco (ex: 'codigo || to_char(data, ...)')
-                 "filter_expression TEXT, " + ;  // Expressão condicional do FOR (ex: '!DELETED()' ou 'ATIVO==.T.')
-                 "is_unique INTEGER, " + ;
-                 "is_bag INTEGER)"
-    miscsql( oDB, mSqlIndex )
+
+  aRETUMETA:=GeraSQLMetadata()
+  cSqlFields  :=aRETUMETA[1] 
+  cSqlIndexes := aRETUMETA[2]
+  
+  IF ! Empty( cSqlFields )
+     miscsql( oDB,cSqlFields )
+  ENDIF   
+
+  IF ! Empty( cSqlIndexes )
+     miscsql( oDB,ccSqlIndexes )
+  ENDIF 
 
 
    // Verifica se a tabela 
