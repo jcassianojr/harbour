@@ -1835,6 +1835,67 @@ FUNCTION GERACAMPOADT(cFieldName, cSqlType, nFieldLength, nFieldDec)
    ENDCASE
 
 RETURN aRetu
+
+FUNCTION GeradbfSchema( cTablename, aStruct )
+LOCAL aRETU
+LOCAL       mFldNm   
+LOCAL       mFldType 
+LOCAL       mFldLen  
+LOCAL       mFldDec 
+LOCAL       i
+LOCAL       mSql
+LOCAL       nIsNullable
+LOCAL       cVisualPic
+
+aRETU:={}
+IF ValType( cTablename ) <> "C"
+   cTablename := Alias()
+ENDIF
+IF ValType( aStruct) <> "A"
+   aStruct := DBSTRUCT()
+ENDIF
+FOR i := 1 TO Len( aStruct )
+   mFldNm   := aStruct[ i, 1 ]
+   mFldType := aStruct[ i, 2 ]
+   mFldLen  := aStruct[ i, 3 ]
+   mFldDec  := aStruct[ i, 4 ]
+
+   // Monta uma máscara visual padrão baseada nas características do campo DBF
+   // Dentro do loop de gravação de metadados de campos (aSTRU):
+   nIsNullable := 1 //1 pois a tag isnulllable quando permite null e o padrao 1
+   cVisualPic  := ""
+
+   DO CASE
+   CASE mFldType == "+"
+      nIsNullable := 0 // Auto-incremento nunca é nulo
+      cVisualPic  := "99999999"
+      
+   CASE mFldType == "I" // Inteiro nativo do ADS
+      cVisualPic  := Replicate("9", mFldLen)
+      
+   CASE mFldType == "T" // Time/Timestamp do ADS
+      cVisualPic  := "99/99/9999 99:99:99"
+      
+   CASE mFldType == "D"
+      cVisualPic  := "99/99/9999"
+      
+   CASE mFldType == "L"
+      cVisualPic  := "Y"
+   ENDCASE
+
+   // Monta o INSERT alimentando a nova estrutura de metadados estendida
+   msql := "INSERT INTO table_metadata (nome_tabela, column_name, original_type, tamanho, precisao, is_nullable, field_visual_picture) VALUES (" + ;
+           c2sql(cTablename)   + ", " + ;
+           c2sql(mFldNm)       + ", " + ;
+           c2sql(mFldType)     + ", " + ;
+           LTrim(Str(mFldLen)) + ", " + ;
+           LTrim(Str(mFldDec)) + ", " + ;
+           LTrim(Str(nIsNullable)) + ", " + ; // Salva 0 ou 1
+           c2sql(cVisualPic)   + ")"          // Salva a máscara padrão gerada
+   aadd(aretu,msql)
+NEXT
+reTURN aRETU
+
 // AJUSTE: Passamos cTablename e cTIPOSQL como parâmetros para a função
 FUNCTION GeraINDICES( cTablename )
 LOCAL aDUPLA
