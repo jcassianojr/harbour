@@ -803,60 +803,17 @@ cNOMETABELA := ALIAS()
 ctablename  := cNOMETABELA
 
 // 1. LIMPEZA DOS METADADOS (Geral para todos os bancos)
-// Limpa o que existia anteriormente para evitar duplicidade na re-importaÃ§Ã£o
+// Limpa o que existia anteriormente para evitar duplicidade na re-importacao
 executacmd( cMDBARQ, "DELETE FROM table_metadata WHERE nome_tabela = " + c2sql(cNOMETABELA) )
 executacmd( cMDBARQ, "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cNOMETABELA) )
 
 
-// 2. INCLUSÃO DOS METADADOS DE CAMPOS (Estrutura do DBF)
-FOR i := 1 TO Len( aSTRU )
-   mFldNm   := aSTRU[ i, 1 ]
-   mFldType := aSTRU[ i, 2 ]
-   mFldLen  := aSTRU[ i, 3 ]
-   mFldDec  := aSTRU[ i, 4 ]
-
-   // Regra para is_nullable: Campos auto-incrementais (+) não aceitam nulo (0). 
-   // Os demais campos aceitam nulo (1) por padrão de compatibilidade SQL.
-   nIsNullable := iif( mFldType == "+", 0, 1 )
-
-   // Monta uma máscara visual padrão baseada nas características do campo DBF
-   // Dentro do loop de gravação de metadados de campos (aSTRU):
-   nIsNullable := 1
-   cVisualPic  := ""
-
-   DO CASE
-   CASE mFldType == "+"
-      nIsNullable := 0 // Auto-incremento nunca é nulo
-      cVisualPic  := "99999999"
-      
-   CASE mFldType == "I" // Inteiro nativo do ADS
-      cVisualPic  := Replicate("9", mFldLen)
-      
-   CASE mFldType == "T" // Time/Timestamp do ADS
-      cVisualPic  := "99/99/9999 99:99:99"
-      
-   CASE mFldType == "D"
-      cVisualPic  := "99/99/9999"
-      
-   CASE mFldType == "L"
-      cVisualPic  := "Y"
-   ENDCASE
-
-   // Monta o INSERT alimentando a nova estrutura de metadados estendida
-   msql := "INSERT INTO table_metadata (nome_tabela, column_name, original_type, tamanho, precisao, is_nullable, field_visual_picture) VALUES (" + ;
-           c2sql(cTablename)   + ", " + ;
-           c2sql(mFldNm)       + ", " + ;
-           c2sql(mFldType)     + ", " + ;
-           LTrim(Str(mFldLen)) + ", " + ;
-           LTrim(Str(mFldDec)) + ", " + ;
-           LTrim(Str(nIsNullable)) + ", " + ; // Salva 0 ou 1
-           c2sql(cVisualPic)   + ")"          // Salva a máscara padrão gerada
-   IF lGRAVASQL .AND. .NOT. EMPTY(msql)
-      HB_MEMOWRIT(cNOMETABELA+"_tablemeta_"+cTIPOSQL+".sql",Msql,.F.)
-   ENDIF
-   
-   executacmd( cMDBARQ, msql )
-NEXT
+//Grava metadata do dbf
+aMETADBF:=GeradbfSchema( cTablename, aStru )
+FOR j := 1 TO LEN(aMETADBF)
+    mSQL:=aMETADBF[J]
+    executacmd( cMDBARQ, msql )
+NEXT J
 
 aINDICES:=GeraINDICES()
 nIndexes := LEN(aINDICES)
@@ -949,15 +906,9 @@ RETURN .T.
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function OPENTIPOARQ()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 FUNCTION OPENTIPOARQ
 
@@ -1049,7 +1000,7 @@ FUNCTION buscachaves( cNomeBanco )
     ENDIF   
     buscapadrao()
     IF lFDB .AND. EMPTY(cPASSX)
-       cPASSX   := padr("masterkey",30)
+       cPASSX   := padr("masterkey",30," ")
     ENDIF
 
    RETURN .T.
@@ -1111,19 +1062,11 @@ ENDIF
 RETURN
 
 
-
-
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 *+    Function MDBIMPDBF()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
 *+
 FUNCTION MDBIMPDBF()
 

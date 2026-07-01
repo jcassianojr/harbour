@@ -1861,7 +1861,7 @@ FOR i := 1 TO Len( aStruct )
    mFldDec  := aStruct[ i, 4 ]
 
    // Monta uma máscara visual padrão baseada nas características do campo DBF
-   // Dentro do loop de gravação de metadados de campos (aSTRU):
+   // Dentro do loop de gravação de dados de campos (aSTRU):
    nIsNullable := 1 //1 pois a tag isnulllable quando permite null e o padrao 1
    cVisualPic  := ""
 

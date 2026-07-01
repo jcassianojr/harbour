@@ -898,10 +898,10 @@ FUNCTION export2sql( odb, cDBFFILE, lincdados )
    cTablename := TIRAEXT( cDBFFILE )
 
 
+  //cria as tabelas metadados tabela e indice
   aRETUMETA:=GeraSQLMetadata()
   cSqlFields  :=aRETUMETA[1] 
   cSqlIndexes := aRETUMETA[2]
-  
   IF ! Empty( cSqlFields )
      miscsql( oDB,cSqlFields )
   ENDIF   
@@ -929,65 +929,47 @@ FUNCTION export2sql( odb, cDBFFILE, lincdados )
    ENDIF
 
 
-// 2. Limpar metadados antigos desta tabela específica (se houver)
+// Limpar metadados antigos desta tabela específica 
    miscsql( oDB, "DELETE FROM table_metadata WHERE nome_tabela = " + c2sql(cTablename) )
    
-   // 1. LIMPA todos os metadados de índices desta tabela de uma vez só (fora do loop)
+   //LIMPA todos os metadados de índices desta tabela
   miscsql( oDB, "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTablename) )
 
+  //abre o dbf para importacao
+  dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), , .T. , .F. )  
+  aStruct := dbStruct()
 
- dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), , .T. , .F. )  //dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), "ORIGEM", .T. , .F. )
-  // USE ( cARQORI ) ALIAS ORIGEM SHARED NEW VIA ( cORIDRIVER )
-// USE (cDBFFILE)  SHARED NEW //VIA  (cORIDRIVER)
+  //Grava metadata do dbf
+  aMETADBF:=GeradbfSchema( cTablename, aStruct )
+   FOR j := 1 TO LEN(aMETADBF)
+       mSQL:=aMETADBF[J]
+       miscsql( oDB, mSql )
+   NEXT J
+   
 
-   aStruct := dbStruct()
-
-
-// 5. Inserir metadados para cada campo
-   FOR i := 1 TO Len( aStruct )
-      mFldNm   := aStruct[ i, 1 ] // DBS_NAME
-      mFldType := aStruct[ i, 2 ] // DBS_TYPE
-      mFldLen  := aStruct[ i, 3 ] // DBS_LEN
-      mFldDec  := aStruct[ i, 4 ] // DBS_DEC
-
-      mSql := "INSERT INTO table_metadata (nome_tabela, column_name, original_type, tamanho, precisao) VALUES (" + ;
-              c2sql(cTablename) + ", " + ;
-              c2sql(mFldNm) + ", " + ;
-              c2sql(mFldType) + ", " + ;
-              ltrim(str(mFldLen)) + ", " + ;
-              ltrim(str(mFldDec)) + ")"
-      miscsql( oDB, mSql )
-   NEXT
-
-
-// criado funcao para usar tambem no dbudoc
-
+   // cria sql create table
    mSQL := SqliteCreateTable( cTablename, aStruct, "SQLITE" )
-
-
    IF !miscsql( oDB, mSql )
       alertx( 'Table Creation Error!', 'DBF2SQLite' )
       RETURN NIL
    ENDIF
 
-
+   //roda create index e grava metadado indices
    aINDICES:=GeraINDICES(cTABLENAME)
    nIndexes := LEN(aINDICES)
    FOR j := 1 TO nIndexes
       msql := aINDICES[J,1]  //Create index
-      
       IF ! miscsql( oDB, mSql )
          MemoWrit( "sql" + StrZero( j, 2, 0 ) + ".txt", msql )
       ENDIF
-   
       msql := aINDICES[J,2]  //metadado
-      
       IF ! miscsql( oDB, mSql )
          MemoWrit( "sql" + StrZero( j, 2, 0 ) + ".txt", msql )
       ENDIF
-      
    NEXT j
 
+
+   //grava dados do dbf com insert into
    IF lincdados
        nLASTREC := RecCount()  // NetRegCount(cOLDDBF)
        zei_fort( nLASTREC,,, 0 )
@@ -1024,19 +1006,11 @@ FUNCTION export2sql( odb, cDBFFILE, lincdados )
 
 
 
-
-
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 // +    Function MDPCHAVEI()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION MDPCHAVEI( cICHAVE )   // Cria string campo1,campo2,... para create index em sql
 
