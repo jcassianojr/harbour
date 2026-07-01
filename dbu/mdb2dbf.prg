@@ -163,39 +163,7 @@ lFDB   := .F.
 IF cTIPOSQL = "FIREBIRD"   .OR. cTIPOSQL = "FDB" .OR.  cTIPOSQL ="GDB" .OR.  cTIPOSQL ="IB"
    lFDB   := .T.
 ENDIF
-
-IF cTIPOSQL="LETO"
-   cSERVERX   := PADR("//127.0.0.1:2812/",30," ")  
-   cPORTAX:= PADR("2812",30," ")
-ENDIF   
-
-IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-   cUSERX := PADR("root",30," ")   
-   cPORTAX:= PADR("3306",30," ")
-ENDIF
-
-IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-   cUSERX := PADR("postgres",30," ") 
-   cPORTAX:= PADR("5432",30," ")
-ENDIF
-IF lFDB 
-   cSERVERX := PADR("localhost", 30, " ")   //net://
-   cUSERX := PADR("SYSDBA",30," ")  
-   cPORTAX:= PADR("3050",30," ")
-   //cPASSX   := padr("masterkey",30) abaixo apos ler do cofre atribui se estiver vazia
-ENDIF
-IF cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
-   cPORTAX:= PADR("1521",30," ")
-ENDIF
-IF cTIPOSQL = "MSSQL"
-   cPORTAX:= PADR("1433",30," ")
-ENDIF
-IF cTIPOSQL == "PARADOX"
-   // Geralmente não usa porta, pois acessa arquivos locais ou pasta
-   cSERVERX := PADR("localhost", 30, " ") 
-   cUSERX   := SPACE(30)
-   cPORTAX  := SPACE(30)
-ENDIF
+buscapadrao() //valores padrao das portas e usuarios
 
 //
 // ajustes nomes de drivers para 32 e 64 bits
@@ -1067,17 +1035,77 @@ FUNCTION buscachaves( cNomeBanco )
        cSecaoCofre := Upper( AllTrim( cNomeBanco ) )
 
        // Busca as credenciais de forma segura no config.dat mascarado
-       cSERVERX := padr(LerDoCofre( cSecaoCofre, "Server",cSERVERX ),30)
-       cUSERX   := padr(LerDoCofre( cSecaoCofre, "User",cUSERX ),30)
-       cPASSX   := padr(LerDoCofre( cSecaoCofre, "Password",cPASSX ),30)
-       cOwnerX   := padr(LerDoCofre( cSecaoCofre, "Owner",cOwnerX ),30)
-       cportaX   := padr(LerDoCofre( cSecaoCofre, "portax",cportaX),30)
+       cSERVERX := padr(LerDoCofre( cSecaoCofre, "Server",cSERVERX ),30," ")
+       cUSERX   := padr(LerDoCofre( cSecaoCofre, "User",cUSERX ),30," ")
+       cPASSX   := padr(LerDoCofre( cSecaoCofre, "Password",cPASSX ),30," ")
+       cOwnerX   := padr(LerDoCofre( cSecaoCofre, "Owner",cOwnerX ),30," ")
+       cportaX   := padr(LerDoCofre( cSecaoCofre, "portax",cportaX),30," ")
     ENDIF   
-   IF lFDB .AND. EMPTY(cPASSX)
-      cPASSX   := padr("masterkey",30)
-   ENDIF
+    buscapadrao()
+    IF lFDB .AND. EMPTY(cPASSX)
+       cPASSX   := padr("masterkey",30)
+    ENDIF
 
    RETURN .T.
+
+function buscapadrao()
+IF cTIPOSQL="LETO"
+   IF EMPTY(cSERVERX)
+      cSERVERX   := PADR("//127.0.0.1:2812/",30," ")  
+   ENDIF   
+   IF EMPTY(cPORTAX)
+      cPORTAX:= PADR("2812",30," ")
+   ENDIF   
+ENDIF   
+
+IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
+   IF EMPTY(cUSERX)
+       cUSERX := PADR("root",30," ")   
+   ENDIF
+   IF EMPTY(cPORTAX)
+       cPORTAX:= PADR("3306",30," ")
+   ENDIF
+ENDIF
+
+IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
+   IF EMPTY(cUSERX)
+       cUSERX := PADR("postgres",30," ") 
+   ENDIF   
+   IF EMPTY(cPORTAX)
+       cPORTAX:= PADR("5432",30," ")
+   ENDIF
+ENDIF
+IF lFDB 
+   IF EMPTY(cSERVERX)
+       cSERVERX := PADR("localhost", 30, " ")   //net://
+   ENDIF
+   IF EMPTY(cUSERX)
+      cUSERX := PADR("SYSDBA",30," ")  
+   ENDIF
+   IF EMPTY(cPORTAX)
+      cPORTAX:= PADR("3050",30," ")
+   ENDIF
+ENDIF
+IF cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
+   IF EMPTY(cPORTAX)
+        cPORTAX:= PADR("1521",30," ")
+   ENDIF
+ENDIF
+IF cTIPOSQL = "MSSQL"
+   IF EMPTY(cPORTAX)
+        cPORTAX:= PADR("1433",30," ")
+   ENDIF
+ENDIF
+IF cTIPOSQL == "PARADOX"
+   // Geralmente não usa porta, pois acessa arquivos locais ou pasta
+   IF EMPTY(cSERVERX)
+        cSERVERX := PADR("localhost", 30, " ") 
+   ENDIF
+ENDIF
+RETURN
+
+
+
 
 *+--------------------------------------------------------------------
 *+

@@ -128,6 +128,7 @@ letodb.hbc
 \develop\harbour\objmgw\adofix.prg
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
+\develop\harbour\objmgw\escolherpasta.prg
 dumypg.prg
 dumyfbsdd.prg
 #fbird_wrappers.prg

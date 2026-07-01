@@ -71,7 +71,7 @@ IF File( CaminhoArquivoCofre() )
 ENDIF
 
 IF Empty( cBufferHex )
-    RETURN ""
+    RETURN cPADRAO
 ENDIF
 
 // 2. Converte a string Hexadecimal de volta para caracteres binários
