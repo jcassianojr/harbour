@@ -55,7 +55,7 @@ lFDB       := .f.
 
 //usado pelo firebirdcreate
 nPageSize := 1024
-cCharSet := "ASCII"
+cCharSet := "ISO8859_1" //"ASCII"
 nDialect := 3 //deixe com 1 caso de erro criacao com 3
 
 

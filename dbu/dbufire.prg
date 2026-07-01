@@ -134,10 +134,11 @@ function firecreate(nDIAUSO)
    cBANCOX:=hb_FNameSplit(cARQORI,NIL,cBANCOX,NIL)
 
     FBCreateDB( AllTrim(cSERVERX) + ":" + AllTrim(cARQORI), cUSERX, cPASSX, nPageSize, cCharSet, nDialect )
-    
+
+
+    //ccharset  e ndialect a prior nao podem ser alterados por isso se define na criacao    
    //fireexecuteSQL({"DEFAULT CHARACTER SET WIN1252","COLLATION PT_BR;"})
-    
-    
+   //ALTER CHARACTER SET NOME_DO_CHARSET SET DEFAULT COLLATION NOME_DO_COLLATION;
     //DEFAULT CHARACTER SET WIN1252
     //COLLATION PT_BR;
 return .T.
@@ -188,6 +189,9 @@ ENDIF
 
 RETURN .T.
 
+// +--------------------------------------------------------------------
+// +    Function GetTablesFB( oServer )
+// +--------------------------------------------------------------------
 FUNCTION GetTablesFB( oServer )
    LOCAL oQuery
    LOCAL aTables := {}
@@ -254,7 +258,7 @@ FUNCTION fireimpdbf()
 LOCAL oServer
 LOCAL aINDICES := {}
 LOCAL nINDICES, cINDEXNAME, cINDEXUSO, msql, cTABLE
-LOCAL i, nCont
+LOCAL i,j, nCont
 
 cTABLE := Space( 30 )
 mdt( "Escolha o DBF de Origem" )
@@ -311,6 +315,20 @@ aRETUMETA:=GeraSQLMetadata()
   ENDIF 
 
 
+// Limpar metadados antigos desta tabela específica 
+oServer:Execute( "DELETE FROM table_metadata WHERE nome_tabela = " + c2sql(cTable) )
+   
+// LIMPA todos os metadados de índices desta tabela 
+oServer:Execute( "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTable) )
+
+ //Grava metadata do dbf
+  aMETADBF:=GeradbfSchema( cTABLE, aStru )
+   FOR j := 1 TO LEN(aMETADBF)
+       mSQL:=aMETADBF[J]
+       oServer:Execute( msql )
+   NEXT J
+
+
 
 // Se a tabela já existir, dropa para evitar conflitos de reimportação
 IF oServer:TableExists( cTABLE )
@@ -318,11 +336,6 @@ IF oServer:TableExists( cTABLE )
 ENDIF
 
 
-// Limpar metadados antigos desta tabela específica 
-oServer:Execute( "DELETE FROM table_metadata WHERE nome_tabela = " + c2sql(cTable) )
-   
-// LIMPA todos os metadados de índices desta tabela 
-oServer:Execute( "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTable) )
 
 // Gera a estrutura DDL adaptada para o Firebird usando seu tradutor existente
 msql := SqliteCreateTable( cTABLE, aSTRU, "FIREBIRD" )
@@ -336,7 +349,7 @@ oServer:Execute( msql )
 // Criação dos índices coletados
 FOR i := 1 TO Len( aINDICES )
    oServer:Execute( aINDICES[i,1] )  //create index
-   oServer:Execute(aINDICES[i,2])  //metadado
+   oServer:Execute( aINDICES[i,2] )  //metadado
 NEXT i
 
 
@@ -471,8 +484,6 @@ DO WHILE !oQuery:Eof()
       IF ValType( eVALOR ) == "C" .OR. ValType( eVALOR ) == "M"
          eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )
             //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
-         //eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )
-         //eVALOR := TIRACE( eVALOR )
       ENDIF
       
       IF !Empty( eVALOR )
@@ -556,6 +567,14 @@ IF FILE(cARQIMP)
    fireexecuteSQL(cCOMANDO)
    oServer:Destroy()
 endif
+
+
+ *+--------------------------------------------------------------------
+*+
+*+    Function fireExecuteSql()
+*+
+*+--------------------------------------------------------------------
+*+
 
 FUNCTION fireexecuteSQL( eCOMANDO, lTRANS, lMES )
 
