@@ -284,6 +284,7 @@ zei_fort( nLASTREC,,, 0 )
     NEXT j
 
 
+
 // Conecta nativamente via classe TFBServer
 oServer := fireconnect()
 IF oServer == NIL
@@ -291,19 +292,53 @@ IF oServer == NIL
    RETURN .F.
 ENDIF
 
+
+//cria as metadados
+aRETUMETA:=GeraSQLMetadata()
+  cSqlFields  :=aRETUMETA[1] 
+  cSqlIndexes := aRETUMETA[2]
+  
+  IF ! Empty( cSqlFields )
+     oServer:Execute(cSqlFields )
+     mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON table_metadata TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
+     oServer:Execute( msql )
+  ENDIF   
+
+  IF ! Empty( cSqlIndexes )
+     oServer:Execute(ccSqlIndexes )
+     mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON index_metadata TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
+     oServer:Execute( msql )
+  ENDIF 
+
+
+
 // Se a tabela já existir, dropa para evitar conflitos de reimportação
 IF oServer:TableExists( cTABLE )
    oServer:Execute( "DROP TABLE " + cTABLE )
 ENDIF
 
+
+// Limpar metadados antigos desta tabela específica 
+oServer:Execute( "DELETE FROM table_metadata WHERE nome_tabela = " + c2sql(cTable) )
+   
+// LIMPA todos os metadados de índices desta tabela 
+oServer:Execute( "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTable) )
+
 // Gera a estrutura DDL adaptada para o Firebird usando seu tradutor existente
 msql := SqliteCreateTable( cTABLE, aSTRU, "FIREBIRD" )
 oServer:Execute( msql )
 
+
+mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON "+cTABLE+" TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
+oServer:Execute( msql )
+ 
+
 // Criação dos índices coletados
 FOR i := 1 TO Len( aINDICES )
-   oServer:Execute( aINDICES[i] )
+   oServer:Execute( aINDICES[i,1] )  //create index
+   oServer:Execute(aINDICES[i,2])  //metadado
 NEXT i
+
 
 nCont := 0
 oServer:StartTransaction()
