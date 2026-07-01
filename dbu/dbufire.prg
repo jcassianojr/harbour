@@ -43,7 +43,7 @@ LOCAL KEY
    LOCAL cName
  */  
 
-nPageSize := 1024
+nPageSize := 8192 //1024
 cCharSet := "ISO8859_1" //"ASCII"
 nDialect := 3 //deixando com 1 caso de erro criacao com 3
 //Dialeto 1 Focado em compatibilidade retroativa (InterBase 6.0 ou inferior).
@@ -126,32 +126,52 @@ RETURN .T.
 // +--------------------------------------------------------------------
 // +    Function firecreate()
 // +--------------------------------------------------------------------
-function firecreate(nDIAUSO)
+function firecreate(lUSASQL)
+LOCAL cCOMANDO
+LOCAL cARQORI
+
     cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
         {{'Firebird fdb','*.fdb'},{'Firebird gdb','*.gdb'},{'Firebird ib','*.ib'},;
          {'All Files','*.*'}},1)  
+
+   IF VALTYPE(lUSASQL)<>"L"
+      lUSASQL:=MDG("Usar SQL(SIM) FBCREATEDB(NAO)")
+   ENDIF
+
    cDATABASEX := cARQORI
    cBANCOX:=hb_FNameSplit(cARQORI,NIL,cBANCOX,NIL)
-
-    FBCreateDB( AllTrim(cSERVERX) + ":" + AllTrim(cARQORI), cUSERX, cPASSX, nPageSize, cCharSet, nDialect )
-
+   
+   
+    IF lUSASQL
+        oServer := fireconnect(.F.)  //Abre sem anexar o arquivo
+        IF oServer == NIL
+           RETURN .F.
+       ENDIF
+       cCOMANDO := "CREATE DATABASE '"+cARQORI+"' USER 'SYSDBA' PASSWORD 'masterkey' PAGE_SIZE = 8192 DEFAULT CHARACTER SET ISO8859_1"
+       oServer:Execute( cCOMANDO )
+    ELSE
+       FBCreateDB( AllTrim(cSERVERX) + ":" + AllTrim(cARQORI), cUSERX, cPASSX, nPageSize, cCharSet, nDialect )
+    ENDIF
 
     //ccharset  e ndialect a prior nao podem ser alterados por isso se define na criacao    
-   //fireexecuteSQL({"DEFAULT CHARACTER SET WIN1252","COLLATION PT_BR;"})
-   //ALTER CHARACTER SET NOME_DO_CHARSET SET DEFAULT COLLATION NOME_DO_COLLATION;
-    //DEFAULT CHARACTER SET WIN1252
-    //COLLATION PT_BR;
 return .T.
 
 // +--------------------------------------------------------------------
 // +    Function fireconnect()
 // +--------------------------------------------------------------------
-STATIC FUNCTION fireconnect()
+STATIC FUNCTION fireconnect(lINCLUIDB)
 LOCAL oServer
 LOCAL cConnString
+IF VALTYPE(lINCLUIDB)<>"L"
+   lINCLUIDB:=.T.
+ENDIF
 
 // Monta string de conexão no formato "host:caminho_ou_alias"
-cConnString := AllTrim(cSERVERX) + ":" + AllTrim(cDATABASEX)
+IF lINCLUIDB
+   cConnString := AllTrim(cSERVERX) + ":" + AllTrim(cDATABASEX)
+ELSE
+   cConnString := AllTrim(cSERVERX) + ":" 
+ENDIF   
 
 // Instancia o servidor nativo usando TFBServer (Dialeto padrão 3)
 oServer := TFBServer():New( cConnString, AllTrim(cUSERX), AllTrim(cPASSX), 3 )
@@ -476,10 +496,6 @@ DO WHILE !oQuery:Eof()
       ENDIF
    ENDIF
    
-   IF hb_UTF8Len(eVALOR) != Len(eVALOR)
-      eVALOR := hb_UTF8ToStr(eVALOR)  //hb_StrToUTF8(cString)
-   ENDIF   
-      
       // Limpeza de strings e caracteres de controle oriundos do banco
       IF ValType( eVALOR ) == "C" .OR. ValType( eVALOR ) == "M"
          eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )

@@ -54,7 +54,7 @@ laccdb     := .f.
 lFDB       := .f.
 
 //usado pelo firebirdcreate
-nPageSize := 1024
+nPageSize := 8192 //1024
 cCharSet := "ISO8859_1" //"ASCII"
 nDialect := 3 //deixe com 1 caso de erro criacao com 3
 
@@ -617,7 +617,7 @@ LOCAL cCONN
 cCONN:=""
 //ajustado criacao com catalogo senao pode ser retornada pela forma nativa
 //if  lFDB //usando nativa erro com catalgo
-//   firecreate()
+//   firecreate() Pergunta se quer usar sql ou fbcreate
 //   return
 //endif
 DO CASE
@@ -797,7 +797,7 @@ executacmd( cMDBARQ, "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(c
 
 
 //Grava metadata do dbf
-aMETADBF:=GeradbfSchema( cTablename, aStru )
+aMETADBF:=GeradbfSchema( cNOMETABELA, aStru )
 FOR j := 1 TO LEN(aMETADBF)
     mSQL:=aMETADBF[J]
     executacmd( cMDBARQ, msql )
@@ -1917,14 +1917,13 @@ CASE cTIPOSQL = "JETFOX"
 CASE cTIPOSQL = "DBASE"
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=dBASE IV;"
 CASE lFDB 
-   //cCONN := "DRIVER=Firebird ODBC driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
-   //cCONN := "DRIVER=Firebird/InterBase(r) driver; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
-   cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+   IF EMPTY(cCAMBASE)
+      cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX
+   ELSE
+      cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+   ENDIF   
 CASE cTIPOSQL = "PARADOX"   // ADOPX
-   //ALERT(cCAMBASE)
-   //ALERT(CCAMDIR)
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=Paradox 5.x;"
-   //ALERT(cCONN)
 CASE cTIPOSQL == "XMLDB"  // ADOXML
    cCONN := "Provider=MSPersist"
 CASE cTIPOSQL == "XML"  // ADOXML
@@ -2081,7 +2080,7 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
                cConn := "DRIVER=" + DriverFirebird() + ";" + ;
                "Uid=SYSDBA;" + ;
                "Pwd=masterkey;" + ;
-               "DbName=" + AllTrim(cARQORI) + ";" + ;
+               "DbName=" + AllTrim(cDatabase) + ";" + ;
                "CHARSET=ISO8859_1;" + ; // Define o Character Set
               "DIALECT=3;"        // Define o Dialeto (sempre use 3 para Firebird moderno)
               oCatalog:Create(cConn)
@@ -2093,7 +2092,6 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
 
 
 
-//FAZERDBF(bUSO, lSHARE[.F.], bPRE, bPOS, cMASK["*."+TABLEEXT],LOPEN[.T.])
 *+--------------------------------------------------------------------
 *+
 *+    Function mdltodos()
@@ -2106,7 +2104,6 @@ LOCAL cPASTA
 cPASTA:=SelectFolder()
 IF ! EMPTY(cPASTA)
    cPASTA+="\*."+TABLEEXT
-   //Alert(cPASTA)
 ENDIF
 cTEXTO:=""
 //FAZERDBF(bUSO               , lSHARE[.F.] , bPRE, bPOS, cMASK["*."+TABLEEXT],LOPEN[.T.])
@@ -2127,15 +2124,12 @@ LOCAL cPASTA
 cPASTA:=SelectFolder()
 IF ! EMPTY(cPASTA)
    cPASTA+="\*."+TABLEEXT
- //  Alert(cPASTA)
 ENDIF
 cTEXTO:=""
 //FAZERDBF(bUSO                                                           , lSHARE[.F.] , bPRE, bPOS, cMASK["*."+TABLEEXT],LOPEN[.T.])
 FAZERDBF( {|| cTEXTO+=FormataBlocoSql(SqliteCreateTable( , , cTIPOSQL,.T.,.T. )) }, .F. ,     ,     ,cPASTA)
 hb_MemoWrit(cTIPOSQL+".sql", cTEXTO ) 
 RETURN .T.
-
-
 
 
 *+ EOF: mdb2dbf.prg

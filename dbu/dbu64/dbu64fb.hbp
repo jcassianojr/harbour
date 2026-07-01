@@ -45,11 +45,11 @@ sddmy.hbc
 #sddpg.hbc
 sddsqlt3.hbc
 #sddoci.hbc
-#sddfb.hbc
 hbfbird.hbc
+#hbfbird.hbc usando as dll compiladas com msv incluidas no robin nao aborta nem da erro 142
+#sddfb.hbc incluido o sddfb o programa nao abre mesmo com as dll do robin
 
 letodb.hbc
-
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
@@ -58,7 +58,6 @@ letodb.hbc
 \develop\harbour\dbu\dbudoc.prg    
 \develop\harbour\dbu\dbuedi.prg
 \develop\harbour\dbu\dbuedit.prg
-#\develop\harbour\dbu\dbuger.prg
 \develop\harbour\dbu\dbuindx.prg
 \develop\harbour\dbu\dbulib.prg 
 \develop\harbour\dbu\dbustru.prg
@@ -131,7 +130,6 @@ letodb.hbc
 \develop\harbour\objmgw\escolherpasta.prg
 dumypg.prg
 dumyfbsdd.prg
-#fbird_wrappers.prg
 
 #
 #       ---   tbclass   ---
