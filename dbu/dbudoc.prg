@@ -656,11 +656,11 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       ENDIF
       
       //SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
-      //gerando os indexex novamente pois os nomes dos fariam conforme o cTIPOSQL
+      //lINDEX e .t. pois cada banco necessita nome do indice especificos 
       cTIPOSQL:="SQLITE"
       cTEXTO += clin + "[SQLITE]"
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "SQLITE",.T. ))
-     // CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
+      /* incluso no SqliteCreateTable
       CTEXTO += clin + "PRAGMA temp_store = MEMORY ; " //
       CTEXTO += clin + "PRAGMA cache_size = 2000 ; " //Aumenta o tamanho do cache (ex: 2000 páginas)
       CTEXTO += clin + "PRAGMA journal_mode = WAL ; " //Modo WAL (Write-Ahead Logging) - Muito mais rápido para inserções e permite leitura e escrita simultâneas
@@ -669,33 +669,29 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       CTEXTO += clin + "PRAGMA page_size = 4096 ; " //
       CTEXTO += clin + "PRAGMA mmap_size = 300000000 ; "
       CTEXTO += clin + "PRAGMA busy_timeout = 5000 ; "
+      */
       CTEXTO += clin
       cTIPOSQL:="MSSQL"
       cTEXTO += clin + "[MSSQL]"
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "MSSQL",.T. ))
-      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
       cTIPOSQL:="MYSQL"
       cTEXTO += clin + "[MYSQL]"
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "MYSQL",.T. ))
-      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
       cTIPOSQL:="POSTGRESQL"
       cTEXTO += clin + "[POSTGRESQL]"
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "POSTGRESQL",.T. ))
-      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
       cTIPOSQL:="ACCESS"
       cTEXTO += clin + "[ACCESS]"
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "ACCESS",.T. ))
-      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
       cTIPOSQL:="ORACLE"
       cTEXTO += clin + "[ORACLE]"
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "ORACLE",.T. ))
-      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
       cTIPOSQL:="FIREBIRD"
       cTEXTO += clin + "[FIREBIRD]"
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "FIREBIRD",.T. ))
-      //CTEXTO += clin + FormataBlocoSql(cINDEXTEXTO)
       cTIPOSQL:=""
-      //
+
+      //Gera dbml
       CTEXTO += GERADBML(cARQ,aESTRU)
 
    ENDIF

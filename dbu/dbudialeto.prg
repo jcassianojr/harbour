@@ -161,7 +161,15 @@ FUNCTION IsDriverInstalled( cDriverName )
 
 RETURN lRet
 
-FUNCTION DriverFirebird() //"+DriverFirebird()+"
+
+// +--------------------------------------------------------------------
+// +
+// +    Function DriverFirebird()
+// +
+// +--------------------------------------------------------------------
+// +
+
+FUNCTION DriverFirebird() 
 LOCAL cDriverFirebird
 cDriverFirebird:=""
     If IsDriverInstalled("Firebird ODBC Driver") 
@@ -175,6 +183,7 @@ cDriverFirebird:=""
        cDriverFirebird = "Firebird ODBC Driver"
     ENDIF
 RETURN cDriverFirebird
+
 // +--------------------------------------------------------------------
 // +
 // +
@@ -442,7 +451,7 @@ FUNCTION Dialeto_ShowDatabases(cTipo)
    CASE cTipo == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0    
       cCOMANDO := "SELECT name AS DB_NAME FROM pragma_database_list;"
 
-   CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB"
+   CASE cTipo == "FIREBIRD" .OR. cTipo == "FDB" .OR. cTipo == "GDB" .OR. cTipo == "IB"
       // No Firebird, por arquitetura, ele não lista outros bancos nativamente via SQL (cada arquivo FDB é isolado).
       // O padrão para retornar o alias do banco conectado na sessão atual é:
       cCOMANDO := "SELECT RDB$GET_CONTEXT('SYSTEM', 'DB_NAME') AS DB_NAME FROM RDB$DATABASE;"
@@ -845,10 +854,29 @@ FUNCTION FormataBlocoSql( cTextoBruto )
    LOCAL nPosAbre         := 0
    LOCAL nPosFecha        := 0
    LOCAL nContCampo       := 0
+   //LOCAL nFIM             := 0
 
    // --- MIOLO DA FUNÇÃO: APENAS COMANDOS EXECUTÁVEIS ---
+   //IF cTIPOSQL="FIREBIRD"
+   //   ALTD()
+   //ENDIF
+   //HB_ATokens( <cString> , <cDelimiter> , <lSkipQuotes> , <lDoubleQuotesOnly> ) -> aTokens
+   //MemoLine(<cString>, <nLineLength> , <nLineNumber> , <nTabSize> , <lWrap> ) -> cLine
+   
+   //nfim=MLCount(cTextoBruto ) 
+   
    FOR i := 1 TO Len( aLinhas )
-      cLinhaLimpa := AllTrim( aLinhas[i] )
+      cLinhaLimpa := AllTrim( aLinhas[i] )  //memoline(cTEXTOBRUTO) PRAGMA
+      
+      IF  ( "GRANT " $ Upper( cLinhaLimpa ) ) .OR. ( "ENGINE=" $ Upper( cLinhaLimpa ) )  .OR. ( "PRAGMA " $ Upper( cLinhaLimpa ) ) 
+          cTextoFormatado += cLinhaLimpa + hb_eol()
+          LOOP
+      ENDIF
+      
+   //   IF Empty( cLinhaLimpa ) //Mantem linha em branco
+   //       cTextoFormatado +=  hb_eol()
+   //       LOOP
+    //  ENDIF
 
       // Ignora linhas vazias, pontos e vírgulas isolados ou tags de seções
       IF Empty( cLinhaLimpa ) .OR. cLinhaLimpa == ";" .OR. ( Left( cLinhaLimpa, 1 ) == "[" .AND. Right( cLinhaLimpa, 1 ) == "]" )
@@ -866,6 +894,8 @@ FUNCTION FormataBlocoSql( cTextoBruto )
 
       // Acumula pedaços de strings para remontar o comando completo
       cInstrucao += iif( Empty( cInstrucao ), "", " " ) + cLinhaLimpa
+
+
 
       // Se não atingiu o delimitador final da estrutura, continua acumulando
       IF ! ( "CREATE TABLE" $ Upper( cInstrucao ) ) .AND. ! ( "INDEX" $ Upper( cInstrucao ) ) .AND. ! ( "ALTER" $ Upper( cInstrucao ) )
@@ -1099,7 +1129,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
 
       DO CASE
         CASE (mFldNm == "SR_DELETED") .AND. ( cTIPOSQL == "FIREBIRD" )      
-            MSql += " SR_DELETED CHAR(1) "
+            MSql += " SR_DELETED CHAR(1) DEFAULT ' ' NOT NULL"
       
          // Campo Auto-incremento / SR_RECNO unificado para MySQL/MariaDB
          CASE (mFldType = "+" .OR. mFldNm == "SR_RECNO") .AND. ( cTIPOSQL $ "MYSQL|MYSQL64|MARIADB" )   
@@ -1402,13 +1432,20 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
    
    mSql += ") " + HB_OSNEWLINE()
    
+   
+   
    IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      mSql += " ENGINE=InnoDB DEFAULT CHARSET=latin1 ; " + HB_OSNEWLINE()
+      mSql += "ENGINE=InnoDB DEFAULT CHARSET=latin1;" + HB_OSNEWLINE()
    ENDIF
    mSql += " ; " + HB_OSNEWLINE()
+   IF cTIPOSQL = "FIREBIRD"
+      mSql += "GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE ON " + cTablename + " TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;" + HB_OSNEWLINE()
+   ENDIF
+   
    
    // Criação dos Índices Originais do DBF
    IF lINDEX
+      msql +=  hb_osNewLine() 
       aINDICES := GeraINDICES()
       nIndexes := LEN(aINDICES)
       FOR j := 1 TO nIndexes
@@ -1421,6 +1458,20 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
              ENDIF   
           ENDIF
       NEXT j
+   ENDIF
+   IF lINCSR
+      mSql += " CREATE INDEX IDX_" + cTablename + "_DELETED ON" + cTablename + " (SR_DELETED);" + HB_OSNEWLINE()
+      mSql += " CREATE INDEX IDX_" + cTablename + "_RECNO   ON" + cTablename + " (SR_RECNO);"   + HB_OSNEWLINE()
+   ENDIF
+   IF cTIPOSQL = "SQLITE"
+      mSql += "PRAGMA temp_store = MEMORY ; " + HB_OSNEWLINE()//
+      mSql += "PRAGMA cache_size = 2000 ; "+ HB_OSNEWLINE() //Aumenta o tamanho do cache (ex: 2000 páginas)
+      mSql += "PRAGMA journal_mode = WAL ; " + HB_OSNEWLINE()//Modo WAL (Write-Ahead Logging) - Muito mais rápido para inserções e permite leitura e escrita simultâneas
+      mSql += "PRAGMA synchronous = NORMAL ; " + HB_OSNEWLINE() //Reduz a sincronização com o disco (Normal é seguro o suficiente com WAL)
+      mSql += "PRAGMA auto_vacuum = INCREMENTAL ; " + HB_OSNEWLINE() //Armazena arquivos temporários na memória em vez de disco
+      mSql += "PRAGMA page_size = 4096 ; " + HB_OSNEWLINE()//
+      mSql += "PRAGMA mmap_size = 300000000 ; "+ HB_OSNEWLINE()
+      mSql += "PRAGMA busy_timeout = 5000 ; "+ HB_OSNEWLINE()
    ENDIF
    
    // SISTEMA AUTOMÁTICO DE TRRIGERS E ÍNDICES PARA MULTI-AUTOINCREMENTOS (MYSQL)
@@ -1453,6 +1504,8 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
       
       mSql += cSqlTrigger 
    ENDIF
+   
+   
 
 RETURN mSql   
    
@@ -1999,6 +2052,7 @@ FOR j := 1 TO nIndexes
                   c2sql(cFilter)    + ", " + ; 
                   iif( lIsUnique, "1", "0" ) + ", " + ; 
                   "1);"                                 
+                    
                         
       AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
    ENDIF 
