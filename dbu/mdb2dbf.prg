@@ -616,7 +616,7 @@ function mdbcria()
 LOCAL cCONN
 cCONN:=""
 if  lFDB //usando nativa erro com catalgo nao suportado
-   firecreate() Pergunta se quer usar sql ou fbcreate
+   firecreate() //Pergunta se quer usar sql ou fbcreate
     return
 endif
 DO CASE
@@ -1926,17 +1926,22 @@ CASE cTIPOSQL = "JETFOX"
 CASE cTIPOSQL = "DBASE"
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=dBASE IV;"
 CASE lFDB 
+   //altd()
    IF EMPTY(cUSERX)
       cUSERX:="SYSDBA"
    ENDIF
     IF EMPTY(cPASSX)
       cPASSX:="masterkey"
    ENDIF
+   cUSERX:=ALLTRIM(cUSERX)
+   cPASSX:=ALLTRIM(CPASSX)
    IF EMPTY(cCAMBASE)
-      cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX
+      cCONN := "DRIVER={"+DriverFirebird()+"};UID="+cUSERX+"; PWD="+cPASSX
    ELSE
-      cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
-   ENDIF   
+      cCONN := "DRIVER={"+DriverFirebird()+"};UID="+cUSERX+"; PWD="+cPASSX+"; DBNAME="+cCAMBASE
+   ENDIF
+   //alert(cCONN)   
+   //memowrit("connn.txt",cCONN)
 CASE cTIPOSQL = "PARADOX"   // ADOPX
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=Paradox 5.x;"
 CASE cTIPOSQL == "XMLDB"  // ADOXML
