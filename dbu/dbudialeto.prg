@@ -1218,6 +1218,7 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "TIMESTAMP"
          CASE mFldType = "T"
             mSql += "DATETIME"
+           
 
          // Numeric (N)
          CASE mFldType = "N" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
@@ -1316,6 +1317,8 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "FLOAT"
          
          // Integer (I)
+         CASE mFldType = "I" .AND. cTIPOSQL = "FIREBIRD"
+            mSql += "INTEGER"
          CASE mFldType = "I" .AND. ( llMDB .OR. llACCDB )
             mSql += "LONG DEFAULT 0"
          CASE mFldType = "I" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
@@ -1344,8 +1347,10 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "DOUBLE"
 
          // Logical (L)
-         CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" .OR. cTIPOSQL = "FIREBIRD" )
+         CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"  )
             mSql += "NUMBER (1)"
+         CASE mFldType = "L" .AND. ( cTIPOSQL = "FIREBIRD" )
+            mSql += "SMALLINT DEFAULT 0 NOT NULL"  //BOOLEAN DEFAULT FALSE NOT NULL
          CASE mFldType = "L" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "SQLITE"  )
             mSql += "BOOLEAN"
          CASE mFldType = "L" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
