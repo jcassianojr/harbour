@@ -2098,7 +2098,7 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
 
          /* o driver nao suporta catalogo
           CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. lFDB 
-               cConn := "DRIVER=" + DriverFirebird() + ";" + ;
+               cConn := "DRIVER={" + DriverFirebird() + "};" + ;
                "Uid=SYSDBA;" + ;
                "Pwd=masterkey;" + ;
                "DbName=" + AllTrim(cDatabase) + ";" + ;
