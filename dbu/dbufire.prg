@@ -135,7 +135,7 @@ LOCAL cARQORI
          {'All Files','*.*'}},1)  
 
    IF VALTYPE(lUSASQL)<>"L"
-      lUSASQL:=MDG("Usar SQL(SIM) FBCREATEDB(NAO)")
+      lUSASQL:=.F. //MDG("Usar SQL(SIM) FBCREATEDB(NAO)")
    ENDIF
 
    cDATABASEX := cARQORI

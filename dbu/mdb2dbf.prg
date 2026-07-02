@@ -615,11 +615,10 @@ return lRETU
 function mdbcria()
 LOCAL cCONN
 cCONN:=""
-//ajustado criacao com catalogo senao pode ser retornada pela forma nativa
-//if  lFDB //usando nativa erro com catalgo
-//   firecreate() Pergunta se quer usar sql ou fbcreate
-//   return
-//endif
+if  lFDB //usando nativa erro com catalgo nao suportado
+   firecreate() Pergunta se quer usar sql ou fbcreate
+    return
+endif
 DO CASE
     CASE lMDB
        cARQORI := win_GetSAVEFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos mdb","*.MDB",1)
@@ -637,6 +636,16 @@ DO CASE
     CASE cTIPOSQL == "PARADOX"
        cARQORI := win_GetSAVEFileName(,"Arquivos Paradox",HB_CWD(),"Paradox","*.db",1)     
 ENDCASE
+
+
+IF lFDB 
+    cDATABASEX := ""
+    executacmd("", "CREATE DATABASE '"+cARQORI+"' USER 'SYSDBA' PASSWORD 'masterkey' PAGE_SIZE = 8192 DEFAULT CHARACTER SET ISO8859_1;")
+     //Abre com "" para o geraconn nao atribui o fdb,gdb,ib na conecao pois ainda nao foi criado
+    CDATABASEX := cARQORI
+    RETURN
+ENDIF
+
 
 
 //cria com sql query create database
@@ -1917,6 +1926,12 @@ CASE cTIPOSQL = "JETFOX"
 CASE cTIPOSQL = "DBASE"
    cCONN := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMDIR+";Extended Properties=dBASE IV;"
 CASE lFDB 
+   IF EMPTY(cUSERX)
+      cUSERX:="SYSDBA"
+   ENDIF
+    IF EMPTY(cPASSX)
+      cPASSX:="masterkey"
+   ENDIF
    IF EMPTY(cCAMBASE)
       cCONN := "DRIVER="+DriverFirebird()+"; UID="+cUSERX+"; PWD="+cPASSX
    ELSE
@@ -2076,6 +2091,7 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
              //oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Paradox 5.x';")
              //ParadoxCreateTable( cTablename, aStruct ) e por arquivo nao cria um database o database e uma pasta 
 
+         /* o driver nao suporta catalogo
           CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. lFDB 
                cConn := "DRIVER=" + DriverFirebird() + ";" + ;
                "Uid=SYSDBA;" + ;
@@ -2084,6 +2100,7 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
                "CHARSET=ISO8859_1;" + ; // Define o Character Set
               "DIALECT=3;"        // Define o Dialeto (sempre use 3 para Firebird moderno)
               oCatalog:Create(cConn)
+          */    
        ENDCASE
     ENDIF
 
