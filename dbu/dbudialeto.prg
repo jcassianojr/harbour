@@ -1435,14 +1435,11 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
       ENDCASE
    NEXT
    
-   mSql += ") " + HB_OSNEWLINE()
-   
-   
-   
+   mSql += ") ;" + HB_OSNEWLINE()
    IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
       mSql += "ENGINE=InnoDB DEFAULT CHARSET=latin1;" + HB_OSNEWLINE()
    ENDIF
-   mSql += " ; " + HB_OSNEWLINE()
+   //mSql += " ; " + HB_OSNEWLINE()
    IF cTIPOSQL = "FIREBIRD"
       mSql += "GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE ON " + cTablename + " TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;" + HB_OSNEWLINE()
    ENDIF

@@ -300,12 +300,7 @@ nLASTREC := RecCount()
 zei_fort( nLASTREC,,, 0 )
 
 
- aINDICESx:=GeraINDICES()
-    nIndexes := LEN(aINDICESx)
-    FOR j := 1 TO nIndexes
-        msql := aINDICESx[J,1]  //Create index
-        AAdd( Aindices, msql )
-    NEXT j
+aINDICES:=GeraINDICES()
 
 
 
@@ -329,7 +324,7 @@ aRETUMETA:=GeraSQLMetadata()
   ENDIF   
 
   IF ! Empty( cSqlIndexes )
-     oServer:Execute(ccSqlIndexes )
+     oServer:Execute(cSqlIndexes )
      mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON index_metadata TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
      oServer:Execute( msql )
   ENDIF 
@@ -352,13 +347,19 @@ oServer:Execute( "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTabl
 
 // Se a tabela já existir, dropa para evitar conflitos de reimportação
 IF oServer:TableExists( cTABLE )
-   oServer:Execute( "DROP TABLE " + cTABLE )
+   IF ! MDG("Excluir tabela existente"+ cTABLE)
+     dbCloseArea()
+     oServer:Destroy()
+   ELSE
+     oServer:Execute( "DROP TABLE " + cTABLE )
+   ENDIF  
 ENDIF
 
 
 
 // Gera a estrutura DDL adaptada para o Firebird usando seu tradutor existente
 msql := SqliteCreateTable( cTABLE, aSTRU, "FIREBIRD" )
+HB_memowrit("uso01.SQL",MSQL,.F.)
 oServer:Execute( msql )
 
 
@@ -368,7 +369,11 @@ oServer:Execute( msql )
 
 // Criação dos índices coletados
 FOR i := 1 TO Len( aINDICES )
-   oServer:Execute( aINDICES[i,1] )  //create index
+   TRY
+      oServer:Execute( aINDICES[i,1] )  //create index
+   catch oErR
+      MDT("Erro "+aINDICES[i,1])   
+   end   
    oServer:Execute( aINDICES[i,2] )  //metadado
 NEXT i
 
