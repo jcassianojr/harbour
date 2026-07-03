@@ -72,7 +72,7 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbuedit.prg
 #\develop\harbour\dbu\dbuger.prg
 \develop\harbour\dbu\dbuindx.prg
-\develop\harbour\dbu\dbulib.prg -b
+\develop\harbour\dbu\dbulib.prg 
 \develop\harbour\dbu\dbustru.prg
 \develop\harbour\dbu\dbuutil.prg 
 \develop\harbour\dbu\dbuver.prg
