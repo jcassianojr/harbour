@@ -657,6 +657,7 @@ LOCAL nOLDTIPO
 LOCAL nORITIPO
 LOCAL cORIDRIVER
 LOCAL cARQORI
+LOCAL nTIPDOC
 LOCAL cDESTINO
 
 IF VALTYPE(nTIPOPR) <> "N"
@@ -726,7 +727,7 @@ IF nTIPOPR = 1 //Exportar copy to ou gerado
       COPYTO(cDESTINO)
       dbcloseall()
    ELSE
-      multidocs(tDOC,cARQORI)
+      multidocs(nTIPDOC,cARQORI)
    ENDIF
 ENDIF
 IF nTIPOPR = 2 //Importar append from so nativo
