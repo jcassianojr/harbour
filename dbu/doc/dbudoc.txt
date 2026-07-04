@@ -1,8 +1,0 @@
-RDDSETDEFAULT("SQLMIX")
-l_SQLHandle = hb_RDDInfo( RDDI_CONNECT, { "ODBC", cConnectionString })
-DBUseArea(.t.,"SQLMIX","select name from contacts","CursorName1",.t.,.t.,"UTF8",l_SQLHandle)
-
-
-dbCreate( cFile, aStruct, cRDD, lKeepOpen, cAlias, cDelimArg, cCodePage, nConnection ) --> <lSuccess>
-dbUseArea( [<lNewArea>], [<cDriver>], <cName>, [<xcAlias>], [<lShared>], [<lReadonly>], [<cCodePage>],  [<nConnection>] ) --> <lSuccess> 
-
