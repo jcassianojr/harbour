@@ -167,12 +167,14 @@ aAMBIENTE := SALVAA()
 WHILE .T.
    HB_dispbox(3,22,22,55,B_DOUBLE+" ")
    @ 03,24 SAY cTIPOSQL         
-   OPCAO(4,24,"&Nativo clientelib   ",78)   //N
-   OPCAO(5,24,"&ADORDD ODBC         ",65)   //A
-   OPCAO(6,24,"&RDD SQLMIX          ",82)   //R
-   OPCAO(7,24,"&ODBC                ",79)   //D
-   OPCAO(8,24,"ADO&X ODBC           ",88)   //X
-   OPCAO(9,24,"&Tclass              ",84)   //t
+   OPCAO( 4,24,"&Nativo clientelib   ",78)   //N
+   OPCAO( 5,24,"&ADORDD ODBC         ",65)   //A
+   OPCAO( 6,24,"&RDD SQLMIX          ",82)   //R
+   OPCAO( 7,24,"&ODBC                ",79)   //D
+   OPCAO( 8,24,"ADO&X ODBC           ",88)   //X
+   OPCAO( 9,24,"&Tclass              ",84)   //t  
+   OPCAO(10,24,"&SQLRDD              ",83)   //S
+   
    KEY := menu(1,0)
    DO CASE
    CASE KEY = 1 .AND. cTIPOSQL = "PGSQL"
@@ -200,6 +202,8 @@ WHILE .T.
       adoxmenu(cTIPOSQL)
   CASE KEY = 6
       tclassmenu(cTIPOSQL)   
+  CASE KEY = 7
+      sqlrddmenu(cTIPOSQL)   
    OTHERWISE
       RETURN
    ENDCASE

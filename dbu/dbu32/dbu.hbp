@@ -13,6 +13,7 @@
 # Dependências (libs) requerida pela tclass
 -llibmysql
 #-llibpq
+-lfbclient
 
 -gtwvg
 -gui
@@ -60,10 +61,12 @@ sddmy.hbc
 #sddpg.hbc
 sddsqlt3.hbc
 letodb.hbc
+
+
 #sddoci.hbc
 #hbfbird.hbc
-
 #Tdbclass.hbc
+sqlrddpp.hbc
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
@@ -87,6 +90,7 @@ letodb.hbc
 \develop\harbour\dbu\dbu2md.prg
 #\develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
+dbusqlrdd.prg -b
 
 #
 # sqlite

@@ -1,0 +1,691 @@
+// +--------------------------------------------------------------------
+// +
+// +    Programa  : dbumix.prg
+// +
+// +     Sistema:
+// +
+// +     Linguagem: Harbour
+// +
+// +     Autor: jcassiano
+// +
+// +     Copyright (c) 2024,  jcassiano
+// +
+// +
+// +    Documentado em 28-Dez-2024 as 10:07 am
+// +
+// +--------------------------------------------------------------------
+// +
+
+//   SR_UseDeleteds(.F.)      // Don't keep deleted records in database
+
+#include "dbinfo.ch"
+#include "error.ch"
+#include "simpleio.ch"
+#include "BOX.CH"
+#include "dbstruct.ch"
+#include "sqlrdd.ch"
+
+REQUEST SQLRDD
+REQUEST SQLEX
+REQUEST SR_ODBC
+//REQUEST SR_MARIADB
+//REQUEST SR_MYSQL
+REQUEST SR_FIREBIRD5
+REQUEST SR_PGS
+//REQUEST SR_ORACLE
+
+#define SQL_DBMS_NAME                       17
+#define SQL_DBMS_VER                        18
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function sqlrddmenu()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION sqlrddmenu( cUSOSQL )
+
+   LOCAL aAMBIENTE
+
+   cTIPOSQL := cUSOSQL   // Passa para privada usadas nas funcoes aBaixo
+   cRDDSQL  := "SQLRDD"
+
+   nConnection := 0
+   aAMBIENTE   := SALVAA()
+   cSERVERX    := Space( 30 )
+   cDATABASEX  := Space( 30 )
+   cUSERX      := Space( 30 )
+   cPASSX      := Space( 30 )
+   cTABELAX    := Space( 30 )
+   cBANCOX     := Space(30)
+   cOWNERX     := Space(30)
+   cPORTAX     := SPACE(30)
+   loledb      := .T.
+   lMDB        := .F.
+   lACCDB      := .F.
+   lFDB        := .F.
+
+   pegcfgbanco()
+   cTIPOMIX :=  "ODBC"
+   
+
+   IF cTIPOSQL="MARIADB".OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "FIREBIRD" .OR. cTIPOSQL = "ORACLE"
+      IF  mdg( "SQLRDD (SIM) SQLRDDODBC (NAO)" )
+         cTIPOMIX := cTIPOSQL
+      ENDIF
+   ENDIF
+
+
+   IF cTIPOMIX="ODBC"
+      cOLDRDD := rddSetDefault( "SQLEX" )
+      nOLDTIPORDD := TIPODBF
+      cRDDSQL  := "SQLEX"
+   ELSE
+      cOLDRDD := rddSetDefault( "SQLRDD" )
+      nOLDTIPORDD := TIPODBF
+      cRDDSQL  := "SQLRDD"
+   ENDIF   
+   TIPODBF:=92
+   
+   
+   // access mdb accdb nao tem nativo
+   IF Lmdb .OR. laccdb .OR. LFDB .OR. cTIPOSQL = "SQLITE"
+      OPENTIPOARQ()
+   ENDIF
+
+
+   WHILE .T.
+      hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
+      @ 03, 24 SAY "SQLRDD:" + cTIPOMIX + " SQL: " + cTIPOSQL + " Banco " + cDATABASEX
+      OPCAO(  4, 24, "&Criar database            ", 67 )   // C
+      OPCAO(  5, 24, "&Database Selecionar       ", 68 )   // D
+      OPCAO(  6, 24, "&Importar  DBF             ", 73 )   // I
+      OPCAO(  7, 24, "&Tabelas                   ", 84 )   // T
+      OPCAO(  8, 24, "&Exportar  DBF             ", 69 )   // E
+      OPCAO(  9, 24, "&Apagar Tabela             ", 65 )   // A
+      OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F 
+      OPCAO( 11, 24, "Executar arquivo &SQL      ", 83 )   //S 83
+      OPCAO( 12, 24, "&Versao Info               ", 86 )   // V 
+      KEY := menu( 1, 0 )
+      DO CASE
+      CASE KEY = 1
+         sqlrdd_createdatabase()
+      CASE KEY = 2
+          MDT("nao implementada")
+      CASE KEY = 3
+         sqlrdd_impdbf()
+      CASE KEY = 4
+          sqlrdd_Tabela()
+      CASE KEY = 5
+         sqlrdd_expdbf( 2 )
+      CASE KEY = 6
+          sqlrdd_delete_Tabela()
+      CASE KEY = 7
+         sqlrdd_expdbf( 2 )
+      CASE KEY = 8
+         sqlrdd_ExecArqSql()
+     CASE KEY = 9
+         sqlrdd_info()         
+      OTHERWISE
+         EXIT
+      ENDCASE
+   ENDDO
+
+
+   rddSetDefault( cOLDRDD )
+   TIPODBF :=nOLDTIPORDD
+   RDDNOME(TIPODBF)
+   
+   RESTAA( aAMBIENTE )
+   LAYOUT()
+
+   RETURN .T.
+
+
+// +--------------------------------------------------------------------
+// +
+// +    Function sqlrdd_expdbf()
+// +
+// +--------------------------------------------------------------------
+// +
+FUNCTION sqlrdd_expdbf( nTIPO )
+
+  /*
+
+   LOCAL cDESTINO
+   LOCAL aSTRU
+   LOCAL aVALOR
+   LOCAL I
+   LOCAL nFIM
+   LOCAL eVALOR
+
+   IF nTIPO = 2
+      LCOPIANAT := .F.   // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
+      tDOC      := pegtipodoc()  // .t. Inclui dbf se for nativa
+      pegparexp()
+      lDOCCAB   := .F.
+      lDOCDAD   := .F.
+      lDOCRECNO := .F.
+      cSUBTIPO  := " "
+      PegcsUB( tDOC )  // pegar o subtipo conforme tipo
+   ENDIF
+
+
+   mdbtabela( cdatabasex )
+
+   cDESTINO := cTABELAX + "_" + cTIPOSQL
+   MDT( cDESTINO )
+
+
+   MDT( "abrindo arquivo de origem: " + cTABELAX )
+   dbUseArea( .T.,, "SELECT * FROM " + cTABELAX, "ORIGEM" )
+   nLASTREC := LastRec()
+   nFIM     := FCount()
+   zei_fort( nLASTREC,,, 0 )
+   aSTRU := dbStruct()
+   aSTRU := sqltodbfstru( aSTRU )
+
+   IF nTIPO = 1  // arquivo fisico
+      MDT( cDESTINO )
+      dbCreate( cDESTINO, aSTRU, "DBFCDX" )
+      dbUseArea( .T., "DBFCDX", cDESTINO, "DESTINO", .T., .F. )
+   ELSE
+
+      // cria um arrayrdd para usar na exportacao usar memoria mudar para rdd quando disponivel
+      // dbCreate( cFile, aStruct, cRDD, lKeepOpen, cAlias, cDelimArg, cCodePage, nConnection ) --> <lSuccess>
+      // nao passa o driver sqlmix ja e default rddSetDefault( "SQLMIX" )
+      // nao precisa abrir area lKeepOpen 4 parametro mantem aberto
+      dbCreate( "DESTINO", aSTRU,, .T., "DESTINO" )
+
+   ENDIF
+
+
+   dbSelectAr( "ORIGEM" )
+   dbGoTop()
+   WHILE !Eof()
+      aVALOR := {}
+      FOR I := 1 TO nFIM
+         AAdd( aVALOR, FieldGet( I ) )
+      NEXT I      dbSelectAr( "DESTINO" )
+      netrecapp()
+
+      FOR I := 1 TO nFIM
+         eVALOR := aVALOR[ I ]
+         IF ValType( eVALOR ) = "C" .AND. SubStr( eVALOR, 5, 1 ) = "-" .AND. SubStr( eVALOR, 8, 1 ) = "-"
+            eVALOR := SubStr( eVALOR, 6, 2 ) + "/" + SubStr( eVALOR, 9, 2 ) + "/" + SubStr( eVALOR, 1, 4 )
+            eVALOR := CToD( eVALOR )
+         ENDIF
+         IF ValType( eVALOR ) = "C" .OR. ValType( eVALOR ) = "M"
+            eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )
+            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
+            //eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )   // Remove caracteres de controle
+            //eVALOR := TIRACE( eVALOR )
+         ENDIF
+         IF !Empty( eVALOR )
+            FieldPut( I, eVALOR )
+         ENDIF
+      NEXT I
+
+      dbSelectAr( "ORIGEM" )
+      dbSkip()
+      zei_fort( nLASTREC,,, 1 )
+   ENDDO
+   dbSelectAr( "ORIGEM" )
+   dbCloseArea()
+
+   IF nTIPO = 2
+      cDESTINO := cTABELAX + "_" + cTIPOSQL + zEXPOREXT
+      MDT( cDESTINO )
+      dbSelectAr( "DESTINO" )
+      nLASTREC := LastRec()
+      zei_fort( nLASTREC,,, 0 )
+      dbGoTop()
+      multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, TIRAEXT( cDESTINO ), aSTRU )
+   ENDIF
+
+   dbSelectAr( "DESTINO" )
+   dbCloseArea()
+   */
+   RETURN .T.
+
+
+ *+--------------------------------------------------------------------
+*+
+*+    Function sqlrdd_ExecArqSql()
+*+
+*+--------------------------------------------------------------------
+*+
+function sqlrdd_ExecArqSql()
+LOCAL cCOMANDO := ""
+LOCAL cARQIMP  := ""
+cARQIMP := win_GetOPENFileName(,"Arquivos SQL",HB_CWD(),"Arquivos SQL","*.SQL",1)
+IF FILE(cARQIMP)
+   //nao pode ser linha a linha pois um comando pode estar em mais de uma linha
+   cCOMANDO:=MEMOREAD(cARQIMP)
+   sqlrdd_executesql( msql )
+endif
+return .t.
+     
+// +--------------------------------------------------------------------
+// +
+// +    Function sqlrdd_Tabela()
+// +
+// +--------------------------------------------------------------------
+// +
+function sqlrdd_Tabela()
+local aTABELAS
+aTABELAS:={}
+sqlrdd_open()
+aTABELAS:=SR_ListTables() 
+sqlrdd_close()
+IF EMPTY(aTABELAS)
+   mdbtabela( cDATABASEX ) //Guarda public cTABELAX
+ELSE
+   mdbtabela(aTABELAS)  //Guarda public cTABELAX
+ENDIF
+return
+
+// +--------------------------------------------------------------------
+// +
+// +    Function sqlrdd_info()
+// +
+// +--------------------------------------------------------------------
+// +
+function sqlrdd_info()
+sqlrdd_open()
+mdt("Connected to        :"+ SR_GetConnectionInfo(, SQL_DBMS_NAME)+" "+ SR_GetConnectionInfo(, SQL_DBMS_VER))
+sqlrdd_close()
+return
+
+// +--------------------------------------------------------------------
+// +
+// +    Function sqlrdd_delete_Tabela()
+// +
+// +--------------------------------------------------------------------
+// +
+function sqlrdd_delete_Tabela()
+sqlrdd_Tabela()
+if ! empty(cTABELAX) .AND.MDG("Excluir tabela "+cTABELAX)
+   sqlrdd_open()
+   IF sr_ExistTable(cTABELAX)
+      sr_DropTable(cTABELAX)
+   ENDIF
+   sqlrdd_close()
+endif
+return
+
+// +--------------------------------------------------------------------
+// +
+// +    Function sqlrdd_impdbf()
+// +
+// +--------------------------------------------------------------------
+// +
+FUNCTION sqlrdd_impdbf()
+
+   mdt( "escolha origem" )
+   tipodbfesc()
+   nORITIPO   := TIPODBF
+   cORIDRIVER := RDDNOME( TIPODBF )
+   
+   IF MDG("Arquivo Individual")
+      cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+   else
+      cARQORI    := SelectFolder()
+   endif   
+
+   sqlrdd_open()
+   sqlrdd_upload_dbf(cARQORI, "", cORIDRIVER, cRDDSQL)
+   sqlrdd_close()
+
+
+   TIPODBF :=nOLDTIPORDD
+   RDDNOME(TIPODBF)
+
+
+   RETURN .T.
+
+
+// +--------------------------------------------------------------------
+// +
+// +    Function sqlrdd_createdatabase()
+// +
+// +--------------------------------------------------------------------
+// +
+FUNCTION sqlrdd_createdatabase()
+  DO CASE
+       CASE cTIPOMIX = "MARIADB" 
+       CASE cTIPOMIX = "MYSQL" .OR. cTIPOMIX = "MYSQL64"
+       CASE cTIPOMIX = "PGSQL" .OR. cTIPOMIX = "PGSQL64"
+       CASE cTIPOSQL = "FIREBIRD"
+            cDATABASEX:=""
+           cARQORI := win_GetsaveFileName(,"Firebase Files",HB_CWD(),"Firebase",;
+                                         {{'Firebird fdb','*.fdb'},{'Firebird gdb','*.gdb'},{'Firebird ib','*.ib'},;
+                                         {'All Files','*.*'}},1)  
+           SR_FIREBIRD5():CreateDatabase(cARQORI, cUSERX, cPASSX, NIL, NIL, NIL)
+           cDATABASEX:=cARQORI
+       CASE cTIPOMIX = "ORACLE"
+       CASE cTIPOSQL = "SQLITE"
+           cDATABASEX:=""
+           cARQORI := win_GetsaveFileName(,"SQLite Files",HB_CWD(),"SQLite",;
+                                       {{'SQLite','*.sqlite'},{'SQLite db','*.DB'},;
+                                     {'SQLite3','*.sqlite3'},{'SQLite db3','*.DB3'},;
+                                     {'SQLite Fossil','*.fossil'},{'All Files','*.*'}},1)
+            IF ! hb_FileExists(cARQORI) //Sqlite pasta existir o arquivo
+               HB_MEMOWRIT(cARQORI,"")
+            ENDIF   
+            cDATABASEX:=cARQORI
+       CASE cTIPOMIX = "ODBC"  // Cserver 
+  ENDCASE
+ 
+
+   /*
+   cnewDATABASEX := INPUTBOX( Space( 30 ), "Novo database" )
+   cnewDATABASEX := AllTrim( cnewDATABASEX )
+   IF !Empty( cnewDATABASEX )
+      IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" ;
+            .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+         mix_executesql( "CREATE DATABASE IF NOT EXISTS " + Cnewdatabasex )
+         // fechar a connecao e trocar o database
+         // CDATABASEX:=CNEWDATABASEX
+      ENDIF
+   ENDIF
+*/
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function sqlrdd_executesql
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+
+FUNCTION sqlrdd_executesql( eCOMANDO, lTRANS, lMES ,lopen)
+
+   LOCAL aCOMANDOS := {}
+   LOCAL nFIM
+   LOCAL i
+   LOCAL lRet
+
+   lRET := .T.
+   IF ValType( LMES ) <> "L"
+      lMES := .F.
+   ENDIF
+   IF ValType( Lopen ) <> "L"
+      lopen := .t.
+   ENDIF
+   
+   IF ValType( eCOMANDO ) = "C"
+      AAdd( aCOMANDOS, eCOMANDO )
+   ELSE
+      aCOMANDOS := eCOMANDO
+   ENDIF
+   nFIM := Len( aCOMANDOS )
+   
+   if lopen
+      sqlrdd_open()
+   endif
+  oSql   := SR_GetConnection()
+   IF lTRANS
+      oSql:execute( Dialeto_begin() )
+   ENDIF
+   FOR i := 1 TO nfim
+      cCOMANDO := aCOMANDOS[ I ]
+      oSql:execute( cCOMANDO )
+   NEXT i
+   IF lTRANS
+      oSql:execute( Dialeto_commit() )
+   ENDIF
+   if lopen
+      sqlrdd_close()
+   endif
+
+   RETURN lRet
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +    Function sqlrdd_open()
+// +
+// +--------------------------------------------------------------------
+// +
+FUNCTION sqlrdd_open()
+  LOCAL cCONN
+  LOCAL oSQL
+  LOCAL cConnectionString
+
+   cCONN := ""
+   nConnection:=0
+   cConnectionString:= ""
+   ALTD()
+  
+// dsn=informix;uid=informix;pwd=1234;dtb=test 
+// dsn=db2;uid=db2admin;pwd=1234
+// dsn=ingres  
+//nDetected   := SR_DetectDBFromDSN(cConnString)
+   
+IF cTIPOMIX = "ODBC"
+   DO CASE
+       CASE cTIPOMIX = "MARIADB" 
+            s_ODBC_DRIVER   :="MariaDB ODBC 3.2 Driver"
+            S_ODBC_OPTIONS  := "TCPIP=1"
+           cConnectionString :=  "Driver="   + s_ODBC_DRIVER   + ";" + ;
+                        "Server="   + cSERVERX   + ";" + ;
+                        "Port="     + cPORTAX     + ";" + ;
+                        "Database=" + cDATABASEX + ";" + ;
+                        "Uid="      + cUSERX      + ";" + ;
+                        "Pwd="      + cPASSX      + ";" + ;
+                        ""          + s_ODBC_OPTIONS  + ";"
+       CASE cTIPOMIX = "MYSQL" .OR. cTIPOMIX = "MYSQL64"
+            if loledb
+               s_ODBC_DRIVER   :="MySQL ODBC 8.0 ANSI Driver"
+            else
+               s_ODBC_DRIVER   :="MySQL ODBC 9.0 ANSI Driver"
+            endif   
+             cConnectionString :=  "Driver="   + s_ODBC_DRIVER   + ";" + ;
+                          "Server="   + cSERVERX   + ";" + ;
+                          "Port="     + cPORTAX     + ";" + ;
+                          "Database=" + cDATABASEX + ";" + ;
+                          "Uid="      + cUSERX      + ";" + ;
+                          "Pwd="      + cPASSX      + ";" + ;
+                          ""          + s_ODBC_OPTIONS  + ";"
+       CASE cTIPOMIX = "PGSQL" .OR. cTIPOMIX = "PGSQL64"
+             if lOLEDB
+                s_ODBC_DRIVER   :="PostgreSQL ANSI"
+             ELSE
+                s_ODBC_DRIVER   :="PostgreSQL ANSI(x64)"
+             ENDIF
+             s_ODBC_OPTIONS  := "BoolsAsChar=0;TrueIsMinus1;" // DO NOT CHANGE
+              cConnectionString := "Driver="   + s_ODBC_DRIVER   + ";" + ;
+                      "Server="   + cSERVERX   + ";" + ;
+                      "Port="     + cPORTAX     + ";" + ;
+                      "Database=" + cDATABASEX + ";" + ;
+                      "Uid="      + cUSERX     + ";" + ;
+                      "Pwd="      + cPASSX     + ";" + ;
+                      ""          + s_ODBC_OPTIONS  + ";"
+       CASE cTIPOMIX = "FIREBIRD"
+            s_ODBC_DRIVER   := DriverFirebird()
+            s_ODBC_CLIENT   := "fbclient.dll"
+            s_ODBC_CHARSET  := "ISO8859_1"
+            cConnectionString :=       "driver="   + s_ODBC_DRIVER   + ";" + ;
+                  "server="   + cSERVERX   + ";" + ;
+                  "port="     + cPORTAX     + ";" + ;
+                  "uid="      + cUSERX      + ";" + ;
+                  "pwd="      + cPASSX      + ";" + ;
+                  "database=" + cDATABASEX + ";" + ;
+                  "client="   + s_ODBC_CLIENT   + ";" + ;
+                  "charset="  + s_ODBC_CHARSET  + ";"
+    CASE cTIPOMIX = "CUBRID"
+          cConnectionString := "DRIVER="   + s_DRIVER   + ";" + ;
+                          "SERVER="   + s_SERVER   + ";" + ;
+                          "PORT="     + s_PORT     + ";" + ;
+                          "DB_NAME="  + s_DATABASE + ";" + ;
+                          "UID="      + s_UID      + ";" + ;
+                          "PWD="      + s_PWD      + ";"
+     CASE cTIPOMIX = "ORACLE"
+    ENDCASE
+    IF ! EMPTY(cConnectionString)
+       sr_AddConnection(CONNECT_ODBC,cConnectionString)
+    ENDIF   
+ELSE  
+   DO CASE
+       CASE cTIPOMIX = "MARIADB" 
+            nConnection := sr_AddConnection(CONNECT_MARIADB, "MARIADB=" + cSERVERx + ";UID=" + cUSERX + ";PWD=" + cPASSX + ";DTB=" + cDATABASEX)
+       CASE cTIPOMIX = "MYSQL" .OR. cTIPOMIX = "MYSQL64"
+            nConnection := sr_AddConnection(CONNECT_MYSQL, "MySQL=" +  cSERVERX + ";PORT=" + cPORTAX + ";UID=" + cUSERX + ";PWD=" + cPASSX + ";DTB=" + cDATABASEX)
+       CASE cTIPOMIX = "PGSQL" .OR. cTIPOMIX = "PGSQL64"
+            nConnection := sr_AddConnection(CONNECT_POSTGRES, "PGS=" + cSERVERX + ";UID=" + cUSERX + ";PWD=" +  cPASSX + ";DTB=" + cDATABASEX)
+          IF nConnection > 0
+             oSql   := SR_GetConnection()
+             // SE CONECTOU NO MIX, FORÇA O SCHEMA E ENCODING VIA INTERFACE RDD
+             // O comando RD_EXECUTE envia a instrução direto para a linha ativa do banco
+            oSql:execute( "SET search_path TO myschema, public; SET client_encoding TO 'WIN1252';")
+          ENDIF
+       CASE cTIPOMIX = "FIREBIRD"
+          //cConnectionString:="FIREBIRD=" + alltrim(cSERVERX) + ";UID=" + alltrim(cUSERX) + ";PWD=" + alltrim(cPASSX) + ";DTB=" + alltrim(cDATABASEX)
+          //nao passando o servidor funcionou
+          cConnectionString:="FIREBIRD=;UID=" + alltrim(cUSERX) + ";PWD=" + alltrim(cPASSX) + ";DTB=" + alltrim(cDATABASEX)
+          
+          //memowrit("dbufireconn.sql",cConnectionString)
+          nConnection := sr_AddConnection(CONNECT_FIREBIRD5,cConnectionString )
+       CASE cTIPOMIX = "ORACLE"
+          nConnection := sr_AddConnection(CONNECT_ORACLE, "OCI=" + cSERVERX + ";UID=" + cUSERX + ";PWD=" + cPASSX + ";DTB=" + cDATABASEX)
+    ENDCASE
+ENDIF
+   IF !( nConnection > 0 )
+      mdt( "Erro ao connectar " + cServerx + " "+ cDATABASEX )
+      nConnection := 0
+   ENDIF
+
+   RETURN nConnection
+
+
+// +--------------------------------------------------------------------
+// +
+// +    Function sqlrdd_close()
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+FUNCTION sqlrdd_close()
+   IF ! Empty( nConnection ) .AND. nConnection <> 0
+      sr_EndConnection(nConnection)
+   ENDIF
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function sqlrdd_expformat()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION sqlrdd_expformat()
+
+
+/*
+   mdbtabela( cdatabasex )
+   LCOPIANAT := .F.  // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado mysqlrddd
+   tDOC      := pegtipodoc()   // .t. Inclui dbf se for nativa
+   pegparexp()
+   lDOCCAB   := .F.
+   lDOCDAD   := .F.
+   lDOCRECNO := .F.
+   cSUBTIPO  := " "
+   PegcsUB( tDOC )   // pegar o subtipo conforme tipo
+   cDESTINO := cTABELAX + "_" + cTIPOSQL + "_rddmix." + zEXPOREXT
+   MDT( cDESTINO )
+   MDT( "abrindo arquivo de origem: " + cTABELAX )
+   dbUseArea( .T.,, "SELECT * FROM " + cTABELAX, cTABELAX )
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+   aSTRU := dbStruct()
+   multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, TIRAEXT( cDESTINO ), aSTRU )
+   dbCloseArea()
+*/
+
+FUNCTION sqlrdd_upload_dbf(cBaseDir, cPrefix, cDriver, cRDD)
+
+   LOCAL aFiles
+   LOCAL aStruct
+   LOCAL aFile
+   LOCAL cFile
+   LOCAL J
+   LOCAL aINDICES
+   LOCAL nINDEXES
+   LOCAL cINDEXNAME
+   LOCAL cKEY
+
+   /* upload files */
+
+   aFiles := directory(cBaseDir + "*.dbf")
+
+   FOR EACH aFile IN aFiles
+      cFile := strtran(lower(alltrim(cPrefix + aFile[F_NAME])), ".dbf", "")
+      dbUseArea(.T., cDriver, cBaseDir + aFile[F_NAME], "ORIG")
+      ? "   Uploading...", cFile, "(" + alltrim(str(ORIG->(lastrec()))), "records)"
+      aStruct := ORIG->(dbStruct())
+      aINDICES:={}
+      nIndexes := dbORDERINFO(DBOI_ORDERCOUNT)
+      FOR j := 1 TO nIndexes
+         // Inicialização correta dos tipos de variáveis a cada iteração
+         cINDEXNAME := dbORDERINFO(DBOI_NAME,,j)
+         cINDEXNAME := AllTrim(cINDEXNAME)
+         cKey := dbOrderInfo( DBOI_EXPRESSION, , j )
+         cKEY       := ALLTRIM(cKEY)
+         AADD(aINDICES,{cINDEXNAME,cKEY})
+      NEXT j
+//      alert(len(nIndexes))
+      
+      ORIG->(dbCloseArea())
+
+      dbCreate(cFile, aStruct, cRDD)
+      dbUseArea(.T., cRDD, cFile, "DEST", .F.)
+      APPEND FROM (cBaseDir + aFile[F_NAME]) VIA cDriver
+
+      dbUseArea(.T., cDriver, cBaseDir + aFile[F_NAME], "ORIG")
+
+//      IF !empty(ordname(1))
+//         ? "   Creating indexes:", cFile
+ //     ENDIF
+
+      nIndexes:=LEN(aINDICES)
+      ? nIndexes
+     IF nIndexes>0
+       FOR j := 1 TO nIndexes
+           cINDEXNAME := Aindices[J,1]
+           cINDEXCHAVE:=Aindices[J,2]
+           ? "Criando Indice: "+cINDEXNAME+" "+cINDEXCHAVE
+            INDEX ON &cINDEXCHAVE TAG &cINDEXNAME//TO &cARQINDEX
+       NEXT j
+     ENDIF    
+
+      
+      ORIG->(dbCloseArea())
+      DEST->(dbCloseArea())
+   NEXT
+
+
+RETURN
+
+// + EOF: sqlrdd.prg
+// +
