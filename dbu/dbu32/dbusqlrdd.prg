@@ -346,6 +346,7 @@ FUNCTION sqlrdd_impdbf()
       cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
    else
       cARQORI    := SelectFolder()
+      cARQORI += "\"+ "*." +TABLEEXT
    endif   
 
    sqlrdd_open()
@@ -644,45 +645,43 @@ FUNCTION sqlrdd_upload_dbf(cBaseDir, cPrefix, cDriver, cRDD)
    LOCAL nINDEXES
    LOCAL cINDEXNAME
    LOCAL cKEY
+   LOCAL cARQORI
 
    /* upload files */
 
-   cBaseDir += "\"
-
-   aFiles := directory(cBaseDir + "*." +TABLEEXT)  
+   aFiles := directory(cBaseDir )  
 
    altd()
    FOR EACH aFile IN aFiles
       cFile := strtran(lower(alltrim(cPrefix + aFile[F_NAME])), ".dbf", "")
-      dbUseArea(.T., cDriver, cBaseDir + aFile[F_NAME], "ORIG")
+      cARQORI:=HB_FNAMEDIR(cBaseDir)+"\"+aFile[F_NAME]
+      dbUseArea(.T., cDriver, cARQORI, "ORIG")
+      //dbUseArea( [<lNewArea>], [<cDriver>], <cName>, [<xcAlias>],
       MDT("   Uploading... "+ cFile  + " (" + alltrim(str(ORIG->(lastrec()))), "records)")
+      
+      //sqlrdd faz o mapeamento dos tipos nao usar criasql aqui
       aStruct := ORIG->(dbStruct())
+      
+      //sqlrdd ja faz a padronizacao dos nomes dos indices passar a key,tag somente por isso nao usando geraindices aqui
+      //implantar geraindices depois porem ao criar usar key,tag e nao create index sql
       aINDICES:={}
       nIndexes := dbORDERINFO(DBOI_ORDERCOUNT)
       FOR j := 1 TO nIndexes
-         // Inicialização correta dos tipos de variáveis a cada iteração
          cINDEXNAME := dbORDERINFO(DBOI_NAME,,j)
          cINDEXNAME := AllTrim(cINDEXNAME)
          cKey := dbOrderInfo( DBOI_EXPRESSION, , j )
          cKEY       := ALLTRIM(cKEY)
          AADD(aINDICES,{cINDEXNAME,cKEY})
       NEXT j
-//      alert(len(nIndexes))
-      
       ORIG->(dbCloseArea())
 
       dbCreate(cFile, aStruct, cRDD)
       dbUseArea(.T., cRDD, cFile, "DEST", .F.)
-      APPEND FROM (cBaseDir + aFile[F_NAME]) VIA cDriver
+      APPEND FROM (cARQORI) VIA cDriver
 
-      dbUseArea(.T., cDriver, cBaseDir + aFile[F_NAME], "ORIG")
 
-//      IF !empty(ordname(1))
-//         ? "   Creating indexes:", cFile
- //     ENDIF
-
+     //sqlrdd ja faz a padronizacao dos nomes dos indices passar a key,tag somente por isso nao usando geraindices aqui
       nIndexes:=LEN(aINDICES)
- //     ? nIndexes
      IF nIndexes>0
        FOR j := 1 TO nIndexes
            cINDEXNAME := Aindices[J,1]
@@ -693,7 +692,6 @@ FUNCTION sqlrdd_upload_dbf(cBaseDir, cPrefix, cDriver, cRDD)
      ENDIF    
 
       
-      ORIG->(dbCloseArea())
       DEST->(dbCloseArea())
    NEXT
 
