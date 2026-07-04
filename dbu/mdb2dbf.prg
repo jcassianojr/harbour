@@ -1056,6 +1056,17 @@ IF cTIPOSQL == "PARADOX"
         cSERVERX := PADR("localhost", 30, " ") 
    ENDIF
 ENDIF
+IF cTIPOSQL == "CUBRID"
+    IF EMPTY(cSERVERX)
+        cSERVERX := PADR("localhost", 30, " ") 
+   ENDIF
+   IF EMPTY(cPORTAX)
+        cPORTAX:= PADR("33000",30," ")
+   ENDIF
+      IF EMPTY(cUSERX)
+      cUSERX := PADR("dba",30," ")  
+   ENDIF
+ENDIF
 RETURN
 
 
