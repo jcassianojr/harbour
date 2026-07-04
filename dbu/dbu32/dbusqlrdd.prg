@@ -24,6 +24,7 @@
 #include "BOX.CH"
 #include "dbstruct.ch"
 #include "sqlrdd.ch"
+#include "directry.ch"
 
 REQUEST SQLRDD
 REQUEST SQLEX
@@ -95,10 +96,11 @@ FUNCTION sqlrddmenu( cUSOSQL )
    TIPODBF:=92
    
    
+    //pegcfgbanco  ja faz o opentipoarq
    // access mdb accdb nao tem nativo
-   IF Lmdb .OR. laccdb .OR. LFDB .OR. cTIPOSQL = "SQLITE"
-      OPENTIPOARQ()
-   ENDIF
+   //IF Lmdb .OR. laccdb .OR. LFDB .OR. cTIPOSQL = "SQLITE"
+   //   OPENTIPOARQ()
+   //ENDIF
 
 
    WHILE .T.
@@ -118,7 +120,7 @@ FUNCTION sqlrddmenu( cUSOSQL )
       CASE KEY = 1
          sqlrdd_createdatabase()
       CASE KEY = 2
-          MDT("nao implementada")
+          pegcfgbanco() //escolhe novamente
       CASE KEY = 3
          sqlrdd_impdbf()
       CASE KEY = 4
@@ -283,12 +285,14 @@ function sqlrdd_Tabela()
 local aTABELAS
 aTABELAS:={}
 sqlrdd_open()
-aTABELAS:=SR_ListTables() 
-sqlrdd_close()
-IF EMPTY(aTABELAS)
-   mdbtabela( cDATABASEX ) //Guarda public cTABELAX
-ELSE
-   mdbtabela(aTABELAS)  //Guarda public cTABELAX
+IF nConnection>0
+    aTABELAS:=SR_ListTables() 
+    sqlrdd_close()
+    IF EMPTY(aTABELAS)
+       mdbtabela( cDATABASEX ) //Guarda public cTABELAX
+    ELSE
+       mdbtabela(aTABELAS)  //Guarda public cTABELAX
+    ENDIF
 ENDIF
 return
 
@@ -300,8 +304,10 @@ return
 // +
 function sqlrdd_info()
 sqlrdd_open()
-mdt("Connected to        :"+ SR_GetConnectionInfo(, SQL_DBMS_NAME)+" "+ SR_GetConnectionInfo(, SQL_DBMS_VER))
-sqlrdd_close()
+IF nConnection>0
+    mdt("Connected to        :"+ SR_GetConnectionInfo(, SQL_DBMS_NAME)+" "+ SR_GetConnectionInfo(, SQL_DBMS_VER))
+    sqlrdd_close()
+ENDIF    
 return
 
 // +--------------------------------------------------------------------
@@ -314,10 +320,12 @@ function sqlrdd_delete_Tabela()
 sqlrdd_Tabela()
 if ! empty(cTABELAX) .AND.MDG("Excluir tabela "+cTABELAX)
    sqlrdd_open()
-   IF sr_ExistTable(cTABELAX)
-      sr_DropTable(cTABELAX)
+   IF nConnection>0
+       IF sr_ExistTable(cTABELAX)
+          sr_DropTable(cTABELAX)
+       ENDIF
+       sqlrdd_close()
    ENDIF
-   sqlrdd_close()
 endif
 return
 
@@ -341,9 +349,10 @@ FUNCTION sqlrdd_impdbf()
    endif   
 
    sqlrdd_open()
-   sqlrdd_upload_dbf(cARQORI, "", cORIDRIVER, cRDDSQL)
-   sqlrdd_close()
-
+   IF nConnection>0
+      sqlrdd_upload_dbf(cARQORI, "", cORIDRIVER, cRDDSQL)
+      sqlrdd_close()
+   ENDIF
 
    TIPODBF :=nOLDTIPORDD
    RDDNOME(TIPODBF)
@@ -437,21 +446,22 @@ FUNCTION sqlrdd_executesql( eCOMANDO, lTRANS, lMES ,lopen)
    if lopen
       sqlrdd_open()
    endif
-  oSql   := SR_GetConnection()
-   IF lTRANS
-      oSql:execute( Dialeto_begin() )
+   IF nConnection>0
+      oSql   := SR_GetConnection()
+       IF lTRANS
+          oSql:execute( Dialeto_begin() )
+       ENDIF
+       FOR i := 1 TO nfim
+          cCOMANDO := aCOMANDOS[ I ]
+          oSql:execute( cCOMANDO )
+       NEXT i
+       IF lTRANS
+          oSql:execute( Dialeto_commit() )
+       ENDIF
+       if lopen
+          sqlrdd_close()
+       endif
    ENDIF
-   FOR i := 1 TO nfim
-      cCOMANDO := aCOMANDOS[ I ]
-      oSql:execute( cCOMANDO )
-   NEXT i
-   IF lTRANS
-      oSql:execute( Dialeto_commit() )
-   ENDIF
-   if lopen
-      sqlrdd_close()
-   endif
-
    RETURN lRet
 
 
@@ -470,14 +480,13 @@ FUNCTION sqlrdd_open()
    cCONN := ""
    nConnection:=0
    cConnectionString:= ""
-   ALTD()
   
 // dsn=informix;uid=informix;pwd=1234;dtb=test 
 // dsn=db2;uid=db2admin;pwd=1234
 // dsn=ingres  
 //nDetected   := SR_DetectDBFromDSN(cConnString)
-   
 IF cTIPOMIX = "ODBC"
+   rddSetDefault( "SQLEX" )   
    DO CASE
        CASE cTIPOMIX = "MARIADB" 
             s_ODBC_DRIVER   :="MariaDB ODBC 3.2 Driver"
@@ -541,6 +550,7 @@ IF cTIPOMIX = "ODBC"
        sr_AddConnection(CONNECT_ODBC,cConnectionString)
     ENDIF   
 ELSE  
+   cOLDRDD := rddSetDefault( "SQLRDD" )
    DO CASE
        CASE cTIPOMIX = "MARIADB" 
             nConnection := sr_AddConnection(CONNECT_MARIADB, "MARIADB=" + cSERVERx + ";UID=" + cUSERX + ";PWD=" + cPASSX + ";DTB=" + cDATABASEX)
@@ -637,12 +647,15 @@ FUNCTION sqlrdd_upload_dbf(cBaseDir, cPrefix, cDriver, cRDD)
 
    /* upload files */
 
-   aFiles := directory(cBaseDir + "*.dbf")
+   cBaseDir += "\"
 
+   aFiles := directory(cBaseDir + "*." +TABLEEXT)  
+
+   altd()
    FOR EACH aFile IN aFiles
       cFile := strtran(lower(alltrim(cPrefix + aFile[F_NAME])), ".dbf", "")
       dbUseArea(.T., cDriver, cBaseDir + aFile[F_NAME], "ORIG")
-      ? "   Uploading...", cFile, "(" + alltrim(str(ORIG->(lastrec()))), "records)"
+      MDT("   Uploading... "+ cFile  + " (" + alltrim(str(ORIG->(lastrec()))), "records)")
       aStruct := ORIG->(dbStruct())
       aINDICES:={}
       nIndexes := dbORDERINFO(DBOI_ORDERCOUNT)
@@ -669,12 +682,12 @@ FUNCTION sqlrdd_upload_dbf(cBaseDir, cPrefix, cDriver, cRDD)
  //     ENDIF
 
       nIndexes:=LEN(aINDICES)
-      ? nIndexes
+ //     ? nIndexes
      IF nIndexes>0
        FOR j := 1 TO nIndexes
            cINDEXNAME := Aindices[J,1]
            cINDEXCHAVE:=Aindices[J,2]
-           ? "Criando Indice: "+cINDEXNAME+" "+cINDEXCHAVE
+           MDT( "Criando Indice: "+cINDEXNAME+" "+cINDEXCHAVE)
             INDEX ON &cINDEXCHAVE TAG &cINDEXNAME//TO &cARQINDEX
        NEXT j
      ENDIF    

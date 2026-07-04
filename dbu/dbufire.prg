@@ -19,7 +19,7 @@
 #include "TRY.CH"
 #include "dbstruct.ch"
 
-
+#include "directry.ch"
 #require "hbfbird"
 
 
@@ -73,42 +73,45 @@ cTIPOSQL := "FIREBIRD"  // Passa para privada usadas nas funcoes abaixo
 // Busca as credenciais e o caminho do banco dinamicamente via cofre do sistema
 pegcfgbanco() 
 
+
+//pegcfbanco ja faz o openarq quando necessario
 // Seleção do arquivo físico .fdb se aplicável à rotina local pegcfgbanco ja chama opentiparq quando e firebird
 //OPENTIPOARQ()
 
 WHILE .T.
    hb_DispBox(3,22,22,55,B_DOUBLE+" ") 
-   @ 03,24 SAY "FIREBIRD"+" "+ALLTRIM(cSERVERX) 
+   @ 03,24 SAY "FIREBIRD"+" "+ALLTRIM(cSERVERX)+ " Banco " + cDATABASEX 
    
-   OPCAO( 4,24,"&Criar Database            ",67)   // c 
-   OPCAO( 5,24,"&Tabelas                   ",84)   // T 
-   OPCAO( 6,24,"&Importar  DBF             ",73)   // I 
-   OPCAO( 7,24,"&Exportar  DBF             ",69)   // E 
-   OPCAO( 8,24,"&Apagar Tabela             ",65)   // A 
-   OPCAO( 9,24,"Exportar &Formatos         ",70)   // F 
-   OPCAO(10,24,"&Versao Info               ",86)   // V 
-   OPCAO(11,24,"Executar arquivo &SQL      ",83)   //S 83
+   OPCAO( 4, 24,"&Criar Database            ",67)   // c 1
+   OPCAO( 5, 24, "&Database Selecionar       ", 68 )   // D 2
+   OPCAO( 6, 24,"&Tabelas                   ",84)   // T  3
+   OPCAO( 7, 24,"&Importar  DBF             ",73)   // I  4
+   OPCAO( 8, 24,"&Exportar  DBF             ",69)   // E 5
+   OPCAO( 9, 24,"&Apagar Tabela             ",65)   // A  6
+   OPCAO(10, 24,"Exportar &Formatos         ",70)   // F  7
+   OPCAO(11, 24,"&Versao Info               ",86)   // V   8
+   OPCAO(12, 24,"Executar arquivo &SQL      ",83)   //S 83 9
    
    KEY := menu(1,0) 
    DO CASE
    CASE KEY = 1
       firecreate()
    CASE KEY = 2
-      fireTABELAS() 
+          pegcfgbanco() //escolhe novamente    
    CASE KEY = 3
-      fireimpdbf()
+      fireTABELAS() 
    CASE KEY = 4
-      fireexpdbf( 1 )
+      fireimpdbf()
    CASE KEY = 5
-      firedeltable()
+      fireexpdbf( 1 )
    CASE KEY = 6
-      fireexpdbf( 2 )
+      firedeltable()
    CASE KEY = 7
-      fireverinfo()
+      fireexpdbf( 2 )
    CASE KEY = 8
+      fireverinfo()
+   CASE KEY = 9
       fireExecArqSql()
-         
-       
    OTHERWISE
       EXIT 
    ENDCASE
