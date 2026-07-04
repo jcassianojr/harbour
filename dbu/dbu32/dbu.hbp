@@ -21,6 +21,7 @@
 \develop\harbour\dbu\dbu.rc
 
 -m -n -w0 -es2 -ge1
+-inc
 
 hbct.hbc
 hbwin.hbc
@@ -83,7 +84,7 @@ letodb.hbc
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbu2md.prg
-\develop\harbour\dbu\dbufire.prg 
+#\develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
 
 #
@@ -146,7 +147,6 @@ c:\develop\harbour\dbu\dumytd.prg
 \develop\harbour\objmgw\wvgini.prg
 \develop\harbour\objmgw\adofix.prg
 \develop\harbour\objmgw\adoerror.prg
-testepg.prg
 \develop\harbour\objmgw\modeseguranca.prg
 \develop\harbour\objmgw\escolherpasta.prg
 

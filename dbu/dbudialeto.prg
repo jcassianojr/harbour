@@ -415,7 +415,9 @@ cCOMANDO:=""
       CASE cTIPOSQL="PGSQL" .OR. cTIPOSQL="PGSQL64" .OR. cTIPOSQL="POSTGRESQL"
            cCOMANDO ="SELECT lastval() AS LAST_ID;"
        CASE cTIPOSQL="ORACLE" .OR. cTIPOSQL="OCI"
-           cCOMANDO ="select LAST_INSERT_ID()  AS LAST_ID;"     
+           cCOMANDO ="select LAST_INSERT_ID()  AS LAST_ID;"  
+       CASE cTIPOSQL == "CUBRID"   
+          cCOMANDO := "SELECT LAST_INSERT_ID()"    
    ENDCASE
 return cCOMANDO
 
@@ -522,44 +524,29 @@ return cCOMANDO
 
 
 // +--------------------------------------------------------------------
-// +    Function Dialeto_TopPrefix( nQtd )
+// +    Function Dialeto_SetLimit( nQtd )
 // +--------------------------------------------------------------------
-FUNCTION Dialeto_TopPrefix( nQtd )
+FUNCTION Dialeto_SetLimit( nQtd )
    LOCAL cCOMANDO := ""
    LOCAL cQtd     := AllTrim( hb_ntos( nQtd ) )
 
    DO CASE
-   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-      cCOMANDO := " TOP " + cQtd + " "
-   
+   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" ;
+                .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
+                .OR.  cTIPOSQL = "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0 ;
+                .OR. cTIPOSQL = "CUBRID"
+      cCOMANDO := " LIMIT " + cQtd
+
    CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
-      // Em versões antigas do Oracle usa-se ROWNUM no WHERE, 
-      // mas no padrão 12c+ pode-se usar o sufixo.
-      cCOMANDO := "" 
-   ENDCASE
-
-   RETURN cCOMANDO
-
-// +--------------------------------------------------------------------
-// +    Function Dialeto_TopSuffix( nQtd )
-// +--------------------------------------------------------------------
-FUNCTION Dialeto_TopSuffix( nQtd )
-   LOCAL cCOMANDO := ""
-   LOCAL cQtd     := AllTrim( hb_ntos( nQtd ) )
-
-   DO CASE
-   CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB"
-      cCOMANDO := " LIMIT " + cQtd
-      
-   CASE cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL"
-      cCOMANDO := " LIMIT " + cQtd
-
-   CASE cTIPOSQL = "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
-      cCOMANDO := " LIMIT " + cQtd
-      
-   CASE cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"
-      // Padrão ANSI/Oracle 12c
       cCOMANDO := " FETCH FIRST " + cQtd + " ROWS ONLY"
+
+   CASE cTIPOSQL == "INFORMIX"   
+          cCOMANDO :=  " FIRST " + cQtd
+          
+   CASE cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "SYBASE"
+      cCOMANDO := " TOP " + cQtd + " "       
+          
+      
    ENDCASE
 
    RETURN cCOMANDO
@@ -1163,7 +1150,9 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
          // Caracter (C)
          CASE mFldType = "C" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
             mSql += "VARCHAR2 (" + LTrim( Str( mFldLen ) ) + ")"
-         CASE mFldType = "C" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         CASE mFldType = "C" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" ;
+                                   .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
+                                   .OR. cTIPOSQL == "CUBRID")
             mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"
          CASE mFldType = "C" .AND. ( llMDB .OR. llACCDB  )
             mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ") DEFAULT ''"
