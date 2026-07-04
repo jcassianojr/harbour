@@ -25,6 +25,8 @@
 #include "dbstruct.ch"
 #include "sqlrdd.ch"
 #include "directry.ch"
+#include "TRY.CH"
+
 
 REQUEST SQLRDD
 REQUEST SQLEX
@@ -126,11 +128,11 @@ FUNCTION sqlrddmenu( cUSOSQL )
       CASE KEY = 4
           sqlrdd_Tabela()
       CASE KEY = 5
-         sqlrdd_expdbf( 1 )
+         sqlrdd_expdbf( )
       CASE KEY = 6
           sqlrdd_delete_Tabela()
       CASE KEY = 7
-         sqlrdd_expdbf( 2 )
+         sqlrdd_expformat()
       CASE KEY = 8
          sqlrdd_ExecArqSql()
      CASE KEY = 9
@@ -157,7 +159,7 @@ FUNCTION sqlrddmenu( cUSOSQL )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION sqlrdd_expdbf( nTIPO )
+FUNCTION sqlrdd_expdbf()
 sqlrdd_Tabela()
 sqlrdd_open()
 IF nConnection>0
@@ -165,9 +167,19 @@ IF nConnection>0
    
    oSql:exec( "SELECT * FROM "+ctabelax, .F.,.T., , ctabelax)
 
+   dbcloseall()
    sqlrdd_close()
+   IF MDG("Exportar Outro Formato")
+       multidocs(0,ctabelax+".dbf")
+   ENDIF
 ENDIF
 
+/*
+DO WHILE (oSql:Fetch(@aReturn) == SQL_SUCCESS)
+      // Use aReturn with the line
+      i++
+   ENDDO
+*/
  *+--------------------------------------------------------------------
 *+
 *+    Function sqlrdd_ExecArqSql()
@@ -231,7 +243,6 @@ function sqlrdd_delete_Tabela()
 sqlrdd_Tabela()
 if ! empty(cTABELAX) .AND. MDG("Excluir tabela "+cTABELAX)
    sqlrdd_open()
-   altd()
    IF nConnection>0
        IF sr_ExistTable(cTABELAX)
           sr_DropTable(cTABELAX)
@@ -523,10 +534,16 @@ FUNCTION sqlrdd_close()
 // +
 // +
 FUNCTION sqlrdd_expformat()
+LOCAL aSTRU
+aSTRU:=""
+sqlrdd_Tabela()
+sqlrdd_open()
+IF nConnection>0
+ELSE
+   RETURN
+ENDIF   
 
 
-/*
-   mdbtabela( cdatabasex )
    LCOPIANAT := .F.  // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado mysqlrddd
    tDOC      := pegtipodoc()   // .t. Inclui dbf se for nativa
    pegparexp()
@@ -535,16 +552,37 @@ FUNCTION sqlrdd_expformat()
    lDOCRECNO := .F.
    cSUBTIPO  := " "
    PegcsUB( tDOC )   // pegar o subtipo conforme tipo
-   cDESTINO := cTABELAX + "_" + cTIPOSQL + "_rddmix." + zEXPOREXT
+   cDESTINO := cTABELAX + "." + zEXPOREXT
    MDT( cDESTINO )
    MDT( "abrindo arquivo de origem: " + cTABELAX )
-   dbUseArea( .T.,, "SELECT * FROM " + cTABELAX, cTABELAX )
+
+   altd() //erro as vezes quando a tabela foi criado/importado fora do sqlrdd
+   TRY
+      dbUseArea(.T., cRDDSQL , cTABELAX, "ORIGEM", .F.) //ok e nao da erro de fieldget
+   catch oErR
+      TRY
+        // FIELDGET(0) abre corretamente com select tabelas nao importas pelo sqlrdd porem da erro no fieldget
+        dbUseArea(.T., cRDDSQL ,"SELECT * FROM "+ctabelax , "ORIGEM", .F.)
+      catch oErR
+        RETURN
+      END
+   END   
+   oSql:=SR_GetConnection()
+   aSTRU:=oSql:aFields
+
    nLASTREC := LastRec()
    zei_fort( nLASTREC,,, 0 )
-   aSTRU := dbStruct()
+
    multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, TIRAEXT( cDESTINO ), aSTRU )
-   dbCloseArea()
-*/
+
+   dbCloseAll()
+
+   sqlrdd_close()
+
+
+   RETURN NIL
+
+
 
 FUNCTION sqlrdd_upload_dbf(cBaseDir, cPrefix, cDriver, cRDD)
 
