@@ -1135,8 +1135,11 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
          CASE (mFldType = "+" .OR. mFldNm == "SR_RECNO") .AND. ( cTIPOSQL == "SQLITE" )      
             MSql += " INTEGER UNIQUE " 
                
+         CASE (mFldType = "+" .OR. mFldNm == "SR_RECNO") .AND. (cTIPOSQL == "CUBRID" )
+            MSql += " BIGINT NOT NULL UNIQUE AUTO_INCREMENT "
+            
          CASE (mFldType = "+" .OR. mFldNm == "SR_RECNO") .AND. ( llMDB .OR. llACCDB )
-            MSql += " COUNTER UNIQUE "
+            MSql += " COUNTER UNIQUE "   
                
          CASE (mFldType = "+" .OR. mFldNm == "SR_RECNO") .AND. ( cTIPOSQL == "FIREBIRD" )      
             MSql += " INTEGER GENERATED ALWAYS AS IDENTITY UNIQUE "
@@ -1174,40 +1177,59 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             ELSE
                mSql += "TEXT "
             ENDIF
-         CASE mFldType = "V" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         CASE mFldType = "V" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" ;
+                               .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
+                               .OR. cTIPOSQL == "CUBRID" ;
+                                    )
             mSql += "VARCHAR(" + hb_ntos( mFldDec ) + ")"
       
          // Date (D)
-         // INSERÇÃO DO DEFAULT VAZIO PARA DATA NO SQLITE
          CASE mFldType = "D" .AND. cTIPOSQL = "SQLITE"
             mSql += "DATE NOT NULL DEFAULT ('')"
-         CASE mFldType = "D" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         CASE mFldType = "D" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" ;
+                                   .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
+                                   .OR. cTIPOSQL = "FIREBIRD" ;
+                                   )   
             mSql += "TIMESTAMP"
-         CASE mFldType = "D" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
+         CASE mFldType = "D" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  ;
+                                    .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" ;
+                                    .OR. llMDB .OR. llACCDB ;
+                                    .OR. cTIPOSQL == "CUBRID" ;
+                                    )   
             mSql += "DATETIME"
          CASE mFldType = "D"
             mSql += "DATE"
   
          // Datetime (@)
-         CASE mFldType = "@" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI")   
+         CASE mFldType = "@" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" ;
+                                   .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
+                                   .OR. cTIPOSQL = "FIREBIRD" ;
+                                   )   
             mSql += "TIMESTAMP"
-         CASE mFldType = "@" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .or. cTIPOSQL = "SQLITE")   
+         CASE mFldType = "@" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .or. cTIPOSQL = "SQLITE" ;
+                                    .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" ;
+                                    .OR. llMDB .OR. llACCDB ;
+                                    .OR. cTIPOSQL == "CUBRID" ;
+                                    )   
             mSql += "DATETIME"
-         CASE mFldType = "@" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" )
-            mSql += "DATETIME"
-         CASE mFldType = "@" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
-            mSql += "TIMESTAMP"
-         CASE mFldType = "@" .AND. ( llMDB .OR. llACCDB  )
-            mSql += "DATETIME"
-         CASE mFldType = "@" .AND. ( cTIPOSQL = "FIREBIRD" )   
-            mSql += "TIMESTAMP"
+         CASE mFldType = "@"
+             mSql += "TIMESTAMP"
          
          // Time (T)
-         CASE mFldType = "T" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "FIREBIRD" .OR. cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"  )
+         CASE mFldType = "T" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" ;
+                                   .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
+                                   .OR. cTIPOSQL = "FIREBIRD" ;
+                                   )   
             mSql += "TIMESTAMP"
-         CASE mFldType = "T"
+         CASE mFldType = "T" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .or. cTIPOSQL = "SQLITE" ;
+                                    .OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" ;
+                                    .OR. llMDB .OR. llACCDB ;
+                                    .OR. cTIPOSQL == "CUBRID" ;
+                                    )   
             mSql += "DATETIME"
-           
+         CASE mFldType = "T"
+             mSql += "DATETIME"
+         
 
          // Numeric (N)
          CASE mFldType = "N" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" )
@@ -1217,7 +1239,9 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
                mSql += "NUMBER(" + hb_ntos( mFldLen ) + ")  DEFAULT 0"
             ENDIF
 
-         CASE mFldType = "N" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" )
+         CASE mFldType = "N" .AND. ( cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" ;
+                                    .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" ;
+                                    .OR. cTIPOSQL == "CUBRID" )
             IF mFldDec > 0
                mSql += "NUMERIC(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
             ELSE
@@ -1336,8 +1360,8 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "DOUBLE"
 
          // Logical (L)
-         CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"  )
-            mSql += "NUMBER (1)"
+         CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" .OR. cTIPOSQL == "CUBRID" )
+            mSql += "SMALLINT"
          CASE mFldType = "L" .AND. ( cTIPOSQL = "FIREBIRD" )
             mSql += "SMALLINT DEFAULT 0 NOT NULL"  //BOOLEAN DEFAULT FALSE NOT NULL
          CASE mFldType = "L" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "SQLITE"  )

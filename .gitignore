@@ -48,3 +48,7 @@ convcep/vcshead.ch
 convcep/tshead.ch
 convcep/vcshead.ch
 /dbu/dbu64/.hbmk/win
+*.c
+dbu/dbu32/.hbmk/win/mingw/_hbmkaut_DBU.o
+*.o
+*.reso
