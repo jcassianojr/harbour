@@ -12,7 +12,7 @@
 
 # Dependências (libs) requerida pela tclass
 -llibmysql
--lpq
+#-llibpq
 
 -gtwvg
 -gui
@@ -54,14 +54,14 @@ hbodbc.hbc
 rddsql.hbc
 sddodbc.hbc
 sddmy.hbc
-sddfb.hbc
+#sddfb.hbc
 #sddpg.hbc
 sddsqlt3.hbc
 letodb.hbc
 #sddoci.hbc
-hbfbird.hbc
+#hbfbird.hbc
 
-Tdbclass.hbc
+#Tdbclass.hbc
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
@@ -118,7 +118,11 @@ Tdbclass.hbc
 #
 \develop\harbour\dbu\dbuleto.prg 
 #
-c:\develop\harbour\dbu\dbutclass.prg
+#c:\develop\harbour\dbu\dbutclass.prg
+c:\develop\harbour\dbu\dumypg.prg
+c:\develop\harbour\dbu\dumyfb.prg
+c:\develop\harbour\dbu\dumytd.prg
+
 
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  
@@ -150,4 +154,5 @@ testepg.prg
 #c:\develop\harbour\dbu\tclass\Tdbclass.prg
 #c:\develop\harbour\dbu\tclass\cocoa_mysql.c
 #c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
+
 

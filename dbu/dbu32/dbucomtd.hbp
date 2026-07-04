@@ -1,37 +1,24 @@
-# Pastas de inclusão c
--cflag=-Ic:\harbour\hb3rd\mysql\include
--cflag=-Ic:\harbour\hb3rd\pgsql\include
+# Pastas de inclusão c necessarias se compilar com fontes tclass nao usando tclass.hbc
+#-cflag=-Ic:\harbour\hb3rd\mysql\include
+#-cflag=-Ic:\harbour\hb3rd\pgsql\include
 
-# Pastas de inclusão
--incpath=c:\harbour\hb3rd\mysql\include
--incpath=c:\harbour\hb3rd\pgsql\include
+# Pastas de inclusão necessarias se compilar com fintes tclass nao usando tclass.hbc
+#-incpath=c:\harbour\hb3rd\mysql\include
+#-incpath=c:\harbour\hb3rd\pgsql\include
 
-# Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
+# Pastas de bibliotecas requerida pela tclass
 -Lc:\harbour\hb3rd\mysql\lib
--Lc:\harbour\hb3rd\pgsql\lib
+#-Lc:\harbour\hb3rd\pgsql\lib
 
-# Dependências (libs)
+# Dependências (libs) requerida pela tclass
 -llibmysql
--lpq
-
+-llibpq
 
 -gtwvg
 -gui
 -lng=pt_BR
 
-#-vcshead=vcshead.ch
-#-tshead=tshead.ch
-
-#-manifest=dbu.Manifest  comentado erro compilacao 32 bits
-
 \develop\harbour\dbu\dbu.rc
-
-
-#-ldflags=--enable-stdcall-fixup
-#-ldflags=-Wl,--allow-multiple-definition -s -static
-#Use --enable-stdcall-fixup to disable these warnings
-#Use --disable-stdcall-fixup to disable these fixups
-#-locilib
 
 -m -n -w0 -es2 -ge1
 
@@ -44,19 +31,22 @@ hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
 #
-#  adt adi adm ads
+#ads
 #
 rddads.hbc
 #
-#  dbf com dbm
+#dbf com dbm
 #
 rddbm.hbc
+
+#teste com direto abaixo
+#rddado.hbc
 #
-#  nativas sqlite,libmysql,libpg,odbc
+#nativas sqlite,libmysql,libpg,odbc
 #
 hbsqlit3.hbc
 hbmysql.hbc
-hbpgsql.hbc
+#hbpgsql.hbc
 hbodbc.hbc
 #
 # sqlmix
@@ -64,107 +54,76 @@ hbodbc.hbc
 rddsql.hbc
 sddodbc.hbc
 sddmy.hbc
-sddpg.hbc
-sddsqlt3.hbc
 #sddfb.hbc
-# 
-# leto
-#
+#sddpg.hbc
+sddsqlt3.hbc
 letodb.hbc
-# 
-# firebird
-#
+#sddoci.hbc
 #hbfbird.hbc
 
-#
-# dbu
-#
+Tdbclass.hbc
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
+\develop\harbour\dbu\dbuxml.prg
 \develop\harbour\dbu\dbucopy.prg
+\develop\harbour\dbu\dbudoc.prg  
 \develop\harbour\dbu\dbuedi.prg
 \develop\harbour\dbu\dbuedit.prg
+#\develop\harbour\dbu\dbuger.prg
 \develop\harbour\dbu\dbuindx.prg
 \develop\harbour\dbu\dbulib.prg 
 \develop\harbour\dbu\dbustru.prg
 \develop\harbour\dbu\dbuutil.prg 
 \develop\harbour\dbu\dbuver.prg
 \develop\harbour\dbu\dbuview.prg
-\develop\harbour\dbu\dbusincdbf.prg
-\develop\harbour\dbu\dbudialeto.prg
-
-#
-# exportacao formatos
-#
 \develop\harbour\dbu\dbuXLSclass.prg
 \develop\harbour\dbu\XLSXClass.prg
-\develop\harbour\dbu\dbudoc.prg  
-\develop\harbour\dbu\dbuxml.prg
+\develop\harbour\dbu\dbusincdbf.prg
+\develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbu2md.prg
-
-#
-# firebird
-#
-develop\harbour\dbu\dbufire.prg
-
-#
-# paradox
-#
-
+\develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
 
 #
 # sqlite
 #
-
 \develop\harbour\dbu\sql2dbf.prg 
-
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-
 \develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
-
 #
-#       ---    mysql libmysql
+# mysql libmysql
 #
-
 \develop\harbour\dbu\dbumy.prg  
 \develop\harbour\dbu\dbumyexp.prg 
 \develop\harbour\dbu\mysqlrdd.prg 
-
 #
-#       ---    postgresql libpg
+# postgresql libpg
 #
-\develop\harbour\dbu\dbupg.prg
-\develop\harbour\dbu\dbupgexp
-\develop\harbour\dbu\pgrdd.prg
+#\develop\harbour\dbu\dbupg.prg
+#\develop\harbour\dbu\dbupgexp
+#\develop\harbour\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
-#       ---    odbc
 #
 \develop\harbour\dbu\dbuodbc.prg 
-#
-#       ---    adox
 #
 \develop\harbour\dbu\adoxb.prg   
 \develop\harbour\dbu\dbuadox.prg 
 #
-#       ---   leto
-#
 \develop\harbour\dbu\dbuleto.prg 
+#
+c:\develop\harbour\dbu\dbutclass.prg
+c:\develop\harbour\dbu\dumyfb.prg
+c:\develop\harbour\dbu\dumypg.prg
 
-#
-\develop\harbour\dbu\dumyfb.prg
-\develop\harbour\dbu\dumytd.prg
 
-#
-# funcoes de apoio
-#
+
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  
 \develop\harbour\objmgw\disk54.prg
@@ -189,10 +148,9 @@ develop\harbour\dbu\dbufire.prg
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
 \develop\harbour\objmgw\escolherpasta.prg
-#
-#       ---   tbclass   ---
-#
-#c:\develop\harbour\dbu\dbutclass.prg
+
+# necessarias se compilar com tclass nao usando tclass.hbc
 #c:\develop\harbour\dbu\tclass\Tdbclass.prg
 #c:\develop\harbour\dbu\tclass\cocoa_mysql.c
 #c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
+
