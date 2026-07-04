@@ -126,7 +126,7 @@ FUNCTION sqlrddmenu( cUSOSQL )
       CASE KEY = 4
           sqlrdd_Tabela()
       CASE KEY = 5
-         sqlrdd_expdbf( 2 )
+         sqlrdd_expdbf( 1 )
       CASE KEY = 6
           sqlrdd_delete_Tabela()
       CASE KEY = 7
@@ -158,105 +158,15 @@ FUNCTION sqlrddmenu( cUSOSQL )
 // +--------------------------------------------------------------------
 // +
 FUNCTION sqlrdd_expdbf( nTIPO )
+sqlrdd_Tabela()
+sqlrdd_open()
+IF nConnection>0
+   oSql:=SR_GetConnection()  //sempre exporta mais da erro com memos
+   
+   oSql:exec( "SELECT * FROM "+ctabelax, .F.,.T., , ctabelax)
 
-  /*
-
-   LOCAL cDESTINO
-   LOCAL aSTRU
-   LOCAL aVALOR
-   LOCAL I
-   LOCAL nFIM
-   LOCAL eVALOR
-
-   IF nTIPO = 2
-      LCOPIANAT := .F.   // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado PGsqlrddd
-      tDOC      := pegtipodoc()  // .t. Inclui dbf se for nativa
-      pegparexp()
-      lDOCCAB   := .F.
-      lDOCDAD   := .F.
-      lDOCRECNO := .F.
-      cSUBTIPO  := " "
-      PegcsUB( tDOC )  // pegar o subtipo conforme tipo
-   ENDIF
-
-
-   mdbtabela( cdatabasex )
-
-   cDESTINO := cTABELAX + "_" + cTIPOSQL
-   MDT( cDESTINO )
-
-
-   MDT( "abrindo arquivo de origem: " + cTABELAX )
-   dbUseArea( .T.,, "SELECT * FROM " + cTABELAX, "ORIGEM" )
-   nLASTREC := LastRec()
-   nFIM     := FCount()
-   zei_fort( nLASTREC,,, 0 )
-   aSTRU := dbStruct()
-   aSTRU := sqltodbfstru( aSTRU )
-
-   IF nTIPO = 1  // arquivo fisico
-      MDT( cDESTINO )
-      dbCreate( cDESTINO, aSTRU, "DBFCDX" )
-      dbUseArea( .T., "DBFCDX", cDESTINO, "DESTINO", .T., .F. )
-   ELSE
-
-      // cria um arrayrdd para usar na exportacao usar memoria mudar para rdd quando disponivel
-      // dbCreate( cFile, aStruct, cRDD, lKeepOpen, cAlias, cDelimArg, cCodePage, nConnection ) --> <lSuccess>
-      // nao passa o driver sqlmix ja e default rddSetDefault( "SQLMIX" )
-      // nao precisa abrir area lKeepOpen 4 parametro mantem aberto
-      dbCreate( "DESTINO", aSTRU,, .T., "DESTINO" )
-
-   ENDIF
-
-
-   dbSelectAr( "ORIGEM" )
-   dbGoTop()
-   WHILE !Eof()
-      aVALOR := {}
-      FOR I := 1 TO nFIM
-         AAdd( aVALOR, FieldGet( I ) )
-      NEXT I      dbSelectAr( "DESTINO" )
-      netrecapp()
-
-      FOR I := 1 TO nFIM
-         eVALOR := aVALOR[ I ]
-         IF ValType( eVALOR ) = "C" .AND. SubStr( eVALOR, 5, 1 ) = "-" .AND. SubStr( eVALOR, 8, 1 ) = "-"
-            eVALOR := SubStr( eVALOR, 6, 2 ) + "/" + SubStr( eVALOR, 9, 2 ) + "/" + SubStr( eVALOR, 1, 4 )
-            eVALOR := CToD( eVALOR )
-         ENDIF
-         IF ValType( eVALOR ) = "C" .OR. ValType( eVALOR ) = "M"
-            eVALOR := FixSRTExtendido( eVALOR , .T. , .T. , .T. , .T. , .T. )
-            //FixSRTExtendido( cVALOR,lLOW,lUP,lACE,lUTF, lESP )
-            //eVALOR := RANGEREPL( Chr( 0 ), Chr( 31 ), eVALOR, " " )   // Remove caracteres de controle
-            //eVALOR := TIRACE( eVALOR )
-         ENDIF
-         IF !Empty( eVALOR )
-            FieldPut( I, eVALOR )
-         ENDIF
-      NEXT I
-
-      dbSelectAr( "ORIGEM" )
-      dbSkip()
-      zei_fort( nLASTREC,,, 1 )
-   ENDDO
-   dbSelectAr( "ORIGEM" )
-   dbCloseArea()
-
-   IF nTIPO = 2
-      cDESTINO := cTABELAX + "_" + cTIPOSQL + zEXPOREXT
-      MDT( cDESTINO )
-      dbSelectAr( "DESTINO" )
-      nLASTREC := LastRec()
-      zei_fort( nLASTREC,,, 0 )
-      dbGoTop()
-      multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, TIRAEXT( cDESTINO ), aSTRU )
-   ENDIF
-
-   dbSelectAr( "DESTINO" )
-   dbCloseArea()
-   */
-   RETURN .T.
-
+   sqlrdd_close()
+ENDIF
 
  *+--------------------------------------------------------------------
 *+
@@ -294,6 +204,7 @@ IF nConnection>0
        mdbtabela(aTABELAS)  //Guarda public cTABELAX
     ENDIF
 ENDIF
+mdt(cTABELAX)
 return
 
 // +--------------------------------------------------------------------
@@ -318,8 +229,9 @@ return
 // +
 function sqlrdd_delete_Tabela()
 sqlrdd_Tabela()
-if ! empty(cTABELAX) .AND.MDG("Excluir tabela "+cTABELAX)
+if ! empty(cTABELAX) .AND. MDG("Excluir tabela "+cTABELAX)
    sqlrdd_open()
+   altd()
    IF nConnection>0
        IF sr_ExistTable(cTABELAX)
           sr_DropTable(cTABELAX)
