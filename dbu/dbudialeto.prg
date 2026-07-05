@@ -1360,8 +1360,10 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "DOUBLE"
 
          // Logical (L)
-         CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI" .OR. cTIPOSQL == "CUBRID" )
+         CASE mFldType = "L" .AND. ( cTIPOSQL = "ORACLE" .OR. cTIPOSQL = "OCI"  )
             mSql += "SMALLINT"
+         CASE mFldType = "L" .AND. ( cTIPOSQL == "CUBRID" )
+            mSql += "BIT"   
          CASE mFldType = "L" .AND. ( cTIPOSQL = "FIREBIRD" )
             mSql += "SMALLINT DEFAULT 0 NOT NULL"  //BOOLEAN DEFAULT FALSE NOT NULL
          CASE mFldType = "L" .AND. ( cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "SQLITE"  )
