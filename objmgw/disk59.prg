@@ -291,7 +291,7 @@ FUNCTION Valcpf( xCPF, lMES )
 // +
 // +
 // +    Function CNPJ_Novo(pCNPJ)
-// +
+// +    https://servicos.receitafederal.gov.br/servico/cnpj-alfa/simular
 // +
 // +
 // +--------------------------------------------------------------------
