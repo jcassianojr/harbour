@@ -35,6 +35,7 @@ REQUEST SR_ODBC
 //REQUEST SR_MYSQL
 REQUEST SR_FIREBIRD5
 REQUEST SR_PGS
+REQUEST ARRAYRDD
 //REQUEST SR_ORACLE
 
 #define SQL_DBMS_NAME                       17
@@ -535,6 +536,7 @@ FUNCTION sqlrdd_close()
 // +
 FUNCTION sqlrdd_expformat()
 LOCAL aSTRU
+LOCAL nCOMO
 aSTRU:=""
 sqlrdd_Tabela()
 sqlrdd_open()
@@ -542,6 +544,8 @@ IF nConnection>0
 ELSE
    RETURN
 ENDIF   
+
+nCOMO:=1
 
 
    LCOPIANAT := .F.  // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado mysqlrddd
@@ -561,14 +565,28 @@ ENDIF
       dbUseArea(.T., cRDDSQL , cTABELAX, "ORIGEM", .F.) //ok e nao da erro de fieldget
    catch oErR
       TRY
-        // FIELDGET(0) abre corretamente com select tabelas nao importas pelo sqlrdd porem da erro no fieldget
-        dbUseArea(.T., cRDDSQL ,"SELECT * FROM "+ctabelax , "ORIGEM", .F.)
+        //FIELDGET(0) abre corretamente com select tabelas nao importas pelo sqlrdd porem da erro no fieldget
+        nCOMO:=2  
+       //   dbUseArea(.T., cRDDSQL ,"SELECT * FROM "+ctabelax , "ORIGEM", .F.)
       catch oErR
         RETURN
       END
    END   
    oSql:=SR_GetConnection()
    aSTRU:=oSql:aFields
+   
+   IF nCOMO=2 //teste com array add estudar append or while registro tratar caso 2 tabela nao registrada no sr erro fielget
+     aDADOSUSO:={}
+     oSql:exec( "SELECT * FROM "+ctabelax, .F.,.T.,@aDADOSUSO )
+     // criar e manter aberto
+     dbCreate( "arrtest.dbf", aStru, "ARRAYRDD", .T., "arrtest" )
+     // criar e abrir
+     //dbCreate( "arrtest.dbf", aStru, "ARRAYRDD" )
+     // USE arrtest.dbf VIA "ARRAYRDD"
+     
+     hb_SetArrayRdd(aDADOSUSO)
+
+   ENDIF
 
    nLASTREC := LastRec()
    zei_fort( nLASTREC,,, 0 )

@@ -12,11 +12,12 @@
 
 # Dependências (libs) requerida pela tclass
 -llibmysql
--lpq
+-llibpq
 
 -gtwvg
 -gui
 -lng=pt_BR
+-inc
 
 \develop\harbour\dbu\dbu.rc
 
