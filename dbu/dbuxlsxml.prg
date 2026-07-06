@@ -40,7 +40,7 @@ PROCEDURE Fazerxlsxlm()
         DbGoTop()
         DO WHILE .NOT. Eof()
             FOR i := 1 TO nFields
-                xValor := FieldGet(i)
+                xValor := hb_FieldGet(i)
                 
                 // Ignora campos vazios para reduzir tamanho do XML
                 IF Empty(xValor) ; LOOP ; ENDIF

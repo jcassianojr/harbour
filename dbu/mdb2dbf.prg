@@ -395,7 +395,7 @@ IF tDOC = 90 .OR. zEXPOREXT = "DBF"
    while !eof()
       aVALOR := {}
       FOR I := 1 TO nFIM
-         AADD(aVALOR,{FIELDGET(I),FIELDNAME(I)})  //guarda o nome do campo caso a ordem venha invertida
+         AADD(aVALOR,{hb_FIELDGET(I),FIELDNAME(I)})  //guarda o nome do campo caso a ordem venha invertida
       NEXT I
       dbselectar(cALIASDBF)
       NETRECAPP()

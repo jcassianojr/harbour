@@ -126,7 +126,7 @@ FUNCTION Dbf2Xml()  // Requer Area Aberta
       s := '  <' + sAlias + '>' + hb_osNewLine()
       FWrite( hXML, s )
       FOR i := 1 TO FCount()
-         sData := GetXMLString( FieldGet( i ) )
+         sData := GetXMLString( hb_FieldGet( i ) )
          s     := '    <' + Upper( FieldName( i ) ) + '>' + sData + '</' + Upper( FieldName( i ) ) + '>' + hb_osNewLine()
          FWrite( hXML, s )
       NEXT

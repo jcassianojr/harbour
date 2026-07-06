@@ -329,7 +329,7 @@ FUNCTION tclass_impdbf()
       
       msql := "INSERT INTO " + cTABLE + " VALUES ("
       FOR i := 1 TO Len( aSTRU )
-         msql += c2sql( FieldGet( i ) ) + iif( i < Len(aSTRU), ", ", "" )
+         msql += c2sql( hb_FieldGet( i ) ) + iif( i < Len(aSTRU), ", ", "" )
       NEXT
       msql += ")"
       
@@ -432,11 +432,14 @@ ENDIF
    // 3. Obtenção de metadados
    // Mantemos MDBTABLES conforme seu sistema original
    aStructInfo := MDBTABLES( cDATABASEX, cTABELAX )
-   nFIM        := Len( aStructInfo )
+   
+   aStru:=sqltodbfstru(aStructInfo)
+   
+   //nFIM        := Len( aStructInfo )
 
-   FOR i := 1 TO nFIM
-      AAdd( aSTRU, geracampodbf( aStructInfo[i, 1], aStructInfo[i, 2], aStructInfo[i, 3], aStructInfo[i, 4] ) )
-   NEXT i
+   //FOR i := 1 TO nFIM
+   //   AAdd( aSTRU, geracampodbf( aStructInfo[i, 1], aStructInfo[i, 2], aStructInfo[i, 3], aStructInfo[i, 4] ) )
+   //NEXT i
 
    // 4. Criação do arquivo
    cDESTINO := AllTrim(cTABELAX) + "_" + cTIPOSQL

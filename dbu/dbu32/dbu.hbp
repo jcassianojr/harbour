@@ -12,7 +12,7 @@
 
 # Dependências (libs) requerida pela tclass
 -llibmysql
-#-llibpq
+-llibpq
 -lfbclient
 
 -gtwvg

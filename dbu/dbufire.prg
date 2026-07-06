@@ -452,16 +452,19 @@ zei_fort( nLASTREC,,, 0 )
 //aStructInfo := oQuery:GetStruct() //voltando matriz vazia
 aStructInfo := MDBTABLES(cDATABASEX,cTABELAX)
 
-nFIM        := Len( aStructInfo )
 
-FOR i := 1 TO nFIM
-   cFieldName   := aStructInfo[i, 1] // Nome do campo
-   cFieldType   := aStructInfo[i, 2] // Tipo ("C", "N", "D", "L", "M")
-   nFieldLength := aStructInfo[i, 3] // Tamanho
-   nFieldDec    := aStructInfo[i, 4] // Decimais
+aStructInfo:=sqltodbfstru(aStructInfo)
+
+//nFIM        := Len( aStructInfo )
+
+//FOR i := 1 TO nFIM
+//   cFieldName   := aStructInfo[i, 1] // Nome do campo
+//   cFieldType   := aStructInfo[i, 2] // Tipo ("C", "N", "D", "L", "M")
+//   nFieldLength := aStructInfo[i, 3] // Tamanho
+//   nFieldDec    := aStructInfo[i, 4] // Decimais
    
-   AAdd( aSTRU, geracampodbf( cFieldName, cFieldType, nFieldLength, nFieldDec ) )
-NEXT i
+//   AAdd( aSTRU, geracampodbf( cFieldName, cFieldType, nFieldLength, nFieldDec ) )
+//NEXT i
 
 
 cDESTINO := AllTrim(cTABELAX) + "_FIREBIRD"

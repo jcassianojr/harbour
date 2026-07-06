@@ -441,7 +441,7 @@ FUNCTION dbf2pgsql()
          oRecord := oTable:GetBlankRow()
 
          FOR i := 1 TO dbffile->( FCount() )
-            oRecord:FieldPut( i, dbffile->( FieldGet( i ) ) )
+            oRecord:FieldPut( i, dbffile->( hb_FieldGet( i ) ) )
          NEXT
 
          oTable:Append( oRecord )

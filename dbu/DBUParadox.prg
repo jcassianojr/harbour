@@ -181,7 +181,7 @@ FUNCTION DBF2Paradox( cDbfOrigem, cParadoxDestino )
       
       oRs:AddNew()
       FOR nI := 1 TO Len( aStruct )
-         oRs:Fields( aStruct[nI][1] ):Value := FieldGet( nI )
+         oRs:Fields( aStruct[nI][1] ):Value := hb_FieldGet( nI )
       NEXT
       oRs:Update()
       
@@ -251,7 +251,7 @@ FUNCTION DBF2Paradoxadordd( cDbfOrigem, cParadoxDestino, cPrimaryKey  )
       
       FOR nI := 1 TO Len( aStruct )
          // Transfere o campo do DBF para o campo do Paradox
-         FieldPut( nI, ORIGEM->(FieldGet( nI )) )
+         FieldPut( nI, ORIGEM->(hb_FieldGet( nI )) )
       NEXT
       
       DBSELECTAR("ORIGEM")

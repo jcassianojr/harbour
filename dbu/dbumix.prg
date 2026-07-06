@@ -264,7 +264,7 @@ FUNCTION mixexpdbf( nTIPO )
    WHILE !Eof()
       aVALOR := {}
       FOR I := 1 TO nFIM
-         AAdd( aVALOR, FieldGet( I ) )
+         AAdd( aVALOR, hb_FieldGet( I ) )
       NEXT I
       dbSelectAr( "DESTINO" )
       netrecapp()

@@ -29,7 +29,7 @@ FUNCTION PEGTIPO2VAL(aESTRU)
    WHILE ! Eof()
       FOR X = 1 TO nFIELDS
          @ 3, 40 SAY PadR( aESTRU[ X ][ 1 ] )
-         nVAL := FieldGet( X )
+         nVAL := hb_FieldGet( X )
          IF aESTRU[ X ][ 2 ] = "N"
             IF nVAL > aVAL[ X ]
                aVAL[ X ] := nVAL
@@ -752,7 +752,7 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
             ENDIF
 
             @ 3, 40 SAY AllTrim( PadR( cCAMPO ) )
-            nVAL := FieldGet( X )
+            nVAL := hb_FieldGet( X )
 
             cFieldName   := aESTRU[ X ][ 1 ]
             cFieldType   := aESTRU[ X ][ 2 ]
