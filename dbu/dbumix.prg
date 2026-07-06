@@ -30,7 +30,7 @@
 #require "sddmy"
 #require "sddpg"
 #require "sddsqlt3"
-#require "sddfb"
+//#require "sddfb" erro 64 bits comentado momentaniamente
 //#require "sddoci"
 
 

@@ -18,6 +18,7 @@
 -gtwvg
 -gui
 -lng=pt_BR
+-inc
 
 #
 #      --- apoio,auxiliares
@@ -91,6 +92,8 @@ letodb.hbc
 #      --- sqlrddpp
 #
 #sqlrddpp.hbc
+
+#tdbclass.hbc
 
 #
 #      --- dbu
@@ -195,13 +198,13 @@ letodb.hbc
 #\develop\harbour\dbu\dbupg.prg
 #\develop\harbour\dbu\dbupgexp 
 #\develop\harbour\dbu\pgrdd.prg
-dumypg.prg
+\develop\harbour\dbu\dumypg.prg
 
 #
 #      ---    firebird
 #
 #\develop\harbour\dbu\dbufire.prg
-dumyfb.prg
+\develop\harbour\dbu\dumyfb.prg
 
 #
 #      ---    sqlrddpp
@@ -209,10 +212,13 @@ dumyfb.prg
 #firebird1a.prg
 #odbcfirebird1
 
+
+\develop\harbour\dbu\dumysd.prg
+\develop\harbour\dbu\dumytD.prg
 #
 #       ---   tbclass   ---
 #
-c:\develop\harbour\dbu\dbutclass.prg
-c:\develop\harbour\dbu\tclass\Tdbclass.prg
-c:\develop\harbour\dbu\tclass\cocoa_mysql.c
-c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
+#c:\develop\harbour\dbu\dbutclass.prg
+#c:\develop\harbour\dbu\tclass\Tdbclass.prg
+#c:\develop\harbour\dbu\tclass\cocoa_mysql.c
+#c:\develop\harbour\dbu\tclass\cocoa_pgsql.c

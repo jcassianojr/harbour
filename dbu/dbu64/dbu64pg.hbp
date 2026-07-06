@@ -17,6 +17,7 @@
 -gtwvg
 -gui
 -lng=pt_BR
+-inc
 
 hbct.hbc
 hbwin.hbc
@@ -128,14 +129,19 @@ letodb.hbc
 \develop\harbour\objmgw\adofix.prg
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
+\develop\harbour\objmgw\escolherpasta.prg
 #
 #       ---   tbclass   ---
 #
-c:\develop\harbour\dbu\dbutclass.prg
-c:\develop\harbour\dbu\tclass\Tdbclass.prg
-c:\develop\harbour\dbu\tclass\cocoa_mysql.c
-c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
+#c:\develop\harbour\dbu\dbutclass.prg
+#c:\develop\harbour\dbu\tclass\Tdbclass.prg
+#c:\develop\harbour\dbu\tclass\cocoa_mysql.c
+#c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
 
 
-dumyfb.prg
+c:\develop\harbour\dbu\dumyfb.prg
+c:\develop\harbour\dbu\dumytd.prg
+c:\develop\harbour\dbu\dumysd.prg
+
+
 #dumypgsdd.prg

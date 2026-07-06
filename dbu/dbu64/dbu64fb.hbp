@@ -12,11 +12,12 @@
 
 # Dependências (libs)
 -llibmysql
--lpq
+-llibpq
 
 -gtwvg
 -gui
 -lng=pt_BR
+-inc
 
 hbct.hbc
 hbwin.hbc
@@ -50,6 +51,8 @@ hbfbird.hbc
 #sddfb.hbc incluido o sddfb o programa nao abre mesmo com as dll do robin
 
 letodb.hbc
+
+#tdbclass.hbc
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
@@ -128,13 +131,18 @@ letodb.hbc
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
 \develop\harbour\objmgw\escolherpasta.prg
-dumypg.prg
-dumyfbsdd.prg
+
+
+\develop\harbour\dbu\dumyfbsdd.prg
+\develop\harbour\dbu\dumypg.prg
+#\develop\harbour\dbu\dumypgsdd.prg
+\develop\harbour\dbu\dumytd.prg
+\develop\harbour\dbu\dumysd.prg
 
 #
 #       ---   tbclass   ---
 #
-c:\develop\harbour\dbu\dbutclass.prg
-c:\develop\harbour\dbu\tclass\Tdbclass.prg
-c:\develop\harbour\dbu\tclass\cocoa_mysql.c
-c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
+#c:\develop\harbour\dbu\dbutclass.prg
+#c:\develop\harbour\dbu\tclass\Tdbclass.prg
+#c:\develop\harbour\dbu\tclass\cocoa_mysql.c
+#c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
