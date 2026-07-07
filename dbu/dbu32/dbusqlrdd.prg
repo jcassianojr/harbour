@@ -86,17 +86,17 @@ FUNCTION sqlrddmenu( cUSOSQL )
       ENDIF
    ENDIF
 
-
+   TIPODBF:=92
    IF cTIPOMIX="ODBC"
       cOLDRDD := rddSetDefault( "SQLEX" )
       nOLDTIPORDD := TIPODBF
       cRDDSQL  := "SQLEX"
+      TIPODBF:=93
    ELSE
       cOLDRDD := rddSetDefault( "SQLRDD" )
       nOLDTIPORDD := TIPODBF
       cRDDSQL  := "SQLRDD"
    ENDIF   
-   TIPODBF:=92
    
    
     //pegcfgbanco  ja faz o opentipoarq
@@ -107,7 +107,7 @@ FUNCTION sqlrddmenu( cUSOSQL )
 
 
    WHILE .T.
-      hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
+      hb_DispBox( 3, 18, 18, 55, B_DOUBLE + " " )
       @ 03, 24 SAY "SQLRDD:" + cTIPOMIX + " SQL: " + cTIPOSQL + " Banco " + cDATABASEX
       OPCAO(  4, 24, "&Criar database            ", 67 )   // C
       OPCAO(  5, 24, "&Database Selecionar       ", 68 )   // D

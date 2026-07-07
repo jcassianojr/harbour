@@ -62,7 +62,7 @@ nDialect := 3 //deixe com 1 caso de erro criacao com 3
 pegcfgbanco()
 
 WHILE .T.
-   HB_dispbox(3,22,22,55,B_DOUBLE+" ")
+   HB_dispbox(3,18,18,55,B_DOUBLE+" ")
    DO CASE
    CASE cTIPOSQL = "MDB" .OR. cTIPOSQL = "ACCESS"
       IF loledb
@@ -208,6 +208,7 @@ IF lFDB
    OPENTIPOARQ()
 ENDIF
 
+layout()
 return .t.
 
 
@@ -962,12 +963,14 @@ IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. c
    @ 14,23 get cownerx
    @ 16,23 get cportax         
    READ
-   cSERVERX := ALLTRIM(cSERVERX)
-   cuserx  := alltrim(cuserx)
-   cpassx  := alltrim(cpassx)
-   cowenrx:= alltrim(cownerx)
+   cSERVERX  := ALLTRIM(cSERVERX)
+   cuserx    := alltrim(cuserx)
+   cpassx    := alltrim(cpassx)
+   cowenrx   := alltrim(cownerx)
    cportax   := alltrim(cportax)
-   IF lFDB 
+   cBANCOX   := alltrim(cBANCOx)
+   cDATABASEX:= alltrim(cdatabasex)
+   IF lFDB //firebird requer arquivo fisico .fdb .gdb .ib e configuracao do server
    ELSE
      cMDBARQ := cDATABASEX
    ENDIF  
@@ -1079,7 +1082,7 @@ RETURN
 FUNCTION MDBIMPDBF()
 
 
-cMDBARQ := OPENTIPOARQ()
+MDBARQ := OPENTIPOARQ()
 
 nOLDTIPO := TIPODBF
 mdt("escolha origem")

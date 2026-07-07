@@ -1,10 +1,6 @@
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Programa  : dbuleto.prg
-*+
-*+
 *+
 *+     Sistema:
 *+
@@ -14,13 +10,8 @@
 *+
 *+     Copyright (c) 2024,  jcassiano
 *+
-*+     
-*+
-*+
 *+
 *+    Documentado em 6-Jan-2025 as  3:37 pm
-*+
-*+
 *+
 *+--------------------------------------------------------------------
 *+
@@ -91,7 +82,7 @@ pegcfgbanco()
 
 
 WHILE .T.
-   hb_DispBox(3,22,22,55,B_DOUBLE+" ")
+   hb_DispBox(3,18,18,55,B_DOUBLE+" ")
    @ 03,24 SAY "LETODB"+" "+cSERVERX         
    OPCAO(4,24,"&Versao Info               ",86)   // V
    OPCAO(5,24,"&Tabelas                   ",84)   // T

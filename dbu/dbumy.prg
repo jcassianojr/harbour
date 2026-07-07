@@ -76,7 +76,7 @@ FUNCTION mysqlmenu()
 
 
    WHILE .T.
-      hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
+      hb_DispBox( 3, 18, 18, 55, B_DOUBLE + " " )
       @ 03, 24 SAY cDATABASEX
       OPCAO(  4, 24, "&Criar database            ", 67 )   // C
       OPCAO(  5, 24, "&Database Selecionar       ", 68 )   // D

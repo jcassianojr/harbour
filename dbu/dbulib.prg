@@ -69,6 +69,9 @@ next
 @  2,0 say replicate("-",80)         
 //alguns rdd nao tem RDDI_TABLEEXT RDDI_MEMOEX RDDI_ORDBAGEXT usando try para ignonar
 TRY
+  @ MAXROW() - 4,0 say cTIPOSQL+" Server: "+cSERVERX+" Banco: "+cBANCOX+" Database: "+cDATABASEX+" Tabela: "+cTABELAX
+END
+TRY
 @ MAXROW() - 3,0 say "RDD("+zUSOVIA+") Extensao("+hb_rddInfo(RDDI_TABLEEXT)+") Memo("+hb_rddInfo(RDDI_MEMOEXT)+") Index("+hb_rddInfo(RDDI_ORDBAGEXT)+")"         
 END
 @ MAXROW() - 2,0 say "Exportar Para("+ZEXPOREXT+") Delimitador("+ZDELIMITE+") Oem Ansi("+ZCNVCHAR+")"                                                                                               
@@ -165,7 +168,7 @@ FUNCTION MENUSQL(cTIPOSQL)
 LOCAL aAMBIENTE
 aAMBIENTE := SALVAA()
 WHILE .T.
-   HB_dispbox(3,22,22,55,B_DOUBLE+" ")
+   HB_dispbox(3,18,18,55,B_DOUBLE+" ")
    @ 03,24 SAY cTIPOSQL         
    OPCAO( 4,24,"&Nativo clientelib   ",78)   //N
    OPCAO( 5,24,"&ADORDD ODBC         ",65)   //A
@@ -385,6 +388,12 @@ do case
     case nTIPODBF = 91  
        USOVIA := "SQLMIX"
        rddSetDefault("SQLMIX")
+    case nTIPODBF = 92  
+       USOVIA := "SQLRDD"
+       rddSetDefault("SQLRDD")
+    case nTIPODBF = 93  
+       USOVIA := "SQLEX"
+       rddSetDefault("SQLEX")
     otherwise
        USOVIA := "DBFCDX"
        rddsetdefault("DBFCDX")

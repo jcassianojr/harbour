@@ -53,7 +53,7 @@ FUNCTION sqlitemenu()
    aAMBIENTE := SALVAA()
 
    WHILE .T.
-      hb_DispBox( 3, 22, 22, 55, B_DOUBLE + " " )
+      hb_DispBox( 3, 18, 18, 55, B_DOUBLE + " " )
       OPCAO(  4, 24, "&Criar base sqllite        ", 67 )   // c
       OPCAO(  5, 24, "&VACUUM (PACK)             ", 86 )   // V
       OPCAO(  6, 24, "&Importar  DBF             ", 73 )   // I
@@ -61,9 +61,9 @@ FUNCTION sqlitemenu()
       OPCAO(  8, 24, "&Tabelas                   ", 84 )   // T
       OPCAO(  9, 24, "&Apagar Tabela             ", 65 )   // A
       OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // f
-	  OPCAO( 11, 24, "Mar&kdown documentacao     ", 75)   //K
-      OPCAO( 12, 24, "C&hecar integridade        ", 72)   //h
-      OPCAO( 13, 24, "Executar arquivo &SQL      ",83)   //S 83
+	  OPCAO( 11, 24, "Mar&kdown documentacao     ", 75 )   //K
+      OPCAO( 12, 24, "C&hecar integridade        ", 72 )   //h
+      OPCAO( 13, 24, "Executar arquivo &SQL      ", 83 )   //S 83
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1

@@ -79,7 +79,7 @@ pegcfgbanco()
 //OPENTIPOARQ()
 
 WHILE .T.
-   hb_DispBox(3,22,22,55,B_DOUBLE+" ") 
+   hb_DispBox(3,18,18,55,B_DOUBLE+" ") 
    @ 03,24 SAY "FIREBIRD"+" "+ALLTRIM(cSERVERX)+ " Banco " + cDATABASEX 
    
    OPCAO( 4, 24,"&Criar Database            ",67)   // c 1
