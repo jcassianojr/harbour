@@ -14,9 +14,23 @@
 -llibmysql
 -llibpq
 
+-DUSE_SDD_MYSQL
+-cflag=-DUSE_SDD_MYSQL
+-DUSE_SDD_POSTGRES
+-cflag=-USE_SDD_POSTGRES
+
+# definindo aqui porem esta com problemas 64 bits abortando comentado no prg a chamada sddfb
+-DUSE_USE_SDD_FIREBIRD
+-cflag=-USE_SDD_FIREBIRD
+
+# oracle implantacao futura comentado aqui para nao chamar
+#-DUSE_USE_SDD_ORACLE
+#-cflag=-USE_SDD_USE_ORACLE
+
 -gtwvg
 -gui
 -lng=pt_BR
+-inc
 
 \develop\harbour\dbu\dbu.rc
 

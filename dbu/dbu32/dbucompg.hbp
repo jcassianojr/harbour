@@ -12,7 +12,10 @@
 
 # Dependências (libs)
 -llibmysql
--lpq
+-llibpq
+
+-DUSE_SDD_POSTGRES
+-cflag=-USE_SDD_POSTGRES
 
 
 -gtwvg
@@ -34,6 +37,7 @@
 #-locilib
 
 -m -n -w0 -es2 -ge1
+-inc
 
 hbct.hbc
 hbwin.hbc
@@ -107,7 +111,7 @@ letodb.hbc
 #
 # firebird
 #
-develop\harbour\dbu\dbufire.prg
+#\develop\harbour\dbu\dbufire.prg
 
 #
 # paradox

@@ -27,11 +27,24 @@
 
 #require "rddsql"
 #require "sddodbc"
-#require "sddmy"
-#require "sddpg"
 #require "sddsqlt3"
-//#require "sddfb" erro 64 bits comentado momentaniamente
-//#require "sddoci"
+
+
+#ifdef USE_SDD_MYSQL
+  #require "sddmy"
+#endif
+#ifdef USE_SDD_POSTGRES  
+  #require "sddpg"
+#endif  
+
+//-#ifdef {USE_FIREBIRD}
+//#require "sddfb" //erro 64 bits comentado momentaniamente
+//-endif
+
+
+#ifdef USE_SDD_ORACLE
+    #require "sddoci"
+#endif    
 
 
 #include "dbinfo.ch"

@@ -10,9 +10,17 @@
 -Lc:\harbour\hb3rd\mysql\lib
 #-Lc:\harbour\hb3rd\pgsql\lib
 
+-DUSE_SDD_MYSQL
+-cflag=-DUSE_SDD_MYSQL
+
+# definindo aqui porem esta com problemas 64 bits abortando comentado no prg a chamada sddfb
+-DUSE_USE_SDD_FIREBIRD
+-cflag=-USE_SDD_FIREBIRD
+
+
 # Dependências (libs) requerida pela tclass
 -llibmysql
--llibpq
+#-llibpq
 
 -gtwvg
 -gui
@@ -71,7 +79,6 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbudoc.prg  
 \develop\harbour\dbu\dbuedi.prg
 \develop\harbour\dbu\dbuedit.prg
-#\develop\harbour\dbu\dbuger.prg
 \develop\harbour\dbu\dbuindx.prg
 \develop\harbour\dbu\dbulib.prg 
 \develop\harbour\dbu\dbustru.prg
