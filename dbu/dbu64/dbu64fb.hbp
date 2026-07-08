@@ -12,7 +12,14 @@
 
 # Dependências (libs)
 -llibmysql
--llibpq
+#-llibpq
+
+
+# definindo aqui porem esta com problemas 64 bits abortando comentado no prg a chamada sddfb
+-DUSE_USE_SDD_FIREBIRD
+-cflag=-USE_SDD_FIREBIRD
+
+
 
 -gtwvg
 -gui
