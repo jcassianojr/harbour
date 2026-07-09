@@ -145,6 +145,9 @@ sqlrddpp.hbc
 \develop\harbour\dbu\dbuleto.prg 
 #
 c:\develop\harbour\dbu\dbutclass.prg
+
+
+c:\develop\harbour\dbu\dumyOCI.prg
 dbusqlrdd.prg -b
 
 \develop\harbour\objmgw\netdbf.prg

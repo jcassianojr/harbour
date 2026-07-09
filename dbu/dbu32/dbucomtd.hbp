@@ -14,6 +14,7 @@
 -llibmysql
 -llibpq
 
+-inc
 -gtwvg
 -gui
 -lng=pt_BR
@@ -83,7 +84,7 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbu2md.prg
-\develop\harbour\dbu\dbufire.prg 
+#\develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
 
 #
@@ -121,6 +122,10 @@ Tdbclass.hbc
 c:\develop\harbour\dbu\dbutclass.prg
 c:\develop\harbour\dbu\dumyfb.prg
 c:\develop\harbour\dbu\dumypg.prg
+c:\develop\harbour\dbu\dumysd.prg
+c:\develop\harbour\dbu\dumyoci.prg
+
+
 
 
 

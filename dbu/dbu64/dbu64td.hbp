@@ -211,12 +211,12 @@ tdbclass.hbc
 #
 #      ---    sqlrddpp
 #
-#firebird1a.prg
-#odbcfirebird1
 
 
 \develop\harbour\dbu\dumysd.prg
 \develop\harbour\dbu\dumymy.prg
+\develop\harbour\dbu\dumyoci.prg
+\develop\harbour\dbu\dumyOCI.prg
 
 #
 #       ---   tbclass   ---

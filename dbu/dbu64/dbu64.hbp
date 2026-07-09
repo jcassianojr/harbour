@@ -199,6 +199,7 @@ letodb.hbc
 #\develop\harbour\dbu\dbupgexp 
 #\develop\harbour\dbu\pgrdd.prg
 \develop\harbour\dbu\dumypg.prg
+c:\develop\harbour\dbu\dumyOCI.prg
 
 #
 #      ---    firebird

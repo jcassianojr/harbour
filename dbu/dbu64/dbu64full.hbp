@@ -175,6 +175,7 @@ c:\develop\harbour\dbu\dbutclass.prg
 
 
 \develop\harbour\dbu\dumysd.prg
+c:\develop\harbour\dbu\dumyOCI.prg
 
 # necessarias se compilar com tclass nao usando tclass.hbc
 #c:\develop\harbour\dbu\tclass\Tdbclass.prg
