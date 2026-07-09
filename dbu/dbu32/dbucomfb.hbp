@@ -7,11 +7,11 @@
 #-incpath=c:\harbour\hb3rd\pgsql\include
 
 # Pastas de bibliotecas requerida pela tclass
--Lc:\harbour\hb3rd\mysql\lib
+#-Lc:\harbour\hb3rd\mysql\lib
 #-Lc:\harbour\hb3rd\pgsql\lib
 
--DUSE_SDD_MYSQL
--cflag=-DUSE_SDD_MYSQL
+#-DUSE_SDD_MYSQL
+#-cflag=-DUSE_SDD_MYSQL
 
 # definindo aqui porem esta com problemas 64 bits abortando comentado no prg a chamada sddfb
 -DUSE_USE_SDD_FIREBIRD
@@ -19,8 +19,9 @@
 
 
 # Dependências (libs) requerida pela tclass
--llibmysql
+#-llibmysql
 #-llibpq
+-lfbclient
 
 -gtwvg
 -gui
@@ -54,7 +55,7 @@ rddbm.hbc
 #nativas sqlite,libmysql,libpg,odbc
 #
 hbsqlit3.hbc
-hbmysql.hbc
+#hbmysql.hbc
 #hbpgsql.hbc
 hbodbc.hbc
 #
@@ -62,7 +63,7 @@ hbodbc.hbc
 #
 rddsql.hbc
 sddodbc.hbc
-sddmy.hbc
+#sddmy.hbc
 sddfb.hbc
 #sddpg.hbc
 sddsqlt3.hbc
@@ -106,9 +107,9 @@ Tdbclass.hbc
 #
 # mysql libmysql
 #
-\develop\harbour\dbu\dbumy.prg  
-\develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+#\develop\harbour\dbu\dbumy.prg  
+#\develop\harbour\dbu\dbumyexp.prg 
+#\develop\harbour\dbu\mysqlrdd.prg 
 #
 # postgresql libpg
 #
@@ -129,6 +130,10 @@ Tdbclass.hbc
 #c:\develop\harbour\dbu\dbutclass.prg
 c:\develop\harbour\dbu\dumypg.prg
 c:\develop\harbour\dbu\dumytd.prg
+c:\develop\harbour\dbu\dumymy.prg
+c:\develop\harbour\dbu\dumySD.prg
+
+
 
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  

@@ -13,9 +13,12 @@
 # Dependências (libs) requerida pela tclass
 -llibmysql
 -llibpq
+-lfbclient
 
 -DUSE_SDD_MYSQL
 -cflag=-DUSE_SDD_MYSQL
+
+
 -DUSE_SDD_POSTGRES
 -cflag=-USE_SDD_POSTGRES
 
@@ -77,6 +80,8 @@ hbfbird.hbc
 
 Tdbclass.hbc
 
+sqlrddpp.hbc
+
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
 \develop\harbour\dbu\dbuxml.prg
@@ -132,6 +137,7 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbuleto.prg 
 #
 c:\develop\harbour\dbu\dbutclass.prg
+dbusqlrdd.prg -b
 
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  

@@ -37,7 +37,7 @@
   #require "sddpg"
 #endif  
 
-//-#ifdef {USE_FIREBIRD}
+//-#ifdef USE_FIREBIRD
 //#require "sddfb" //erro 64 bits comentado momentaniamente
 //-endif
 

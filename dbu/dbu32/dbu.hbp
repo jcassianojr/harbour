@@ -7,13 +7,19 @@
 #-incpath=c:\harbour\hb3rd\pgsql\include
 
 # Pastas de bibliotecas requerida pela tclass
--Lc:\harbour\hb3rd\mysql\lib
--Lc:\harbour\hb3rd\pgsql\lib
+#-Lc:\harbour\hb3rd\mysql\lib
+#-Lc:\harbour\hb3rd\pgsql\lib
 
 # Dependências (libs) requerida pela tclass
--llibmysql
--llibpq
+#-llibmysql
+#-llibpq
+
 -lfbclient
+
+# Setado para testes sqlrdd em firebird
+-DUSE_USE_SDD_FIREBIRD
+-cflag=-USE_SDD_FIREBIRD
+
 
 -gtwvg
 -gui
@@ -48,7 +54,7 @@ rddbm.hbc
 #nativas sqlite,libmysql,libpg,odbc
 #
 hbsqlit3.hbc
-hbmysql.hbc
+#hbmysql.hbc
 #hbpgsql.hbc
 hbodbc.hbc
 #
@@ -56,7 +62,7 @@ hbodbc.hbc
 #
 rddsql.hbc
 sddodbc.hbc
-sddmy.hbc
+#sddmy.hbc
 #sddfb.hbc
 #sddpg.hbc
 sddsqlt3.hbc
@@ -104,9 +110,9 @@ dbusqlrdd.prg -b
 #
 # mysql libmysql
 #
-\develop\harbour\dbu\dbumy.prg  
-\develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+#\develop\harbour\dbu\dbumy.prg  
+#\develop\harbour\dbu\dbumyexp.prg 
+#\develop\harbour\dbu\mysqlrdd.prg 
 #
 # postgresql libpg
 #
@@ -128,6 +134,7 @@ dbusqlrdd.prg -b
 c:\develop\harbour\dbu\dumypg.prg
 c:\develop\harbour\dbu\dumyfb.prg
 c:\develop\harbour\dbu\dumytd.prg
+c:\develop\harbour\dbu\dumymy.prg
 
 
 \develop\harbour\objmgw\netdbf.prg
