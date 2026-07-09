@@ -132,6 +132,7 @@ FUNCTION sqlrddmenu( cUSOSQL )
       OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F 
       OPCAO( 11, 24, "Executar arquivo &SQL      ", 83 )   //S 83
       OPCAO( 12, 24, "&Versao Info               ", 86 )   // V 
+      OPCAO( 13, 24, "&ODBC   Info               ", 79 )   // O 
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -151,7 +152,10 @@ FUNCTION sqlrddmenu( cUSOSQL )
       CASE KEY = 8
          sqlrdd_ExecArqSql()
      CASE KEY = 9
-         sqlrdd_info()         
+         sqlrdd_info()    
+     CASE KEY = 10
+         sqlrdd_ODBC_info()    
+              
       OTHERWISE
          EXIT
       ENDCASE
@@ -679,6 +683,47 @@ FUNCTION sqlrdd_upload_dbf(cBaseDir, cPrefix, cDriver, cRDD)
 
 
 RETURN
+
+function sqlrdd_ODBC_info()
+LOCAL cTEXTO
+LOCAL n
+LOCAL a
+
+cTEXTO:="Drives:"+HB_OSNEWLINE()
+a := SR_ListODBCDrivers()
+FOR n := 1 TO len(a)
+    cTEXTO+="desc="+ a[n, 1] + " attr="+ a[n, 2]+HB_OSNEWLINE()
+NEXT n
+
+cTEXTO+="Data Sources Sistema:"+HB_OSNEWLINE()
+   a := SR_ListODBCSystemDataSources()
+   FOR n := 1 TO len(a)
+      cTEXTO+= "DSN= "+ a[n, 1]+ " DRIVER="+ a[n, 2]+HB_OSNEWLINE()
+   NEXT n
+
+cTEXTO+="Data Sources Usuario:"+HB_OSNEWLINE()
+   a :=  SR_ListODBCUserDataSources()
+   FOR n := 1 TO len(a)
+      cTEXTO+= "DSN= "+ a[n, 1]+ " DRIVER="+ a[n, 2]+HB_OSNEWLINE()
+   NEXT n
+
+
+ // list all data sources
+//   a := SR_ListODBCDataSources()
+
+   // list all data sources
+//   a := SR_ListODBCDataSources(2) // SQL_FETCH_FIRST
+
+   // list only user data sources
+//   a := SR_ListODBCDataSources(31) // SQL_FETCH_FIRST_USER
+
+   // list only system data sources
+//   a := SR_ListODBCDataSources(32) // SQL_FETCH_FIRST_SYSTEM
+
+hb_memowrit("odbc_info.txt",cTEXTO)
+mdt("arquivo odbc_info.txt gerado")
+
+//cTEXTO+= +HB_OSNEWLINE()
 
 // + EOF: sqlrdd.prg
 // +

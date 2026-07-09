@@ -1,0 +1,89 @@
+Drives:
+desc=Driver da Microsoft para arquivos texto (*.txt; *.csv) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.,*.asc,*.csv,*.tab,*.txt,*.csv;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Driver do Microsoft Access (*.mdb) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.mdb;FileUsage=2;SQLLevel=0;UsageCount=1;
+desc=Driver do Microsoft dBase (*.dbf) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.dbf,*.ndx,*.mdx;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Driver do Microsoft Excel(*.xls) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.xls;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Driver do Microsoft Paradox (*.db ) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.db;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Microsoft Access Driver (*.mdb) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.mdb;FileUsage=2;SQLLevel=0;UsageCount=1;
+desc=Microsoft Access-Treiber (*.mdb) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.mdb;FileUsage=2;SQLLevel=0;UsageCount=1;
+desc=Microsoft dBase Driver (*.dbf) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.dbf,*.ndx,*.mdx;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Microsoft dBase-Treiber (*.dbf) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.dbf,*.ndx,*.mdx;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Microsoft Excel Driver (*.xls) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.xls;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Microsoft Excel-Treiber (*.xls) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.xls;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Microsoft ODBC for Oracle attr=APILevel=1;ConnectFunctions=YYY;CPTimeout=120;DriverODBCVer=02.50;FileUsage=0;SQLLevel=1;UsageCount=1;
+desc=Microsoft Paradox Driver (*.db ) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.db;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Microsoft Paradox-Treiber (*.db ) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.db;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Microsoft Text Driver (*.txt; *.csv) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.,*.asc,*.csv,*.tab,*.txt,*.csv;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=Microsoft Text-Treiber (*.txt; *.csv) attr=APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileExtns=*.,*.asc,*.csv,*.tab,*.txt,*.csv;FileUsage=1;SQLLevel=0;UsageCount=1;
+desc=SQL Server attr=APILevel=2;ConnectFunctions=YYY;CPTimeout=60;DriverODBCVer=03.50;FileUsage=0;SQLLevel=1;UsageCount=1;
+desc=Microsoft Visual FoxPro Driver attr=UsageCount=1;FileExtns=*.dbf,*.cdx,*.idx,*.fpt;DriverODBCVer=02.50;FileUsage=1;APILevel=0;SQLLevel=0;ConnectFunctions=YYN;
+desc=Microsoft Visual FoxPro-Treiber attr=UsageCount=1;FileExtns=*.dbf,*.cdx,*.idx,*.fpt;DriverODBCVer=02.50;FileUsage=1;APILevel=0;SQLLevel=0;ConnectFunctions=YYN;
+desc=Driver para o Microsoft Visual FoxPro attr=UsageCount=1;FileExtns=*.dbf,*.cdx,*.idx,*.fpt;DriverODBCVer=02.50;FileUsage=1;APILevel=0;SQLLevel=0;ConnectFunctions=YYN;
+desc=Microsoft FoxPro VFP Driver (*.dbf) attr=UsageCount=1;FileExtns=*.dbf,*.cdx,*.idx,*.fpt;DriverODBCVer=02.50;FileUsage=1;APILevel=0;SQLLevel=0;ConnectFunctions=YYN;
+desc=SQLite3 ODBC Driver attr=UsageCount=1;
+desc=Microsoft Access Driver (*.mdb, *.accdb) attr=UsageCount=3;APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileUsage=2;FileExtns=*.mdb,*.accdb;SQLLevel=0;
+desc=Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb) attr=UsageCount=3;APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileUsage=2;FileExtns=*.xls,*.xlsx, *.xlsb;SQLLevel=0;
+desc=Microsoft Access dBASE Driver (*.dbf, *.ndx, *.mdx) attr=UsageCount=3;APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileUsage=2;FileExtns=*.dbf, *.ndx, *.mdx;SQLLevel=0;
+desc=Microsoft Access Text Driver (*.txt, *.csv) attr=UsageCount=3;APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileUsage=2;FileExtns=*.txt, *.csv;SQLLevel=0;
+desc=Firebird ODBC Driver attr=UsageCount=1;FileExtns=*.fdb,*.gdb;APILevel=1;ConnectFunctions=YYY;FileUsage=0;DriverODBCVer=03.51;SQLLevel=1;
+Data Sources Sistema:
+DSN= Visual FoxPro Database DRIVER=Microsoft Visual FoxPro Driver
+DSN= Visual FoxPro Tables DRIVER=Microsoft Visual FoxPro Driver
+DSN= SQLite3 Datasource DRIVER=SQLite3 ODBC Driver
+DSN= SQLite3 DRIVER=SQLite3 ODBC Driver
+DSN= SQLite3W DRIVER=SQLite3 ODBC Driver
+Data Sources Usuario:
+DSN= IMAGEM DRIVER=SQLite3 ODBC Driver
+DSN= IMGFER DRIVER=SQLite3 ODBC Driver
+DSN= IMGMA01 DRIVER=SQLite3 ODBC Driver
+DSN= IMGME01 DRIVER=SQLite3 ODBC Driver
+DSN= IMGME04 DRIVER=SQLite3 ODBC Driver
+DSN= IMGME06 DRIVER=SQLite3 ODBC Driver
+DSN= FEMEA DRIVER=SQLite3 ODBC Driver
+DSN= PFP DRIVER=SQLite3 ODBC Driver
+DSN= IMGMQ01 DRIVER=SQLite3 ODBC Driver
+DSN= IMGMR01 DRIVER=SQLite3 ODBC Driver
+DSN= IMGMS01 DRIVER=SQLite3 ODBC Driver
+DSN= IMGMT01 DRIVER=SQLite3 ODBC Driver
+DSN= IMGMU01 DRIVER=SQLite3 ODBC Driver
+DSN= IMGMW05 DRIVER=SQLite3 ODBC Driver
+DSN= IMGMW07 DRIVER=SQLite3 ODBC Driver
+DSN= MANA5 DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5APU DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5BCO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5CON DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5CRM DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5FIS DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5GRA DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5INS DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5PCP DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5PRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5QUA DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5RH DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5TGQ DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5VIA DRIVER=Microsoft Visual FoxPro Driver
+DSN= PF DRIVER=SQLite3 ODBC Driver
+DSN= DESENHO DRIVER=SQLite3 ODBC Driver
+DSN= POA DRIVER=SQLite3 ODBC Driver
+DSN= PFG DRIVER=SQLite3 ODBC Driver
+DSN= MANA5FER DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5ENG DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5EMP DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5EM1 DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOLHAEM1 DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOPTOEM1 DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOLHA DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOLHAPTO DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOLHAEMP DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOPTOEMP DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANEMP01 DRIVER=Microsoft Visual FoxPro Driver
+DSN= FMP0401 DRIVER=SQLite3 ODBC Driver
+DSN= FOLEMP01 DRIVER=Microsoft Visual FoxPro Driver
+DSN= PTOEMP01 DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5FIN DRIVER=Microsoft Visual FoxPro Driver
+DSN= CEPS DRIVER=Microsoft Visual FoxPro Driver
+DSN= CNPJIEUF DRIVER=Microsoft Visual FoxPro Driver
+DSN= SQLite3 DRIVER=SQLite3 ODBC Driver
+DSN= MANA5ENGMDB DRIVER=Driver do Microsoft Access (*.mdb)
+DSN= ENGV16 DRIVER=Microsoft Access Driver (*.mdb, *.accdb)
+DSN= engaccdb DRIVER=Microsoft Access Driver (*.mdb, *.accdb)
