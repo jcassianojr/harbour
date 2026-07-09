@@ -17,9 +17,8 @@
 -lfbclient
 
 # Setado para testes sqlrdd em firebird
--DUSE_USE_SDD_FIREBIRD
--cflag=-USE_SDD_FIREBIRD
-
+-DUSE_USE_SR_FIREBIRD
+-cflag=-USE_SR_FIREBIRD
 
 -gtwvg
 -gui

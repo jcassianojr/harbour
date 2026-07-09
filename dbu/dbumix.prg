@@ -33,14 +33,15 @@
 #ifdef USE_SDD_MYSQL
   #require "sddmy"
 #endif
+
 #ifdef USE_SDD_POSTGRES  
   #require "sddpg"
 #endif  
 
-//-#ifdef USE_FIREBIRD
-//#require "sddfb" //erro 64 bits comentado momentaniamente
-//-endif
-
+//erro 64 bits usando outra tag
+#ifdef USE_SDD_FIREBIRD
+   require "sddfb" 
+#endif
 
 #ifdef USE_SDD_ORACLE
     #require "sddoci"
@@ -56,11 +57,25 @@
 
 REQUEST SQLMIX
 REQUEST SDDODBC
-REQUEST SDDMY
-REQUEST SDDPG
 REQUEST SDDSQLITE3
-REQUEST SDDFB
-//REQUEST SDDOCI
+
+
+#ifdef USE_SDD_MYSQL
+    REQUEST SDDMY
+#endif     
+
+#ifdef USE_SDD_POSTGRES  
+    REQUEST SDDPG
+#endif 
+
+#ifdef USE_SDD_FIREBIRD
+    REQUEST SDDFB
+#endif     
+
+#ifdef USE_SDD_ORACLE
+  REQUEST SDDOCI
+#endif 
+  
 //REQUEST SDDOCI //compilou e abriu sem erro versao 1.77 incluido -locilib  e  sddoci.hbc no hpb
 //foram usadas compilacao independentes pelo bat da pasta harbour/contrib copiadas e pasta lib padrao
 //na compilacao 64 ainda nao esta encontra ocilib teste futuramente o porque

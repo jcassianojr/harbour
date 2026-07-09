@@ -17,6 +17,8 @@
 
 -DUSE_SDD_MYSQL
 -cflag=-DUSE_SDD_MYSQL
+-DUSE_SR_MYSQL
+-cflag=-DUSE_SR_MYSQL
 
 
 -gtwvg

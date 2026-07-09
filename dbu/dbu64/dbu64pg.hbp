@@ -17,6 +17,9 @@
 -DUSE_SDD_POSTGRES
 -cflag=-USE_SDD_POSTGRES
 
+-DUSE_SR_POSTGRES
+-cflag=-USE_SR_POSTGRES
+
 -gtwvg
 -gui
 -lng=pt_BR

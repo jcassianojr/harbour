@@ -17,14 +17,22 @@
 
 -DUSE_SDD_MYSQL
 -cflag=-DUSE_SDD_MYSQL
+-DUSE_SR_MYSQL
+-cflag=-DUSE_SR_MYSQL
 
 
 -DUSE_SDD_POSTGRES
 -cflag=-USE_SDD_POSTGRES
+-DUSE_SR_POSTGRES
+-cflag=-USE_SR_POSTGRES
 
-# definindo aqui porem esta com problemas 64 bits abortando comentado no prg a chamada sddfb
--DUSE_USE_SDD_FIREBIRD
--cflag=-USE_SDD_FIREBIRD
+
+# nao definindo aqui porem esta com problemas 64 bits abortando 
+#-DUSE_USE_SDD_FIREBIRD
+#-cflag=-USE_SDD_FIREBIRD
+-DUSE_USE_SR_FIREBIRD
+-cflag=-USE_SR_FIREBIRD
+
 
 # oracle implantacao futura comentado aqui para nao chamar
 #-DUSE_USE_SDD_ORACLE
