@@ -1,8 +1,3 @@
-//function MYSQLMENU()
-//return 
-
-//function SDDMY()
-//return
 
 function PGSQLMENU()
 return
@@ -10,8 +5,3 @@ return
 function  SDDPG()
 return
 
-//function TFBServer()
-//return
-
-//function FBCreateDB()
-//return
