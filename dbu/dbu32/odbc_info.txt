@@ -27,63 +27,63 @@ desc=Microsoft Access dBASE Driver (*.dbf, *.ndx, *.mdx) attr=UsageCount=3;APILe
 desc=Microsoft Access Text Driver (*.txt, *.csv) attr=UsageCount=3;APILevel=1;ConnectFunctions=YYN;DriverODBCVer=02.50;FileUsage=2;FileExtns=*.txt, *.csv;SQLLevel=0;
 desc=Firebird ODBC Driver attr=UsageCount=1;FileExtns=*.fdb,*.gdb;APILevel=1;ConnectFunctions=YYY;FileUsage=0;DriverODBCVer=03.51;SQLLevel=1;
 Data Sources Sistema:
-DSN= Visual FoxPro Database DRIVER=Microsoft Visual FoxPro Driver
-DSN= Visual FoxPro Tables DRIVER=Microsoft Visual FoxPro Driver
-DSN= SQLite3 Datasource DRIVER=SQLite3 ODBC Driver
-DSN= SQLite3 DRIVER=SQLite3 ODBC Driver
-DSN= SQLite3W DRIVER=SQLite3 ODBC Driver
+DSN= Visual FoxPro Database Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= Visual FoxPro Tables Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= SQLite3 Datasource Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= SQLite3 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= SQLite3W Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
 Data Sources Usuario:
-DSN= IMAGEM DRIVER=SQLite3 ODBC Driver
-DSN= IMGFER DRIVER=SQLite3 ODBC Driver
-DSN= IMGMA01 DRIVER=SQLite3 ODBC Driver
-DSN= IMGME01 DRIVER=SQLite3 ODBC Driver
-DSN= IMGME04 DRIVER=SQLite3 ODBC Driver
-DSN= IMGME06 DRIVER=SQLite3 ODBC Driver
-DSN= FEMEA DRIVER=SQLite3 ODBC Driver
-DSN= PFP DRIVER=SQLite3 ODBC Driver
-DSN= IMGMQ01 DRIVER=SQLite3 ODBC Driver
-DSN= IMGMR01 DRIVER=SQLite3 ODBC Driver
-DSN= IMGMS01 DRIVER=SQLite3 ODBC Driver
-DSN= IMGMT01 DRIVER=SQLite3 ODBC Driver
-DSN= IMGMU01 DRIVER=SQLite3 ODBC Driver
-DSN= IMGMW05 DRIVER=SQLite3 ODBC Driver
-DSN= IMGMW07 DRIVER=SQLite3 ODBC Driver
-DSN= MANA5 DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5APU DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5BCO DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5CON DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5CRM DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5FIS DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5GRA DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5INS DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5PCP DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5PRO DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5QUA DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5RH DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5TGQ DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5VIA DRIVER=Microsoft Visual FoxPro Driver
-DSN= PF DRIVER=SQLite3 ODBC Driver
-DSN= DESENHO DRIVER=SQLite3 ODBC Driver
-DSN= POA DRIVER=SQLite3 ODBC Driver
-DSN= PFG DRIVER=SQLite3 ODBC Driver
-DSN= MANA5FER DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5ENG DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5EMP DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5EM1 DRIVER=Microsoft Visual FoxPro Driver
-DSN= FOLHAEM1 DRIVER=Microsoft Visual FoxPro Driver
-DSN= FOPTOEM1 DRIVER=Microsoft Visual FoxPro Driver
-DSN= FOLHA DRIVER=Microsoft Visual FoxPro Driver
-DSN= FOLHAPTO DRIVER=Microsoft Visual FoxPro Driver
-DSN= FOLHAEMP DRIVER=Microsoft Visual FoxPro Driver
-DSN= FOPTOEMP DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANEMP01 DRIVER=Microsoft Visual FoxPro Driver
-DSN= FMP0401 DRIVER=SQLite3 ODBC Driver
-DSN= FOLEMP01 DRIVER=Microsoft Visual FoxPro Driver
-DSN= PTOEMP01 DRIVER=Microsoft Visual FoxPro Driver
-DSN= MANA5FIN DRIVER=Microsoft Visual FoxPro Driver
-DSN= CEPS DRIVER=Microsoft Visual FoxPro Driver
-DSN= CNPJIEUF DRIVER=Microsoft Visual FoxPro Driver
-DSN= SQLite3 DRIVER=SQLite3 ODBC Driver
-DSN= MANA5ENGMDB DRIVER=Driver do Microsoft Access (*.mdb)
-DSN= ENGV16 DRIVER=Microsoft Access Driver (*.mdb, *.accdb)
-DSN= engaccdb DRIVER=Microsoft Access Driver (*.mdb, *.accdb)
+DSN= IMAGEM Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGFER Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGMA01 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGME01 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGME04 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGME06 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= FEMEA Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= PFP Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGMQ01 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGMR01 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGMS01 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGMT01 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGMU01 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGMW05 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= IMGMW07 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= MANA5 Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5APU Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5BCO Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5CON Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5CRM Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5FIS Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5GRA Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5INS Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5PCP Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5PRO Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5QUA Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5RH Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5TGQ Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5VIA Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= PF Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= DESENHO Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= POA Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= PFG Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= MANA5FER Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5ENG Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5EMP Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5EM1 Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOLHAEM1 Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOPTOEM1 Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOLHA Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOLHAPTO Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOLHAEMP Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= FOPTOEMP Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANEMP01 Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= FMP0401 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= FOLEMP01 Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= PTOEMP01 Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= MANA5FIN Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= CEPS Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= CNPJIEUF Dialeto= FOXPRO DRIVER=Microsoft Visual FoxPro Driver
+DSN= SQLite3 Dialeto= SQLITE DRIVER=SQLite3 ODBC Driver
+DSN= MANA5ENGMDB Dialeto= ACCESS DRIVER=Driver do Microsoft Access (*.mdb)
+DSN= ENGV16 Dialeto= ACCESS DRIVER=Microsoft Access Driver (*.mdb, *.accdb)
+DSN= engaccdb Dialeto= ACCESS DRIVER=Microsoft Access Driver (*.mdb, *.accdb)
