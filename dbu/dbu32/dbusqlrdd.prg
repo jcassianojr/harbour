@@ -92,6 +92,7 @@ FUNCTION sqlrddmenu( cUSOSQL )
 
    pegcfgbanco()
    cTIPOMIX :=  "ODBC"
+   cTIPODBC :=  "CONN"
    
 
    IF cTIPOSQL="MARIADB".OR. cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "FIREBIRD" .OR. cTIPOSQL = "ORACLE"
@@ -122,7 +123,7 @@ FUNCTION sqlrddmenu( cUSOSQL )
 
    WHILE .T.
       hb_DispBox( 3, 18, 18, 55, B_DOUBLE + " " )
-      @ 03, 24 SAY "SQLRDD:" + cTIPOMIX + " SQL: " + cTIPOSQL + " Banco " + cDATABASEX
+      @ 03, 24 SAY "SQLRDD:" + cTIPOMIX + " SQL: " + cTIPOSQL 
       OPCAO(  4, 24, "&Criar database            ", 67 )   // C
       OPCAO(  5, 24, "&Database Selecionar       ", 68 )   // D
       OPCAO(  6, 24, "&Importar  DBF             ", 73 )   // I
@@ -131,8 +132,8 @@ FUNCTION sqlrddmenu( cUSOSQL )
       OPCAO(  9, 24, "&Apagar Tabela             ", 65 )   // A
       OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F 
       OPCAO( 11, 24, "Executar arquivo &SQL      ", 83 )   //S 83
-      OPCAO( 12, 24, "&Versao Info               ", 86 )   // V 
-      OPCAO( 13, 24, "&ODBC   Info               ", 79 )   // O 
+      OPCAO( 12, 24, "&Versao Info SR            ", 86 )   // V 
+      OPCAO( 13, 24, "&ODBC   Info DSN           ", 79 )   // O 
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -333,7 +334,7 @@ FUNCTION sqlrdd_createdatabase()
                HB_MEMOWRIT(cARQORI,"")
             ENDIF   
             cDATABASEX:=cARQORI
-       CASE cTIPOMIX = "ODBC"  // Cserver 
+       CASE cTIPOMIX = "ODBC" .AND. cTIPODBC =  "DSN" // Cserver 
   ENDCASE
  
 
@@ -431,6 +432,9 @@ FUNCTION sqlrdd_open()
 IF cTIPOMIX = "ODBC"
    rddSetDefault( "SQLEX" )   
    DO CASE
+      CASE cTIPODBC ==  "DSN"
+           cConnectionString :=  "dsn="+cBANCOX
+      
        CASE cTIPOMIX = "MARIADB" 
             s_ODBC_DRIVER   :="MariaDB ODBC 3.2 Driver"
             S_ODBC_OPTIONS  := "TCPIP=1"
@@ -688,6 +692,10 @@ function sqlrdd_ODBC_info()
 LOCAL cTEXTO
 LOCAL n
 LOCAL a
+LOCAL aODBC
+LOCAL aTIPO
+aODBC:={}
+aTIPO:={}
 
 cTEXTO:="Drives:"+HB_OSNEWLINE()
 a := SR_ListODBCDrivers()
@@ -699,12 +707,16 @@ cTEXTO+="Data Sources Sistema:"+HB_OSNEWLINE()
    a := SR_ListODBCSystemDataSources()
    FOR n := 1 TO len(a)
       cTEXTO+= "DSN= "+ a[n, 1]+" Dialeto= "+DIALETO_DetectTargetDb(a[n, 2])+ " DRIVER="+ a[n, 2]+HB_OSNEWLINE()
+      AADD(aODBC, a[n, 1])
+      AADD(aTIPO, a[n, 2])
    NEXT n
 
 cTEXTO+="Data Sources Usuario:"+HB_OSNEWLINE()
    a :=  SR_ListODBCUserDataSources()
    FOR n := 1 TO len(a)
       cTEXTO+= "DSN= "+ a[n, 1]+" Dialeto= "+DIALETO_DetectTargetDb(a[n, 2])+ " DRIVER="+ a[n, 2]+HB_OSNEWLINE()
+      AADD(aODBC, a[n, 1])
+      AADD(aTIPO, a[n, 2])
    NEXT n
 
 
@@ -722,7 +734,29 @@ cTEXTO+="Data Sources Usuario:"+HB_OSNEWLINE()
 
 hb_memowrit("odbc_info.txt",cTEXTO)
 mdt("arquivo odbc_info.txt gerado")
-
+IF LEN(aODBC)>0
+   nChoices := ACHOICE(4,19,17,54,aODBC)
+   //3, 18, 18, 55
+  // AChoice( <nTop>, <nLeft>, <nBottom>, <nRight>, <acMenuItems>, [<alSelableItems>  <lSelableItems>], [<cUserFunction> | <bUserBlock>], [<nInitialItem>]
+   IF nChoices >0
+       cBANCOX:=aODBC[nChoices]
+       cTIPOSQL:=DIALETO_DetectTargetDb(aTIPO[nChoices])
+       cTIPOMIX:="ODBC"
+       cTIPODBC:="DSN" 
+       
+       cSERVERX    := "" //Space( 30 )
+       cDATABASEX  := ""  //Space( 30 )
+       cUSERX      := ""   //Space( 30 )
+       cPASSX      := ""  //Space( 30 )
+       cTABELAX    := ""  //Space( 30 )
+       cOWNERX     := ""   //Space(30)
+       cPORTAX     := ""  //SPACE(30)
+       
+       
+       MDT(cBANCOX+" "+cTIPOSQL)
+       layout()
+   ENDIF
+ENDIF
 
 
 FUNCTION DIALETO_DetectTargetDb(cTargetDB)
