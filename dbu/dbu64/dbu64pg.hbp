@@ -1,17 +1,17 @@
 # Pastas de inclusão c
--cflag=-Ic:\harbour\hb3rd\mysql-x64\include
+#-cflag=-Ic:\harbour\hb3rd\mysql-x64\include
 -cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
 
 # Pastas de inclusão
--incpath=c:\harbour\hb3rd\mysql-x64\include
+#-incpath=c:\harbour\hb3rd\mysql-x64\include
 -incpath=c:\harbour\hb3rd\pgsql-x64\include
 
 # Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
--Lc:\harbour\hb3rd\mysql-x64\lib
+#-Lc:\harbour\hb3rd\mysql-x64\lib
 -Lc:\harbour\hb3rd\pgsql-x64\lib
 
 # Dependências (libs)
--llibmysql
+#-llibmysql
 -llibpq
 
 -DUSE_SDD_POSTGRES
@@ -33,7 +33,7 @@ rddbm.hbc
 hbsqlit3.hbc
 #usando prg no lugar da lib abaixo
 #rddado.hbc
-hbmysql.hbc
+#hbmysql.hbc
 hbpgsql.hbc
 hbodbc.hbc
 hbmemio.hbc
@@ -45,7 +45,7 @@ hbxlsxml.hbc
 #
 rddsql.hbc
 sddodbc.hbc
-sddmy.hbc
+#sddmy.hbc
 sddpg.hbc
 sddsqlt3.hbc
 #sddoci.hbc
@@ -87,9 +87,9 @@ letodb.hbc
 #
 # mysql libmysql
 #
-\develop\harbour\dbu\dbumy.prg  
-\develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+#\develop\harbour\dbu\dbumy.prg  
+#\develop\harbour\dbu\dbumyexp.prg 
+#\develop\harbour\dbu\mysqlrdd.prg 
 #
 # postgresql libpg
 #
@@ -145,6 +145,5 @@ letodb.hbc
 c:\develop\harbour\dbu\dumyfb.prg
 c:\develop\harbour\dbu\dumytd.prg
 c:\develop\harbour\dbu\dumysd.prg
+c:\develop\harbour\dbu\dumymy.prg
 
-
-#dumypgsdd.prg

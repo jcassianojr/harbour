@@ -1,141 +1,175 @@
 # Pastas de inclusão c
 -cflag=-Ic:\harbour\hb3rd\mysql-x64\include
--cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
+#-cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
 
 # Pastas de inclusão
 -incpath=c:\harbour\hb3rd\mysql-x64\include
--incpath=c:\harbour\hb3rd\pgsql-x64\include
+#-incpath=c:\harbour\hb3rd\pgsql-x64\include
 
-# Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
+# Pastas de bibliotecas
 -Lc:\harbour\hb3rd\mysql-x64\lib
--Lc:\harbour\hb3rd\pgsql-x64\lib
+#-Lc:\harbour\hb3rd\pgsql-x64\lib
 
-
-# Dependências (libs) requerida pela tclass
+# Dependências (libs)
 -llibmysql
--llibpq
--lfbclient
+#-llibpq
 
 -DUSE_SDD_MYSQL
 -cflag=-DUSE_SDD_MYSQL
 
--DUSE_SDD_POSTGRES
--cflag=-USE_SDD_POSTGRES
-
-# definindo aqui porem esta com problemas 64 bits abortando comentado no prg a chamada sddfb
--DUSE_USE_SDD_FIREBIRD
--cflag=-USE_SDD_FIREBIRD
-
-# oracle implantacao futura comentado aqui para nao chamar
-#-DUSE_USE_SDD_ORACLE
-#-cflag=-USE_SDD_USE_ORACLE
-
+# flasgs compilacao
 -gtwvg
 -gui
 -lng=pt_BR
 -inc
 
-\develop\harbour\dbu\dbu.rc
-
--m -n -w0 -es2 -ge1
-
+#
+#      --- apoio,auxiliares
+#
 hbct.hbc
 hbwin.hbc
 hbtip.hbc
 xhb.hbc
+gtwvg.hbc
 hbmemio.hbc
 hbziparc.hbc
-hbmxml.hbc
-hbxlsxml.hbc
+
 #
-#ads
+#      --- ads adt adi adm
 #
 rddads.hbc
+
 #
-#dbf com dbm
+#      --- RDDBM
 #
 rddbm.hbc
 
-#teste com direto abaixo
-#rddado.hbc
 #
-#nativas sqlite,libmysql,libpg,odbc
+#      --- sqlit3
 #
 hbsqlit3.hbc
-hbmysql.hbc
-hbpgsql.hbc
-hbodbc.hbc
+
 #
-# sqlmix
+#      ---  mysql
+#
+hbmysql.hbc
+
+#
+#      --- odbc
+#
+hbodbc.hbc
+
+#
+#      --- exportacao
+#
+hbmxml.hbc
+hbxlsxml.hbc
+
+#
+#      ---  sqlmix
 #
 rddsql.hbc
 sddodbc.hbc
 sddmy.hbc
-sddfb.hbc
-sddpg.hbc
 sddsqlt3.hbc
-letodb.hbc
 #sddoci.hbc
-hbfbird.hbc
 
-Tdbclass.hbc
+#
+#      --- LETO
+#
+letodb.hbc
 
+#
+#      --- Firebird
+#
+#hbfbird.hbc
+#sddfb.hbc
+
+#
+#      --- postgre
+#
+#hbpgsql.hbc
+#sddpg.hbc
+
+#
+#      --- sqlrddpp
+#
+#sqlrddpp.hbc
+
+#tdbclass.hbc
+
+#
+#      --- dbu
+#
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
-\develop\harbour\dbu\dbuxml.prg
 \develop\harbour\dbu\dbucopy.prg
-\develop\harbour\dbu\dbudoc.prg  
+\develop\harbour\dbu\dbudoc.prg    
 \develop\harbour\dbu\dbuedi.prg
 \develop\harbour\dbu\dbuedit.prg
 \develop\harbour\dbu\dbuindx.prg
 \develop\harbour\dbu\dbulib.prg 
 \develop\harbour\dbu\dbustru.prg
-\develop\harbour\dbu\dbuutil.prg 
+\develop\harbour\dbu\dbuutil.prg
 \develop\harbour\dbu\dbuver.prg
 \develop\harbour\dbu\dbuview.prg
+\develop\harbour\dbu\dbusincdbf.prg
+\develop\harbour\dbu\dbudialeto.prg
+
+#
+#      --- exportacao
+#
+\develop\harbour\dbu\dbuxml.prg
+\develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbuXLSclass.prg
 \develop\harbour\dbu\XLSXClass.prg
-\develop\harbour\dbu\dbusincdbf.prg
-\develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
-\develop\harbour\dbu\dbu2md.prg
-\develop\harbour\dbu\dbufire.prg 
+
+#
+#      --- paradox ODBC extend
+#
 \develop\harbour\dbu\dbUparadox.prg
 
 #
-# sqlite
+#      ---    sqlite compilado com fontes C nativo
 #
 \develop\harbour\dbu\sql2dbf.prg 
+
 #
-# ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
+#      ---    ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
+\develop\harbour\dbu\mdb2dbf.prg 
 \develop\harbour\dbu\adordd.prg
-\develop\harbour\dbu\mdb2dbf.prg
+
 #
-# mysql libmysql
+#      ---    mysql libmysql
 #
 \develop\harbour\dbu\dbumy.prg  
 \develop\harbour\dbu\dbumyexp.prg 
 \develop\harbour\dbu\mysqlrdd.prg 
+
 #
-# postgresql libpg
-#
-\develop\harbour\dbu\dbupg.prg
-\develop\harbour\dbu\dbupgexp.prg
-\develop\harbour\dbu\pgrdd.prg
+#      ---    dbumix
 #
 \develop\harbour\dbu\dbumix.prg
+
 #
+#      --- contrib odbc
 #
-\develop\harbour\dbu\dbuodbc.prg 
+\develop\harbour\dbu\dbuodbc.prg
 #
-\develop\harbour\dbu\adoxb.prg   
+#      --- ADOX ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
+#
+\develop\harbour\dbu\adoxb.prg
 \develop\harbour\dbu\dbuadox.prg 
 #
-\develop\harbour\dbu\dbuleto.prg 
+#      --- LETO
 #
-c:\develop\harbour\dbu\dbutclass.prg
+\develop\harbour\dbu\dbuleto.prg 
 
+#
+#      --- auxiliares apoio
+#
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  
 \develop\harbour\objmgw\disk54.prg
@@ -150,7 +184,7 @@ c:\develop\harbour\dbu\dbutclass.prg
 \develop\harbour\objmgw\f_tempfi.prg
 \develop\harbour\objmgw\f_encode.prg
 \develop\harbour\objmgw\f_freadl.prg
-\develop\harbour\objmgw\f_makedb.prg  
+\develop\harbour\objmgw\f_makedb.prg       
 \develop\harbour\objmgw\f_ismemo.prg       
 \develop\harbour\objmgw\mmousen.prg
 \develop\harbour\objmgw\mlib06.prg
@@ -161,11 +195,24 @@ c:\develop\harbour\dbu\dbutclass.prg
 \develop\harbour\objmgw\modeseguranca.prg
 \develop\harbour\objmgw\escolherpasta.prg
 
+#
+#      ---    postgresql libpg
+#
+#\develop\harbour\dbu\dbupg.prg
+#\develop\harbour\dbu\dbupgexp 
+#\develop\harbour\dbu\pgrdd.prg
+\develop\harbour\dbu\dumypg.prg
 
+\develop\harbour\dbu\dumyfb.prg
 \develop\harbour\dbu\dumysd.prg
+\develop\harbour\dbu\dumytD.prg
 
-# necessarias se compilar com tclass nao usando tclass.hbc
+
+
+#
+#       ---   tbclass   ---
+#
+#c:\develop\harbour\dbu\dbutclass.prg
 #c:\develop\harbour\dbu\tclass\Tdbclass.prg
 #c:\develop\harbour\dbu\tclass\cocoa_mysql.c
 #c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
-

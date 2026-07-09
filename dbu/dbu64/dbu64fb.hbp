@@ -1,25 +1,24 @@
 # Pastas de inclusão c
--cflag=-Ic:\harbour\hb3rd\mysql-x64\include
--cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
+#-cflag=-Ic:\harbour\hb3rd\mysql-x64\include
+#-cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
 
 # Pastas de inclusão
--incpath=c:\harbour\hb3rd\mysql-x64\include
--incpath=c:\harbour\hb3rd\pgsql-x64\include
+#-incpath=c:\harbour\hb3rd\mysql-x64\include
+#-incpath=c:\harbour\hb3rd\pgsql-x64\include
 
 # Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
--Lc:\harbour\hb3rd\mysql-x64\lib
--Lc:\harbour\hb3rd\pgsql-x64\lib
+#-Lc:\harbour\hb3rd\mysql-x64\lib
+#-Lc:\harbour\hb3rd\pgsql-x64\lib
 
 # Dependências (libs)
--llibmysql
+#-llibmysql
 #-llibpq
+-lfbclient
 
 
 # definindo aqui porem esta com problemas 64 bits abortando comentado no prg a chamada sddfb
 -DUSE_USE_SDD_FIREBIRD
 -cflag=-USE_SDD_FIREBIRD
-
-
 
 -gtwvg
 -gui
@@ -37,7 +36,7 @@ rddbm.hbc
 hbsqlit3.hbc
 #usando prg no lugar da lib abaixo
 #rddado.hbc
-hbmysql.hbc
+#hbmysql.hbc
 #hbpgsql.hbc
 hbodbc.hbc
 hbmemio.hbc
@@ -49,11 +48,12 @@ hbxlsxml.hbc
 #
 rddsql.hbc
 sddodbc.hbc
-sddmy.hbc
+#sddmy.hbc
 #sddpg.hbc
 sddsqlt3.hbc
 #sddoci.hbc
 hbfbird.hbc
+
 #hbfbird.hbc usando as dll compiladas com msv incluidas no robin nao aborta nem da erro 142
 #sddfb.hbc incluido o sddfb o programa nao abre mesmo com as dll do robin
 
@@ -92,9 +92,9 @@ letodb.hbc
 #
 # mysql libmysql
 #
-\develop\harbour\dbu\dbumy.prg  
-\develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+#\develop\harbour\dbu\dbumy.prg  
+#\develop\harbour\dbu\dbumyexp.prg 
+#\develop\harbour\dbu\mysqlrdd.prg 
 #
 # postgresql libpg
 #
@@ -142,9 +142,10 @@ letodb.hbc
 
 \develop\harbour\dbu\dumyfbsdd.prg
 \develop\harbour\dbu\dumypg.prg
-#\develop\harbour\dbu\dumypgsdd.prg
 \develop\harbour\dbu\dumytd.prg
 \develop\harbour\dbu\dumysd.prg
+\develop\harbour\dbu\dumymy.prg
+
 
 #
 #       ---   tbclass   ---

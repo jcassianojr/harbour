@@ -1,18 +1,18 @@
 # Pastas de inclusão c
--cflag=-Ic:\harbour\hb3rd\mysql-x64\include
--cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
+#-cflag=-Ic:\harbour\hb3rd\mysql-x64\include
+#-cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
 
 # Pastas de inclusão
--incpath=c:\harbour\hb3rd\mysql-x64\include
--incpath=c:\harbour\hb3rd\pgsql-x64\include
+#-incpath=c:\harbour\hb3rd\mysql-x64\include
+#-incpath=c:\harbour\hb3rd\pgsql-x64\include
 
 # Pastas de bibliotecas
--Lc:\harbour\hb3rd\mysql-x64\lib
--Lc:\harbour\hb3rd\pgsql-x64\lib
+#-Lc:\harbour\hb3rd\mysql-x64\lib
+#-Lc:\harbour\hb3rd\pgsql-x64\lib
 
 # Dependências (libs)
--llibmysql
--lpq
+#-llibmysql
+#-lpq
 
 # flasgs compilacao
 -gtwvg
@@ -49,7 +49,7 @@ hbsqlit3.hbc
 #
 #      ---  mysql
 #
-hbmysql.hbc
+#hbmysql.hbc
 
 #
 #      --- odbc
@@ -67,7 +67,7 @@ hbxlsxml.hbc
 #
 rddsql.hbc
 sddodbc.hbc
-sddmy.hbc
+#sddmy.hbc
 sddsqlt3.hbc
 #sddoci.hbc
 
@@ -141,9 +141,9 @@ letodb.hbc
 #
 #      ---    mysql libmysql
 #
-\develop\harbour\dbu\dbumy.prg  
-\develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+#\develop\harbour\dbu\dbumy.prg  
+#\develop\harbour\dbu\dbumyexp.prg 
+#\develop\harbour\dbu\mysqlrdd.prg 
 
 #
 #      ---    dbumix
@@ -215,6 +215,8 @@ letodb.hbc
 
 \develop\harbour\dbu\dumysd.prg
 \develop\harbour\dbu\dumytD.prg
+\develop\harbour\dbu\dumymy.prg
+
 #
 #       ---   tbclass   ---
 #
