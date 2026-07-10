@@ -418,15 +418,15 @@ FUNCTION sqlrdd_open()
    nConnection:=0
    cConnectionString:= ""
   
-// dsn=informix;uid=informix;pwd=1234;dtb=test 
-// dsn=db2;uid=db2admin;pwd=1234
-// dsn=ingres  
-//nDetected   := SR_DetectDBFromDSN(cConnString)
+
 IF cTIPOMIX = "ODBC"
    rddSetDefault( "SQLEX" )   
    DO CASE
       CASE cTIPODBC ==  "DSN"
            cConnectionString :=  "dsn="+cBANCOX
+            // dsn=informix;uid=informix;pwd=1234;dtb=test 
+            // dsn=db2;uid=db2admin;pwd=1234
+            // dsn=ingres  
       
        CASE cTIPOMIX = "MARIADB" 
             s_ODBC_DRIVER   :="MariaDB ODBC 3.2 Driver"

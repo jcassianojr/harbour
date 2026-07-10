@@ -614,6 +614,18 @@ FUNCTION mix_close()
    ENDIF
 
 
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function mix_AFFECTEDROWS()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
 function mix_AFFECTEDROWS()
 LOCAL nRetVal
 nRetVal:=0
@@ -666,7 +678,7 @@ FUNCTION mix_Conn()
 FUNCTION mixexpformat()
 
    mdbtabela( cdatabasex )
-   LCOPIANAT := .F.  // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado mysqlrddd
+   LCOPIANAT := .F.  // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado sqlmix
    tDOC      := pegtipodoc()   // .t. Inclui dbf se for nativa
    pegparexp()
    lDOCCAB   := .F.
