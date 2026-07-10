@@ -57,6 +57,8 @@ FUNCTION adoxmenu( cUSOSQL )
    lMDB       := .F.
    lACCDB     := .F.
    lFDB       := .F.
+   CTIPOMIX :="ODBC"
+   cTIPODBC :="ODBC"
 
    pegcfgbanco()
 
@@ -69,7 +71,7 @@ FUNCTION adoxmenu( cUSOSQL )
    ADOEXECUTE(cSQL)
    ADOCopy2DBF() nao implantado
    ADOIndex( "clientes", "nome", "CliNome", .t. )
-   DOSetOrder( 1 )
+   ADOSetOrder( 1 )
    ADOAlias()
    ADOSORT()
    ADOSETFILTER()
@@ -86,6 +88,7 @@ FUNCTION adoxmenu( cUSOSQL )
       OPCAO(  9, 24, "&Apagar Tabela             ", 65 )   // A
       OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F 
       OPCAO( 11, 24, "Executar arquivo &SQL      ", 83 )   //S 83
+      OPCAO( 12, 24, "&ODBC   Info DSN           ", 79 )   // O 
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -107,7 +110,8 @@ FUNCTION adoxmenu( cUSOSQL )
          adoxexpdbf( 2 )
       CASE KEY = 8
           adoxExecArqSql()
-          
+       CASE KEY = 9
+          sqlrdd_ODBC_info()        
       OTHERWISE
          RETURN
       ENDCASE

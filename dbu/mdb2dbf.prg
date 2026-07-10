@@ -57,6 +57,8 @@ lFDB       := .f.
 nPageSize := 8192 //1024
 cCharSet := "ISO8859_1" //"ASCII"
 nDialect := 3 //deixe com 1 caso de erro criacao com 3
+CTIPOMIX :="ODBC"
+cTIPODBC :="ODBC"
 
 
 pegcfgbanco()
@@ -93,6 +95,7 @@ WHILE .T.
    OPCAO( 9,24,"&Exportar  DBF            ",69)   //E 69 
    OPCAO(10,24,"DBF para &Scrit           ",83)   //S 83 
    OPCAO(11,24,"DBF para D&BML            ",84)   //B 66
+   OPCAO( 12, 24, "&ODBC   Info DSN           ", 79 )   // O 
    
    KEY := menu(1,0)
    DO CASE
@@ -127,6 +130,8 @@ WHILE .T.
         endif  
    CASE KEY=8
         mdltodos() 
+   CASE KEY = 9
+          sqlrdd_ODBC_info()      
    OTHERWISE
       EXIT
    ENDCASE
