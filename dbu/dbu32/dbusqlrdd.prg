@@ -338,21 +338,17 @@ FUNCTION sqlrdd_createdatabase()
             ENDIF   
             cDATABASEX:=cARQORI
        CASE cTIPOMIX = "ODBC" .AND. cTIPODBC =  "DSN" // Cserver 
+       CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" ;
+            .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
+             cnewDATABASEX := INPUTBOX( Space( 30 ), "Novo database" )
+             cnewDATABASEX := AllTrim( cnewDATABASEX )
+             IF ! Empty( cnewDATABASEX )
+                sqlrdd_executesql( "CREATE DATABASE IF NOT EXISTS " + Cnewdatabasex )
+                CDATABASEX:=CNEWDATABASEX
+             ENDIF    
+                 
   ENDCASE
  
-
-   /*
-   cnewDATABASEX := INPUTBOX( Space( 30 ), "Novo database" )
-   cnewDATABASEX := AllTrim( cnewDATABASEX )
-   IF !Empty( cnewDATABASEX )
-      IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" ;
-            .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-         sqlrdd_executesql( "CREATE DATABASE IF NOT EXISTS " + Cnewdatabasex )
-         // fechar a connecao e trocar o database
-         // CDATABASEX:=CNEWDATABASEX
-      ENDIF
-   ENDIF
-*/
 
 
 // +--------------------------------------------------------------------
