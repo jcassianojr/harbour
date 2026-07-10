@@ -76,24 +76,15 @@ REQUEST SDDSQLITE3
   REQUEST SDDOCI
 #endif 
   
-//REQUEST SDDOCI //compilou e abriu sem erro versao 1.77 incluido -locilib  e  sddoci.hbc no hpb
-//foram usadas compilacao independentes pelo bat da pasta harbour/contrib copiadas e pasta lib padrao
-//na compilacao 64 ainda nao esta encontra ocilib teste futuramente o porque
 
 ANNOUNCE RDDSYS
 
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function mixmenu()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION mixmenu( cUSOSQL )
 
@@ -118,6 +109,8 @@ FUNCTION mixmenu( cUSOSQL )
 
    pegcfgbanco()
    cTIPOMIX := cTIPOSQL
+   
+   cTIPODBC :=  "CONN"
 
 // Mariadb MSSQL nao tem nativo
    IF cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" .OR. cTIPOSQL = "PARADOX"
@@ -179,6 +172,8 @@ FUNCTION mixmenu( cUSOSQL )
       OPCAO(  9, 24, "&Apagar Tabela             ", 65 )   // A
       OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F 
       OPCAO( 11, 24, "Executar arquivo &SQL      ", 83 )   //S 83
+      OPCAO( 12, 24, "&ODBC   Info DSN           ", 79 )   // O 
+      
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -208,7 +203,8 @@ FUNCTION mixmenu( cUSOSQL )
          // mixexpformat() usando sqlmix array memory migrar rdd quando disponivel
       CASE KEY = 8
          mixExecArqSql()
-        
+      CASE KEY = 9
+          sqlrdd_ODBC_info()    
       OTHERWISE
          EXIT
       ENDCASE
@@ -363,15 +359,9 @@ return .t.
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function miximpdbf()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 FUNCTION miximpdbf()
 
@@ -587,6 +577,10 @@ FUNCTION mix_open()
       
    CASE cTIPOMIX = "ORACLE"
       nCONN := rddInfo( RDDI_CONNECT, { "OCILIB", cSERVERX, cUSERX, cPASSX, cDATABASEX } )
+  CASE cTIPOMIX = "ODBC"  .AND. cTIPODBC =  "DSN"    
+       cCONN:="Provider=MSDASQL;Data Source="+cBANCOX+";" //Uid=admin;Pwd=secret;"
+      
+       nCONN := rddInfo( RDDI_CONNECT, { "ODBC", cCONN } )
    CASE cTIPOMIX = "ODBC"  // Cserver Conneccao
       Set( _SET_DATEFORMAT, "yyyy-mm-dd" )
       cCONN := GERACONN( cDATABASEX, .F. )  // Sqlmix usa driver no lugar de provider(adooledb) geraconn(cCAMBASE,lPROVIDER)

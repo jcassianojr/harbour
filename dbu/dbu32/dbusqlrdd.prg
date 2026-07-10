@@ -267,6 +267,9 @@ if ! empty(cTABELAX) .AND. MDG("Excluir tabela "+cTABELAX)
        IF sr_ExistTable(cTABELAX)
           sr_DropTable(cTABELAX)
        ENDIF
+       IF sr_ExistTable(cTABELAX)
+          sqlrdd_executesql( "DROP TABLE  " + cTABELAX, .F., .F. ,.F.)
+       ENDIF
        sqlrdd_close()
    ENDIF
 endif
@@ -344,7 +347,7 @@ FUNCTION sqlrdd_createdatabase()
    IF !Empty( cnewDATABASEX )
       IF cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "PGSQL64" ;
             .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"
-         mix_executesql( "CREATE DATABASE IF NOT EXISTS " + Cnewdatabasex )
+         sqlrdd_executesql( "CREATE DATABASE IF NOT EXISTS " + Cnewdatabasex )
          // fechar a connecao e trocar o database
          // CDATABASEX:=CNEWDATABASEX
       ENDIF
@@ -731,9 +734,10 @@ cTEXTO+="Data Sources Usuario:"+HB_OSNEWLINE()
 
    // list only system data sources
 //   a := SR_ListODBCDataSources(32) // SQL_FETCH_FIRST_SYSTEM
-
-hb_memowrit("odbc_info.txt",cTEXTO)
-mdt("arquivo odbc_info.txt gerado")
+IF mdg("Gravar info")
+   hb_memowrit("odbc_info.txt",cTEXTO)
+   mdt("arquivo odbc_info.txt gerado")
+ENDIF   
 IF LEN(aODBC)>0
    nChoices := ACHOICE(4,19,17,54,aODBC)
    //3, 18, 18, 55
