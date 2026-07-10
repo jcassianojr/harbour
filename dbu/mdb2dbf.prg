@@ -1855,8 +1855,11 @@ ENDIF
 
 
 DO CASE
+  CASE cTIPOMIX = "ODBC"  .AND. cTIPODBC =  "DSN"    
+       cCONN:="Provider=MSDASQL;Data Source="+cBANCOX+";" //Uid=admin;Pwd=secret;"
 
-CASE lMDB .OR. at(".MDB",upper(cCAMBASE)) > 0   ///cTIPOSQL="MDB" .OR. cTIPOSQL="MDB64" .or. cTIPOSQL="ACCESS" .OR. cTIPOSQL="ACCESS64"  .or. at(".MDB",upper(cCAMBASE))>0
+
+CASE lMDB .OR. at(".MDB",upper(cCAMBASE)) > 0   
    if loledb  // provider ou driver que fixa o nome independente da versao do access sqlmix(usa driver) adordd(use provider)
       IF lPROVIDER
          cConn := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //32 bit jet oledb
@@ -1871,7 +1874,7 @@ CASE lMDB .OR. at(".MDB",upper(cCAMBASE)) > 0   ///cTIPOSQL="MDB" .OR. cTIPOSQL=
       ENDIF
    endif
 
-CASE Laccdb .or. at(".ACCDB",upper(cCAMBASE)) > 0   //cTIPOSQL="ACCDB" .OR. cTIPOSQL="ACCDB64" .or. at(".ACCDB",upper(cCAMBASE))>0
+CASE Laccdb .or. at(".ACCDB",upper(cCAMBASE)) > 0   
    //provider ou driver que fixa o nome independente da versao do access sqlmix(usa driver) adordd(use provider)
    IF lPROVIDER
       cConn := "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+cCAMBASE+";Mode=Share Deny None"  //driver 32 e 64 devem estar instalados

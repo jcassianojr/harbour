@@ -54,11 +54,13 @@ FUNCTION odbcmenu( cUSOSQL )
    cTABELAX   := Space( 30 )
    cBANCOX   := Space(30)
    cOWNERX   := Space(30)
-cPORTAX    :=SPACE(30)
+   cPORTAX    :=SPACE(30)
    loledb     := .T.
    lMDB       := .F.
    lACCDB     := .F.
    lFDB       := .F.
+   CTIPOMIX :="ODBC"
+   cTIPODBC :="ODBC"
 
    pegcfgbanco()
 
@@ -79,6 +81,7 @@ cPORTAX    :=SPACE(30)
       OPCAO(  9, 24, "&Apagar Tabela             ", 65 )   // A
       OPCAO( 10, 24, "Exportar &Formatos         ", 70 )  // F 
       OPCAO( 11, 24, "Executar arquivo &SQL      ", 83 )   //S 83
+      OPCAO( 12, 24, "&ODBC   Info DSN           ", 79 )   // O 
       KEY := menu( 1, 0 )
       DO CASE
       CASE KEY = 1
@@ -100,7 +103,8 @@ cPORTAX    :=SPACE(30)
          odbcexpdbf( 2 )
       CASE KEY = 8
          odbcExecArqSql()
-          
+      CASE KEY = 9
+          sqlrdd_ODBC_info()          
       OTHERWISE
          RETURN
       ENDCASE

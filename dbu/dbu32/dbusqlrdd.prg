@@ -353,15 +353,9 @@ FUNCTION sqlrdd_createdatabase()
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function sqlrdd_executesql
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 
 FUNCTION sqlrdd_executesql( eCOMANDO, lTRANS, lMES ,lopen)
