@@ -17,6 +17,7 @@
 // +
 
 #include "dbinfo.ch"
+#include "fileio.ch"
 
 
 /* indices
@@ -103,13 +104,15 @@ FUNCTION ISMEMO( cARQ, lMES, lINFO )
 FUNCTION INFOTIPODBF( filename, lMES )
 
    LOCAL cbuffer := ' ', nhandle, ret_value, cMES, cDRIVERPAD,aRETVAL,cEXTMEMO,nbuffer
+   LOCAL cextensao 
 
    //IF At( ".", filename ) = 0
     //  filename := Trim( filename ) + ".DBF"
    //ENDIF
    
    
-   filename:=hb_FNameExtSet( filename, ".dbf" )
+   // removendo pode ser dbf adt db fdb gdb ib mdb accdb
+  // filename:=hb_FNameExtSet( filename, ".dbf" )
    
    
    IF ValType( lMES ) # "L"
@@ -139,6 +142,8 @@ FUNCTION INFOTIPODBF( filename, lMES )
       RETURN aRETVAL
    ENDIF
    
+   
+    cextensao :=lower(hb_fnameext(filename))
 
 // Se nao ocorrer erro na abertura, carrega o primeiro byte.
    IF FError() = 0 .AND. FRead( nHANDLE, @cBUFFER, 1 ) = 1
@@ -261,6 +266,41 @@ FUNCTION INFOTIPODBF( filename, lMES )
          cMES      := "FoxBASE"
          cDRIVERPAD:="DBFNTX"
          ret_value := 251
+     CASE nbuffer = 59  .and. cextensao=".db"  // 3Bh(59) Paradox Database
+         cMES      := "Paradox Database"
+         ret_value := 59
+         cDRIVERPAD:= "PARADOX"    
+      OTHERWISE //tenta expandido
+          FSeek( nHANDLE, 0, FS_SET )
+          cBuffer:=SPACE(20)
+          IF FRead( nHANDLE, @cBuffer, 20 ) == 20
+             DO CASE
+                CASE Left( cBuffer, 15 ) == "SQLite format 3"
+                    cMES      := "Arquivo SQLite"
+                    ret_value := 999 
+                    cDRIVERPAD:= "SQLITE"
+                CASE "DUCK" $  cBuffer .and. cextensao=".db" 
+                     cMES      := "DuckDB Database"
+                     ret_value := 998 
+                     cDRIVERPAD:= "DUCKDB"   
+                CASE "Standard ACE DB" $  cBuffer .and. cextensao=".mdb" 
+                     cMES      := "Arquivo access MDB"
+                     ret_value := 997 
+                     cDRIVERPAD:= "MDB"  
+                CASE "Standard ACE DB" $  cBuffer .and. cextensao=".accdb" 
+                     cMES      := "Arquivo access accdb"
+                     ret_value := 997 
+                     cDRIVERPAD:= "ACCDB"       
+                CASE "Standard Jet DB" $  cBuffer .and. cextensao=".mdb" 
+                     cMES      := "Arquivo access MDB"
+                     ret_value := 995 
+                     cDRIVERPAD:= "MDB"            
+                CASE SubStr(cBuffer, 17, 2) == Chr(0) + Chr(32)  .and. (cextensao=".fdb" .or. cextensao=".gdb" .or. cextensao=".ib" )
+                     cMES      := "Firebird Database"
+                     ret_value := 994
+                    cDRIVERPAD:= "FIREBIRD"
+                ENDCASE
+          ENDIF       
       ENDCASE
    ELSE
       ret_value := -2   // Nao Pode Ser Verificado
@@ -268,6 +308,8 @@ FUNCTION INFOTIPODBF( filename, lMES )
    ENDIF
 // Apaga tudo e encerra a funcao.
    FClose( nHANDLE )
+   
+   
    IF Lmes
       ALERTX( Cmes )
    ENDIF
