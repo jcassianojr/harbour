@@ -20,6 +20,17 @@
 #INCLUDE "DBINFO.CH"
 #include "hbwin.ch"
 
+/* tamanho campos tabelas indices
+Oracle (Versões anteriores à 12c.2): Limite de 30 bytes (caracteres).
+
+Firebird: Limite de 31 caracteres.
+
+PostgreSQL: Limite padrão de 63 bytes.
+
+MySQL / MariaDB: Limite de 64 caracteres.
+
+DuckDB / SQLite / SQL Server: Limite de pelo menos 128 a 256 caracteres (SQLite e DuckDB praticamente ilimitados).
+*/
 
 FUNCTION ConverterEmptyParaSQL( cSQL )
    LOCAL nPos, nInicio, nFim, cCampo, cSubst, lNot, nTamRemover

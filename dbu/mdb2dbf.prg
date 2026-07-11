@@ -1909,6 +1909,12 @@ CASE Laccdb .or. at(".ACCDB",upper(cCAMBASE)) > 0
    ENDIF
 CASE cTIPOSQL = "SQLITE" .or. at(".SQLITE",upper(cCAMBASE)) > 0
    cConn := "Driver={SQLite3 ODBC Driver};Database="+cCAMBASE+";"   //mesmo nome de driver para 32 e 64 ambos devem estar instaldos
+   
+CASE cTIPOSQL = "DUCKDB" 
+   cConn := "Driver={DuckDB Driver};Database="+cCAMBASE+";"   //mesmo nome de driver para 32 e 64 ambos devem estar instaldos
+   
+   
+   
 
 CASE cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64"
    if empty(cDATABASEX)
