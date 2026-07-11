@@ -156,6 +156,7 @@ FUNCTION mixmenu( cUSOSQL )
 // precisa retornar rdd se for usar de charmar ddSetDefault( "SQLMIX" ) novamente nao ter connecao aberta sqlmix tambem
 // mdbtabela(cdatabasex)
 
+   cRDDSQL  := "SQLMIX"
    cOLDRDD := rddSetDefault( "SQLMIX" )
    nOLDTIPORDD := TIPODBF
    TIPODBF:=91

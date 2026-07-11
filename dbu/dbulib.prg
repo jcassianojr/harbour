@@ -394,6 +394,9 @@ do case
     case nTIPODBF = 93  
        USOVIA := "SQLEX"
        rddSetDefault("SQLEX")
+    case nTIPODBF = 94  
+       USOVIA := "LETO"
+       rddSetDefault("LETO")
     otherwise
        USOVIA := "DBFCDX"
        rddsetdefault("DBFCDX")

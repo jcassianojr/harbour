@@ -73,6 +73,7 @@ lMDB       := .F.
 lACCDB     := .F.
 lFDB       := .F.
 
+cRDDSQL     := "LETO"
 cOLDRDD     := RDDSETDEFAULT("LETO")
 nOLDTIPORDD := TIPODBF
 TIPODBF     := 90

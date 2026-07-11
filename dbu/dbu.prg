@@ -154,6 +154,7 @@ public INDIEXT  := "CDX"   //hb_rddInfo(RDDI_ORDBAGEXT)
 public cTIPOSQL := ""
 PUBLIC cTIPOMIX := ""
 PUBLIC cTIPODBC := ""
+PUBLIC cRDDSQL  :=""  //Separado de zusovia aqui somente as que precisam rddsetdefault SQLMIX SQLRDD SQLEX LETO
 
 clear
 
