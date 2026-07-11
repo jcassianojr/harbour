@@ -719,6 +719,9 @@ DO CASE
    CASE cTIPOSQL == "MYSQL" .OR. cTIPOSQL == "MYSQL64" .OR. cTIPOSQL == "MARIADB"
       cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (nome_tabela VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), tamanho INTEGER, precisao INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
       cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (nome_tabela VARCHAR(50), index_name VARCHAR(50), expression TEXT, sql_expression TEXT, filter_expression TEXT, is_unique INTEGER, is_bag INTEGER)"
+  CASE cTIPOSQL == "DUCKDB"
+     cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (nome_tabela VARCHAR, column_name VARCHAR, original_type VARCHAR, tamanho BIGINT, precisao BIGINT, is_nullable BIGINT, field_visual_picture VARCHAR)"
+     cSqlIndexes := "CREATE TABLE IF NOT EXISTS index_metadata (nome_tabela VARCHAR, index_name VARCHAR, expression VARCHAR, sql_expression VARCHAR, filter_expression VARCHAR, is_unique BIGINT, is_bag BIGINT)"
 
    CASE cTIPOSQL == "PGSQL" .OR. cTIPOSQL == "PGSQL64" .OR. cTIPOSQL == "POSTGRESQL"
       cSqlFields  := "CREATE TABLE IF NOT EXISTS table_metadata (nome_tabela VARCHAR(50), column_name VARCHAR(50), original_type VARCHAR(1), tamanho INTEGER, precisao INTEGER, is_nullable INTEGER, field_visual_picture VARCHAR(250))"
@@ -1231,6 +1234,12 @@ IF cTIPOINFO = "TABELA"
           else
              cCOMANDO := "SELECT table_name AS TABLE_NAME FROM all_tables WHERE owner = '" + Upper(cOwnerx) + "' ORDER BY TABLE_NAME;"
           endif
+      CASE cTIPOSQL == "DUCKDB"
+         if Empty( cOwnerx )
+            cCOMANDO := "SELECT table_name AS TABLE_NAME FROM duckdb_tables WHERE schema_name = 'main' ORDER BY table_name;"
+         else
+            cCOMANDO := "SELECT table_name AS TABLE_NAME FROM duckdb_tables WHERE schema_name = '" + Lower(cOwnerx) + "' ORDER BY table_name;"
+         endif    
 
        CASE lFDB 
           // RDB$SYSTEM_FLAG = 0 traz apenas tabelas criadas pelo usuário (ignora tabelas do sistema do Firebird)
@@ -1298,7 +1307,13 @@ DO CASE
                   "FROM INFORMATION_SCHEMA.COLUMNS " + ;
                   "WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = '" + cSchemaSQL + "' " + ;
                   "ORDER BY ORDINAL_POSITION;"
-
+CASE cTIPOSQL == "DUCKDB"
+   cSchemaSQL := iif( Empty(cOwnerx), "main", Lower(cOwnerx) )
+   cCOMANDO := "SELECT column_name AS FIELD_NAME, data_type AS DATA_TYPE, " + ;
+               "column_size AS FIELD_LEN, decimal_digits AS FIELD_DEC " + ;
+               "FROM duckdb_columns " + ;
+               "WHERE table_name = '" + cTabela + "' AND schema_name = '" + cSchemaSQL + "' " + ;
+               "ORDER BY column_index;"
    CASE cTIPOSQL == "ORACLE" .OR. cTIPOSQL == "OCI"
       cUserOracle := iif( Empty(cOwnerx), "USER_TAB_COLUMNS", "ALL_TAB_COLUMNS" )
       cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
@@ -1347,6 +1362,12 @@ IF cTIPOINFO = "__INDEX__"
                   "JOIN pg_namespace n ON n.oid = i.relnamespace " + ;
                   "WHERE LOWER(i.relname) = '" + Lower(cTabela) + "' AND n.nspname = '" + cSchemaPG + "' " + ;
                   "ORDER BY t.relname, a.attnum;"
+   CASE cTIPOSQL == "DUCKDB"
+      cSchemaDK := iif( Empty(cOwnerx), "main", Lower(cOwnerx) )
+      cCOMANDO := "SELECT index_name AS INDEX_NAME, expressions AS COLUMN_NAME " + ;
+                  "FROM duckdb_indexes " + ;
+                  "WHERE table_name = '" + cTabela + "' AND schema_name = '" + cSchemaDK + "' " + ;
+                  "ORDER BY index_name;"               
 
    CASE cTIPOSQL == "MSSQL" .OR. cTIPOSQL == "SQLSERVER"
       // Consulta padrão na sys.indexes do SQL Server
