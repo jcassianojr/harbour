@@ -728,15 +728,19 @@ IF mdg("Gravar info")
    hb_memowrit("odbc_info.txt",cTEXTO)
    mdt("arquivo odbc_info.txt gerado")
 ENDIF   
+IF ! mdg("Escolhar um DSN/ODBC para Usar")
+   RETURN .F.
+ENDIF
 IF LEN(aODBC)>0
    nChoices := ACHOICE(4,19,17,54,aODBC)
    //3, 18, 18, 55
   // AChoice( <nTop>, <nLeft>, <nBottom>, <nRight>, <acMenuItems>, [<alSelableItems>  <lSelableItems>], [<cUserFunction> | <bUserBlock>], [<nInitialItem>]
    IF nChoices >0
-       cBANCOX:=aODBC[nChoices]
-       cTIPOSQL:=DIALETO_DetectTargetDb(aTIPO[nChoices])
-       cTIPOMIX:="ODBC"
-       cTIPODBC:="DSN" 
+       cBANCOX  :=aODBC[nChoices]
+       cTIPOSQL :=DIALETO_DetectTargetDb(aTIPO[nChoices])
+       cTIPOMIX :="ODBC"
+       cTIPODBC :="DSN" 
+       cRDDSQL  := "SQLEX"
        
        cSERVERX    := "" //Space( 30 )
        cDATABASEX  := ""  //Space( 30 )
@@ -751,7 +755,7 @@ IF LEN(aODBC)>0
        layout()
    ENDIF
 ENDIF
-
+RETURN .T.
 
 
 
