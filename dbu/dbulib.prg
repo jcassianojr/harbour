@@ -172,11 +172,11 @@ WHILE .T.
    @ 03,24 SAY cTIPOSQL         
    OPCAO( 4,24,"&Nativo clientelib   ",78)   //N
    OPCAO( 5,24,"&ADORDD ODBC         ",65)   //A
-   OPCAO( 6,24,"&RDD SQLMIX          ",82)   //R
+   OPCAO( 6,24,"&RDD SQLMIX SDD      ",82)   //R
    OPCAO( 7,24,"&ODBC                ",79)   //D
    OPCAO( 8,24,"ADO&X ODBC           ",88)   //X
    OPCAO( 9,24,"&Tclass              ",84)   //t  
-   OPCAO(10,24,"&SQLRDD              ",83)   //S
+   OPCAO(10,24,"&SQLRDD    SR        ",83)   //S
    
    KEY := menu(1,0)
    DO CASE
@@ -188,25 +188,20 @@ WHILE .T.
       sqlitemenu()
    CASE KEY = 1 .AND. cTIPOSQL = "FIREBIRD"
       Firebirdmenu()
-      
    CASE KEY = 1
       MDT("Sem clientelib para "+cTIPOSQL)
-      //ADORDD ODBC
    CASE KEY = 2
-      mdbmenu(cTIPOSQL)
-      //SQLMIX RDD
-   CASE KEY = 3
-      mixmenu(cTIPOSQL)
-      //ODBC
+      mdbmenu(cTIPOSQL)  //ADORDD engine e ODBC
+   CASE KEY = 3 
+      mixmenu(cTIPOSQL)  //SQLMIX RDD SDD engine e odbc
    CASE KEY = 4
-      ODBCmenu(cTIPOSQL)
-      //ADOX
+      ODBCmenu(cTIPOSQL) //odbc e dsn
    CASE KEY = 5
-      adoxmenu(cTIPOSQL)
+      adoxmenu(cTIPOSQL)  //adox engine e odbc e dsn
   CASE KEY = 6
-      tclassmenu(cTIPOSQL)   
+      tclassmenu(cTIPOSQL)   //ao entrar trato os tipo que funcionam
   CASE KEY = 7
-      sqlrddmenu(cTIPOSQL)   
+      sqlrddmenu(cTIPOSQL)   //sqlrdd engines odbc e dsn
    OTHERWISE
       RETURN
    ENDCASE

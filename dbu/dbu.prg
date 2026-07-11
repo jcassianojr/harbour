@@ -454,8 +454,8 @@ ajuda_m := {"Ajuda"}
 ajuda_b := {.T.}
 
 abrir_m := {"Database","Indice","Visao","POSTGRESQL",;
- "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB","FIREBIRD","PARADOX"}
-abrir_b := array(14)
+ "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB","FIREBIRD","PARADOX","DUCKDB"}
+abrir_b := array(15)
 abrir_b[1] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[2] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
 abrir_b[3] = "sysfunc = 0 .AND. .NOT. box_open"
@@ -470,7 +470,7 @@ abrir_b[11] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[12] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[13] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[14] = "sysfunc = 0 .AND. .NOT. box_open"
-
+abrir_b[15] = "sysfunc = 0 .AND. .NOT. box_open"
 
 DECLARE criar_b[11]
 criar_m := {"Database","Indice","DBF->EXP","Sem  uso","sem  uso","sem  uso",;
@@ -603,7 +603,9 @@ do while .T.
       case M->func_sel = 13
          MENUSQL("FIREBIRD")  
        case M->func_sel = 14
-         MENUSQL("PARADOX")    
+         MENUSQL("PARADOX")  
+      case M->func_sel = 15
+         MENUSQL("DUCKDB")   
       endcase
       sysfunc := 0  //setar para nao retornar ficar em loop
    case M->sysfunc = 9  //utilitarios F9
@@ -673,7 +675,8 @@ do while .T.
           Sqltodos("ACCESS")
           Sqltodos("ORACLE")
           sqltodos("FIREBIRD")
-          //sqltodos("PARADOX")
+          sqltodos("DUCKDB")
+          //sqltodos("PARADOX") //nao implemntado odbc nao gerando
       
       case M->func_sel = 13
       case M->func_sel = 14
