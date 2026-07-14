@@ -1262,6 +1262,12 @@ IF cTIPOINFO = "ESTRUTURA"
 DO CASE
    CASE lARQMDBACCDB  
       //Implantado abaixo com  catalogx
+   CASE cTIPOSQL="INFORMIX"   
+      cCOMANDO := "select t.tabname,c.colname AS FIELD_NAME,c.coltype AS FIELD_NAME,c.collength AS FIELD_LEN,c.colno " + ;
+            "from systables t,syscolumns c " + ;
+            "where t.tabid > 0 " + ;
+            "and t.tabid = c.tabid " + ;
+            "order by 1,5 " 
   
    CASE cTIPOSQL == "SQLITE" .OR. At( ".SQLITE", Upper( cdatabaseX ) ) > 0
       // PRAGMA table_info retorna: cid, name, type, notnull, dflt_value, pk
