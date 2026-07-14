@@ -16,7 +16,36 @@
 // +--------------------------------------------------------------------
 // +
 
-//   SR_UseDeleteds(.F.)      // Don't keep deleted records in database
+//   SR_UseDeleteds(.F.)      // Don't keep deleted records in databaseSQLRDDRDBMSACCESS   
+/*
+SQLRDDRDBMS ADABAS   
+SQLRDDRDBMS AZURE   
+SQLRDDRDBMS CACHE   
+CUBRID 11.4 Work In Progress 
+SQLRDDRDBMS FIREBR   
+SQLRDDRDBMS FIREBR3   
+SQLRDDRDBMS FIREBR4   
+SQLRDDRDBMS FIREBR5   
+SQLRDDRDBMS IBMDB2   
+SQLRDDRDBMS INFORM   
+SQLRDDRDBMS INGRES   
+SQLRDDRDBMS MARIADB   
+SQLRDDRDBMS MSSQL6   
+SQLRDDRDBMS MSSQL7   
+SQLRDDRDBMS MYSQL   
+SQLRDDRDBMS ORACLE   
+SQLRDDRDBMS OTERRO   
+SQLRDDRDBMS PERVASIVE   
+SQLRDDRDBMS POSTGR   
+SQLRDDRDBMS SQLANY   
+SQLRDDRDBMS SQLBAS   
+SQLRDDRDBMS SYBASE 
+"SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB","FIREBIRD","PARADOX","DUCKDB"
+  N        S         S            N           N            S       S         N          S         N        N
+*/
+
+
+
 
 #include "dbinfo.ch"
 #include "error.ch"
@@ -71,6 +100,13 @@ REQUEST ARRAYRDD
 FUNCTION sqlrddmenu( cUSOSQL )
 
    LOCAL aAMBIENTE
+   
+   
+    IF cTIPOSQL="SQLITE" .OR. cTIPOSQL="PARADOX" .OR. cTIPOSQL="LETODB" .OR. cTIPOSQL="DUCKDB" .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCDB"
+      MDT("Nao suportado:"+cTIPOSQL)
+      RETURN
+   ENDIF
+
 
    cTIPOSQL := cUSOSQL   // Passa para privada usadas nas funcoes aBaixo
    cRDDSQL  := "SQLRDD"
@@ -89,6 +125,7 @@ FUNCTION sqlrddmenu( cUSOSQL )
    lMDB        := .F.
    lACCDB      := .F.
    lFDB        := .F.
+
 
    pegcfgbanco()
    cTIPOMIX :=  "ODBC"
@@ -114,12 +151,6 @@ FUNCTION sqlrddmenu( cUSOSQL )
    ENDIF   
    
    
-    //pegcfgbanco  ja faz o opentipoarq
-   // access mdb accdb nao tem nativo
-   //IF Lmdb .OR. laccdb .OR. LFDB .OR. cTIPOSQL = "SQLITE"
-   //   OPENTIPOARQ()
-   //ENDIF
-
 
    WHILE .T.
       hb_DispBox( 3, 18, 18, 55, B_DOUBLE + " " )
