@@ -17,6 +17,7 @@
 
 -DUSE_SDD_MYSQL
 -cflag=-DUSE_SDD_MYSQL
+
 -DUSE_SR_MYSQL
 -cflag=-DUSE_SR_MYSQL
 
@@ -38,6 +39,7 @@ hbmemio.hbc
 hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
+rddado.hbc
 
 #
 #ads
@@ -105,7 +107,7 @@ sqlrddpp.hbc
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-\develop\harbour\dbu\adordd.prg
+#\develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 #
 # mysql libmysql

@@ -36,6 +36,7 @@ xhb.hbc
 gtwvg.hbc
 hbmemio.hbc
 hbziparc.hbc
+rddado.hbc
 
 #
 #      --- ads adt adi adm
@@ -142,7 +143,7 @@ letodb.hbc
 #      ---    ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
 \develop\harbour\dbu\mdb2dbf.prg 
-\develop\harbour\dbu\adordd.prg
+#\develop\harbour\dbu\adordd.prg
 
 #
 #      ---    mysql libmysql

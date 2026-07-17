@@ -67,6 +67,7 @@ sddodbc.hbc
 sddsqlt3.hbc
 letodb.hbc
 
+rddado.hbc
 
 #sddoci.hbc
 #hbfbird.hbc
@@ -104,7 +105,7 @@ dbusqlrdd.prg -b
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-\develop\harbour\dbu\adordd.prg
+#\develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 #
 # mysql libmysql
