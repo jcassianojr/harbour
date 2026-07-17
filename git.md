@@ -1,21 +1,11 @@
-vb flexgrid
-https://github.com/Kr00l/VBFLXGRD.git
-harbour
+harbour core
 https://github.com/harbour/core.git
-vb common controls
-https://github.com/Kr00l/VBCCR.git
-vb extra
-https://github.com/xxdoc/vbExtra 
 harbour vszakats
 https://github.com/vszakats/hb.git
 sefazclass
 https://github.com/JoseQuintas/sefazclass
 sefazclass fork
 https://github.com/malcarli1/sefazclass
-vb sqllite
-https://github.com/Kr00l/VBSQLite
-vb newtab
-https://github.com/EduardoVB/NewTab
 harbour sqlrddpp
 https://github.com/marcosgambeta/sqlrddpp.git
 harbour hbxlswriter
@@ -28,8 +18,6 @@ openads
 https://github.com/FiveTechSoft/OpenADS
 xharbour
 https://github.com/xHarbour-org/xharbour
-combo printer extend
-https://github.com/fafalone/ucPrinterComboEx
 ocilib 
 https://github.com/vrogier/ocilib
 
