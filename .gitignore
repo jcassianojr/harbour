@@ -4,6 +4,7 @@
 *.log
 *.o
 *.reso
+* dll
 convcep/tshead.ch
 convcep/vcshead.ch
 dbu/error.log
