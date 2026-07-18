@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   FORES_E9.PRG: Imprimir Resumo de Rescis„o Contratual
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1999,  jcassiano  S/C Ltda.

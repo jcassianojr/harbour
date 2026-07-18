@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :      MMENU.PRG: Menu Principal do Manager
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: MANA5 - ITAESBRA
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.
 // :  Atualizado em: 05/05/94     10:41

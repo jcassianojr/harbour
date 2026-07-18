@@ -28,7 +28,7 @@
 
 // :*****************************************************************************
 // :       FOGB.PRG:  RECRIA PLANILHA DE FALTAS OU HT
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :  Atualizado em: 01/07/98

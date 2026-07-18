@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :     M_DC2.PRG : Imprimir etiquetas para lote de pe‡as
-// :     Linguagem : Clipper 5.x
+// :     Linguagem : harbour
 // :        Sistema: Mana5 - ITAESBRA
 // :      Copyright (c) 1996, Disk Soft S/C Ltda.
 // :

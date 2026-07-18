@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FO711.PRG: Rela‡„o de ntes
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 22/10/97     11:25

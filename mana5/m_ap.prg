@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AP   .PRG : Cadastro de M„o de Obra
-// :   Linguagem   : Clipper 5.X
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :      Copyright (c) 1997, jcassiano 
 // :

@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AM4  .PRG : Mensagens Corpo Nota Fiscal
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: Manager 5
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

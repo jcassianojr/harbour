@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   M_A2   .PRG : Cadastro de Pecas Estoque
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5/ITAESBRA
 // :      Copyright (c) 1998, Disk Soft S/C Ltda.
 // :

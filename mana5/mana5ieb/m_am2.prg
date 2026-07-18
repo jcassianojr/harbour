@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   M_AM2 .PRG  : Saidas de Notas Fiscais
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: Mana5  - ITAESBRA
 // :      Copyright (c) 1999
 //

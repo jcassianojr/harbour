@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_CO2  .PRG : Arquivo de Ajuda ONline
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :

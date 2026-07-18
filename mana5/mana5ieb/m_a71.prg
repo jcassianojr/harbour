@@ -28,7 +28,7 @@
 // :****************************************************************************
 // :
 // :      M_A71.PRG: Faturar Pedidos em Carteira ** Faturamento Conforme OS
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: ITAESBRA (Mana5)
 // :      Copyright (C) 1997 by Disk Softwares S/C Ltda.
 // :     Atualizado: 20/10/1997

@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FO1M.PRG: Cria‡„o Arquivos Folha de Ponto
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

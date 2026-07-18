@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   FORES_C.PRG : Menu de Calculos
-// :     Linguagem : Clipper 5.x
+// :     Linguagem : harbour
 // :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

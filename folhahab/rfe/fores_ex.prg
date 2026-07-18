@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   FORES_EX.PRG: Dados B sicos para Formul rios de F‚rias
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/08/94     13:11

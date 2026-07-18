@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :      FOIC0.PRG: Acumulado Dados para o Resumo Departamento II
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :  Atualizado em: 15/07/98

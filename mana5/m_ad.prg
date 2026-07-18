@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AD   .PRG : Cadastro de Tabelas e Indices de Corre‡„o
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

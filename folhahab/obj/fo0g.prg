@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FO0G.PRG: Cadastramento C¢digos FPAS
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :  Atualizado em: 11/08/98

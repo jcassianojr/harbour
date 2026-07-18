@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :        FO4.PRG: Menu do Cadastro de Sal rios
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/25/94     11:18

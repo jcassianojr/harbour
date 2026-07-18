@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOAM.PRG: Ocorrencias Coletivas
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/08/94      8:59

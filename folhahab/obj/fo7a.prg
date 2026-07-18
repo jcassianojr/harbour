@@ -28,7 +28,7 @@
 // ****************************************************************************
 // :
 // :       FO7A.PRG: Inclui/Altera Cadastro Funcionario
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :
 // :*****************************************************************************

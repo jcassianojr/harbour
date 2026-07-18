@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :        FO6.PRG: Cadastro de Vencimentos e Descontos
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/07/94     15:15

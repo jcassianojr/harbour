@@ -28,7 +28,7 @@
 // :****************************************************************************
 // :
 // :      M_AM .PRG: Notas Fiscais de Vendas
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: ITAESBRA
 // :      Copyright (c) 1999, jcassiano Sistemas
 // :

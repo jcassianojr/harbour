@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AS3  .PRG : Composicao do Produto
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :

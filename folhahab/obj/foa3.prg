@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOA3.PRG: Entrada de Dados Pr‚ Selecionada
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

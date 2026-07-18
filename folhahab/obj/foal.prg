@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOAL.PRG: Inclus„o de uma ocorrencia
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 18/11/97     11:32

@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FO_1.PRG: VERIFICACAO DA EMPRESA SOLICITADA)
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :  Atualizado em: 10/03/99

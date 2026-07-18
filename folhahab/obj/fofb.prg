@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOFB.PRG: Cadastro de Mensagens nos Holleriths
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :  Atualizado em: 10/03/99

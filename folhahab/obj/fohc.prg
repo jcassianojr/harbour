@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :      FOHC .PRG: Guia Inss Por Departamento
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema:
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

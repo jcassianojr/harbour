@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :        FOU.PRG: Menu Experiencia Admissao Demissao
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1997,  jcassiano  S/C Ltda.

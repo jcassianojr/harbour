@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :      FOD2.PRG : Calcular a folha de pagamento
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :  Atualizado em: 03/03/99

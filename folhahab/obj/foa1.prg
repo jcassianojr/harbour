@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOA1.PRG: Entrada de dados folha Individualizado
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :      FOUEC.PRG: IMPRIME Contrato de Experiencia
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 2004,  jcassiano  S/C Ltda.

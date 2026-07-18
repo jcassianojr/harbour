@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :        FOC.PRG: Menu De Impress„o de Dados
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :  Atualizado em: 30/06/98

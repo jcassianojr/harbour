@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOCC.PRG: Rela‡„o de L¡quidos a Pagar/Bancaria/Cheques
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: jcassiano 
 // :      Copyright (c) 1997,  jcassiano  S/C Ltda.

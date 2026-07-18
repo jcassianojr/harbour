@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   FORES_ED.PRG: Recibo Abono Pecuniario Ferias
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/26/94      9:09

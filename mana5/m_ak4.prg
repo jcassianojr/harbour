@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AK4  .PRG :
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: C:MANA5
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.

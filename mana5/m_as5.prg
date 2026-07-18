@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AS5  .PRG : Cadastro de Pecas Similares
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: DISNAUTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.

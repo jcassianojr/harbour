@@ -150,7 +150,7 @@ FUNCTION INFOTIPODBF( filename, lMES )
 
    /*
      3† 0x03 —.NTX Single NATIVE DBFNTX Nantucket Clipper / CA-Clipper Uses 0x03 with exclusive .NTX. DBFNTX is Harbour's native RDD for this.
-      — — — .NSX Compound NATIVE DBFNSX CA-Clipper 5.x / Harbour NSX Harbour native compound index. Recommended over CDX in pure Harbour environments.
+      — — — .NSX Compound NATIVE DBFNSX CA-harbour / Harbour NSX Harbour native compound index. Recommended over CDX in pure Harbour environments.
     ‡ 0x03 .DBT .DB/— — NOT SUPP. — Borland Paradox NOT DBF. Paradox .DB is proprietary. Access only via ODBC/BDE/ADO.
      — — .DBT .NTX/.CDX S/Comp NATIVE NTX/CDX Harbour native DBF (self-generated) Harbour outputs 0x03 or 0x30 by default, controlled by active RD
 

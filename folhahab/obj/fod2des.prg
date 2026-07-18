@@ -27,7 +27,7 @@
 
 // :
 // :    FOD2DES.PRG: CALCULAR OS DESCONTAS DA FOLHA DE PAGAMENTO
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :  Atualizado em: 29/04/99

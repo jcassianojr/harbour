@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_BN2.PRG   : Imprimir Duplicata em formulario continuo
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

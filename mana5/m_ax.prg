@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AX   .PRG : Controle de Horas
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :

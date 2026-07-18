@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :        FOY.PRG: Menu do Auxilio Operacional
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :  Atualizado em: 12/03/99

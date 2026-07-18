@@ -28,7 +28,7 @@
 // :***************************************************************************
 // :
 // :   M_AN1.PRG   : Contas a Receber
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: ITAESBRA
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.
 // :

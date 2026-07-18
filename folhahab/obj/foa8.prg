@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOA8.PRG: Transferir fixos di rios para mensal
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :  Atualizado em: 21/12/98     11:30

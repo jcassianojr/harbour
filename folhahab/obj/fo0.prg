@@ -29,7 +29,7 @@
 // :
 // :
 // :        FO0.PRG: Destinado ao Cadastramento de Tabelas
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

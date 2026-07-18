@@ -28,7 +28,7 @@
 // ******************************************************************************
 // :
 // :  FOPTO_4R.PRG :
-// :     Linguagem : Clipper 5.x
+// :     Linguagem : harbour
 // :        Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
 // :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :

@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOHF.PRG: IMPRIMIR RE FGTS PADRAO CAIXA
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: jcassiano 
 // :      Copyright (c) 1997,  jcassiano  S/C Ltda.

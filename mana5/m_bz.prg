@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :      M_BZB.PRG: Calcular e Imprimir Relat¢rio de Fluxo Financeiro
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: Mana5
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

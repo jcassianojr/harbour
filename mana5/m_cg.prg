@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :       M_CG.PRG: Ajustar data e Hora do Sistema
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :
 // :        Sistema: Manager Vers„o 5  Cl-52E,RATM
 // :         Autor : Equipe jcassiano Sistemas

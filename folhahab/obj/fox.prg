@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   MANUAL .PRG : MANUAL
-// :     Linguagem : Clipper 5.x
+// :     Linguagem : harbour
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 05/02/94     11:49

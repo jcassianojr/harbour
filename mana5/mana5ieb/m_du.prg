@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   M_AS2  .PRG : Lista de Precos - Reajuste
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5/ITAESBRA
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.

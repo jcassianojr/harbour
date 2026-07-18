@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOHA.PRG: Imprimir Guia de INPS
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 20/11/97     14:43

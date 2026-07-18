@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_DC   .PRG : Configura��o de etiquetas
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

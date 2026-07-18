@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   M_AL .PRG   : Contas a Pagar e Pagas
-// :   Linguagem   : Clipper 5.X
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1997,  jcassiano  S/C Ltda.

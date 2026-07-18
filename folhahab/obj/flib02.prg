@@ -29,7 +29,7 @@
 // ** PADRAO .PRG  :
 // ** Gerado em    : Janeiro 17, 1996
 // ** Programador  : Disk Softwares
-// ** Linguagem    : Clipper 5.x
+// ** Linguagem    : harbour
 // **
 
 

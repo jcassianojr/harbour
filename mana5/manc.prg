@@ -28,7 +28,7 @@
 
 // :******************************************************************************:
 // :       MANC.PRG: Sub-Menu de Configura‡”es
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: MANA5
 // :          Autor: jcassiano 
 // :      Copyright (c) 1997,  jcassiano  S/C Ltda.

@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AN.PRG    :
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: SEPAG
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

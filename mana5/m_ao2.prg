@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AO2  .PRG : Itens do Pedido
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: Mana5 - ITAESBRA
 // :      Copyright (c) 1998, Disk Soft S/C Ltda.
 // :  DATA DA ATUALIZA€ŽO >>>>23/07/98

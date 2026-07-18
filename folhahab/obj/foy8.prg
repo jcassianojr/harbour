@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FOY8.PRG: Atualizando Estruturas de Arquivos
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

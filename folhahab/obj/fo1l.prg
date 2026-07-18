@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FO1L.PRG: Zerando dados de uma Empresa
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

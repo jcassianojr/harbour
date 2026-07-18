@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :   M_AY   .PRG :
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: D:UI
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

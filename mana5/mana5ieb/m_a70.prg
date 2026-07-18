@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   M_A70.PRG   : Cancelamento de Notas Fiscais Faturadas
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: ITAESBRA (Mana5)
 // :      Copyright (c) 1994 by Disk Softwares S/C Ltda.
 // :

@@ -29,7 +29,7 @@
 // :*****************************************************************************
 // :
 // :      M_A50.PRG: Sub Menu Fiscal
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: Mana5
 // :          Autor: Equipe Disk    (Hugo Boss em 14.12.1994)
 // :      Copyright (c) 1994 by  jcassiano Sistemas Ltda.

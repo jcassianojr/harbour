@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :      FOI2B.PRG: Listar Resumo de Apura‡„o por Centro de Custo Contabil
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.

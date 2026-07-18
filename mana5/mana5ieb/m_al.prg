@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :   M_AL1 .PRG  : Contas a Pagar
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.
 // :

@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :  FORES_C1.PRG : Calculando Ferias
-// :     Linguagem : Clipper 5.x
+// :     Linguagem : harbour
 // :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
 // :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 25/08/97

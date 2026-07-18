@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :        FOA.PRG: Menu de Entrada de Dados
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :  Atualizado em: 17/07/98

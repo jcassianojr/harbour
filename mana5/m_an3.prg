@@ -30,7 +30,7 @@
 // :*****************************************************************************
 // :
 // :   M_AN3  .PRG : Cadastro de Cheques
-// :   Linguagem   : Clipper 5.x
+// :   Linguagem   : harbour
 // :        Sistema: MANA5
 // :          Autor: jcassiano 
 // :      Copyright (c)  1996, jcassiano 

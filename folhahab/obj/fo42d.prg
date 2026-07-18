@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :      FO42D.PRG: Nome do Programa
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/07/94     14:55

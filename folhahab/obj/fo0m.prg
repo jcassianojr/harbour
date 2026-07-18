@@ -28,7 +28,7 @@
 // :*****************************************************************************
 // :
 // :       FO0L.PRG: Cadastro de Tipos de Vale Transporte
-// :      Linguagem: Clipper 5.x
+// :      Linguagem: harbour
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994,  jcassiano  S/C Ltda.
