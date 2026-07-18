@@ -18,10 +18,11 @@
 
 //   SR_UseDeleteds(.F.)      // Don't keep deleted records in databaseSQLRDDRDBMSACCESS   
 /*
+SQLRDDRDBMS_ACCESS
 SQLRDDRDBMS ADABAS   
 SQLRDDRDBMS AZURE   
 SQLRDDRDBMS CACHE   
-CUBRID 11.4 Work In Progress 
+SQLRDDRDBMS CUBRID 
 SQLRDDRDBMS FIREBR   
 SQLRDDRDBMS FIREBR3   
 SQLRDDRDBMS FIREBR4   
@@ -41,7 +42,7 @@ SQLRDDRDBMS SQLANY
 SQLRDDRDBMS SQLBAS   
 SQLRDDRDBMS SYBASE 
 "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB","FIREBIRD","PARADOX","DUCKDB"
-  N        S         S            N           N            S       S         N          S         N        N
+  N        S         S            S           N            S       S         N          S         N        N
 */
 
 
@@ -102,7 +103,7 @@ FUNCTION sqlrddmenu( cUSOSQL )
    LOCAL aAMBIENTE
    
    
-    IF cTIPOSQL="SQLITE" .OR. cTIPOSQL="PARADOX" .OR. cTIPOSQL="LETODB" .OR. cTIPOSQL="DUCKDB" .OR. cTIPOSQL="MDB" .OR. cTIPOSQL="ACCDB"
+    IF cTIPOSQL="SQLITE" .OR. cTIPOSQL="PARADOX" .OR. cTIPOSQL="LETODB" .OR. cTIPOSQL="DUCKDB"  .OR. cTIPOSQL="ACCDB"
       MDT("Nao suportado:"+cTIPOSQL)
       RETURN
    ENDIF
