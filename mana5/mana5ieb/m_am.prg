@@ -30,7 +30,7 @@
 // :      M_AM .PRG: Notas Fiscais de Vendas
 // :      Linguagem: Clipper 5.x
 // :        Sistema: ITAESBRA
-// :      Copyright (c) 1999, Softec Sistemas
+// :      Copyright (c) 1999, jcassiano Sistemas
 // :
 // :*****************************************************************************
 

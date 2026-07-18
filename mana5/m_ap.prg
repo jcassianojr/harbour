@@ -31,7 +31,7 @@
 // :   M_AP   .PRG : Cadastro de M„o de Obra
 // :   Linguagem   : Clipper 5.X
 // :        Sistema: MANA5
-// :      Copyright (c) 1997, Softec Sistemas S/C Ltda.
+// :      Copyright (c) 1997, jcassiano 
 // :
 // :*****************************************************************************
 

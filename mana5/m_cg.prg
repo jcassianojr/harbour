@@ -32,8 +32,8 @@
 // :      Linguagem: Clipper 5.x
 // :
 // :        Sistema: Manager Vers„o 5  Cl-52E,RATM
-// :         Autor : Equipe Softec Sistemas
-// :      Copyright (c) 1995, Softec Sistemas S/C Ltda.
+// :         Autor : Equipe jcassiano Sistemas
+// :      Copyright (c) 1995, jcassiano 
 // :  Atualizado  : 21/09/95      7:52
 // :
 // :      Documentado 21/09/95 at 07:58                Softec!

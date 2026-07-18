@@ -30,7 +30,7 @@
 // :      FO43Z.PRG: Listar Evolucao Salarial
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/25/94     11:21
 // :
 // :*****************************************************************************

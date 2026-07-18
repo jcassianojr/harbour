@@ -32,7 +32,7 @@
 // :   Linguagem   : Clipper 5.x
 // :        Sistema: MANA5
 // :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :
 // :  Procs & Fncts: fMBN()
 // :

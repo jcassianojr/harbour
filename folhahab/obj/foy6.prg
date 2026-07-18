@@ -30,7 +30,7 @@
 // :        FOY.PRG: Recompor Contas
 // :      Linguagem: clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 11/11/97     13:38
 // :
 // :*****************************************************************************

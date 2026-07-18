@@ -279,7 +279,7 @@ FUNC PADRAO
                nREG := REGBUS( wARQ, nIBUS, mCHABUS )
             ELSE
                pPAD := AScan( aPAD2, mCHAVE )
-               IF pPAD = 0 .AND. ValType( mCHABUS ) = "N"  // Simular Softec Seek
+               IF pPAD = 0 .AND. ValType( mCHABUS ) = "N"  // Simular jcassiano Seek
                   nREG := REGBUS( wARQ, nIBUS, mCHABUS )
                ENDIF
             ENDIF

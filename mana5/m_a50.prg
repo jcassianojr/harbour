@@ -32,7 +32,7 @@
 // :      Linguagem: Clipper 5.x
 // :        Sistema: Mana5
 // :          Autor: Equipe Disk    (Hugo Boss em 14.12.1994)
-// :      Copyright (c) 1994 by  Softec Sistemas Ltda.
+// :      Copyright (c) 1994 by  jcassiano Sistemas Ltda.
 // :
 // :  Procs & Fncts: fMA6()
 // :

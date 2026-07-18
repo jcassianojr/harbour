@@ -30,7 +30,7 @@
 // :   MANUAL .PRG : MANUAL
 // :     Linguagem : Clipper 5.x
 // :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 05/02/94     11:49
 // :
 // :  Procs & Fncts: FOX()

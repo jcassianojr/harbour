@@ -30,7 +30,7 @@
 // :       FOHH.PRG: Guia de Contribui‡„o ao Sindicato
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1998,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :  Atualizado em: 30/06/98
 // :
 // :*****************************************************************************

@@ -30,7 +30,7 @@
 // :       FO1T.PRG: Tela para Edicao de Dados do Cadastro da Firma
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 02/10/97
 // :
 // :*****************************************************************************

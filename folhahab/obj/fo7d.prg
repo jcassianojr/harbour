@@ -31,7 +31,7 @@
 // :       FO7D.PRG: Cadastro Simples Funcionarios
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 22/10/97     11:25
 // :
 // :*****************************************************************************

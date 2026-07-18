@@ -31,7 +31,7 @@
 // :   M_AI   .PRG : Plano de Contas
 // :   Linguagem   : Clipper 5.x
 // :        Sistema: MANA5
-// :      Copyright (c) 1999, Softec Sistemas
+// :      Copyright (c) 1999, jcassiano Sistemas
 // :
 // :*****************************************************************************
 

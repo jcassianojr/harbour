@@ -30,7 +30,7 @@
 // :        FO7.PRG: Menu Principal Cadastro de Funcionarios
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1998,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :  Atualizado em:22/06/98
 // :
 // :*****************************************************************************

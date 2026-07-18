@@ -32,7 +32,7 @@
 // :   Linguagem   : Clipper 5.x
 // :        Sistema: MANA5
 // :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :
 // :  Documentado em: Julho 28, 1994 as 17:39:37                DISK!  vers„o 5.01
 // :*****************************************************************************

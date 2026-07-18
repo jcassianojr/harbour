@@ -31,7 +31,7 @@
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/07/94     15:21
 // :
 // :    Chamado por: FO77               (processo  em FO7.PRG)

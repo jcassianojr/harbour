@@ -28,7 +28,7 @@
 // **
 // ** FO1O   .PRG  : Codigos SAT(INSS)
 // ** Gerado em    : 17 de Julho de 1996
-// ** Programador  :  Softec Sistemas
+// ** Programador  :  jcassiano Sistemas
 // ** Linguagem    : Clipper 5.x
 
 #include "BOX.CH"

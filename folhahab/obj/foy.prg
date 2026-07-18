@@ -30,7 +30,7 @@
 // :        FOY.PRG: Menu do Auxilio Operacional
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :  Atualizado em: 12/03/99
 // :
 // :*****************************************************************************

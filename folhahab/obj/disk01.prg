@@ -28,7 +28,7 @@
 // **
 // ** DISK01.PRG   : Nome do Programa
 // ** Gerado em    : Mar‡o 31, 1994
-// ** Programador  : Softec Sistemas
+// ** Programador  : jcassiano Sistemas
 // ** Linguagem    : Clipper 5.x
 // **
 

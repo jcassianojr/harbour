@@ -30,7 +30,7 @@
 // :   FORES_E6.PRG: Listar Rescis„o contratual Resumo
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/03/99
 // :
 // :*****************************************************************************

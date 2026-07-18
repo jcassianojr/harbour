@@ -32,8 +32,8 @@
 // :   M_AN3  .PRG : Cadastro de Cheques
 // :   Linguagem   : Clipper 5.x
 // :        Sistema: MANA5
-// :          Autor: Equipe Softec
-// :      Copyright (c)  1996, Softec Sistemas S/C Ltda.
+// :          Autor: jcassiano 
+// :      Copyright (c)  1996, jcassiano 
 // :
 // :  Procs & Fncts: fMAN3()
 // :

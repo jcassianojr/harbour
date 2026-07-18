@@ -30,8 +30,8 @@
 // :       MANC.PRG: Sub-Menu de Configura‡”es
 // :      Linguagem: Clipper 5.x
 // :        Sistema: MANA5
-// :          Autor: Equipe Softec
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
+// :          Autor: jcassiano 
+// :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 15/09/97
 // :
 // :*****************************************************************************

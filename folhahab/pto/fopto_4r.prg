@@ -30,7 +30,7 @@
 // :  FOPTO_4R.PRG :
 // :     Linguagem : Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
-// :      Copyright (c) 1998,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1998,  jcassiano  S/C Ltda.
 // :
 // :*****************************************************************************
 

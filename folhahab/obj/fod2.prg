@@ -30,7 +30,7 @@
 // :      FOD2.PRG : Calcular a folha de pagamento
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :  Atualizado em: 03/03/99
 // :
 // :*****************************************************************************

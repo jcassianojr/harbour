@@ -30,7 +30,7 @@
 // :       FO7G.PRG : Ficha de Salario Familia
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 22/10/97     11:25
 // :
 // :*****************************************************************************

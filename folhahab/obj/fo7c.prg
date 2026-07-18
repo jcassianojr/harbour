@@ -30,7 +30,7 @@
 // :       FO7C.PRG: Imprimir Cadastro Completo Funcion rio
 // :      Linguagem: Clipper 5.2e
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 21/08/97
 // :
 // :*****************************************************************************

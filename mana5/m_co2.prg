@@ -31,7 +31,7 @@
 // :   M_CO2  .PRG : Arquivo de Ajuda ONline
 // :   Linguagem   : Clipper 5.x
 // :        Sistema: MANA5
-// :      Copyright (c) 1999,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1999,  jcassiano  S/C Ltda.
 // :
 // :*****************************************************************************
 

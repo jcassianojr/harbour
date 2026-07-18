@@ -31,7 +31,7 @@
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
 // :          Autor: Equipe Disk
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/08/94     13:05
 // :
 // :  Procs & Fncts: FORES_D1()

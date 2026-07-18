@@ -30,7 +30,7 @@
 // :       FOCF.PRG: Relatorio de Dados da Folha
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 05/13/94     13:10
 // :
 // :*****************************************************************************

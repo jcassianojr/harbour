@@ -30,8 +30,8 @@
 // :       FOCC.PRG: Rela‡„o de L¡quidos a Pagar/Bancaria/Cheques
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :          Autor: Equipe Softec
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
+// :          Autor: jcassiano 
+// :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 02/10/97
 // :
 // :*****************************************************************************

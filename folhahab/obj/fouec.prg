@@ -31,7 +31,7 @@
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
 // :          Autor: Equipe Disk
-// :      Copyright (c) 2004,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 2004,  jcassiano  S/C Ltda.
 // :  Atualizado em: 31/08/2004    8:37
 // :
 // :*****************************************************************************

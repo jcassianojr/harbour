@@ -30,7 +30,7 @@
 // :       FOG8.PRG: COMPENSACAO DE HORAS
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :      Copyright (c) 1994,  SOFTEC  S/C Ltda.
+// :      Copyright (c) 1994,  jcassiano  S/C Ltda.
 // :  Atualizado em: 04/18/94     11:44
 // :
 // :*****************************************************************************

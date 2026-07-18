@@ -30,8 +30,8 @@
 // :       FOHF.PRG: IMPRIMIR RE FGTS PADRAO CAIXA
 // :      Linguagem: Clipper 5.x
 // :        Sistema: FOLHA DE PAGAMENTO
-// :          Autor: Equipe Softec
-// :      Copyright (c) 1997,  SOFTEC  S/C Ltda.
+// :          Autor: jcassiano 
+// :      Copyright (c) 1997,  jcassiano  S/C Ltda.
 // :  Atualizado em: 02/10/97
 // :
 // :*****************************************************************************
