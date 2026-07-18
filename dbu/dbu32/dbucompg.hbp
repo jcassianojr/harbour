@@ -49,6 +49,7 @@ hbmemio.hbc
 hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
+sqlrddpp-postgresql.hbc
 #
 #  adt adi adm ads
 #

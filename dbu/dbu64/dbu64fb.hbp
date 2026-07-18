@@ -35,6 +35,7 @@ xhb.hbc
 gtwvg.hbc
 rddads.hbc
 rddbm.hbc
+sqlrddpp-firebird.hbc
 
 hbsqlit3.hbc
 #usando prg no lugar da lib abaixo

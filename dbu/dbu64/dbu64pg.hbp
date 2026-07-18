@@ -32,6 +32,7 @@ xhb.hbc
 gtwvg.hbc
 rddads.hbc
 rddbm.hbc
+sqlrddpp-postgresql.hbc
 
 hbsqlit3.hbc
 #usando prg no lugar da lib abaixo

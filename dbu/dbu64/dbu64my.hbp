@@ -37,6 +37,7 @@ gtwvg.hbc
 hbmemio.hbc
 hbziparc.hbc
 rddado.hbc
+sqlrddpp-mysql.hbc
 
 #
 #      --- ads adt adi adm

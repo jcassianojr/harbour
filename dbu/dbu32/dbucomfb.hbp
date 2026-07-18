@@ -16,6 +16,7 @@
 # nao definindo aqui porem esta com problemas 64 bits 
 #-DUSE_USE_SDD_FIREBIRD
 #-cflag=-USE_SDD_FIREBIRD
+
 -DUSE_USE_SR_FIREBIRD
 -cflag=-USE_SR_FIREBIRD
 
@@ -42,6 +43,8 @@ hbmemio.hbc
 hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
+sqlrddpp-firebird.hbc
+
 #
 #ads
 #

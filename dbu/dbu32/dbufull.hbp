@@ -55,6 +55,8 @@ hbmemio.hbc
 hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
+sqlrddpp.hbc
+
 #
 #ads
 #

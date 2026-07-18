@@ -40,6 +40,7 @@ hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
 rddado.hbc
+sqlrddpp-mysql.hbc
 
 #
 #ads
