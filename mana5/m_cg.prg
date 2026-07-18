@@ -36,7 +36,7 @@
 // :      Copyright (c) 1995, jcassiano 
 // :  Atualizado  : 21/09/95      7:52
 // :
-// :      Documentado 21/09/95 at 07:58                Softec!
+// :      Documentado 21/09/95 at 07:58                
 // :*****************************************************************************
 
 // Preparando o Help
