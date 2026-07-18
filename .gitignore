@@ -1,7 +1,6 @@
 *.c
 *.ch
 *.exe
-*.ddl 
 *.log
 *.o
 *.reso
