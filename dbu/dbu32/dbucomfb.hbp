@@ -1,17 +1,3 @@
-# Pastas de inclusão c necessarias se compilar com fontes tclass nao usando tclass.hbc
-#-cflag=-Ic:\harbour\hb3rd\mysql\include
-#-cflag=-Ic:\harbour\hb3rd\pgsql\include
-
-# Pastas de inclusão necessarias se compilar com fintes tclass nao usando tclass.hbc
-#-incpath=c:\harbour\hb3rd\mysql\include
-#-incpath=c:\harbour\hb3rd\pgsql\include
-
-# Pastas de bibliotecas requerida pela tclass
-#-Lc:\harbour\hb3rd\mysql\lib
-#-Lc:\harbour\hb3rd\pgsql\lib
-
-#-DUSE_SDD_MYSQL
-#-cflag=-DUSE_SDD_MYSQL
 
 # nao definindo aqui porem esta com problemas 64 bits 
 #-DUSE_USE_SDD_FIREBIRD
@@ -22,7 +8,6 @@
 
 
 # Dependências (libs) requerida pela tclass
-#-llibmysql
 #-llibpq
 -lfbclient
 
@@ -57,20 +42,16 @@ rddbm.hbc
 #teste com direto abaixo
 #rddado.hbc
 #
-#nativas sqlite,libmysql,libpg,odbc
+#nativas sqlite,odbc
 #
 hbsqlit3.hbc
-#hbmysql.hbc
-#hbpgsql.hbc
 hbodbc.hbc
 #
 # sqlmix
 #
 rddsql.hbc
 sddodbc.hbc
-#sddmy.hbc
 sddfb.hbc
-#sddpg.hbc
 sddsqlt3.hbc
 letodb.hbc
 #sddoci.hbc
@@ -105,22 +86,12 @@ Tdbclass.hbc
 #
 \develop\harbour\dbu\sql2dbf.prg 
 #
-# ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
+# ADO ODBC MDB,ACCESS,ACCDB,SQLITE,POSTGRESQL
 #
 \develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 #
-# mysql libmysql
 #
-#\develop\harbour\dbu\dbumy.prg  
-#\develop\harbour\dbu\dbumyexp.prg 
-#\develop\harbour\dbu\mysqlrdd.prg 
-#
-# postgresql libpg
-#
-#\develop\harbour\dbu\dbupg.prg
-#\develop\harbour\dbu\dbupgexp
-#\develop\harbour\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
@@ -136,7 +107,7 @@ Tdbclass.hbc
 c:\develop\harbour\dbu\dumypg.prg
 c:\develop\harbour\dbu\dumytd.prg
 c:\develop\harbour\dbu\dumymy.prg
-c:\develop\harbour\dbu\dumySD.prg
+c:\develop\harbour\dbu\dbusqlrdd.prg
 c:\develop\harbour\dbu\dumyOCI.prg
 
 

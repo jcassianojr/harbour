@@ -150,7 +150,7 @@ c:\develop\harbour\dbu\dbutclass.prg
 
 
 c:\develop\harbour\dbu\dumyOCI.prg
-dbusqlrdd.prg -b
+c:\develop\harbour\dbu\dbusqlrdd.prg
 
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  

@@ -1,17 +1,13 @@
 # Pastas de inclusão c
--cflag=-Ic:\harbour\hb3rd\mysql\include
 -cflag=-Ic:\harbour\hb3rd\pgsql\include
 
 # Pastas de inclusão
-#-incpath=c:\harbour\hb3rd\mysql\include
 -incpath=c:\harbour\hb3rd\pgsql\include
 
 # Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
-#-Lc:\harbour\hb3rd\mysql\lib
 -Lc:\harbour\hb3rd\pgsql\lib
 
 # Dependências (libs)
-#-llibmysql
 -llibpq
 
 -DUSE_SDD_POSTGRES
@@ -24,19 +20,8 @@
 -gui
 -lng=pt_BR
 
-#-vcshead=vcshead.ch
-#-tshead=tshead.ch
-
-#-manifest=dbu.Manifest  comentado erro compilacao 32 bits
 
 \develop\harbour\dbu\dbu.rc
-
-
-#-ldflags=--enable-stdcall-fixup
-#-ldflags=-Wl,--allow-multiple-definition -s -static
-#Use --enable-stdcall-fixup to disable these warnings
-#Use --disable-stdcall-fixup to disable these fixups
-#-locilib
 
 -m -n -w0 -es2 -ge1
 -inc
@@ -59,29 +44,24 @@ rddads.hbc
 #
 rddbm.hbc
 #
-#  nativas sqlite,libmysql,libpg,odbc
+#  nativas sqlite,libpg,odbc
 #
 hbsqlit3.hbc
-#hbmysql.hbc
 hbpgsql.hbc
 hbodbc.hbc
+
 #
 # sqlmix
 #
 rddsql.hbc
 sddodbc.hbc
-#sddmy.hbc
 sddpg.hbc
 sddsqlt3.hbc
-#sddfb.hbc
+
 # 
 # leto
 #
 letodb.hbc
-# 
-# firebird
-#
-#hbfbird.hbc
 
 #
 # dbu
@@ -112,11 +92,6 @@ letodb.hbc
 \develop\harbour\dbu\dbu2md.prg
 
 #
-# firebird
-#
-#\develop\harbour\dbu\dbufire.prg
-
-#
 # paradox
 #
 
@@ -129,19 +104,12 @@ letodb.hbc
 \develop\harbour\dbu\sql2dbf.prg 
 
 #
-# ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
+# ADO ODBC MDB,ACCESS,ACCDB,SQLITE,POSTGRESQL
 #
 
 \develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 
-#
-#       ---    mysql libmysql
-#
-
-#\develop\harbour\dbu\dbumy.prg  
-#\develop\harbour\dbu\dbumyexp.prg 
-#\develop\harbour\dbu\mysqlrdd.prg 
 
 #
 #       ---    postgresql libpg
@@ -149,6 +117,7 @@ letodb.hbc
 \develop\harbour\dbu\dbupg.prg
 \develop\harbour\dbu\dbupgexp
 \develop\harbour\dbu\pgrdd.prg
+
 #
 \develop\harbour\dbu\dbumix.prg
 #
@@ -169,8 +138,8 @@ letodb.hbc
 \develop\harbour\dbu\dumyfb.prg
 \develop\harbour\dbu\dumytd.prg
 \develop\harbour\dbu\dumymy.prg
-\develop\harbour\dbu\dumySD.prg
-c:\develop\harbour\dbu\dumyOCI.prg
+\develop\harbour\dbu\dbusqlrdd.prg
+\develop\harbour\dbu\dumyOCI.prg
 
 #
 # funcoes de apoio
@@ -199,6 +168,7 @@ c:\develop\harbour\dbu\dumyOCI.prg
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
 \develop\harbour\objmgw\escolherpasta.prg
+
 #
 #       ---   tbclass   ---
 #
