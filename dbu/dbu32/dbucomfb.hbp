@@ -39,8 +39,7 @@ rddads.hbc
 #
 rddbm.hbc
 
-#teste com direto abaixo
-#rddado.hbc
+rddado.hbc
 #
 #nativas sqlite,odbc
 #
@@ -88,7 +87,6 @@ Tdbclass.hbc
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,POSTGRESQL
 #
-\develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 #
 #

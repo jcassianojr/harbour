@@ -49,6 +49,7 @@ rddbm.hbc
 hbsqlit3.hbc
 hbpgsql.hbc
 hbodbc.hbc
+rddado.hbc
 
 #
 # sqlmix
@@ -107,7 +108,6 @@ letodb.hbc
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,POSTGRESQL
 #
 
-\develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 
 
@@ -116,7 +116,7 @@ letodb.hbc
 #
 \develop\harbour\dbu\dbupg.prg
 \develop\harbour\dbu\dbupgexp
-\develop\harbour\dbu\pgrdd.prg
+\develop\harbourpriv\dbu\pgrdd.prg
 
 #
 \develop\harbour\dbu\dbumix.prg

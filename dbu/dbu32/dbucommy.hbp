@@ -48,8 +48,6 @@ rddads.hbc
 #
 rddbm.hbc
 
-#teste com direto abaixo
-#rddado.hbc
 #
 #nativas sqlite,libmysql,odbc
 #
@@ -62,14 +60,10 @@ hbodbc.hbc
 rddsql.hbc
 sddodbc.hbc
 sddmy.hbc
-#sddfb.hbc
 sddsqlt3.hbc
 letodb.hbc
 
 
-#sddoci.hbc
-#hbfbird.hbc
-#Tdbclass.hbc
 sqlrddpp.hbc
 
 \develop\harbour\dbu\DBU.PRG  
@@ -94,7 +88,6 @@ sqlrddpp.hbc
 \develop\harbour\dbu\dbu2md.prg
 #\develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
-#dbusqlrdd.prg -b
 
 #
 # sqlite
@@ -110,7 +103,7 @@ sqlrddpp.hbc
 #
 \develop\harbour\dbu\dbumy.prg  
 \develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+\develop\harbourpriv\dbu\mysqlrdd.prg 
 #
 \develop\harbour\dbu\dbumix.prg
 #

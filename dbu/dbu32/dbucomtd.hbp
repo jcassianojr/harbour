@@ -40,8 +40,7 @@ rddads.hbc
 #
 rddbm.hbc
 
-#teste com direto abaixo
-#rddado.hbc
+rddado.hbc
 #
 #nativas sqlite,libmysql,libpg,odbc
 #
@@ -94,20 +93,19 @@ Tdbclass.hbc
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-\develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 #
 # mysql libmysql
 #
 \develop\harbour\dbu\dbumy.prg  
 \develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+\develop\harbourpriv\dbu\mysqlrdd.prg 
 #
 # postgresql libpg
 #
 #\develop\harbour\dbu\dbupg.prg
 #\develop\harbour\dbu\dbupgexp
-#\develop\harbour\dbu\pgrdd.prg
+#\develop\harbourpriv\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #

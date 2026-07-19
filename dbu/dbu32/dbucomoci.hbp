@@ -1,33 +1,24 @@
-# Pastas de inclusão c necessarias se compilar com fontes tclass nao usando tclass.hbc
-#-cflag=-Ic:\harbour\hb3rd\mysql\include
-#-cflag=-Ic:\harbour\hb3rd\pgsql\include
 
-# Pastas de inclusão necessarias se compilar com fintes tclass nao usando tclass.hbc
-#-incpath=c:\harbour\hb3rd\mysql\include
-#-incpath=c:\harbour\hb3rd\pgsql\include
 
-# Pastas de bibliotecas requerida pela tclass
-#-Lc:\harbour\hb3rd\mysql\lib
-#-Lc:\harbour\hb3rd\pgsql\lib
+# Dependências (libs) requerida
+#-llib
+#
 
-# Dependências (libs) requerida pela tclass
-#-llibmysql
-#-llibpq
+# oracle implantacao futura comentado aqui para nao chamar
+-DUSE_SDD_ORACLE
+-cflag=-USE_SDD_ORACLE
+-DUSE_SR_ORACLE
+-cflag=-USE_SR_ORACLE
 
--lfbclient
-
-# Setado para testes sqlrdd em firebird
--DUSE_USE_SR_FIREBIRD
--cflag=-USE_SR_FIREBIRD
 
 -gtwvg
 -gui
 -lng=pt_BR
+-inc
 
 \develop\harbour\dbu\dbu.rc
 
 -m -n -w0 -es2 -ge1
--inc
 
 hbct.hbc
 hbwin.hbc
@@ -37,6 +28,8 @@ hbmemio.hbc
 hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
+sqlrddpp-oracle.hbc
+rddado.hbc
 
 #
 #ads
@@ -47,32 +40,21 @@ rddads.hbc
 #
 rddbm.hbc
 
-#teste com direto abaixo
-#rddado.hbc
 #
-#nativas sqlite,libmysql,libpg,odbc
+#nativas sqlite,odbc
 #
 hbsqlit3.hbc
-#hbmysql.hbc
-#hbpgsql.hbc
 hbodbc.hbc
 #
 # sqlmix
 #
 rddsql.hbc
 sddodbc.hbc
-#sddmy.hbc
-#sddfb.hbc
-#sddpg.hbc
 sddsqlt3.hbc
 letodb.hbc
+sddoci.hbc
 
-rddado.hbc
-
-#sddoci.hbc
-#hbfbird.hbc
-#Tdbclass.hbc
-sqlrddpp.hbc
+Tdbclass.hbc
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
@@ -93,6 +75,7 @@ sqlrddpp.hbc
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbu2md.prg
+\develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
 
 #
@@ -100,22 +83,11 @@ sqlrddpp.hbc
 #
 \develop\harbour\dbu\sql2dbf.prg 
 #
-# ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
+# ADO ODBC MDB,ACCESS,ACCDB,SQLITE,POSTGRESQL
 #
-#\develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 #
-# mysql libmysql
 #
-#\develop\harbour\dbu\dbumy.prg  
-#\develop\harbour\dbu\dbumyexp.prg 
-#\develop\harbour\dbu\mysqlrdd.prg 
-#
-# postgresql libpg
-#
-#\develop\harbour\dbu\dbupg.prg
-#\develop\harbour\dbu\dbupgexp
-#\develop\harbour\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
@@ -127,13 +99,11 @@ sqlrddpp.hbc
 #
 \develop\harbour\dbu\dbuleto.prg 
 #
-#c:\develop\harbour\dbu\dbutclass.prg
 c:\develop\harbour\dbu\dumypg.prg
-c:\develop\harbour\dbu\dumyfb.prg
 c:\develop\harbour\dbu\dumytd.prg
 c:\develop\harbour\dbu\dumymy.prg
-c:\develop\harbour\dbu\dumyOCI.prg
-c:\develop\harbour\dbu\dumySD.prg
+c:\develop\harbour\dbu\dumyfb.prg
+c:\develop\harbour\dbu\dbusqlrdd.prg
 
 
 \develop\harbour\objmgw\netdbf.prg
@@ -165,5 +135,4 @@ c:\develop\harbour\dbu\dumySD.prg
 #c:\develop\harbour\dbu\tclass\Tdbclass.prg
 #c:\develop\harbour\dbu\tclass\cocoa_mysql.c
 #c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
-
 

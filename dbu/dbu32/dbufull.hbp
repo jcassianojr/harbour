@@ -35,8 +35,11 @@
 
 
 # oracle implantacao futura comentado aqui para nao chamar
-#-DUSE_USE_SDD_ORACLE
-#-cflag=-USE_SDD_USE_ORACLE
+#-DUSE_SDD_ORACLE
+#-cflag=-USE_SDD_ORACLE
+#-DUSE_SR_ORACLE
+#-cflag=-USE_SR_ORACLE
+
 
 -gtwvg
 -gui
@@ -66,8 +69,7 @@ rddads.hbc
 #
 rddbm.hbc
 
-#teste com direto abaixo
-#rddado.hbc
+rddado.hbc
 #
 #nativas sqlite,libmysql,libpg,odbc
 #
@@ -121,20 +123,19 @@ sqlrddpp.hbc
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-\develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 #
 # mysql libmysql
 #
 \develop\harbour\dbu\dbumy.prg  
 \develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+\develop\harbourpriv\dbu\mysqlrdd.prg 
 #
 # postgresql libpg
 #
 \develop\harbour\dbu\dbupg.prg
 \develop\harbour\dbu\dbupgexp.prg
-\develop\harbour\dbu\pgrdd.prg
+\develop\harbourpriv\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
