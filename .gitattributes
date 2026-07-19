@@ -54,14 +54,27 @@ ChangeLog.txt ident
 *.sh      text eol=lf
 
 # Binary files
+*.7z      binary
 *.a       binary
+*.accdb   binary
 *.afm     binary
 *.bmp     binary
+*.cab     binary
+*.chm     binary
+*.cmp     binary
+*.ctx     binary
 *.dat     binary
 *.dbf     binary
+*.dll     binary
+*.doc     binary
+*.docx    binary
+*.dsx     binary
 *.exe     binary
 *.frm     binary
+*.frx     binary
 *.gif     binary
+*.gz      binary
+*.hlp     binary
 *.icns    binary
 *.ico     binary
 *.jpg     binary
@@ -69,12 +82,21 @@ ChangeLog.txt ident
 *.lib     binary
 *.mdb     binary
 *.ng      binary
+*.ocx     binary
 *.odt     binary
+*.pdb     binary
 *.pdf     binary
 *.pfb     binary
 *.png     binary
+*.ppt     binary
+*.pptx    binary
+*.res     binary
 *.sqlite3 binary
 *.tif     binary
+*.tlb     binary
+*.xls     binary
+*.xlsx    binary
+*.zip     binary
 
 # TOTEST:
 #*.c       text diff=cpp
