@@ -15,3 +15,7 @@
 - [objmgw](<objmgw.md>)
 - [sefaz](<sefaz.md>)
   - [gerapdf](<gerapdf.md>)
+  
+  
+  base de dados e ddl 
+https://github.com/jcassianojr/modelos
