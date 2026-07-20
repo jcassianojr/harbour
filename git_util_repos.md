@@ -34,3 +34,12 @@ https://github.com/vrogier/ocilib
 harbour builder tdclass
 https://github.com/FiveTechSoft/HarbourBuilder
 
+
+
+firebird
+
+https://github.com/FirebirdSQL
+
+http://www.flamerobin.org/
+
+
