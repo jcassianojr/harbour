@@ -1,8 +1,9 @@
 
 
 # Dependências (libs) requerida
-#-llib
-#
+-lociliba
+-locilibm
+-locilibw
 
 # oracle implantacao futura comentado aqui para nao chamar
 -DUSE_SDD_ORACLE
@@ -75,7 +76,6 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbu2md.prg
-\develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
 
 #
