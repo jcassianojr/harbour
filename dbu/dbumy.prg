@@ -1,5 +1,6 @@
 // +--------------------------------------------------------------------
 // +
+// +   hmg\SOURCE\HbMySQL\  https://www.hmgextended.com/
 // +   git\core\contrib\hbmysql\
 // +
 // +

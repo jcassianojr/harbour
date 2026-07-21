@@ -33,12 +33,17 @@
 4. Microsoft XML, v 6.0 for latest versions of MS Office.
 */
 
-// https://brasilaberto.com/blog/posts/5-melhores-apis-de-cep-2023
-// https://api.brasilaberto.com/v1/zipcode/01001000
-// https://viacep.com.br/ws/01001000/json/
-// https://opencep.com/v1/15050305
-// https://brasilapi.com.br/api/cep/v2/01001000
+/*
+   lCHECKVIACEP := MSGYESNO( "Usar viacep" )        https://viacep.com.br/ws/01001000/json/
+   lCHECKREPVIR  := MSGYESNO( "Usar RepVirtual" )    http://cep.republicavirtual.com.br/web_cep.php?cep=" + xCep + "&formato=xml
+   lCHECKAPICEP  := MSGYESNO( "Usar apicep" )       https://cdn.apicep.com/file/apicep/06233-030.json
+   lCHECKAPIAWE  := MSGYESNO( "Usar apiAWE" )        https://cep.awesomeapi.com.br/json/" + cCEP
+   lBrasilAberto := MSGYESNO( "Usar BrasilAberto" ) https://api.brasilaberto.com/v1/zipcode/01001000
+   lopencep      := MSGYESNO( "Usar opencep" )      https://opencep.com/v1/15050305
+   lBrasilAPI    := MSGYESNO( "Usar BrasilAPI" )   https://brasilapi.com.br/api/cep/v2/01001000
+
 // https://cdn.apicep.com/file/apicep/06233-030.json
+*/
 
 #include "tshead.ch"
 #include "try.ch"
