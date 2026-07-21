@@ -1,6 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +   hmg\SOURCE\HbMySQL\  https://www.hmgextended.com/
+// +   hmg\SOURCE\HbMySQL\  https://www.hmgextended.com/ https://github.com/ivanilmarcelino/OpenMinigui
 // +   git\core\contrib\hbmysql\
 // +
 // +

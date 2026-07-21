@@ -35,6 +35,9 @@ harbour builder tdclass
 https://github.com/FiveTechSoft/HarbourBuilder
 
 
+hmg
+https://www.hmgextended.com/
+https://github.com/ivanilmarcelino/OpenMinigui
 
 firebird
 
