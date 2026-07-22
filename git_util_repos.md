@@ -34,6 +34,9 @@ https://github.com/vrogier/ocilib
 harbour builder tdclass
 https://github.com/FiveTechSoft/HarbourBuilder
 
+adoxb
+https://pctoledo.org/viewtopic.php?t=6772
+
 
 hmg
 https://www.hmgextended.com/
