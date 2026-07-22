@@ -1,6 +1,6 @@
 // +--------------------------------------------------------------------
 // +
-// +   
+// +   https://github.com/digikv/xlsx xlsxclass.prg
 // +
 // +
 // +--------------------------------------------------------------------
@@ -8,9 +8,6 @@
 
 
 #INCLUDE "hbclass.ch"
-//REQUEST DBFCDX
-
-//REQUEST HB_GT_WIN_DEFAULT                                             // Console
 
 REQUEST HB_CODEPAGE_UTF8EX
 
@@ -25,11 +22,8 @@ LOCAL cPOS
 LOCAL nPOS
 LOCAL cCOMP
 hb_cdpSelect( 'UTF8EX' )
-//setmode(25,80)
-//SET DATE FORMAT "dd/mm/yyyy"
-//rddSetDefault( "DBFCDX" )
 
-//DBUseArea( .t., , "cartaobandeira",  , .T. , .T. ) 
+
 oExcel := WorkBook():New(alias()+".xlsx") 
 nNumFmt := oExcel:NewFormat("#,##0.000")
 nNumFmt1 := oExcel:NewFormat("#,##0.00")

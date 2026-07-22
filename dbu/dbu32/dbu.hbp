@@ -73,7 +73,7 @@ sqlrddpp.hbc
 \develop\harbour\dbu\dbuver.prg
 \develop\harbour\dbu\dbuview.prg
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
+\develop\harbourpriv\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg

@@ -355,7 +355,7 @@ FUNCTION INFOTIPODBF( filename, lMES )
  *    RDD functions, making it suitable for inspecting the physical file
  *    format independently of the active database driver.
  */
-FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info
+FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info V=Verificar
 
    // Collection returned to the caller containing decoded header information.
    LOCAL aRet := {}
@@ -364,6 +364,11 @@ FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info
    LOCAL nHandle, dbfhead, h1, h2, h3, h4
    LOCAL dbftype, headrecs, headsize, recsize, nof
    LOCAL fieldlist, nField, nPos, cFieldName, cType, cWidth, nWidth, nDec, cDec
+   LOCAL cErrorString
+   LOCAL aErrors := {}
+   LOCAL cFieldType 
+   LOCAL nFieldLen  
+    
 
    // Accept file names with or without the standard DBF extension.
    IF !'.DBF' $ Upper( database )
@@ -497,7 +502,54 @@ FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info
 
       // Preserve the decoded field definition for later presentation.
       AAdd( fieldlist, { cFieldName, cType, nWidth, nDec } )
-
+      
+      cFieldType :=cType
+      nFieldLen  :=nWidth
+      
+      cErrorString := 	"Field No: " + AllTrim(Str(nField))	;
+					+ 	" Name: " + cFieldName	;
+					+ 	" Type: " + cFieldType 	;
+					+ 	" Length: " +  AllTrim(Str(nFieldLen)) ;
+					+ 	" Dec: " + AllTrim(Str(nDec))
+      
+      
+      	IF nFieldLen == 0
+    		AAdd(aErrors,{"Field error -  invalid length Field must have length > 0 ",cErrorString})
+    	ELSEIF cFieldType == "L"
+    		// logic must be 1
+    		IF nFieldLen <> 1
+    			AAdd(aErrors,{"Field error -  invalid length LOGIC must be length 1",cErrorString})			
+    		ENDIF
+    	ELSEIF cFieldType == "D"
+    		// date must be 8
+    		IF nFieldLen <> 8
+    			AAdd(aErrors,{"Field error - invalid length - DATE must be length 8",cErrorString})			
+    		ENDIF
+    	ELSEIF cFieldType == "M"
+    		// memo must be 10
+    		IF nFieldLen <> 10
+    			AAdd(aErrors,{"Field error - invalid length - MEMO must be length 10",cErrorString})			
+    		ENDIF
+    	ELSEIF cFieldType == "O"
+    		// Ole must be 10
+    		IF nFieldLen <> 10
+    			AAdd(aErrors,{"Field error - invalid length  - OLE must be length 10",cErrorString})			
+    		ENDIF
+    	ELSEIF cFieldType == "N"  .or. cFieldType == "F"
+    		IF nFieldLen > 19
+    			// numerics not greater that 19
+    			AAdd(aErrors,{"Field error - invalid length - NUMERIC must have length not greater than 19",cErrorString})			
+    		ELSEIF nDec > nFieldLen
+    			AAdd(aErrors,{"Field error - invalid decimals - DECIMALS must not be greater than FIELD length",cErrorString})			
+    		ENDIF
+    	ELSEIF cFieldType == "C"
+    		// 0-
+    		IF nFieldLen > 64*1024	// 64k
+    			AAdd(aErrors,{"Field error - invalid length  - CHAR must not be greater than 64k ",cErrorString})
+    		ENDIF
+    	ELSE
+    		AAdd(aErrors,{"Field error - invalid Data Type ",cErrorString})
+    	ENDIF
    NEXT
 
    // Always release the operating system file handle after processing.
@@ -515,6 +567,11 @@ FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info
    IF cTIPOINFO="E" //O Retorno e apenas a estruturq
       aRET:=fieldlist
    ENDIF
+  
+   IF cTIPOINFO="V" //O Retorno e apenas a estruturq
+      aRET:=aErrors
+   ENDIF
+   
 
 RETURN aRet
 
