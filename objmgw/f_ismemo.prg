@@ -355,7 +355,7 @@ FUNCTION INFOTIPODBF( filename, lMES )
  *    RDD functions, making it suitable for inspecting the physical file
  *    format independently of the active database driver.
  */
-FUNCTION GetHeaderInfo( database )
+FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info
 
    // Collection returned to the caller containing decoded header information.
    LOCAL aRet := {}
@@ -368,6 +368,10 @@ FUNCTION GetHeaderInfo( database )
    // Accept file names with or without the standard DBF extension.
    IF !'.DBF' $ Upper( database )
       database += '.DBF'
+   ENDIF
+   
+   IF VALTYPE(cTIPOINFO)<>"C"
+      cTIPOINFO="F"
    ENDIF
 
    // Open the database in read-only mode because the operation is purely
@@ -502,8 +506,15 @@ FUNCTION GetHeaderInfo( database )
    // Add a separator entry before listing individual field definitions.
    AAdd( aRet, { '', 'Fields structure' } )
 
-   // Convert each decoded field descriptor into a compact display string.
-   AEval( fieldlist, {|x, i| AAdd( aRet, { x[1] + " - " + x[2] + "(" + hb_ntos( x[3] ) + "," + hb_ntos( x[4] ) + ")", hb_ntos( i ) } ) } )
+
+   IF cTIPOINFO="F" //Adiciona descritivos dos campos
+      // Convert each decoded field descriptor into a compact display string.
+      AEval( fieldlist, {|x, i| AAdd( aRet, { x[1] + " - " + x[2] + "(" + hb_ntos( x[3] ) + "," + hb_ntos( x[4] ) + ")", hb_ntos( i ) } ) } )
+   ENDIF   
+   
+   IF cTIPOINFO="E" //O Retorno e apenas a estruturq
+      aRET:=fieldlist
+   ENDIF
 
 RETURN aRet
 
