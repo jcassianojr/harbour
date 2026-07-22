@@ -18,6 +18,8 @@
 
 #include "dbinfo.ch"
 #include "fileio.ch"
+#include "dbstruct.ch"  // Database structure constants used when defining DBF fields (DBS_NAME, DBS_TYPE, DBS_LEN, DBS_DEC).
+
 
 
 /* indices
@@ -315,6 +317,296 @@ FUNCTION INFOTIPODBF( filename, lMES )
    ENDIF
    aRETVAL:={ret_value,cDRIVERPAD,cEXTMEMO,cMES}
    RETURN  aRETVAL // ret_value 
+   
+   
+   // DBF file format constants used when navigating the binary header.
+// Using symbolic names avoids hard-coded offsets and improves maintainability.
+#define FIELD_ENTRY_SIZE  32   // Size in bytes of a single DBF field descriptor.
+#define FIELD_NAME_SIZE   11   // Maximum field name length stored in the descriptor (including null terminator).
+
+/*
+ * FUNCTION: GetHeaderInfo
+ *
+ * Purpose:
+ *    Reads and interprets the binary header of a DBF file using Harbour's
+ *    low-level file I/O functions. The function extracts general database
+ *    information together with the complete field structure and returns it
+ *    in a format suitable for presentation by the custom AChoice() dialog.
+ *
+ * Parameters:
+ *    database (Character)
+ *       Name or path of the DBF file. The ".DBF" extension is appended
+ *       automatically when omitted.
+ *
+ * Returns:
+ *    Array
+ *       An array of { Value, Description } pairs containing header
+ *       information and field definitions. An empty array is returned
+ *       if the file cannot be opened.
+ *
+ * Side Effects:
+ *    - Opens the specified DBF file in read-only mode.
+ *    - Displays informational dialogs when errors or invalid header
+ *      values are detected.
+ *    - Closes the file handle before returning.
+ *
+ * Notes:
+ *    This implementation accesses the DBF file directly instead of using
+ *    RDD functions, making it suitable for inspecting the physical file
+ *    format independently of the active database driver.
+ */
+FUNCTION GetHeaderInfo( database )
+
+   // Collection returned to the caller containing decoded header information.
+   LOCAL aRet := {}
+
+   // Variables used while reading and decoding the binary header.
+   LOCAL nHandle, dbfhead, h1, h2, h3, h4
+   LOCAL dbftype, headrecs, headsize, recsize, nof
+   LOCAL fieldlist, nField, nPos, cFieldName, cType, cWidth, nWidth, nDec, cDec
+
+   // Accept file names with or without the standard DBF extension.
+   IF !'.DBF' $ Upper( database )
+      database += '.DBF'
+   ENDIF
+
+   // Open the database in read-only mode because the operation is purely
+   // informational and must never modify the source file.
+   IF ( nHandle := FOpen( database, FO_READ ) ) == -1
+      ALERT( 'Cannot open file ' + Upper( database ) + ' for reading!' )
+      RETURN aRet
+   ENDIF
+
+   // Read the first four bytes containing the file signature and the
+   // last-update date stored in the DBF header.
+   dbfhead := Space( 4 )
+   FRead( nHandle, @dbfhead, 4 )
+
+   // Decode the file type identifier.
+   h1 := FT_BYT2HEX( SubStr( dbfhead, 1, 1 ) )
+   dbftype := h1
+
+   // Decode the date components stored as individual bytes.
+   h2 := FT_BYT2HEX( SubStr( dbfhead, 2, 1 ) )
+   h3 := FT_BYT2HEX( SubStr( dbfhead, 3, 1 ) )
+   h4 := FT_BYT2HEX( SubStr( dbfhead, 4, 1 ) )
+
+   // Perform a simple sanity check before presenting the stored date.
+   IF hex2dec( h3 ) > 12 .OR. hex2dec( h4 ) > 31
+      ALERT( 'Date damage in header!' )
+   ENDIF
+
+   // Store the DBF version identifier.
+   AAdd( aRet, { '0x' + dbftype, 'Type of file' } )
+
+   // Convert the encoded update date into a readable DD.MM.YY format.
+   AAdd( aRet, { StrZero( hex2dec( h4 ), 2 ) + '.' + StrZero( hex2dec( h3 ), 2 ) + '.' + ;
+                 StrZero( hex2dec( h2 ) - If( hex2dec( h2 ) > 100, 100, 0 ), 2 ), ;
+                 'Last update (DD.MM.YY)' } )
+
+   // Read the four-byte record count stored as a little-endian integer.
+   headrecs := Space( 4 )
+   FSeek( nHandle, 4, FS_SET )
+   FRead( nHandle, @headrecs, 4 )
+
+   // Convert the four bytes into a Harbour numeric value.
+   h1 := FT_BYT2HEX( SubStr( headrecs, 1, 1 ) )
+   h2 := FT_BYT2HEX( SubStr( headrecs, 2, 1 ) )
+   h3 := FT_BYT2HEX( SubStr( headrecs, 3, 1 ) )
+   h4 := FT_BYT2HEX( SubStr( headrecs, 4, 1 ) )
+   headrecs := Int( hex2dec( h1 ) + 256 * hex2dec( h2 ) + ( 256 ** 2 ) * hex2dec( h3 ) + ( 256 ** 3 ) * hex2dec( h4 ) )
+
+   AAdd( aRet, { headrecs, 'Number of records' } )
+
+   // Read the total header size expressed as a 16-bit little-endian value.
+   headsize := Space( 2 )
+   FRead( nHandle, @headsize, 2 )
+   h1 := FT_BYT2HEX( SubStr( headsize, 1, 1 ) )
+   h2 := FT_BYT2HEX( SubStr( headsize, 2, 1 ) )
+   headsize := hex2dec( h1 ) + 256 * hex2dec( h2 )
+
+   AAdd( aRet, { headsize, 'Header size' } )
+
+   // Read the physical length of each database record.
+   recsize := Space( 2 )
+   FRead( nHandle, @recsize, 2 )
+   h1 := FT_BYT2HEX( SubStr( recsize, 1, 1 ) )
+   h2 := FT_BYT2HEX( SubStr( recsize, 2, 1 ) )
+   recsize := hex2dec( h1 ) + 256 * hex2dec( h2 )
+
+   AAdd( aRet, { recsize, 'Record size' } )
+
+   // Calculate the number of field descriptors contained in the header.
+   // The first 32 bytes form the file header itself and are excluded.
+   nof := Int( headsize / FIELD_ENTRY_SIZE ) - 1
+
+   AAdd( aRet, { nof, 'Fields count' } )
+
+   // Read and decode each field descriptor individually.
+   fieldlist := {}
+
+   FOR nField := 1 TO nof
+
+      // Compute the byte offset of the current field descriptor.
+      nPos := nField * FIELD_ENTRY_SIZE
+
+      FSeek( nHandle, nPos, FS_SET )
+
+      // Read the null-terminated field name and remove trailing padding.
+      cFieldName := Space( FIELD_NAME_SIZE )
+      FRead( nHandle, @cFieldName, FIELD_NAME_SIZE )
+      cFieldName := RTrim( StrTran( cFieldName, Chr( 0 ), ' ' ) )
+
+      // Read the one-byte field type identifier.
+      cType := Space( 1 )
+      FRead( nHandle, @cType, 1 )
+
+      // Skip the internal field address maintained by the DBF engine.
+      FSeek( nHandle, 4, FS_RELATIVE )
+
+      // Character fields store their width differently from other
+      // DBF field types and therefore require separate decoding.
+      IF cType == 'C'
+
+         cWidth := Space( 2 )
+         FRead( nHandle, @cWidth, 2 )
+
+         h1 := FT_BYT2HEX( SubStr( cWidth, 1, 1 ) )
+         h2 := FT_BYT2HEX( SubStr( cWidth, 2, 1 ) )
+
+         nWidth := hex2dec( h1 ) + 256 * hex2dec( h2 )
+         nDec := 0
+
+      ELSE
+
+         cWidth := Space( 1 )
+         FRead( nHandle, @cWidth, 1 )
+
+         nWidth := hex2dec( FT_BYT2HEX( cWidth ) )
+
+         cDec := Space( 1 )
+         FRead( nHandle, @cDec, 1 )
+
+         nDec := hex2dec( FT_BYT2HEX( cDec ) )
+
+      ENDIF
+
+      // Preserve the decoded field definition for later presentation.
+      AAdd( fieldlist, { cFieldName, cType, nWidth, nDec } )
+
+   NEXT
+
+   // Always release the operating system file handle after processing.
+   FClose( nHandle )
+
+   // Add a separator entry before listing individual field definitions.
+   AAdd( aRet, { '', 'Fields structure' } )
+
+   // Convert each decoded field descriptor into a compact display string.
+   AEval( fieldlist, {|x, i| AAdd( aRet, { x[1] + " - " + x[2] + "(" + hb_ntos( x[3] ) + "," + hb_ntos( x[4] ) + ")", hb_ntos( i ) } ) } )
+
+RETURN aRet
+
+// Lookup table used for hexadecimal conversions.
+// Character positions correspond directly to hexadecimal digit values.
+#define HEXTABLE "0123456789ABCDEF"
+
+/*
+ * FUNCTION: HEX2DEC
+ *
+ * Purpose:
+ *    Converts a hexadecimal string into its decimal numeric equivalent.
+ *    The function processes each hexadecimal digit manually, making it
+ *    independent of external conversion routines and suitable for decoding
+ *    binary values extracted from DBF headers.
+ *
+ * Parameters:
+ *    cHexNum (Character)
+ *       Hexadecimal string consisting of characters 0-9 and A-F.
+ *       Both uppercase and lowercase input are accepted.
+ *
+ * Returns:
+ *    Numeric
+ *       Decimal representation of the supplied hexadecimal value.
+ *
+ * Side Effects:
+ *    None.
+ *
+ * Notes:
+ *    The conversion is performed using positional notation, multiplying
+ *    each hexadecimal digit by the appropriate power of sixteen.
+ */
+FUNCTION HEX2DEC( cHexNum )
+
+   // Loop counter, accumulated decimal value, and current hexadecimal
+   // positional multiplier.
+   LOCAL n, nDec := 0, nHexPower := 1
+
+   // Process digits from right to left, exactly as manual base conversion
+   // is performed in positional numeral systems.
+   FOR n := Len( cHexNum ) TO 1 STEP -1
+
+      // Convert the current hexadecimal digit into its numeric value and
+      // accumulate its contribution to the final decimal result.
+      nDec += ( At( Upper( SubStr( cHexNum, n, 1 ) ), HEXTABLE ) - 1 ) * nHexPower
+
+      // Advance to the next hexadecimal position.
+      nHexPower *= 16
+
+   NEXT
+
+RETURN nDec
+
+
+/*
+ * FUNCTION: FT_BYT2HEX
+ *
+ * Purpose:
+ *    Converts a single byte into its two-character hexadecimal
+ *    representation. This helper is primarily used while decoding
+ *    binary DBF header values read from disk.
+ *
+ * Parameters:
+ *    cByte (Character)
+ *       Single-byte character to convert.
+ *
+ *    plusH (Logical)
+ *       Optional flag indicating whether to append the traditional
+ *       "h" hexadecimal suffix.
+ *
+ * Returns:
+ *    Character
+ *       Two-character hexadecimal string, optionally followed by "h".
+ *       Returns NIL if the supplied value is not of character type.
+ *
+ * Side Effects:
+ *    None.
+ */
+FUNCTION FT_BYT2HEX( cByte, plusH )
+
+   // Stores the formatted hexadecimal representation.
+   LOCAL xHexString
+
+   // Default to the conventional two-character hexadecimal format.
+   IF VALTYPE(plusH)<>"L"
+      plusH := .F.
+   ENDIF
+   // Perform the conversion only for character values representing
+   // a single binary byte.
+   IF ValType( cByte ) == "C"
+
+      // Split the byte into its high and low nibbles and translate each
+      // nibble into its hexadecimal character using the lookup table.
+      xHexString := SubStr( HEXTABLE, Int( Asc( cByte ) / 16 ) + 1, 1 ) + ;
+                    SubStr( HEXTABLE, Int( Asc( cByte ) % 16 ) + 1, 1 ) + ;
+                    iif( plusH, "h", '' )
+
+   ENDIF
+
+RETURN xHexString
+
+   
+   
 
 // + EOF: f_ismemo.prg
 // +

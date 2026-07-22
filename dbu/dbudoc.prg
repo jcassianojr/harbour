@@ -252,6 +252,9 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK,LOPEN )
    LOCAL cCAMMASK  := Space( 100 )
    LOCAL cCAMFILE  := Space( 50 )
    LOCAL cCAMEXT   := Space( 10 )
+   PRIVATE cCAMINHOCOMPLETO
+   
+   cCAMINHOCOMPLETO:=''
 
    IF ValType( cMASK ) # "C" .OR. EMPTY(cMASK )
       cMASK := "*."+TABLEEXT
@@ -286,6 +289,7 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK,LOPEN )
          IF ValType( bUSO ) = "B"
             IF File( cCAMMASK + ARQUIVO )
                MDS( "Arquivo: " + cCAMMASK + ARQUIVO )  //Remonta o caminho
+               cCAMINHOCOMPLETO:=cCAMMASK + ARQUIVO
                IF lOPEN
                   DBUREDE( cCAMMASK + ARQUIVO,, lSHARE ) //abre o caminho
                ENDIF   
@@ -628,10 +632,10 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          NEXT j
          cTEXTO += 'ENDINDEX' + cLIN
       ENDIF
-      
-      
-      
       cTEXTO += 'ENDFILE' + cLIN
+      
+      
+      
       cTEXTO +=  cLIN
       cTEXTO += "[" + Upper( AllTrim( carq ) ) + "."+TABLEEXT+"]" + clin
       cTEXTO += "CAMINHO=" + hb_cwd() + clin
