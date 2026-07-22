@@ -188,7 +188,7 @@ FWrite( nHANDLE, hb_osNewLine() )
 ENDIF
 dbSelectAr( "DICI" )
 dbGoTop()
-mCHAVE := PadR( mARQUIVO, 10 ) + PadR( aESTRU[ X, 1 ], 10 )
+mCHAVE := PadR( mARQUIVO, 30 ) + PadR( aESTRU[ X, 1 ], 10 )
 IF !dbSeek( mCHAVE )
 NETRECAPP()
 field->tabela := mARQUIVO
