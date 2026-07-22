@@ -204,15 +204,15 @@ FUNCTION INFOTIPODBF( filename, lMES )
          cEXTMEMO:="FPT"
       CASE nbuffer =  131    // FoxBaseDBase3WithMemo:=0x83 -->83h(131) dBASE III+ with memo file DBF/NTX DBFNTX ADSNTX COMIX (DBT-MEMO) * Tambem pode ser comix  DBF/NTX       COMIX (DBT-MEMO)
          //131 0x83 .DBT .NDX/.NTX Single NATIVE DBFNTX dBASE III Plus / FoxBASE+ (with memo) DBT memo dBASE III. Full support. Typical Clipper migration format.
-         cMES      := "dBASE III com memo"
+         cMES      := "FoxBASE+ / dBASE III com memo"
          ret_value := 131
-         cDRIVERPAD:="DBFNTX"
+         cDRIVERPAD:="DBFCDX" //"DBFNTX"
          cEXTMEMO:="DBT"
       CASE nbuffer = 003   // FoxBaseDBase3NoMemo:=3 -->03h(003) dBASE III w/o memo file  DBF/NTX/CDX FORTESS DBFNTX DBFCDX DBFMDX COMIX ADSCDX ADSNTX
          //3 0x03 — .NDX/.NTX Single NATIVE DBFNTX dBASE III Plus / FoxBASE+ (no memo) Most common legacy Clipper format. Full read/write/index support.
-         cMES      := "dBASE III sem memo"
+         cMES      := "FoxBASE+ / dBASE III sem memo"
          ret_value := 003
-         cDRIVERPAD:="DBFNTX"
+         cDRIVERPAD:= "DBFCDX" //"DBFNTX"
       CASE nbuffer =  002    // FoxBase:=2                           -->02h(002)
          //2 0x02 — .NDX/.NTX Single NATIVE DBFNTX FoxBASE original No memo. Compatible with Clipper and CA-Clipper.
          cMES      := "FoxBase"

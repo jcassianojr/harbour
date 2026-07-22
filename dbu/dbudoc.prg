@@ -288,7 +288,7 @@ FUNCTION FAZERDBF( bUSO, lSHARE, bPRE, bPOS, cMASK,LOPEN )
          ENDIF
          IF ValType( bUSO ) = "B"
             IF File( cCAMMASK + ARQUIVO )
-               MDS( "Arquivo: " + cCAMMASK + ARQUIVO )  //Remonta o caminho
+               MDT( "Arquivo: " + cCAMMASK + ARQUIVO )  //Remonta o caminho
                cCAMINHOCOMPLETO:=cCAMMASK + ARQUIVO
                IF lOPEN
                   DBUREDE( cCAMMASK + ARQUIVO,, lSHARE ) //abre o caminho
@@ -634,7 +634,29 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       ENDIF
       cTEXTO += 'ENDFILE' + cLIN
       
-      
+     
+     IF AT(".DBF",UPPER(cCAMINHOCOMPLETO))>0
+         cTEXTO += clin + "[HEADERINFO]"
+         aHeaderInfo:=GetHeaderInfo( cCAMINHOCOMPLETO ) 
+         IF lEN(aHeaderInfo)>0
+            cTEXTO += clin + PADR(hb_ValToStr(aHeaderInfo[1,2]),25)+": "+hb_ValToStr(aHeaderInfo[1,1])
+            cTEXTO += clin + PADR(hb_ValToStr(aHeaderInfo[2,2]),25)+": "+hb_ValToStr(aHeaderInfo[2,1])
+            cTEXTO += clin + PADR(hb_ValToStr(aHeaderInfo[3,2]),25)+": "+hb_ValToStr(aHeaderInfo[3,1])
+            cTEXTO += clin + PADR(hb_ValToStr(aHeaderInfo[4,2]),25)+": "+hb_ValToStr(aHeaderInfo[4,1])
+            cTEXTO += clin + PADR(hb_ValToStr(aHeaderInfo[5,2]),25)+": "+hb_ValToStr(aHeaderInfo[5,1])
+            cTEXTO += clin + PADR(hb_ValToStr(aHeaderInfo[6,2]),25)+": "+hb_ValToStr(aHeaderInfo[6,1])
+         ENDIF  
+         aHeaderInfo:=INFOTIPODBF(cCAMINHOCOMPLETO ) 
+         IF lEN(aHeaderInfo)>0
+            cTEXTO += clin + PADR("Header: ",25)+hb_ValToStr(aHeaderInfo[1])
+            cTEXTO += clin + PADR("Driver: ",25)+hb_ValToStr(aHeaderInfo[2])
+            IF ! EMPTY(aHeaderInfo[3])
+               cTEXTO += clin + PADR("Memo: ",25)+hb_ValToStr(aHeaderInfo[3])
+            ENDIF   
+            cTEXTO += clin + PADR("Tipo:   ",25)+hb_ValToStr(aHeaderInfo[4])
+         ENDIF 
+        cTEXTO += clin 
+      ENDIF 
       
       cTEXTO +=  cLIN
       cTEXTO += "[" + Upper( AllTrim( carq ) ) + "."+TABLEEXT+"]" + clin
