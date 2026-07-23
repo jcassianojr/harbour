@@ -1,9 +1,10 @@
 
 
 # Dependências (libs) requerida
--lociliba
--locilibm
--locilibw
+#-lociliba
+#-locilibw
+-lbcrypt
+#-lsqlrddpp-oracle
 
 # oracle implantacao futura comentado aqui para nao chamar
 -DUSE_SDD_ORACLE
@@ -54,7 +55,8 @@ sddodbc.hbc
 sddsqlt3.hbc
 letodb.hbc
 sddoci.hbc
-
+adoxb.hbc
+dbfcdxex.hbc
 Tdbclass.hbc
 
 \develop\harbour\dbu\DBU.PRG  
@@ -71,12 +73,13 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbuver.prg
 \develop\harbour\dbu\dbuview.prg
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
+\develop\harbourpriv\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbUparadox.prg
+\develop\harbour\dbu\dbucrypto.prg
 
 #
 # sqlite
@@ -94,7 +97,6 @@ Tdbclass.hbc
 #
 \develop\harbour\dbu\dbuodbc.prg 
 #
-\develop\harbour\dbu\adoxb.prg   
 \develop\harbour\dbu\dbuadox.prg 
 #
 \develop\harbour\dbu\dbuleto.prg 
