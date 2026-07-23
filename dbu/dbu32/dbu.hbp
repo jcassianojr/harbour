@@ -1,5 +1,6 @@
 
 -lfbclient
+-lbcrypt
 
 # Setado para testes sqlrdd em firebird
 -DUSE_USE_SR_FIREBIRD
@@ -22,6 +23,7 @@ hbmemio.hbc
 hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
+dbfcdxex.hbc
 
 #
 #ads

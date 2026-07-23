@@ -48,6 +48,7 @@ REQUEST VFPCDX  //-15-VFPCDX DBFCDX/DBFFPT/VFPCDX
 REQUEST BMDBFCDX  //-16 BMDBFCDX DBFCDX
 REQUEST BMDBFNSX  //-17 BMDBFNSX DBFNSX
 REQUEST BMDBFNTX  //-18 BMDBFNTX DBFNTX
+REQUEST DBFCDXEX  //-19 CRYPTO   DBFCDXEX
 
 
 //Microsoft FoxPro create an IDX index file similar ntx
@@ -155,6 +156,7 @@ public cTIPOSQL := ""
 PUBLIC cTIPOMIX := ""
 PUBLIC cTIPODBC := ""
 PUBLIC cRDDSQL  :=""  //Separado de zusovia aqui somente as que precisam rddsetdefault SQLMIX SQLRDD SQLEX LETO
+PUBLIC zSENHACDX := ""
 
 clear
 

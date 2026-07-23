@@ -37,6 +37,8 @@ https://github.com/FiveTechSoft/HarbourBuilder
 adoxb
 https://pctoledo.org/viewtopic.php?t=6772
 
+dbfcdxex
+https://github.com/carles9000/dbfcdxex
 
 hmg
 https://www.hmgextended.com/
