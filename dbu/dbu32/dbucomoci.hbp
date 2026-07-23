@@ -1,14 +1,14 @@
 
 
 # Dependências (libs) requerida
-#-lociliba
-#-locilibw
 -lbcrypt
-#-lsqlrddpp-oracle
+-loci
 
-# oracle implantacao futura comentado aqui para nao chamar
--DUSE_SDD_ORACLE
--cflag=-USE_SDD_ORACLE
+# oracle mix ssdoci
+#-DUSE_SDD_ORACLE
+#-cflag=-USE_SDD_ORACLE
+
+# oracle sqlrddpp
 -DUSE_SR_ORACLE
 -cflag=-USE_SR_ORACLE
 
@@ -54,7 +54,7 @@ rddsql.hbc
 sddodbc.hbc
 sddsqlt3.hbc
 letodb.hbc
-sddoci.hbc
+#sddoci.hbc
 adoxb.hbc
 dbfcdxex.hbc
 Tdbclass.hbc
@@ -80,6 +80,9 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbUparadox.prg
 \develop\harbour\dbu\dbucrypto.prg
+
+
+\develop\harbour\dbu\dumyocissd.prg
 
 #
 # sqlite
