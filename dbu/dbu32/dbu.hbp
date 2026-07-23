@@ -81,6 +81,7 @@ sqlrddpp.hbc
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbUparadox.prg
+\develop\harbour\dbu\dbucrypto.prg
 
 #
 # sqlite

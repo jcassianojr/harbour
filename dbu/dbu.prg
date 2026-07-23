@@ -456,7 +456,7 @@ ajuda_m := {"Ajuda"}
 ajuda_b := {.T.}
 
 abrir_m := {"Database","Indice","Visao","POSTGRESQL",;
- "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB","FIREBIRD","PARADOX","DUCKDB","SEMUSO"}
+ "SQLITE","MARIADB","MYSQL","MDB ACCESS","ACCDB ACCESS","MSSQL","ORACLE","LETODB","FIREBIRD","PARADOX","DUCKDB","DBFCRYPTO"}
 abrir_b := array(16)
 abrir_b[1] = "sysfunc = 0 .AND. .NOT. box_open"
 abrir_b[2] = "sysfunc = 0 .AND. .NOT. box_open .AND. .NOT. EMPTY(cur_dbf)"
@@ -611,8 +611,7 @@ do while .T.
       case M->func_sel = 15
          MENUSQL("DUCKDB")
       case M->func_sel = 16
-          //MENUSQL("")
-          MDT("sem uso")  
+         DBFcryptomenu()
       endcase
       sysfunc := 0  //setar para nao retornar ficar em loop
    case M->sysfunc = 9  //utilitarios F9

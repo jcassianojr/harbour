@@ -1,6 +1,14 @@
+// +--------------------------------------------------------------------
+// + requer -lbcrypt no hbp    libbcrypt
+// + dbfcdxex https://github.com/carles9000/dbfcdxex
+*+
 *+--------------------------------------------------------------------
 *+
-*+    Programa  : dbuleto.prg
+
+
+*+--------------------------------------------------------------------
+*+
+*+    Programa  : crypto.prg
 *+
 *+     Sistema:
 *+
@@ -20,7 +28,7 @@
 // +
 // +
 // +
-// +    Function cryptomenu()
+// +    Function DBFcryptomenu()
 // +
 // +
 // +
@@ -29,12 +37,13 @@
 // +
 // +
 
+#INCLUDE "BOX.CH"
 
 REQUEST DBFCDXEX
 
 
 
-FUNCTION cryptomenu()
+FUNCTION DBFcryptomenu()
 
 
 LOCAL aAMBIENTE
@@ -57,7 +66,7 @@ lMDB       := .F.
 lACCDB     := .F.
 lFDB       := .F.
 
-zSENHACDX := INPUTBOX( PADR( zSENHACDX,30 ), "Novo database" )
+zSENHACDX := INPUTBOX( PADR( zSENHACDX,30 ), "Senha para cryptografia" )
 zSENHACDX :=ALLTRIM(zSENHACDX)
 USOVIA := "DBFCDXEX"
 rddSetDefault("DBFCDXEX")   
@@ -71,15 +80,14 @@ WHILE .T.
    OPCAO(4,24,"&Encryptar                 ",86)   // V
    OPCAO(5,24,"&Descrptar                 ",84)   // T
    OPCAO(6,24,"&Checar                    ",73)   // I
-   //opcao backup zip
    KEY := menu(1,0)
    DO CASE
    CASE KEY = 1
-      
+        DBFcrypto_enc()
    CASE KEY = 2
-      
+        DBFcrypto_dec() 
    CASE KEY = 3
-      
+        DBFcrypto_check()
    OTHERWISE
       EXIT
    ENDCASE
@@ -95,6 +103,57 @@ LAYOUT()
 RETURN .T.
 
 
+function DBFcrypto_enc()
+cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+DbfcdxexSetup( "aes256", zSENHACDX )
+
+ USE ( cARQORI ) VIA "DBFCDXEX" EXCLUSIVE NEW
+
+   IF ! CDXEX_IsTableEncrypted()
+      IF CDXEX_EncryptTable()
+         MDT("Tabela cryptografada")
+      ELSE
+         MDT("Erro ao cryptografar")
+      ENDIF
+   ELSE
+       MDT("Tabela ja cryptografada")
+   ENDIF
+USE
+mdt(CDXEX_Info()) 
+return
+
+
+function DBFcrypto_dec()
+cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+DbfcdxexSetup( "aes256", zSENHACDX )
+
+USE ( cARQORI ) VIA "DBFCDXEX" EXCLUSIVE NEW
+IF CDXEX_IsTableEncrypted()
+   iF CDXEX_DecryptTable()
+      MDT("Tabela descryptografada")
+   ELSE
+      MDT("Erro ao descryptografar")
+   ENDIF
+ELSE
+   MDT("Tabela nao cryptografada")
+ENDIF  
+mdt(CDXEX_Info()) 
+USE
+return
+
+function DBFcrypto_check()
+cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
+DbfcdxexSetup( "aes256", zSENHACDX )
+
+USE ( cARQORI ) VIA "DBFCDXEX" EXCLUSIVE NEW
+IF CDXEX_IsTableEncrypted()
+   MDT("Tabela cryptografada")
+ELSE
+   MDT("Tabela nao cryptografada")
+ENDIF
+alert(CDXEX_Info())
+USE
+return
 
 // cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*.dbf", 1 )
   
