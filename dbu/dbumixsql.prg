@@ -269,7 +269,7 @@ METHOD SQLMIXEXT:CloseAreas()
 RETURN n
 
 *---------------------------------------------------------------------------------------------*
-METHOD SQLMIXEXT:Connect( cServer, cUser, cPassword, cDatabase, cTipoMix, cPorta, cOwner )
+METHOD SQLMIXEXT:Connect( cServer, cUser, cPassword, cDatabase, cTipoMix, cPorta, cOwner, cStringCom )
 *---------------------------------------------------------------------------------------------*
 /*
  * SQLMIXEXT:Connect( cServer, cUser, cPassword, cDatabase, cTipoMix, cPorta, cOwner )
@@ -332,11 +332,22 @@ METHOD SQLMIXEXT:Connect( cServer, cUser, cPassword, cDatabase, cTipoMix, cPorta
       CASE ::cTipoMix = "ORACLE" .OR. ::cTipoMix = "OCI"
          ::nConnHandle := rddInfo( RDDI_CONNECT, { "OCILIB", AllTrim(cServer), AllTrim(cUser), AllTrim(cPassword), AllTrim(cDatabase) }, "SQLMIX" )
 
-      CASE ::cTipoMix = "ODBC"
-         // Se cServer for usado como DSN ou se repassado via cDatabase
-         cConnStr := "Provider=MSDASQL;Data Source=" + AllTrim(cDatabase) + ";"
-         IF !Empty(cUser); cConnStr += "Uid=" + AllTrim(cUser) + ";"; ENDIF
-         IF !Empty(cPassword); cConnStr += "Pwd=" + AllTrim(cPassword) + ";"; ENDIF
+     CASE ::cTipoMix = "ODBC"
+         IF !Empty( cStringCom )
+            // Utiliza a string pronta passada por parâmetro
+            cConnStr := AllTrim( cStringCom )
+         ELSEIF !Empty( cServer ) .AND. At( "DRIVER=", Upper( cServer ) ) > 0
+            // Caso o cServer traga a string pronta de conexão
+            cConnStr := AllTrim( cServer )
+         ELSEIF ::cTipoMix = "ODBC" // Ajuste lógico para DSN se aplicável
+            cConnStr := "Provider=MSDASQL;Data Source=" + AllTrim( cDatabase ) + ";"
+            IF !Empty( cUser ); cConnStr += "Uid=" + AllTrim( cUser ) + ";"; ENDIF
+            IF !Empty( cPassword ); cConnStr += "Pwd=" + AllTrim( cPassword ) + ";"; ENDIF
+         ELSE
+            // Fallback padrão se nenhuma string customizada for informada
+            cConnStr := "Provider=MSDASQL;Data Source=" + AllTrim( cDatabase ) + ";"
+         ENDIF
+
          ::nConnHandle := rddInfo( RDDI_CONNECT, { "ODBC", cConnStr }, "SQLMIX" )
 
       OTHERWISE
