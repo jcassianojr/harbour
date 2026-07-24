@@ -339,13 +339,10 @@ METHOD SQLMIXEXT:Connect( cServer, cUser, cPassword, cDatabase, cTipoMix, cPorta
          ELSEIF !Empty( cServer ) .AND. At( "DRIVER=", Upper( cServer ) ) > 0
             // Caso o cServer traga a string pronta de conexão
             cConnStr := AllTrim( cServer )
-         ELSEIF ::cTipoMix = "ODBC" // Ajuste lógico para DSN se aplicável
+         ELSE // Ajuste lógico para DSN se aplicável
             cConnStr := "Provider=MSDASQL;Data Source=" + AllTrim( cDatabase ) + ";"
             IF !Empty( cUser ); cConnStr += "Uid=" + AllTrim( cUser ) + ";"; ENDIF
             IF !Empty( cPassword ); cConnStr += "Pwd=" + AllTrim( cPassword ) + ";"; ENDIF
-         ELSE
-            // Fallback padrão se nenhuma string customizada for informada
-            cConnStr := "Provider=MSDASQL;Data Source=" + AllTrim( cDatabase ) + ";"
          ENDIF
 
          ::nConnHandle := rddInfo( RDDI_CONNECT, { "ODBC", cConnStr }, "SQLMIX" )
