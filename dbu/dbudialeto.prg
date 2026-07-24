@@ -1197,7 +1197,23 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"
          CASE mFldType = "C" .AND. ( llMDB .OR. llACCDB  )
             mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ") DEFAULT ''"
+         
+         CASE mFldType = "C" .AND. ( cTIPOSQL = "IBMDB2" )
+            IF mFldLen > 128
+               mSql += "VARCHAR (" + LTrim( Str( mFldLen ) ) + ")"
+            ELSE
+               mSql += "CHARACTER (" + LTrim( Str( mFldLen ) ) + ")"
+            ENDIF
 
+         CASE mFldType = "C" .AND. ( cTIPOSQL = "INGRES" .OR. cTIPOSQL = "INFORMIX" )
+            mSql += "CHARACTER (" + LTrim( Str( mFldLen ) ) + ")"
+
+         CASE mFldType = "C" .AND. ( cTIPOSQL = "SQLANY" .OR. cTIPOSQL = "SYBASE" )
+            IF mFldLen > 254
+               mSql += "LONG VARCHAR"
+            ELSE
+               mSql += "CHAR (" + LTrim( Str( mFldLen ) ) + ")"
+            ENDIF
 
          CASE mFldType = "C" .AND. cTIPOSQL = "SQLITE"
             mSql += "TEXT NOT NULL DEFAULT ('')"    
@@ -1244,6 +1260,16 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "DATETIME"
          CASE mFldType = "D" .AND. cTIPOSQL == "DUCKDB"
             mSql += "DATE" // DuckDB nativo para datas   
+
+        CASE mFldType = "D" .AND. ( cTIPOSQL = "IBMDB2" )
+            mSql += "DATE"
+
+         CASE mFldType = "D" .AND. ( cTIPOSQL = "SYBASE" )
+            mSql += "DATETIME"
+
+         CASE mFldType = "D" .AND. ( cTIPOSQL = "SQLANY" )
+            mSql += "TIMESTAMP"
+
          CASE mFldType = "D"
             mSql += "DATE"
   
@@ -1337,6 +1363,28 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             ELSE
                mSql += "INTEGER default 0"
             ENDIF
+            
+            
+       CASE mFldType = "N" .AND. ( cTIPOSQL = "IBMDB2" )
+            IF mFldDec > 0
+               mSql += "DECIMAL(" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+            ELSE
+               mSql += "DECIMAL(" + hb_ntos( mFldLen ) + ")"
+            ENDIF
+
+         CASE mFldType = "N" .AND. ( cTIPOSQL = "ADABAS" .OR. cTIPOSQL = "SQLANY" )
+            mSql += "NUMERIC (" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+
+         CASE mFldType = "N" .AND. ( cTIPOSQL = "INGRES" )
+            mSql += "DECIMAL (" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+
+         CASE mFldType = "N" .AND. ( cTIPOSQL = "INFORMIX" )
+            IF mFldLen > 15
+               mSql += "DECIMAL (" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+            else
+               mSql += "DECIMAL (" + hb_ntos( mFldLen ) + "," + hb_ntos( mFldDec ) + ")"
+            ENDIF     
+            
 
          CASE mFldType = "N" .AND. ( cTIPOSQL = "MYSQL" .OR. cTIPOSQL = "MYSQL64" .OR. cTIPOSQL = "MARIADB" .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER"  )
             IF mFldDec > 0
@@ -1428,7 +1476,22 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
          CASE mFldType = "L" .AND. ( llMDB .OR. llACCDB .OR. cTIPOSQL = "MSSQL" .OR. cTIPOSQL = "SQLSERVER" )
             mSql += "BIT DEFAULT 0"
          CASE mFldType = "L" .AND. cTIPOSQL == "DUCKDB"
-            mSql += "BOOLEAN"   
+            mSql += "BOOLEAN" 
+        CASE mFldType = "L" .AND. ( cTIPOSQL = "IBMDB2" )
+            mSql += "SMALLINT"
+
+         CASE mFldType = "L" .AND. ( cTIPOSQL = "SYBASE" )
+            mSql += "BIT NOT NULL"
+
+         CASE mFldType = "L" .AND. ( cTIPOSQL = "SQLANY" )
+            mSql += "NUMERIC (1) NULL"
+
+         CASE mFldType = "L" .AND. ( cTIPOSQL = "INFORMIX" )
+            mSql += "BOOLEAN"
+
+         CASE mFldType = "L" .AND. ( cTIPOSQL = "INGRES" )
+            mSql += "TINYINT"       
+              
          CASE mFldType = "L"
             mSql += "BOOL"
 
@@ -1443,6 +1506,18 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "BLOB SUB_TYPE TEXT" 
          CASE mFldType = "M" .AND. cTIPOSQL == "DUCKDB"
             mSql += "VARCHAR" // DuckDB lida com textos grandes eficientemente como VARCHAR   
+        CASE mFldType = "M" .AND. ( cTIPOSQL = "IBMDB2" )
+            mSql += "CLOB (256000)"
+
+         CASE mFldType = "M" .AND. ( cTIPOSQL = "SQLANY" .OR. cTIPOSQL = "INGRES" )
+            mSql += "LONG VARCHAR"
+
+         CASE mFldType = "M" .AND. ( cTIPOSQL = "SYBASE" )
+            mSql += "TEXT"
+
+         CASE mFldType = "M" .AND. ( cTIPOSQL = "ADABAS" )
+            mSql += "LONG"    
+            
          CASE mFldType = "M"
             mSql += "TEXT"
 
