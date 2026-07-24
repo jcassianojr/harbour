@@ -44,10 +44,23 @@ hmg
 https://www.hmgextended.com/
 https://github.com/ivanilmarcelino/OpenMinigui
 
-firebird
 
-https://github.com/FirebirdSQL
+MySQL
+https://www.mysql.com 
 
+MariaDB
+https://mariadb.org 
+
+PostgreSQL
+https://www.postgresql.org 
+
+Firebird
+https://firebirdsql.org 
 http://www.flamerobin.org/
 
+CUBRID
+https://www.cubrid.org 
 
+DUCKDB
+https://duckdb.org/
+https://ducklake.select/
