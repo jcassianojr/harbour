@@ -5,6 +5,8 @@
 -tshead=tshead.ch
 #-manifest=folha1.Manifest  comentado erro compilacao 32 bits
 
+-inc
+
 hbct.hbc
 hbwin.hbc
 hbtip.hbc

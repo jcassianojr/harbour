@@ -161,15 +161,21 @@ LOCAL cDBFNAME
    dbGoTop()
    WHILE !Eof()
       cCAM    := ""
-      USODBF  := AllTrim( DBF )
+      USODBF  := AllTrim( FIELD->DBF )
       cDBFNAME := USODBF
       aCHAVE  := {}
       aINDICE := {}
       aTAG    := {}
-      WHILE USODBF = AllTrim( DBF ) .AND. !Eof()
-         USONTX := AllTrim( NTX )
-         USOCAM := AllTrim( CAMPO )
-         USOTAG := AllTrim( TAG )
+      WHILE USODBF = AllTrim( FIELD->DBF ) .AND. !Eof()
+         USONTX := AllTrim( FIELD->NTX )
+         USOCAM := AllTrim( FIELD->CAMPO )
+         USOTAG := AllTrim( FIELD->TAG )
+         IF EMPTY(USOTAG)
+            USOTAG:=AllTrim(FIELD->NTX)
+            if (field->seq)>1
+               USOTAG:=AllTrim(FIELD->NTX)+"-"+stR(field->seq,1)
+            endif   
+         ENDIF
          IF Len( AllTrim( USODBF ) ) = 3 .AND. USODBF = "FOL"
             USODBF := FOL
             USONTX := FOL
@@ -303,7 +309,7 @@ LOCAL cDBFNAME
             USODBF := cCAM + USODBF
             USONTX := cCAM + USODBF
          ENDIF
-         IF !xEMP .OR. PAD = 'S'
+         IF ! xEMP .OR. PAD = 'S'
             AAdd( achave, USOCAM )
             AAdd( aindice, usontx )
             AAdd( aTAG, usotag )

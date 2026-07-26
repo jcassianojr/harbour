@@ -98,7 +98,14 @@ FUNCTION INFOR
       mINDICE := aINDICE[ X ]
       mTAG    := aTAG[ X ]
       IF Empty( mTAG ) .AND. Upper( ordBagExt() ) = ".CDX"
-         mTAG := mINDICE
+         IF AT(":",mINDICE)>0 //esta com o caminho EX: C:\TEMP\
+            mTAG := HB_FNAMENAME(mINDICE)
+         ELSE
+            mTAG := mINDICE
+         ENDIF  
+         IF X>1
+            mTAG := mTAG+STr(X,1)
+         ENDIF 
       ENDIF
       @ 09, 23 SAY AllTrim( mCHAVE )
       @ 10, 23 SAY AllTrim( mINDICE )
@@ -108,7 +115,7 @@ FUNCTION INFOR
       zei_fort( nLASTREC,,, 0 )
 
 
-    IF Empty( mTAG )
+      IF Empty( mTAG )
          ordCondSet(,,,, {|| ZEI_FORT( nLASTREC,,, 1 )},, RecNo(),,,,,,,,,,,,, ) 
          ordCreate( mINDICE,, mCHAVE, {|| &mCHAVE}, )
       ELSE
