@@ -1,2 +1,2 @@
-call d:\DEVPRG\hb64mgw12\hb64mgw12
+call c:\devprg\hb64\hb64msys_c.bat
 hbmk2.exe folha1.hbp
