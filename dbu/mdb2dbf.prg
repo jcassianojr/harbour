@@ -97,14 +97,14 @@ WHILE .T.
    else
       OPCAO(4,24,"&Criar arquivo              ",67)   //c 67
    endif
-   OPCAO( 5,24,"Executar arquivo &SQL     ",83)   //S 83 
-   OPCAO( 6,24,"&Importar  DBF            ",73)   //I 73 
-   OPCAO( 7,24,"Exportar Tabela &Formatos ",69)   //F 70 
-   OPCAO( 8,24,"&Database Selecionar      ",68)   //D 68 
-   OPCAO( 9,24,"&Exportar  DBF            ",69)   //E 69 
-   OPCAO(10,24,"DBF para &Scrit           ",83)   //S 83 
-   OPCAO(11,24,"DBF para D&BML            ",84)   //B 66
-   OPCAO( 12, 24, "&ODBC   Info DSN           ", 79 )   // O 
+   OPCAO(  5, 24,"Executar arquivo &SQL     ", 83)   //S 83 
+   OPCAO(  6, 24,"&Importar  DBF            ", 73)   //I 73 
+   OPCAO(  7, 24,"Exportar Tabela &Formatos ", 69)   //F 70 
+   OPCAO(  8, 24,"&Database Selecionar      ", 68)   //D 68 
+   OPCAO(  9, 24,"&Exportar  DBF            ", 69)   //E 69 
+   OPCAO( 10, 24,"DBF para &Script          ", 83)   //S 83 
+   OPCAO( 11, 24,"DBF para D&BML            ", 84)   //B 66
+   OPCAO( 12, 24, "&ODBC   Info DSN         ", 79 )   // O 
    
    KEY := menu(1,0)
    DO CASE
