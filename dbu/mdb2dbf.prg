@@ -148,6 +148,11 @@ ENDDO
 
 RESTAA(aAMBIENTE)
 layout()
+loledb     := .f.
+lmdb       := .f.
+laccdb     := .f.
+lFDB       := .f.
+
 return nil
 
 
@@ -2189,13 +2194,16 @@ function mdltodos()
 LOCAL cPASTA
 cPASTA:=SelectFolder()
 IF ! EMPTY(cPASTA)
-   cPASTA+="\*."+TABLEEXT
+   DO CASE
+      CASE llMDB
+           cPASTA+="\*.MDB"
+      CASE llACCDB
+           cPASTA+="\*.ACCDB"
+      OTHERWISE
+           cPASTA+="\*."+TABLEEXT
+   ENDCASE
 ENDIF
-cTEXTO:=""
-//FAZERDBF(bUSO               , lSHARE[.F.] , bPRE, bPOS, cMASK["*."+TABLEEXT],LOPEN[.T.])
-
-FAZERDBF( {|| cTEXTO+=GERADBML(,,.F.) }, .F.,     ,     , cPASTA)
-hb_MemoWrit("estrutura.DBML", cTEXTO ) 
+GeraMDdbml(cMASK)
 RETURN .T.
 
 *+--------------------------------------------------------------------

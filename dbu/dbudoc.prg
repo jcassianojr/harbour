@@ -206,9 +206,10 @@ FUNCTION multidocs
       CASE tdoc = 7 .AND. cSUBTIPO="XML"      //xlm 
           FAZERDBF( {|| dbf2xml() }, .F.,,, cMASK )
 	  CASE tdoc = 14
-          FAZERDBF( {|| dbf2md() }, .F.,,, cMASK )	 
+          //FAZERDBF( {|| dbf2md() }, .F.,,, cMASK )	 
           //faztambem sqlite()
-          DocMarkdow()		  
+          //DocMarkdow()
+          GeraMDdbml(cMASK)		  
       OTHERWISE
            FAZERDBF( {|| multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO ) }, .F.,,, cMASK )
    ENDCASE
@@ -717,8 +718,18 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
       cTEXTO += clin + FormataBlocoSql(SqliteCreateTable( cARQ, aESTRU, "FIREBIRD",.T. ))
       cTIPOSQL:=""
 
-      //Gera dbml
-      CTEXTO += GERADBML(cARQ,aESTRU)
+       aINDICESDBML:={}
+       FOR nI := 1 TO dbOrderInfo( DBOI_ORDERCOUNT )
+            cTag  := dbOrderInfo( DBOI_NAME, , nI )
+            cExpr := dbOrderInfo( DBOI_EXPRESSION, , nI )
+            AAdd( aINDICESDBML, { nI, cTag, cExpr } )
+       NEXT
+      //Gera dbml       
+      cTEXTO+="[DBML]"+HB_OSNEWLINE()
+      CTEXTO += GERADBML_Custom( cARQ, aESTRU, aINDICESDBML, cARQ, zusovia )
+      
+      
+      //CTEXTO += GERADBML(cARQ,aESTRU)
 
    ENDIF
 
@@ -1091,107 +1102,6 @@ FUNCTION DBETODBF( cMASK, lLAY, lCRIA )
 
    RETURN .T.
 
-
-// +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-// +
-// +    Function  GERADBML()
-// +
-// +||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-// +
-
-FUNCTION GERADBML(cARQ,aUSO,lCAB)
-/*
-Table table_name {
-  column_name column_type [column_settings]
-}
-
-// table belonged to a schema
-Table schema_name.table_name {
-  column_name column_type [column_settings]
-Note: 'Stores user data'  
-}
-
-created_at timestamp [default: `now()`]
-column_name column_type [note: 'replace text here']
-
-*/
-LOCAL cLINHA
-LOCAL K
-LOCAL j
-IF VALTYPE(cARQ)<>"C"
-    cARQ:=ALIAS()
-ENDIF
-IF VALTYPE(AUSO)<>"A"
-    aUSO:=DBSTRUCT()
-ENDIF
-IF VALTYPE(lCAB)<>"L"
-    lCAB:=.T.
-ENDIF
-
-
-cLINHA:=HB_OSNEWLINE()
-IF lCAB
-    cLINHA+="[DBML]"+HB_OSNEWLINE()
-ENDIF    
-cLINHA+="Table "+cARQ+" {"+HB_OSNEWLINE()
-FOR K:= 1 TO lEN(aUSO)
-
-   cLINHA += CHR(34)+AllTrim( aUSO[ K ][ DBS_NAME ] ) +CHR(34)
-        DO CASE
-               CASE aUSO[ K ][ DBS_TYPE ] = "C"
-                    cLINHA += " CHAR (" + AllTrim( Str( aUSO[ K ][ DBS_LEN ] ) ) + ")"
-               CASE aUSO[ K ][ DBS_TYPE ] = "D"
-                   cLINHA += " DATETIME "
-                //PGSQL  TIMESTAMP   
-                   
-               CASE aUSO[ K ][ DBS_TYPE ] = "L"
-                   cLINHA += " BOOLEAN"   
-                   //" TINYINT(1)" SQL
-               CASE aUSO[ K ][ DBS_TYPE ] = "N"
-                   IF aUSO[ K ][DBS_DEC] =0
-                     //    cLINHA += " INTEGER [default: 0]"
-                     cLINHA += " DECIMAL (" + AllTrim( Str( aUSO[ K ][ DBS_LEN ] ) ) +  ") [default: 0]"
-                   ELSE
-                     cLINHA += " DECIMAL (" + AllTrim( Str( aUSO[ K ][ DBS_LEN ] ) ) + "," + AllTrim( Str( aUSO[ K ][ DBS_DEC ] ) ) + ") [default: 0]"
-                   ENDIF  
-               //CASE 
-               //    "BYTEA"    PGSQL BYNARY
-               CASE aUSO[ K ][ DBS_TYPE ] = "M"   
-                    cLINHA += " LONGTEXT"
-        ENDCASE
-    cLINHA+= HB_OSNEWLINE()          
-               
-  //"TIPO" CHAR(20)
-NEXT K
- // Indexes {
- //   TIPO [name: "TIPO"]
-  //}
-//   Indexes {
-//    DOCUMENTO [name: "DOCUMENTO"]
-//    NOVODOC [name: "NOVODOC"]
-//    (TIPO, NUMERO) [name: "TIPONUMERO"]
-//  }
-
-
-     //AADD(aDUPLA,{msql,msqlmeta,cTablename,cINDEXNAME,cKey,cSqlExpr,cFilter,lIsUnique})       
-     //              1     2          3          4      5      6        7       8   
-
-aINDICES:=GeraINDICES()
-nIndexes := LEN(aINDICES)
-IF nIndexes>0
-    cLINHA+="  Indexes {" +HB_OSNEWLINE()
-         FOR j = 1 TO  nIndexes
-            cINDEXNAME := aINDICES[J,4]
-            cLINHA+= " ( " + aINDICES[J,6] + " ) "
-            cLINHA+= " [name: "+CHR(34)+cINDEXNAME+CHR(34)+"]" +HB_OSNEWLINE() 
-         NEXT j 
-    cLINHA+= HB_OSNEWLINE()     
-    cLINHA+=" }" +HB_OSNEWLINE()     
- ENDIF 
-  
-  
-cLINHA+="}"+HB_OSNEWLINE()
-RETURN cLINHA
 
 
 // + EOF: DBUDOC.PRG
