@@ -97,14 +97,15 @@ WHILE .T.
    else
       OPCAO(4,24,"&Criar arquivo              ",67)   //c 67
    endif
-   OPCAO(  5, 24,"Executar arquivo &SQL     ", 83)   //S 83 
-   OPCAO(  6, 24,"&Importar  DBF            ", 73)   //I 73 
-   OPCAO(  7, 24,"Exportar Tabela &Formatos ", 69)   //F 70 
-   OPCAO(  8, 24,"&Database Selecionar      ", 68)   //D 68 
-   OPCAO(  9, 24,"&Exportar  DBF            ", 69)   //E 69 
-   OPCAO( 10, 24,"DBF para &Script          ", 83)   //S 83 
-   OPCAO( 11, 24,"DBF para D&BML            ", 84)   //B 66
-   OPCAO( 12, 24, "&ODBC   Info DSN         ", 79 )   // O 
+   OPCAO(  5, 24, "Executar arquivo &SQL     ", 83)   //S 83 
+   OPCAO(  6, 24, "&Importar  DBF            ", 73)   //I 73 
+   OPCAO(  7, 24, "Exportar Tabela &Formatos ", 69)   //F 70 
+   OPCAO(  8, 24, "&Database Selecionar      ", 68)   //D 68 
+   OPCAO(  9, 24, "&Exportar  DBF            ", 69)   //E 69 
+   OPCAO( 10, 24, "DBF para &Script          ", 83)   //S 83 
+   OPCAO( 11, 24, "DBF para D&BML            ", 84)   //B 66
+   OPCAO( 12, 24, "&ODBC   Info DSN          ", 79 )   // O
+   OPCAO( 13, 24, "Gerar md e dbml           ", 79 )   // O 
    
    KEY := menu(1,0)
    DO CASE
@@ -140,7 +141,9 @@ WHILE .T.
    CASE KEY=8
         mdltodos() 
    CASE KEY = 9
-          sqlrdd_ODBC_info()      
+          sqlrdd_ODBC_info()   
+   CASE KEY = 10       
+          MDBGERAINFO()  
    OTHERWISE
       EXIT
    ENDCASE
@@ -1120,6 +1123,28 @@ IF FILE(cARQORI)
    ENDIF
    RDDNOME(nOLDTIPO)  //retorna tipo anterior
 ENDIF
+
+
+*+--------------------------------------------------------------------
+*+
+*+    Function MDBGERAINFO()
+*+
+*+--------------------------------------------------------------------
+*+
+FUNCTION MDBGERAINFO()
+LOCAL cCONNSTRING
+MDBARQ := OPENTIPOARQ()
+DO CASE 
+   CASE lMDB
+        GeraMDdbml(MDBARQ)
+   CASE lACCDB
+        GeraMDdbml(MDBARQ)
+   CASE cTIPOSQL == "SQLITE"
+       GeraMDdbml(MDBARQ)
+   OTHERWISE
+       cCONNSTRING:=GERACONN( cDATABASEX )
+       GeraMDdbml(,cCONNSTRING)
+ENDCASE
 
 
 
@@ -2193,6 +2218,8 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
 function mdltodos()
 LOCAL cPASTA
 cPASTA:=SelectFolder()
+
+/* aqui e dbf para md dbml porem geradbml suporta mdb accdb sqlite
 IF ! EMPTY(cPASTA)
    DO CASE
       CASE llMDB
@@ -2203,7 +2230,9 @@ IF ! EMPTY(cPASTA)
            cPASTA+="\*."+TABLEEXT
    ENDCASE
 ENDIF
-GeraMDdbml(cMASK)
+*/
+cPASTA+="\*."+TABLEEXT
+GeraMDdbml(cPASTA)
 RETURN .T.
 
 *+--------------------------------------------------------------------
