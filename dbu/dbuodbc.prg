@@ -175,6 +175,29 @@ IF FILE(cARQIMP)
 endif
 return .t.
 
+
+Function odbcimpdbf()
+ nOLDTIPO := TIPODBF
+            alertX( "escolha origem" )
+            tipodbfesc()
+            nORITIPO   := TIPODBF
+            cORIDRIVER := RDDNOME( TIPODBF )
+            lincdados:=mdg("Incluir Dados")
+            IF MDG("Arquivo individual")
+               cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+                IF File( cARQORI )
+                   odbc_impdbf(cARQORI,lincdados )
+                ENDIF
+            ELSE
+               cPASTA:=SelectFolder()
+               cPASTA+="\*."+TABLEEXT 
+               //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
+               FAZERDBF( {|| odbc_impdbf(cCAMINHOCOMPLETO,lincdados ) }, .F. ,     ,     ,cPASTA,.F.)
+            ENDIF   
+            RDDNOME( nOLDTIPO )   // retorna tipo anterior
+return
+
+
 // +--------------------------------------------------------------------
 // +
 // +
@@ -187,7 +210,7 @@ return .t.
 // +
 // +
 // +
-FUNCTION odbcimpdbf()
+FUNCTION odbc_impdbf(cARQORI,lincdados )
 
    LOCAL aINDICES
    LOCAL nINDICES
@@ -200,11 +223,6 @@ FUNCTION odbcimpdbf()
    aINDICES := {}
 
    cTABLE := Space( 30 )
-   mdt( "escolha origem" )
-   tipodbfesc()
-   nORITIPO   := TIPODBF
-   cORIDRIVER := RDDNOME( TIPODBF )
-   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
    hb_FNameSplit( cARQORI, nil, @cTable, NIL )
    cTABLE := AllTrim( cTABLE )
 
@@ -251,40 +269,38 @@ FUNCTION odbcimpdbf()
   dsFunctions:SETSQL( Dialeto_begin() )
       dsFunctions:ExecSQL()
 
-   dbSelectArea( cTABLE )
-   dbGoTop()
-   WHILE !Eof()
-      zei_fort( nLASTREC,,, 1 )
-      mSql := "INSERT INTO " + cTable + " VALUES "
-      msql := msql + "("
-      FOR i := 1 TO Len( aSTRU )
-         mFldNm := aSTRU[ i, DBS_NAME ]
-         IF i > 1
-            mSql += ", "
-         ENDIF
-         mSql += c2sql( &mFldNm )
-      NEXT
-      mSql += ")"
-	  
-	  
-      dsFunctions:SETSQL( mSQL )
-      dsFunctions:ExecSQL()
-	  
-	   nCont++
-      IF nCont % 500 == 0
-         dsFunctions:SETSQL( Dialeto_commit()  )
-         dsFunctions:ExecSQL()
-		 dsFunctions:SETSQL( Dialeto_begin() )
-         dsFunctions:ExecSQL()
-		 
-      ENDIF
-	  
-	  
-	  
-	  
-	  
-      dbSkip()
-   ENDDO
+   if lincdados
+     dbSelectArea( cTABLE )
+     dbGoTop()
+     WHILE !Eof()
+        zei_fort( nLASTREC,,, 1 )
+        mSql := "INSERT INTO " + cTable + " VALUES "
+        msql := msql + "("
+        FOR i := 1 TO Len( aSTRU )
+           mFldNm := aSTRU[ i, DBS_NAME ]
+           IF i > 1
+              mSql += ", "
+           ENDIF
+           mSql += c2sql( &mFldNm )
+        NEXT
+        mSql += ")"
+  	  
+  	  
+        dsFunctions:SETSQL( mSQL )
+        dsFunctions:ExecSQL()
+  	  
+  	   nCont++
+        IF nCont % 500 == 0
+           dsFunctions:SETSQL( Dialeto_commit()  )
+           dsFunctions:ExecSQL()
+  		 dsFunctions:SETSQL( Dialeto_begin() )
+           dsFunctions:ExecSQL()
+  		 
+        ENDIF
+        dbSkip()
+     ENDDO
+  ENDIF
+   
    dsFunctions:SETSQL( Dialeto_commit()  )
    dsFunctions:ExecSQL()
    dbCloseArea()

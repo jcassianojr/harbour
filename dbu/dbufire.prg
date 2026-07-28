@@ -282,21 +282,40 @@ FUNCTION fireTABELASTESTE( lNATIVE )
    
 RETURN .T.
 
+
+Function fireimpdbf()
+  nOLDTIPO := TIPODBF
+            alertX( "escolha origem" )
+            tipodbfesc()
+            nORITIPO   := TIPODBF
+            cORIDRIVER := RDDNOME( TIPODBF )
+            lincdados:=mdg("Incluir Dados")
+            IF MDG("Arquivo individual")
+               cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+                IF File( cARQORI )
+                   fire_impdbf(cARQORI,lincdados)
+                ENDIF
+            ELSE
+               cPASTA:=SelectFolder()
+               cPASTA+="\*."+TABLEEXT 
+               //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
+               FAZERDBF( {|| fire_impdbf(cCAMINHOCOMPLETO,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+            ENDIF   
+            RDDNOME( nOLDTIPO )   // retorna tipo anterior
+
+RETURN
+
+
 // +--------------------------------------------------------------------
 // +    Function fireimpdbf()
 // +--------------------------------------------------------------------
-FUNCTION fireimpdbf()
+FUNCTION fire_impdbf(cARQORI,lincdados)
 LOCAL oServer
 LOCAL aINDICES := {}
 LOCAL nINDICES, cINDEXNAME, cINDEXUSO, msql, cTABLE
 LOCAL i,j, nCont
 
 cTABLE := Space( 30 )
-mdt( "Escolha o DBF de Origem" )
-tipodbfesc()
-nORITIPO   := TIPODBF
-cORIDRIVER := RDDNOME( TIPODBF )
-cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
 
 IF Empty( cARQORI )
    RETURN .F.
@@ -395,29 +414,31 @@ oServer:StartTransaction()
 dbSelectArea( cTABLE )
 dbGoTop()
 
-WHILE !Eof()
-   zei_fort( nLASTREC,,, 1 )
-   
-   msql := "INSERT INTO " + cTABLE + " VALUES ("
-   FOR i := 1 TO Len( aSTRU )
-      IF i > 1
-         msql += ", "
-      ENDIF
-      msql += c2sql( & ( aSTRU[i, DBS_NAME] ) )
-   NEXT i
-   msql += ")"
-   
-   oServer:Execute( msql )
-   
-   nCont++
-   // Bloco de Commit térmico para otimizar transações em lote (Bulk Insert)
-   IF nCont % 500 == 0
-      oServer:Commit()
-      oServer:StartTransaction()
-   ENDIF
-   
-   dbSkip()
-ENDDO
+IF lincdados
+  WHILE !Eof()
+     zei_fort( nLASTREC,,, 1 )
+     
+     msql := "INSERT INTO " + cTABLE + " VALUES ("
+     FOR i := 1 TO Len( aSTRU )
+        IF i > 1
+           msql += ", "
+        ENDIF
+        msql += c2sql( & ( aSTRU[i, DBS_NAME] ) )
+     NEXT i
+     msql += ")"
+     
+     oServer:Execute( msql )
+     
+     nCont++
+     // Bloco de Commit térmico para otimizar transações em lote (Bulk Insert)
+     IF nCont % 500 == 0
+        oServer:Commit()
+        oServer:StartTransaction()
+     ENDIF
+     
+     dbSkip()
+   ENDDO
+endif
 
 oServer:Commit()
 dbCloseArea()

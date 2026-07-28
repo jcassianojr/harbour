@@ -113,7 +113,7 @@ ENDDO
 
 TIPODBF := nOLDTIPORDD
 rddSetDefault(cOLDRDD)
-RDDNOME(TIPODBF)
+
 
 RESTAA(aAMBIENTE)
 LAYOUT()
@@ -266,6 +266,28 @@ endif
 return .t.
 
 
+Function LETO_DBFTOSRV(cSrvAddr)
+ nOLDTIPO := TIPODBF
+            alertX( "escolha origem" )
+            tipodbfesc()
+            nORITIPO   := TIPODBF
+            cORIDRIVER := RDDNOME( TIPODBF )
+            lincdados:=mdg("Incluir Dados")
+            IF MDG("Arquivo individual")
+               cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+                IF File( cARQORI )
+                   LETO_DBFSRV(cSrvAddr,cARQORI)
+                ENDIF
+            ELSE
+               cPASTA:=SelectFolder()
+               cPASTA+="\*."+TABLEEXT 
+               //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
+               FAZERDBF( {|| LETO_DBFSRV(cSrvAddr,cCAMINHOCOMPLETO) }, .F. ,     ,     ,cPASTA,.F.)
+            ENDIF   
+            RDDNOME( nOLDTIPO )   // retorna tipo anterior
+return
+
+
 *+--------------------------------------------------------------------
 *+
 *+
@@ -278,9 +300,8 @@ return .t.
 *+
 *+
 *+
-FUNCTION LETO_DBFTOSRV(cSrvAddr)
+FUNCTION LETO_DBFSRV(cSrvAddr,cARQORI)
 
-cARQORI   := win_GetOpenFileName(,"Arquivos de Origem",hb_cwd(),"Arquivos de Origem","*."+TABLEEXT,1)
 cCAMINHO  := ""
 cARQUIVO  := ""
 cEXTENSAO := ""

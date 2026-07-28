@@ -10,6 +10,8 @@
 # Dependências (libs) requerida pela tclass
 #-llibpq
 -lfbclient
+-lbcrypt
+
 
 -gtwvg
 -gui
@@ -29,6 +31,8 @@ hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
 sqlrddpp-firebird.hbc
+adoxb.hbc
+dbfcdxex.hbc
 
 #
 #ads
@@ -72,13 +76,15 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbuver.prg
 \develop\harbour\dbu\dbuview.prg
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
+\develop\harbourPRIV\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
-\develop\harbour\dbu\dbu2md.prg
+#\develop\harbour\dbu\dbu2md.prg
+\develop\harbour\dbu\dbumddbml.prg
 \develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
+\develop\harbour\dbu\dbucrypto.prg
 
 #
 # sqlite
@@ -96,7 +102,7 @@ Tdbclass.hbc
 #
 \develop\harbour\dbu\dbuodbc.prg 
 #
-\develop\harbour\dbu\adoxb.prg   
+#\develop\harbour\dbu\adoxb.prg   
 \develop\harbour\dbu\dbuadox.prg 
 #
 \develop\harbour\dbu\dbuleto.prg 

@@ -771,7 +771,7 @@ RETURN {cSqlFields,cSqlIndexes}
 *+
 *+--------------------------------------------------------------------
 *+
-FUNCTION DBF2MDB(cMDBARQ,cDBFARQ)
+FUNCTION DBF2MDB(cMDBARQ,cDBFARQ,lincdados)
 
 local aINDICES
 LOCAL nINDICES
@@ -906,19 +906,19 @@ IF cTIPOSQL = "PGSQL" .OR. cTIPOSQL = "POSTGRESQL" .OR. cTIPOSQL = "PGSQL64"  //
    ENDIF   
 ENDIF
 
-if nLASTREC > 0   //nao importa se nao tiver registros
+if nLASTREC > 0 .AND. lincdados  //nao importa se nao tiver registros
    try
-   opencmdbarq()
+      opencmdbarq()
    //Criar opcao de append from insert into usando
-   try
-   append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
+      try
+         append from &cDBFARQ. WHILE zei_fort(nLASTREC,,,1)
+      catch oErR
+          MDT("Erro anexando dados")
+      end
    catch oErR
-   MDT("Erro anexando dados")
-end
-catch oErR
-MDT("Erro ao abrir nova tabela")
-end
-dbcloseall()
+      MDT("Erro ao abrir nova tabela")
+   end
+   dbcloseall()
 endif
 
 Set(_SET_DATEFORMAT,"dd/mm/yyyy")
@@ -1098,6 +1098,9 @@ ENDIF
 RETURN
 
 
+
+
+
 *+--------------------------------------------------------------------
 *+
 *+    Function MDBIMPDBF()
@@ -1109,20 +1112,30 @@ FUNCTION MDBIMPDBF()
 
 MDBARQ := OPENTIPOARQ()
 
-nOLDTIPO := TIPODBF
-mdt("escolha origem")
-tipodbfesc()
-nORITIPO   := TIPODBF
-cORIDRIVER := RDDNOME(TIPODBF)
-cARQORI    := win_GetOpenFileName(,"Arquivos de Origem",HB_CWD(),"Arquivos de Origem","*."+TABLEEXT,1)
-IF FILE(cARQORI)
-   IF cTIPOSQL="PARADOX"
-      DBF2Paradox( cARQORI)//DBF2Paradox( cARQORI, cParadoxDestino )
-   ELSE
-     DBF2MDB(cMDBARQ,cARQORI)
-   ENDIF
-   RDDNOME(nOLDTIPO)  //retorna tipo anterior
-ENDIF
+
+ nOLDTIPO := TIPODBF
+            alertX( "escolha origem" )
+            tipodbfesc()
+            nORITIPO   := TIPODBF
+            cORIDRIVER := RDDNOME( TIPODBF )
+            lincdados:=mdg("Incluir Dados")
+            IF MDG("Arquivo individual")
+               cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+                IF File( cARQORI )
+                   IF cTIPOSQL="PARADOX"
+                     DBF2Paradox( cARQORI)//DBF2Paradox( cARQORI, cParadoxDestino )
+                   ELSE
+                     DBF2MDB(cMDBARQ,cARQORI,lincdados)
+                  ENDIF
+              ENDIF
+            ELSE
+               cPASTA:=SelectFolder()
+               cPASTA+="\*."+TABLEEXT 
+               //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
+               FAZERDBF( {|| DBF2MDB(cMDBARQ,cCAMINHOCOMPLETO,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+            ENDIF   
+            RDDNOME( nOLDTIPO )   // retorna tipo anterior
+return
 
 
 *+--------------------------------------------------------------------

@@ -368,6 +368,28 @@ IF FILE(cARQIMP)
 endif
 return .t.
      
+Function miximpdbf()
+
+  nOLDTIPO := TIPODBF
+            alertX( "escolha origem" )
+            tipodbfesc()
+            nORITIPO   := TIPODBF
+            cORIDRIVER := RDDNOME( TIPODBF )
+            lincdados:=mdg("Incluir Dados")
+            IF MDG("Arquivo individual")
+               cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+                IF File( cARQORI )
+                   mix_impdbf(cARQORI,lincdados)
+                ENDIF
+            ELSE
+               cPASTA:=SelectFolder()
+               cPASTA+="\*."+TABLEEXT 
+               //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
+               FAZERDBF( {|| mix_impdbf(cCAMINHOCOMPLETO,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+            ENDIF   
+            RDDNOME( nOLDTIPO )   // retorna tipo anterior
+return     
+     
 
 // +--------------------------------------------------------------------
 // +
@@ -375,7 +397,7 @@ return .t.
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION miximpdbf()
+FUNCTION mix_impdbf(cARQORI,lincdados)
 
    LOCAL aINDICES
    LOCAL nINDICES
@@ -388,11 +410,7 @@ FUNCTION miximpdbf()
    aINDICES := {}
 
    cTABLE := Space( 30 )
-   mdt( "escolha origem" )
-   tipodbfesc()
-   nORITIPO   := TIPODBF
-   cORIDRIVER := RDDNOME( TIPODBF )
-   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+
    hb_FNameSplit( cARQORI, nil, @cTable, NIL )
    cTABLE := AllTrim( cTABLE )
 
@@ -423,6 +441,7 @@ FUNCTION miximpdbf()
   mix_executesql( Dialeto_begin() ) // Inicia transação
   nCont := 0
 
+   IF lincdados
    dbGoTop()
    WHILE !Eof()
       zei_fort( nLASTREC,,, 1 )
@@ -444,9 +463,9 @@ FUNCTION miximpdbf()
       ENDIF
       dbSkip()
    ENDDO
-    mix_executesql( Dialeto_commit() )
 
-
+   endif
+   mix_executesql( Dialeto_commit() )
    dbCloseArea()
    mix_close()
 

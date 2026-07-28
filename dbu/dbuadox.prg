@@ -196,7 +196,49 @@ FUNCTION adoxcriadatabase()
 // +
 // +
 // +
-FUNCTION adoximpdbf()
+Function adoximpdbf()
+   IF cTIPOSQL="PARADOX"
+      DBF2Paradox( cARQORI)
+      RETURN
+   ENDIF   
+   cMDBARQ := OPENTIPOARQ()
+    nOLDTIPO := TIPODBF
+            alertX( "escolha origem" )
+            tipodbfesc()
+            nORITIPO   := TIPODBF
+            cORIDRIVER := RDDNOME( TIPODBF )
+            lincdados:=mdg("Incluir Dados")
+            IF MDG("Arquivo individual")
+               cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+                IF File( cARQORI )
+                   adox_impdbf(cARQORI)
+                ENDIF
+            ELSE
+               cPASTA:=SelectFolder()
+               cPASTA+="\*."+TABLEEXT 
+               //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
+               FAZERDBF( {|| adox_impdbf(cARQORI,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+            ENDIF   
+            RDDNOME( nOLDTIPO )   // retorna tipo anterior
+RETURN
+  
+
+
+
+
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+// +    Function adoximpdbf()
+// +
+// +
+// +
+// +--------------------------------------------------------------------
+// +
+// +
+// +
+FUNCTION adox_impdbf(cARQORI,lincdados)
 
    LOCAL aINDICES
    LOCAL nINDICES
@@ -208,22 +250,10 @@ FUNCTION adoximpdbf()
    LOCAL nCAMPOS
    LOCAL cCAMPO
 
-   cMDBARQ := OPENTIPOARQ()
 
    aINDICES := {}
    cTABLE   := Space( 30 )
-   mdt( "escolha origem" )
-   tipodbfesc()
-   nORITIPO   := TIPODBF
-   cORIDRIVER := RDDNOME( TIPODBF )
-   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
-   hb_FNameSplit( cARQORI, nil, @cTable, NIL )
-   cTABLE := AllTrim( cTABLE )
-   
-   IF cTIPOSQL="PARADOX"
-      DBF2Paradox( cARQORI)
-      RETURN
-   ENDIF   
+ 
 
    dbUseArea( .T., cORIDRIVER, cARQORI, cTABLE, .T., .T. )
    aSTRU := dbStruct()
@@ -250,21 +280,23 @@ FUNCTION adoximpdbf()
 
 
    dbSelectArea( cTABLE )
-   nLASTREC := RecCount()
-   nCAMPOS  := FCount()
-   zei_fort( nLASTREC,,, 0 )
-   dbGoTop()
-   WHILE !Eof()
-      zei_fort( nLASTREC,,, 1 )
-      ADOAPPEND()
-      FOR i := 1 TO nCAMPOS
-         cCAMPO := aSTRU[ i, DBS_NAME ]
-         ADOREPLACE( cCAMPO, FieldGet( i ) )
-      NEXT I
-      ADOCOMMIT()
-      dbSelectArea( cTABLE )
-      dbSkip()
-   ENDDO
+   IF lincdados
+       nLASTREC := RecCount()
+       nCAMPOS  := FCount()
+       zei_fort( nLASTREC,,, 0 )
+       dbGoTop()
+       WHILE !Eof()
+          zei_fort( nLASTREC,,, 1 )
+          ADOAPPEND()
+          FOR i := 1 TO nCAMPOS
+             cCAMPO := aSTRU[ i, DBS_NAME ]
+             ADOREPLACE( cCAMPO, FieldGet( i ) )
+          NEXT I
+          ADOCOMMIT()
+          dbSelectArea( cTABLE )
+          dbSkip()
+       ENDDO
+   ENDIF
    dbCloseArea()
    ADOCLOSE()
    ADODISCONNECT()

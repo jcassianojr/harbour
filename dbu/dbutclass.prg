@@ -286,19 +286,36 @@ Function tclass_createdatabase()
    ENDIF
 return nil
 
+FUNCTION tclass_impdbf()
+  nOLDTIPO := TIPODBF
+            alertX( "escolha origem" )
+            tipodbfesc()
+            nORITIPO   := TIPODBF
+            cORIDRIVER := RDDNOME( TIPODBF )
+            lincdados:=mdg("Incluir Dados")
+            IF MDG("Arquivo individual")
+               cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+                IF File( cARQORI )
+                   tclassimpdbf(cARQORI,lincdados)
+                ENDIF
+            ELSE
+               cPASTA:=SelectFolder()
+               cPASTA+="\*."+TABLEEXT 
+               //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
+               FAZERDBF( {|| tclassimpdbf(cCAMINHOCOMPLETO,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+            ENDIF   
+            RDDNOME( nOLDTIPO )   // retorna tipo anterior
+RETURN            
+
 
 // +--------------------------------------------------------------------
 // +    Function tclass_impdbf()
 // +    Implementação orientada a objetos (TDatabase)
 // +--------------------------------------------------------------------
-FUNCTION tclass_impdbf()
-   LOCAL aINDICES := {}, aSTRU, nLASTREC, cARQORI, cTABLE := Space(30), j, nIndexes
+FUNCTION tclassimpdbf(cARQORI,lincdados)
+   LOCAL aINDICES := {}, aSTRU, nLASTREC, cTABLE := Space(30), j, nIndexes
    LOCAL msql, i, nCont := 0
 
-   // 1. Seleção do arquivo origem
-   mdt( "Escolha o DBF de Origem" )
-   tipodbfesc()
-   cARQORI := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
 
    IF Empty( cARQORI ); RETURN .F.; ENDIF
 
@@ -332,27 +349,29 @@ FUNCTION tclass_impdbf()
    // 5. Migração dos dados com Transação
    oDb:BeginTransaction()
    
-   dbGoTop()
-   WHILE !Eof()
-      zei_fort( nLASTREC,,, 1 )
-      
-      msql := "INSERT INTO " + cTABLE + " VALUES ("
-      FOR i := 1 TO Len( aSTRU )
-         msql += c2sql( hb_FieldGet( i ) ) + iif( i < Len(aSTRU), ", ", "" )
-      NEXT
-      msql += ")"
-      
-      oDb:Execute( msql )
-      
-      nCont++
-      IF nCont % 500 == 0
-         oDb:Commit()
-         oDb:BeginTransaction()
-      ENDIF
-      
-      dbSkip()
-   ENDDO
    
+   IF lincdados
+       dbGoTop()
+       WHILE !Eof()
+          zei_fort( nLASTREC,,, 1 )
+          
+          msql := "INSERT INTO " + cTABLE + " VALUES ("
+          FOR i := 1 TO Len( aSTRU )
+             msql += c2sql( hb_FieldGet( i ) ) + iif( i < Len(aSTRU), ", ", "" )
+          NEXT
+          msql += ")"
+          
+          oDb:Execute( msql )
+          
+          nCont++
+          IF nCont % 500 == 0
+             oDb:Commit()
+             oDb:BeginTransaction()
+          ENDIF
+          
+          dbSkip()
+       ENDDO
+   ENDIF
    oDb:Commit()
    dbCloseArea()
    tclass_close()
