@@ -377,6 +377,25 @@ FUNCTION PGstrutodbf()
 
 
 
+FUNCTION dbf2pgsql()
+ nOLDTIPO := TIPODBF
+            alertX( "escolha origem" )
+            tipodbfesc()
+            nORITIPO   := TIPODBF
+            cORIDRIVER := RDDNOME( TIPODBF )
+            lincdados:=mdg("Incluir Dados")
+            IF MDG("Arquivo individual")
+               cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+                IF File( cARQORI )
+                   pgsql_dbf(cARQORI,lincdados)
+                ENDIF
+            ELSE
+               cPASTA:=SelectFolder()
+               cPASTA+="\*."+TABLEEXT 
+               //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
+               FAZERDBF( {|| pgsql_dbf(cCAMINHOCOMPLETO,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+            ENDIF   
+            RDDNOME( nOLDTIPO )   // retorna tipo anterior
 
 
 // +--------------------------------------------------------------------
@@ -391,15 +410,9 @@ FUNCTION PGstrutodbf()
 // +
 // +
 // +
-FUNCTION dbf2pgsql()
+FUNCTION pgsql_dbf(cARQORI,lincdados)
 
    cTABLE   := Space( 30 )
-   nOLDTIPO := TIPODBF
-   mdt( "escolha origem" )
-   tipodbfesc()
-   nORITIPO   := TIPODBF
-   cORIDRIVER := RDDNOME( TIPODBF )
-   cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
    IF File( cARQORI )
       hb_FNameSplit( cARQORI, nil, @cTable, NIL )
       cTABLE := AllTrim( cTABLE )
@@ -447,23 +460,26 @@ FUNCTION dbf2pgsql()
          ENDIF
       ENDIF
 
-      DO WHILE !dbffile->( Eof() )
 
-         oRecord := oTable:GetBlankRow()
+      IF lincdados
+          DO WHILE !dbffile->( Eof() )
 
-         FOR i := 1 TO dbffile->( FCount() )
-            oRecord:FieldPut( i, dbffile->( hb_FieldGet( i ) ) )
-         NEXT
+             oRecord := oTable:GetBlankRow()
 
-         oTable:Append( oRecord )
-         IF oTable:NetErr()
-            mdt( oTable:ErrorMSG() )
-         ENDIF
+             FOR i := 1 TO dbffile->( FCount() )
+                oRecord:FieldPut( i, dbffile->( hb_FieldGet( i ) ) )
+             NEXT
 
-         dbffile->( dbSkip() )
+             oTable:Append( oRecord )
+             IF oTable:NetErr()
+                mdt( oTable:ErrorMSG() )
+             ENDIF
 
-         zei_fort( nLASTREC,,, 1 )
-      ENDDO
+             dbffile->( dbSkip() )
+
+             zei_fort( nLASTREC,,, 1 )
+          ENDDO
+      ENDIF
 
       dbffile->( dbCloseArea() )
 

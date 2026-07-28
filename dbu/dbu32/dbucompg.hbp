@@ -9,6 +9,7 @@
 
 # Dependências (libs)
 -llibpq
+-lbcrypt
 
 -DUSE_SDD_POSTGRES
 -cflag=-USE_SDD_POSTGRES
@@ -35,6 +36,8 @@ hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
 sqlrddpp-postgresql.hbc
+dbfcdxex.hbc
+
 #
 #  adt adi adm ads
 #
@@ -50,6 +53,7 @@ hbsqlit3.hbc
 hbpgsql.hbc
 hbodbc.hbc
 rddado.hbc
+adoxb.hbc
 
 #
 # sqlmix
@@ -86,11 +90,12 @@ letodb.hbc
 # exportacao formatos
 #
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
+\develop\harbourPRIV\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbudoc.prg  
 \develop\harbour\dbu\dbuxml.prg
 \develop\harbour\dbu\dbuxlsxml.prg
-\develop\harbour\dbu\dbu2md.prg
+\develop\harbour\dbu\dbumddbml.prg
+\develop\harbour\dbu\dbucrypto.prg
 
 #
 # paradox
@@ -127,7 +132,7 @@ letodb.hbc
 #
 #       ---    adox
 #
-\develop\harbour\dbu\adoxb.prg   
+#\develop\harbour\dbu\adoxb.prg   
 \develop\harbour\dbu\dbuadox.prg 
 #
 #       ---   leto
