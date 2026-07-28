@@ -2218,10 +2218,11 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
 *+--------------------------------------------------------------------
 *+
 
-function mdltodos()
-LOCAL cPASTA
-cPASTA:=SelectFolder()
+function mdltodos(cPASTA)
 
+IF EMPTY(CPASTA)
+  cPASTA:=SelectFolder()
+ENDIF
 /* aqui e dbf para md dbml porem geradbml suporta mdb accdb sqlite
 IF ! EMPTY(cPASTA)
    DO CASE
@@ -2245,9 +2246,10 @@ RETURN .T.
 *+--------------------------------------------------------------------
 *+
 
-function sqltodos(cTIPOSQL)
-LOCAL cPASTA
-cPASTA:=SelectFolder()
+function sqltodos(cTIPOSQL,cPASTA)
+IF EMPTY(CPASTA)
+   cPASTA:=SelectFolder()
+ENDIF   
 IF ! EMPTY(cPASTA)
    cPASTA+="\*."+TABLEEXT
 ENDIF

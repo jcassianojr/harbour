@@ -673,15 +673,16 @@ do while .T.
       case M->func_sel = 11
          copiardbfpara(2)   //append formatos para dbf
       case M->func_sel = 12
-          mdltodos()
-          Sqltodos("SQLITE")
-          Sqltodos("MSSQL")
-          Sqltodos("MYSQL")
-          Sqltodos("POSTGRESQL")
-          Sqltodos("ACCESS")
-          Sqltodos("ORACLE")
-          sqltodos("FIREBIRD")
-          sqltodos("DUCKDB")
+          cPASTA:=SelectFolder()
+          mdltodos(cPASTA)
+          Sqltodos("SQLITE",cPASTA)
+          Sqltodos("MSSQL",cPASTA)
+          Sqltodos("MYSQL",cPASTA)
+          Sqltodos("POSTGRESQL",cPASTA)
+          Sqltodos("ACCESS",cPASTA)
+          Sqltodos("ORACLE",cPASTA)
+          sqltodos("FIREBIRD",cPASTA)
+          sqltodos("DUCKDB",cPASTA)
           //sqltodos("PARADOX") //nao implemntado odbc nao gerando
       
       case M->func_sel = 13

@@ -1221,8 +1221,8 @@ FUNCTION SqliteCreateTable( cTablename, aStruct, cTIPOSQL, lINDEX ,lPK,lINCSR)
             mSql += "VARCHAR(" + LTrim( Str( mFldLen ) ) + ")"  
          // Exemplo de como fica a sua função adaptada
         CASE mFldType = "C" .AND. cTIPOSQL == "DUCKDB"
-            IF nFieldLength > 0
-                mSql += "VARCHAR(" + LTrim(Str(nFieldLength)) + ")" // O DuckDB aceita e otimiza
+            IF mFldLen > 0
+                mSql += "VARCHAR(" + LTrim(Str(mFldLen)) + ")" // O DuckDB aceita e otimiza
             ELSE
             mSql += "VARCHAR"
         ENDIF    
