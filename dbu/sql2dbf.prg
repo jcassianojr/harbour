@@ -89,12 +89,19 @@ FUNCTION sqlitemenu()
             tipodbfesc()
             nORITIPO   := TIPODBF
             cORIDRIVER := RDDNOME( TIPODBF )
-            cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
-            IF File( cARQORI )
-               lincdados:=mdg("Incluir Dados")
-               export2sql( odb, cARQORI,lincdados )
-               RDDNOME( nOLDTIPO )   // retorna tipo anterior
-            ENDIF
+            lincdados:=mdg("Incluir Dados")
+            IF MDG("Arquivo individual")
+               cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
+                IF File( cARQORI )
+                   export2sql( odb, cARQORI,lincdados )
+                ENDIF
+            ELSE
+               cPASTA:=SelectFolder()
+               cPASTA+="\*."+TABLEEXT 
+               //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
+               FAZERDBF( {|| export2sql( odb, cCAMINHOCOMPLETO ,lincdados ) }, .F. ,     ,     ,cPASTA,.F.)
+            ENDIF   
+            RDDNOME( nOLDTIPO )   // retorna tipo anterior
          ENDIF
       CASE KEY = 4
          IF selectdb()
@@ -686,7 +693,7 @@ FUNCTION createSqlitedb
    ENDIF
 
    if mdg("Implantar configuracao de performace")
-      optimize_sqlite( db )
+      optimize_sqlite( odb )
    endif
 
 
@@ -905,7 +912,7 @@ FUNCTION export2sql( odb, cDBFFILE, lincdados )
    endif
 
 
-   cTablename := TIRAEXT( cDBFFILE )
+   cTablename := HB_FNAMENAME(cDBFFILE) //TIRAEXT( cDBFFILE )
 
 
   //cria as tabelas metadados tabela e indice
@@ -917,7 +924,7 @@ FUNCTION export2sql( odb, cDBFFILE, lincdados )
   ENDIF   
 
   IF ! Empty( cSqlIndexes )
-     miscsql( oDB,ccSqlIndexes )
+     miscsql( oDB,cSqlIndexes )
   ENDIF 
 
 
@@ -946,7 +953,7 @@ FUNCTION export2sql( odb, cDBFFILE, lincdados )
   miscsql( oDB, "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTablename) )
 
   //abre o dbf para importacao
-  dbUseArea( .T., ( cORIDRIVER ), ( cARQORI ), , .T. , .F. )  
+  dbUseArea( .T., ( cORIDRIVER ), ( cDBFFILE ), , .T. , .F. )   //cARQORI
   aStruct := dbStruct()
 
   //Grava metadata do dbf
