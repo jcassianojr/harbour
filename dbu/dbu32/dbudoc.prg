@@ -174,7 +174,7 @@ FUNCTION PegcsUB( tDOC )
 FUNCTION multidocs
 
    PARA tDOC, cMASK           // Passara outra funcao manter aqui para ficar como private
-   LOCAL cPASTA               // se passar uma pasta incluir o filtro como exemplo multidocs(4, cPASTA+"\*."+TABLEEXT)  //4- dbe
+   LOCAL cPASTA
 
    IF ValType( cMASK ) # "C"
       cMASK := "*."+TABLEEXT
@@ -198,7 +198,6 @@ FUNCTION multidocs
    lDOCRECNO := .F.
    cSUBTIPO := " "
    PegcsUB( tDOC )  // pegar o subtipo conforme tipo
-   altd()
    DO CASE 
       CASE cSUBTIPO = "XLSXLM"                 //xlsxlm 
            FAZERDBF( {|| Fazerxlsxlm() }, .F.,,, cMASK )

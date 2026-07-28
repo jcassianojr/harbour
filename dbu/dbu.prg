@@ -684,6 +684,9 @@ do while .T.
           sqltodos("FIREBIRD",cPASTA)
           sqltodos("DUCKDB",cPASTA)
           //sqltodos("PARADOX") //nao implemntado odbc nao gerando
+          //alert("multi")
+          multidocs(4, cPASTA+"\*."+TABLEEXT)  //4- dbe
+      
       
       case M->func_sel = 13
       case M->func_sel = 14
