@@ -13,6 +13,8 @@
 # Dependências (libs)
 #-llibmysql
 -llibpq
+-lbcrypt
+
 
 -DUSE_SDD_POSTGRES
 -cflag=-USE_SDD_POSTGRES
@@ -33,6 +35,9 @@ gtwvg.hbc
 rddads.hbc
 rddbm.hbc
 sqlrddpp-postgresql.hbc
+adoxb.hbc
+rddado.hbc
+dbfcdxex.hbc
 
 hbsqlit3.hbc
 #usando prg no lugar da lib abaixo
@@ -76,7 +81,7 @@ letodb.hbc
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
+\develop\harbourPRIV\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbuxlsxml.prg
 \develop\harbour\dbu\dbUparadox.prg
 #
@@ -87,7 +92,7 @@ letodb.hbc
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
 \develop\harbour\dbu\mdb2dbf.prg 
-\develop\harbour\dbu\adordd.prg
+#\develop\harbour\dbu\adordd.prg
 #
 # mysql libmysql
 #
@@ -99,15 +104,18 @@ letodb.hbc
 #
 \develop\harbour\dbu\dbupg.prg
 \develop\harbour\dbu\dbupgexp 
-\develop\harbour\dbu\pgrdd.prg
+\develop\harbourPRIV\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
 \develop\harbour\dbu\dbuodbc.prg
 #
-\develop\harbour\dbu\adoxb.prg
+#\develop\harbour\dbu\adoxb.prg
 \develop\harbour\dbu\dbuadox.prg 
-\develop\harbour\dbu\dbu2md.prg
+\develop\harbour\dbu\dbumddbml.prg
+\develop\harbour\dbu\dbucrypto.prg
+
+#\develop\harbour\dbu\dbu2md.prg
 #
 #
 \develop\harbour\dbu\dbuleto.prg 

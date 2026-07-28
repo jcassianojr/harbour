@@ -15,10 +15,10 @@
 -llibmysql
 -llibpq
 -lfbclient
+-lbcrypt
 
 -DUSE_SDD_MYSQL
 -cflag=-DUSE_SDD_MYSQL
-
 -DUSE_SR_MYSQL
 -cflag=-DUSE_SR_MYSQL
 
@@ -29,19 +29,19 @@
 -cflag=-USE_SR_POSTGRES
 
 
-# NAO definindo aqui porem esta com problemas 64 bits 
+# nao definindo aqui porem esta com problemas 64 bits abortando 
 #-DUSE_USE_SDD_FIREBIRD
 #-cflag=-USE_SDD_FIREBIRD
-
 -DUSE_USE_SR_FIREBIRD
 -cflag=-USE_SR_FIREBIRD
 
 
 # oracle implantacao futura comentado aqui para nao chamar
-#-DUSE_USE_SDD_ORACLE
-#-cflag=-USE_SDD_USE_ORACLE
-#-DUSE_USE_SR_ORACLE
-#-cflag=-USE_SR_USE_ORACLE
+#-DUSE_SDD_ORACLE
+#-cflag=-USE_SDD_ORACLE
+#-DUSE_SR_ORACLE
+#-cflag=-USE_SR_ORACLE
+
 
 -gtwvg
 -gui
@@ -61,6 +61,8 @@ hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
 sqlrddpp.hbc
+dbfcdxex.hbc
+adoxb.hbc
 
 #
 #ads
@@ -71,8 +73,7 @@ rddads.hbc
 #
 rddbm.hbc
 
-#teste com direto abaixo
-#rddado.hbc
+rddado.hbc
 #
 #nativas sqlite,libmysql,libpg,odbc
 #
@@ -95,6 +96,8 @@ hbfbird.hbc
 
 Tdbclass.hbc
 
+sqlrddpp.hbc
+
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
 \develop\harbour\dbu\dbuxml.prg
@@ -109,13 +112,16 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbuver.prg
 \develop\harbour\dbu\dbuview.prg
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
+\develop\harbourPRIV\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
-\develop\harbour\dbu\dbu2md.prg
+#\develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
+\develop\harbour\dbu\dbumddbml.prg
+\develop\harbour\dbu\dbucrypto.prg
+
 
 #
 # sqlite
@@ -124,32 +130,35 @@ Tdbclass.hbc
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-\develop\harbour\dbu\adordd.prg
 \develop\harbour\dbu\mdb2dbf.prg
 #
 # mysql libmysql
 #
 \develop\harbour\dbu\dbumy.prg  
 \develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+\develop\harbourpriv\dbu\mysqlrdd.prg 
 #
 # postgresql libpg
 #
 \develop\harbour\dbu\dbupg.prg
 \develop\harbour\dbu\dbupgexp.prg
-\develop\harbour\dbu\pgrdd.prg
+\develop\harbourpriv\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
 #
 \develop\harbour\dbu\dbuodbc.prg 
 #
-\develop\harbour\dbu\adoxb.prg   
+#\develop\harbour\dbu\adoxb.prg   
 \develop\harbour\dbu\dbuadox.prg 
 #
 \develop\harbour\dbu\dbuleto.prg 
 #
 c:\develop\harbour\dbu\dbutclass.prg
+
+
+c:\develop\harbour\dbu\dumyOCI.prg
+c:\develop\harbour\dbu\dbusqlrdd.prg
 
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  
@@ -175,10 +184,6 @@ c:\develop\harbour\dbu\dbutclass.prg
 \develop\harbour\objmgw\adoerror.prg
 \develop\harbour\objmgw\modeseguranca.prg
 \develop\harbour\objmgw\escolherpasta.prg
-
-
-\develop\harbour\dbu\dumysd.prg
-c:\develop\harbour\dbu\dumyOCI.prg
 
 # necessarias se compilar com tclass nao usando tclass.hbc
 #c:\develop\harbour\dbu\tclass\Tdbclass.prg

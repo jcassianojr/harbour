@@ -13,6 +13,7 @@
 # Dependências (libs)
 #-llibmysql
 #-lpq
+-lbcrypt
 
 # flasgs compilacao
 -gtwvg
@@ -30,6 +31,9 @@ xhb.hbc
 gtwvg.hbc
 hbmemio.hbc
 hbziparc.hbc
+adoxb.hbc
+rddado.hbc
+dbfcdxex.hbc
 
 #
 #      --- ads adt adi adm
@@ -117,10 +121,12 @@ letodb.hbc
 #      --- exportacao
 #
 \develop\harbour\dbu\dbuxml.prg
-\develop\harbour\dbu\dbu2md.prg
+#\develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
+\develop\harbourpriv\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbuxlsxml.prg
+\develop\harbour\dbu\dbumddbml.prg
+\develop\harbour\dbu\dbucrypto.prg
 
 #
 #      --- paradox ODBC extend
@@ -136,7 +142,7 @@ letodb.hbc
 #      ---    ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
 \develop\harbour\dbu\mdb2dbf.prg 
-\develop\harbour\dbu\adordd.prg
+#\develop\harbour\dbu\adordd.prg
 
 #
 #      ---    mysql libmysql
@@ -157,7 +163,7 @@ letodb.hbc
 #
 #      --- ADOX ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-\develop\harbour\dbu\adoxb.prg
+#\develop\harbour\dbu\adoxb.prg
 \develop\harbour\dbu\dbuadox.prg 
 #
 #      --- LETO

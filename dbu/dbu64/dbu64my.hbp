@@ -13,6 +13,7 @@
 # Dependências (libs)
 -llibmysql
 #-llibpq
+-lbcrypt
 
 -DUSE_SDD_MYSQL
 -cflag=-DUSE_SDD_MYSQL
@@ -38,6 +39,10 @@ hbmemio.hbc
 hbziparc.hbc
 rddado.hbc
 sqlrddpp-mysql.hbc
+dbfcdxex.hbc
+rddado.hbc
+adoxb.hbc
+
 
 #
 #      --- ads adt adi adm
@@ -125,10 +130,12 @@ letodb.hbc
 #      --- exportacao
 #
 \develop\harbour\dbu\dbuxml.prg
-\develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
+\develop\harbourPRIV\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbuxlsxml.prg
+\develop\harbour\dbu\dbumddbml.prg
+\develop\harbour\dbu\dbucrypto.prg
+
 
 #
 #      --- paradox ODBC extend
@@ -151,7 +158,7 @@ letodb.hbc
 #
 \develop\harbour\dbu\dbumy.prg  
 \develop\harbour\dbu\dbumyexp.prg 
-\develop\harbour\dbu\mysqlrdd.prg 
+\develop\harbourPRIV\dbu\mysqlrdd.prg 
 
 #
 #      ---    dbumix
@@ -165,7 +172,7 @@ letodb.hbc
 #
 #      --- ADOX ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-\develop\harbour\dbu\adoxb.prg
+#\develop\harbour\dbu\adoxb.prg
 \develop\harbour\dbu\dbuadox.prg 
 #
 #      --- LETO
