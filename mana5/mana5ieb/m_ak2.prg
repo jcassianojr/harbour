@@ -29,7 +29,7 @@
 // :
 // :   M_AK2 .PRG  : Entrada de Notas Fiscais e Despesas (NFCompras) - ITENS
 // :   Linguagem   : harbour
-// :        Sistema: Mana5 - ITAESBRA
+// :        Sistema: Mana5 - empresa
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.
 // :

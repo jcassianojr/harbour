@@ -29,7 +29,7 @@
 // :
 // :     M_DC2.PRG : Imprimir etiquetas para lote de pe‡as
 // :     Linguagem : harbour
-// :        Sistema: Mana5 - ITAESBRA
+// :        Sistema: Mana5 - empresa
 // :      Copyright (c) 1996, Disk Soft S/C Ltda.
 // :
 // :*****************************************************************************
@@ -72,10 +72,10 @@ ENDIF
 @ PRow(), 33    SAY 'Qtde : ' + Str( QTDE, 5 )
 @ PRow(), 66    SAY 'Qtde : ' + Str( QTDE, 5 )
 @ PRow(), 99    SAY 'Qtde : ' + Str( QTDE, 5 )
-@ PRow() + 2, 00 SAY 'Itaesbra Ind.Mecanica Ltda'
-@ PRow(), 33    SAY 'Itaesbra Ind.Mecanica Ltda'
-@ PRow(), 66    SAY 'Itaesbra Ind.Mecanica Ltda'
-@ PRow(), 99    SAY 'Itaesbra Ind.Mecanica Ltda'
+@ PRow() + 2, 00 SAY 'empresa Ind.Mecanica Ltda'
+@ PRow(), 33    SAY 'empresa Ind.Mecanica Ltda'
+@ PRow(), 66    SAY 'empresa Ind.Mecanica Ltda'
+@ PRow(), 99    SAY 'empresa Ind.Mecanica Ltda'
 @ PRow() + 4, 00 SAY ""
 NEXT X
 VIDEO()

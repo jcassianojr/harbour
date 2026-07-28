@@ -27,7 +27,7 @@
 
 // +께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께
 // +
-// +    Source Module => J:\ITAESBRA\M_BY4.PRG
+// +    Source Module => J:\empresa\M_BY4.PRG
 // +
 // +    Reformatted by Click! 2.03 on May-7-2001 at  2:17 pm
 // +

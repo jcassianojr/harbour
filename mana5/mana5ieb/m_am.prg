@@ -29,7 +29,7 @@
 // :
 // :      M_AM .PRG: Notas Fiscais de Vendas
 // :      Linguagem: harbour
-// :        Sistema: ITAESBRA
+// :        Sistema: empresa
 // :      Copyright (c) 1999, jcassiano Sistemas
 // :
 // :*****************************************************************************

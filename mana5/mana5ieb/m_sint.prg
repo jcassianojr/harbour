@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_SINT.PRG
+// +    Source Module => J:\empresa\M_SINT.PRG
 // +
 // +    Functions: Function M_BM701()
 // +

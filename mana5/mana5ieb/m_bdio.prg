@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BDIO.PRG
+// +    Source Module => J:\empresa\M_BDIO.PRG
 // +
 // +    Functions: Function M_BDIO01()
 // +

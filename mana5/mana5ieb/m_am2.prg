@@ -29,7 +29,7 @@
 // :
 // :   M_AM2 .PRG  : Saidas de Notas Fiscais
 // :   Linguagem   : harbour
-// :        Sistema: Mana5  - ITAESBRA
+// :        Sistema: Mana5  - empresa
 // :      Copyright (c) 1999
 //
 // :*****************************************************************************

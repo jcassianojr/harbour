@@ -27,7 +27,7 @@
 
 MDI( "Gerar Remessa Combran‡a" )
 cContrato  := Space( 12 )
-cEMP       := PadR( "ITAESBRA", 30 )
+cEMP       := PadR( "empresa", 30 )
 cSUB       := "I"
 cIN1       := "10"
 cIN2       := "38"

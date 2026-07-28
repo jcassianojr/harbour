@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BO7.PRG
+// +    Source Module => J:\empresa\M_BO7.PRG
 // +
 // +    Reformatted by Click! 2.03 on May-7-2001 at  2:17 pm
 // +
@@ -70,7 +70,7 @@ FUNCTION m_bo7
    IF nTIPO = 1
       mCAMINHO := ProfileString( "MANA5.INI", "PATH", "DESADVGM", hb_cwd() + "\EDIWISE\MANA5\" )  // "p:\novell\EDIWISE\MANA5\"
    ELSE
-      mCAMINHO := ProfileString( "MANA5.INI", "PATH", "DESADVELE", hb_cwd() + "\ARQUIVO\" )   // "p:\novell\ITAESBRA\ARQUIVO\"
+      mCAMINHO := ProfileString( "MANA5.INI", "PATH", "DESADVELE", hb_cwd() + "\ARQUIVO\" )   // "p:\novell\empresa\ARQUIVO\"
    ENDIF
    mREPOR  := "N"
    mGERAAE := " "

@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_AOCRM.PRG
+// +    Source Module => J:\empresa\M_AOCRM.PRG
 // +
 // +    Reformatted by Click! 2.03 on Jul-5-2002 at  2:16 pm
 // +

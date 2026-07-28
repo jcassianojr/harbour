@@ -29,7 +29,7 @@
 // :
 // :      M_A71.PRG: Faturar Pedidos em Carteira ** Faturamento Conforme OS
 // :      Linguagem: harbour
-// :        Sistema: ITAESBRA (Mana5)
+// :        Sistema: empresa (Mana5)
 // :      Copyright (C) 1997 by Disk Softwares S/C Ltda.
 // :     Atualizado: 20/10/1997
 // :
@@ -445,7 +445,7 @@ ENDIF
 ARQWORK1 := "MM01"
 ARQWORK2 := "MM02"
 mDATA    := mDIAFAT
-M_A7I( xNUMERO, .F., .T. )  // LAYOUT DA NOTA FISCAL DE VENDAS ITAESBRA
+M_A7I( xNUMERO, .F., .T. )  // LAYOUT DA NOTA FISCAL DE VENDAS empresa
 
 
 // Gravar Contas

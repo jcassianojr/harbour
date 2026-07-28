@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BY1.PRG
+// +    Source Module => J:\empresa\M_BY1.PRG
 // +
 // +    Functions: Function MBY1FIL()
 // +               Function MBY101()
@@ -371,8 +371,8 @@ FUNC MBY1FIL()
          Y := 99
       ENDIF
       MDS( "Aguarde Checando Nomes Empresa " + Str( Y, 2 ) )
-      IF !USECHK( "p:\novell\itaesbra\emp000" + StrZero( Y, 2 ) + "\mp04.dbf", ;
-            "p:\novell\itaesbra\emp000" + StrZero( Y, 2 ) + "\mp04.cdx", .T., "DBFCDX", .T. )
+      IF !USECHK( "p:\novell\empresa\emp000" + StrZero( Y, 2 ) + "\mp04.dbf", ;
+            "p:\novell\empresa\emp000" + StrZero( Y, 2 ) + "\mp04.cdx", .T., "DBFCDX", .T. )
          LOOP
       ENDIF
       IF !USEREDE( "RDF", 1, 99 )

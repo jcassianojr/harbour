@@ -2308,5 +2308,100 @@ FUNCTION DIALETO_DetectTargetDb(cTargetDB)
 RETURN cSystemID
 
 
+FUNCTION DIALETO_Estrutura(cTargetDB,cTABELA,cUsuario)
+LOCAL cCOMANDO
+LOCAL cSchema
+LOCAL cSchemaSQL
+LOCAL cUserOracle
+cCOMANDO:=""
+cSchema:=""
+cSchemaSQL:=""
+cUserOracle:=""
+
+
+DO CASE
+   CASE cTargerdb="INFORMIX"   
+      cCOMANDO := "select t.tabname,c.colname AS FIELD_NAME,c.coltype AS FIELD_NAME,c.collength AS FIELD_LEN,c.colno " + ;
+            "from systables t,syscolumns c " + ;
+            "where t.tabid > 0 " + ;
+            "and t.tabid = c.tabid " + ;
+            "order by 1,5 " 
+  
+   CASE cTargerdb == "SQLITE" 
+      // PRAGMA table_info retorna: cid, name, type, notnull, dflt_value, pk
+      // Como o SQLite não aceita aliases em PRAGMAs diretamente, a sua camada de dados
+      // deverá ler os campos nativos do pragma ("name", "type") ou usamos uma query vazia de metadados:
+      cCOMANDO := "SELECT name AS FIELD_NAME, type AS DATA_TYPE, 0 AS FIELD_LEN, 0 AS FIELD_DEC FROM pragma_table_info('" + cTabela + "');"
+
+   CASE cTargerdb == "MYSQL" .OR. cTargerdb == "MYSQL64" .OR. cTargerdb == "MARIADB"
+      // Em vez de SHOW COLUMNS (que gera colunas dinâmicas), usamos a information_schema para fixar os aliases
+      if Empty( cUsuario )
+         cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                     "COALESCE(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
+                     "COALESCE(NUMERIC_SCALE, 0) AS FIELD_DEC " + ;
+                     "FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = DATABASE() ORDER BY ORDINAL_POSITION;"
+      else
+         cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                     "COALESCE(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
+                     "COALESCE(NUMERIC_SCALE, 0) AS FIELD_DEC " + ;
+                     "FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = '" + cUsuario + "' ORDER BY ORDINAL_POSITION;"
+      endif
+
+   CASE cTargerdb == "PGSQL" .OR. cTargerdb == "PGSQL64" .OR. cTargerdb == "POSTGRESQL"
+      // PostgreSQL diferencia maiúsculas de minúsculas. Geralmente tabelas ficam em minúsculo no Postgres.
+      // udt_name ou data_type mapeados perfeitamente
+       //nome tabela em maiusculo postgresql e case sensitive
+      //udt_name melhor retorno mas tambem tras data_type caso necesario
+      //where table_schema='public'  tras todas as tabelas do usurio(public)
+   
+      
+      cSchema := iif( Empty(cUsuario), "public", cUsuario )
+      cCOMANDO := "SELECT column_name AS FIELD_NAME, udt_name AS DATA_TYPE, " + ;
+                  "COALESCE(character_maximum_length, numeric_precision) AS FIELD_LEN, " + ;
+                  "COALESCE(numeric_scale, 0) AS FIELD_DEC " + ;
+                  "FROM information_schema.columns " + ;
+                  "WHERE LOWER(table_name) = '" + Lower(cTabela) + "' AND table_schema = '" + cSchema + "' " + ;
+                  "ORDER BY ordinal_position;"
+
+   CASE cTargerdb == "MSSQL" .OR. cTargerdb == "SQLSERVER"
+      cSchemaSQL := iif( Empty(cUsuario), "dbo", cUsuario )
+      cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                  "ISNULL(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION) AS FIELD_LEN, " + ;
+                  "ISNULL(NUMERIC_SCALE, 0) AS FIELD_DEC " + ;
+                  "FROM INFORMATION_SCHEMA.COLUMNS " + ;
+                  "WHERE TABLE_NAME = '" + cTabela + "' AND TABLE_SCHEMA = '" + cSchemaSQL + "' " + ;
+                  "ORDER BY ORDINAL_POSITION;"
+  CASE cTargerdb == "DUCKDB"
+     cSchemaSQL := iif( Empty(cUsuario), "main", Lower(cUsuario) )
+     cCOMANDO := "SELECT column_name AS FIELD_NAME, data_type AS DATA_TYPE, " + ;
+                 "column_size AS FIELD_LEN, decimal_digits AS FIELD_DEC " + ;
+                 "FROM duckdb_columns " + ;
+                 "WHERE table_name = '" + cTabela + "' AND schema_name = '" + cSchemaSQL + "' " + ;
+                 "ORDER BY column_index;"
+   CASE cTargerdb == "ORACLE" .OR. cTargerdb == "OCI"
+      cUserOracle := iif( Empty(cUsuario), "USER_TAB_COLUMNS", "ALL_TAB_COLUMNS" )
+      cCOMANDO := "SELECT COLUMN_NAME AS FIELD_NAME, DATA_TYPE AS DATA_TYPE, " + ;
+                  "DATA_LENGTH AS FIELD_LEN, COALESCE(DATA_SCALE, 0) AS FIELD_DEC " + ;
+                  "FROM " + cUserOracle + " WHERE TABLE_NAME = '" + Upper(cTabela) + "' " + ;
+                  iif( !Empty(cUsuario), "AND OWNER = '" + Upper(cUsuario) + "' ", "" ) + ;
+                  "ORDER BY COLUMN_ID;"
+
+   CASE cTargerdb == "FIREBIRD"
+      // O Firebird exige um JOIN complexo no catálogo do sistema para extrair os tipos amigáveis
+      cCOMANDO := "SELECT TRIM(F.RDB$FIELD_NAME) AS FIELD_NAME, " + ;
+                  "CASE T.RDB$FIELD_TYPE " + ;
+                  "  WHEN 7 THEN 'SMALLINT' WHEN 8 THEN 'INTEGER' WHEN 16 THEN 'BIGINT' " + ;
+                  "  WHEN 10 THEN 'FLOAT' WHEN 27 THEN 'DOUBLE PRECISION' " + ;
+                  "  WHEN 14 THEN 'CHAR' WHEN 37 THEN 'VARCHAR' WHEN 40 THEN 'CSTRING' " + ;
+                  "  WHEN 12 THEN 'DATE' WHEN 13 THEN 'TIME' WHEN 35 THEN 'TIMESTAMP' " + ;
+                  "  WHEN 261 THEN 'BLOB' END AS DATA_TYPE, " + ;
+                  "T.RDB$FIELD_LENGTH AS FIELD_LEN, COALESCE(T.RDB$FIELD_SCALE, 0) * -1 AS FIELD_DEC " + ;
+                  "FROM RDB$RELATION_FIELDS F " + ;
+                  "JOIN RDB$FIELDS T ON F.RDB$FIELD_SOURCE = T.RDB$FIELD_NAME " + ;
+                  "WHERE F.RDB$RELATION_NAME = '" + Upper(cTabela) + "' " + ;
+                  "ORDER BY F.RDB$FIELD_POSITION;"
+ENDCASE
+RETURN cCOMANDO
+
 // + EOF: dbudialeto.prg
 // +

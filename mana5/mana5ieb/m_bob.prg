@@ -27,7 +27,7 @@
 
 // +께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께
 // +
-// +    Source Module => J:\ITAESBRA\M_BOB.PRG
+// +    Source Module => J:\empresa\M_BOB.PRG
 // +
 // +    Functions: Function MBOB01()
 // +

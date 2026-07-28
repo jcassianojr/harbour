@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BFOR.PRG
+// +    Source Module => J:\empresa\M_BFOR.PRG
 // +
 // +    Reformatted by Click! 2.03 on Jun-10-2002 at  3:07 pm
 // +

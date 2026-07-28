@@ -27,7 +27,7 @@
 
 // +께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께
 // +
-// +    Source Module => J:\ITAESBRA\M_AYCRM.PRG
+// +    Source Module => J:\empresa\M_AYCRM.PRG
 // +
 // +    Reformatted by Click! 2.03 on Jul-2-2002 at  5:10 pm
 // +

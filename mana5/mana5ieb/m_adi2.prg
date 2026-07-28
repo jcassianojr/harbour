@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_ADI2.PRG
+// +    Source Module => J:\empresa\M_ADI2.PRG
 // +
 // +    Functions: Function fMADX()
 // +               Function tMADX()

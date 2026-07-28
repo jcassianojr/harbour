@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BM6A.PRG
+// +    Source Module => J:\empresa\M_BM6A.PRG
 // +
 // +    Functions: Function MBM6AB()
 // +               Function COMPRAS()

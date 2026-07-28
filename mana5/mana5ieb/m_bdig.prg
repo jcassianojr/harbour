@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BDIG.PRG
+// +    Source Module => J:\empresa\M_BDIG.PRG
 // +
 // +    Functions: Function MBDG01()
 // +               Function MBDG02()

@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => C:\DEVELOP\CLIPPER\MANA5\ITAESBRA\M_BO2.PRG
+// +    Source Module => C:\DEVELOP\CLIPPER\MANA5\empresa\M_BO2.PRG
 // +
 // +    Reformatted by Click! 2.03 on Nov-23-2004 at 12:13 pm
 // +

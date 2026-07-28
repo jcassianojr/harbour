@@ -29,7 +29,7 @@
 // :
 // :       M_AS.PRG: Cadastro de Produtos
 // :      Linguagem: harbour
-// :        Sistema: Mana5 - ITAESBRA
+// :        Sistema: Mana5 - empresa
 // :      Copyright (c) 1994 by Disk Softwares S/C Ltda.
 // :
 // :*****************************************************************************

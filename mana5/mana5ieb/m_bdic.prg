@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BDIC.PRG
+// +    Source Module => J:\empresa\M_BDIC.PRG
 // +
 // +    Reformatted by Click! 2.03 on May-7-2001 at  2:15 pm
 // +

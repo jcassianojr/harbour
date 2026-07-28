@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BDIK.PRG
+// +    Source Module => J:\empresa\M_BDIK.PRG
 // +
 // +    Functions: Function MBDIK02()
 // +

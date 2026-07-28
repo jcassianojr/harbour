@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BY3.PRG
+// +    Source Module => J:\empresa\M_BY3.PRG
 // +
 // +    Functions: Function MBY301()
 // +

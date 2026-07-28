@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BS7.PRG
+// +    Source Module => J:\empresa\M_BS7.PRG
 // +
 // +    Functions: Function MBS0701()
 // +               Function MBS0702()

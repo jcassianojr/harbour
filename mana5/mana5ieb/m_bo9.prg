@@ -27,7 +27,7 @@
 
 // +께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께
 // +
-// +    Source Module => J:\ITAESBRA\M_BO9.PRG
+// +    Source Module => J:\empresa\M_BO9.PRG
 // +
 // +    Functions: Function MBO901()
 // +

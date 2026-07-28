@@ -29,7 +29,7 @@
 // :
 // :      MMENU.PRG: Menu Principal do Manager
 // :      Linguagem: harbour
-// :        Sistema: MANA5 - ITAESBRA
+// :        Sistema: MANA5 - empresa
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.
 // :  Atualizado em: 05/05/94     10:41
 // :

@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BM4.PRG
+// +    Source Module => J:\empresa\M_BM4.PRG
 // +
 // +    Reformatted by Click! 2.03 on May-7-2001 at  2:16 pm
 // +
@@ -82,7 +82,7 @@ FUNCTION M_bm4
    IMPRESSORA()
 
    TOT1 := TOT2 := TOT3 := 0.00
-   @ PRow(), 1    SAY "ITAESBRA INDUSTRA MECANICA LTDA."
+   @ PRow(), 1    SAY "empresa INDUSTRA MECANICA LTDA."
    @ PRow() + 1, 23 SAY cCABREF
    @ PRow() + 1, 0  SAY repl( '-', 78 )
    @ PRow() + 1, 0  SAY 'N.Fis'

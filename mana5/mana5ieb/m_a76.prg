@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_A76.PRG
+// +    Source Module => J:\empresa\M_A76.PRG
 // +
 // +    Functions: Function MAMGRVREM()
 // +               Function GRVREMESSA()

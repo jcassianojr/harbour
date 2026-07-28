@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_A2.PRG
+// +    Source Module => J:\empresa\M_A2.PRG
 // +
 // +    Functions: Function MA26()
 // +               Function Ma2lanhor()

@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_AO.PRG
+// +    Source Module => J:\empresa\M_AO.PRG
 // +
 // +    Functions: Function fMAO()
 // +               Function tMAO()

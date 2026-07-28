@@ -29,7 +29,7 @@
 // :
 // :   M_AN1.PRG   : Contas a Receber
 // :   Linguagem   : harbour
-// :        Sistema: ITAESBRA
+// :        Sistema: empresa
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.
 // :
 // :*****************************************************************************

@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_SINTG.PRG
+// +    Source Module => J:\empresa\M_SINTG.PRG
 // +
 // +    Functions: Function SINTG01()
 // +

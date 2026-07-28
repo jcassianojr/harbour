@@ -107,8 +107,8 @@ ENDIF
 
 IMPRESSORA()
 FOR Z := 1 TO nCOPIA
-@ PRow() + 1, 0 SAY PadR( ACENTO( "ITAESBRA  Ind£stria Mecƒnica Ltda." ), 80 )
-@ PRow(), 0   SAY PadR( ACENTO( "ITAESBRA  Ind£stria Mecƒnica Ltda." ), 80 )
+@ PRow() + 1, 0 SAY PadR( ACENTO( "empresa  Ind£stria Mecƒnica Ltda." ), 80 )
+@ PRow(), 0   SAY PadR( ACENTO( "empresa  Ind£stria Mecƒnica Ltda." ), 80 )
 @ PRow() + 1, 0 SAY ACENTO( "-----------------------------------------------------------------------------" )
 @ PRow() + 1, 0 SAY ACENTO( "C.G.C. 61.381.323/0001-67   Inscricao 103.689.678.113" )
 @ PRow() + 1, 0 SAY ACENTO( cENDERECO )
@@ -148,7 +148,7 @@ NEXT X
 @ PRow() + 1, 0 SAY ACENTO( "    Declaramos, a quem possa - interessar, que os valores referentes aos" )
 @ PRow() + 1, 0 SAY ACENTO( "Impostos (IPI e ICM) foram lan‡ados em nossos livros fiscais obedecendo as" )
 @ PRow() + 1, 0 SAY ACENTO( "corre‡”es Mencionadas." )
-@ PRow() + 2, 0 SAY ACENTO( "Atenciosamente        ITAESBRA IND—STRIA MECANICA LTDA" )
+@ PRow() + 2, 0 SAY ACENTO( "Atenciosamente        empresa IND—STRIA MECANICA LTDA" )
 @ PRow() + 2, 0 SAY ACENTO( "                      ________________________________" )
 @ PRow() + 1, 0 SAY ACENTO( "                             Depto Fiscal" )
 @ PRow() + 1, 0 SAY ACENTO( "=============================================================================" )

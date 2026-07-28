@@ -1298,7 +1298,9 @@ IF cTIPOINFO = "TABELA"
    ENDCASE
 ENDIF
 IF cTIPOINFO = "ESTRUTURA"
-DO CASE
+   cCOMANDO :=DIALETO_Estrutura(cTIPOSQL,cTABELA,cOwnerx)
+   /*
+   DO CASE
    CASE lARQMDBACCDB  
       //Implantado abaixo com  catalogx
    CASE cTIPOSQL="INFORMIX"   
@@ -1382,6 +1384,7 @@ CASE cTIPOSQL == "DUCKDB"
                   "WHERE F.RDB$RELATION_NAME = '" + Upper(cTabela) + "' " + ;
                   "ORDER BY F.RDB$FIELD_POSITION;"
    ENDCASE
+   */
 ENDIF
 IF cTIPOINFO = "CCAMPOSQL"
    cCOMANDO := cCAMPOSQL

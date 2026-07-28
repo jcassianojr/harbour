@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\MLIBNF.PRG
+// +    Source Module => J:\empresa\MLIBNF.PRG
 // +
 // +    Functions: Function NFCOD()
 // +               Function PEGLOTE()

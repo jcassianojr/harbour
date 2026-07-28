@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => C:\DEVELOP\ITAESBRA\M_AO2.PRG
+// +    Source Module => C:\DEVELOP\empresa\M_AO2.PRG
 // +
 // +    Functions: Function tMAO2()
 // +               Function gMAO2()

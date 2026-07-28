@@ -30,7 +30,7 @@
 // :
 // :   M_AO2  .PRG : Itens do Pedido
 // :   Linguagem   : harbour
-// :        Sistema: Mana5 - ITAESBRA
+// :        Sistema: Mana5 - empresa
 // :      Copyright (c) 1998, Disk Soft S/C Ltda.
 // :  DATA DA ATUALIZA€ŽO >>>>23/07/98
 // :

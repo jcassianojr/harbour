@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BY2.PRG
+// +    Source Module => J:\empresa\M_BY2.PRG
 // +
 // +    Functions: Function CABMBY2()
 // +               Function CABMBY2B()

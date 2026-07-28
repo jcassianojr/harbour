@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BDII.PRG
+// +    Source Module => J:\empresa\M_BDII.PRG
 // +
 // +    Functions: Function MBDII()
 // +

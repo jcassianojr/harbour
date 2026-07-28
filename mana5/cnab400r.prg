@@ -27,7 +27,7 @@
 
 
 MDI( " LER Arquivo CNAB Retorno" )
-cARQUIVO := "p:\novell\ITAESBRA\RETCOB\" + Space( 50 )
+cARQUIVO := "p:\novell\empresa\RETCOB\" + Space( 50 )
 @ 23, 00 SAY "Arquivo"
 @ 24, 00 GET cARQUIVO
 IF !READCUR()

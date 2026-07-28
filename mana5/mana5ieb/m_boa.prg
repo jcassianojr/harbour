@@ -27,7 +27,7 @@
 
 // +께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께
 // +
-// +    Source Module => J:\ITAESBRA\M_BOA.PRG
+// +    Source Module => J:\empresa\M_BOA.PRG
 // +
 // +    Functions: Function MBOA01()
 // +

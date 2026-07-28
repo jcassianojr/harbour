@@ -27,7 +27,7 @@
 
 // +께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께
 // +
-// +    Source Module => J:\ITAESBRA\M_BZ1.PRG
+// +    Source Module => J:\empresa\M_BZ1.PRG
 // +
 // +    Functions: Function MBZ101()
 // +               Function MBZ102()

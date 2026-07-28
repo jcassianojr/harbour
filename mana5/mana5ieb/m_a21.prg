@@ -29,7 +29,7 @@
 // :
 // :   M_A2   .PRG : Cadastro de Pecas Estoque
 // :   Linguagem   : harbour
-// :        Sistema: MANA5/ITAESBRA
+// :        Sistema: MANA5/empresa
 // :      Copyright (c) 1998, Disk Soft S/C Ltda.
 // :
 // :*****************************************************************************

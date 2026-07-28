@@ -25,15 +25,8 @@
 // +--------------------------------------------------------------------
 // +
 
-// +
-// +
-// +    Source Module => J:\ITAESBRA\M_BO6.PRG
-// +
-// +    Reformatted by Click! 2.03 on May-7-2001 at  2:16 pm
-// +
-// +
 
-MDI( "þ Aviso de Embarque" )
+MDI( "  Aviso de Embarque" )
 PARA nTIPO
 
 nNUMERO  := 0
@@ -159,7 +152,7 @@ FWrite( nHANDLE, "04" )
 FWrite( nHANDLE, StrZero( nSEQ, 5 ) )
 FWrite( nHANDLE, cDATA )
 FWrite( nHANDLE, cTIME )
-FWrite( nHANDLE, "61381323000167" )
+FWrite( nHANDLE, "1BPB353W000168" )
 IF nTIPO = 1  // GM
 FWrite( nHANDLE, "59275792000150" )
 ENDIF

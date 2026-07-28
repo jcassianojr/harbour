@@ -27,7 +27,7 @@
 
 // +께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께께
 // +
-// +    Source Module => J:\ITAESBRA\M_BMU.PRG
+// +    Source Module => J:\empresa\M_BMU.PRG
 // +
 // +    Reformatted by Click! 2.03 on Jul-30-2001 at 11:33 am
 // +

@@ -29,7 +29,7 @@
 // :
 // :   M_AS2  .PRG : Lista de Precos - Reajuste
 // :   Linguagem   : harbour
-// :        Sistema: MANA5/ITAESBRA
+// :        Sistema: MANA5/empresa
 // :          Autor: Equipe Disk
 // :      Copyright (c) 1994, Disk Soft S/C Ltda.
 // :

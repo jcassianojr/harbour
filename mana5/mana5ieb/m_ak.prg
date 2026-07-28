@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_AK.PRG
+// +    Source Module => J:\empresa\M_AK.PRG
 // +
 // +    Functions: Function fMAK()
 // +               Function MAKK01()

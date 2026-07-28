@@ -27,7 +27,7 @@
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
-// +    Source Module => J:\ITAESBRA\M_BDIH.PRG
+// +    Source Module => J:\empresa\M_BDIH.PRG
 // +
 // +    Functions: Function MBDIH()
 // +
