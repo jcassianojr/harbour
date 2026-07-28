@@ -14,6 +14,7 @@
 -llibmysql
 -llibpq
 -lfbclient
+-lbcrypt
 
 -DUSE_SDD_MYSQL
 -cflag=-DUSE_SDD_MYSQL
@@ -59,6 +60,8 @@ hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
 sqlrddpp.hbc
+dbfcdxex.hbc
+adoxb.hbc
 
 #
 #ads
@@ -108,13 +111,16 @@ sqlrddpp.hbc
 \develop\harbour\dbu\dbuver.prg
 \develop\harbour\dbu\dbuview.prg
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbour\dbu\XLSXClass.prg
+\develop\harbourPRIV\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
-\develop\harbour\dbu\dbu2md.prg
+#\develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbUparadox.prg
+\develop\harbour\dbu\dbumddbml.prg
+\develop\harbour\dbu\dbucrypto.prg
+
 
 #
 # sqlite
@@ -142,7 +148,7 @@ sqlrddpp.hbc
 #
 \develop\harbour\dbu\dbuodbc.prg 
 #
-\develop\harbour\dbu\adoxb.prg   
+#\develop\harbour\dbu\adoxb.prg   
 \develop\harbour\dbu\dbuadox.prg 
 #
 \develop\harbour\dbu\dbuleto.prg 
