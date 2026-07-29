@@ -87,7 +87,7 @@ letodb.hbc
 \develop\harbour\dbu\dbuXLSclass.prg
 \develop\harbourpriv\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbuxlsxml.prg
-\develop\harbour\dbu\dbUparadox.prg
+\develop\harbour\dbu\dbumypdx.prg
 #
 # sqlite compilado com fontes C nativo
 #

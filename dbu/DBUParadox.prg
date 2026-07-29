@@ -268,3 +268,79 @@ RETURN .T.
 
 
 
+FUNCTION paradoxtocsv(cPASTA,cTABELA)
+    LOCAL oConn, oRs
+    LOCAL cConnStr, cQuery
+    LOCAL nFile, cLine, cVal
+    LOCAL i
+
+    CLS
+    ? "Iniciando conexao com Paradox via ADO no Harbour..."
+
+    // Cria o objeto de conexao ADO
+    oConn := CreateObject("ADODB.Connection")
+    
+    // ATENCAO: O 'Data Source' no Jet OLEDB para Paradox deve apontar 
+    // estritamente para a PASTA (diretorio) onde o arquivo .db esta localizado, 
+    // e nao para o arquivo em si.
+    // 'Paradox 5.X' pode ser alterado dependendo da versao (ex: Paradox 3.X, 4.X, 5.x 7.X)
+    //cConnStr := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=c:\temp\uso\;Extended Properties=Paradox 5.X;"
+    //cConnStr := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\caminho\para\sua\pasta;Extended Properties=Paradox 5.X;"
+    cConnStr := "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+cPASTA+";Extended Properties=Paradox 5.X;"
+    
+
+    BEGIN SEQUENCE
+        // Abre a conexao
+        oConn:Open(cConnStr)
+        ? "Conexao aberta com sucesso!"
+
+        // O nome da tabela corresponde ao nome do arquivo .db sem a extensao
+        cQuery := "SELECT * FROM "+cTABELA
+        oRs := oConn:Execute(cQuery)
+
+        // Cria o arquivo CSV de saida
+        nFile := FCreate("resultado_harbour.csv")
+        IF FError() != 0
+            ? "Erro ao criar o arquivo CSV de saida. Codigo de erro:", FError()
+            BREAK
+        ENDIF
+
+        // 1. Escreve o Cabecalho (nomes das colunas)
+        cLine := ""
+        FOR i := 0 TO oRs:Fields:Count - 1
+            cLine += oRs:Fields(i):Name
+            IF i < oRs:Fields:Count - 1
+                cLine += ","
+            ENDIF
+        NEXT
+        FWrite(nFile, cLine + Chr(13) + Chr(10))
+
+        // 2. Percorre os registros e grava as linhas
+        DO WHILE !oRs:EOF
+            cLine := ""
+            FOR i := 0 TO oRs:Fields:Count - 1
+                // Converte o valor do campo para string de forma segura
+                cVal := hb_ValToStr(oRs:Fields(i):Value)
+                
+                // Envolve em aspas e trata eventuais aspas internas para preservar o CSV
+                cLine += '"' + StrTran(cVal, '"', '""') + '"'
+                
+                IF i < oRs:Fields:Count - 1
+                    cLine += ","
+                ENDIF
+            NEXT
+            FWrite(nFile, cLine + Chr(13) + Chr(10))
+            oRs:MoveNext()
+        ENDDO
+
+        FClose(nFile)
+        oRs:Close()
+        oConn:Close()
+        
+        ? "Processo concluido! Arquivo 'resultado_harbour.csv' gerado com sucesso."
+
+    RECOVER
+        ? "Erro criticou durante a execucao ADO."
+    END SEQUENCE
+
+    RETURN
