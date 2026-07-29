@@ -968,6 +968,7 @@ FUNCTION export2sql( odb, cDBFFILE, lincdados )
    mSQL := SqliteCreateTable( cTablename, aStruct, "SQLITE" )
    IF !miscsql( oDB, mSql )
       alertx( 'Table Creation Error!', 'DBF2SQLite' )
+      MemoWrit( "sql_create_" +cTablename,msql)
       RETURN NIL
    ENDIF
 
@@ -977,7 +978,7 @@ FUNCTION export2sql( odb, cDBFFILE, lincdados )
    FOR j := 1 TO nIndexes
       msql := aINDICES[J,1]  //Create index
       IF ! miscsql( oDB, mSql )
-         MemoWrit( "sql" + StrZero( j, 2, 0 ) + ".txt", msql )
+         MemoWrit( "sql_index_create_" +cTablename+"_"+ StrZero( j, 2, 0 ) + ".txt", msql )
       ENDIF
       msql := aINDICES[J,2]  //metadado
       IF ! miscsql( oDB, mSql )

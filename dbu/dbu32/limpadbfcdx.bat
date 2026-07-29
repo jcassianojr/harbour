@@ -10,3 +10,4 @@ del *.md
 del *.sqlite
 del *.log
 del *.csv
+del *.txt
