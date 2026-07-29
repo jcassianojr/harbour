@@ -7,3 +7,5 @@
 7z a oracle.zip oracle.sql
 7z a postgresql.zip postgresql.sql
 7z a sqlite.zip sqlite.sql
+del *.dbe
+del *.sql
