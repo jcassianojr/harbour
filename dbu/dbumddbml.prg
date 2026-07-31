@@ -418,7 +418,7 @@ FUNCTION GERADBML_Custom( cARQ, aUSO, aINDICES, cOrigemFile, cTipoOrigem )
    IF LEN(aINDICES) > 0
       cLINHA += "  Indexes {" + hb_eol()
       FOR j := 1 TO LEN(aINDICES)
-         cLINHA += "    " + aINDICES[j,3] + " [name: " + CHR(34) + aINDICES[j,2] + CHR(34) + "]" + hb_eol()
+         cLINHA += "    (" + MDPCHAVEI(aINDICES[j,3]) + ") [name: " + CHR(34) + aINDICES[j,2] + CHR(34) + "]" + hb_eol()
       NEXT j 
       cLINHA += "  }" + hb_eol()     
    ENDIF 
