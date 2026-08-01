@@ -107,6 +107,7 @@ FUNCTION INFOTIPODBF( filename, lMES )
 
    LOCAL cbuffer := ' ', nhandle, ret_value, cMES, cDRIVERPAD,aRETVAL,cEXTMEMO,nbuffer
    LOCAL cextensao 
+   LOCAL nPxVersion
 
    //IF At( ".", filename ) = 0
     //  filename := Trim( filename ) + ".DBF"
@@ -272,6 +273,19 @@ FUNCTION INFOTIPODBF( filename, lMES )
          cMES      := "Paradox Database"
          ret_value := 59
          cDRIVERPAD:= "PARADOX"    
+         
+         // --- Leitura adicional para obter a versão do Paradox (px_fileversion) ---
+         // No formato Paradox, a versão costuma ocupar 1 byte ou inteiro curto 
+         // dependendo da estrutura do header. Vamos ler na posição específica.
+         FSeek( nHANDLE, 39, FS_SET ) // Exemplo de offset comum para versão do header Paradox
+         cBuffer := Space( 1 )
+         IF FRead( nHANDLE, @cBuffer, 1 ) == 1
+            // Se quiser guardar ou anexar a informação na descrição/retorno:
+            nPxVersion := Asc( cBuffer )
+            cMES := "Paradox Database (Version: " + AllTrim( Str( nPxVersion ) ) + ")"
+         ENDIF
+         
+         
       OTHERWISE //tenta expandido
           FSeek( nHANDLE, 0, FS_SET )
           cBuffer:=SPACE(20)
@@ -673,7 +687,7 @@ FUNCTION FT_BYT2HEX( cByte, plusH )
 
 RETURN xHexString
 
-   
+
    
 
 // + EOF: f_ismemo.prg
