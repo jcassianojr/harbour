@@ -488,7 +488,7 @@ FUNC gMCN2
             dESTRU[ X ] += AllTrim( DADO )
          ENDIF
       NEXT X
-      mDEFAULT := RCAMPO( mDEFAULT )
+      mDEFAULTV := RCAMPO( mDEFAULTV )
       @ 11, 01 CLEAR TO 22, 78
       @ 11, 01 TO 20, 40
       @ 12, 3  SAY 'Variaveis para Auxilio em Relatorios'
@@ -537,15 +537,6 @@ FUNC gMCN2
    RETU .T.
 
 
-
-
-// !*****************************************************************************
-// !
-// !         Fun‡„o: CFATOR()
-// !
-// !    Chamado por: M_CN2()             (fun‡„o    em M_CH1.PRG)
-// !
-// !*****************************************************************************
 
 
 // +--------------------------------------------------------------------

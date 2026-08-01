@@ -121,7 +121,7 @@ TAM2       := mTAM2
 TAM3       := mTAM3
 TAM4       := mTAM4
 TAM5       := mTAM5
-DEFA       := IF( mDEFAULT = 0, 1, mDEFAULT )
+DEFA       := IF( mDEFAULTV = 0, 1, mDEFAULTV )
 AREA       := "mARQ" + IF( mSELECAO > 9, Str( mSELECAO, 2 ), Str( mSELECAO, 1 ) )
 FATOR      := FATOR_AUX := CTR1 := CTR2 := 0.00
 aTOTAL     := Array( 20 )
