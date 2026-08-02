@@ -1,13 +1,21 @@
+// Requer pxlib https://pxlib.sourceforge.net/
+// libpx.a -Ic:\mspxlib-0.6.10\include\
+// https://github.com/steinm/pxlib 
+
+
 #include "fileio.ch"
 
-PROCEDURE Main()
-   Local cDbFile  := "siglas.db"
-   Local cCsvFile := "siglas_exportado.csv"
+PROCEDURE paradox_to_csv(cDbFile)
+  // Local cDbFile  := "siglas.db"
+  // Local cCsvFile := "siglas_exportado.csv"
+  Local cCsvFile
    Local nHandleCsv
    Local pPxDoc   := NIL
    Local nNumRecords := 0, nNumFields := 0
    Local i, j
    Local cFieldNames := "", cRowData := ""
+   
+   cCsvFile=HB_FNAMEEXTSET(cDbFile)
 
    IF !File( cDbFile )
       ? "Arquivo Paradox nao encontrado: " + cDbFile
@@ -137,50 +145,117 @@ HB_FUNC( PX_GET_FIELD_VAL )
       int total_len = 0;
       int k;
       for( k = 0; k < pxdoc->px_head->px_numfields; k++ ) {
-         total_len += pxdoc->px_head->px_fields[k].px_flen;
+         total_len += (int) pxdoc->px_head->px_fields[k].px_flen;
       }
       
       int offset = 0;
-      if (total_len < pxdoc->px_head->px_recordsize) {
-          offset = pxdoc->px_head->px_recordsize - total_len; 
+      int rec_size = (int) pxdoc->px_head->px_recordsize;
+      if (total_len < rec_size) {
+          offset = rec_size - total_len; 
       }
       
       for( k = 0; k < fieldno; k++ ) {
-         offset += pxdoc->px_head->px_fields[k].px_flen;
+         offset += (int) pxdoc->px_head->px_fields[k].px_flen;
       }
       
       char *field_ptr = data + offset;
       int ftype = field->px_ftype;
-      char *fname = (char *) field->px_fname;
       
-      // Se o nome do campo for HireDate (ou conter Date), força o tratamento de data independente do ftype
-      int is_date_field = 0;
-      if (fname && (strcasecmp(fname, "HireDate") == 0 || strcasecmp(fname, "Date") == 0 || ftype == 2)) {
-         is_date_field = 1;
-      }
+      
+      
+      // Identifica o campo de data (Tipo 2 = Date ou Tipo 21 = Timestamp)
+      int is_date_field = (ftype == 2 || ftype == 21) ? 1 : 0;
 
       if (is_date_field) {
-         long val = 0;
-         PX_get_data_long(pxdoc, field_ptr, field->px_flen, &val);
-         if (val != 0 && val > 0 && val < 3000000) { // Faixa segura de dias julianos
-            long J = val + 1721425; 
-            long l = J + 68569;
-            long n = ( 4 * l ) / 146097;
-            l = l - ( 146097 * n + 3 ) / 4;
-            long i = ( 4000 * ( l + 1 ) ) / 1461001;
-            l = l - ( 1461 * i ) / 4 + 31;
-            long j = ( 80 * l ) / 2447;
-            long d = l - ( 2447 * j ) / 80;
-            l = j / 11;
-            long m = j + 2 - ( 12 * l );
-            long y = 100 * ( n - 49 ) + i + l;
+         long days_val = 0;
+
+         //===================================================================
+         // Leitura direta da memória para Timestamp (Tipo 21 - 8 bytes)
+         //===================================================================
+         if (ftype == 21 && field->px_flen == 8) {
+            unsigned char *p = (unsigned char *) field_ptr;
+            // O Paradox armazena o Timestamp como um Double Big-Endian com o MSB invertido
+            unsigned char buf[8];
+            buf[0] = p[0] ^ 0x80; // Inverte o bit de sinal
+            buf[1] = p[1]; buf[2] = p[2]; buf[3] = p[3];
+            buf[4] = p[4]; buf[5] = p[5]; buf[6] = p[6]; buf[7] = p[7];
             
-            // Buffer seguro de 32 bytes elimina totalmente o warning do GCC
-            char dstr[32];
-            sprintf(dstr, "%04ld-%02ld-%02ld", y, m, d);
-            hb_retc(dstr);
+            // Converte para Double de forma segura de Big Endian para Little Endian (padrão do PC)
+            unsigned char little_endian[8];
+            little_endian[0] = buf[7]; little_endian[1] = buf[6];
+            little_endian[2] = buf[5]; little_endian[3] = buf[4];
+            little_endian[4] = buf[3]; little_endian[5] = buf[2];
+            little_endian[6] = buf[1]; little_endian[7] = buf[0];
+            
+            double ms_val = 0.0;
+            memcpy(&ms_val, little_endian, 8);
+            
+            // Converte milissegundos transcorridos desde 0001-01-01 para dias
+            if (ms_val != 0.0) {
+               days_val = (long) (ms_val / 86400000.0);
+            }
+         } 
+         //===================================================================
+         // Leitura da memória para Date (Tipo 2 - 4 bytes)
+         //===================================================================
+         else if (ftype == 2 && field->px_flen == 4) {
+            unsigned char *p = (unsigned char *) field_ptr;
+            days_val = (((long)(p[0] ^ 0x80)) << 24) |
+                       (((long)p[1]) << 16) |
+                       (((long)p[2]) << 8) |
+                       ((long)p[3]);
+         }
+
+         if (days_val != 0) {
+            // Algoritmo nativo de conversão Rata Die (Época Paradox: 01/01/0001)
+            long rd = days_val - 1; 
+            
+            // Ciclo de 400 anos
+            long n400 = rd / 146097;
+            rd %= 146097;
+            
+            // Ciclo de 100 anos
+            long n100 = rd / 36524;
+            if (n100 == 4) n100 = 3; // Exceção bissexta
+            rd -= n100 * 36524;
+            
+            // Ciclo de 4 anos
+            long n4 = rd / 1461;
+            rd %= 1461;
+            
+            // Ciclo de 1 ano
+            long n1 = rd / 365;
+            if (n1 == 4) n1 = 3; // Exceção bissexta
+            rd -= n1 * 365;
+            
+            long year = n400 * 400 + n100 * 100 + n4 * 4 + n1 + 1;
+            
+            // Determina se o ano atual é bissexto
+            int is_leap = ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) ? 1 : 0;
+            int days_in_month[] = {31, 28 + is_leap, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+            
+            // Calcula o mês e o dia com base nos dias restantes
+            long month = 1;
+            int i_m = 0;
+            for (i_m = 0; i_m < 12; i_m++) {
+                if (rd < days_in_month[i_m]) break;
+                rd -= days_in_month[i_m];
+                month++;
+            }
+            long day = rd + 1;
+
+            if (year >= 1000 && year <= 9999) {
+               char dstr[32];
+               // Formata exatamente como o Python: YYYY-MM-DD 00:00:00
+               snprintf(dstr, sizeof(dstr), "%04ld-%02ld-%02ld 00:00:00", year, month, day);
+               hb_retc(dstr);
+            } else {
+               char dstr[32];
+               snprintf(dstr, sizeof(dstr), "%ld", days_val);
+               hb_retc(dstr);
+            }
          } else {
-            hb_retc(""); 
+            hb_retc("");
          }
       }
       else if (ftype == 3) { 
@@ -219,5 +294,4 @@ HB_FUNC( PX_GET_FIELD_VAL )
       hb_retc( "ERR_MEM" );
    }
 }
-
 #pragma ENDDUMP

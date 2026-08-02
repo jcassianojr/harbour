@@ -44,6 +44,9 @@ hmg
 https://www.hmgextended.com/
 https://github.com/ivanilmarcelino/OpenMinigui
 
+Paradox
+https://pxlib.sourceforge.net/
+https://github.com/steinm/pxlib 
 
 MySQL
 https://www.mysql.com 
