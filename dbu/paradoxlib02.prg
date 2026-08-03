@@ -6,6 +6,33 @@
 #include "fileio.ch"
 
 
+PROCEDURE paradox_from_estrutura( cDbFile, aStruct )
+   Local pPxDoc := NIL
+
+   ? "Iniciando criacao e gravacao do arquivo Paradox em: " + cDbFile + " ..."
+
+   pPxDoc := PX_New()
+   IF pPxDoc == 0 .OR. pPxDoc == NIL
+      ? "Erro ao instanciar PX_New()"
+      RETURN
+   ENDIF
+
+   // ETAPA 1: Criação da Estrutura e do Arquivo Vazio no caminho especificado
+   IF PX_Create_Table( pPxDoc, cDbFile, aStruct ) == 0
+      ? "Estrutura do Paradox criada com sucesso!"
+   ELSE
+      ? "Erro ao criar o arquivo Paradox no caminho informado."
+   ENDIF
+
+   // Limpeza segura dos ponteiros da pxlib
+   PX_Close( pPxDoc )
+   PX_Delete( pPxDoc )
+   
+   ? "Processo finalizado!"
+
+RETURN
+
+
 
 PROCEDURE paradox_to_dbf(cDbFile,cDRIVEDES)
  //  Local cDbFile  := "siglas.db"
@@ -403,4 +430,212 @@ HB_FUNC( PX_GET_FIELD_VAL )
       hb_retc( "ERR_MEM" );
    }
 }
+
+HB_FUNC( PX_CREATE_TABLE )
+{
+   pxdoc_t *pxdoc = (pxdoc_t *) (HB_PTRDIFF) hb_parnl( 1 );
+   const char *filename_ptr = hb_parc( 2 );
+   PHB_ITEM aStruct = hb_param( 3, HB_IT_ARRAY );
+   
+   if( !pxdoc || !filename_ptr || !aStruct ) {
+      hb_retni( -1 );
+      return;
+   }
+
+   int num_fields = (int) hb_arrayLen( aStruct );
+   if( num_fields <= 0 || num_fields > 255 ) {
+      hb_retni( -2 );
+      return;
+   }
+
+   pxfield_t *fields = (pxfield_t *) calloc( num_fields, sizeof( pxfield_t ) );
+   if( !fields ) {
+      hb_retni( -3 );
+      return;
+   }
+
+   int j;
+   for( j = 0; j < num_fields; j++ ) {
+      PHB_ITEM field_info = hb_arrayGetItemPtr( aStruct, j + 1 );
+      
+      if( field_info && HB_IS_ARRAY( field_info ) ) {
+         const char *fname = hb_arrayGetCPtr( field_info, 1 );
+         const char *ftype_str = hb_arrayGetCPtr( field_info, 2 );
+         int flen = hb_arrayGetNI( field_info, 3 );
+         int fdec = hb_arrayGetNI( field_info, 4 );
+
+         // Aloca e copia o nome de forma segura, garantindo ausência de lixo de memória
+         if( fname && fname[0] != '\0' ) {
+            int len = strlen( fname );
+            fields[j].px_fname = (char *) malloc( len + 1 );
+            memcpy( fields[j].px_fname, fname, len + 1 );
+         } else {
+            fields[j].px_fname = (char *) malloc( 8 );
+            memcpy( fields[j].px_fname, "FIELD", 6 );
+         }
+         
+         fields[j].px_fdc = fdec;
+
+         if( ftype_str && (ftype_str[0] == 'C' || ftype_str[0] == 'c') ) {
+            fields[j].px_ftype = 1; // Alpha
+            fields[j].px_flen  = (flen > 0 && flen <= 255) ? flen : 50;
+         } else if( ftype_str && (ftype_str[0] == 'N' || ftype_str[0] == 'n') ) {
+            if( fdec > 0 ) {
+               fields[j].px_ftype = 5; // Number (Double)
+               fields[j].px_flen  = 8;
+            } else {
+               fields[j].px_ftype = 4; // Long Integer
+               fields[j].px_flen  = 4;
+            }
+         } else if( ftype_str && (ftype_str[0] == 'D' || ftype_str[0] == 'd') ) {
+            fields[j].px_ftype = 2; // Date
+            fields[j].px_flen  = 4;
+         } else if( ftype_str && (ftype_str[0] == 'L' || ftype_str[0] == 'l') ) {
+            fields[j].px_ftype = 9; // Logical
+            fields[j].px_flen  = 1;
+         } else {
+            fields[j].px_ftype = 1;
+            fields[j].px_flen  = 50;
+         }
+      }
+   }
+
+   int result = PX_create_file( pxdoc, fields, num_fields, filename_ptr, 0 );
+   
+   // Libera as alocações dos nomes dos campos
+   for( j = 0; j < num_fields; j++ ) {
+      if( fields[j].px_fname ) {
+         free( fields[j].px_fname );
+      }
+   }
+   free( fields );
+
+   if( result < 0 ) {
+      hb_retni( -4 );
+      return;
+   }
+
+   hb_retni( 0 );
+}
+
+HB_FUNC( PX_APPEND_RECORD )
+{
+   pxdoc_t *pxdoc = (pxdoc_t *) (HB_PTRDIFF) hb_parnl( 1 );
+   PHB_ITEM aRow = hb_param( 2, HB_IT_ARRAY );
+
+   if( !pxdoc || !pxdoc->px_head || !aRow ) {
+      hb_retni( -1 );
+      return;
+   }
+
+   int num_fields = pxdoc->px_head->px_numfields;
+   int arr_len = (int) hb_arrayLen( aRow );
+
+   // Recalcula o tamanho do registro para garantir que o buffer não venha zerado
+   int total_len = 0;
+   int k;
+   for( k = 0; k < num_fields; k++ ) {
+      total_len += (int) pxdoc->px_head->px_fields[k].px_flen;
+   }
+   
+   int record_size = pxdoc->px_head->px_recordsize;
+   if (record_size < total_len) {
+       record_size = total_len; 
+       pxdoc->px_head->px_recordsize = total_len;
+   }
+
+   // Aloca o buffer com margem de segurança
+   char *rec_buf = (char *) calloc( 1, record_size + 128 );
+   if( !rec_buf ) {
+      hb_retni( -2 );
+      return;
+   }
+
+   // Pula os bytes de controle ocultos exigidos pelo Paradox
+   int offset = 0;
+   if (total_len < record_size) {
+       offset = record_size - total_len; 
+   }
+
+   // Preenche os dados usando as funções validadas do Harbour
+   for( k = 0; k < num_fields; k++ ) {
+      pxfield_t *field = &pxdoc->px_head->px_fields[k];
+      char *field_ptr = rec_buf + offset;
+
+      if ( k < arr_len ) {
+         if( field->px_ftype == 1 ) { // Alpha (Texto)
+            const char *str = hb_arrayGetCPtr( aRow, k + 1 );
+            if ( str ) {
+               int copy_len = strlen(str);
+               if (copy_len > field->px_flen) copy_len = field->px_flen;
+               memcpy(field_ptr, str, copy_len);
+            }
+         } else if( field->px_ftype == 4 ) { // Long Integer (4 bytes)
+            long lval = (long) hb_arrayGetNL( aRow, k + 1 );
+            PX_put_data_long( pxdoc, field_ptr, field->px_flen, lval );
+         } else if( field->px_ftype == 5 || field->px_ftype == 6 ) { // Double / Currency
+            double dval = (double) hb_arrayGetND( aRow, k + 1 );
+            PX_put_data_double( pxdoc, field_ptr, field->px_flen, dval );
+         } else if( field->px_ftype == 9 ) { // Logical
+            int lval = hb_arrayGetL( aRow, k + 1 );
+            field_ptr[0] = lval ? 0x81 : 0x80; // 0x81 = True, 0x80 = False no Paradox
+         } else if( field->px_ftype == 2 ) { // Date
+            const char *str = hb_arrayGetCPtr( aRow, k + 1 );
+            if ( str ) {
+               int y = 0, m = 0, d = 0;
+               if( sscanf(str, "%d-%d-%d", &y, &m, &d) == 3 ) {
+                  long a = (14 - m) / 12;
+                  long y2 = y + 4800 - a;
+                  long m2 = m + 12 * a - 3;
+                  long jdn = d + (153 * m2 + 2) / 5 + 365 * y2 + y2 / 4 - y2 / 100 + y2 / 400 - 32045;
+                  long p_days = jdn - 1721425; 
+                  
+                  PX_put_data_long( pxdoc, field_ptr, 4, p_days );
+               }
+            }
+         }
+      }
+
+      offset += field->px_flen;
+   }
+
+   // Grava o registro utilizando a função oficial PX_put_record da pxlib
+   int res = PX_put_record( pxdoc, rec_buf );
+   free( rec_buf );
+
+   // CORREÇÃO: PX_put_record retorna >= 0 em caso de sucesso (número do registro ou 0)
+   hb_retni( (res >= 0) ? 0 : -3 );
+}
+
+HB_FUNC( PX_DELETE_RECORD )
+{
+   pxdoc_t *pxdoc = (pxdoc_t *) (HB_PTRDIFF) hb_parnl( 1 );
+   int recno = hb_parni( 2 );
+
+   if( !pxdoc ) {
+      hb_retni( -1 );
+      return;
+   }
+
+   // A pxlib utiliza base 0 para o número do registro (recno de 0 até Total-1)
+   int result = PX_delete_record( pxdoc, recno );
+
+   // Retorna 0 em caso de sucesso ou -1 em caso de falha
+   hb_retni( (result >= 0) ? 0 : -1 );
+}
+
+HB_FUNC( PX_RECNO )
+{
+   pxdoc_t *pxdoc = (pxdoc_t *) (HB_PTRDIFF) hb_parnl( 1 );
+   int current_rec = hb_parni( 2 ); // Opcional: você pode passar o índice atual como parâmetro
+
+   if( !pxdoc ) {
+      hb_retni( 0 );
+      return;
+   }
+
+   // Retorna o registro atual baseado no índice fornecido (convertido para base 1)
+   hb_retni( current_rec + 1 );
+}
+
 #pragma ENDDUMP
