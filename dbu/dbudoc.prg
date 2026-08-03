@@ -635,7 +635,11 @@ FUNCTION GRAVADOC( tdoc, cARQ, aESTRU, aVAL, lDOCCAB, lDOCDAD, cSUBTIPO, lDOCREC
          cTEXTO += 'ENDINDEX' + cLIN
       ENDIF
       cTEXTO += 'ENDFILE' + cLIN
+      cTEXTO +=  cLIN
       
+     cTEXTO += clin + "[MATRIX ESTRUTURA]"+ cLIN
+     cTEXTO += StrTran( hb_ValToExp(aESTRU), "},", "},"+HB_EOL() )+ cLIN
+     cTEXTO +=  cLIN
      
      IF AT(".DBF",UPPER(cCAMINHOCOMPLETO))>0
          cTEXTO += clin + "[HEADERINFO]"
