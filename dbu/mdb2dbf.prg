@@ -291,7 +291,6 @@ local aResult
 nChoices := 0
 aResult:={}
 IF cTIPOSQL="PARADOX"
- //  ALERT("MDB TABELA"+cMDBARQ)
    RETURN
 ENDIF   
 IF VALTYPE(cMDBARQ) = "A"
@@ -327,10 +326,9 @@ cMDBARQ := OPENTIPOARQ()
 
 mdbtabela(cMDBARQ)
 
-//IF cTIPOSQL="PARADOX"
-  // ALERT("MDBEXP TAB"+cTABELAX)
-   //ALERT("MDBEXP ARQ"+cMDBARQ)
-//ENDIF   
+IF cTIPOSQL="PARADOX"
+   RETURN
+ENDIF   
 cTABELA := cTABELAX
 
 IF EMPTY(cTABELA)
@@ -709,17 +707,7 @@ IF cTIPOSQL = "SQLITE"
 ENDIF
 
 IF cTIPOSQL == "PARADOX"
-   //Character	Alpha	O Paradox limita campos Alpha a no máximo 255 caracteres.
-   //Numeric	Number	Corresponde a números de ponto flutuante de 15 dígitos.
-   //Logical	Logical	O Paradox possui um campo nativo Logical (exibe como T/F).
-   //Date	Date	Compatibilidade total entre DBF e Paradox.
-   //Memo	Memo	O Paradox gerencia Memos em um arquivo .mb anexo ao .db.
-   //Integer	Short / Long	O Paradox diferencia Short (16-bit) e Long (32-bit).
-   //FFFFloat	Number	O tipo Number do Paradox é o padrão para precisão decimal.
-
-    ParadoxCreateTable( cARQORI, aStruct )
-   //cARQORI := win_GetSAVEFileName(,"Arquivos Paradox",HB_CWD(),"Paradox","*.db",1)
-   // Adicionar lógica de criação se o driver permitir (via ADOX ou SQL)
+   ParadoxCreateTable( cARQORI, aStruct )
 ENDIF
 
 RETURN NIL
@@ -1079,10 +1067,7 @@ IF cTIPOSQL = "MSSQL"
    ENDIF
 ENDIF
 IF cTIPOSQL == "PARADOX"
-   // Geralmente não usa porta, pois acessa arquivos locais ou pasta
-   IF EMPTY(cSERVERX)
-        cSERVERX := PADR("localhost", 30, " ") 
-   ENDIF
+    cSERVERX := SPACE(30)
 ENDIF
 IF cTIPOSQL == "CUBRID"
     IF EMPTY(cSERVERX)
@@ -1123,7 +1108,7 @@ MDBARQ := OPENTIPOARQ()
                cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
                 IF File( cARQORI )
                    IF cTIPOSQL="PARADOX"
-                     DBF2Paradox( cARQORI)//DBF2Paradox( cARQORI, cParadoxDestino )
+                     Dbf_Para_Paradox( cARQORI,cORIDRIVER)
                    ELSE
                      DBF2MDB(cMDBARQ,cARQORI,lincdados)
                   ENDIF
@@ -1132,7 +1117,11 @@ MDBARQ := OPENTIPOARQ()
                cPASTA:=SelectFolder()
                cPASTA+="\*."+TABLEEXT 
                //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
-               FAZERDBF( {|| DBF2MDB(cMDBARQ,cCAMINHOCOMPLETO,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+               IF cTIPOSQL="PARADOX"
+                  FAZERDBF( {|| Dbf_Para_Paradox( cCAMINHOCOMPLETO,cORIDRIVER,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+               ELSE
+                  FAZERDBF( {|| DBF2MDB(cMDBARQ,cCAMINHOCOMPLETO,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+               ENDIF   
             ENDIF   
             RDDNOME( nOLDTIPO )   // retorna tipo anterior
 return
@@ -2203,8 +2192,7 @@ FUNCTION CreateAccessDatabase(cDatabase, cUserName, cPassword, lEncrypt)
              oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Excel 8.0;HDR=YES';Persist Security Info=False") 
 
           CASE cEXTENSAO == ".db" .OR. cTIPOSQL == "PARADOX"
-             //oCatalog:Create("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + cDatabase + ";Extended Properties='Paradox 5.x';")
-             //ParadoxCreateTable( cTablename, aStruct ) e por arquivo nao cria um database o database e uma pasta 
+             //nao funciona catalog e a paradoxcreatetable precisas da estrutura(nao cria vazia)
 
          /* o driver nao suporta catalogo
           CASE cEXTENSAO == ".fdb" .OR. cEXTENSAO == ".gdb" .OR. cEXTENSAO == ".ib" .OR. lFDB 
