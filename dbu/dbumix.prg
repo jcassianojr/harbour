@@ -415,7 +415,6 @@ FUNCTION mix_impdbf(cARQORI,lincdados)
    cTABLE := AllTrim( cTABLE )
 
    IF cTIPOSQL="PARADOX"
-      DBF2Paradox( cARQORI)
       RETURN
    ENDIF 
 

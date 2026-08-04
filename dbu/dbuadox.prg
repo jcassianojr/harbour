@@ -198,7 +198,6 @@ FUNCTION adoxcriadatabase()
 // +
 Function adoximpdbf()
    IF cTIPOSQL="PARADOX"
-      DBF2Paradox( cARQORI)
       RETURN
    ENDIF   
    cMDBARQ := OPENTIPOARQ()

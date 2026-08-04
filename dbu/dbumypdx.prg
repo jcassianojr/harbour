@@ -1,4 +1,6 @@
 function PARADOXCREATETABLE()
 return .f.
-function DBF2PARADOX()
+function Dbf_Para_Paradox()
+return .f.
+function Paradoxmenu()
 return .f.
