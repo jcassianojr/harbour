@@ -20,6 +20,7 @@
 #include "dbstruct.ch"
 #include "directry.ch"
 
+REQUEST PXRDD
 
 // +--------------------------------------------------------------------
 // +    Function firebirdmenu()
@@ -32,14 +33,14 @@ LOCAL KEY
 
 
 aAMBIENTE  := SALVAA() 
-cSERVERX   := PADR("localhost",30)  // localhost:cARQUIVO no connection
+cSERVERX   := Space(30)  // localhost:cARQUIVO no connection
 cDATABASEX := Space(30) 
-cUSERX     :=  PADR("SYSDBA",30)
-cPASSX     := PADR("masterkey",30)
+cUSERX     := Space(30) 
+cPASSX     := Space(30) 
 cTABELAX   := Space(30) 
 cBANCOX    := Space(30) 
-cOWNERX   := Space(30)
-cPORTAX    :=SPACE(30)
+cOWNERX   :=  Space(30)
+cPORTAX    := SPACE(30)
 cPATH      := "" 
 loledb     := .T. 
 lMDB       := .F. 
@@ -58,7 +59,7 @@ cTIPOSQL := "PARADOX"  // Passa para privada usadas nas funcoes abaixo
 
 WHILE .T.
    hb_DispBox(3,18,18,55,B_DOUBLE+" ") 
-   @ 03,24 SAY "FIREBIRD"+" "+ALLTRIM(cSERVERX)+ " Banco " + cDATABASEX 
+   @ 03,24 SAY "PARADOX" 
    
    OPCAO( 4, 24,"&Informacao do db        ",67)   // c 1
    OPCAO( 5, 24,"&Informacao dos campos   ",68 )   // D 2
@@ -148,4 +149,39 @@ FUNCTION paradoximportadbf()
             ENDIF   
             RDDNOME( nOLDTIPO )   // retorna tipo anterior
 RETURN
+
+
+FUNCTION paradoxexpformat()
+   cARQORI := win_GetOPENFileName(,"Selecione o arquivo Paradox",,"Arquivo DB|*.db",,"*.db")
+   LCOPIANAT := .F.  // MDG("Copia Nativa(SIM) Interna(NAO)") //copy to nao implemntado mysqlrddd
+   tDOC      := pegtipodoc()   // .t. Inclui dbf se for nativa
+   pegparexp()
+   lDOCCAB   := .F.
+   lDOCDAD   := .F.
+   lDOCRECNO := .F.
+   cSUBTIPO  := " "
+   
+   cTABELA:=HB_FNAMENAME(cARQORI)
+   PegcsUB( tDOC )   // pegar o subtipo conforme tipo
+   cDESTINO := cTABELA + "_mysql." + zEXPOREXT
+   MDT( "abrindo arquivo de origem: " + cTABELA )
+   
+   aSTRU=Paradox_DbStruct( cARQORI )
+   
+   USE ( cARQORI ) VIA "PXRDD" ALIAS ( cTabela )   
+
+
+
+
+   nLASTREC := LastRec()
+   zei_fort( nLASTREC,,, 0 )
+
+   //aSTRU := dbstruct()
+
+   multidocg( lDOCCAB, lDOCDAD, lDOCRECNO, cSUBTIPO, TIRAEXT( cDESTINO ), aSTRU )
+
+   dbCloseAll()
+
+   RETURN NIL
+
 
