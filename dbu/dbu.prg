@@ -50,6 +50,10 @@ REQUEST BMDBFNSX  //-17 BMDBFNSX DBFNSX
 REQUEST BMDBFNTX  //-18 BMDBFNTX DBFNTX
 REQUEST DBFCDXEX  //-19 CRYPTO   DBFCDXEX
 
+#ifdef USE_PXRDD
+    REQUEST PXRDD   //-20 Carrega a RDD do Paradox criada acima
+#endif
+
 
 //Microsoft FoxPro create an IDX index file similar ntx
 //REQUEST DBFNDX nao tem mais a rdd removido tipos dbulib.prg A dBASE III standard index file (.NDX)

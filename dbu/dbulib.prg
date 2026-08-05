@@ -189,6 +189,8 @@ WHILE .T.
       sqlitemenu()
    CASE KEY = 1 .AND. cTIPOSQL = "FIREBIRD"
       Firebirdmenu()
+   CASE KEY = 1 .AND. cTIPOSQL = "PARADOX"
+      paradoxmenu()
    CASE KEY = 1
       MDT("Sem clientelib para "+cTIPOSQL)
    CASE KEY = 2
@@ -259,6 +261,8 @@ DBFMDX PARTIAL  0x43/0x63/0x8B  .MDX       .DBT      dBASE IV MDX. Partial suppo
 SIXRDD EXTERNAL 0xE5            .BAG/.NTX  .SMT      External HiPer-Six library. Not bundled with Harbour. Legacy-specific only.
 LETO   NATIVE   any             any        any       Remote DBF over network (leto server). Works on top of DBFNTX/CDX/NSX.
 SQLRDD NATIVE   —               —          —         SQL access (MySQL, PostgreSQL, SQLite, MSSQL) using xBase syntax.
+
+PXRDD  baseada na pxlib        implementacao
 */
 
 
@@ -289,7 +293,9 @@ OPCAO(09,35,"B&MDBFCDX DBF CXD FPT ",77)  //M 16 BMDBFCDX DBFCDX DBFFPT
 OPCAO(10,35,"BMDBFNSX  DBF NSX FPT ",49)  //1 17 BMDBFNSX DBFNSX DBFFPT
 OPCAO(11,35,"BMDBFNTX  DBF NTX FPT ",50)  //2 18 BMDBFNTX DBFNTX DBFFPT 
 OPCAO(12,35,"DBFCDXEX  DBF CDX FPT ",51)  //2 19 Crypto   DBFCDXEX   -lbcrypt
-
+#ifdef USE_PXRDD
+   OPCAO(13,35,"PARADOX   DB  PX  MB  ",51)   //-20 Carrega a RDD do Paradox pxrdd
+#endif
 
 KEY := menu(2,0)
 if KEY > 0
@@ -380,16 +386,17 @@ do case
     case nTIPODBF = 18
        USOVIA := "BMDBFNTX"
        rddSetDefault("BMDBFNTX")
-       
-    
     case nTIPODBF = 19
-       zSENHACDX := INPUTBOX( PADR( zSENHACDX,30 ), "Novo database" )
+       zSENHACDX := INPUTBOX( PADR( zSENHACDX,30 ), "Senha" )
        zSENHACDX :=ALLTRIM(zSENHACDX)
        USOVIA := "DBFCDXEX"
        rddSetDefault("DBFCDXEX")   
        DbfcdxexSetup( "aes256", zSENHACDX )
-       
-       
+#ifdef USE_PXRDD
+    case nTIPODBF = 20
+        USOVIA := "PXRDD"
+        rddSetDefault("PXRDD")
+#endif
     case nTIPODBF = 90   
        USOVIA := "LETO"
        rddSetDefault("LETO")
@@ -457,12 +464,12 @@ OPCAO(12,14,"&JSON                               ",74)  //J 8
 OPCAO(13,14,"SSV Semi Colon (;) &Ponto e Virgula ",80)  //P  9
 OPCAO(14,14,"CS&V Colon     (,) Virgula          ",86)  //V1 0
 OPCAO(15,14,"&UNL PSV       (|) Pipe             ",85)  //U 11
-OPCAO(16,14,"TSV            TA&B               ",66)  //B 12
+OPCAO(16,14,"TSV            TA&B                 ",66)  //B 12
 OPCAO(17,14,"S&QL   insert into                  ",81)  //Q 13
-OPCAO(18,14,"Mar&kdown                         ",75)  //K 14
+OPCAO(18,14,"Mar&kdown                           ",75)  //K 14
 
 IF lincdbf
-   OPCAO(21,14,"DB&F                                ",70)   //F 15
+   OPCAO(21,14,"DB&F                                ",70)   //F 15-->90
 ENDIF
 tdoc := menu(2,0)
 
