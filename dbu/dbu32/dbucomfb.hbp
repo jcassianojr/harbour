@@ -89,11 +89,11 @@ Tdbclass.hbc
 #
 # sqlite
 #
-\develop\harbour\dbu\sql2dbf.prg 
+\develop\harbour\dbu\dbusqlite.prg 
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,POSTGRESQL
 #
-\develop\harbour\dbu\mdb2dbf.prg
+\develop\harbour\dbu\dburddado.prg
 #
 #
 #

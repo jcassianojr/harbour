@@ -136,12 +136,12 @@ letodb.hbc
 #
 #      ---    sqlite compilado com fontes C nativo
 #
-\develop\harbour\dbu\sql2dbf.prg 
+\develop\harbour\dbu\dbusqlite.prg 
 
 #
 #      ---    ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-\develop\harbour\dbu\mdb2dbf.prg 
+\develop\harbour\dbu\dburddado.prg 
 #\develop\harbour\dbu\adordd.prg
 
 #

@@ -90,11 +90,11 @@ Tdbclass.hbc
 #
 # sqlite
 #
-\develop\harbour\dbu\sql2dbf.prg 
+\develop\harbour\dbu\dbusqlite.prg 
 #
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
-\develop\harbour\dbu\mdb2dbf.prg
+\develop\harbour\dbu\dburddado.prg
 #
 # mysql libmysql
 #
