@@ -7,7 +7,7 @@
 #-incpath=c:\harbour\hb3rd\pgsql-x64\include
 
 # Pastas de bibliotecas
--Lc:\harbour\hb3rd\mysql-x64\lib
+#-Lc:\harbour\hb3rd\mysql-x64\lib
 #-Lc:\harbour\hb3rd\pgsql-x64\lib
 
 
@@ -98,9 +98,9 @@ Tdbclass.hbc
 #
 # mysql libmysql
 #
-\develop\harbour\dbu\dbumy.prg  
-\develop\harbour\dbu\dbumyexp.prg 
-\develop\harbourpriv\dbu\mysqlrdd.prg 
+#\develop\harbour\dbu\dbumy.prg  
+#\develop\harbour\dbu\dbumyexp.prg 
+#\develop\harbourpriv\dbu\mysqlrdd.prg 
 #
 # postgresql libpg
 #
@@ -121,6 +121,7 @@ Tdbclass.hbc
 c:\develop\harbour\dbu\dbutclass.prg
 c:\develop\harbour\dbu\dumyfb.prg
 c:\develop\harbour\dbu\dumypg.prg
+c:\develop\harbour\dbu\dumymy.prg
 c:\develop\harbour\dbu\dumysd.prg
 c:\develop\harbour\dbu\dumyoci.prg
 
