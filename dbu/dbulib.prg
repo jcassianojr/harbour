@@ -322,6 +322,9 @@ IF VALTYPE(nTIPODBF) <> "N"
    nTIPODBF := TIPODBF  //Atribui a publica se nao for passado
 ENDIF
 TABLEEXT:="DBF"
+//pego abaixo pelo redinfo
+//MEMOEXT  := "FPT"    //hb_rddInfo(RDDI_MEMOEXT)
+//INDIEXT  := "CDX"   //hb_rddInfo(RDDI_ORDBAGEXT)
 do case
     case nTIPODBF = 1
        USOVIA := "DBFNTX"
@@ -394,6 +397,7 @@ do case
        DbfcdxexSetup( "aes256", zSENHACDX )
 #ifdef USE_PXRDD
     case nTIPODBF = 20
+        TABLEEXT :="DB"
         USOVIA := "PXRDD"
         rddSetDefault("PXRDD")
 #endif
@@ -416,7 +420,7 @@ endcase
 zusovia := USOVIA
 //Algumas rdd nao tem hb_rddinfo usando try para ignonar 
 TRY
-  //TABLEEXT :=strtran(hb_rddInfo(RDDI_TABLEEXT),".","") Fixado nos case so tem dbf adt
+  //TABLEEXT :=strtran(hb_rddInfo(RDDI_TABLEEXT),".","") Fixado nos case so tem dbf adt(ads) db(paradox)
 END
 TRY
    MEMOEXT:=strtran(hb_rddInfo(RDDI_MEMOEXT),".","") 
