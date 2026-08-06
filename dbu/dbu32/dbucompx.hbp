@@ -1,56 +1,20 @@
-# Pastas de inclusão c
--cflag=-Ic:\harbour\hb3rd\mysql-x64\include
--cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
 
-# Pastas de inclusão
--incpath=c:\harbour\hb3rd\mysql-x64\include
--incpath=c:\harbour\hb3rd\pgsql-x64\include
-
-# Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
--Lc:\harbour\hb3rd\mysql-x64\lib
--Lc:\harbour\hb3rd\pgsql-x64\lib
-
-
-# Dependências (libs) requerida pela tclass
--llibmysql
--llibpq
 -lfbclient
 -lbcrypt
+-lpx
 
--DUSE_SDD_MYSQL
--cflag=-DUSE_SDD_MYSQL
--DUSE_SR_MYSQL
--cflag=-DUSE_SR_MYSQL
-
-
--DUSE_SDD_POSTGRES
--cflag=-USE_SDD_POSTGRES
--DUSE_SR_POSTGRES
--cflag=-USE_SR_POSTGRES
-
-
-# nao definindo aqui porem esta com problemas 64 bits abortando 
-#-DUSE_SDD_FIREBIRD
-#-cflag=-USE_SDD_FIREBIRD
--DUSE_SR_FIREBIRD
--cflag=-USE_SR_FIREBIRD
-
-
-# oracle implantacao futura comentado aqui para nao chamar
-#-DUSE_SDD_ORACLE
-#-cflag=-USE_SDD_ORACLE
-#-DUSE_SR_ORACLE
-#-cflag=-USE_SR_ORACLE
-
+# Setado para testes sqlrdd em firebird
+-DUSE_PXRDD
+-cflag=-USE_PXRDD
 
 -gtwvg
 -gui
 -lng=pt_BR
--inc
 
 \develop\harbour\dbu\dbu.rc
 
 -m -n -w0 -es2 -ge1
+-inc
 
 hbct.hbc
 hbwin.hbc
@@ -60,41 +24,20 @@ hbmemio.hbc
 hbziparc.hbc
 hbmxml.hbc
 hbxlsxml.hbc
-sqlrddpp.hbc
 dbfcdxex.hbc
-adoxb.hbc
+harbourparadox.hbc
 
-#
-#ads
-#
 rddads.hbc
-#
-#dbf com dbm
-#
 rddbm.hbc
 
-rddado.hbc
-#
-#nativas sqlite,libmysql,libpg,odbc
-#
 hbsqlit3.hbc
-hbmysql.hbc
-hbpgsql.hbc
 hbodbc.hbc
-#
-# sqlmix
-#
 rddsql.hbc
 sddodbc.hbc
-sddmy.hbc
-sddfb.hbc
-sddpg.hbc
 sddsqlt3.hbc
 letodb.hbc
-#sddoci.hbc
-hbfbird.hbc
-
-Tdbclass.hbc
+adoxb.hbc
+rddado.hbc
 
 sqlrddpp.hbc
 
@@ -112,53 +55,27 @@ sqlrddpp.hbc
 \develop\harbour\dbu\dbuver.prg
 \develop\harbour\dbu\dbuview.prg
 \develop\harbour\dbu\dbuXLSclass.prg
-\develop\harbourPRIV\dbu\XLSXClass.prg
+\develop\harbourpriv\dbu\XLSXClass.prg
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
-#\develop\harbour\dbu\dbu2md.prg
-\develop\harbour\dbu\dbufire.prg 
-\develop\harbour\dbu\dbumypdx.prg
 \develop\harbour\dbu\dbumddbml.prg
 \develop\harbour\dbu\dbucrypto.prg
 
-
-#
-# sqlite
-#
 \develop\harbour\dbu\dbusqlite.prg 
-#
-# ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
-#
 \develop\harbour\dbu\dburddado.prg
-#
-# mysql libmysql
-#
-\develop\harbour\dbu\dbumy.prg  
-\develop\harbour\dbu\dbumyexp.prg 
-\develop\harbourpriv\dbu\mysqlrdd.prg 
-#
-# postgresql libpg
-#
-\develop\harbour\dbu\dbupg.prg
-\develop\harbour\dbu\dbupgexp.prg
-\develop\harbourpriv\dbu\pgrdd.prg
-#
 \develop\harbour\dbu\dbumix.prg
-#
-#
 \develop\harbour\dbu\dbuodbc.prg 
-#
-#\develop\harbour\dbu\adoxb.prg   
 \develop\harbour\dbu\dbuadox.prg 
-#
 \develop\harbour\dbu\dbuleto.prg 
-#
-c:\develop\harbour\dbu\dbutclass.prg
-
-
+c:\develop\harbour\dbu\dumypg.prg
+c:\develop\harbour\dbu\dumyfb.prg
+c:\develop\harbour\dbu\dumytd.prg
+c:\develop\harbour\dbu\dumymy.prg
 c:\develop\harbour\dbu\dumyOCI.prg
-c:\develop\harbour\dbu\dbusqlrdd.prg
+c:\develop\harbour\dbu\dumySD.prg
+c:\develop\harbour\dbu\dbuparadox.prg
+
 
 \develop\harbour\objmgw\netdbf.prg
 \develop\harbour\objmgw\comp.prg  
@@ -185,8 +102,5 @@ c:\develop\harbour\dbu\dbusqlrdd.prg
 \develop\harbour\objmgw\modeseguranca.prg
 \develop\harbour\objmgw\escolherpasta.prg
 
-# necessarias se compilar com tclass nao usando tclass.hbc
-#c:\develop\harbour\dbu\tclass\Tdbclass.prg
-#c:\develop\harbour\dbu\tclass\cocoa_mysql.c
-#c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
+
 

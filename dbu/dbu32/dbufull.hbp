@@ -29,9 +29,9 @@
 
 
 # nao definindo aqui porem esta com problemas 64 bits abortando 
-#-DUSE_USE_SDD_FIREBIRD
+#-DUSE_SDD_FIREBIRD
 #-cflag=-USE_SDD_FIREBIRD
--DUSE_USE_SR_FIREBIRD
+-DUSE_SR_FIREBIRD
 -cflag=-USE_SR_FIREBIRD
 
 

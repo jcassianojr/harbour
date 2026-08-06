@@ -139,13 +139,13 @@ FUNCTION paradoximportadbf()
             IF MDG("Arquivo individual")
                cARQORI    := win_GetOpenFileName(, "Arquivos de Origem", hb_cwd(), "Arquivos de Origem", "*."+TABLEEXT, 1 )
                 IF File( cARQORI )
-                   dbf_to_paradox(cARQORI,cORIDRIVER,lincdados)
+                   dbf_para_paradox(cARQORI,cORIDRIVER,lincdados)
                 ENDIF
             ELSE
                cPASTA:=SelectFolder()
                cPASTA+="\*."+TABLEEXT 
                //FAZERDBF(bUSO                                       , lSHARE[.F.] , bPRE, bPOS, cMASK ,LOPEN )
-               FAZERDBF( {|| dbf_to_paradox(cCAMINHOCOMPLETO,cORIDRIVER,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
+               FAZERDBF( {|| dbf_para_paradox(cCAMINHOCOMPLETO,cORIDRIVER,lincdados) }, .F. ,     ,     ,cPASTA,.F.)
             ENDIF   
             RDDNOME( nOLDTIPO )   // retorna tipo anterior
 RETURN
