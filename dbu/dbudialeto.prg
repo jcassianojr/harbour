@@ -32,6 +32,22 @@ MySQL / MariaDB: Limite de 64 caracteres.
 DuckDB / SQLite / SQL Server: Limite de pelo menos 128 a 256 caracteres (SQLite e DuckDB praticamente ilimitados).
 */
 
+
+// Exemplo de função para higienizar a matriz do dbstruct()
+//As letras após os dois pontos: Representam flags de collation, suporte a Unicode/UTF-8 e regras de comparação de strings. No caso específico de :BZEU:
+//    B / BZ: Frequentemente associado a Binary ou Binary Collation / Case-Insensitive (regras de ordenação binária ou sem distinção entre maiúsculas e minúsculas).
+//    EU / U: Indica tipicamente suporte a UTF-8 (Extended Unicode ou UTF-8 Encoding).
+FUNCTION CleanDbStruct( aStruct )
+   Local i, cType
+   For i := 1 To Len( aStruct )
+      cType := aStruct[ i, 2 ] // Pega a string do tipo (ex: "C:BZEU")
+      If At( ":", cType ) > 0
+         // Corta tudo a partir dos dois pontos, mantendo apenas a letra base (ex: "C")
+         aStruct[ i, 2 ] := SubStr( cType, 1, At( ":", cType ) - 1 )
+      EndIf
+   Next
+RETURN aStruct
+
 FUNCTION ConverterEmptyParaSQL( cSQL )
    LOCAL nPos, nInicio, nFim, cCampo, cSubst, lNot, nTamRemover
    
