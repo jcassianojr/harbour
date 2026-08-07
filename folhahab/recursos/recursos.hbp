@@ -8,6 +8,7 @@
 #-exitstr -info -jobs=10 -trace -q -map -w3 -es2 -p.\PPO\
 #-m -n -w3 -es2 -ge1
 -m -n -w0 -es2 -ge1
+-inc
 
 hbct.hbc
 hbwin.hbc

@@ -12,7 +12,7 @@
 // +
 // +     Autor: jcassiano
 // +
-// +     Copyright (c) 2024,  jcassiano
+// +     Copyright (c) 2024-2026,  jcassiano
 // +
 // +
 // +
@@ -25,30 +25,33 @@
 // +--------------------------------------------------------------------
 // +
 
-
-
 // Teclas Operacionais
 #include "INKEY.CH"
-
+#include "dbinfo.ch"
 
 
 // +--------------------------------------------------------------------
-// +
-// +
 // +
 // +    Function USEREDE()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME )  // Arquivo,Modo,Indices,Area,mensagem,tempo
 
    LOCAL cARQDIR := ""
    LOCAL aARQIND := {}
+   LOCAL cTableExt, cOrdExt
    PRIVATE X
+
+   // Obtem as extensoes dinamicamente via hb_rddInfo, aplicando valores padrao se vazio
+   cTableExt := hb_rddInfo( RDDI_TABLEEXT )
+   IF Empty( cTableExt )
+      cTableExt := "dbf"
+   ENDIF
+
+   cOrdExt := hb_rddInfo( RDDI_ORDBAGEXT )
+   IF Empty( cOrdExt )
+      cOrdExt := "cdx"
+   ENDIF
 
    IF ValType( lMES ) # "L"
       lMES := .T.
@@ -62,6 +65,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME )  // Arquivo,Modo,Indices
       RETURN .F.
    ENDIF
    cARQ := Upper( CARQ )
+   cARQ := StrTran( cARQ, "." + Upper( cTableExt ), "" )
    cARQ := StrTran( cARQ, ".DBF", "" )
    IF ValType( nMOD ) # "N"
       ALERTX( "Funcao USEREDE, Modo de Abertura nao e Numerico" )
@@ -81,7 +85,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME )  // Arquivo,Modo,Indices
          RETURN .F.
       ENDIF
    ENDIF
-// Abrindo o Arquivo de Configura‡„o do Arquivo
+// Abrindo o Arquivo de Configuracao do Arquivo
    IF !USECHK( ZDIRC + ZARQ, ZDIRC + ZARQ, .T. )
       RETURN .F.
    ENDIF
@@ -94,7 +98,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME )  // Arquivo,Modo,Indices
       RETURN .F.
    ENDIF
 
-// Carrega o Diret¢rio do Arquivo
+// Carrega o Diretorio do Arquivo
    cARQDIR := LOCALARQ( PADRAO, CAMINHO )
 
 // Carrega o Driver
@@ -104,9 +108,9 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME )  // Arquivo,Modo,Indices
       cDRIVER := "DBFCDX"
    ENDIF
 // Verifica a existencia do Arquivo
-   IF !File( cARQDIR + cARQ + ".DBF" )
+   IF !File( cARQDIR + cARQ + "." + cTableExt )
       IF lMES
-         ALERTX( "O Sistema nAo Encontrou o Arquivo " + cARQ )
+         ALERTX( "O Sistema nao Encontrou o Arquivo " + cARQ )
       ENDIF
       RETURN .F.
    ENDIF
@@ -115,7 +119,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME )  // Arquivo,Modo,Indices
       IF cDRIVER = "DBFCDX"  // somente um elemento aARQIND com o mesmo nome do arquivo
          AAdd( aARQIND, cARQ )  // Mesmo Nome do Arquivo
       ELSE   // ntx pega e adiciona na aarqind
-         // Abrindo o Arquivo de Configura‡„o de Indexacao
+         // Abrindo o Arquivo de Configuracao de Indexacao
          IF !USECHK( ZDIRC + ZARQ1, ZDIRC + ZARQ1, .T. )
             RETURN .F.
          ENDIF
@@ -144,7 +148,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME )  // Arquivo,Modo,Indices
 // Verifica a Existencia dos Indices
    IF nIND > 0
       FOR X := 1 TO Len( aARQIND )
-         IF !File( cARQDIR + aARQIND[ X ] + if( cDRIVER = "DBFCDX", ".CDX", ".NTX" ) )
+         IF !File( cARQDIR + aARQIND[ X ] + if( cDRIVER = "DBFCDX", "." + cOrdExt, ".NTX" ) )
             ALERTX( "Falta arquivo de Indice: " + aARQIND[ X ] + " de " + cARQ )
             IF MDG( "Indexar " + cARQ )
                M_DB( "ARQUIVO='" + cARQ + "'" )
@@ -200,23 +204,30 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME )  // Arquivo,Modo,Indices
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function USECHK()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES )
+
+   LOCAL cTableExt, cOrdExt
+   LOCAL cDbfFile
+
+   // Obtem as extensoes dinamicamente via hb_rddInfo, aplicando valores padrao se vazio
+   cTableExt := hb_rddInfo( RDDI_TABLEEXT )
+   IF Empty( cTableExt )
+      cTableExt := "dbf"
+   ENDIF
+
+   cOrdExt := hb_rddInfo( RDDI_ORDBAGEXT )
+   IF Empty( cOrdExt )
+      cOrdExt := "cdx"
+   ENDIF
 
    IF ValType( lMES ) <> "L"
       lMES := .T.
    ENDIF
    IF ValType( cDRIVER ) # "C" .OR. Empty( cDRIVER )
-      cDRIVER := IF( cRDDEXT = "CDX" .OR. Empty( CRDDEXT ), "DBFCDX", "DBFNTX" )
+      cDRIVER := IF( Upper( cOrdExt ) = "CDX" .OR. Empty( cOrdExt ), "DBFCDX", "DBFNTX" )
    ELSE
       cDRIVER := AllTrim( cDRIVER )
    ENDIF
@@ -226,7 +237,9 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES )
    IF ValType( nTIME ) # "N"
       nTIME := -1
    ENDIF
-   IF !File( cARQ + ".DBF" )
+
+   cDbfFile := cARQ + "." + cTableExt
+   IF !File( cDbfFile ) .AND. !File( cARQ )
       IF lMES
          ALERTX( "Falta Arquivo: " + Carq )
       ELSE
@@ -235,9 +248,6 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES )
       RETURN .F.
    ENDIF
    WHILE .T.
-      // DBUSEAREA( [<lNewArea>], [<cDriver>], <cName>, [<xcAlias>],[<lShared>], [<lReadonly>])
-      // dbusearea( lNEW, cDRIVER, cARQ,, lSHA, lREAD )
-
       dbUseArea( lNEW, cDRIVER, cARQ,, lSHA, .F. )
       IF !NetErr()
          EXIT
@@ -248,13 +258,12 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES )
       IF nTIME = 0
          RETURN .F.
       ENDIF
-      // -1 nao faz nada
       IF nTIME = -2
          IF !MDG( "Deseja Retentar" )
             RETURN .F.
          ENDIF
       ENDIF
-      MDS( "Nao Estou Conseguindo Abrir aquivo " + cARQ )
+      MDS( "Nao Estou Conseguindo Abrir arquivo " + cARQ )
       KEY := Inkey( 1 )
       IF KEY = K_ESC
          RETURN .F.
@@ -274,16 +283,9 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES )
 
 // +--------------------------------------------------------------------
 // +
-// +
-// +
 // +    Function LOCALARQ()
 // +
-// +
-// +
 // +--------------------------------------------------------------------
-// +
-// +
-// +
 FUNCTION LOCALARQ( cPADRAO, cCAMINHO )
 
    cARQDIR := ZDIRP
@@ -309,4 +311,3 @@ FUNCTION LOCALARQ( cPADRAO, cCAMINHO )
    RETURN cARQDIR
 
 // + EOF: mlib29.prg
-// +
