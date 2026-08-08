@@ -7,8 +7,7 @@
 -cflag=-USE_SR_FIREBIRD
 
 
-# Dependências (libs) requerida pela tclass
-#-llibpq
+# Dependências (libs) 
 -lfbclient
 -lbcrypt
 
@@ -57,10 +56,8 @@ sddodbc.hbc
 sddfb.hbc
 sddsqlt3.hbc
 letodb.hbc
-#sddoci.hbc
 hbfbird.hbc
 
-Tdbclass.hbc
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
@@ -80,7 +77,6 @@ Tdbclass.hbc
 \develop\harbour\dbu\dbusincdbf.prg
 \develop\harbour\dbu\dbudialeto.prg 
 \develop\harbour\dbu\dbuxlsxml.prg
-#\develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbumddbml.prg
 \develop\harbour\dbu\dbufire.prg 
 \develop\harbour\dbu\dbumypdx.prg
@@ -107,7 +103,6 @@ Tdbclass.hbc
 #
 \develop\harbour\dbu\dbuleto.prg 
 #
-#c:\develop\harbour\dbu\dbutclass.prg
 c:\develop\harbour\dbu\dumypg.prg
 c:\develop\harbour\dbu\dumytd.prg
 c:\develop\harbour\dbu\dumymy.prg
@@ -140,8 +135,4 @@ c:\develop\harbour\dbu\dumyOCI.prg
 \develop\harbour\objmgw\modeseguranca.prg
 \develop\harbour\objmgw\escolherpasta.prg
 
-# necessarias se compilar com tclass nao usando tclass.hbc
-#c:\develop\harbour\dbu\tclass\Tdbclass.prg
-#c:\develop\harbour\dbu\tclass\cocoa_mysql.c
-#c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
 

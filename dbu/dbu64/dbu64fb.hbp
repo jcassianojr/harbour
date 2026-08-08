@@ -1,18 +1,4 @@
-# Pastas de inclusão c
-#-cflag=-Ic:\harbour\hb3rd\mysql-x64\include
-#-cflag=-Ic:\harbour\hb3rd\pgsql-x64\include
-
-# Pastas de inclusão
-#-incpath=c:\harbour\hb3rd\mysql-x64\include
-#-incpath=c:\harbour\hb3rd\pgsql-x64\include
-
-# Pastas de bibliotecas (essencial para evitar o erro de 'cannot find')
-#-Lc:\harbour\hb3rd\mysql-x64\lib
-#-Lc:\harbour\hb3rd\pgsql-x64\lib
-
 # Dependências (libs)
-#-llibmysql
-#-llibpq
 -lfbclient
 -lbcrypt
 
@@ -42,10 +28,6 @@ rddado.hbc
 dbfcdxex.hbc
 
 hbsqlit3.hbc
-#usando prg no lugar da lib abaixo
-#rddado.hbc
-#hbmysql.hbc
-#hbpgsql.hbc
 hbodbc.hbc
 hbmemio.hbc
 hbziparc.hbc
@@ -56,10 +38,7 @@ hbxlsxml.hbc
 #
 rddsql.hbc
 sddodbc.hbc
-#sddmy.hbc
-#sddpg.hbc
 sddsqlt3.hbc
-#sddoci.hbc
 hbfbird.hbc
 
 #hbfbird.hbc usando as dll compiladas com msv incluidas no robin nao aborta nem da erro 142
@@ -67,7 +46,6 @@ hbfbird.hbc
 
 letodb.hbc
 
-#tdbclass.hbc
 
 \develop\harbour\dbu\DBU.PRG  
 \develop\harbour\dbu\dbucnvmemo.prg 
@@ -96,30 +74,14 @@ letodb.hbc
 # ADO ODBC MDB,ACCESS,ACCDB,SQLITE,MYSQL,POSTGRESQL
 #
 \develop\harbour\dbu\dburddado.prg 
-#\develop\harbour\dbu\adordd.prg
-#
-# mysql libmysql
-#
-#\develop\harbour\dbu\dbumy.prg  
-#\develop\harbour\dbu\dbumyexp.prg 
-#\develop\harbour\dbu\mysqlrdd.prg 
-#
-# postgresql libpg
-#
-#\develop\harbour\dbu\dbupg.prg
-#\develop\harbour\dbu\dbupgexp 
-#\develop\harbour\dbu\pgrdd.prg
 #
 \develop\harbour\dbu\dbumix.prg
 #
 \develop\harbour\dbu\dbuodbc.prg
 #
-#\develop\harbour\dbu\adoxb.prg
 \develop\harbour\dbu\dbuadox.prg 
-#\develop\harbour\dbu\dbu2md.prg
 \develop\harbour\dbu\dbumddbml.prg
 \develop\harbour\dbu\dbucrypto.prg
-
 #
 #
 \develop\harbour\dbu\dbuleto.prg 
@@ -156,13 +118,6 @@ letodb.hbc
 \develop\harbour\dbu\dumytd.prg
 \develop\harbour\dbu\dumysd.prg
 \develop\harbour\dbu\dumymy.prg
-c:\develop\harbour\dbu\dumyOCI.prg
+\develop\harbour\dbu\dumyOCI.prg
 
 
-#
-#       ---   tbclass   ---
-#
-#c:\develop\harbour\dbu\dbutclass.prg
-#c:\develop\harbour\dbu\tclass\Tdbclass.prg
-#c:\develop\harbour\dbu\tclass\cocoa_mysql.c
-#c:\develop\harbour\dbu\tclass\cocoa_pgsql.c
