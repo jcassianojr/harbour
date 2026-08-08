@@ -51,8 +51,13 @@
 
 //erro 64 bits usando outra tag
 #ifdef USE_SDD_FIREBIRD
-   require "sddfb" 
+   #require "sddfb" 
 #endif
+
+#ifdef USE_SDD_FB5
+   #require "sddfb5" 
+#endif
+
 
 #ifdef USE_SDD_ORACLE
     #require "sddoci"

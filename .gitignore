@@ -1,5 +1,3 @@
-*.c
-*.ch
 *.exe
 *.log
 *.o
@@ -19,3 +17,15 @@ mana5/vcshead.ch
 sefazclass/gerapdf/tshead.ch
 sefazclass/gerapdf/vcshead.ch
 *.dll
+/dbu/dbu32/.hbmk
+/dbu/dbu64/.hbmk
+/folhahab/obj/.hbmk
+folhahab/obj/tshead.ch
+folhahab/obj/vcshead.ch
+folhahab/pto/adordd.ch
+folhahab/pto/tshead.ch
+folhahab/pto/vcshead.ch
+folhahab/recursos/tshead.ch
+folhahab/recursos/vcshead.ch
+folhahab/rfe/tshead.ch
+folhahab/rfe/vcshead.ch

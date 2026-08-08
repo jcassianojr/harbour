@@ -28,7 +28,7 @@
 #include "dbstruct.ch"
 
 #include "directry.ch"
-#require "hbfbird"
+#require "hbfbird5"
 
 
 // +--------------------------------------------------------------------
@@ -184,8 +184,8 @@ ELSE
    cConnString := AllTrim(cSERVERX) + ":" 
 ENDIF   
 
-// Instancia o servidor nativo usando TFBServer (Dialeto padrão 3)
-oServer := TFBServer():New( cConnString, AllTrim(cUSERX), AllTrim(cPASSX), 3 )
+// Instancia o servidor nativo usando Fb5class (Dialeto padrão 3)
+oServer := Fb5class():New( cConnString, AllTrim(cUSERX), AllTrim(cPASSX), 3 )
 
 IF oServer:NetErr()
    Alert( "Falha na conexao Nativa Firebird: " + oServer:Error() )
@@ -334,7 +334,7 @@ aINDICES:=GeraINDICES()
 
 
 
-// Conecta nativamente via classe TFBServer
+// Conecta nativamente via classe Fb5class
 oServer := fireconnect()
 IF oServer == NIL
    dbCloseArea()
@@ -351,7 +351,7 @@ aRETUMETA:=GeraSQLMetadata()
   
   IF ! Empty( cSqlFields )
      oServer:Execute(cSqlFields )
-    // oServer:Commit()
+   //  oServer:Commit()
      mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON table_metadata TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
      oServer:Execute( msql )
     // oServer:Commit()
@@ -359,16 +359,17 @@ aRETUMETA:=GeraSQLMetadata()
 
   IF ! Empty( cSqlIndexes )
      oServer:Execute(cSqlIndexes )
-     //oServer:Commit()
+    // oServer:Commit()
      mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON index_metadata TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
      oServer:Execute( msql )
-     //oServer:Commit()
+    // oServer:Commit()
   ENDIF 
 
 
 // Limpar metadados antigos desta tabela específica 
 oServer:Execute( "DELETE FROM table_metadata WHERE nome_tabela = " + c2sql(cTable) )
-//oServer:Commit()   
+//oServer:Commit()
+   
 // LIMPA todos os metadados de índices desta tabela 
 oServer:Execute( "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTable) )
 //oServer:Commit()
@@ -388,6 +389,7 @@ IF oServer:TableExists( cTABLE )
    IF ! MDG("Excluir tabela existente"+ cTABLE)
      dbCloseArea()
      oServer:Destroy()
+     return .f.
    ELSE
      oServer:Execute( "DROP TABLE " + cTABLE )
     // oServer:Commit()
@@ -402,9 +404,11 @@ HB_memowrit("create_firebird_"+cTABLE+".SQL",MSQL,.F.)
 oServer:Execute( msql )
 //oServer:Commit()
 
+
 mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON "+cTABLE+" TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
 oServer:Execute( msql )
-// oServer:Commit()
+//oServer:Commit()
+ 
 
 // Criação dos índices coletados
 FOR i := 1 TO Len( aINDICES )
@@ -417,7 +421,6 @@ FOR i := 1 TO Len( aINDICES )
    oServer:Execute( aINDICES[i,2] )  //metadado
    //oServer:Commit()
 NEXT i
-
 oServer:Commit()
 
 nCont := 0
