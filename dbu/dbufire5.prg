@@ -205,6 +205,9 @@ oServer := fireconnect()
 IF oServer != NIL
    // Captura a string de versão retornada diretamente pela API do cliente Firebird
    cVersionInfo := oServer:GetServerInfo()
+   hb_memowrit("info01",oServer:GetServerInfo())
+   hb_memowrit("info02",hb_valtoexp(oServer:ListTables()))
+   hb_memowrit("info03",hb_valtoexp(oServer:TableStruct( "CLIENTES" )))
    
    IF Empty( cVersionInfo )
       cVersionInfo := "Nao foi possivel ler os detalhes da versao."
@@ -220,42 +223,9 @@ ENDIF
 
 RETURN .T.
 
-// +--------------------------------------------------------------------
-// +    Function GetTablesFB( oServer )
-// +--------------------------------------------------------------------
-FUNCTION GetTablesFB( oServer )
-   LOCAL oQuery
-   LOCAL aTables := {}
-   LOCAL cSQL := "SELECT CAST(RDB$RELATION_NAME AS VARCHAR(31)) AS TABLE_NAME " + ;
-                 "FROM RDB$RELATIONS " + ;
-                 "WHERE COALESCE(RDB$SYSTEM_FLAG, 0) = 0 " + ;
-                 "AND RDB$VIEW_BLR IS NULL " + ;
-                 "ORDER BY RDB$RELATION_NAME"
-
-   oQuery := oServer:Query( cSQL )
-   
-   IF oQuery != NIL
-      WHILE !oQuery:Eof()
-         oRow := oQuery:GetRow()
-         // Adiciona o nome da tabela à matriz
-         eVALOR:=ALLTRIM(oRow:FieldGet( 1 ))
-         AAdd( aTables,eVALOR  )// oQuery:FieldGet( 1 ) )
-         oQuery:Skip()
-      ENDDO
-      oQuery:Destroy()
-   ENDIF
-
-RETURN aTables
-
-// +--------------------------------------------------------------------
-// +    Function fireTABELAS()
-// +--------------------------------------------------------------------
-FUNCTION fireTABELAS()
-mdbtabela( cDATABASEX )
-RETURN .T.
 
 
-FUNCTION fireTABELASTESTE( lNATIVE )
+FUNCTION fireTABELAS( lNATIVE )
    LOCAL oServer, aTABELAS := {}
 
    IF VALTYPE( lNATIVE ) <> "L"
@@ -266,7 +236,7 @@ FUNCTION fireTABELASTESTE( lNATIVE )
       oServer := fireconnect()
       IF oServer != NIL
          // Substituindo o oServer:ListTables() pela nossa nova função
-         aTABELAS := GetTablesFB( oServer )
+         aTABELAS := oServer:ListTables()
          
          IF !Empty( aTABELAS )
             mdbtabela( aTABELAS ) // Passa a matriz populada para sua rotina de interface
@@ -383,6 +353,9 @@ oServer:Execute( "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTabl
    NEXT J
 
 
+oServer:Commit()
+oServer:StartTransaction()
+
 
 // Se a tabela já existir, dropa para evitar conflitos de reimportação
 IF oServer:TableExists( cTABLE )
@@ -396,19 +369,45 @@ IF oServer:TableExists( cTABLE )
    ENDIF  
 ENDIF
 
+IF oServer:StartedTrans
+   oServer:Commit()
+ENDIF
+
+oServer:Destroy()
+
+oServer := fireconnect()
+IF oServer == NIL
+   dbCloseArea()
+   RETURN .F.
+ENDIF
 
 
+
+oServer:StartTransaction()
 // Gera a estrutura DDL adaptada para o Firebird usando seu tradutor existente
 msql := SqliteCreateTable( cTABLE, aSTRU, "FIREBIRD" )
 HB_memowrit("create_firebird_"+cTABLE+".SQL",MSQL,.F.)
+//altd()
+
+//O execute nao roda muliplas linha 
+aCAMPOS:=HB_ATokens(msql,hb_eol()) 
+FOR iac:=1 to len(acampos)
+    msql:=aCAMPOS[iac]
+    oServer:Execute( msql )
+    mdt(msql)
+next iac
 oServer:Execute( msql )
-//oServer:Commit()
+oServer:Commit()
 
 
-mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON "+cTABLE+" TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
-oServer:Execute( msql )
+oServer:StartTransaction()
+
+//ja no 
+//mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON "+cTABLE+" TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
+//oServer:Execute( msql )
 //oServer:Commit()
- 
+
+oServer:StartTransaction()
 
 // Criação dos índices coletados
 FOR i := 1 TO Len( aINDICES )
@@ -498,17 +497,6 @@ aStructInfo := MDBTABLES(cDATABASEX,cTABELAX)
 
 
 aStructInfo:=sqltodbfstru(aStructInfo)
-
-//nFIM        := Len( aStructInfo )
-
-//FOR i := 1 TO nFIM
-//   cFieldName   := aStructInfo[i, 1] // Nome do campo
-//   cFieldType   := aStructInfo[i, 2] // Tipo ("C", "N", "D", "L", "M")
-//   nFieldLength := aStructInfo[i, 3] // Tamanho
-//   nFieldDec    := aStructInfo[i, 4] // Decimais
-   
-//   AAdd( aSTRU, geracampodbf( cFieldName, cFieldType, nFieldLength, nFieldDec ) )
-//NEXT i
 
 
 cDESTINO := AllTrim(cTABELAX) + "_FIREBIRD"

@@ -381,6 +381,10 @@ oServer:Execute( "DELETE FROM index_metadata WHERE nome_tabela = " + c2sql(cTabl
   //     oServer:Commit()
    NEXT J
 
+oServer:Commit()
+
+mdt("commit meta")
+oServer:StartTransaction()
 
 
 // Se a tabela já existir, dropa para evitar conflitos de reimportação
@@ -394,17 +398,42 @@ IF oServer:TableExists( cTABLE )
    ENDIF  
 ENDIF
 
+IF oServer:StartedTrans
+   oServer:Commit()
+ENDIF
 
+oServer:Destroy()
 
+oServer := fireconnect()
+IF oServer == NIL
+   dbCloseArea()
+   RETURN .F.
+ENDIF
+
+oServer:StartTransaction()
 // Gera a estrutura DDL adaptada para o Firebird usando seu tradutor existente
 msql := SqliteCreateTable( cTABLE, aSTRU, "FIREBIRD" )
 HB_memowrit("create_firebird_"+cTABLE+".SQL",MSQL,.F.)
-oServer:Execute( msql )
-//oServer:Commit()
 
-mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON "+cTABLE+" TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
+//O execute nao roda muliplas linha 
+aCAMPOS:=HB_ATokens(msql,hb_eol()) 
+FOR iac:=1 to len(acampos)
+    msql:=aCAMPOS[iac]
+    oServer:Execute( msql )
+    mdt(msql)
+next iac
 oServer:Execute( msql )
-// oServer:Commit()
+oServer:Commit()
+
+
+oServer:StartTransaction()
+
+//ja no 
+//mSQL="GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE  ON "+cTABLE+" TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;"
+//oServer:Execute( msql )
+//oServer:Commit()
+oServer:StartTransaction()
+
 
 // Criação dos índices coletados
 FOR i := 1 TO Len( aINDICES )
