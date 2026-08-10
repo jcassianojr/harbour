@@ -3,8 +3,8 @@
 -lbcrypt
 
 # Setado para testes sqlrdd em firebird
--DUSE_SR_FIREBIRD
--cflag=-USE_SR_FIREBIRD
+#-dUSE_SR_FIREBIRD
+#-cflag=-USE_SR_FIREBIRD
 
 -gtwvg
 -gui
@@ -14,6 +14,7 @@
 
 -m -n -w0 -es2 -ge1
 -inc
+-workdir=.hbmk/dbu
 
 hbct.hbc
 hbwin.hbc

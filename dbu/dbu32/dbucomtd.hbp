@@ -16,6 +16,7 @@
 -lbcrypt
 
 -inc
+-workdir=.hbmk/dbucomtd
 -gtwvg
 -gui
 -lng=pt_BR

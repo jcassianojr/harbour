@@ -5,6 +5,10 @@
 -tshead=tshead.ch
 #-manifest=recursos.Manifest  comentado erro compilacao 32 bits
 
+
+#-dUSE_PXRDD
+#-cflag=-USE_PXRDD
+
 #-exitstr -info -jobs=10 -trace -q -map -w3 -es2 -p.\PPO\
 #-m -n -w3 -es2 -ge1
 -m -n -w0 -es2 -ge1
@@ -17,6 +21,8 @@ xhb.hbc
 hbhpdf.hbc
 hbmisc.hbc
 gtwvg.hbc
+harbourparadox.hbc
+hbsqlit3.hbc
 recursos.prg
 recuproc.prg
 recumenu.prg
@@ -69,10 +75,10 @@ recuger1.prg
 \develop\harbour\objmgw\mlib06.prg
 \develop\harbour\objmgw\mlib16.prg
 \develop\harbour\objmgw\mmousen.prg
-\develop\harbour\objmgw\netdbf.prg
+\develop\harbour\objmgw\netdbfsd3.prg
 \develop\harbour\objmgw\pdf.prg
 \develop\harbour\objmgw\profile.prg
 \develop\harbour\objmgw\xhberr_mode.prg
 \develop\harbour\objmgw\wvgini.prg
 \develop\harbour\objmgw\modeseguranca.prg
-
+\develop\harboursqliterdd\SL3RDD.prg

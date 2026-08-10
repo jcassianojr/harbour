@@ -15,10 +15,10 @@
 #-llibpq
 -lbcrypt
 
--DUSE_SDD_MYSQL
--cflag=-DUSE_SDD_MYSQL
--DUSE_SR_MYSQL
--cflag=-DUSE_SR_MYSQL
+-dUSE_SDD_MYSQL
+-cflag=-dUSE_SDD_MYSQL
+-dUSE_SR_MYSQL
+-cflag=-dUSE_SR_MYSQL
 
 
 # flasgs compilacao
@@ -26,6 +26,7 @@
 -gui
 -lng=pt_BR
 -inc
+-workdir=.hbmk/dbu64my
 
 #
 #      --- apoio,auxiliares

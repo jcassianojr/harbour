@@ -5,11 +5,11 @@
 -loci
 
 # oracle mix ssdoci
-#-DUSE_SDD_ORACLE
+#-dUSE_SDD_ORACLE
 #-cflag=-USE_SDD_ORACLE
 
 # oracle sqlrddpp
--DUSE_SR_ORACLE
+-dUSE_SR_ORACLE
 -cflag=-USE_SR_ORACLE
 
 
@@ -17,6 +17,7 @@
 -gui
 -lng=pt_BR
 -inc
+-workdir=.hbmk/dbucomoci
 
 \develop\harbour\dbu\dbu.rc
 

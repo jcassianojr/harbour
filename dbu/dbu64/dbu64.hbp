@@ -20,6 +20,7 @@
 -gui
 -lng=pt_BR
 -inc
+-workdir=.hbmk/dbu64
 
 #
 #      --- apoio,auxiliares

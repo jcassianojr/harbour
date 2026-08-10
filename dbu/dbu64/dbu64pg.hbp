@@ -16,16 +16,17 @@
 -lbcrypt
 
 
--DUSE_SDD_POSTGRES
+-dUSE_SDD_POSTGRES
 -cflag=-USE_SDD_POSTGRES
 
--DUSE_SR_POSTGRES
+-dUSE_SR_POSTGRES
 -cflag=-USE_SR_POSTGRES
 
 -gtwvg
 -gui
 -lng=pt_BR
 -inc
+-workdir=.hbmk/dbu64pg
 
 hbct.hbc
 hbwin.hbc

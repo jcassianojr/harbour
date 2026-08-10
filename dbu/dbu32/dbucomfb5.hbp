@@ -1,9 +1,9 @@
 
--DUSE_SDD_FB5
--cflag=-USE_SDD_FB5
+-dUSE_SDD_FB5
+#-cflag=-USE_SDD_FB5
 
--DUSE_SR_FIREBIRD
--cflag=-USE_SR_FIREBIRD
+-dUSE_SR_FIREBIRD
+#-cflag=-USE_SR_FIREBIRD
 
 
 # Dependências (libs) 
@@ -15,6 +15,7 @@
 -gui
 -lng=pt_BR
 -inc
+-workdir=.hbmk/dbucomfb5
 
 \develop\harbour\dbu\dbu.rc
 

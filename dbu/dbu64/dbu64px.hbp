@@ -4,7 +4,7 @@
 -lpx
 
 # Setado para testes sqlrdd em firebird
--DUSE_PXRDD
+-dUSE_PXRDD
 -cflag=-USE_PXRDD
 
 -gtwvg
@@ -15,6 +15,7 @@
 
 -m -n -w0 -es2 -ge1
 -inc
+-workdir=.hbmk/dbu64px
 
 hbct.hbc
 hbwin.hbc

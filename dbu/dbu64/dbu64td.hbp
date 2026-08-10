@@ -21,6 +21,8 @@
 -gtwvg
 -gui
 -lng=pt_BR
+-inc
+-workdir=.hbmk/dbu64td
 
 \develop\harbour\dbu\dbu.rc
 
