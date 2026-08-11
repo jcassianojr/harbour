@@ -1,3 +1,0 @@
-function tclassmenu()
-return
-
