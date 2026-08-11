@@ -12,20 +12,20 @@ hbmisc.hbc
 gtwvg.hbc
  
 convcep.PRG   -b
-\develop\harbour\objmgw\cepsutil.prg
-\develop\harbour\objmgw\comp.prg
-\develop\harbour\objmgw\netdbf.prg
-\develop\harbour\objmgw\disk53.prg
-\develop\harbour\objmgw\disk55.prg
-\develop\harbour\objmgw\disk56.prg
-\develop\harbour\objmgw\disk64.prg
-\develop\harbour\objmgw\disk66.prg
-\develop\harbour\objmgw\f_freadl.prg
-\develop\harbour\objmgw\mlib06.prg
-\develop\harbour\objmgw\mlib16.prg
+\develop\harbour\diversos\objmgw\cepsutil.prg
+\develop\harbour\diversos\objmgw\comp.prg
+\develop\harbour\diversos\objmgw\netdbf.prg
+\develop\harbour\diversos\objmgw\disk53.prg
+\develop\harbour\diversos\objmgw\disk55.prg
+\develop\harbour\diversos\objmgw\disk56.prg
+\develop\harbour\diversos\objmgw\disk64.prg
+\develop\harbour\diversos\objmgw\disk66.prg
+\develop\harbour\diversos\objmgw\f_freadl.prg
+\develop\harbour\diversos\objmgw\mlib06.prg
+\develop\harbour\diversos\objmgw\mlib16.prg
 
 #vendo com o novo hb_error
-#\develop\harbour\objmgw\error.prg
-\develop\harbour\objmgw\xhberr_mode.prg
+#\develop\harbour\diversos\objmgw\error.prg
+\develop\harbour\diversos\objmgw\xhberr_mode.prg
 
-\develop\harbour\objmgw\wvgini.prg
+\develop\harbour\diversos\objmgw\wvgini.prg
