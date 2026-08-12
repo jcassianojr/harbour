@@ -67,3 +67,12 @@ https://www.cubrid.org
 DUCKDB
 https://duckdb.org/
 https://ducklake.select/
+https://www.timestored.com/qstudio/
+
+OPENSSL
+https://github.com/openssl/openssl
+
+SQLITE
+https://www.sqlite.org/index.html
+http://www.ch-werner.de/sqliteodbc/
+https://letos.org/
