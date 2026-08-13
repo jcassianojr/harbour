@@ -598,7 +598,7 @@ FUNCTION FtsBuscaDbf( cArquivoDbf, cTermoBusca, cRegExp )
 
     WHILE !(cAlias)->( EoF() )
         // Converte o registro inteiro em string
-        cRegistroStr := (cAlias)->( HB_RecToStr() )
+        cRegistroStr := (cAlias)->(RecToStr() )
 
         // 1º Passo: Verifica se o termo textual existe (caso o termo não esteja vazio)
         IF Empty( cTermoBusca ) .OR. ( cTermoUpper $ Upper( cRegistroStr ) )
@@ -627,13 +627,23 @@ RETURN aRecnos
 
 FUNCTION FilterFtsBusca(cTermoBusca, cRegExp )
 IF EMPTY(cRegExp)
-   cExprFiltro := '{ || "' + cTermoBusca + '" $ Upper(HB_RecToStr()) }'
+   cExprFiltro := '{ || "' + cTermoBusca + '" $ Upper(RecToStr()) }'
 ELSE
-   cExprFiltro := '{ || "' + cTermoBusca + '" $ Upper(HB_RecToStr()) .AND. hb_RegEx("' + cRegex + '", HB_RecToStr()) }'
+   cExprFiltro := '{ || "' + cTermoBusca + '" $ Upper(RecToStr()) .AND. hb_RegEx("' + cRegex + '", RecToStr()) }'
 
 ENDIF   
 DBSETFILTER( &(cExprFiltro), cExprFiltro )
 
    
+FUNCTION RecToStr()
+    LOCAL cStr := ""
+    LOCAL i
+    
+    FOR i := 1 TO FCount()
+        // Converte qualquer tipo de dado (String, Número, Data, Lógico) para texto
+        cStr += hb_ValToStr( FieldGet( i ) ) + " "
+    NEXT
+    
+RETURN cStr   
 
 // + EOF: netdbf.prg
