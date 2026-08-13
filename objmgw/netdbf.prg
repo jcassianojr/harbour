@@ -9,11 +9,15 @@
 // +     Autor: jcassiano
 // +
 // +     Copyright (c) 2024-2026,  jcassiano
+// + 1. DbGetRec() — Lê o registro atual para um Array
+// + 2. DbPutRec( aRegistro ) — Grava um Array de volta no Registro
+// + 3.HB_RecToStr() Converte o registro todo para string
 // +
 // +--------------------------------------------------------------------
 
 #include "INKEY.CH"
 #include "dbinfo.ch"
+#include "try.ch"
 
 // +--------------------------------------------------------------------
 // +    Function netregosok()
@@ -490,5 +494,80 @@ FUNCTION sdvarrcam( cLINHA, aDBF, lCONV )
    NEXT X
 
    RETURN aRETU
+   
+   
+/**
+ * Função de FTS (Full-Text Search) para DBF em Harbour
+ * 
+ * Parâmetros:
+ *  - cArquivoDbf : Caminho do arquivo .dbf
+ *  - cTermoBusca : Termo textual a ser buscado (obrigatório)
+ *  - cRegExp     : Expressão regular opcional para refinar a busca
+ * 
+ * Retorno:
+ *  - Array com os RECNO() encontrados
+ */
+FUNCTION FtsBuscaDbf( cArquivoDbf, cTermoBusca, cRegExp )
+    LOCAL cAlias := "FTS_ALIAS_" + AllTrim( Str( HB_RandomInt( 1000, 9999 ) ) )
+    LOCAL aRecnos := {}
+    LOCAL cRegistroStr
+    LOCAL cTermoUpper
+    LOCAL lTemRegex := !Empty( cRegExp )
+
+    // Valida se o arquivo existe
+    IF !File( cArquivoDbf )
+        RETURN aRecnos
+    ENDIF
+
+    // Abre a tabela em modo compartilhado e somente leitura para segurança
+    IF !DbUseArea( .T., "DBFCDX", cArquivoDbf, cAlias, .T., .T. )
+        RETURN aRecnos
+    ENDIF
+
+    // Pré-processamentos para ganho de performance no loop
+    cTermoUpper := Upper( AllTrim( cTermoBusca ) )
+
+    (cAlias)->( DbGoTop() )
+
+    WHILE !(cAlias)->( EoF() )
+        // Converte o registro inteiro em string
+        cRegistroStr := (cAlias)->( HB_RecToStr() )
+
+        // 1º Passo: Verifica se o termo textual existe (caso o termo não esteja vazio)
+        IF Empty( cTermoBusca ) .OR. ( cTermoUpper $ Upper( cRegistroStr ) )
+            
+            // 2º Passo: Se houver Regex, valida o padrão na string do registro
+            IF lTemRegex
+                // hb_RegEx aceita a regex e a string alvo (case-sensitive por padrão, 
+                // use hb_RegExCase se quiser ignorar case na regex)
+                IF hb_RegEx( cRegExp, cRegistroStr )
+                    AAdd( aRecnos, (cAlias)->( RecNo() ) )
+                ENDIF
+            ELSE
+                // Se passou no termo e não tem regex, adiciona o recno
+                AAdd( aRecnos, (cAlias)->( RecNo() ) )
+            ENDIF
+
+        ENDIF
+
+        (cAlias)->( DbSkip() )
+    ENDDO
+
+    // Fecha a área de trabalho aberta internamente
+    (cAlias)->( DbCloseArea() )
+
+RETURN aRecnos
+
+FUNCTION FilterFtsBusca(cTermoBusca, cRegExp )
+IF EMPTY(cRegExp)
+   cExprFiltro := '{ || "' + cTermoBusca + '" $ Upper(HB_RecToStr()) }'
+ELSE
+   cExprFiltro := '{ || "' + cTermoBusca + '" $ Upper(HB_RecToStr()) .AND. hb_RegEx("' + cRegex + '", HB_RecToStr()) }'
+
+ENDIF   
+DBSETFILTER( &(cExprFiltro), cExprFiltro )
+
+
+
 
 // + EOF: netdbf.prg
