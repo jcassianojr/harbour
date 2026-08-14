@@ -369,70 +369,53 @@ FUNCTION INFOTIPODBF( filename, lMES )
  *    RDD functions, making it suitable for inspecting the physical file
  *    format independently of the active database driver.
  */
-FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info V=Verificar
-
-   // Collection returned to the caller containing decoded header information.
+FUNCTION GetHeaderInfo( database, cTIPOINFO )
    LOCAL aRet := {}
-
-   // Variables used while reading and decoding the binary header.
    LOCAL nHandle, dbfhead, h1, h2, h3, h4
    LOCAL dbftype, headrecs, headsize, recsize, nof
    LOCAL fieldlist, nField, nPos, cFieldName, cType, cWidth, nWidth, nDec, cDec
    LOCAL cErrorString
    LOCAL aErrors := {}
-   LOCAL cFieldType 
-   LOCAL nFieldLen  
+   LOCAL cFieldType, nFieldLen
+   LOCAL nFileLen, nCalcLen, cTerminator
     
-
-   // Accept file names with or without the standard DBF extension.
    IF !'.DBF' $ Upper( database )
       database += '.DBF'
    ENDIF
    
-   IF VALTYPE(cTIPOINFO)<>"C"
-      cTIPOINFO="F"
+   IF VALTYPE(cTIPOINFO) <> "C"
+      cTIPOINFO := "F"
    ENDIF
 
-   // Open the database in read-only mode because the operation is purely
-   // informational and must never modify the source file.
    IF ( nHandle := FOpen( database, FO_READ ) ) == -1
       ALERT( 'Cannot open file ' + Upper( database ) + ' for reading!' )
       RETURN aRet
    ENDIF
 
-   // Read the first four bytes containing the file signature and the
-   // last-update date stored in the DBF header.
    dbfhead := Space( 4 )
    FRead( nHandle, @dbfhead, 4 )
 
-   // Decode the file type identifier.
    h1 := FT_BYT2HEX( SubStr( dbfhead, 1, 1 ) )
    dbftype := h1
 
-   // Decode the date components stored as individual bytes.
    h2 := FT_BYT2HEX( SubStr( dbfhead, 2, 1 ) )
    h3 := FT_BYT2HEX( SubStr( dbfhead, 3, 1 ) )
    h4 := FT_BYT2HEX( SubStr( dbfhead, 4, 1 ) )
 
-   // Perform a simple sanity check before presenting the stored date.
    IF hex2dec( h3 ) > 12 .OR. hex2dec( h4 ) > 31
       ALERT( 'Date damage in header!' )
    ENDIF
 
-   // Store the DBF version identifier.
    AAdd( aRet, { '0x' + dbftype, 'Type of file' } )
 
-   // Convert the encoded update date into a readable DD.MM.YY format.
    AAdd( aRet, { StrZero( hex2dec( h4 ), 2 ) + '.' + StrZero( hex2dec( h3 ), 2 ) + '.' + ;
                  StrZero( hex2dec( h2 ) - If( hex2dec( h2 ) > 100, 100, 0 ), 2 ), ;
                  'Last update (DD.MM.YY)' } )
 
-   // Read the four-byte record count stored as a little-endian integer.
    headrecs := Space( 4 )
    FSeek( nHandle, 4, FS_SET )
    FRead( nHandle, @headrecs, 4 )
 
-   // Convert the four bytes into a Harbour numeric value.
    h1 := FT_BYT2HEX( SubStr( headrecs, 1, 1 ) )
    h2 := FT_BYT2HEX( SubStr( headrecs, 2, 1 ) )
    h3 := FT_BYT2HEX( SubStr( headrecs, 3, 1 ) )
@@ -441,7 +424,6 @@ FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info V=Veri
 
    AAdd( aRet, { headrecs, 'Number of records' } )
 
-   // Read the total header size expressed as a 16-bit little-endian value.
    headsize := Space( 2 )
    FRead( nHandle, @headsize, 2 )
    h1 := FT_BYT2HEX( SubStr( headsize, 1, 1 ) )
@@ -450,7 +432,6 @@ FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info V=Veri
 
    AAdd( aRet, { headsize, 'Header size' } )
 
-   // Read the physical length of each database record.
    recsize := Space( 2 )
    FRead( nHandle, @recsize, 2 )
    h1 := FT_BYT2HEX( SubStr( recsize, 1, 1 ) )
@@ -459,135 +440,120 @@ FUNCTION GetHeaderInfo( database ,cTIPOINFO)  //F=full E=Estrutura I=Info V=Veri
 
    AAdd( aRet, { recsize, 'Record size' } )
 
-   // Calculate the number of field descriptors contained in the header.
-   // The first 32 bytes form the file header itself and are excluded.
    nof := Int( headsize / FIELD_ENTRY_SIZE ) - 1
 
    AAdd( aRet, { nof, 'Fields count' } )
 
-   // Read and decode each field descriptor individually.
+   // Validação física integrada do VO incorporada ao Harbour
+// Substituir o cálculo com ftell por FSeek relativo
+   FSeek( nHandle, 0, FS_END )
+   nFileLen := FSeek( nHandle, 0, FS_RELATIVE )
+   nCalcLen := ( recsize * headrecs ) + headsize + 1
+   IF Abs( nCalcLen - nFileLen ) > 1
+      AAdd( aErrors, { "File length error - header size:" + AllTrim(Str(nFileLen)) + " actual size:" + AllTrim(Str(nCalcLen)), "" } )
+   ENDIF
+
+   cTerminator := Space( 1 )
+   FSeek( nHandle, ( nof * 32 ) + 32, FS_SET )
+   FRead( nHandle, @cTerminator, 1 )
+   IF FT_BYT2HEX( cTerminator ) <> "0D"
+      AAdd( aErrors, { "Header terminator not 0Dh Value:" + FT_BYT2HEX( cTerminator ), "" } )
+   ENDIF
+
    fieldlist := {}
 
    FOR nField := 1 TO nof
-
-      // Compute the byte offset of the current field descriptor.
       nPos := nField * FIELD_ENTRY_SIZE
-
       FSeek( nHandle, nPos, FS_SET )
 
-      // Read the null-terminated field name and remove trailing padding.
       cFieldName := Space( FIELD_NAME_SIZE )
       FRead( nHandle, @cFieldName, FIELD_NAME_SIZE )
       cFieldName := RTrim( StrTran( cFieldName, Chr( 0 ), ' ' ) )
 
-      // Read the one-byte field type identifier.
       cType := Space( 1 )
       FRead( nHandle, @cType, 1 )
 
-      // Skip the internal field address maintained by the DBF engine.
       FSeek( nHandle, 4, FS_RELATIVE )
 
-      // Character fields store their width differently from other
-      // DBF field types and therefore require separate decoding.
       IF cType == 'C'
-
          cWidth := Space( 2 )
          FRead( nHandle, @cWidth, 2 )
-
          h1 := FT_BYT2HEX( SubStr( cWidth, 1, 1 ) )
          h2 := FT_BYT2HEX( SubStr( cWidth, 2, 1 ) )
-
          nWidth := hex2dec( h1 ) + 256 * hex2dec( h2 )
          nDec := 0
-
       ELSE
-
          cWidth := Space( 1 )
          FRead( nHandle, @cWidth, 1 )
-
          nWidth := hex2dec( FT_BYT2HEX( cWidth ) )
-
          cDec := Space( 1 )
          FRead( nHandle, @cDec, 1 )
-
          nDec := hex2dec( FT_BYT2HEX( cDec ) )
-
       ENDIF
 
-      // Preserve the decoded field definition for later presentation.
       AAdd( fieldlist, { cFieldName, cType, nWidth, nDec } )
       
-      cFieldType :=cType
-      nFieldLen  :=nWidth
+      cFieldType := cType
+      nFieldLen  := nWidth
       
-      cErrorString := 	"Field No: " + AllTrim(Str(nField))	;
-					+ 	" Name: " + cFieldName	;
-					+ 	" Type: " + cFieldType 	;
-					+ 	" Length: " +  AllTrim(Str(nFieldLen)) ;
-					+ 	" Dec: " + AllTrim(Str(nDec))
+      cErrorString := "Field No: " + AllTrim(Str(nField))	;
+					+ " Name: " + cFieldName	;
+					+ " Type: " + cFieldType 	;
+					+ " Length: " + AllTrim(Str(nFieldLen)) ;
+					+ " Dec: " + AllTrim(Str(nDec))
       
-      
-      	IF nFieldLen == 0
-    		AAdd(aErrors,{"Field error -  invalid length Field must have length > 0 ",cErrorString})
+      IF nFieldLen == 0
+    		AAdd(aErrors, {"Field error - invalid length Field must have length > 0 ", cErrorString})
     	ELSEIF cFieldType == "L"
-    		// logic must be 1
     		IF nFieldLen <> 1
-    			AAdd(aErrors,{"Field error -  invalid length LOGIC must be length 1",cErrorString})			
+    			AAdd(aErrors, {"Field error - invalid length LOGIC must be length 1", cErrorString})			
     		ENDIF
     	ELSEIF cFieldType == "D"
-    		// date must be 8
     		IF nFieldLen <> 8
-    			AAdd(aErrors,{"Field error - invalid length - DATE must be length 8",cErrorString})			
+    			AAdd(aErrors, {"Field error - invalid length - DATE must be length 8", cErrorString})			
     		ENDIF
     	ELSEIF cFieldType == "M"
-    		// memo must be 10
     		IF nFieldLen <> 10
-    			AAdd(aErrors,{"Field error - invalid length - MEMO must be length 10",cErrorString})			
+    			AAdd(aErrors, {"Field error - invalid length - MEMO must be length 10", cErrorString})			
     		ENDIF
     	ELSEIF cFieldType == "O"
-    		// Ole must be 10
     		IF nFieldLen <> 10
-    			AAdd(aErrors,{"Field error - invalid length  - OLE must be length 10",cErrorString})			
+    			AAdd(aErrors, {"Field error - invalid length - OLE must be length 10", cErrorString})			
     		ENDIF
-    	ELSEIF cFieldType == "N"  .or. cFieldType == "F"
+    	ELSEIF cFieldType == "N" .or. cFieldType == "F"
     		IF nFieldLen > 19
-    			// numerics not greater that 19
-    			AAdd(aErrors,{"Field error - invalid length - NUMERIC must have length not greater than 19",cErrorString})			
+    			AAdd(aErrors, {"Field error - invalid length - NUMERIC must have length not greater than 19", cErrorString})			
     		ELSEIF nDec > nFieldLen
-    			AAdd(aErrors,{"Field error - invalid decimals - DECIMALS must not be greater than FIELD length",cErrorString})			
+    			AAdd(aErrors, {"Field error - invalid decimals - DECIMALS must not be greater than FIELD length", cErrorString})			
     		ENDIF
     	ELSEIF cFieldType == "C"
-    		// 0-
-    		IF nFieldLen > 64*1024	// 64k
-    			AAdd(aErrors,{"Field error - invalid length  - CHAR must not be greater than 64k ",cErrorString})
+    		IF nFieldLen > 64*1024	
+    			AAdd(aErrors, {"Field error - invalid length - CHAR must not be greater than 64k ", cErrorString})
     		ENDIF
     	ELSE
-    		AAdd(aErrors,{"Field error - invalid Data Type ",cErrorString})
+    		AAdd(aErrors, {"Field error - invalid Data Type ", cErrorString})
     	ENDIF
    NEXT
 
-   // Always release the operating system file handle after processing.
    FClose( nHandle )
 
-   // Add a separator entry before listing individual field definitions.
    AAdd( aRet, { '', 'Fields structure' } )
 
-
-   IF cTIPOINFO="F" //Adiciona descritivos dos campos
-      // Convert each decoded field descriptor into a compact display string.
+   IF cTIPOINFO = "F" 
       AEval( fieldlist, {|x, i| AAdd( aRet, { x[1] + " - " + x[2] + "(" + hb_ntos( x[3] ) + "," + hb_ntos( x[4] ) + ")", hb_ntos( i ) } ) } )
    ENDIF   
    
-   IF cTIPOINFO="E" //O Retorno e apenas a estruturq
-      aRET:=fieldlist
+   IF cTIPOINFO = "E" 
+      aRet := fieldlist
    ENDIF
   
-   IF cTIPOINFO="V" //O Retorno e apenas a estruturq
-      aRET:=aErrors
+   IF cTIPOINFO = "V" 
+      aRet := aErrors
    ENDIF
    
-
-RETURN aRet
+RETURN aRet 
+ 
+ 
 
 // Lookup table used for hexadecimal conversions.
 // Character positions correspond directly to hexadecimal digit values.
