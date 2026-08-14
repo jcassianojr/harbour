@@ -16,8 +16,10 @@
 // +--------------------------------------------------------------------
 
 #include "INKEY.CH"
-#include "dbinfo.ch"
 #include "try.ch"
+#include "fileio.ch"
+#include "dbstruct.ch"
+#include "dbinfo.ch"
 
 #ifdef USE_PXRDD
     REQUEST PXRDD   //-20 Carrega a RDD do Paradox criada acima
@@ -562,6 +564,98 @@ FUNCTION sdvarrcam( cLINHA, aDBF, lCONV )
 
    RETURN aRETU
    
+/**
+ * Função FTS em Harbour abrindo o DBF diretamente pelo caminho (FOPEN/FSEEK)
+ * 
+ * Parâmetros:
+ *  - cCaminhoDbf : Caminho completo ou relativo do arquivo .dbf
+ *  - cTermoBusca : Termo textual a ser buscado (obrigatório)
+ *  - cRegExp     : Expressão regular opcional para validação avançada (opcional)
+ * 
+ * Retorno:
+ *  - Array com os recnos encontrados: { { string_formatada, recno }, ... }
+ *  aResultados := FtsBuscaPorArquivo( "clientes.dbf", "HARBOUR", ".*@email\.com.*" )
+ */
+FUNCTION FtsBuscaPorArquivo( cCaminhoDbf, cTermoBusca, cRegExp )
+    LOCAL pHandle
+    LOCAL cRecord
+    LOCAL nRecno
+    LOCAL aRetu := {}
+    LOCAL nLastRec
+    LOCAL nHeader, nRecSize
+    LOCAL cAliasTemp := "FTS_" + AllTrim( Str( HB_RandomInt( 1000, 9999 ) ) )
+    LOCAL cTermoUpper
+    LOCAL lTemRegex := !Empty( cRegExp )
+
+    IF Empty( cCaminhoDbf ) .OR. !File( cCaminhoDbf )
+        RETURN aRetu
+    ENDIF
+
+    IF Empty( cTermoBusca ) .AND. !lTemRegex
+        RETURN aRetu
+    ENDIF
+
+    // Abre a tabela temporariamente apenas para extrair metadados estruturais (Header, RecSize, LastRec)
+    // de forma segura sem precisar calcular manualmente os bytes do cabeçalho do DBF.
+    RddSetDefault( "DBFCDX" )
+    IF !DbUseArea( .T., "DBFCDX", cCaminhoDbf, cAliasTemp, .T., .T. )
+        RETURN aRetu
+    ENDIF
+
+    nLastRec  := (cAliasTemp)->( LastRec() )
+   nHeader   := (cAliasTemp)->( DbInfo( DBI_GETHEADERSIZE ) )
+    nRecSize  := (cAliasTemp)->( DbInfo( DBI_GETRECSIZE ) )
+    
+    // Fecha o alias estrutural, pois agora faremos a leitura via baixo nível (FOPEN)
+    (cAliasTemp)->( DbCloseArea() )
+
+    // Abre o arquivo fisicamente em modo de leitura compartilhada de baixo nível
+    pHandle := FOpen( cCaminhoDbf, FO_READ + FO_SHARED )
+    
+    IF FError() != 0 .OR. pHandle == NIL
+        RETURN aRetu
+    ENDIF
+
+    cTermoUpper := Upper( AllTrim( cTermoBusca ) )
+
+    // Varredura registro a registro usando o ponteiro físico do arquivo
+    FOR nRecno := 1 UP nLastRec
+        
+        // Posiciona o ponteiro do arquivo exatamente no início do registro atual
+        FSeek( pHandle, nHeader + ( ( nRecno - 1 ) * nRecSize ), FS_SET )
+        
+        // Lê os bytes brutos do registro
+        cRecord := FReadStr( pHandle, nRecSize )
+
+        IF Empty( cRecord )
+            LOOP
+        ENDIF
+
+        // 1º Filtro: Verifica o termo textual básico (se informado)
+        IF !Empty( cTermoBusca )
+            IF !( cTermoUpper $ Upper( cRecord ) )
+                LOOP // Se não achou o termo, pula para o próximo
+            ENDIF
+        ENDIF
+
+        // 2º Filtro: Se houver Regex, valida o padrão na string do registro
+        IF lTemRegex
+            // hb_RegEx valida a expressão regular contra o registro bruto
+            IF !hb_RegEx( cRegExp, cRecord )
+                LOOP // Se não bateu com a regex, pula
+            ENDIF
+        ENDIF
+
+        // Se passou por todas as validações, adiciona ao array de retorno
+        // Formato: { "RECNO_FORMATADO-CONTEUDO", numero_do_recno }
+        AAdd( aRetu, { StrZero( nRecno, 8 ) + "-" + cRecord, nRecno } )
+
+    NEXT
+
+    // Fecha o handle de baixo nível do arquivo
+    FClose( pHandle )
+
+RETURN aRetu   
    
 /**
  * Função de FTS (Full-Text Search) para DBF em Harbour
