@@ -527,6 +527,12 @@ STATIC FUNCTION LOADSTRU
       fld_type := Upper( PARSE( @textline ) )  // Obtem tipo campo
       fld_len  := PARSE( @textline )   // Obtem tamanho campo
       fld_dec  := PARSE( @textline )   // Obtem casas decimais campo
+      
+      
+      IF fld_type == "D" .AND. fld_len == 0; fld_len := 8; ENDIF
+      IF fld_type == "L" .AND. fld_len == 0; fld_len := 1; ENDIF
+      IF fld_type == "M" .AND. fld_len == 0; fld_len := 4; ENDIF
+      
 
       IF Empty( fld_name ) .OR. Len( fld_name ) > 10
          MESSAGE := 'Campo Nome'
