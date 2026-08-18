@@ -15,6 +15,8 @@
 // +--------------------------------------------------------------------
 // +
 
+#include "TRY.ch"
+
 // +--------------------------------------------------------------------
 // +
 // +
@@ -41,6 +43,7 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
 
 #include "box.ch"
 #include "dbinfo.ch"
+#include "TRY.ch"
 
 #define f_names  1
 #define f_types  2
@@ -228,10 +231,30 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
          // Remove todas as copias de seguranca antigas, se houver.
 
          // Localiza na base de dados nomes de memo definidos.
-
          lMEMO    := ISMEMO( cCaminho+dbf_name, .F., .F. )
-         //memoflds := INFOTIPODBF( cCaminho+dbf_name, .F. )
-         aRETVAL:= INFOTIPODBF( cCaminho+dbf_name, .F. )
+         
+         // Obtém as informações do DBF via INFOTIPODBF
+         aRETVAL  := INFOTIPODBF( cCaminho+dbf_name, .F. )
+         memoflds := aRETVAL[1]  // Código identificador do tipo de DBF/Memo
+         cDRIVER  := aRETVAL[2]  // Driver sugerido (ex: DBFNTX, DBFCDX, SMTCDX, etc.)
+         memoext  := aRETVAL[3]  // Extensão do memo (ex: .DBT, .FPT, .SMT)
+
+         // Se o driver retornado não estiver vazio, define ele como padrão
+         IF !Empty( cDRIVER )
+            rddSetDefault( cDRIVER )
+         ENDIF
+
+         IF Empty( memoext )
+            TRY
+               memoext := hb_rddInfo( RDDI_MEMOEXT )
+            CATCH
+               // Tratamento de segurança caso falhe
+            ENDTRY
+         ENDIF
+
+         dbf_memo := cCaminho + dbf_name +"."+ memoext
+         
+         /*
          memoflds := aRETVAL[1]
          memoext  := ""
          IF memoflds = 131
@@ -256,11 +279,14 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
          ENDIF
 
          IF Empty( memoext )
-            memoext := hb_rddInfo( RDDI_MEMOEXT )
+            TRY
+               memoext := hb_rddInfo( RDDI_MEMOEXT )
+            END   
          ENDIF
-
+         
 
          dbf_memo := cCaminho+dbf_name + MEMOEXT
+         */
 
 
          // Troca nome dos arquivos da base de dados antiga pelo da copia.

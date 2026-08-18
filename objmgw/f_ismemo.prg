@@ -272,7 +272,7 @@ FUNCTION INFOTIPODBF( filename, lMES )
      CASE nbuffer = 59  .and. cextensao=".db"  // 3Bh(59) Paradox Database
          cMES      := "Paradox Database"
          ret_value := 59
-         cDRIVERPAD:= "PARADOX"    
+         cDRIVERPAD:= "PXRDD"    
          
          // --- Leitura adicional para obter a versão do Paradox (px_fileversion) ---
          // No formato Paradox, a versão costuma ocupar 1 byte ou inteiro curto 
@@ -294,11 +294,11 @@ FUNCTION INFOTIPODBF( filename, lMES )
                 CASE Left( cBuffer, 15 ) == "SQLite format 3"
                     cMES      := "Arquivo SQLite"
                     ret_value := 999 
-                    cDRIVERPAD:= "SQLITE"
+                    cDRIVERPAD:= "SL3RDD"
                 CASE "DUCK" $  cBuffer .and. cextensao=".db" 
                      cMES      := "DuckDB Database"
                      ret_value := 998 
-                     cDRIVERPAD:= "DUCKDB"   
+                     cDRIVERPAD:= "DUCKDBRDD"   
                 CASE "Standard ACE DB" $  cBuffer .and. cextensao=".mdb" 
                      cMES      := "Arquivo access MDB"
                      ret_value := 997 
@@ -314,7 +314,12 @@ FUNCTION INFOTIPODBF( filename, lMES )
                 CASE SubStr(cBuffer, 17, 2) == Chr(0) + Chr(32)  .and. (cextensao=".fdb" .or. cextensao=".gdb" .or. cextensao=".ib" )
                      cMES      := "Firebird Database"
                      ret_value := 994
-                    cDRIVERPAD:= "FIREBIRD"
+                    cDRIVERPAD:= "FB5RDD"
+                CASE "Advantage Table" $ cBuffer .or. cextensao == ".adt"
+                     cMES      := "Advantage Table (ADT)"
+                     ret_value := 993
+                     cDRIVERPAD:= "ADSADT"
+                     cEXTMEMO  := "ADM"    
                 ENDCASE
           ENDIF       
       ENDCASE
