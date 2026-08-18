@@ -249,7 +249,7 @@ FUNCTION MAKEDBF( cArqDic, lQUIT, lCRIA, cDRIVER, cCAMINHO )
                memoext := hb_rddInfo( RDDI_MEMOEXT )
             CATCH
                // Tratamento de segurança caso falhe
-            ENDTRY
+            END
          ENDIF
 
          dbf_memo := cCaminho + dbf_name +"."+ memoext
