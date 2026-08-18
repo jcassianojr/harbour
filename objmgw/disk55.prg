@@ -1080,16 +1080,19 @@ FUNCTION aconvertend()
    RETURN aCNV
 
 
+
 // +--------------------------------------------------------------------
 // +  Função: UniversalToDate()
 // +  Objetivo: Garantir a leitura correta de datas em múltiplos formatos
 // +            (DD/MM/YY, DD-MM-YYYY, DD.MM.YY, AAAAMMDD, YYYY-MM-DD)
+// +  Atualização: Inteligência para datas sem zeros (ex: 5/3/2021)
 // +--------------------------------------------------------------------
 FUNCTION UniversalToDate( xData )
 
    LOCAL dResult := CToD( "" )
    LOCAL cFormatOrig := Set( _SET_DATEFORMAT, "dd/mm/yyyy" ) // Força padrão interno temporário
    LOCAL cData, cLimpa, nLen
+   LOCAL cTemp, aParts // Variáveis adicionadas para a melhoria
 
    // 1. Se já for do tipo Data, retorna ela mesma
    IF ValType( xData ) == "D"
@@ -1105,15 +1108,32 @@ FUNCTION UniversalToDate( xData )
 
    cData := AllTrim( xData )
 
-   // 3. Trata o formato ISO muito comum em bancos de dados (YYYY-MM-DD)
-   //    Exemplo: "2026-05-16" vira "16/05/2026"
-   IF Len( cData ) == 10 .AND. SubStr( cData, 5, 1 ) == "-" .AND. SubStr( cData, 8, 1 ) == "-"
-      dResult := CToD( Right( cData, 2 ) + "/" + SubStr( cData, 6, 2 ) + "/" + Left( cData, 4 ) )
+   // >>> INÍCIO DA MELHORIA: Interceptação Inteligente com Separadores <<<
+   cTemp  := StrTran( cData, "-", "/" )
+   cTemp  := StrTran( cTemp, ".", "/" )
+   aParts := hb_ATokens( cTemp, "/" )
+
+   // Se possui 3 blocos, processa com segurança usando StrZero (ignora o cLimpa)
+   IF Len( aParts ) == 3
+      IF Len( aParts[ 1 ] ) == 4
+         // Formato YYYY/MM/DD (O Ano veio primeiro)
+         dResult := CToD( StrZero( Val( aParts[ 3 ] ), 2 ) + "/" + ;
+                          StrZero( Val( aParts[ 2 ] ), 2 ) + "/" + ;
+                          aParts[ 1 ] )
+      ELSE
+         // Formato DD/MM/YYYY ou DD/MM/YY ou D/M/YYYY
+         dResult := CToD( StrZero( Val( aParts[ 1 ] ), 2 ) + "/" + ;
+                          StrZero( Val( aParts[ 2 ] ), 2 ) + "/" + ;
+                          aParts[ 3 ] )
+      ENDIF
+      
       Set( _SET_DATEFORMAT, cFormatOrig )
       RETURN dResult
    ENDIF
+   // >>> FIM DA MELHORIA <<<
 
-   // 4. Remove separadores comuns (barra, hífen, ponto) para analisar os números limpos
+   // 4. Se chegou aqui (veio tudo grudado, sem separadores), 
+   // mantém A SUA LÓGICA ORIGINAL INTACTA:
    cLimpa := StrTran( cData, "/", "" )
    cLimpa := StrTran( cLimpa, "-", "" )
    cLimpa := StrTran( cLimpa, ".", "" )
@@ -1146,5 +1166,3 @@ FUNCTION UniversalToDate( xData )
    Set( _SET_DATEFORMAT, cFormatOrig )
 
    RETURN dResult
-// + EOF: disk55.prg
-// +
