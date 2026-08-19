@@ -270,6 +270,8 @@ FUNCTION INFOTIPODBF( filename, lMES )
          cMES      := "FoxBASE"
          cDRIVERPAD:="DBFNTX"
          ret_value := 251
+         
+     /*    
      CASE nbuffer = 59  .and. cextensao=".db"  // 3Bh(59) Paradox Database
          cMES      := "Paradox Database"
          ret_value := 59
@@ -285,12 +287,12 @@ FUNCTION INFOTIPODBF( filename, lMES )
             nPxVersion := Asc( cBuffer )
             cMES := "Paradox Database (Version: " + AllTrim( Str( nPxVersion ) ) + ")"
          ENDIF
-         
+       */  
          
       OTHERWISE //tenta expandido
           FSeek( nHANDLE, 0, FS_SET )
-          cBuffer:=SPACE(20)
-          IF FRead( nHANDLE, @cBuffer, 20 ) == 20
+          cBuffer:=SPACE(32)
+          IF FRead( nHANDLE, @cBuffer, 32 ) == 32
              DO CASE
                 CASE Left( cBuffer, 15 ) == "SQLite format 3"
                     cMES      := "Arquivo SQLite"
@@ -321,6 +323,24 @@ FUNCTION INFOTIPODBF( filename, lMES )
                      ret_value := 993
                      cDRIVERPAD:= "ADSADT"
                      cEXTMEMO  := "ADM"    
+             // --- NOVA IDENTIFICAÇÃO PARADOX ---
+                // Verifica se é extensão .db e faz a validação heurística do cabeçalho
+                // SubStr(cBuffer, 1, 2) = px_recordsize (> 0)
+                // SubStr(cBuffer, 5, 2) = px_headersize (>= 1024)
+                CASE cextensao == ".db" .AND. Bin2W( SubStr( cBuffer, 1, 2 ) ) > 0 .AND. Bin2W( SubStr( cBuffer, 5, 2 ) ) >= 1024
+                     cMES      := "Paradox Database"
+                     ret_value := 59 // Mantendo seu código de retorno original
+                     cDRIVERPAD:= "PXRDD"
+                     
+                     // Leitura adicional para obter a versão do Paradox (px_fileversion)
+                     // A versão do Paradox fica gravada no byte da posição 57 (offset 0x39)
+                     FSeek( nHANDLE, 57, FS_SET ) 
+                     cBuffer := Space( 1 )
+                     IF FRead( nHANDLE, @cBuffer, 1 ) == 1
+                        nPxVersion := Asc( cBuffer )
+                        cMES := "Paradox Database (Version: " + AllTrim( Str( nPxVersion ) ) + ")"
+                     ENDIF        
+                     
                 ENDCASE
           ENDIF       
       ENDCASE
