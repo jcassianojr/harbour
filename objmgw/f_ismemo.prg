@@ -52,6 +52,22 @@ LETO   NATIVE   any             any        any       Remote DBF over network (le
 SQLRDD NATIVE   —               —          —         SQL access (MySQL, PostgreSQL, SQLite, MSSQL) using xBase syntax.
 */
 
+   /*
+     3† 0x03 —.NTX Single NATIVE DBFNTX Nantucket Clipper / CA-Clipper Uses 0x03 with exclusive .NTX. DBFNTX is Harbour's native RDD for this.
+      — — — .NSX Compound NATIVE DBFNSX CA-harbour / Harbour NSX Harbour native compound index. Recommended over CDX in pure Harbour environments.
+    ‡ 0x03 .DBT .DB/— — NOT SUPP. — Borland Paradox NOT DBF. Paradox .DB is proprietary. Access only via ODBC/BDE/ADO.
+     — — .DBT .NTX/.CDX S/Comp NATIVE NTX/CDX Harbour native DBF (self-generated) Harbour outputs 0x03 or 0x30 by default, controlled by active RD
+
+    https://github.com/X-Sharp/XSharpPublic/blob/main/Runtime/XSharp.Rdd/Enums.prg#L105
+    
+    
+    NATIVE Full support: reliable read, write and index maintenance via Harbour native RDD.
+    PARTIAL Reading generally possible; index creation/maintenance limited or RDD-dependent.
+    NOT SUPP. Proprietary/incompatible format. Access only via external ODBC/ADO/BDE.
+    EXTERNAL Support via external RDD/library not included in standard Harbour.
+    
+   */
+
 
 // +--------------------------------------------------------------------
 // +
@@ -106,34 +122,26 @@ FUNCTION ISMEMO( cARQ, lMES, lINFO )
 // +
 FUNCTION INFOTIPODBF( filename, lMES )
 
-   LOCAL cbuffer := ' ', nhandle, ret_value, cMES, cDRIVERPAD,aRETVAL,cEXTMEMO,nbuffer
+   LOCAL cbuffer := ' ', nhandle, ret_value, cMES, cDRIVERPAD, aRETVAL, cEXTMEMO, nbuffer
+   LOCAL cEXTTABLE, cEXTINDEX // <-- NOVAS VARIÁVEIS ADICIONADAS
    LOCAL cextensao 
    LOCAL nPxVersion
 
-   //IF At( ".", filename ) = 0
-    //  filename := Trim( filename ) + ".DBF"
-   //ENDIF
-   
-   
-   // removendo pode ser dbf adt db fdb gdb ib mdb accdb
-  // filename:=hb_FNameExtSet( filename, ".dbf" )
-   
-   
    IF ValType( lMES ) # "L"
       lMES := .F.
    ENDIF
    
-   nbuffer:=0
-   cDRIVERPAD:=""
-   cEXTMEMO:=""
-   aRETVAL:={0,"","",""}
-
-//
-// Retorna 0 Se Nao For DBF
-//
-   ret_value := 0  // Unknown:=0 ou -2 se nao  conseguir abrir o arquivo
-   cMES      := "Parece Nao Ser DBF"
+   nbuffer    := 0
+   cDRIVERPAD := ""
+   cEXTMEMO   := ""
+   cEXTTABLE  := "" // <-- INICIALIZA VAZIO 
+   cEXTINDEX  := "" // <-- INICIALIZA VAZIO
    
+   // Array agora com 6 posicoes
+   aRETVAL    := { 0, "", "", "", "", "" } 
+
+   ret_value  := 0 
+   cMES       := "Parece Nao Ser DBF"
    
    IF !File( filename )
       aRETVAL[4] := "Arquivo nao encontrado"
@@ -146,154 +154,143 @@ FUNCTION INFOTIPODBF( filename, lMES )
       RETURN aRETVAL
    ENDIF
    
-   
-    cextensao :=lower(hb_fnameext(filename))
+   cextensao := lower( hb_fnameext( filename ) )
 
-// Se nao ocorrer erro na abertura, carrega o primeiro byte.
    IF FError() = 0 .AND. FRead( nHANDLE, @cBUFFER, 1 ) = 1
 
-   /*
-     3† 0x03 —.NTX Single NATIVE DBFNTX Nantucket Clipper / CA-Clipper Uses 0x03 with exclusive .NTX. DBFNTX is Harbour's native RDD for this.
-      — — — .NSX Compound NATIVE DBFNSX CA-harbour / Harbour NSX Harbour native compound index. Recommended over CDX in pure Harbour environments.
-    ‡ 0x03 .DBT .DB/— — NOT SUPP. — Borland Paradox NOT DBF. Paradox .DB is proprietary. Access only via ODBC/BDE/ADO.
-     — — .DBT .NTX/.CDX S/Comp NATIVE NTX/CDX Harbour native DBF (self-generated) Harbour outputs 0x03 or 0x30 by default, controlled by active RD
-
-    https://github.com/X-Sharp/XSharpPublic/blob/main/Runtime/XSharp.Rdd/Enums.prg#L105
-    
-    
-    NATIVE Full support: reliable read, write and index maintenance via Harbour native RDD.
-    PARTIAL Reading generally possible; index creation/maintenance limited or RDD-dependent.
-    NOT SUPP. Proprietary/incompatible format. Access only via external ODBC/ADO/BDE.
-    EXTERNAL Support via external RDD/library not included in standard Harbour.
-    
-   */
-    
-    // Verifica a existencia do codigo do memo no cBUFFER.
-      
-      nbuffer:=Asc(cBUFFER)
+      nbuffer := Asc( cBUFFER )
       
       DO CASE
-         //cBUFFER = Chr( 142 )--->>nbuffer=142  usando nbuffer assim nao precisa usar chr em todos os cases
-      CASE nbuffer =  142   // 8Eh(142) dBASE IV w. SQL table
+      CASE nbuffer =  142   // dBASE IV SQL table
          cMES      := "dBASE IV  SQL table"
          ret_value := 142
-      CASE nbuffer =  048    // VisualFoxPro:=0x30 -->30h(048) Visual FoxPro w. DBC
-         //48 0x30 .FPT .CDX Compound NATIVE DBFCDX Visual FoxPro (standard) Full support via DBFCDX. FPT memo VFP-compatible.
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "MDX"
+      CASE nbuffer =  048   // Visual FoxPro DBC
          cMES      := "Visual FoxPro DBC"
          ret_value := 048
-         cDRIVERPAD:="DBFCDX"
-         cEXTMEMO:="FPT"
-      CASE nbuffer =  123   // dBase4WithMemo_:=0x7b -->7Bh(123) dBASE IV with memo
+         cDRIVERPAD:= "DBFCDX"
+         cEXTMEMO  := "FPT"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "CDX"
+      CASE nbuffer =  123   // dBASE IV with memo
          cMES      := "dBASE IV com memo"
          ret_value := 123
-      CASE nbuffer = 005    // dBase5 :=5 -->05h(005)dBASE V w/o memo file
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "MDX"
+      CASE nbuffer = 005    // dBASE V w/o memo file
          cMES      := "dbase V  Sem memo"
          ret_value := 005
-      CASE nbuffer =  004   // dBase4 :=4 -->04h(004)dBASE IV or IV w/o memo file
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "MDX"
+      CASE nbuffer =  004   // dBASE IV or IV w/o memo file
          cMES      := "dbase IV  Sem memo"
          ret_value := 004
-      CASE nbuffer =  139    // dBase4WithMemo:=0x8b -->8Bh(139) dBASE IV w. memo  DBF/MDX DBFMDX (DBT-MEMO)
-           //139 0x8B .DBT .MDX Compound PARTIAL DBFMDX* dBASE IV (with memo) DBT memo dBASE IV. MDX partial support only.
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "MDX"
+      CASE nbuffer =  139   // dBASE IV w. memo
          cMES      := "dbase IV  com memo"
-         cDRIVERPAD:="DBFMDX"
-         cEXTMEMO:="DBT"
+         cDRIVERPAD:= "DBFMDX"
+         cEXTMEMO  := "DBT"
          ret_value := 139
-      CASE nbuffer =  245    // FoxPro2WithMemo:=0xf5 -->F5h(245) FoxPro w. memo file  DBF/CDX-IDX DBFCDX ADSCDX (FPT-MEMO)
-         //245 0xF5 .FPT .CDX/.IDX Compound NATIVE DBFCDX FoxPro 2.x (with memo) FoxPro 2.x FPT memo. Fully compatible via DBFCDX.
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "MDX"
+      CASE nbuffer =  245   // FoxPro w. memo file
          cMES      := "Foxpro  com memo"
          ret_value := 245
-         cDRIVERPAD:="DBFCDX"
-         cEXTMEMO:="FPT"
-      CASE nbuffer =  131    // FoxBaseDBase3WithMemo:=0x83 -->83h(131) dBASE III+ with memo file DBF/NTX DBFNTX ADSNTX COMIX (DBT-MEMO) * Tambem pode ser comix  DBF/NTX       COMIX (DBT-MEMO)
-         //131 0x83 .DBT .NDX/.NTX Single NATIVE DBFNTX dBASE III Plus / FoxBASE+ (with memo) DBT memo dBASE III. Full support. Typical Clipper migration format.
+         cDRIVERPAD:= "DBFCDX"
+         cEXTMEMO  := "FPT"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "CDX"
+      CASE nbuffer =  131   // dBASE III+ with memo file
          cMES      := "FoxBASE+ / dBASE III com memo"
          ret_value := 131
-         cDRIVERPAD:="DBFCDX" //"DBFNTX"
-         cEXTMEMO:="DBT"
-      CASE nbuffer = 003   // FoxBaseDBase3NoMemo:=3 -->03h(003) dBASE III w/o memo file  DBF/NTX/CDX FORTESS DBFNTX DBFCDX DBFMDX COMIX ADSCDX ADSNTX
-         //3 0x03 — .NDX/.NTX Single NATIVE DBFNTX dBASE III Plus / FoxBASE+ (no memo) Most common legacy Clipper format. Full read/write/index support.
+         cDRIVERPAD:= "DBFCDX" // ou DBFNTX conforme o legado
+         cEXTMEMO  := "DBT"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "CDX"
+      CASE nbuffer = 003    // dBASE III w/o memo file
          cMES      := "FoxBASE+ / dBASE III sem memo"
          ret_value := 003
-         cDRIVERPAD:= "DBFCDX" //"DBFNTX"
-      CASE nbuffer =  002    // FoxBase:=2                           -->02h(002)
-         //2 0x02 — .NDX/.NTX Single NATIVE DBFNTX FoxBASE original No memo. Compatible with Clipper and CA-Clipper.
+         cDRIVERPAD:= "DBFCDX" 
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "CDX"
+      CASE nbuffer =  002   // FoxBASE original
          cMES      := "FoxBase"
          ret_value := 2
-         cDRIVERPAD:="DBFNTX"
-      CASE nbuffer =  007    // VO :=7        -->07h(007)
+         cDRIVERPAD:= "DBFNTX"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "NTX"
+      CASE nbuffer =  007   // VO
          cMES      := "VO"
          ret_value := 7
-      CASE nbuffer =  019    // Flagship := 0x13      -->13h(
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "NTX"
+      CASE nbuffer =  019   // Flagship
          cMES      := "Flagship"
          ret_value := 019
-      CASE nbuffer =  035    // Flagship248 := 0x23     -->23h(
+         cEXTTABLE := "DBF"
+      CASE nbuffer =  035   // Flagship248
          cMES      := "Flagship248"
          ret_value := 035
-      CASE nbuffer =  049    // VisualFoxProAutoIncrement:=0x31  -->31h(
-         //49  0x31 .FPT .CDX Compound NATIVE DBFCDX Visual FoxPro (autoincrement) Autoincrement field read OK; write needs attention.
+         cEXTTABLE := "DBF"
+      CASE nbuffer =  049   // Visual FoxPro (autoincrement)
          cMES      := "VisualFoxProAutoIncrement"
          ret_value := 049
-         cDRIVERPAD:="DBFNTX"
-      CASE nbuffer =  050    // VisualFoxProVarChar :=0x32   -->32h(
-        //50 0x32 .FPT .CDX Compound PARTIAL  DBFCDX Visual FoxPro (VARCHAR/VARBINARY) VARCHAR/VARBINARY read as Character. No variable-length native support.
+         cDRIVERPAD:= "DBFNTX"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "NTX"
+      CASE nbuffer =  050   // Visual FoxPro (VARCHAR/VARBINARY)
          cMES      := "VisualFoxProVarChar"
          ret_value := 050
-         cDRIVERPAD:="DBFCDX"
-      CASE nbuffer =  051    // Flagship248WithDBV := 0x33   -->33h(
+         cDRIVERPAD:= "DBFCDX"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "CDX"
+      CASE nbuffer =  051   // Flagship248WithDBV
          cMES      := "Flagship248WithDBV"
          ret_value := 051
-      CASE nbuffer =  067    // dBase4SQLTableNoMemo:=0x43   -->43h(
-        // 67 0x43 — .MDX Compound PARTIAL DBFMDX* dBASE IV SQL table (no memo) DBFMDX available but limited. MDX not a native Harbour RDD.
+         cEXTTABLE := "DBF"
+      CASE nbuffer =  067   // dBASE IV SQL table (no memo)
          cMES      := "dBase4SQLTableNoMemo"
          ret_value := 067
-         cDRIVERPAD:="DBFMDX"
-      CASE nbuffer = 099    // dBase4SQLSystemNoMemo:=0x63   -->63h(
-         //99 0x63 — .MDX Compound PARTIAL DBFMDX* dBASE IV SQL system files Partial read only. Avoid in production.
+         cDRIVERPAD:= "DBFMDX"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "MDX"
+      CASE nbuffer = 099    // dBASE IV SQL system files
          cMES      := "dBase4SQLSystemNoMemo"
          ret_value := 099
-         cDRIVERPAD:="DBFMDX"
-      CASE nbuffer =  135    // VOWithMemo := 0x87     -->87h(
+         cDRIVERPAD:= "DBFMDX"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "MDX"
+      CASE nbuffer =  135   // VOWithMemo
          cMES      := "VOWithMemo"
          ret_value := 135
-      CASE nbuffer =  203    // dBase4SQLTableWithMemo:=0xcb   -->cbh(
-         //203 0xCB .DBT .MDX Compound PARTIAL DBFMDX* dBASE IV SQL table (with memo) Same as 0x8B with SQL flag. Rare in practice.
+         cEXTTABLE := "DBF"
+      CASE nbuffer =  203   // dBASE IV SQL table (with memo)
          cMES      := "dBase4SQLTableWithMemo"
          ret_value := 203
-         cDRIVERPAD:="DBFMDX"
-      CASE nbuffer =  229    // ClipperSixWithSMT:=0xe5    -->e5h(
-          //229 0xE5 .SMT .NTX Single PARTIAL SIXRDD* HiPer-Six / Six Driver Proprietary SMT memo. Requires SIXRDD. Avoid in new apps.
-         cMES      := "Six With SMT"   // rddSetDefault( "SMTCDX" ) rddSetDefault( "SIXCDX" )
+         cDRIVERPAD:= "DBFMDX"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "MDX"
+      CASE nbuffer =  229   // HiPer-Six / Six Driver
+         cMES      := "Six With SMT"
          ret_value := 229
-         cDRIVERPAD:="SMTCDX"
-      CASE nbuffer =  251    // FoxBASE_:=0xfb      -->fbh(
-        //251 0xFB — .NDX/.NTX Single NATIVE DBFNTX FoxBASE (variant) FoxBASE variant. No memo. Identical to 0x02/0x03.
+         cDRIVERPAD:= "SMTCDX"
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "CDX"
+      CASE nbuffer =  251   // FoxBASE (variant)
          cMES      := "FoxBASE"
-         cDRIVERPAD:="DBFNTX"
+         cDRIVERPAD:= "DBFNTX"
          ret_value := 251
-         
-     /*    
-     CASE nbuffer = 59  .and. cextensao=".db"  // 3Bh(59) Paradox Database
-         cMES      := "Paradox Database"
-         ret_value := 59
-         cDRIVERPAD:= "PXRDD"    
-         
-         // --- Leitura adicional para obter a versão do Paradox (px_fileversion) ---
-         // No formato Paradox, a versão costuma ocupar 1 byte ou inteiro curto 
-         // dependendo da estrutura do header. Vamos ler na posição específica.
-         FSeek( nHANDLE, 39, FS_SET ) // Exemplo de offset comum para versão do header Paradox
-         cBuffer := Space( 1 )
-         IF FRead( nHANDLE, @cBuffer, 1 ) == 1
-            // Se quiser guardar ou anexar a informação na descrição/retorno:
-            nPxVersion := Asc( cBuffer )
-            cMES := "Paradox Database (Version: " + AllTrim( Str( nPxVersion ) ) + ")"
-         ENDIF
-       */  
+         cEXTTABLE := "DBF"
+         cEXTINDEX := "NTX"
          
       OTHERWISE //tenta expandido
           FSeek( nHANDLE, 0, FS_SET )
           cBuffer:=SPACE(32)
           IF FRead( nHANDLE, @cBuffer, 32 ) == 32
              DO CASE
+                // --- DBMS (Extensoes ficam em branco) ---
                 CASE Left( cBuffer, 15 ) == "SQLite format 3"
                     cMES      := "Arquivo SQLite"
                     ret_value := 999 
@@ -314,26 +311,29 @@ FUNCTION INFOTIPODBF( filename, lMES )
                      cMES      := "Arquivo access MDB"
                      ret_value := 995 
                      cDRIVERPAD:= "MDB"            
-                CASE SubStr(cBuffer, 17, 2) == Chr(0) + Chr(32)  .and. (cextensao=".fdb" .or. cextensao=".gdb" .or. cextensao=".ib" )
+                CASE SubStr(cBuffer, 17, 2) == Chr(0) + Chr(32) .and. (cextensao=".fdb" .or. cextensao=".gdb" .or. cextensao=".ib" )
                      cMES      := "Firebird Database"
                      ret_value := 994
-                    cDRIVERPAD:= "FB5RDD"
+                     cDRIVERPAD:= "FB5RDD"
+                     
+                // --- ADVANTAGE TABLE ---
                 CASE "Advantage Table" $ cBuffer .or. cextensao == ".adt"
                      cMES      := "Advantage Table (ADT)"
                      ret_value := 993
                      cDRIVERPAD:= "ADSADT"
                      cEXTMEMO  := "ADM"    
-             // --- NOVA IDENTIFICAÇÃO PARADOX ---
-                // Verifica se é extensão .db e faz a validação heurística do cabeçalho
-                // SubStr(cBuffer, 1, 2) = px_recordsize (> 0)
-                // SubStr(cBuffer, 5, 2) = px_headersize (>= 1024)
+                     cEXTTABLE := "ADT"
+                     cEXTINDEX := "ADI"
+                     
+                // --- NOVA IDENTIFICAÇÃO PARADOX ---
                 CASE cextensao == ".db" .AND. Bin2W( SubStr( cBuffer, 1, 2 ) ) > 0 .AND. Bin2W( SubStr( cBuffer, 5, 2 ) ) >= 1024
                      cMES      := "Paradox Database"
-                     ret_value := 59 // Mantendo seu código de retorno original
+                     ret_value := 59 
                      cDRIVERPAD:= "PXRDD"
+                     cEXTTABLE := "DB"
+                     cEXTINDEX := ""    // Paradox prop. usa outras libs, s/ idx nativo
                      
-                     // Leitura adicional para obter a versão do Paradox (px_fileversion)
-                     // A versão do Paradox fica gravada no byte da posição 57 (offset 0x39)
+                     // Leitura adicional para obter a versão do Paradox
                      FSeek( nHANDLE, 57, FS_SET ) 
                      cBuffer := Space( 1 )
                      IF FRead( nHANDLE, @cBuffer, 1 ) == 1
@@ -348,16 +348,16 @@ FUNCTION INFOTIPODBF( filename, lMES )
       ret_value := -2   // Nao Pode Ser Verificado
       cMES      := "Nao Pode Ser Verificado"
    ENDIF
-// Apaga tudo e encerra a funcao.
+
    FClose( nHANDLE )
-   
    
    IF Lmes
       ALERTX( Cmes )
    ENDIF
-   aRETVAL:={ret_value,cDRIVERPAD,cEXTMEMO,cMES}
-   RETURN  aRETVAL // ret_value 
    
+   // --- NOVO RETORNO COM 6 ELEMENTOS ---
+   aRETVAL := { ret_value, cDRIVERPAD, cEXTMEMO, cMES, cEXTTABLE, cEXTINDEX }
+   RETURN aRETVAL   
    
    // DBF file format constants used when navigating the binary header.
 // Using symbolic names avoids hard-coded offsets and improves maintainability.
