@@ -40,6 +40,9 @@ https://pctoledo.org/viewtopic.php?t=6772
 dbfcdxex
 https://github.com/carles9000/dbfcdxex
 
+HBnfeEmail
+https://github.com/malcarli1/Nova-HbNfeEmail
+
 hmg
 https://www.hmgextended.com/
 https://github.com/ivanilmarcelino/OpenMinigui
