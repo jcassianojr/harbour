@@ -619,7 +619,7 @@ FUNCTION FtsBuscaPorArquivo( cCaminhoDbf, cTermoBusca, cRegExp )
     cTermoUpper := Upper( AllTrim( cTermoBusca ) )
 
     // Varredura registro a registro usando o ponteiro físico do arquivo
-    FOR nRecno := 1 UP nLastRec
+    FOR nRecno := 1 TO nLastRec
         
         // Posiciona o ponteiro do arquivo exatamente no início do registro atual
         FSeek( pHandle, nHeader + ( ( nRecno - 1 ) * nRecSize ), FS_SET )

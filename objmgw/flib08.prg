@@ -89,7 +89,7 @@ if nTIPSPO = 0
       OPCAO(14,01," &HTML                            ",72)  //8
       oPCAO(07,41," &RTF(Rith Text Format)           ",82)  //9
       oPCAO(08,41," &PDF(Portable Document Format)   ",80)  //10
-      oPCAO(09,41,"                                  ",87)  //11 oPCAO( 09, 41, " Programa E&xterno                ", 87 ) //11
+      oPCAO(09,41," &ODT(OpenDocument Text)          ",87)  //11 
       oPCAO(10,41," Impressora w&Indows RAW          ",73)  //12
       oPCAO(11,41," C&OM1                            ",79)  //13
       oPCAO(12,41," CO&M2                            ",77)  //14
@@ -99,41 +99,9 @@ if nTIPSPO = 0
          oPCAO(15,41," Preview &Zebra pdf                ",90)  //17
       ENDIF
       nTIPSPO := menu(,0)
-      IF nTIPSPO = 11
-         ALERTX("Opcao Desativada")
-         loop
-      ENDIF
       if nTIPSPO = 15
          ALERTX("Opcao Desativada")
          loop
-         /* Pergunta no final se quer email
-         lIMPEMAIL:=.T.
-         nTIPSPO:=6
-         CLSBOX( 6, 0, 17, 80 )
-         HB_dispbox( 6, 0, 17, 79, B_DOUBLE+" ")
-         oPCAO( 09, 01, " &TXT Arquivo Texto Dos(OEM)      ", 84 )
-         oPCAO( 10, 01, " TXT Arquivo Texto Windows(&Ansi) ", 65 )
-         OPCAO( 11, 01, " &HTML                            ", 72 )
-         oPCAO( 12, 01, " &RTF(Rith Text Format)           ", 82 )
-         oPCAO( 13, 01, " &PDF(Portable Document Format)   ", 80 )
- IF lZEBRA
-    oPCAO( 14, 41, " Preview &Zebra pdf                ", 90) 
-     ENDIF
-         nTIPEMAIL := menu(, 0 )
-         do case
-            case nTIPEMAIL=1
-                 nTIPSPO:=6
-            case nTIPEMAIL=2
-                 nTIPSPO:=7
-            case nTIPEMAIL=3
-                 nTIPSPO:=8
-            case nTIPEMAIL=4
-                 nTIPSPO:=9
-            case nTIPEMAIL=5
-                 nTIPSPO:=10
- 
-         endcase
- */
       endif
       if nTIPSPO = 16
          nPORTA   := 1
@@ -226,7 +194,7 @@ if nTIPSPO = 2 .or. nTIPSPO = 3 .or. nTIPSPO = 4
       endif
    enddo
 endif
-if (nTIPSPO > 5 .and. nTIPSPO < 11) .OR. nTIPSPO = 17   //TXT OEM TXT ANSI HTML RTF PDF ZEBRA_17
+if (nTIPSPO > 5 .and. nTIPSPO < 12) .OR. nTIPSPO = 17   //TXT OEM TXT ANSI HTML RTF PDF ZEBRA_17
    //cARQSPO := "c:\temp\nome000" + space( 20 )
    //cARQUIVO=WIN_GETSAVEFILENAME(        , "Exportar", HB_CWD(),"txt"   , "*.txt" , 1            ,               , cARQUIVO)
    cARQSPO := STRTRAN(TMPFILE("TXT"),".TXT","")+SPACE(30)   //"c:\temp\nome000" + space( 20 )
@@ -241,17 +209,13 @@ if (nTIPSPO > 5 .and. nTIPSPO < 11) .OR. nTIPSPO = 17   //TXT OEM TXT ANSI HTML 
          cARQSPO += ".TXW"  //A Funcoes trocam a extencao para txt
          //Evita criar com o mesmo nome
       else
-         cARQSPO += ".TXT"  //A Funcoes trocam a extencao para pdf/htm/rtf
+         cARQSPO += ".TXT"  //A Funcoes trocam a extencao para pdf/htm/rtf/odt
       endif
       FERASE(cARQSPO)
       set print to &cARQSPO
    endif
 endif
-if nTIPSPO = 11
-   ALERTX("Opcao Programa Externo Desativada")
-   returno := .F.
-ENDIF
-if nTIPSPO = 1 .or. nTIPSPO = 12 .or. nTIPSPO = 5   //Video //externo  nTIPSPO = 11 (desativado) //winraw //win32prn
+if nTIPSPO = 1 .or. nTIPSPO = 12 .or. nTIPSPO = 5   //Video  //winraw //win32prn
    cARQSPO := tmpfile("TXT")
    RETORNO := .T.
    FERASE(cARQSPO)
@@ -319,11 +283,10 @@ if nTIPSPO = 10   //pdf
       nTIPSPO := - 1  //-1 para nao processar mais nada	
    ENDCASE
 endif
-/*
-if nTIPSPO = 11     //imprime usuando externo desativada
-   IMPEXT( cARQSPO )
+
+if nTIPSPO = 11    
+   cFILE := printtoodt(cARQSPO) //odt
 endif
-*/
 if nTIPSPO = 12   //print raw
    FILEtoprwin(cARQSPO,1)
 endif
@@ -331,9 +294,9 @@ if nTIPSPO = 5  //win32prn
    FILEtoprwin(cARQSPO,2)
 endif
 if lAPAGA .AND. (nTIPSPO = 1 .or. nTIPSPO = 7 .or. nTIPSPO = 8 .or. nTIPSPO = 9 .or. nTIPSPO = 10 ;
-           .or. nTIPSPO = 12 .or. nTIPSPO = 5)
+           .or. nTIPSPO = 11 .or. nTIPSPO = 12 .or. nTIPSPO = 5)
    //6 txt nao muda extensao nao apagar
-   ferase(cARQSPO)  //11 nao pode apagar pois e externo
+   ferase(cARQSPO)  
    //demais direto na porta
 endif
 if nTIPSPO = 17
@@ -754,7 +717,7 @@ endif
 if cTIPO = "RTF"
    fwrite(nHANWRI,"\par}")
 endif
-fclose(cFILE)
+fclose(nHANDLE)
 fclose(nHANWRI)
 return cFILE
 
@@ -979,7 +942,7 @@ IF nOPCAO=4
    oEmail := hbNFeEmail():New()
 
    // Converte para minúsculo e limpa espaços para garantir a comparação automatizada
-   cServerLower := AllTrim( Lower( cServer ) )
+   cServerLower := AllTrim( Lower( cServerIP ) )
 
    // DESCOBERTA E ESCOPO AUTOMÁTICO ADADEQUADO AO SERVER DO INI
    DO CASE
@@ -1154,7 +1117,48 @@ ENDIF
 retu .t.
 
 
+*+--------------------------------------------------------------------
+*+    Function printtoodt()
+*+--------------------------------------------------------------------
+function printtoodt( cARQ, cFileToSave )
+   LOCAL cLinha, nFileHandle
+   LOCAL oDoc
 
+   IF !hb_FileExists( cARQ )
+      ALERTX( "Falta Arquivo " + cARQ )
+      RETURN ""
+   ENDIF
+
+   IF ValType( cFileToSave ) # "C"
+      cFileToSave := trocaext( cARQ, ".ODT" )
+   ENDIF
+
+   oDoc := DocumentODT():New( cFileToSave )
+   oDoc:AddHeading( "Relatório do Sistema", 1 )
+
+   nFileHandle := hb_FOpen( cARQ )
+   zei_fort( FLineCount( cARQ ),,, 0 )
+   
+   DO WHILE HB_FReadLine( nFileHandle, @cLinha ) == 0
+      IF cLinha == "##page##"
+         // Salto de página opcional ou separador no ODT
+         oDoc:AddParagraph( "----------------------------------------" )
+      ELSE
+         cLinha := RANGEREM( Chr( 0 ), Chr( 09 ), cLinha )
+         cLinha := RANGEREM( Chr( 11 ), Chr( 12 ), cLinha )
+         cLinha := RANGEREM( Chr( 14 ), Chr( 31 ), cLinha )
+         cLinha := hb_OEMToANSI( cLinha )
+         
+         oDoc:AddParagraph( cLinha )
+      ENDIF
+      zei_fort(,, 1 )
+   ENDDO
+
+   FClose( nFileHandle )
+   oDoc:Save()
+   
+   @ MaxRow(), 0 SAY "Gerado ODT " + cFileToSave
+RETURN cFileToSave
 
 *+--------------------------------------------------------------------
 *+
@@ -1345,47 +1349,35 @@ Return (.t.)
 
 *+--------------------------------------------------------------------
 *+
-*+
-*+
 *+    Function filezebrapdf()
 *+
-*+
-*+
 *+--------------------------------------------------------------------
-*+
-*+
-*+
-function filezebrapdf(cARQSPO)
+FUNCTION filezebrapdf( cARQSPO )
+   LOCAL cFILE, cZPLText, oZPL
 
-cFILE     := substr(cARQSPO,1,at(".",cARQSPO) - 1)
-cFILE     += ".pdf"
-oServerWS := Win_OleCreateObject("MSXML2.ServerXMLHTTP")
-oXMLDoc   := Win_OleCreateObject("MSXML2.DOMDocument")
+   // 1. Define o nome do arquivo PDF de saída baseado no arquivo .TXT gerado
+   cFILE := SubStr( cARQSPO, 1, At( ".", cARQSPO ) - 1 ) + ".pdf"
+   
+   // 2. Lê o conteúdo ZPL bruto que o seu sistema já gerou no disco
+   cZPLText := hb_MemoRead( cARQSPO )
+   
+   // (Opcional) Limpeza de caracteres caso a engine antiga precisasse
+   // cZPLText := StrTran( cZPLText, Chr(13), "" )
+   // cZPLText := StrTran( cZPLText, Chr(10), "" )
 
-cUrlWS := 'http://api.labelary.com/v1/printers/8dpmm/labels/4x6/0/'
-//cData :=  '"^XA^MMT^PW400^LL0400^LS0^FT5,384^A0N,41,40^FH\^FDwww.pctoledo.com.br^FS^BY1,3,99^FT70,322^BCN,,Y,N^FD>:Forum do Programador^FS^FT10,46^A0N,38,60^FH\^FDLinguagem ZPL^FS^BY1,3,104^FT96,182^B3N,N,,Y,N^FD1135265909+^FS^PQ1,0,1,Y^XZ"'
-cDATA := '"'+strtran(STRTRAN(hb_memoread(CARQSPO),CHR(13),""),chr(10),"")+'"'
+   // 3. Instancia a classe ZPL (o padrão do método New() já é etiqueta 4x6 em 203dpi/8dpmm)
+   oZPL := ZPLDocument():New()
+   
+   // 4. Injeta todo o código ZPL no documento
+   oZPL:AddRaw( cZPLText )
 
-nResolve := 5 * 1000
-nConnect := 5 * 1000
-nSend    := 30 * 1000
-nReceive := 30 * 1000
+   // 5. Gera o PDF consumindo a API nativamente pela classe (com controle de timeout seguro)
+   IF ! oZPL:SaveToPDF( cFILE )
+      // Retorna vazio caso não haja internet ou a API falhe, evitando que o sistema tente abrir um PDF fantasma
+      cFILE := "" 
+   ENDIF
 
-With Object oServerWS
-:SetTimeouts(nResolve,nConnect,nSend,nReceive)
-:Open("POST",cUrlWS,.F.)
-:SetRequestHeader("Content-Type",'application/x-www-form-urlencoded; charset="utf-8"')
-:SetRequestHeader("Accept","application/pdf")
-:SetRequestHeader("Content-Length",hb_NtoS(3000))   //3000 ‚ o m ximo
-:Send(cData)
-Do While :readyState != 4
-   :WaitForResponse(1000)
-Enddo
-cResp := :responseBody
-Hb_Memowrit(cFILE,cResp)
-End
-return cFILE
-
+RETURN cFILE
 
 *+--------------------------------------------------------------------
 *+
@@ -1400,8 +1392,8 @@ return cFILE
 *+
 *+
 function IsImpressora(QuePrinter)
-
 LOCAL nStatus
+cERRO:=''
 nStatus := PrintStat(QuePrinter)
 if nStatus < 1 
    cERRO += "OK"
