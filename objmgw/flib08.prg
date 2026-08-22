@@ -1353,29 +1353,18 @@ Return (.t.)
 *+
 *+--------------------------------------------------------------------
 FUNCTION filezebrapdf( cARQSPO )
-   LOCAL cFILE, cZPLText, oZPL
-
-   // 1. Define o nome do arquivo PDF de saída baseado no arquivo .TXT gerado
-   cFILE := SubStr( cARQSPO, 1, At( ".", cARQSPO ) - 1 ) + ".pdf"
    
-   // 2. Lê o conteúdo ZPL bruto que o seu sistema já gerou no disco
-   cZPLText := hb_MemoRead( cARQSPO )
+    Local oConverter
+   Local cPdfFile 
+   Local lSuccess
    
-   // (Opcional) Limpeza de caracteres caso a engine antiga precisasse
-   // cZPLText := StrTran( cZPLText, Chr(13), "" )
-   // cZPLText := StrTran( cZPLText, Chr(10), "" )
-
-   // 3. Instancia a classe ZPL (o padrão do método New() já é etiqueta 4x6 em 203dpi/8dpmm)
-   oZPL := ZPLDocument():New()
+   cPdfFile:=HB_FNAMEEXTSET(cARQSPO,"pdf")
    
-   // 4. Injeta todo o código ZPL no documento
-   oZPL:AddRaw( cZPLText )
+    oConverter := TZebraToPdf():New()
+   
+   // Lemos do arquivo que acabamos de criar
+   lSuccess := oConverter:Generate( hb_MemoRead( cARQSPO ), cPdfFile )
 
-   // 5. Gera o PDF consumindo a API nativamente pela classe (com controle de timeout seguro)
-   IF ! oZPL:SaveToPDF( cFILE )
-      // Retorna vazio caso não haja internet ou a API falhe, evitando que o sistema tente abrir um PDF fantasma
-      cFILE := "" 
-   ENDIF
 
 RETURN cFILE
 
