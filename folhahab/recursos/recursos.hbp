@@ -66,9 +66,8 @@ recuger1.prg
 \develop\harbour\diversos\objmgw\disk72.prg
 \develop\harbour\privado\objmgw\hbnfeemail.prg
 \develop\harbour\diversos\objmgw\flib04hab.prg
-\develop\harbour\diversos\objmgw\flib08.prg
 \develop\harbour\diversos\objmgw\f_encode.prg
-c:\develop\harbour\csvrdd\f_freadl.prg
+\develop\harbour\csvrdd\f_freadl.prg
 \develop\harbour\diversos\objmgw\f_ismemo.prg
 \develop\harbour\diversos\objmgw\f_makedb.prg 
 \develop\harbour\diversos\objmgw\f_mmopac.prg
@@ -83,5 +82,9 @@ c:\develop\harbour\csvrdd\f_freadl.prg
 \develop\harbour\diversos\objmgw\wvgini.prg
 \develop\harbour\diversos\objmgw\modeseguranca.prg
 c:\develop\harbour\sqliterdd\SL3RDD.prg
+\develop\harbour\OdsOdt\flib08.prg
 c:\develop\harbour\OdsOdt\odtclass.prg
-classezebra.prg
+c:\develop\harbour\OdsOdt\cnvformatos.prg
+c:\develop\harbour\OdsOdt\docclass.prg
+c:\develop\harbour\OdsOdt\dumyzebra.prg
+#classezebra.prg
