@@ -37,8 +37,11 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
    LOCAL cDbPath, cTableName, nPosCol
    LOCAL cOldRdd := RddSetDefault()  // Salva a RDD padrão atual
    PRIVATE X
-   LOCAL cPADRAO
-   LOCAL cCAMINHO
+   LOCAL cSQLITEARQ
+   LOCAL cEXT
+   
+   cSQLITEARQ:=""
+   cEXT:=""
 
    // Obtem as extensoes dinamicamente via hb_rddInfo com Try/Catch e fallbacks
    TRY
@@ -98,20 +101,17 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
    ENDIF
 
    // Carrega o Diretorio do Arquivo
-   cARQDIR := LOCALARQ( PADRAO, CAMINHO )
+   cARQDIR := LOCALARQ( FIELD->PADRAO, FIELD->CAMINHO )
+   IF EMPTY(cDRIVER) .AND. ! EMPTY(FIELD->DRIVER)
+      cDRIVER:=FIELD->DRIVER
+   ENDIF
+   IF cDRIVER="SQLITE"
+      cSQLITEARQ:=MARQSLITE( cARQ,FIELD->PADRAO, FIELD->CAMINHO )
+      cARQ:=cSQLITEARQ+":"+cARQ
+   ENDIF   
    dbCloseArea()
 
 
-   // Tratamento para SL3RDD recebendo no formato caminho:tabela
-   nPosCol := At( ":", cARQ )
-   IF nPosCol > 0
-      cDbPath    := SubStr( cARQ, 1, nPosCol - 1 )
-      cTableName := SubStr( cARQ, nPosCol + 1 )
-   ELSE
-      cTableName := Upper( cARQ )
-      cTableName := StrTran( cTableName, "." + Upper( cTableExt ), "" )
-      cTableName := StrTran( cTableName, ".DBF", "" )
-   ENDIF
 
    IF ValType( nMOD ) # "N"
       ALERTX( "Funcao USEREDE, Modo de Abertura nao e Numerico" )
@@ -125,16 +125,15 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
       RETURN .F.
    ENDIF
 
-   // Carrega o Driver previamente com tratativa robusta via CASE
-   cDRIVER := DRIVER
-   IF ValType( cDRIVER ) # "C" .OR. Empty( cDRIVER )
+   cEXT:=HB_FNAMEEXT(cARQ)
+   IF (ValType( cDRIVER ) # "C" .OR. Empty( cDRIVER )) .AND. ! EMPTY(cEXT)
       DO CASE
-      CASE Upper( cTableExt ) == "SQLITE" .OR. "SL3" $ Upper( cTableExt )
+      CASE Upper( cExt ) == "SQLITE" .OR. "SL3" $ Upper( cExt )
          cDRIVER := "SL3RDD"
-      CASE Upper( cTableExt ) == "ADT"
+      CASE Upper( cExt ) == "ADT"
          cDRIVER := "ADSADT"
       #ifdef USE_PXRDD
-      CASE Upper( cTableExt ) == "DB"
+      CASE Upper( cExt ) == "DB"
          cDRIVER := "PXRDD"
       #endif
       OTHERWISE
@@ -143,6 +142,20 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
    ELSE
       cDRIVER := AllTrim( cDRIVER )
    ENDIF
+   
+   
+
+   // Tratamento para SL3RDD recebendo no formato caminho:tabela
+   nPosCol := At( ":", cARQ )
+   IF nPosCol > 0
+      cDbPath    := SubStr( cARQ, 1, nPosCol - 1 )
+      cTableName := SubStr( cARQ, nPosCol + 1 )
+   ELSE
+      cTableName := Upper( cARQ )
+      cTableName := StrTran( cTableName, "." + Upper( cTableExt ), "" )
+      cTableName := StrTran( cTableName, ".DBF", "" )
+   ENDIF
+
 
    // Se o driver for ADSADT, configura as definições do Advantage e altera o RddSetDefault
    IF cDRIVER == "ADSADT"
