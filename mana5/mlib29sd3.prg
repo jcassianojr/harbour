@@ -37,6 +37,8 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
    LOCAL cDbPath, cTableName, nPosCol
    LOCAL cOldRdd := RddSetDefault()  // Salva a RDD padrão atual
    PRIVATE X
+   LOCAL cPADRAO
+   LOCAL cCAMINHO
 
    // Obtem as extensoes dinamicamente via hb_rddInfo com Try/Catch e fallbacks
    TRY
@@ -78,6 +80,27 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
       RddSetDefault( cOldRdd )
       RETURN .F.
    ENDIF
+
+  // Abrindo o Arquivo de Configuracao do Arquivo
+   IF !USECHK( ZDIRC + ZARQ, ZDIRC + ZARQ, .T. )
+      RddSetDefault( cOldRdd )
+      RETURN .F.
+   ENDIF
+
+   dbGoTop()
+   IF !dbSeek( cTableName )
+      dbCloseArea()
+      IF lMES
+         ALERTX( "Falta configuracao do Arquivo de Dados " + cTableName )
+      ENDIF
+      RddSetDefault( cOldRdd )
+      RETURN .F.
+   ENDIF
+
+   // Carrega o Diretorio do Arquivo
+   cARQDIR := LOCALARQ( PADRAO, CAMINHO )
+   dbCloseArea()
+
 
    // Tratamento para SL3RDD recebendo no formato caminho:tabela
    nPosCol := At( ":", cARQ )
@@ -145,25 +168,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
       ENDIF
    ENDIF
 
-   // Abrindo o Arquivo de Configuracao do Arquivo
-   IF !USECHK( ZDIRC + ZARQ, ZDIRC + ZARQ, .T. )
-      RddSetDefault( cOldRdd )
-      RETURN .F.
-   ENDIF
-
-   dbGoTop()
-   IF !dbSeek( cTableName )
-      dbCloseArea()
-      IF lMES
-         ALERTX( "Falta configuracao do Arquivo de Dados " + cTableName )
-      ENDIF
-      RddSetDefault( cOldRdd )
-      RETURN .F.
-   ENDIF
-
-   // Carrega o Diretorio do Arquivo
-   cARQDIR := LOCALARQ( PADRAO, CAMINHO )
-   dbCloseArea()
+   
 
    // Se for SL3RDD e lOPENCON for verdadeiro, conecta na base e usa o nome da tabela
    IF cDRIVER == "SL3RDD" .AND. lOPENCON .AND. !Empty( cDbPath )
@@ -445,5 +450,30 @@ FUNCTION LOCALARQ( cPADRAO, cCAMINHO )
    ENDCASE
 
    RETURN cARQDIR
+   
+FUNCTION MARQSLITE( cARQ,cPADRAO, cCAMINHO )
+
+   cARQDIR := ZDIRP
+   DO CASE
+   CASE cPADRAO = 'S'
+      cARQDIR := "mana5_emp.sqlite"
+   CASE cPADRAO = 'N'
+      cARQDIR := "mana5.sqlite"
+   CASE cPADRAO = 'C'
+      cARQDIR := "mana5_configur.sqlite"
+   CASE cPADRAO = 'I'
+      cARQDIR := ""
+   CASE cPADRAO = 'A'
+      cARQDIR := ""
+   CASE cPADRAO = 'B'
+      cARQDIR :=  ""
+   CASE cPADRAO = "X"
+      cARQDIR := AllTrim( cCAMINHO )
+   OTHERWISE
+      cARQDIR := "mana5.sqlite"
+   ENDCASE
+
+   RETURN cARQDIR
+
 
 // + EOF: mlib29.prg
