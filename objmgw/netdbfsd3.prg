@@ -20,6 +20,9 @@
 #include "fileio.ch"
 #include "dbstruct.ch"
 #include "dbinfo.ch"
+#include "ads.ch"
+
+REQUEST ADSADT
 
 #ifdef USE_PXRDD
     REQUEST PXRDD   //-20 Carrega a RDD do Paradox criada acima
@@ -265,6 +268,8 @@ FUNCTION NetRegCount( cARQ )
    ENDIF
 
    RETURN nREG
+
+
 // +--------------------------------------------------------------------
 // +    Function netuse(cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
 // +--------------------------------------------------------------------
@@ -277,10 +282,12 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
    LOCAL cDbfFile
    LOCAL nPosCol
    LOCAL cDbPath, cTableName
+   LOCAL cOldRdd := RddSetDefault()  // Salva a RDD padrão atual
 
    // Tratamento com TRY/CATCH para recuperacao de extensoes via rddInfo
    TRY
       cTableExt := hb_rddInfo( RDDI_TABLEEXT )
+      cTableExt := strtran(cTableExt,".","")
    CATCH
       cTableExt := ""
    END
@@ -291,6 +298,7 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
 
    TRY
       cMemoExt := hb_rddInfo( RDDI_MEMOEXT )
+      cMemoExt := strtran(cMemoExt,".","")
    CATCH
       cMemoExt := ""
    END
@@ -301,6 +309,7 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
 
    TRY
       cOrdExt := hb_rddInfo( RDDI_ORDBAGEXT )
+      cOrdExt := strtran(cOrdExt,".","")
    CATCH
       cOrdExt := ""
    END
@@ -309,7 +318,7 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
       cOrdExt := "cdx"
    ENDIF
 
-   cEXT := StrTran( Upper( cOrdExt ), ".", "" )
+   cEXT := StrTran( Upper( cTableExt ), ".", "" )
 
    IF ValType( cDRIVER ) # "C" .OR. Empty( cDRIVER )
       DO CASE
@@ -326,6 +335,11 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
       ENDCASE 
    ELSE
       cDRIVER := AllTrim( cDRIVER )
+   ENDIF
+
+   // Se o driver for ADSADT, define o RddSetDefault explicitamente
+   IF cDRIVER == "ADSADT"
+      RddSetDefault( "ADSADT" )
    ENDIF
 
    IF ValType( lNEW ) # "L"
@@ -347,9 +361,10 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
       lINDEX := .F.
    ENDIF
 
-
    // Tratamento especifico para SL3RDD dividindo por dois pontos (:) se houver
    IF cDRIVER == "SL3RDD"
+      AdsSetServerType(ADS_LOCAL_SERVER)
+      AdsSetFileType(ADS_ADT)
       lINDEX := .F.
       IF ValType( lOPENCON ) # "L"
          lOPENCON := .T.  
@@ -373,13 +388,14 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
 
    // Só inclui a extensão padrão se ela já não foi passada explicitamente no nome do arquivo
    IF Lower( Right( cARQ, Len( cTableExt ) + 1 ) ) != "." + Lower( cTableExt )
-      cDbfFile := cARQ + "." + cTableExt
+      cDbfFile := cARQ +"."+ cTableExt
    ELSE
       cDbfFile := cARQ
    ENDIF
 
    IF cDRIVER != "SL3RDD" .AND. !File( cDbfFile ) .AND. !File( cARQ )   
       ALERTX( "Netuse: Falta Arquivo: " + cARQ )
+      RddSetDefault( cOldRdd )  // Restaura a RDD antes de sair com .F.
       RETURN .F.
    ENDIF
 
@@ -392,10 +408,12 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
          nTIME := nTIME - 1
       ENDIF
       IF nTIME = 0
+         RddSetDefault( cOldRdd )  // Restaura a RDD antes de sair com .F.
          RETURN .F.
       ENDIF
       IF nTIME = -2
          IF !MDG( "Deseja Retentar" )
+            RddSetDefault( cOldRdd )  // Restaura a RDD antes de sair com .F.
             RETURN .F.
          ENDIF
       ENDIF
@@ -403,6 +421,7 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
       WaitPeriod( 100 )
       nKEY := Inkey( 1 )
       IF nKEY = K_ESC
+         RddSetDefault( cOldRdd )  // Restaura a RDD antes de sair com .F.
          RETURN .F.
       ENDIF
    ENDDO
@@ -427,9 +446,9 @@ FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
       rddInfo( RDDI_LOCKSCHEME, DB_DBFLOCK_HB32 )
    ENDIF
 
+   RddSetDefault( cOldRdd )  // Restaura a RDD original antes de concluir com sucesso
+
    RETURN .T.
-
-
 
 
 

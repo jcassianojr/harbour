@@ -18,7 +18,9 @@
 #include "INKEY.CH"
 #include "dbinfo.ch"
 #include "try.ch"
+#include "ads.ch"
 
+REQUEST ADSADT
 #ifdef USE_PXRDD
     REQUEST PXRDD   // Carrega a RDD do Paradox criada acima
 #endif
@@ -33,11 +35,13 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
    LOCAL aARQIND := {}
    LOCAL cTableExt, cOrdExt
    LOCAL cDbPath, cTableName, nPosCol
+   LOCAL cOldRdd := RddSetDefault()  // Salva a RDD padrão atual
    PRIVATE X
 
    // Obtem as extensoes dinamicamente via hb_rddInfo com Try/Catch e fallbacks
    TRY
       cTableExt := hb_rddInfo( RDDI_TABLEEXT )
+      cTableExt := strtran(cTableExt,".","")
    CATCH
       cTableExt := ""
    END
@@ -48,6 +52,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
 
    TRY
       cOrdExt := hb_rddInfo( RDDI_ORDBAGEXT )
+      cOrdExt := strtran(cOrdExt,".","")
    CATCH
       cOrdExt := ""
    END
@@ -70,6 +75,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
       @ 24, 10 SAY cARQ
       @ 24, 50 SAY "Tipo:" + ValType( cARQ )
       ALERTX( "Funcao USEREDE, Nome do Arquivo nao e Caracter" )
+      RddSetDefault( cOldRdd )
       RETURN .F.
    ENDIF
 
@@ -86,11 +92,13 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
 
    IF ValType( nMOD ) # "N"
       ALERTX( "Funcao USEREDE, Modo de Abertura nao e Numerico" )
+      RddSetDefault( cOldRdd )
       RETURN .F.
    ENDIF
 
    IF nMOD < 0 .OR. nMOD > 1   // 0-Exclusivo 1-Compartilhado
       ALERTX( "Funcao USEREDE, Modo de Abertura fora de parametro" )
+      RddSetDefault( cOldRdd )
       RETURN .F.
    ENDIF
 
@@ -98,12 +106,12 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
    cDRIVER := DRIVER
    IF ValType( cDRIVER ) # "C" .OR. Empty( cDRIVER )
       DO CASE
-      CASE Upper( cOrdExt ) == "SQLITE" .OR. "SL3" $ Upper( cTableExt )
+      CASE Upper( cTableExt ) == "SQLITE" .OR. "SL3" $ Upper( cTableExt )
          cDRIVER := "SL3RDD"
-      CASE Upper( cOrdExt ) == "ADT"
+      CASE Upper( cTableExt ) == "ADT"
          cDRIVER := "ADSADT"
       #ifdef USE_PXRDD
-      CASE Upper( cOrdExt ) == "DB"
+      CASE Upper( cTableExt ) == "DB"
          cDRIVER := "PXRDD"
       #endif
       OTHERWISE
@@ -113,10 +121,18 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
       cDRIVER := AllTrim( cDRIVER )
    ENDIF
 
+   // Se o driver for ADSADT, configura as definições do Advantage e altera o RddSetDefault
+   IF cDRIVER == "ADSADT"
+      AdsSetServerType( ADS_LOCAL_SERVER )
+      AdsSetFileType( ADS_ADT )
+      RddSetDefault( "ADSADT" )
+   ENDIF
+
    // Valida nIND apenas se nao for SL3RDD ou PXRDD
    IF cDRIVER <> "SL3RDD" .AND. cDRIVER <> "PXRDD"
       IF ValType( nIND ) # "N"
          ALERTX( "Funcao USEREDE, Indices nao e Numerico" )
+         RddSetDefault( cOldRdd )
          RETURN .F.
       ENDIF
    ENDIF
@@ -124,12 +140,14 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
    IF PCount() = 4
       IF ValType( cARE ) # "C"
          ALERTX( "Funcao USEREDE, Area nao e Caracter" )
+         RddSetDefault( cOldRdd )
          RETURN .F.
       ENDIF
    ENDIF
 
    // Abrindo o Arquivo de Configuracao do Arquivo
    IF !USECHK( ZDIRC + ZARQ, ZDIRC + ZARQ, .T. )
+      RddSetDefault( cOldRdd )
       RETURN .F.
    ENDIF
 
@@ -139,6 +157,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
       IF lMES
          ALERTX( "Falta configuracao do Arquivo de Dados " + cTableName )
       ENDIF
+      RddSetDefault( cOldRdd )
       RETURN .F.
    ENDIF
 
@@ -157,6 +176,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
             IF lMES
                ALERTX( "O Sistema nao Encontrou o Arquivo " + cTableName )
             ENDIF
+            RddSetDefault( cOldRdd )
             RETURN .F.
          ENDIF
       ENDIF
@@ -170,6 +190,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
       ELSE   // ntx pega e adiciona na aarqind
          // Abrindo o Arquivo de Configuracao de Indexacao
          IF !USECHK( ZDIRC + ZARQ1, ZDIRC + ZARQ1, .T. )
+            RddSetDefault( cOldRdd )
             RETURN .F.
          ENDIF
          dbGoTop()
@@ -177,6 +198,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
             IF !dbSeek( PadR( cTableName, 8 ) + Str( 1, 2 ) )
                dbCloseArea()
                ALERTX( "Falta configuracao Indexacao " + cTableName + Str( 1, 2 ) )
+               RddSetDefault( cOldRdd )
                RETURN .F.
             ENDIF
             WHILE PadR( cTableName, 8 ) = ARQUIVO .AND. !Eof()
@@ -187,6 +209,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
             IF !dbSeek( PadR( cTableName, 8 ) + Str( nIND, 2 ) )
                dbCloseArea()
                ALERTX( "Falta configuracao Indexacao " + cTableName + Str( nIND, 2 ) )
+               RddSetDefault( cOldRdd )
                RETURN .F.
             ENDIF
             AAdd( aARQIND, INDICE )
@@ -203,6 +226,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
             IF MDG( "Indexar " + cTableName )
                M_DB( "ARQUIVO='" + cTableName + "'" )
             ENDIF
+            RddSetDefault( cOldRdd )
             RETURN .F.
          ENDIF
       NEXT X
@@ -229,6 +253,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
    ENDDO
 
    IF nIND = 0 .OR. cDRIVER == "SL3RDD" .OR. cDRIVER == "PXRDD"
+      RddSetDefault( cOldRdd )
       RETURN .T.
    ENDIF
 
@@ -245,6 +270,7 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
          KEY := Inkey( .5 )
          IF KEY = K_ESC
             dbCloseArea()
+            RddSetDefault( cOldRdd )
             RETURN .F.
          ENDIF
          MDS( "Nao Estou Conseguindo Abrir indice " + aARQIND[ X ] )
@@ -255,8 +281,9 @@ FUNCTION USEREDE( cARQ, nMOD, nIND, cARE, lMES, nTIME, lOPENCON )  // Arquivo,Mo
       dbSetOrder( nIND )
    ENDIF
 
-   RETURN .T.
+   RddSetDefault( cOldRdd )  // Restaura a RDD original antes de concluir com sucesso
 
+   RETURN .T.
 
 // +--------------------------------------------------------------------
 // +    Function USECHK()
@@ -266,9 +293,11 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES, lOPENCON )
    LOCAL cTableExt, cOrdExt
    LOCAL cDbfFile
    LOCAL cEXT
+   LOCAL cOldRdd := RddSetDefault()  // Salva a RDD padrão atual
 
    TRY
       cTableExt := hb_rddInfo( RDDI_TABLEEXT )
+      cTableExt := strtran(cTableExt,".","")
    CATCH
       cTableExt := ""
    END
@@ -279,6 +308,7 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES, lOPENCON )
 
    TRY
       cOrdExt := hb_rddInfo( RDDI_ORDBAGEXT )
+      cOrdExt := strtran(cOrdExt,".","")
    CATCH
       cOrdExt := ""
    END
@@ -287,7 +317,7 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES, lOPENCON )
       cOrdExt := "cdx"
    ENDIF
 
-   cEXT := StrTran( Upper( cOrdExt ), ".", "" )
+   cEXT := StrTran( Upper( cTableExt ), ".", "" )
 
    IF ValType( lMES ) <> "L"
       lMES := .T.
@@ -314,6 +344,13 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES, lOPENCON )
       cDRIVER := AllTrim( cDRIVER )
    ENDIF
 
+   // Se o driver for ADSADT, configura o Advantage e ajusta o RddSetDefault
+   IF cDRIVER == "ADSADT"
+      AdsSetServerType( ADS_LOCAL_SERVER )
+      AdsSetFileType( ADS_ADT )
+      RddSetDefault( "ADSADT" )
+   ENDIF
+
    IF ValType( lNEW ) # "L"
       lNEW := .T.
    ENDIF
@@ -335,6 +372,7 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES, lOPENCON )
       ELSE
          MDT( "Falta Arquivo: " + cARQ )
       ENDIF
+      RddSetDefault( cOldRdd )  // Restaura a RDD original antes de sair
       RETURN .F.
    ENDIF
 
@@ -349,11 +387,13 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES, lOPENCON )
       ENDIF
 
       IF nTIME = 0
+         RddSetDefault( cOldRdd )  // Restaura a RDD original antes de sair
          RETURN .F.
       ENDIF
 
       IF nTIME = -2
          IF !MDG( "Deseja Retentar" )
+            RddSetDefault( cOldRdd )  // Restaura a RDD original antes de sair
             RETURN .F.
          ENDIF
       ENDIF
@@ -361,6 +401,7 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES, lOPENCON )
       MDS( "Nao Estou Conseguindo Abrir arquivo " + cARQ )
       KEY := Inkey( 1 )
       IF KEY = K_ESC
+         RddSetDefault( cOldRdd )  // Restaura a RDD original antes de sair
          RETURN .F.
       ENDIF
    ENDDO
@@ -374,8 +415,9 @@ FUNCTION USECHK( cARQ, cIND, lSHA, cDRIVER, lNEW, nTIME, lMES, lOPENCON )
       ENDIF
    ENDIF
 
-   RETURN .T.
+   RddSetDefault( cOldRdd )  // Restaura a RDD original ao concluir com sucesso
 
+   RETURN .T.
 
 // +--------------------------------------------------------------------
 // +    Function LOCALARQ()
