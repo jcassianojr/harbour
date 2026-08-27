@@ -15,6 +15,9 @@
 // +
 // +--------------------------------------------------------------------
 
+//hs := hs_Index( cFile, cExpr, nKeySize, nOpenMode, nBufSize, lCase, nFiltSet )
+//hs := hs_Create( cFile, nBufSize, nKeySize, lCase, nFiltSet, xExpr )
+
 #include "INKEY.CH"
 #include "try.ch"
 #include "fileio.ch"
