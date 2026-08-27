@@ -759,4 +759,99 @@ FUNCTION RecToStr()
     
 RETURN cStr   
 
+/*
+ * ftshsx: Wrapper function usando o motor nativo HiPer-SEEK (.hsx) do Harbour
+ * 
+ * Parâmetros:
+ *  - cDbfFile   : Caminho do arquivo .dbf
+ *  - cTermoBusca: Termo textual a ser buscado
+ *  - cKeyExpr   : Expressão de chave (opcional: se vazia, indexa a linha inteira de campos)
+ *  - lRecriar   : Se .T. (padrão), apaga e recria o .hsx para evitar dados antigos/misturados
+ * 
+ * Retorno:
+ *  - Array com os recnos encontrados: { recno1, recno2, ... }
+ */
+FUNCTION ftshsx( cDbfFile, cTermoBusca, cKeyExpr, lRecriar )
+   LOCAL hs
+   LOCAL nRec
+   LOCAL aRetu := {}
+   LOCAL cHsxPath
+   LOCAL cRddAnterior
+   LOCAL xExprIndex := NIL
+   LOCAL cAliasTemp
+   LOCAL i
+
+   // 1. Guarda o RDD atual e define o padrão para RMDBFCDX
+   cRddAnterior := rddDefault()
+   rddSetDefault( "RMDBFCDX" )
+
+   // Define o valor padrão de lRecriar como .T.
+   IF ValType( lRecriar ) # "L"
+      lRecriar := .T.
+   ENDIF
+
+   // Validações básicas
+   IF Empty( cDbfFile ) .OR. !File( cDbfFile )
+      rddSetDefault( cRddAnterior )
+      RETURN aRetu
+   ENDIF
+
+   cHsxPath := cDbfFile + ".hsx"
+
+   // Se solicitado recriar e o índice já existir, apaga-o
+   IF lRecriar .AND. File( cHsxPath )
+      FErase( cHsxPath )
+   ENDIF
+
+   // 2. Define a expressão de índice (Se não informada, cria o CodeBlock unificando todos os campos)
+   IF !Empty( cKeyExpr )
+      xExprIndex := cKeyExpr
+   ELSE
+      // Se não passou expressão, abrimos temporariamente para estruturar o CodeBlock de linha inteira
+      cAliasTemp := "FTS_EXPR_" + AllTrim( Str( HB_RandomInt( 1000, 9999 ) ) )
+      IF DbUseArea( .T., "DBFCDX", cDbfFile, cAliasTemp, .T., .T. )
+         
+         // Cria dinamicamente um CodeBlock que simula a união de todos os campos (RecToStr)
+         xExprIndex := { || 
+            Local cStr := "", _i
+            For _i := 1 TO FCount()
+               cStr += hb_ValToStr( FieldGet( _i ) ) + " "
+            Next
+            Return cStr
+         }
+
+         (cAliasTemp)->( DbCloseArea() )
+      ENDIF
+   ENDIF
+
+   // 3. Abre ou Cria o índice HiPer-SEEK usando a chave avaliada (String ou CodeBlock)
+   IF File( cHsxPath )
+      hs := hs_Open( cDbfFile, , 2 ) // Abre em modo compartilhado/leitura
+   ELSE
+      // Passa a expressão (seja string ou o codeblock gerado) para o hs_Index nativo
+      hs := hs_Index( cDbfFile, xExprIndex, 2, 2, , .T., 3 )
+   ENDIF
+
+   IF hs < 0
+      rddSetDefault( cRddAnterior )
+      RETURN aRetu
+   ENDIF
+
+   // 4. Configura o termo de busca no motor HSX e executa
+   IF hs_Set( hs, cTermoBusca ) >= 0
+      WHILE ( nRec := hs_Next( hs ) ) > 0
+         IF hs_Verify( hs ) > 0
+            AAdd( aRetu, nRec )
+         ENDIF
+      ENDDO
+   ENDIF
+
+   // 5. Fecha o manipulador do índice
+   hs_Close( hs )
+
+   // 6. Restaura o RDD original
+   rddSetDefault( cRddAnterior )
+
+RETURN aRetu
+
 // + EOF: netdbf.prg
