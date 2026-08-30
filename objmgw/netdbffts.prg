@@ -1,22 +1,8 @@
 // +--------------------------------------------------------------------
-// +
 // +    Programa  : netdbf.prg
-// +
-// +     Sistema:
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024-2026,  jcassiano
-// + 1. DbGetRec() — Lê o registro atual para um Array
-// + 2. DbPutRec( aRegistro ) — Grava um Array de volta no Registro
-// + 3.HB_RecToStr() Converte o registro todo para string
-// +
+// +    Sistema   : FTS (Full-Text Search) DBF
+// +    Linguagem : Harbour
 // +--------------------------------------------------------------------
-
-//hs := hs_Index( cFile, cExpr, nKeySize, nOpenMode, nBufSize, lCase, nFiltSet )
-//hs := hs_Create( cFile, nBufSize, nKeySize, lCase, nFiltSet, xExpr )
 
 #include "INKEY.CH"
 #include "try.ch"
@@ -25,212 +11,191 @@
 #include "dbinfo.ch"
 
 /**
- * Função FTS em Harbour abrindo o DBF diretamente pelo caminho (FOPEN/FSEEK)
- * 
- * Parâmetros:
- *  - cCaminhoDbf : Caminho completo ou relativo do arquivo .dbf
- *  - cTermoBusca : Termo textual a ser buscado (obrigatório)
- *  - cRegExp     : Expressão regular opcional para validação avançada (opcional)
- * 
- * Retorno:
- *  - Array com os recnos encontrados: { { string_formatada, recno }, ... }
+ * FtsBuscaPorArquivo: Busca física direta em DBF (FOPEN/FSEEK)
+ * Filtro aCampos é aplicado através de mapeamento físico de bytes.
  */
-FUNCTION FtsBuscaPorArquivo( cCaminhoDbf, cTermoBusca, cRegExp )
-    LOCAL pHandle
-    LOCAL cRecord
-    LOCAL nRecno
-    LOCAL aRetu := {}
-    LOCAL nLastRec
-    LOCAL nHeader, nRecSize
+
+/**
+ * FtsBuscaPorArquivo: Busca física direta em DBF via FOPEN/FSEEK
+ * Utiliza o cálculo estrutural nativo do DBF e suporta filtragem por colunas (aCampos).
+ */
+FUNCTION FtsBuscaPorArquivo( cCaminhoDbf, cTermoBusca, cRegExp, cKEYWILD, lIncluiMemos, aCampos )
+    LOCAL pHandle, cRecord, nRecno, aRetu := {}, nLastRec, nHeader, nRecSize
     LOCAL cAliasTemp := "FTS_" + AllTrim( Str( HB_RandomInt( 1000, 9999 ) ) )
-    LOCAL cTermoUpper
+    LOCAL cTermoUpper, cBufferLinha
     LOCAL lTemRegex := !Empty( cRegExp )
+    LOCAL lTemWild  := !Empty( cKEYWILD )
+    LOCAL lFiltrar  := ( ValType( aCampos ) == "A" .AND. Len( aCampos ) > 0 )
+    LOCAL aStruct, aOffsets := {}, nPos, nLen, i
+
+    IF ValType( lIncluiMemos ) # "L"
+        lIncluiMemos := .T.
+    ENDIF
 
     IF Empty( cCaminhoDbf ) .OR. !File( cCaminhoDbf )
         RETURN aRetu
     ENDIF
 
-    IF Empty( cTermoBusca ) .AND. !lTemRegex
+    IF Empty( cTermoBusca ) .AND. !lTemRegex .AND. !lTemWild
         RETURN aRetu
     ENDIF
 
-    // Abre a tabela temporariamente apenas para extrair metadados estruturais (Header, RecSize, LastRec)
-    // de forma segura sem precisar calcular manualmente os bytes do cabeçalho do DBF.
+    // Abre a tabela temporariamente para extrair metadados e estrutura
     RddSetDefault( "DBFCDX" )
     IF !DbUseArea( .T., "DBFCDX", cCaminhoDbf, cAliasTemp, .T., .T. )
         RETURN aRetu
     ENDIF
 
     nLastRec  := (cAliasTemp)->( LastRec() )
-   nHeader   := (cAliasTemp)->( DbInfo( DBI_GETHEADERSIZE ) )
+    nHeader   := (cAliasTemp)->( DbInfo( DBI_GETHEADERSIZE ) )
     nRecSize  := (cAliasTemp)->( DbInfo( DBI_GETRECSIZE ) )
-    // Fecha o alias estrutural, pois agora faremos a leitura via baixo nível (FOPEN)
+    aStruct   := (cAliasTemp)->( DbStruct() )
+
+    // Mapeia os offsets de bytes de cada campo no registro físico do DBF
+    nPos := 2 // O 1º byte do registro DBF é o indicador de exclusão (*)
+    FOR i := 1 TO Len( aStruct )
+        nLen := aStruct[ i, 3 ]
+        
+        // Se a filtragem estiver ativa, valida se o campo atual está no array aCampos
+        IF lFiltrar
+            IF AScan( aCampos, i ) > 0
+                AAdd( aOffsets, { nPos, nLen } )
+            ENDIF
+        ELSE
+            AAdd( aOffsets, { nPos, nLen } )
+        ENDIF
+        
+        nPos += nLen
+    NEXT
+
     (cAliasTemp)->( DbCloseArea() )
 
-
-    // Abre o arquivo fisicamente em modo de leitura compartilhada de baixo nível
+    // Abre o arquivo fisicamente em baixo nível
     pHandle := FOpen( cCaminhoDbf, FO_READ + FO_SHARED )
-    
     IF FError() != 0 .OR. pHandle == NIL
         RETURN aRetu
     ENDIF
 
     cTermoUpper := Upper( AllTrim( cTermoBusca ) )
 
-    // Varredura registro a registro usando o ponteiro físico do arquivo
+    // Varredura registro a registro usando o ponteiro físico estrutural
     FOR nRecno := 1 TO nLastRec
-        
-        // Posiciona o ponteiro do arquivo exatamente no início do registro atual
         FSeek( pHandle, nHeader + ( ( nRecno - 1 ) * nRecSize ), FS_SET )
-        
-        // Lê os bytes brutos do registro
         cRecord := FReadStr( pHandle, nRecSize )
 
         IF Empty( cRecord )
             LOOP
         ENDIF
 
-        // 1º Filtro: Verifica o termo textual básico (se informado)
-        IF !Empty( cTermoBusca )
-            IF !( cTermoUpper $ Upper( cRecord ) )
-                LOOP // Se não achou o termo, pula para o próximo
-            ENDIF
+        // Monta o buffer de texto apenas com as colunas mapeadas no offset
+        IF lFiltrar
+            cBufferLinha := ""
+            FOR i := 1 TO Len( aOffsets )
+                cBufferLinha += SubStr( cRecord, aOffsets[ i, 1 ], aOffsets[ i, 2 ] ) + " "
+            NEXT
+        ELSE
+            cBufferLinha := cRecord
         ENDIF
 
-        // 2º Filtro: Se houver Regex, valida o padrão na string do registro
-        IF lTemRegex
-            // hb_RegEx valida a expressão regular contra o registro bruto
-            IF !hb_RegEx( cRegExp, cRecord )
-                LOOP // Se não bateu com a regex, pula
+        // Hierarquia de Busca Exclusiva (Wildcard > Regex > Termo básico)
+        IF lTemWild
+            IF hb_WildMatch( cKEYWILD, cBufferLinha )
+                AAdd( aRetu, { StrZero( nRecno, 8 ) + "-" + cRecord, nRecno } )
+            ENDIF
+        ELSEIF lTemRegex
+            IF hb_RegEx( cRegExp, cBufferLinha )
+                AAdd( aRetu, { StrZero( nRecno, 8 ) + "-" + cRecord, nRecno } )
+            ENDIF
+        ELSEIF !Empty( cTermoBusca )
+            IF cTermoUpper $ Upper( cBufferLinha )
+                AAdd( aRetu, { StrZero( nRecno, 8 ) + "-" + cRecord, nRecno } )
             ENDIF
         ENDIF
-
-        // Se passou por todas as validações, adiciona ao array de retorno
-        // Formato: { "RECNO_FORMATADO-CONTEUDO", numero_do_recno }
-        AAdd( aRetu, { StrZero( nRecno, 8 ) + "-" + cRecord, nRecno } )
 
     NEXT
 
-    // Fecha o handle de baixo nível do arquivo
     FClose( pHandle )
 
-RETURN aRetu 
- 
-   
-/**
- * Função de FTS (Full-Text Search) para DBF em Harbour por registro
- * 
- * Parâmetros:
- *  - cArquivoDbf : Caminho do arquivo .dbf
- *  - cTermoBusca : Termo textual a ser buscado (obrigatório)
- *  - cRegExp     : Expressão regular opcional para refinar a busca
- * 
- * Retorno:
- *  - Array com os RECNO() encontrados
- */
-FUNCTION FtsBuscaDbf( cArquivoDbf, cTermoBusca, cRegExp )
-    LOCAL cAlias := "FTS_ALIAS_" + AllTrim( Str( HB_RandomInt( 1000, 9999 ) ) )
-    LOCAL aRecnos := {}
-    LOCAL cRegistroStr
-    LOCAL cTermoUpper
-    LOCAL lTemRegex := !Empty( cRegExp )
+RETURN aRetu
 
-    // Valida se o arquivo existe
-    IF !File( cArquivoDbf )
+/**
+ * FtsBuscaDbf: Busca por registro via Alias lógico
+ */
+FUNCTION FtsBuscaDbf( cArquivoDbf, cTermoBusca, cRegExp, cKEYWILD, lIncluiMemos, aCampos )
+    LOCAL cAlias := "FTS_ALIAS_" + AllTrim( Str( HB_RandomInt( 1000, 9999 ) ) )
+    LOCAL aRecnos := {}, cRegistroStr, cTermoUpper
+    LOCAL lTemRegex := !Empty( cRegExp )
+    LOCAL lTemWild  := !Empty( cKEYWILD )
+
+    IF ValType( lIncluiMemos ) # "L"
+        lIncluiMemos := .T.
+    ENDIF
+
+    IF Empty( cTermoBusca ) .AND. !lTemRegex .AND. !lTemWild
         RETURN aRecnos
     ENDIF
 
-    // Abre a tabela em modo compartilhado e somente leitura para segurança
+    IF !File( cArquivoDbf ) 
+        RETURN aRecnos 
+    ENDIF
+
     IF !DbUseArea( .T., "DBFCDX", cArquivoDbf, cAlias, .T., .T. )
         RETURN aRecnos
     ENDIF
 
-    // Pré-processamentos para ganho de performance no loop
     cTermoUpper := Upper( AllTrim( cTermoBusca ) )
-
     (cAlias)->( DbGoTop() )
 
     WHILE !(cAlias)->( EoF() )
-        // Converte o registro inteiro em string
-        cRegistroStr := (cAlias)->( RecToStr() )
+        // RecToStr agora processa a omissão dos campos diretamente
+        cRegistroStr := (cAlias)->( RecToStr( lIncluiMemos, aCampos ) )
 
-        // 1º Passo: Verifica se o termo textual existe (caso o termo não esteja vazio)
-        IF Empty( cTermoBusca ) .OR. ( cTermoUpper $ Upper( cRegistroStr ) )
-            
-            // 2º Passo: Se houver Regex, valida o padrão na string do registro
-            IF lTemRegex
-                // hb_RegEx aceita a regex e a string alvo (case-sensitive por padrão, 
-                // use hb_RegExCase se quiser ignorar case na regex)
-                IF hb_RegEx( cRegExp, cRegistroStr )
-                    AAdd( aRecnos, (cAlias)->( RecNo() ) )
-                ENDIF
-            ELSE
-                // Se passou no termo e não tem regex, adiciona o recno
+        // Hierarquia de Busca Exclusiva
+        IF lTemWild
+            IF hb_WildMatch( cKEYWILD, cRegistroStr )
                 AAdd( aRecnos, (cAlias)->( RecNo() ) )
             ENDIF
-
+        ELSEIF lTemRegex
+            IF hb_RegEx( cRegExp, cRegistroStr )
+                AAdd( aRecnos, (cAlias)->( RecNo() ) )
+            ENDIF
+        ELSEIF !Empty( cTermoBusca )
+            IF cTermoUpper $ Upper( cRegistroStr )
+                AAdd( aRecnos, (cAlias)->( RecNo() ) )
+            ENDIF
         ENDIF
 
         (cAlias)->( DbSkip() )
     ENDDO
 
-    // Fecha a área de trabalho aberta internamente
     (cAlias)->( DbCloseArea() )
 
 RETURN aRecnos
 
-FUNCTION FilterFtsBusca(cTermoBusca, cRegExp )
-IF EMPTY(cRegExp)
-   cExprFiltro := '{ || "' + cTermoBusca + '" $ Upper(RecToStr()) }'
-ELSE
-   cExprFiltro := '{ || "' + cTermoBusca + '" $ Upper(RecToStr()) .AND. hb_RegEx("' + cRegex + '", RecToStr()) }'
 
-ENDIF   
-DBSETFILTER( &(cExprFiltro), cExprFiltro )
-
-FUNCTION RecToStr()
-    LOCAL cStr := ""
-    LOCAL i
-    
-    FOR i := 1 TO FCount()
-        // Converte qualquer tipo de dado (String, Número, Data, Lógico) para texto
-        cStr += hb_ValToStr( FieldGet( i ) ) + " "
-    NEXT
-    
-RETURN cStr
-
-/*
- * ftshsx: Wrapper function usando o motor nativo HiPer-SEEK (.hsx) do Harbour
- * 
- * Parâmetros:
- *  - cDbfFile   : Caminho do arquivo .dbf
- *  - cTermoBusca: Termo textual a ser buscado
- *  - cKeyExpr   : Expressão de chave (opcional: se vazia, indexa a linha inteira de campos)
- *  - lRecriar   : Se .T. (padrão), apaga e recria o .hsx para evitar dados antigos/misturados
- * 
- * Retorno:
- *  - Array com os recnos encontrados: { recno1, recno2, ... }
+/**
+ * ftshsx: Wrapper motor nativo HiPer-SEEK (.hsx)
  */
-FUNCTION ftshsx( cDbfFile, cTermoBusca, cKeyExpr, lRecriar )
-   LOCAL hs
-   LOCAL nRec
-   LOCAL aRetu := {}
-   LOCAL cHsxPath
-   LOCAL cRddAnterior
-   LOCAL xExprIndex := NIL
-   LOCAL cAliasTemp
-   LOCAL i
+FUNCTION ftshsx( cDbfFile, cTermoBusca, cKeyExpr, cRegExp, cKEYWILD, lIncluiMemos, aCampos, lRecriar )
+   LOCAL hs, nRec, aRetu := {}, cHsxPath, cRddAnterior, xExprIndex := NIL
+   LOCAL cAliasTemp, cRegistroStr
+   LOCAL lTemRegex := !Empty( cRegExp )
+   LOCAL lTemWild  := !Empty( cKEYWILD )
 
-   // 1. Guarda o RDD atual e define o padrão para RMDBFCDX
-   cRddAnterior := rddDefault()
-   rddSetDefault( "RMDBFCDX" )
-
-   // Define o valor padrão de lRecriar como .T.
+   IF ValType( lIncluiMemos ) # "L"
+       lIncluiMemos := .T.
+   ENDIF
    IF ValType( lRecriar ) # "L"
       lRecriar := .T.
    ENDIF
 
-   // Validações básicas
+   IF Empty( cTermoBusca ) .AND. !lTemRegex .AND. !lTemWild
+       RETURN aRetu
+   ENDIF
+
+   cRddAnterior := rddDefault() 
+   rddSetDefault( "RMDBFCDX" ) 
+
    IF Empty( cDbfFile ) .OR. !File( cDbfFile )
       rddSetDefault( cRddAnterior )
       RETURN aRetu
@@ -238,37 +203,24 @@ FUNCTION ftshsx( cDbfFile, cTermoBusca, cKeyExpr, lRecriar )
 
    cHsxPath := cDbfFile + ".hsx"
 
-   // Se solicitado recriar e o índice já existir, apaga-o
    IF lRecriar .AND. File( cHsxPath )
       FErase( cHsxPath )
    ENDIF
 
-   // 2. Define a expressão de índice (Se não informada, cria o CodeBlock unificando todos os campos)
    IF !Empty( cKeyExpr )
       xExprIndex := cKeyExpr
    ELSE
-      // Se não passou expressão, abrimos temporariamente para estruturar o CodeBlock de linha inteira
       cAliasTemp := "FTS_EXPR_" + AllTrim( Str( HB_RandomInt( 1000, 9999 ) ) )
       IF DbUseArea( .T., "DBFCDX", cDbfFile, cAliasTemp, .T., .T. )
-         
-         // Cria dinamicamente um CodeBlock que simula a união de todos os campos (RecToStr)
-         xExprIndex := { || 
-            Local cStr := "", _i
-            For _i := 1 TO FCount()
-               cStr += hb_ValToStr( FieldGet( _i ) ) + " "
-            Next
-            Return cStr
-         }
-
+         // O bloco de indexação respeita os campos restritos
+         xExprIndex := { || (cAliasTemp)->( RecToStr( lIncluiMemos, aCampos ) ) }
          (cAliasTemp)->( DbCloseArea() )
       ENDIF
    ENDIF
 
-   // 3. Abre ou Cria o índice HiPer-SEEK usando a chave avaliada (String ou CodeBlock)
    IF File( cHsxPath )
-      hs := hs_Open( cDbfFile, , 2 ) // Abre em modo compartilhado/leitura
+      hs := hs_Open( cDbfFile, , 2 ) 
    ELSE
-      // Passa a expressão (seja string ou o codeblock gerado) para o hs_Index nativo
       hs := hs_Index( cDbfFile, xExprIndex, 2, 2, , .T., 3 )
    ENDIF
 
@@ -277,21 +229,87 @@ FUNCTION ftshsx( cDbfFile, cTermoBusca, cKeyExpr, lRecriar )
       RETURN aRetu
    ENDIF
 
-   // 4. Configura o termo de busca no motor HSX e executa
-   IF hs_Set( hs, cTermoBusca ) >= 0
-      WHILE ( nRec := hs_Next( hs ) ) > 0
-         IF hs_Verify( hs ) > 0
-            AAdd( aRetu, nRec )
+   IF hs_Set( hs, cTermoBusca ) >= 0 
+      
+      IF lTemRegex .OR. lTemWild
+         cAliasTemp := "FTS_VAL_" + AllTrim( Str( HB_RandomInt( 1000, 9999 ) ) ) 
+         DbUseArea( .T., "DBFCDX", cDbfFile, cAliasTemp, .T., .T. ) 
+      ENDIF
+
+      WHILE ( nRec := hs_Next( hs ) ) > 0 
+         IF hs_Verify( hs ) > 0 
+            IF lTemWild .OR. lTemRegex
+               (cAliasTemp)->( DbGoto( nRec ) )
+               cRegistroStr := (cAliasTemp)->( RecToStr( lIncluiMemos, aCampos ) )
+               
+               IF lTemWild
+                   IF hb_WildMatch( cKEYWILD, cRegistroStr )
+                       AAdd( aRetu, nRec ) 
+                   ENDIF
+               ELSEIF lTemRegex
+                   IF hb_RegEx( cRegExp, cRegistroStr )
+                       AAdd( aRetu, nRec ) 
+                   ENDIF
+               ENDIF
+            ELSE
+               AAdd( aRetu, nRec ) 
+            ENDIF
          ENDIF
       ENDDO
+      
+      IF lTemRegex .OR. lTemWild
+         (cAliasTemp)->( DbCloseArea() )
+      ENDIF
    ENDIF
 
-   // 5. Fecha o manipulador do índice
-   hs_Close( hs )
+   hs_Close( hs ) 
+   rddSetDefault( cRddAnterior ) 
 
-   // 6. Restaura o RDD original
-   rddSetDefault( cRddAnterior )
+RETURN aRetu 
 
-RETURN aRetu
 
-// + EOF: netdbf.prg
+/**
+ * Converte os campos de um registro atual para String respeitando o filtro aCampos
+ */
+FUNCTION RecToStr( lIncluiMemos, aCampos )
+    LOCAL cStr := ""
+    LOCAL i, xValor
+    LOCAL lFiltrar := ( ValType( aCampos ) == "A" .AND. Len( aCampos ) > 0 )
+    
+    IF ValType( lIncluiMemos ) # "L"
+        lIncluiMemos := .T.
+    ENDIF
+
+    FOR i := 1 TO FCount()
+        // Se aCampos foi passado, ignora colunas que não estão na lista
+        IF lFiltrar .AND. AScan( aCampos, i ) == 0
+            LOOP
+        ENDIF
+
+        xValor := FieldGet( i )
+        IF !lIncluiMemos .AND. ValType( xValor ) == "M"
+            LOOP
+        ENDIF
+        
+        cStr += hb_ValToStr( xValor ) + " "
+    NEXT
+    
+RETURN cStr
+
+
+/**
+ * Cria macro filtro
+ */
+FUNCTION FilterFtsBusca( cTermoBusca, cRegExp, cKEYWILD )
+    LOCAL cExprFiltro
+
+    IF !Empty( cKEYWILD )
+        cExprFiltro := '{ || hb_WildMatch("' + cKEYWILD + '", RecToStr()) }'
+    ELSEIF !Empty( cRegExp )
+        cExprFiltro := '{ || hb_RegEx("' + cRegExp + '", RecToStr()) }'
+    ELSE
+        cExprFiltro := '{ || "' + cTermoBusca + '" $ Upper(RecToStr()) }'
+    ENDIF   
+    
+    DBSETFILTER( &(cExprFiltro), cExprFiltro )
+RETURN NIL
