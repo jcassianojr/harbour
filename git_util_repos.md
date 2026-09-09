@@ -79,3 +79,9 @@ SQLITE
 https://www.sqlite.org/index.html
 http://www.ch-werner.de/sqliteodbc/
 https://letos.org/
+
+LETODB
+https://sourceforge.net/projects/letodb/
+https://github.com/elchs/LetoDBf
+https://github.com/alkresin/letodb
+
