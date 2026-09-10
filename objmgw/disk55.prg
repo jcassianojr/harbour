@@ -1,4 +1,4 @@
-// +--------------------------------------------------------------------
+--------------------------------------------------------------------
 // +
 // +    Programa  : disk55.prg
 // +
@@ -1093,6 +1093,7 @@ FUNCTION UniversalToDate( xData )
    LOCAL cFormatOrig := Set( _SET_DATEFORMAT, "dd/mm/yyyy" ) // Força padrão interno temporário
    LOCAL cData, cLimpa, nLen
    LOCAL cTemp, aParts // Variáveis adicionadas para a melhoria
+   LOCAL nPos, cMesStr, cMes, cAno, cDia // Variáveis adicionadas para tratar formatos HTTP/Extensos
 
    // 1. Se já for do tipo Data, retorna ela mesma
    IF ValType( xData ) == "D"
@@ -1107,6 +1108,55 @@ FUNCTION UniversalToDate( xData )
    ENDIF
 
    cData := AllTrim( xData )
+
+   // -------------------------------------------------------------------------
+   // >>> INÍCIO DO NOVO BLOCO: Trata formatos HTTP/Extensos <<<
+   // (ex: "Fri, 05 Jun 2026...", "05 Junho 2026...")
+   // -------------------------------------------------------------------------
+   cTemp := cData
+   nPos  := At( ",", cTemp )
+   
+   // Se tiver vírgula (ex: "Fri,"), removemos ela e o dia da semana
+   IF nPos > 0
+      cTemp := AllTrim( SubStr( cTemp, nPos + 1 ) )
+   ENDIF
+   
+   // Quebra pelos espaços
+   aParts := hb_ATokens( cTemp, " " )
+   
+   // Se tem pelo menos 3 partes (Dia, Mês, Ano), tentamos validar
+   IF Len( aParts ) >= 3
+      cMesStr := Upper( Left( aParts[ 2 ], 3 ) ) // Pega os 3 primeiros caracteres (JUN)
+      cMes    := "00"
+      
+      DO CASE
+         CASE cMesStr == "JAN"; cMes := "01"
+         CASE cMesStr == "FEB" .OR. cMesStr == "FEV"; cMes := "02"
+         CASE cMesStr == "MAR"; cMes := "03"
+         CASE cMesStr == "APR" .OR. cMesStr == "ABR"; cMes := "04"
+         CASE cMesStr == "MAY" .OR. cMesStr == "MAI"; cMes := "05"
+         CASE cMesStr == "JUN"; cMes := "06" // Atende Jun e Junho
+         CASE cMesStr == "JUL"; cMes := "07" // Atende Jul e Julho
+         CASE cMesStr == "AUG" .OR. cMesStr == "AGO"; cMes := "08"
+         CASE cMesStr == "SEP" .OR. cMesStr == "SET"; cMes := "09"
+         CASE cMesStr == "OCT" .OR. cMesStr == "OUT"; cMes := "10"
+         CASE cMesStr == "NOV"; cMes := "11"
+         CASE cMesStr == "DEC" .OR. cMesStr == "DEZ"; cMes := "12"
+      ENDCASE
+      
+      // Se encontrou um mês válido e o ano tem 4 dígitos, retorna direto
+      IF cMes != "00" .AND. Len( aParts[ 3 ] ) == 4
+         cDia := StrZero( Val( aParts[ 1 ] ), 2 )
+         cAno := aParts[ 3 ]
+         
+         dResult := SToD( cAno + cMes + cDia )
+         Set( _SET_DATEFORMAT, cFormatOrig )
+         RETURN dResult
+      ENDIF
+   ENDIF
+   // -------------------------------------------------------------------------
+   // >>> FIM DO NOVO BLOCO <<<
+   // -------------------------------------------------------------------------
 
    // >>> INÍCIO DA MELHORIA: Interceptação Inteligente com Separadores <<<
    cTemp  := StrTran( cData, "-", "/" )
