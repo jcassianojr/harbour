@@ -1079,30 +1079,23 @@ FUNCTION aconvertend()
 
    RETURN aCNV
 
-
-
-// +--------------------------------------------------------------------
-// +  Função: UniversalToDate()
-// +  Objetivo: Garantir a leitura correta de datas em múltiplos formatos
-// +            (DD/MM/YY, DD-MM-YYYY, DD.MM.YY, AAAAMMDD, YYYY-MM-DD)
-// +  Atualização: Parser para HTTP-date e segurança numérica.
-// +--------------------------------------------------------------------
 FUNCTION UniversalToDate( xData )
 
    LOCAL dResult := CToD( "" )
-   LOCAL cFormatOrig := Set( _SET_DATEFORMAT, "dd/mm/yyyy" ) // Força padrão interno temporário
+   LOCAL cFormatOrig := Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
    LOCAL cData, cLimpa, nLen
    LOCAL cTemp, aParts 
-   LOCAL i, nMes, cMes, cAno, cDia, nDia, nAno
-   LOCAL aMonths := { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" }
+   LOCAL i, nMes, cMes, cAno, cDia, nDia, nAno, cMesStr
+   
+   // Opção escolhida: Duas Matrizes independentes pela clareza e velocidade nativa do AScan
+   LOCAL aMonthsEN := { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" }
+   LOCAL aMonthsPT := { "JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ" }
 
-   // 1. Se já for do tipo Data, retorna ela mesma
    IF ValType( xData ) == "D"
       Set( _SET_DATEFORMAT, cFormatOrig )
       RETURN xData
    ENDIF
 
-   // 2. Se for nulo ou não for string, retorna data vazia
    IF ValType( xData ) <> "C" .OR. Empty( xData )
       Set( _SET_DATEFORMAT, cFormatOrig )
       RETURN dResult
@@ -1112,24 +1105,30 @@ FUNCTION UniversalToDate( xData )
    cTemp := cData
 
    // -------------------------------------------------------------------------
-   // Suporte a Formatos HTTP-date (RFC 1123, RFC 850 e ANSI C asctime)
+   // Suporte a Formatos HTTP-date e Logs (Inglês e Português)
    // -------------------------------------------------------------------------
-   // Padroniza separadores (, e -) para espaços para facilitar a quebra
    cTemp := StrTran( cTemp, ",", " " )
    cTemp := StrTran( cTemp, "-", " " )
 
-   // Remove espaços duplos gerados no ANSI C ou pela substituição acima
    DO WHILE "  " $ cTemp
       cTemp := StrTran( cTemp, "  ", " " )
    ENDDO
 
    aParts := hb_ATokens( AllTrim( cTemp ), " " )
 
-   // Um formato extenso válido conterá pelo menos 4 fragmentos úteis
    IF Len( aParts ) >= 4
       FOR i := 1 TO Len( aParts )
-         nMes := AScan( aMonths, Upper( Left( aParts[ i ], 3 ) ) )
+         cMesStr := Upper( Left( aParts[ i ], 3 ) )
          
+         // 1. Busca primeiro em Inglês
+         nMes := AScan( aMonthsEN, cMesStr )
+         
+         // 2. Se não encontrar, tenta em Português
+         IF nMes == 0
+            nMes := AScan( aMonthsPT, cMesStr )
+         ENDIF
+         
+         // Se encontrou o mês em qualquer um dos idiomas, processa
          IF nMes > 0
             cMes := StrZero( nMes, 2 )
             
@@ -1137,25 +1136,23 @@ FUNCTION UniversalToDate( xData )
             IF i == 2 .AND. Len( aParts ) >= 5 // ANSI C asctime: "Sun Nov 6 08:49:37 1994"
                cDia := StrZero( Val( aParts[ 3 ] ), 2 )
                cAno := aParts[ 5 ]
-            ELSEIF i == 3 // RFC 1123 / RFC 850: "Sun 06 Nov 1994" ou "Sunday 06 Nov 94"
+            ELSEIF i == 3 // RFC 1123 / RFC 850: "Sun 06 Nov 1994"
                cDia := StrZero( Val( aParts[ 2 ] ), 2 )
                cAno := aParts[ 4 ]
-               // Trata o ano de 2 dígitos legado do RFC 850
+               
                IF Len( cAno ) == 2
                   nAno := Val( cAno )
                   cAno := iif( nAno < 50, "20" + cAno, "19" + cAno )
                ENDIF
             ELSE
-               LOOP // Não reconhecido, continua buscando no loop
+               LOOP 
             ENDIF
             
             nDia := Val( cDia )
             nAno := Val( cAno )
             
-            // Validação rigorosa dos limites numéricos
             IF nDia >= 1 .AND. nDia <= 31 .AND. nAno >= 1000 .AND. Len( cAno ) == 4
                dResult := SToD( cAno + cMes + cDia )
-               // O Harbour previne datas falsas como 31/Nov e retorna Vazio. Passando no teste, está apto.
                IF !Empty( dResult )
                   Set( _SET_DATEFORMAT, cFormatOrig )
                   RETURN dResult
@@ -1164,6 +1161,7 @@ FUNCTION UniversalToDate( xData )
          ENDIF
       NEXT
    ENDIF
+
 
    // >>> INÍCIO DA MELHORIA: Interceptação Inteligente com Separadores <<<
    cTemp  := cData // Reseta a string temporária para não sofrer da limpeza acima

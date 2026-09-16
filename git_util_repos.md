@@ -88,4 +88,4 @@ LETODB
 
 ZPL   
 https://github.com/brunoleocam/ZPL2PDF
-
+https://github.com/BinaryKits/BinaryKits.Zpl
