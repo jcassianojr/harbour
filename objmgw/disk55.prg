@@ -1086,6 +1086,7 @@ FUNCTION UniversalToDate( xData )
    LOCAL cData, cLimpa, nLen
    LOCAL cTemp, aParts 
    LOCAL i, nMes, cMes, cAno, cDia, nDia, nAno, cMesStr
+   LOCAL cCleanData
    
    // Opção escolhida: Duas Matrizes independentes pela clareza e velocidade nativa do AScan
    LOCAL aMonthsEN := { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" }
@@ -1100,6 +1101,15 @@ FUNCTION UniversalToDate( xData )
       Set( _SET_DATEFORMAT, cFormatOrig )
       RETURN dResult
    ENDIF
+
+// Limpa uma única vez para otimizar os testes
+   cCleanData := Upper( AllTrim( xData ) )
+
+   // Barreira imediata contra literais nulos/vazios
+   IF cCleanData == "NULL" .OR. cCleanData == "NIL" .OR. cCleanData == "<NULL>" .OR. cCleanData == "NUL" .OR. cCleanData == "/  /" .OR. cCleanData == "-  -"
+      RETURN dResult
+   ENDIF
+
 
    cData := AllTrim( xData )
    cTemp := cData
