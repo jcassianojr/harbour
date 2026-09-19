@@ -23,6 +23,8 @@ hbmisc.hbc
 gtwvg.hbc
 hbmzip.hbc
 hbsqlit3.hbc
+rddads.hbc
+sqliterdd.hbc
 
 recursos.prg
 recuproc.prg
@@ -57,7 +59,7 @@ recuger1.prg
 \develop\harbour\diversos\objmgw\disk56.prg
 \develop\harbour\diversos\objmgw\disk57.prg
 \develop\harbour\diversos\objmgw\disk59.prg
-\develop\harbour\diversos\objmgw\disk61.prg
+c:\develop\harbour\OdsOdt\disk61.prg
 \develop\harbour\diversos\objmgw\disk63.prg
 \develop\harbour\diversos\objmgw\disk64.prg
 \develop\harbour\diversos\objmgw\disk66.prg
