@@ -661,14 +661,22 @@ FUNCTION Cmes( ddata )
 // +
 // +--------------------------------------------------------------------
 // +
+// +--------------------------------------------------------------------
+// +  Função: Mmes() - Aprimorada com Cache Estático (Lazy Load)
+// +--------------------------------------------------------------------
 FUNCTION Mmes( nmes )
+   STATIC aMeses
 
-   IF nmes < 1 .OR. nmes > 12
-      RETU "Erro MES"
+   IF aMeses == NIL
+      aMeses := { "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", ;
+                  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }
    ENDIF
 
-   RETURN ( { "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }[ nMES ] )
+   IF nmes < 1 .OR. nmes > 12
+      RETURN "Erro MES"
+   ENDIF
 
+   RETURN aMeses[ nmes ]
 // +--------------------------------------------------------------------
 // +
 // +    Function Cdia() VEM A DATA , RETORNA DIA POR EXTENSO
@@ -687,14 +695,21 @@ FUNCTION Cdia( ddata )
 // +
 // +--------------------------------------------------------------------
 // +
+// +--------------------------------------------------------------------
+// +  Função: Ddia() - Aprimorada com Cache Estático (Lazy Load)
+// +--------------------------------------------------------------------
 FUNCTION Ddia( ndia )
+   STATIC aDias
 
-   IF ndia < 1 .OR. ndia > 7
-      RETU "Erro DIA"
+   IF aDias == NIL
+      aDias := { "Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado" }
    ENDIF
 
-   RETURN ( { "Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado" }[ nDIA ] )
+   IF ndia < 1 .OR. ndia > 7
+      RETURN "Erro DIA"
+   ENDIF
 
+   RETURN aDias[ ndia ]
 
 // +--------------------------------------------------------------------
 // +
@@ -1079,20 +1094,37 @@ FUNCTION aconvertend()
 
    RETURN aCNV
 
+// +--------------------------------------------------------------------
+// +  Função: UniversalToDate
+// +  Aprimorada: hb_Hash() multi-idioma substituindo AScan (Performance)
+// +--------------------------------------------------------------------
 FUNCTION UniversalToDate( xData )
 
    LOCAL dResult := CToD( "" )
    LOCAL cFormatOrig := Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
-   LOCAL cData, cLimpa, nLen
-   LOCAL cTemp, aParts 
-   LOCAL i, nMes, cMes, cAno, cDia, nDia, nAno, cMesStr
-   LOCAL cCleanData
+   LOCAL cData, cLimpa, nLen, cTemp, aParts 
+   LOCAL i, nMes, cMes, cAno, cDia, nDia, nAno, cMesStr, cCleanData
    
-   // Opção escolhida: Duas Matrizes independentes pela clareza e velocidade nativa do AScan
-   LOCAL aMonthsEN := { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" }
-   LOCAL aMonthsPT := { "JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ" }
+   // Dicionário Estático para mapeamento ultra-rápido PT/EN
+   STATIC hMesesStr
+   
+   IF hMesesStr == NIL
+      hMesesStr := hb_Hash()
+      hb_HSet( hMesesStr, "JAN", 1 )
+      hb_HSet( hMesesStr, "FEV", 2 ); hb_HSet( hMesesStr, "FEB", 2 )
+      hb_HSet( hMesesStr, "MAR", 3 )
+      hb_HSet( hMesesStr, "ABR", 4 ); hb_HSet( hMesesStr, "APR", 4 )
+      hb_HSet( hMesesStr, "MAI", 5 ); hb_HSet( hMesesStr, "MAY", 5 )
+      hb_HSet( hMesesStr, "JUN", 6 )
+      hb_HSet( hMesesStr, "JUL", 7 )
+      hb_HSet( hMesesStr, "AGO", 8 ); hb_HSet( hMesesStr, "AUG", 8 )
+      hb_HSet( hMesesStr, "SET", 9 ); hb_HSet( hMesesStr, "SEP", 9 )
+      hb_HSet( hMesesStr, "OUT", 10); hb_HSet( hMesesStr, "OCT", 10)
+      hb_HSet( hMesesStr, "NOV", 11)
+      hb_HSet( hMesesStr, "DEZ", 12); hb_HSet( hMesesStr, "DEC", 12)
+   ENDIF
 
-   IF ValType( xData ) == "D"
+   IF ValType( xData ) == "D" .OR. ValType( xData ) == "T"
       Set( _SET_DATEFORMAT, cFormatOrig )
       RETURN xData
    ENDIF
@@ -1102,21 +1134,14 @@ FUNCTION UniversalToDate( xData )
       RETURN dResult
    ENDIF
 
-// Limpa uma única vez para otimizar os testes
    cCleanData := Upper( AllTrim( xData ) )
 
-   // Barreira imediata contra literais nulos/vazios
    IF cCleanData == "NULL" .OR. cCleanData == "NIL" .OR. cCleanData == "<NULL>" .OR. cCleanData == "NUL" .OR. cCleanData == "/  /" .OR. cCleanData == "-  -"
       RETURN dResult
    ENDIF
 
-
    cData := AllTrim( xData )
    cTemp := cData
-
-   // -------------------------------------------------------------------------
-   // Suporte a Formatos HTTP-date e Logs (Inglês e Português)
-   // -------------------------------------------------------------------------
    cTemp := StrTran( cTemp, ",", " " )
    cTemp := StrTran( cTemp, "-", " " )
 
@@ -1130,26 +1155,17 @@ FUNCTION UniversalToDate( xData )
       FOR i := 1 TO Len( aParts )
          cMesStr := Upper( Left( aParts[ i ], 3 ) )
          
-         // 1. Busca primeiro em Inglês
-         nMes := AScan( aMonthsEN, cMesStr )
-         
-         // 2. Se não encontrar, tenta em Português
-         IF nMes == 0
-            nMes := AScan( aMonthsPT, cMesStr )
-         ENDIF
-         
-         // Se encontrou o mês em qualquer um dos idiomas, processa
-         IF nMes > 0
+         // Pesquisa instantânea via Tabela Hash
+         IF hb_HHasKey( hMesesStr, cMesStr )
+            nMes := hb_HGet( hMesesStr, cMesStr )
             cMes := StrZero( nMes, 2 )
             
-            // Extrai o Dia e o Ano baseado na posição do Mês (ANSI C vs RFC)
-            IF i == 2 .AND. Len( aParts ) >= 5 // ANSI C asctime: "Sun Nov 6 08:49:37 1994"
+            IF i == 2 .AND. Len( aParts ) >= 5
                cDia := StrZero( Val( aParts[ 3 ] ), 2 )
                cAno := aParts[ 5 ]
-            ELSEIF i == 3 // RFC 1123 / RFC 850: "Sun 06 Nov 1994"
+            ELSEIF i == 3 
                cDia := StrZero( Val( aParts[ 2 ] ), 2 )
                cAno := aParts[ 4 ]
-               
                IF Len( cAno ) == 2
                   nAno := Val( cAno )
                   cAno := iif( nAno < 50, "20" + cAno, "19" + cAno )
@@ -1172,22 +1188,17 @@ FUNCTION UniversalToDate( xData )
       NEXT
    ENDIF
 
-
-   // >>> INÍCIO DA MELHORIA: Interceptação Inteligente com Separadores <<<
-   cTemp  := cData // Reseta a string temporária para não sofrer da limpeza acima
+   cTemp  := cData 
    cTemp  := StrTran( cTemp, "-", "/" )
    cTemp  := StrTran( cTemp, ".", "/" )
    aParts := hb_ATokens( cTemp, "/" )
 
-   // Se possui 3 blocos, processa com segurança usando StrZero (ignora o cLimpa)
    IF Len( aParts ) == 3
       IF Len( aParts[ 1 ] ) == 4
-         // Formato YYYY/MM/DD (O Ano veio primeiro)
          dResult := CToD( StrZero( Val( aParts[ 3 ] ), 2 ) + "/" + ;
                           StrZero( Val( aParts[ 2 ] ), 2 ) + "/" + ;
                           aParts[ 1 ] )
       ELSE
-         // Formato DD/MM/YYYY ou DD/MM/YY ou D/M/YYYY
          dResult := CToD( StrZero( Val( aParts[ 1 ] ), 2 ) + "/" + ;
                           StrZero( Val( aParts[ 2 ] ), 2 ) + "/" + ;
                           aParts[ 3 ] )
@@ -1196,39 +1207,91 @@ FUNCTION UniversalToDate( xData )
       Set( _SET_DATEFORMAT, cFormatOrig )
       RETURN dResult
    ENDIF
-   // >>> FIM DA MELHORIA <<<
 
-   // 4. Se chegou aqui (veio tudo grudado, sem separadores), 
-   // mantém A SUA LÓGICA ORIGINAL INTACTA:
    cLimpa := StrTran( cData, "/", "" )
    cLimpa := StrTran( cLimpa, "-", "" )
    cLimpa := StrTran( cLimpa, ".", "" )
    cLimpa := AllTrim( cLimpa )
    nLen   := Len( cLimpa )
 
-   // 5. Identifica o formato pelo tamanho da string limpa
    DO CASE
    CASE nLen == 8
-      // Pode ser AAAAMMDD (DToS) ou DDMMYYYY
-      // Testamos primeiro AAAAMMDD (onde os 4 primeiros caracteres são o ano, ex: > 1900)
       IF Val( Left( cLimpa, 4 ) ) > 1900
          dResult := CToD( SubStr( cLimpa, 7, 2 ) + "/" + SubStr( cLimpa, 5, 2 ) + "/" + Left( cLimpa, 4 ) )
       ELSE
-         // Se não for, assume DDMMYYYY
          dResult := CToD( Left( cLimpa, 2 ) + "/" + SubStr( cLimpa, 3, 2 ) + "/" + Right( cLimpa, 4 ) )
       ENDIF
 
    CASE nLen == 6
-      // Formato DDMMYY (Ano com 2 dígitos)
-      // O Harbour trata o centenário automaticamente baseado no SET EPOCH (padrão geralmente 1950)
       dResult := CToD( Left( cLimpa, 2 ) + "/" + SubStr( cLimpa, 3, 2 ) + "/" + Right( cLimpa, 2 ) )
 
    OTHERWISE
-      // Tentativa padrão caso caia em algo fora do comum
       dResult := CToD( cData )
    ENDCASE
 
-   // Restaura o formato de data original do sistema
    Set( _SET_DATEFORMAT, cFormatOrig )
-
    RETURN dResult
+   
+   
+   // +--------------------------------------------------------------------
+// +  Função: UniversalDateTime
+// +  Objetivo: Tratar datas complexas mantendo e corrigindo o horário
+// +  Retorna: Timestamp nativo (T) de alta precisão
+// +--------------------------------------------------------------------
+FUNCTION UniversalDateTime( xData )
+
+   LOCAL cStr, cDataLimpa, aParts, i, dData
+   LOCAL cTime := "00:00:00"
+   LOCAL nHour := 0, nMin := 0, nSec := 0
+
+   // 1. Já é Data ou Timestamp? Trata a conversão direta
+   IF ValType( xData ) == "T"
+      RETURN xData
+   ELSEIF ValType( xData ) == "D"
+      RETURN hb_DateTime( Year(xData), Month(xData), Day(xData) )
+   ENDIF
+
+   // 2. Barreira para nulos ou variáveis não suportadas
+   IF ValType( xData ) <> "C" .OR. Empty( xData )
+      RETURN hb_DateTime( 0, 0, 0 )
+   ENDIF
+
+   // 3. Limpa espaços e conserta erros como ";" ou tags ISO "T"
+   cStr := AllTrim( xData )
+   cStr := StrTran( cStr, ";", ":" )
+   cStr := StrTran( cStr, "T", " " )
+
+   aParts := hb_ATokens( cStr, " " )
+   cDataLimpa := ""
+
+   // 4. Caçador de Horários
+   FOR i := 1 TO Len( aParts )
+      IF ":" $ aParts[i] .AND. Val( StrTran( aParts[i], ":", "" ) ) >= 0
+         cTime := aParts[i] // Isola apenas a hora encontrada
+      ELSE
+         cDataLimpa += aParts[i] + " " // Reconstrói string base só da data
+      ENDIF
+   NEXT
+
+   cDataLimpa := AllTrim( cDataLimpa )
+   
+   // 5. Utiliza o motor otimizado para extrair o calendário válido
+   dData := UniversalToDate( cDataLimpa )
+
+   // Fallback se a rotina retornar vazio, checa direto via Harbour CToD
+   IF Empty( dData ) .AND. !Empty( CToD( cDataLimpa ) )
+      dData := CToD( cDataLimpa )
+   ENDIF
+
+   IF Empty( dData )
+      RETURN hb_DateTime( 0, 0, 0 )
+   ENDIF
+
+   // 6. Separa e converte as partes do Horário
+   aParts := hb_ATokens( cTime, ":" )
+   IF Len( aParts ) >= 1; nHour := Val( aParts[1] ); ENDIF
+   IF Len( aParts ) >= 2; nMin  := Val( aParts[2] ); ENDIF
+   IF Len( aParts ) >= 3; nSec  := Val( aParts[3] ); ENDIF
+
+   // 7. Retorna o Objeto Timestamp Oficial
+   RETURN hb_DateTime( Year( dData ), Month( dData ), Day( dData ), nHour, nMin, nSec )
