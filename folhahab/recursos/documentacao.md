@@ -1,40 +1,40 @@
 # 📘 Documentacao Tecnica do Projeto
-> Gerado em: 14/10/2026 09:45:54
+> Gerado em: 14/10/2026 09:51:10
 
 ## 🏗️ Estrutura de Modulos (PRGs)
 
-### 📄 Arquivo: `c:\develop\harbour\diversos\folhahab\recursos\recuapo2.prg`
+### 📄 Arquivo: `recuapo2`
 - Function RECUAPO2()
 - Function folutil3()
 - Function folutil4()
 - Function folutil5()
 
-### 📄 Arquivo: `c:\develop\harbour\diversos\folhahab\recursos\recueti1.prg`
+### 📄 Arquivo: `recueti1`
 - Function RECUETI1()
 - Function EDITA2()
 - Function CAD()
 
-### 📄 Arquivo: `c:\develop\harbour\diversos\folhahab\recursos\recueti2.prg`
+### 📄 Arquivo: `recueti2`
 - Function RECUETI2()
 - Function EDITA()
 - Function CA()
 - Function LISTA()
 
-### 📄 Arquivo: `c:\develop\harbour\diversos\folhahab\recursos\recuger1.prg`
+### 📄 Arquivo: `recuger1`
 - Function RECUGER1()
 - Function CAD1()
 - Function TELATIP()
 
-### 📄 Arquivo: `c:\develop\harbour\diversos\folhahab\recursos\recuger2.prg`
+### 📄 Arquivo: `recuger2`
 - Function RECUGER2()
 - Function tREDIT()
 - Function gREDIT()
 - Function lREDIT()
 
-### 📄 Arquivo: `c:\develop\harbour\diversos\folhahab\recursos\recumenu.prg`
+### 📄 Arquivo: `recumenu`
 - Function RECUMENU()
 
-### 📄 Arquivo: `c:\develop\harbour\diversos\folhahab\recursos\recuproc.prg`
+### 📄 Arquivo: `recuproc`
 - Function CABE2()
 - Function CABE3()
 - Function NSHOW()
@@ -44,7 +44,7 @@
 - Function COR()
 - Function CABEX()
 
-### 📄 Arquivo: `c:\develop\harbour\diversos\folhahab\recursos\recursos.prg`
+### 📄 Arquivo: `recursos`
 - Function main()
 - Function corrigeendereco()
 - Function m_da()
