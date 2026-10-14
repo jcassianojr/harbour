@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 14-Out-2026 as  9:30 am
+*+    Documentado em 14-Out-2026 as  9:41 am
 *+
 *+
 *+
@@ -398,12 +398,11 @@ RETURN (GetJson(cJson) != NIL .AND. ;
 
 
 
-
 *+--------------------------------------------------------------------
 *+
 *+
 *+
-*+    Function separacidadepais()
+*+    Procedure separacidadepais()
 *+
 *+
 *+
@@ -411,7 +410,7 @@ RETURN (GetJson(cJson) != NIL .AND. ;
 *+
 *+
 *+
-FUNCTION separacidadepais()
+PROCEDURE separacidadepais()
 
 LOCAL cFileOrigem := "sefazcidade.csv"
 LOCAL cFilePaises := "sefazpaises.csv"
