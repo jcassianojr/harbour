@@ -1,52 +1,66 @@
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Programa  : fopto_16.prg Visualizando Arquivo'
-// +
-// +
-// +
-// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024,  jcassiano
-// +
-// +
-// +
-// +
-// +
-// +    Documentado em 27-Dez-2024 as  9:32 pm
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : fopto_16.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 15-Out-2026 as 10:21 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
 // //#INCLUDE "COMANDO.CH"
 #include "INKEY.CH"
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function fopto_16()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNCTION fopto_16()
 
-   CABE2( 'FOPTO_16 - Visualizando Arquivo' )
 
-   PARA cTIPO
+CABE2('FOPTO_16 - Visualizando Arquivo')
 
-   ntipo := PEGRELOGIO()
+PARA cTIPO
 
-   cARQ := TARQREL( nTIPO, .T., cTIPO )
+ntipo := PEGRELOGIO()
 
-
-   PADRAO( cARQ, cARQ, "' '+STR(mNUMERO,8)+' '+DTOC(mDATA)+' '+STR(mHORA,5,2)+' '+mRELOGIO", "STR(mNUMERO,8)+DTOS(mDATA)+STR(mHORA,5,2)", "Importacao Relatorio", "Numero Data Hora Relogio", ;
-      {|| ALLTRUE( ALERTX( "Inclusao por importacao" ) ) }, "FO_DIO", "FO_DIO", {|| FO_FOR( "GRUPO='FO_DIO'" ) }, ;
-      ,,,, "V" )
-
-   RETURN
+cARQ := TARQREL(nTIPO,.T.,cTIPO)
 
 
+PADRAO(cARQ,cARQ,"' '+STR(mNUMERO,8)+' '+DTOC(mDATA)+' '+STR(mHORA,5,2)+' '+mRELOGIO","STR(mNUMERO,8)+DTOS(mDATA)+STR(mHORA,5,2)","Importacao Relatorio","Numero Data Hora Relogio",;
+ {|| ALLTRUE(ALERTX("Inclusao por importacao"))},"FO_DIO","FO_DIO",{|| FO_FOR("GRUPO='FO_DIO'")},;
+ ,,,,"V")
 
-// + EOF: fopto_16.prg
-// +
+RETURN
+
+
+
+
+*+ EOF: fopto_16.prg
+*+

@@ -2,11 +2,11 @@
 *+
 *+
 *+
-*+    Programa  : fopto_3l.prg Geracao AFDT
+*+    Programa  : fopto_3l.prg
 *+
 *+
 *+
-*+     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
+*+     Sistema:
 *+
 *+     Linguagem: Harbour
 *+
@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 27-Dez-2024 as  9:33 pm
+*+    Documentado em 15-Out-2026 as 10:22 am
 *+
 *+
 *+
@@ -28,7 +28,21 @@
 #include "adordd.ch"
 #include "try.ch"
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function fopto_3l()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 function fopto_3l()
+
 CABE2('FOPTO_3L - Geracao AFDT '+ANOMESW)
 PARA lPER,lDESC
 
@@ -761,7 +775,7 @@ FWRITE(nHANHOR,"                     100%N   150%N   50%    75%   100%   130%   
 //         aadd(aTOTJEF,{NUMERO,DTOC(X),CTA06,CTA19,CTA05,CTA08,CTA09,CTA07,CTA10,nATRASO})
 dbselectar("logixvalores")
 FOR X := 1 TO Nfim
-   IF mNUMERO <> aTOTJEF[X ,  1]
+   IF mNUMERO <> aTOTJEF[X,1]
       FWRITE(nHANHOR,STR(mNUMERO)+"            ")
       FOR Z := 3 TO 10
          FWRITE(nHANHOR,STRZERO(aTOTfun[Z],6,2)+" ")
@@ -793,14 +807,14 @@ FOR X := 1 TO Nfim
       mNUMERO := aTOTJEF[X,1]
    ENDIF
    IF lDIA
-      FWRITE(nHANHOR,STR(aTOTJEF[X ,  1])+" "+aTOTJEF[X ,  2]+" ")
+      FWRITE(nHANHOR,STR(aTOTJEF[X,1])+" "+aTOTJEF[X,2]+" ")
    ENDIF
    FOR Z := 3 TO 10
       IF lDIA
-         FWRITE(nHANHOR,STRZERO(aTOTJEF[X ,  Z],6,2)+" ")
+         FWRITE(nHANHOR,STRZERO(aTOTJEF[X,Z],6,2)+" ")
       ENDIF
-      aTOTFUN[Z] += aTOTJEF[X ,  Z]
-      aTOTGER[Z] += aTOTJEF[X ,  Z]
+      aTOTFUN[Z] += aTOTJEF[X,Z]
+      aTOTGER[Z] += aTOTJEF[X,Z]
    NEXT Z
    IF lDIA
       FWRITE(nHANHOR,HB_OSNEWLINE())
@@ -838,7 +852,15 @@ return
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function fopto3lesc()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -846,7 +868,12 @@ return
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION fopto3lesc(eBUSCA,cARQ)
+
 
 dbselectar(cARQ)
 dbgotop()
@@ -861,7 +888,15 @@ ENDIF
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function ImpHorLogix()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -869,7 +904,12 @@ ENDIF
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function ImpHorLogix(dDATINI,dDATFIM)
+
 
 local cConn    := "Provider=MSDASQL.1;Persist Security Info=False;Data Source=ol_logix"
 local cCOMANDO := ""
@@ -881,23 +921,23 @@ endif
 
 
 try
-oConn := CreateObject("ADODB.Connection")
-with object oConn
-:ConnectionString := cConn
-:Open()
-end
+   oConn := CreateObject("ADODB.Connection")
+   with object oConn
+      :ConnectionString := cConn
+      :Open()
+   end
 
-cCOMANDO := "SET ISOLATION TO DIRTY READ"
-oComm    := CreateObject("ADODB.Command")
-with object oComm
-:CommandText      := cCOMANDO
-:CommandType      := adCmdText
-:ActiveConnection := oConn
-:Execute()
-end
+   cCOMANDO := "SET ISOLATION TO DIRTY READ"
+   oComm    := CreateObject("ADODB.Command")
+   with object oComm
+      :CommandText      := cCOMANDO
+      :CommandType      := adCmdText
+      :ActiveConnection := oConn
+      :Execute()
+   end
 
 catch oErr
-ShowAdoError(oERR,oCoNn,cCOMANDO)
+   ShowAdoError(oERR,oCoNn,cCOMANDO)
 end
 
 oRegistro                := CreateObject('ADODB.RecordSet')
@@ -916,33 +956,33 @@ FOR X := 1 TO 2
       cSQL += "    and dat_referencia<='"+DTOC(EOM(dDATFIM))+"'"
    ENDIF
    TRY
-   oRegistro:Open(cSQL,oConN,adOpenForwardOnly,adLockReadOnly)
+      oRegistro:Open(cSQL,oConN,adOpenForwardOnly,adLockReadOnly)
    catch oErr
-   ShowAdoError(oERR,oConn,cSQL)
-END
-while .not. oregistro:eof
-   mEMPRESA   := VAL(oregistro:fields("cod_empresa") :value)
-   mMATRICULA := oregistro:fields("num_matricula") :value
-   mCODEVENTO := oregistro:fields("cod_evento") :value
-   mQTDHORAS  := oregistro:fields("qtd_horas") :value
-   dDATAREF   := oregistro:fields("dat_referencia") :value
-   mANOEVE    := YEAR(dDATAREF)
-   mMESEVE    := MONTH(dDATAREF)
-   cCHAVE     := STR(mEMPRESA,2)+STR(mMATRICULA,8)+STR(mANOEVE,4)+STR(mMESEVE,2)+STR(mCODEVENTO,4)
-   logixvalores->(dbgotop())
-   if !logixvalores->(dbseek(cCHAVE))
-      netrecapp()
-      logixvalores->EMPRESA := mEMPRESA
-      logixvalores->NUMERO  := mMATRICULA
-      logixvalores->ANO     := mANOEVE
-      logixvalores->MES     := mMESEVE
-      logixvalores->EVENTO  := mCODEVENTO
-      logixvalores->HORAS   := mQTDHORAS
-      dbunlock()
-   endif
-   oregistro:movenext()
-enddo
-oregistro:close()
+      ShowAdoError(oERR,oConn,cSQL)
+   END
+   while .not. oregistro:eof
+      mEMPRESA   := VAL(oregistro:fields("cod_empresa") :value)
+      mMATRICULA := oregistro:fields("num_matricula") :value
+      mCODEVENTO := oregistro:fields("cod_evento") :value
+      mQTDHORAS  := oregistro:fields("qtd_horas") :value
+      dDATAREF   := oregistro:fields("dat_referencia") :value
+      mANOEVE    := YEAR(dDATAREF)
+      mMESEVE    := MONTH(dDATAREF)
+      cCHAVE     := STR(mEMPRESA,2)+STR(mMATRICULA,8)+STR(mANOEVE,4)+STR(mMESEVE,2)+STR(mCODEVENTO,4)
+      logixvalores->(dbgotop())
+      if !logixvalores->(dbseek(cCHAVE))
+         netrecapp()
+         logixvalores->EMPRESA := mEMPRESA
+         logixvalores->NUMERO  := mMATRICULA
+         logixvalores->ANO     := mANOEVE
+         logixvalores->MES     := mMESEVE
+         logixvalores->EVENTO  := mCODEVENTO
+         logixvalores->HORAS   := mQTDHORAS
+         dbunlock()
+      endif
+      oregistro:movenext()
+   enddo
+   oregistro:close()
 NEXT X
 dbcloseall()
 oConn:close()
@@ -964,6 +1004,7 @@ AND dat_referencia>="01/11/2012"
 
 
 */
+
 
 *+ EOF: fopto_3l.prg
 *+

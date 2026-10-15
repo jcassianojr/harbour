@@ -1,4 +1,4 @@
--incpath=d:\devprg\hb64mgw12\contrib\rddado\
+-incpath=\devprg\hb64mgw12\contrib\rddado\
 
 -gtwvg
 -gui 
@@ -8,6 +8,7 @@
 #-manifest=folhapto.Manifest  comentado erro compilacao 32 bits
 
 -m -n -w0 -es2 -ge1
+-inc
 
 hbct.hbc
 hbwin.hbc
@@ -15,7 +16,7 @@ hbtip.hbc
 xhb.hbc
 hbhpdf.hbc
 hbmisc.hbc
-#adordd.hbc
+hbmzip.hbc
  
 FOLHAPTO.prg
 FOPTOP.prg   
@@ -121,43 +122,52 @@ FOPTO_4T.prg
 FOPTO_6.prg
 FOPTO_4V.prg
 FOPTO_4X.prg  
-d:\develop\harbour\diversos\objmgw\adofix.prg
-d:\develop\harbour\diversos\objmgw\comp.prg
-d:\develop\harbour\diversos\objmgw\disk52.prg
-d:\develop\harbour\diversos\objmgw\disk53.prg
-d:\develop\harbour\diversos\objmgw\disk54.prg
-d:\develop\harbour\diversos\objmgw\disk55.prg
-d:\develop\harbour\diversos\objmgw\disk56.prg
-d:\develop\harbour\diversos\objmgw\disk59.prg
-d:c:\develop\harbour\OdsOdt\disk61.prg
-d:\develop\harbour\diversos\objmgw\disk63.prg
-d:\develop\harbour\diversos\objmgw\disk64.prg      
-d:\develop\harbour\diversos\objmgw\disk66.prg
-d:\develop\harbour\diversos\objmgw\disk70.prg
-d:\develop\harbour\diversos\objmgw\disk71.prg
-d:\develop\harbour\diversos\objmgw\disk72.prg
+\develop\harbour\diversos\objmgw\adofix.prg
+\develop\harbour\diversos\objmgw\comp.prg
+\develop\harbour\diversos\objmgw\disk52.prg
+\develop\harbour\diversos\objmgw\disk53.prg
+\develop\harbour\diversos\objmgw\disk54.prg
+\develop\harbour\diversos\objmgw\disk55.prg
+\develop\harbour\diversos\objmgw\disk56.prg
+\develop\harbour\diversos\objmgw\disk59.prg
+\develop\harbour\OdsOdt\disk61.prg
+\develop\harbour\diversos\objmgw\disk63.prg
+\develop\harbour\diversos\objmgw\disk64.prg      
+\develop\harbour\diversos\objmgw\disk66.prg
+\develop\harbour\diversos\objmgw\disk70.prg
+\develop\harbour\diversos\objmgw\disk71.prg
+\develop\harbour\diversos\objmgw\disk72.prg
 
 #vendo com o novo hb_error
-#d:\develop\harbour\diversos\objmgw\error.prg
-d:\develop\harbour\diversos\objmgw\xhberr_mode.prg
+\develop\harbour\diversos\objmgw\xhberr_mode.prg
 
-d:\develop\harbour\diversos\objmgw\f_encode.prg
-d:c:\develop\harbour\csvrdd\f_freadl.prg
-d:\develop\harbour\diversos\objmgw\f_ismemo.prg
-d:\develop\harbour\diversos\objmgw\f_makedb.prg
-d:\develop\harbour\diversos\objmgw\f_mmopac.prg
-d:\develop\harbour\diversos\objmgw\f_tempfi.prg
-d:\develop\harbour\diversos\objmgw\feriado.prg
-d:\develop\harbour\diversos\objmgw\flib04hab.prg
-d:c:\develop\harbour\OdsOdt\flib08.prg 
-d:\develop\harbour\diversos\objmgw\mlib06.prg
-d:\develop\harbour\diversos\objmgw\mlib16.prg     
-d:\develop\harbour\diversos\objmgw\mmouseN.prg
-d:\develop\harbour\diversos\objmgw\netdbf.prg    
-d:\develop\harbour\diversos\objmgw\pdf.prg
-d:\develop\harbour\diversos\objmgw\profile.prg 
-d:\develop\harbour\diversos\objmgw\validaie.prg
-d:\develop\harbour\diversos\objmgw\wvgini.prg
-d:\develop\harbour\sefazclass\ze_digitodoc.prg
-d:\develop\harbour\sefazclass\ze_inscestadual.prg
-d:\develop\harbour\sefazclass\ze_miscfunc.prg
+\develop\harbour\diversos\objmgw\f_encode.prg
+\develop\harbour\csvrdd\f_freadl.prg
+\develop\harbour\diversos\objmgw\f_ismemo.prg
+\develop\harbour\diversos\objmgw\f_makedb.prg
+\develop\harbour\diversos\objmgw\f_mmopac.prg
+\develop\harbour\diversos\objmgw\f_tempfi.prg
+\develop\harbour\diversos\objmgw\feriado.prg
+\develop\harbour\diversos\objmgw\flib04hab.prg
+\develop\harbour\diversos\objmgw\mlib06.prg
+\develop\harbour\diversos\objmgw\mlib16.prg     
+\develop\harbour\diversos\objmgw\mmouseN.prg
+\develop\harbour\diversos\objmgw\netdbf.prg    
+\develop\harbour\diversos\objmgw\pdf.prg
+\develop\harbour\diversos\objmgw\profile.prg 
+\develop\harbour\diversos\objmgw\validaie.prg
+\develop\harbour\diversos\objmgw\wvgini.prg
+\develop\harbour\privado\sefazclass\ze_digitodoc.prg
+\develop\harbour\privado\sefazclass\ze_inscestadual.prg
+\develop\harbour\privado\sefazclass\ze_miscfunc.prg
+
+
+#\develop\harbour\csvrdd\f_freadl.prg
+\develop\harbour\OdsOdt\flib08.prg
+c:\develop\harbour\OdsOdt\cnvformatos.prg
+c:\develop\harbour\OdsOdt\docclass.prg
+c:\develop\harbour\OdsOdt\dumyzebra.prg
+c:\develop\harbour\OdsOdt\odtclass.prg
+c:\develop\harbour\diversos\objmgw\modeseguranca.prg
+c:\develop\harbour\privado\objmgw\hbnfeemail.prg
+#c:\develop\harbour\OdsOdt\disk61.prg

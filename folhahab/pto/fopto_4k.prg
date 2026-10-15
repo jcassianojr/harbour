@@ -1,85 +1,99 @@
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Programa  : fopto_4k.prg Lancamento Multiplos Banco de Horas
-// +
-// +
-// +
-// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024,  jcassiano
-// +
-// +
-// +
-// +
-// +
-// +    Documentado em 27-Dez-2024 as  9:33 pm
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : fopto_4k.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 15-Out-2026 as 10:22 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
 
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function fopto_4k()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNCTION fopto_4k()
 
-   CABE2( "FOPTO_4K - Lancamento Multiplos Banco de Horas" )
+
+CABE2("FOPTO_4K - Lancamento Multiplos Banco de Horas")
 
 
-   cBH := IF( lSECBCO, "BK", "BH" ) + ANOMESW  // ANOWORK+strzero(mestrab,2)
+cBH := IF(lSECBCO,"BK","BH")+ANOMESW  // ANOWORK+strzero(mestrab,2)
 
-   CHECKCRI( cBH, "BCOREQ", "REQUISI" )
-   CRIARVARS( cBH )
+CHECKCRI(cBH,"BCOREQ","REQUISI")
+CRIARVARS(cBH)
 
-   @ 23, 00
-   @ 24, 00
-   @ 23, 10 SAY "Data     T  Horas  Dias Obs"
-   @ 24, 10 GET mDATA
-   @ 24, 19 GET mTIPO                         VALID mTIPO $ "CD" PICT "!"
-   @ 24, 22 GET mHORAS                        PICT '999.99'
-   @ 24, 29 GET mDIAS                         PICT '999.99'
-   @ 24, 35 GET mOBS                          PICT "@S40"
-   IF !READCUR()
-      RETU .F.
-   ENDIF
+@ 23,00
+@ 24,00
+@ 23,10 SAY "Data     T  Horas  Dias Obs"                                   
+@ 24,10 GET mDATA                                                           
+@ 24,19 GET mTIPO                         VALID mTIPO $ "CD" PICT "!"       
+@ 24,22 GET mHORAS                        PICT '999.99'                     
+@ 24,29 GET mDIAS                         PICT '999.99'                     
+@ 24,35 GET mOBS                          PICT "@S40"                       
+IF !READCUR()
+   RETU .F.
+ENDIF
 
 // SELE 1
-   IF !NETUSE( PES )
-      RETU
-   ENDIF
-   FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
-   FILTRO := FILTRO( FILTRO )
-   SET FILTER TO &FILTRO
+IF !NETUSE(PES)
+   RETU
+ENDIF
+FILTRO := '((EMPTY(DEMITIDO)).OR.(MONTH(DEMITIDO)>=MESTRAB.AND.YEAR(DEMITIDO)>=ANOUSO))'
+FILTRO := FILTRO(FILTRO)
+SET FILTER TO &FILTRO
 // SELE 2
-   IF !NETUSE( cBH )
-      dbCloseAll()
-      RETU
-   ENDIF
-   dbGoBottom()
-   mREQUISI := REQUISI
-   mREQUISI++
-
-   dbSelectAr( pes )
-   dbGoTop()
-   WHILE !Eof()
-      mNUMERO := NUMERO
-      dbSelectAr( cBH )
-      netrecapp()
-      REPLVARS()
-      mREQUISI++
-      dbSelectAr( pes )
-      dbSkip()
-   ENDDO
+IF !NETUSE(cBH)
    dbCloseAll()
+   RETU
+ENDIF
+dbGoBottom()
+mREQUISI := REQUISI
+mREQUISI ++
 
-   FOPTO4Q01()   // Ajusta Saldos
+dbSelectAr(pes)
+dbGoTop()
+WHILE !Eof()
+   mNUMERO := NUMERO
+   dbSelectAr(cBH)
+   netrecapp()
+   REPLVARS()
+   mREQUISI ++
+   dbSelectAr(pes)
+   dbSkip()
+ENDDO
+dbCloseAll()
 
-   RETURN
+FOPTO4Q01()   // Ajusta Saldos
 
-// + EOF: fopto_4k.prg
-// +
+RETURN
+
+
+*+ EOF: fopto_4k.prg
+*+

@@ -2,11 +2,11 @@
 *+
 *+
 *+
-*+    Programa  : fopto_15.prg Importar Catraca Portaria/Refeitorio
+*+    Programa  : fopto_15.prg
 *+
 *+
 *+
-*+     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
+*+     Sistema:
 *+
 *+     Linguagem: Harbour
 *+
@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 27-Dez-2024 as  9:32 pm
+*+    Documentado em 15-Out-2026 as 10:21 am
 *+
 *+
 *+
@@ -29,7 +29,21 @@
 #include "try.ch"
 
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function fopto_15()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 function fopto_15()
+
 para nTIPO
 LOCAL oRs,oErr
 local cConnStr
@@ -91,11 +105,11 @@ cSQL += " AND EQPI_NUMERO="+str(nEQUIP)
 @ 24,00 SAY "Connectando:"+cConnStr         
 
 TRY
-oCon:Open()
+   oCon:Open()
 CATCH oErr
-ShowAdoError(oERR,oCon)
-dbcloseall()
-RETURN NIL
+   ShowAdoError(oERR,oCon)
+   dbcloseall()
+   RETURN NIL
 END TRY
 
 
@@ -108,11 +122,11 @@ END TRY
 oRs                := WIN_OLECreateObject('ADODB.RecordSet')
 oRs:CursorLocation := 3
 TRY
-oRs:Open(cSQL,oCon,1,3)
+   oRs:Open(cSQL,oCon,1,3)
 CATCH oERR
-ShowAdoError(oERR,oCon,cSQL)
-dbcloseall()
-RETURN NIL
+   ShowAdoError(oERR,oCon,cSQL)
+   dbcloseall()
+   RETURN NIL
 END
 
 while !ors:eof
@@ -164,7 +178,15 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function ShowAdoError()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -172,7 +194,12 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION ShowAdoError(oERR,oCon,cMESSAGE)
+
 
 LOCAL nAdoErrors := 0
 LOCAL oAdoErr
@@ -196,6 +223,7 @@ cERRO += HB_OsNewLine()+oErr:Operation+" "+oErr:Description
 hb_memowrit("showadoerror"+ArqLogDataHora("log"),cERRO)
 ALERTX(cERRO)
 RETURN nil
+
 
 
 

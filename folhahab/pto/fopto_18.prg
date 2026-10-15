@@ -1,61 +1,76 @@
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Programa  : fopto_18.prg Criando Arquivo TXT Com Base Arquivo Reserva
-// +
-// +
-// +
-// +     Sistema: FOLHA DE PAGAMENTO - MODULO PONTO
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024,  jcassiano
-// +
-// +
-// +
-// +
-// +
-// +    Documentado em 27-Dez-2024 as  9:32 pm
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : fopto_18.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 15-Out-2026 as 10:21 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function fopto_18()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 FUNCTION fopto_18()
 
-   CABE2( 'FOPTO_18 - Criando Arquivo TXT Com Base Arquivo Reserva' )
 
-   ntipo := PEGRELOGIO()
+CABE2('FOPTO_18 - Criando Arquivo TXT Com Base Arquivo Reserva')
 
-   cDD := TARQREL( nTIPO, .F. )
+ntipo := PEGRELOGIO()
 
-   IF !REDEFILE( cDD, "DBF", .T. )
-      RETU .F.
-   ENDIF
+cDD := TARQREL(nTIPO,.F.)
 
-   TIPC := pegarqcon( nTIPO, "PRO" )
+IF !REDEFILE(cDD,"DBF",.T.)
+   RETU .F.
+ENDIF
 
-   FO21CRI( cDD, "FO_DIO", "STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)" )
+TIPC := pegarqcon(nTIPO,"PRO")
 
-   IF !NETUSE( cDD )
-      RETU .F.
-   ENDIF
-   nLASTREC := LastRec()
-   zei_fort( nLASTREC,,, 0 )
-   cTXT += ".TXT"
-   IF TIPC = "S"
-      COPY TO &cTXT. SDF WHILE zei_fort( nLASTREC,,, 1 )
-   ENDIF
-   IF TIPC = "D"
-      COPY TO &cTXT. DELI WHILE zei_fort( nLASTREC,,, 1 )
-   ENDIF
-   dbCloseAll()
+FO21CRI(cDD,"FO_DIO","STR(NUMERO,8)+DTOS(DATA)+STR(HORA,5,2)")
 
-   RETURN
+IF !NETUSE(cDD)
+   RETU .F.
+ENDIF
+nLASTREC := LastRec()
+zei_fort(nLASTREC,,,0)
+cTXT += ".TXT"
+IF TIPC = "S"
+   COPY TO &cTXT. SDF WHILE zei_fort( nLASTREC,,, 1 )
+ENDIF
+IF TIPC = "D"
+   COPY TO &cTXT. DELI WHILE zei_fort( nLASTREC,,, 1 )
+ENDIF
+dbCloseAll()
 
-// + EOF: fopto_18.prg
-// +
+RETURN
+
+
+*+ EOF: fopto_18.prg
+*+
