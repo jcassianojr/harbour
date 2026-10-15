@@ -1,7 +1,0 @@
-# folha
-
-modulo principal
-
-
-***
-
