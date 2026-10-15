@@ -5,6 +5,7 @@
 -tshead=tshead.ch
 # -manifest=folharfe.Manifest  comentado erro compilacao 32 bits
 -m -n -w0 -es2 -ge1
+-inc
 
 hbct.hbc
 hbwin.hbc
@@ -12,6 +13,8 @@ hbtip.hbc
 xhb.hbc
 hbhpdf.hbc
 hbmisc.hbc
+hbmzip.hbc
+
 
 
 folharfe.prg
@@ -72,40 +75,46 @@ fores_e9.prg
 ..\OBJ\FOLERR.prg
 ..\OBJ\FO7ALIB.prg
 ..\OBJ\FO7w.prg
-d:\develop\harbour\diversos\objmgw\comp
-d:\develop\harbour\diversos\objmgw\disk51
-d:\develop\harbour\diversos\objmgw\disk52
-d:\develop\harbour\diversos\objmgw\disk53
-d:\develop\harbour\diversos\objmgw\disk54
-d:\develop\harbour\diversos\objmgw\disk55
-d:\develop\harbour\diversos\objmgw\disk56
-d:\develop\harbour\diversos\objmgw\disk59
-d:\develop\harbour\diversos\objmgw\disk61
-d:\develop\harbour\diversos\objmgw\disk63
-d:\develop\harbour\diversos\objmgw\disk64
-d:\develop\harbour\diversos\objmgw\disk66
-d:\develop\harbour\diversos\objmgw\disk70
-d:\develop\harbour\diversos\objmgw\disk71
-d:\develop\harbour\diversos\objmgw\disk72
-d:\develop\harbour\diversos\objmgw\flib04hab
-d:\develop\harbour\diversos\objmgw\flib08
-#d:\develop\harbour\diversos\objmgw\f_decode
-d:\develop\harbour\diversos\objmgw\f_encode
-d:\develop\harbour\diversos\objmgw\f_freadl
-d:\develop\harbour\diversos\objmgw\f_ismemo
-d:\develop\harbour\diversos\objmgw\f_makedb
-d:\develop\harbour\diversos\objmgw\f_mmopac
-d:\develop\harbour\diversos\objmgw\f_tempfi
-d:\develop\harbour\diversos\objmgw\mlib06
-d:\develop\harbour\diversos\objmgw\mlib16
-d:\develop\harbour\diversos\objmgw\mmouseN
-d:\develop\harbour\diversos\objmgw\netdbf
-d:\develop\harbour\diversos\objmgw\pdf
-d:\develop\harbour\diversos\objmgw\profile
+\develop\harbour\diversos\objmgw\comp
+\develop\harbour\diversos\objmgw\disk51
+\develop\harbour\diversos\objmgw\disk52
+\develop\harbour\diversos\objmgw\disk53
+\develop\harbour\diversos\objmgw\disk54
+\develop\harbour\diversos\objmgw\disk55
+\develop\harbour\diversos\objmgw\disk56
+\develop\harbour\diversos\objmgw\disk59
+\develop\harbour\diversos\objmgw\disk63
+\develop\harbour\diversos\objmgw\disk64
+\develop\harbour\diversos\objmgw\disk66
+\develop\harbour\diversos\objmgw\disk70
+\develop\harbour\diversos\objmgw\disk71
+\develop\harbour\diversos\objmgw\disk72
+\develop\harbour\diversos\objmgw\flib04hab
+\develop\harbour\diversos\objmgw\f_encode
+\develop\harbour\diversos\objmgw\f_ismemo
+\develop\harbour\diversos\objmgw\f_makedb
+\develop\harbour\diversos\objmgw\f_mmopac
+\develop\harbour\diversos\objmgw\f_tempfi
+\develop\harbour\diversos\objmgw\mlib06
+\develop\harbour\diversos\objmgw\mlib16
+\develop\harbour\diversos\objmgw\mmouseN
+\develop\harbour\diversos\objmgw\netdbf
+\develop\harbour\diversos\objmgw\pdf
+\develop\harbour\diversos\objmgw\profile
 
 #vendo com o novo hb_error
-#d:\develop\harbour\diversos\objmgw\error.prg
-d:\develop\harbour\diversos\objmgw\xhberr_mode.prg
+#\develop\harbour\diversos\objmgw\error.prg
+\develop\harbour\diversos\objmgw\xhberr_mode.prg
 
-d:\develop\harbour\diversos\objmgw\wvgini.prg
+\develop\harbour\diversos\objmgw\wvgini.prg
 
+
+\develop\harbour\csvrdd\f_freadl.prg
+\develop\harbour\OdsOdt\flib08.prg
+c:\develop\harbour\OdsOdt\cnvformatos.prg
+c:\develop\harbour\OdsOdt\docclass.prg
+c:\develop\harbour\OdsOdt\dumyzebra.prg
+c:\develop\harbour\OdsOdt\odtclass.prg
+c:\develop\harbour\diversos\objmgw\modeseguranca.prg
+c:\develop\harbour\privado\objmgw\hbnfeemail.prg
+c:\develop\harbour\OdsOdt\disk61.prg

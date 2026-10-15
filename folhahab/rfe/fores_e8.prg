@@ -2,11 +2,11 @@
 *+
 *+
 *+
-*+    Programa  : fores_e8.prg apuracao 
+*+    Programa  : fores_e8.prg
 *+
 *+
 *+
-*+     Sistema: FOLHA PAGAMENTO - RECISAO E FERIAS
+*+     Sistema:
 *+
 *+     Linguagem: Harbour
 *+
@@ -18,14 +18,28 @@
 *+
 *+
 *+
-*+    Documentado em 27-Dez-2024 as  9:41 pm
+*+    Documentado em 15-Out-2026 as 10:57 am
 *+
 *+
 *+
 *+--------------------------------------------------------------------
 *+
 
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function fores_e8()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
 function fores_e8()
+
 CABE2('Imprimir Guia DARF ')
 DXDIA1   := DXDIA2 := DATE()
 PERIODO  := SPACE(9)
@@ -170,6 +184,7 @@ SET PRIN ON
 SET PRIN OFF
 RETU
 // : FIM: FORES_E8.PRG
+
 
 *+ EOF: fores_e8.prg
 *+
