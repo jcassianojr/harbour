@@ -5,6 +5,7 @@
 -vcshead=vcshead.ch
 -tshead=tshead.ch
 #-manifest=mana5.Manifest  comentado erro compilacao 32 bits
+-inc
 
 hbwin.hbc
 hbtip.hbc
@@ -13,6 +14,8 @@ hbhpdf.hbc
 hbmisc.hbc
 gtwvg.hbc
 hbsqlit3.hbc
+rddado.hbc
+hbmzip.hbc
  
 MANA5.prg 
 MLIB.prg
@@ -75,7 +78,7 @@ MLIBEST.prg
 MLIBARQ.prg
 MLIBNF.prg
 MLIBC.prg
-\develop\harbour\folhahab\lis\foldirf.prg
+\develop\harbour\folha\lis\foldirf.prg
 M_AA.prg
 M_AD.prg
 M_AD2.prg
@@ -210,21 +213,29 @@ c:\develop\harbour\OdsOdt\disk61.prg
 \develop\harbour\diversos\objmgw\xhberr_mode.prg
 
 \develop\harbour\diversos\objmgw\f_encode.prg
-c:\develop\harbour\csvrdd\f_freadl.prg
 \develop\harbour\diversos\objmgw\f_ismemo.prg
 \develop\harbour\diversos\objmgw\f_mmopac.prg
 \develop\harbour\diversos\objmgw\f_readtx.prg
 \develop\harbour\diversos\objmgw\f_tempfi.prg
-c:\develop\harbour\OdsOdt\flib08.prg
 \develop\harbour\diversos\objmgw\mlib06.prg
 \develop\harbour\diversos\objmgw\mlib16.prg
 \develop\harbour\diversos\objmgw\mmousen.prg
 \develop\harbour\diversos\objmgw\netdbf.prg
 \develop\harbour\diversos\objmgw\pdf.prg
 \develop\harbour\diversos\objmgw\profile.prg
-\develop\harbour\sefazclass\ze_digitodoc.prg
-\develop\harbour\sefazclass\ze_miscfunc.prg
+\develop\harbour\privado\sefazclass\ze_digitodoc.prg
+\develop\harbour\privado\sefazclass\ze_miscfunc.prg
 \develop\harbour\diversos\objmgw\valida_placa.prg
-#\develop\harbour\diversos\objmgw\validacnh.prg
 \develop\harbour\diversos\objmgw\wvgini.prg
 \develop\harbour\diversos\objmgw\adoerror.prg
+
+
+\develop\harbour\csvrdd\f_freadl.prg
+\develop\harbour\OdsOdt\flib08.prg
+c:\develop\harbour\OdsOdt\cnvformatos.prg
+c:\develop\harbour\OdsOdt\docclass.prg
+c:\develop\harbour\OdsOdt\dumyzebra.prg
+c:\develop\harbour\OdsOdt\odtclass.prg
+c:\develop\harbour\diversos\objmgw\modeseguranca.prg
+c:\develop\harbour\privado\objmgw\hbnfeemail.prg
+#c:\develop\harbour\OdsOdt\disk61.prg

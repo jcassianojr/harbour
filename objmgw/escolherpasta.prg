@@ -1,3 +1,29 @@
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : escolherpasta.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 16-Out-2026 as  8:02 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
 #include "try.ch"
 
@@ -7,44 +33,61 @@
 
 /* lAllowNewFolder: .T. permite criar pasta, .F. desabilita
 */
-FUNCTION SelectFolder( cTitle, cInitialPath, lAllowNewFolder )
-   LOCAL oShell, oFolder, cPath := ""
-   LOCAL nOptions := BIF_RETURNONLYFSDIRS
 
-   // Define o padrão se não for informado
-   if valtype(lAllowNewFolder)<>"L"
-       lAllowNewFolder:= .F.
-   endif
-   if valtype(cTitle)<>"C" .OR. EMPTY(cTitle)    
-      cTitle:="Selecione uma pasta"
-   endif
-   if valtype(cInitialPath)<>"C" .OR. EMPTY(cInitialPath)    
-      cInitialPath:= nil
-   endif
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function SelectFolder()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION SelectFolder(cTitle,cInitialPath,lAllowNewFolder)
 
-   IF ! Empty( cInitialPath ) .AND. SubStr( cInitialPath, Len( cInitialPath ), 1 ) == "\"
-      cInitialPath := SubStr( cInitialPath, 1, Len( cInitialPath ) - 1 )
-   ENDIF   
+LOCAL oShell,oFolder,cPath := ""
+LOCAL nOptions := BIF_RETURNONLYFSDIRS
 
-   // Se lAllowNewFolder for .F., adicionamos a flag para desabilitar o botão
-   IF !lAllowNewFolder
-      nOptions += BIF_NONEWFOLDERBUTTON
-   ENDIF
+// Define o padrão se não for informado
+if valtype(lAllowNewFolder) <> "L"
+   lAllowNewFolder := .F.
+endif
+if valtype(cTitle) <> "C" .OR. EMPTY(cTitle)
+   cTitle := "Selecione uma pasta"
+endif
+if valtype(cInitialPath) <> "C" .OR. EMPTY(cInitialPath)
+   cInitialPath := nil
+endif
 
-   TRY
-      oShell := CreateObject( "Shell.Application" )
-      
-      // O 4º parâmetro (root) aceita caminhos absolutos no Windows moderno
-      oFolder := oShell:BrowseForFolder( 0, cTitle, nOptions, cInitialPath )
+IF !Empty(cInitialPath) .AND. SubStr(cInitialPath,Len(cInitialPath),1) == "\"
+   cInitialPath := SubStr(cInitialPath,1,Len(cInitialPath) - 1)
+ENDIF
 
-      IF ValType( oFolder ) == "O" .AND. oFolder != NIL
-         // Verificamos se o método Self existe antes de acessar
-         IF HB_IsObject( oFolder:Self )
-            cPath := oFolder:Self:Path
-         ENDIF
+// Se lAllowNewFolder for .F., adicionamos a flag para desabilitar o botão
+IF !lAllowNewFolder
+   nOptions += BIF_NONEWFOLDERBUTTON
+ENDIF
+
+TRY
+   oShell := CreateObject("Shell.Application")
+
+   // O 4º parâmetro (root) aceita caminhos absolutos no Windows moderno
+   oFolder := oShell:BrowseForFolder(0,cTitle,nOptions,cInitialPath)
+
+   IF ValType(oFolder) == "O" .AND. oFolder != NIL
+      // Verificamos se o método Self existe antes de acessar
+      IF HB_IsObject(oFolder:Self)
+         cPath := oFolder:Self:Path
       ENDIF
-   CATCH
-      cPath := ""
-   END
+   ENDIF
+CATCH
+   cPath := ""
+END
 
 RETURN cPath
+
+*+ EOF: escolherpasta.prg
+*+

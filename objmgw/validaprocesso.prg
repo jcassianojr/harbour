@@ -1,29 +1,29 @@
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Programa  : validaprocesso.prg
-// +
-// +
-// +
-// +     Sistema:
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024,  jcassiano
-// +
-// +
-// +
-// +
-// +
-// +    Documentado em 28-Dez-2024 as 10:42 am
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : validaprocesso.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 16-Out-2026 as  8:02 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
 // 10090848820158260161
 // NNNNNNNDDAAAAJTROOOO
@@ -80,17 +80,18 @@ fclose(nGRV)
 // +
 // +
 // +
-FUNCTION formataprocesso( cPROCESSO )
+FUNCTION formataprocesso(cPROCESSO)
 
-   IF validaprocesso( cPROCESSO )
-      // 1009084-88.2015.8.26.0161
-      // 1234567-89-0123.4.56.7890
-      // 1            2
-      // "@R 9999999-99.9999.9.99.9999"
-      RETURN Transform( AllTrim( tiraout( cPROCESSO ) ), "@R 9999999-99.9999.9.99.9999" )
-   ELSE
-      RETURN cPROCESSO
-   ENDIF
+
+IF validaprocesso(cPROCESSO)
+   // 1009084-88.2015.8.26.0161
+   // 1234567-89-0123.4.56.7890
+   // 1            2
+   // "@R 9999999-99.9999.9.99.9999"
+   RETURN Transform(AllTrim(tiraout(cPROCESSO)),"@R 9999999-99.9999.9.99.9999")
+ELSE
+   RETURN cPROCESSO
+ENDIF
 
 
 // +--------------------------------------------------------------------
@@ -106,24 +107,25 @@ FUNCTION formataprocesso( cPROCESSO )
 // +
 // +
 
-FUNCTION validaprocesso( cPROCESSO )
+FUNCTION validaprocesso(cPROCESSO)
 
-   cPROCESSO := TIRAOUT( cPROCESSO )
-   IF Empty( cPROCESSO )
-      RETURN .F.
-   ENDIF
-   cNUMERO := SubStr( cPROCESSO, 1, 7 )
-   cDD     := SubStr( cPROCESSO, 8, 2 )
-   cANO    := SubStr( cPROCESSO, 10, 4 )
-   cJTR    := SubStr( cPROCESSO, 14, 3 )
-   cFINAL  := SubStr( cPROCESSO, 17, 4 )
-   resto1  := Int( Mod( Val( cNUMERO ), 97 ) )
-   valor2  := StrZero( resto1, 2 ) + cANO + cJTR
-   resto2  := Int( Mod( Val( valor2 ), 97 ) )
-   valor3  := StrZero( resto2, 2 ) + cFINAL + cDD
-   resto3  := Int( Mod( Val( valor3 ), 97 ) )
 
-   RETURN resto3 = 1
+cPROCESSO := TIRAOUT(cPROCESSO)
+IF Empty(cPROCESSO)
+   RETURN .F.
+ENDIF
+cNUMERO := SubStr(cPROCESSO,1,7)
+cDD     := SubStr(cPROCESSO,8,2)
+cANO    := SubStr(cPROCESSO,10,4)
+cJTR    := SubStr(cPROCESSO,14,3)
+cFINAL  := SubStr(cPROCESSO,17,4)
+resto1  := Int(Mod(Val(cNUMERO),97))
+valor2  := StrZero(resto1,2)+cANO+cJTR
+resto2  := Int(Mod(Val(valor2),97))
+valor3  := StrZero(resto2,2)+cFINAL+cDD
+resto3  := Int(Mod(Val(valor3),97))
+
+RETURN resto3 = 1
 
 /*
 Function validaprocesso2(cPROCESSO)
@@ -140,5 +142,6 @@ cFINAL :=SUBSTR(cPROCESSO,17,4)
 return calcula_mod97
 */
 
-// + EOF: validaprocesso.prg
-// +
+
+*+ EOF: validaprocesso.prg
+*+

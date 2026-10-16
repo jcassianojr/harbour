@@ -1,28 +1,29 @@
-// +--------------------------------------------------------------------
-// +
-// +    Programa  : disk54.prg
-// +
-// +     Sistema:
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024,  jcassiano
-// +
-// +
-// +    Documentado em 28-Dez-2024 as 10:41 am
-// +
-// +    Functions: Function AC_AGUDO()
-// +               Function AC_CRASE()
-// +               Function AC_TIL()
-// +               Function AC_CIRC()
-// +               Function Acentuar()
-// +               Function liga_acento()
-// +               Function Acento()
-// +
-// +--------------------------------------------------------------------
-// +
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : disk54.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 16-Out-2026 as  8:02 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
 // --- Definições de Constantes (Tabela PTISO/ISO-8859-1) ---
 #define CHR_A_AGUDO 193 // Á
@@ -74,55 +75,69 @@
 #define CHR_U_CRASE 217 // Ù
 #define CHR_u_CRASE 249 // ù
 
-FUNCTION Acentuar( cTIPO )
-   LOCAL cBUS, cDEST, nPOS, yKEY, kkey, xkey
-   
-   IF ! ACENTUA
-      RETURN
-   ENDIF
 
-   DO CASE
-   CASE cTIPO = "AGU"
-      cBUS  := { "A", "a", "E", "e", "I", "i", "O", "o", "U", "u", "C", "c" }
-      cDEST := { Chr(CHR_A_AGUDO), Chr(CHR_a_AGUDO), Chr(CHR_E_AGUDO), Chr(CHR_e_AGUDO), ;
-                 Chr(CHR_I_AGUDO), Chr(CHR_i_AGUDO), Chr(CHR_O_AGUDO), Chr(CHR_o_AGUDO), ;
-                 Chr(CHR_U_AGUDO), Chr(CHR_u_AGUDO), Chr(CHR_C_CEDIL), Chr(CHR_c_CEDIL) }
-   CASE cTIPO = "TIL"
-      cBUS  := { "A", "a", "O", "o", "N", "n" }
-      cDEST := { Chr(CHR_A_TIL), Chr(CHR_a_TIL), Chr(CHR_O_TIL), Chr(CHR_o_TIL), ;
-                 Chr(CHR_N_TIL), Chr(CHR_n_TIL) }
-   CASE cTIPO = "CIR"
-      cBUS  := { "A", "a", "E", "e", "I", "i", "O", "o", "U", "u" }
-      cDEST := { Chr(CHR_A_CIRC), Chr(CHR_a_CIRC), Chr(CHR_E_CIRC), Chr(CHR_e_CIRC), ;
-                 Chr(CHR_I_CIRC), Chr(CHR_i_CIRC), Chr(CHR_O_CIRC), Chr(CHR_o_CIRC), ;
-                 Chr(CHR_U_CIRC), Chr(CHR_u_CIRC) }
-   CASE cTIPO = "TRE"
-      cBUS  := { "A", "a", "E", "e", "I", "i", "O", "o", "U", "u" }
-      cDEST := { Chr(CHR_A_TREM), Chr(CHR_a_TREM), Chr(CHR_E_TREM), Chr(CHR_e_TREM), ;
-                 Chr(CHR_I_TREM), Chr(CHR_i_TREM), Chr(CHR_O_TREM), Chr(CHR_o_TREM), ;
-                 Chr(CHR_U_TREM), Chr(CHR_u_TREM) }
-  CASE cTIPO = "CRA"
-      cBUS  := { "A", "a", "E", "e", "I", "i", "O", "o", "U", "u" }
-      cDEST := { Chr(CHR_A_CRASE), Chr(CHR_a_CRASE), Chr(CHR_E_CRASE), Chr(CHR_e_CRASE), ;
-                 Chr(CHR_I_CRASE), Chr(CHR_i_CRASE), Chr(CHR_O_CRASE), Chr(CHR_o_CRASE), ;
-                 Chr(CHR_U_CRASE), Chr(CHR_u_CRASE) }
-   CASE cTIPO = "GRA" // Apenas A/a conforme seu código original
-      cBUS  := { "A", "a" }
-      cDEST := { Chr(CHR_A_CRASE), Chr(CHR_a_CRASE) }               
-   OTHERWISE
-      RETURN NIL
-   ENDCASE
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function Acentuar()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION Acentuar(cTIPO)
 
-   xkey := Inkey( 0 )
-   ykey := Chr( xkey )
-   nPOS := AScan( cBUS, yKEY )
+LOCAL cBUS,cDEST,nPOS,yKEY,kkey,xkey
 
-   IF nPOS > 0
-      kkey := cDEST[ nPOS ]
-   ELSE
-      kkey := ykey
-   ENDIF
-   KEYBOARD ( kkey )
+IF !ACENTUA
+   RETURN
+ENDIF
+
+DO CASE
+CASE cTIPO = "AGU"
+   cBUS  := {"A","a","E","e","I","i","O","o","U","u","C","c"}
+   cDEST := {Chr(CHR_A_AGUDO),Chr(CHR_a_AGUDO),Chr(CHR_E_AGUDO),Chr(CHR_e_AGUDO),;
+    Chr(CHR_I_AGUDO),Chr(CHR_i_AGUDO),Chr(CHR_O_AGUDO),Chr(CHR_o_AGUDO),;
+    Chr(CHR_U_AGUDO),Chr(CHR_u_AGUDO),Chr(CHR_C_CEDIL),Chr(CHR_c_CEDIL)}
+CASE cTIPO = "TIL"
+   cBUS  := {"A","a","O","o","N","n"}
+   cDEST := {Chr(CHR_A_TIL),Chr(CHR_a_TIL),Chr(CHR_O_TIL),Chr(CHR_o_TIL),;
+    Chr(CHR_N_TIL),Chr(CHR_n_TIL)}
+CASE cTIPO = "CIR"
+   cBUS  := {"A","a","E","e","I","i","O","o","U","u"}
+   cDEST := {Chr(CHR_A_CIRC),Chr(CHR_a_CIRC),Chr(CHR_E_CIRC),Chr(CHR_e_CIRC),;
+    Chr(CHR_I_CIRC),Chr(CHR_i_CIRC),Chr(CHR_O_CIRC),Chr(CHR_o_CIRC),;
+    Chr(CHR_U_CIRC),Chr(CHR_u_CIRC)}
+CASE cTIPO = "TRE"
+   cBUS  := {"A","a","E","e","I","i","O","o","U","u"}
+   cDEST := {Chr(CHR_A_TREM),Chr(CHR_a_TREM),Chr(CHR_E_TREM),Chr(CHR_e_TREM),;
+    Chr(CHR_I_TREM),Chr(CHR_i_TREM),Chr(CHR_O_TREM),Chr(CHR_o_TREM),;
+    Chr(CHR_U_TREM),Chr(CHR_u_TREM)}
+CASE cTIPO = "CRA"
+   cBUS  := {"A","a","E","e","I","i","O","o","U","u"}
+   cDEST := {Chr(CHR_A_CRASE),Chr(CHR_a_CRASE),Chr(CHR_E_CRASE),Chr(CHR_e_CRASE),;
+    Chr(CHR_I_CRASE),Chr(CHR_i_CRASE),Chr(CHR_O_CRASE),Chr(CHR_o_CRASE),;
+    Chr(CHR_U_CRASE),Chr(CHR_u_CRASE)}
+CASE cTIPO = "GRA"  // Apenas A/a conforme seu código original
+   cBUS  := {"A","a"}
+   cDEST := {Chr(CHR_A_CRASE),Chr(CHR_a_CRASE)}
+OTHERWISE
+   RETURN NIL
+ENDCASE
+
+xkey := Inkey(0)
+ykey := Chr(xkey)
+nPOS := AScan(cBUS,yKEY)
+
+IF nPOS > 0
+   kkey := cDEST[nPOS]
+ELSE
+   kkey := ykey
+ENDIF
+KEYBOARD (kkey)
 RETURN NIL
 
 // +--------------------------------------------------------------------
@@ -133,10 +148,11 @@ RETURN NIL
 // +
 FUNCTION AC_AGUDO
 
- //  SET KEY 39 to
-   ACENTUAR( "AGU" )
- //  SetKey( 39, {|| AC_AGUDO() } )
-   RETURN
+
+//  SET KEY 39 to
+ACENTUAR("AGU")
+//  SetKey( 39, {|| AC_AGUDO() } )
+RETURN
 
 
 // +--------------------------------------------------------------------
@@ -148,8 +164,9 @@ FUNCTION AC_AGUDO
 
 FUNCTION AC_CRASE
 
-   Acentuar( "CRA" )
-   RETURN
+
+Acentuar("CRA")
+RETURN
 
 
 // +--------------------------------------------------------------------
@@ -161,8 +178,9 @@ FUNCTION AC_CRASE
 
 FUNCTION AC_TIL
 
-   Acentuar( "TIL" )
-   RETURN
+
+Acentuar("TIL")
+RETURN
 
 
 // +--------------------------------------------------------------------
@@ -173,8 +191,9 @@ FUNCTION AC_TIL
 // +
 
 FUNCTION AC_CIRC
-   ACENTUAR( "CIR" )
-   RETURN
+
+ACENTUAR("CIR")
+RETURN
 
 // +--------------------------------------------------------------------
 // +
@@ -185,71 +204,87 @@ FUNCTION AC_CIRC
 
 FUNCTION liga_acento
 
-   IF mdg( "Ligar Acentuacao" )
-      SetKey( 39, {|| AC_AGUDO() } )
-      SetKey( 94, {|| AC_CIRC() } )
-      SetKey( 96, {|| AC_CRASE() } )
-      SetKey( 126, {|| AC_TIL() } )
-      IF MDG( "Acentuacao para Windows" )
-         ACENTUA := .F.
-      ELSE
-         ACENTUA := .T.
-      ENDIF
+
+IF mdg("Ligar Acentuacao")
+   SetKey(39,{|| AC_AGUDO()})
+   SetKey(94,{|| AC_CIRC()})
+   SetKey(96,{|| AC_CRASE()})
+   SetKey(126,{|| AC_TIL()})
+   IF MDG("Acentuacao para Windows")
+      ACENTUA := .F.
    ELSE
-      SET KEY 39 to
-      SET KEY 94 to
-      SET KEY 96 to
-      SET KEY 126 to
+      ACENTUA := .T.
    ENDIF
-   RETURN
+ELSE
+   SET KEY 39 to
+   SET KEY 94 to
+   SET KEY 96 to
+   SET KEY 126 to
+ENDIF
+RETURN
 
 
-FUNCTION Acento( texto )
 
-   LOCAL ag   := Chr( 8 ) + Chr( 39 ) // Agudo
-   LOCAL ti   := Chr( 8 ) + Chr( 126 ) // Til
-   LOCAL cr   := Chr( 8 ) + Chr( 96 )  // Crase
-   LOCAL ci   := Chr( 8 ) + Chr( 94 )  // Circunflexo
-   LOCAL ce   := Chr( 8 ) + Chr( 44 )  // Cedilha
-   LOCAL sp   := 0
-   LOCAL X
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function Acento()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION Acento(texto)
 
-   // Usando os #define criados anteriormente para compor o array
-   LOCAL aORI := { Chr(CHR_a_AGUDO), Chr(CHR_e_AGUDO), Chr(CHR_i_AGUDO), Chr(CHR_o_AGUDO), Chr(CHR_u_AGUDO), ;
-                   Chr(CHR_A_AGUDO), Chr(CHR_E_AGUDO), Chr(CHR_I_AGUDO), Chr(CHR_O_AGUDO), Chr(CHR_U_AGUDO), ;
-                   Chr(CHR_a_CIRC),  Chr(CHR_e_CIRC),  Chr(CHR_o_CIRC),  Chr(CHR_a_CRASE), Chr(CHR_A_CRASE), ;
-                   Chr(CHR_c_CEDIL), Chr(CHR_C_CEDIL), Chr(CHR_A_CIRC),  Chr(CHR_E_CIRC),  Chr(CHR_O_CIRC), ;
-                   Chr(CHR_a_TIL),   Chr(CHR_A_TIL),   Chr(CHR_o_TIL),   Chr(CHR_O_TIL),   Chr(CHR_A_TIL), ;
-                   Chr(CHR_A_TIL),   Chr(CHR_O_TIL),   Chr(CHR_O_TIL) }
 
-   // Nota: Mantive a correspondência lógica dos seus índices originais
-   LOCAL aDES := { "a" + ag, "e" + ag, "i" + ag, "o" + ag, "u" + ag, ;
-                   "A" + ag, "E" + ag, "I" + ag, "O" + ag, "U" + ag, ;
-                   "a" + ci, "e" + ci, "o" + ci, "a" + cr, "A" + cr, ;
-                   "c" + ce, "C" + ce, "A" + ci, "E" + ci, "O" + ci, ;
-                   "a" + ti, "a" + ti, "o" + ti, "o" + ti, "A" + ti, ;
-                   "A" + ti, "O" + ti, "O" + ti }
+LOCAL ag := Chr(8)+Chr(39)  // Agudo
+LOCAL ti := Chr(8)+Chr(126)   // Til
+LOCAL cr := Chr(8)+Chr(96)  // Crase
+LOCAL ci := Chr(8)+Chr(94)  // Circunflexo
+LOCAL ce := Chr(8)+Chr(44)  // Cedilha
+LOCAL sp := 0
+LOCAL X
 
-   IF ValType( TEXTO ) # "C"
-      RETURN texto
+// Usando os #define criados anteriormente para compor o array
+LOCAL aORI := {Chr(CHR_a_AGUDO),Chr(CHR_e_AGUDO),Chr(CHR_i_AGUDO),Chr(CHR_o_AGUDO),Chr(CHR_u_AGUDO),;
+ Chr(CHR_A_AGUDO),Chr(CHR_E_AGUDO),Chr(CHR_I_AGUDO),Chr(CHR_O_AGUDO),Chr(CHR_U_AGUDO),;
+ Chr(CHR_a_CIRC),Chr(CHR_e_CIRC),Chr(CHR_o_CIRC),Chr(CHR_a_CRASE),Chr(CHR_A_CRASE),;
+ Chr(CHR_c_CEDIL),Chr(CHR_C_CEDIL),Chr(CHR_A_CIRC),Chr(CHR_E_CIRC),Chr(CHR_O_CIRC),;
+ Chr(CHR_a_TIL),Chr(CHR_A_TIL),Chr(CHR_o_TIL),Chr(CHR_O_TIL),Chr(CHR_A_TIL),;
+ Chr(CHR_A_TIL),Chr(CHR_O_TIL),Chr(CHR_O_TIL)}
+
+// Nota: Mantive a correspondência lógica dos seus índices originais
+LOCAL aDES := {"a"+ag,"e"+ag,"i"+ag,"o"+ag,"u"+ag,;
+ "A"+ag,"E"+ag,"I"+ag,"O"+ag,"U"+ag,;
+ "a"+ci,"e"+ci,"o"+ci,"a"+cr,"A"+cr,;
+ "c"+ce,"C"+ce,"A"+ci,"E"+ci,"O"+ci,;
+ "a"+ti,"a"+ti,"o"+ti,"o"+ti,"A"+ti,;
+ "A"+ti,"O"+ti,"O"+ti}
+
+IF ValType(TEXTO) # "C"
+   RETURN texto
+ENDIF
+
+// Verifica nTIPSPO (se existir)
+IF Type("nTIPSPO") == "U" .OR. !(nTIPSPO >= 2 .AND. nTIPSPO <= 4)
+   RETURN texto
+ENDIF
+
+FOR X := 1 TO Len(aORI)
+   IF At (aORI[X],texto) > 0
+      texto := StrTran(texto,aORI[X],aDES[X])
+      sp ++
    ENDIF
-   
-   // Verifica nTIPSPO (se existir)
-   IF Type( "nTIPSPO" ) == "U" .OR. ! (nTIPSPO >= 2 .AND. nTIPSPO <= 4)
-      RETURN texto
-   ENDIF
+NEXT
 
-   FOR X := 1 TO Len( aORI )
-      IF At( aORI[ X ], texto ) > 0
-         texto := StrTran( texto, aORI[ X ], aDES[ X ] )
-         sp++
-      ENDIF
-   NEXT
-   
-   IF sp > 0
-      texto += Space( sp )
-   ENDIF
-   
-   RETURN ( texto )
-// + EOF: disk54.prg
-// +
+IF sp > 0
+   texto += Space(sp)
+ENDIF
+
+RETURN (texto)
+
+*+ EOF: disk54.prg
+*+

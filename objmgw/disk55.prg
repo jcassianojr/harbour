@@ -1,3 +1,30 @@
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : disk55.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 16-Out-2026 as  8:02 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+
 //--------------------------------------------------------------------
 // +
 // +    Programa  : disk55.prg
@@ -97,14 +124,15 @@
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION convansi( ctexto )
+FUNCTION convansi(ctexto)
 
-   IF ValType( cTEXTO ) # "C"
-      RETU cTEXTO
-   ENDIF
-   cTEXTO := win_oemtoansi( cTEXTO )   // hb_oemtoansi(cTEXTO)
 
-   RETURN cTEXTO
+IF ValType(cTEXTO) # "C"
+   RETU cTEXTO
+ENDIF
+cTEXTO := win_oemtoansi(cTEXTO)   // hb_oemtoansi(cTEXTO)
+
+RETURN cTEXTO
 
 
 // +--------------------------------------------------------------------
@@ -113,14 +141,15 @@ FUNCTION convansi( ctexto )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION convoem( ctexto )
+FUNCTION convoem(ctexto)
 
-  IF ValType( cTEXTO ) # "C"
-      RETU cTEXTO
-   ENDIF
-   cTEXTO := win_ansitooem( cTEXTO )   // HB_ansitooem(cTEXTO)
 
-   RETURN cTEXTO
+IF ValType(cTEXTO) # "C"
+   RETU cTEXTO
+ENDIF
+cTEXTO := win_ansitooem(cTEXTO)   // HB_ansitooem(cTEXTO)
+
+RETURN cTEXTO
 
 
 // +--------------------------------------------------------------------
@@ -129,23 +158,24 @@ FUNCTION convoem( ctexto )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION str2html( cStr, lAnsi, loem )
+FUNCTION str2html(cStr,lAnsi,loem)
 
-   IF ValType( lANSI ) <> "L"
-      lAnsi := .F.
-   ENDIF
-   IF ValType( loem ) <> "L"
-      loem := .T.
-   ENDIF
-   IF lansi
-      cSTR := win_oemtoansi( cSTR )  // AnsiToHtml( cSTR)
-   ENDIF
-   IF loem
-      cSTR := win_ANSIToOEM( cSTR )  // OemToHtml( cSTR)
-   ENDIF
-   cSTR := tip_StrToHtml( cSTR )
 
-   RETURN cSTR
+IF ValType(lANSI) <> "L"
+   lAnsi := .F.
+ENDIF
+IF ValType(loem) <> "L"
+   loem := .T.
+ENDIF
+IF lansi
+   cSTR := win_oemtoansi(cSTR)  // AnsiToHtml( cSTR)
+ENDIF
+IF loem
+   cSTR := win_ANSIToOEM(cSTR)  // OemToHtml( cSTR)
+ENDIF
+cSTR := tip_StrToHtml(cSTR)
+
+RETURN cSTR
 
 // +--------------------------------------------------------------------
 // +
@@ -153,28 +183,29 @@ FUNCTION str2html( cStr, lAnsi, loem )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION CAPFIRS2( string )
+FUNCTION CAPFIRS2(string)
 
-   LOCAL ret_string := ''
 
-   ret_string := TOKENUPPER( Lower( string ) )
-   ret_string := StrTran( ret_string, " Em ", " em " )
-   ret_string := StrTran( ret_string, " Da ", " da " )
-   ret_string := StrTran( ret_string, " De ", " de " )
-   ret_string := StrTran( ret_string, " Do ", " do " )
-   ret_string := StrTran( ret_string, " Das ", " das " )
-   ret_string := StrTran( ret_string, " Des ", " des " )
-   ret_string := StrTran( ret_string, " Dos ", " dos " )
-   ret_string := StrTran( ret_string, " Para ", " para " )
-   ret_string := StrTran( ret_string, " Por ", " por " )
-   ret_string := StrTran( ret_string, " A ", " a " )
-   ret_string := StrTran( ret_string, " E ", " e " )
-   ret_string := StrTran( ret_string, " O ", " o " )
-   ret_string := StrTran( ret_string, " Ou ", " ou " )
-   ret_string := StrTran( ret_string, " Com ", " com " )
-   string     := ret_string  // Caso passar @como parametro
+LOCAL ret_string := ''
 
-   RETURN ret_string
+ret_string := TOKENUPPER(Lower(string))
+ret_string := StrTran(ret_string," Em "," em ")
+ret_string := StrTran(ret_string," Da "," da ")
+ret_string := StrTran(ret_string," De "," de ")
+ret_string := StrTran(ret_string," Do "," do ")
+ret_string := StrTran(ret_string," Das "," das ")
+ret_string := StrTran(ret_string," Des "," des ")
+ret_string := StrTran(ret_string," Dos "," dos ")
+ret_string := StrTran(ret_string," Para "," para ")
+ret_string := StrTran(ret_string," Por "," por ")
+ret_string := StrTran(ret_string," A "," a ")
+ret_string := StrTran(ret_string," E "," e ")
+ret_string := StrTran(ret_string," O "," o ")
+ret_string := StrTran(ret_string," Ou "," ou ")
+ret_string := StrTran(ret_string," Com "," com ")
+string     := ret_string  // Caso passar @como parametro
+
+RETURN ret_string
 
 // +--------------------------------------------------------------------
 // +
@@ -182,34 +213,35 @@ FUNCTION CAPFIRS2( string )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION SonumeroX( cInString, lPONTO, lVIRGULA )
+FUNCTION SonumeroX(cInString,lPONTO,lVIRGULA)
 
-   LOCAL nIter, cThisLetter
-   LOCAL nLenString  := Len( cInString )
-   LOCAL cOutValue   := ''
-   LOCAL cCompString := '0123456789'
 
-   IF ValType( cInString ) <> "C"
-      cInString := STRVAL( cInString )
-   ENDIF
-   IF ValType( lPONTO ) = "L"
-      IF lPONTO
-         cCompString += "."
-      ENDIF
-   ENDIF
-   IF ValType( lVIRGULA ) = "L"
-      IF lVIRGULA
-         cCompString += ","
-      ENDIF
-   ENDIF
-   FOR nIter := 1 TO nLenString
-      cThisLetter := SUBST( cInString, nIter, 1 )
-      IF cThisLetter $ cCOMPSTRING
-         cOutValue += cThisLetter
-      ENDIF
-   NEXT
+LOCAL nIter,cThisLetter
+LOCAL nLenString  := Len(cInString)
+LOCAL cOutValue   := ''
+LOCAL cCompString := '0123456789'
 
-   RETURN cOutValue
+IF ValType(cInString) <> "C"
+   cInString := STRVAL(cInString)
+ENDIF
+IF ValType(lPONTO) = "L"
+   IF lPONTO
+      cCompString += "."
+   ENDIF
+ENDIF
+IF ValType(lVIRGULA) = "L"
+   IF lVIRGULA
+      cCompString += ","
+   ENDIF
+ENDIF
+FOR nIter := 1 TO nLenString
+   cThisLetter := SUBST(cInString,nIter,1)
+   IF cThisLetter $ cCOMPSTRING
+      cOutValue += cThisLetter
+   ENDIF
+NEXT
+
+RETURN cOutValue
 
 
 // +--------------------------------------------------------------------
@@ -218,14 +250,15 @@ FUNCTION SonumeroX( cInString, lPONTO, lVIRGULA )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION TIRAOUT( TEXTO )
+FUNCTION TIRAOUT(TEXTO)
 
-   texto := StrTran( texto, ".", "" )
-   texto := StrTran( texto, ":", "" )
-   texto := StrTran( texto, "-", "" )
-   texto := StrTran( texto, "/", "" )
 
-   RETURN texto
+texto := StrTran(texto,".","")
+texto := StrTran(texto,":","")
+texto := StrTran(texto,"-","")
+texto := StrTran(texto,"/","")
+
+RETURN texto
 
 
 
@@ -235,14 +268,15 @@ FUNCTION TIRAOUT( TEXTO )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION GRVVAL( nVAL, nTAM, nDEC )
+FUNCTION GRVVAL(nVAL,nTAM,nDEC)
 
-   LOCAL cVAR := ""
 
-   cVAR := StrZero( nVAL, nTAM + 1, nDEC )   // mAIS 1 por causa do ponto
-   cVAR := StrTran( cVAR, ".", "" )
+LOCAL cVAR := ""
 
-   RETURN cVAR
+cVAR := StrZero(nVAL,nTAM+1,nDEC)   // mAIS 1 por causa do ponto
+cVAR := StrTran(cVAR,".","")
+
+RETURN cVAR
 
 // +--------------------------------------------------------------------
 // +
@@ -255,231 +289,232 @@ FUNCTION GRVVAL( nVAL, nTAM, nDEC )
 // +--------------------------------------------------------------------
 // +
 
-FUNCTION data2str( dData, cFOR, cSEP, cDIG, cINI, cFIM )
-
-   LOCAL cDIA    := cMES := cANO := cRETU := ""
-   LOCAL cFORINI
-
-    dDATA := UniversalToDate( dDATA )
-	
-   IF ValType( dDATA ) <> "D" .AND. ValType( dDATA ) <> "T"
-      cDIA := "00"
-      cMES := "00"
-      cANO := "0000"
-   ELSE
-      cDIA := StrZero( Day( dDATA ), 2 )
-      cMES := StrZero( Month( dDATA ), 2 )
-      cANO := StrZero( Year( dDATA ), 4 )
-   ENDIF
-   IF ValType( cFOR ) # "C"
-      cFOR := "DMA"
-   ENDIF
-   cFOR    := AllTrim( cFOR )  // remove espacos para comparar corretamente
-   cFORINI := cFOR   // guarda o inicial se precisar correcoes como o mysql data em branco para null
-   IF At( "AAAA", cFOR ) > 0
-      cDIG := "4"
-      cFOR := StrTran( cFOR, "AAAA", "Y" )
-   ENDIF
-   IF At( "YYYY", cFOR ) > 0
-      cDIG := "4"
-      cFOR := StrTran( cFOR, "YYYY", "Y" )
-   ENDIF
-   IF At( "AA", cFOR ) > 0
-      cDIG := "2"
-      cFOR := StrTran( cFOR, "AA", "Y" )
-   ENDIF
-   IF At( "YY", cFOR ) > 0
-      cDIG := "2"
-      cFOR := StrTran( cFOR, "YY", "Y" )
-   ENDIF
-   IF At( "MM", cFOR ) > 0
-      cFOR := StrTran( cFOR, "MM", "M" )
-   ENDIF
-   IF At( "DD", cFOR ) > 0
-      cFOR := StrTran( cFOR, "DD", "D" )
-   ENDIF
-   IF At( "A", cFOR ) > 0   // troca ano(A) para (Y)year padrao funcoes harbour
-      cFOR := StrTran( cFOR, "A", "Y" )
-   ENDIF
-   IF Len( cFOR ) = 5  // FFFSD EX: DMY/4
-      cSEP := SubStr( cFOR, 4, 1 )
-      CDIG := SubStr( cFOR, 5, 1 )
-      cFOR := SubStr( cFOR, 1, 3 )
-   ENDIF
-   IF ValType( cSEP ) # "C"  // passar "" se nao quiser separador
-      cSEP := "/"
-   ENDIF
-   IF ValType( cDIG ) # "C"
-      cDIG := "4"
-   ENDIF
-   cSEP := AllTrim( cSEP )   // espaco vira vazio
-
-   IF ValType( cINI ) # "C"
-      cINI := ""
-   ENDIF
-
-   IF ValType( cINI ) # "C"
-      cFIM := ""
-   ENDIF
-
-   IF cFOR = "NDL"   // ''yyyymmdd
-      cDIG := "4"
-      cFOR := "YMD"
-   ENDIF
-
-   IF cFOR = "NDC"   // 'yymmdd
-      cDIG := "2"
-      cFOR := "YMD"
-   ENDIF
-
-   IF cFOR = "ASPAS"   // "'" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "'"
-      cINI := "'"
-      cCEP := "/"
-      cDIG := "4"
-      cFOR := "YMD"
-      cFIM := "'"
-   ENDIF
-
-   IF cFOR = "ACESSS"  // "#" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "#"
-      cINI := "#"
-      cCEP := "/"
-      cDIG := "4"
-      cFOR := "YMD"
-      cFIM := "#"
-   ENDIF
-
-   IF cFOR = "CRYSTAL" .OR. cFOR = "DATE(,"  // "DATE(" & Year(dDATA) & "," & Month(dDATA) & "," & Day(dDATA) & ")"
-      cINI := "DATE("
-      cFIM := ")"
-      cCEP := ","
-      cDIG := "4"
-      cFOR := "YMD"
-   ENDIF
-
-   IF cFOR = "DATESERIAL"  // DateSerial(1969, 2, 12)    ' Return a date.
-      cINI := "DATESERIAL("
-      cFIM := ")"
-      cCEP := ","
-      cDIG := "4"
-      cFOR := "YMD"
-   ENDIF
-
-   IF cFOR = "CRYSTALX" .OR. cFOR = "CDATE(,"  // "CDATE(" & Year(dDATA) & "," & Month(dDATA) & "," & Day(dDATA) & ")"
-      cINI := "CDATE("
-      cFIM := ")"
-      cCEP := ","
-      cDIG := "4"
-      cFOR := "YMD"
-   ENDIF
-
-   IF cFOR = "MYSQL-" .OR. cFOR = "SQLITE"   // "'" & Year(dDATA) & "-" & Month(dDATA) & "-" & Day(dDATA) & "'"  YYYY-MM-DD
-      cINI := "'"
-      cFIM := "'"
-      cCEP := "-"
-      cDIG := "4"
-      cFOR := "YMD"
-   ENDIF
-
-   IF cFOR = "MYSQL" .OR. cFOR = "MYSQL/"  // "'" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "'"
-      cINI := "'"
-      cFIM := "'"
-      cCEP := "/"
-      cDIG := "4"
-      cFOR := "YMD"
-   ENDIF
-
-   IF cFOR = "ORACLE" .OR. cFOR = "TO_DATE"  // to_date('" + Format(dDATA, "dd/mm/yyyy") + "','DD/MM/YYYY')
-      cINI := "to_date('"
-      cFIM := "','DD/MM/YYYY')"
-      cCEP := "/"
-      cDIG := "4"
-      cFOR := "DMY"
-   ENDIF
-
-   IF cFOR = "MSSQL" .OR. cFOR = "SQL" .OR. cFOR = "103"   // convert(datetime, '" + DTOC(dDATA)+ "', 103)"
-      cINI := "convert(datetime, ''"
-      cFIM := "', 103)"
-      cCEP := "/"
-      cDIG := "4"
-      cFOR := "DMY"
-   ENDIF
-
-   IF cFOR = "SQLSERVER" .OR. cFOR = "102"   // CONVERT(datetime, '" + Format(DateValue(dDATA), "yyyy-mm-dd") + "', 102)     //datetime
-      cINI := "convert(datetime, ''"
-      cFIM := "', 102)"
-      cCEP := "-"
-      cDIG := "4"
-      cFOR := "DMY"
-   ENDIF
-
-   IF cSEP = "2"   // Ano 2 digitos passado na quarta posicao DMY2
-      cSEP := ""
-      cANO := Right( cANO, 2 )
-   ENDIF
-   IF cSEP = "4"   // Ano 4 digitos passado na quarta posicao DMY4
-      cSEP := ""
-      cANO := Right( cANO, 4 )
-   ENDIF
+FUNCTION data2str(dData,cFOR,cSEP,cDIG,cINI,cFIM)
 
 
-   IF !Empty( cINI )
-      cRETU := cINI
+LOCAL cDIA    := cMES := cANO := cRETU := ""
+LOCAL cFORINI
+
+dDATA := UniversalToDate(dDATA)
+
+IF ValType(dDATA) <> "D" .AND. ValType(dDATA) <> "T"
+   cDIA := "00"
+   cMES := "00"
+   cANO := "0000"
+ELSE
+   cDIA := StrZero(Day(dDATA),2)
+   cMES := StrZero(Month(dDATA),2)
+   cANO := StrZero(Year(dDATA),4)
+ENDIF
+IF ValType(cFOR) # "C"
+   cFOR := "DMA"
+ENDIF
+cFOR    := AllTrim(cFOR)  // remove espacos para comparar corretamente
+cFORINI := cFOR   // guarda o inicial se precisar correcoes como o mysql data em branco para null
+IF At ("AAAA",cFOR) > 0
+   cDIG := "4"
+   cFOR := StrTran(cFOR,"AAAA","Y")
+ENDIF
+IF At ("YYYY",cFOR) > 0
+   cDIG := "4"
+   cFOR := StrTran(cFOR,"YYYY","Y")
+ENDIF
+IF At ("AA",cFOR) > 0
+   cDIG := "2"
+   cFOR := StrTran(cFOR,"AA","Y")
+ENDIF
+IF At ("YY",cFOR) > 0
+   cDIG := "2"
+   cFOR := StrTran(cFOR,"YY","Y")
+ENDIF
+IF At ("MM",cFOR) > 0
+   cFOR := StrTran(cFOR,"MM","M")
+ENDIF
+IF At ("DD",cFOR) > 0
+   cFOR := StrTran(cFOR,"DD","D")
+ENDIF
+IF At ("A",cFOR) > 0  // troca ano(A) para (Y)year padrao funcoes harbour
+   cFOR := StrTran(cFOR,"A","Y")
+ENDIF
+IF Len(cFOR) = 5  // FFFSD EX: DMY/4
+   cSEP := SubStr(cFOR,4,1)
+   CDIG := SubStr(cFOR,5,1)
+   cFOR := SubStr(cFOR,1,3)
+ENDIF
+IF ValType(cSEP) # "C"  // passar "" se nao quiser separador
+   cSEP := "/"
+ENDIF
+IF ValType(cDIG) # "C"
+   cDIG := "4"
+ENDIF
+cSEP := AllTrim(cSEP)   // espaco vira vazio
+
+IF ValType(cINI) # "C"
+   cINI := ""
+ENDIF
+
+IF ValType(cINI) # "C"
+   cFIM := ""
+ENDIF
+
+IF cFOR = "NDL"   // ''yyyymmdd
+   cDIG := "4"
+   cFOR := "YMD"
+ENDIF
+
+IF cFOR = "NDC"   // 'yymmdd
+   cDIG := "2"
+   cFOR := "YMD"
+ENDIF
+
+IF cFOR = "ASPAS"   // "'" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "'"
+   cINI := "'"
+   cCEP := "/"
+   cDIG := "4"
+   cFOR := "YMD"
+   cFIM := "'"
+ENDIF
+
+IF cFOR = "ACESSS"  // "#" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "#"
+   cINI := "#"
+   cCEP := "/"
+   cDIG := "4"
+   cFOR := "YMD"
+   cFIM := "#"
+ENDIF
+
+IF cFOR = "CRYSTAL" .OR. cFOR = "DATE(,"  // "DATE(" & Year(dDATA) & "," & Month(dDATA) & "," & Day(dDATA) & ")"
+   cINI := "DATE("
+   cFIM := ")"
+   cCEP := ","
+   cDIG := "4"
+   cFOR := "YMD"
+ENDIF
+
+IF cFOR = "DATESERIAL"  // DateSerial(1969, 2, 12)    ' Return a date.
+   cINI := "DATESERIAL("
+   cFIM := ")"
+   cCEP := ","
+   cDIG := "4"
+   cFOR := "YMD"
+ENDIF
+
+IF cFOR = "CRYSTALX" .OR. cFOR = "CDATE(,"  // "CDATE(" & Year(dDATA) & "," & Month(dDATA) & "," & Day(dDATA) & ")"
+   cINI := "CDATE("
+   cFIM := ")"
+   cCEP := ","
+   cDIG := "4"
+   cFOR := "YMD"
+ENDIF
+
+IF cFOR = "MYSQL-" .OR. cFOR = "SQLITE"   // "'" & Year(dDATA) & "-" & Month(dDATA) & "-" & Day(dDATA) & "'"  YYYY-MM-DD
+   cINI := "'"
+   cFIM := "'"
+   cCEP := "-"
+   cDIG := "4"
+   cFOR := "YMD"
+ENDIF
+
+IF cFOR = "MYSQL" .OR. cFOR = "MYSQL/"  // "'" & Year(dDATA) & "/" & Month(dDATA) & "/" & Day(dDATA) & "'"
+   cINI := "'"
+   cFIM := "'"
+   cCEP := "/"
+   cDIG := "4"
+   cFOR := "YMD"
+ENDIF
+
+IF cFOR = "ORACLE" .OR. cFOR = "TO_DATE"  // to_date('" + Format(dDATA, "dd/mm/yyyy") + "','DD/MM/YYYY')
+   cINI := "to_date('"
+   cFIM := "','DD/MM/YYYY')"
+   cCEP := "/"
+   cDIG := "4"
+   cFOR := "DMY"
+ENDIF
+
+IF cFOR = "MSSQL" .OR. cFOR = "SQL" .OR. cFOR = "103"   // convert(datetime, '" + DTOC(dDATA)+ "', 103)"
+   cINI := "convert(datetime, ''"
+   cFIM := "', 103)"
+   cCEP := "/"
+   cDIG := "4"
+   cFOR := "DMY"
+ENDIF
+
+IF cFOR = "SQLSERVER" .OR. cFOR = "102"   // CONVERT(datetime, '" + Format(DateValue(dDATA), "yyyy-mm-dd") + "', 102)     //datetime
+   cINI := "convert(datetime, ''"
+   cFIM := "', 102)"
+   cCEP := "-"
+   cDIG := "4"
+   cFOR := "DMY"
+ENDIF
+
+IF cSEP = "2"   // Ano 2 digitos passado na quarta posicao DMY2
+   cSEP := ""
+   cANO := Right(cANO,2)
+ENDIF
+IF cSEP = "4"   // Ano 4 digitos passado na quarta posicao DMY4
+   cSEP := ""
+   cANO := Right(cANO,4)
+ENDIF
+
+
+IF !Empty(cINI)
+   cRETU := cINI
+ENDIF
+
+DO CASE
+CASE cFOR = "MYS"
+   cRETU := StrZero(Year(dDATA),4)+"-"+StrZero(Month(dDATA),2)+"-"+StrZero(Day(dDATA),2)
+   IF cRETU == "0000-00-00"
+      cRETU := "NULL"
+      cFIM  := ""
    ENDIF
-
-   DO CASE
-   CASE cFOR = "MYS"
-      cRETU := StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 )
-      IF cRETU == "0000-00-00"
-         cRETU := "NULL"
-         cFIM  := ""
-      ENDIF
-   CASE cFOR = "DHZ"
-      cRETU += StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) + " 00:00:00"
-      // CASE cFOR="SQL" acima
-      // cRETU:="convert(datetime, '" + DTOC(dDATA)+ "', 103)"
-   CASE cFOR = "DMY"
-      cRETU += cDIA + cSEP + cMES + cSEP + cANO
-   CASE cFOR = "YMD"
-      cRETU += cANO + cSEP + cMES + cSEP + cDIA
-   CASE cFOR = "MDY"
-      cRETU += cMES + cSEP + cDIA + cSEP + cANO
-   CASE cFOR = "YDM"
-      cRETU += cANO + cSEP + cDIA + cSEP + cMES
-   CASE cFOR = "MY"
-      cRETU += cMES + cSEP + cANO
-   CASE cFOR = "YM"
-      cRETU += cANO + cSEP + cMES
-   CASE cFOR = "YD"
-      cRETU += cANO + cSEP + cDIA
-   CASE cFOR = "DY"
-      cRETU += cDIA + cSEP + cANO
-   CASE cFOR = "DM"
-      cRETU += cDIA + cSEP + cMES
-   CASE cFOR = "MD"
-      cRETU += cMES + cSEP + cDIA
-   CASE cFOR = "Y"
-      cRETU += cANO
-   CASE cFOR = "M"
-      cRETU += cMES
-   CASE cFOR = "D"
-      cRETU += cDIA
-   OTHERWISE   // DMY
-      cRETU += cDIA + cSEP + cMES + cSEP + cANO
-   END CASE
+CASE cFOR = "DHZ"
+   cRETU += StrZero(Year(dDATA),4)+"-"+StrZero(Month(dDATA),2)+"-"+StrZero(Day(dDATA),2)+" 00:00:00"
+   // CASE cFOR="SQL" acima
+   // cRETU:="convert(datetime, '" + DTOC(dDATA)+ "', 103)"
+CASE cFOR = "DMY"
+   cRETU += cDIA+cSEP+cMES+cSEP+cANO
+CASE cFOR = "YMD"
+   cRETU += cANO+cSEP+cMES+cSEP+cDIA
+CASE cFOR = "MDY"
+   cRETU += cMES+cSEP+cDIA+cSEP+cANO
+CASE cFOR = "YDM"
+   cRETU += cANO+cSEP+cDIA+cSEP+cMES
+CASE cFOR = "MY"
+   cRETU += cMES+cSEP+cANO
+CASE cFOR = "YM"
+   cRETU += cANO+cSEP+cMES
+CASE cFOR = "YD"
+   cRETU += cANO+cSEP+cDIA
+CASE cFOR = "DY"
+   cRETU += cDIA+cSEP+cANO
+CASE cFOR = "DM"
+   cRETU += cDIA+cSEP+cMES
+CASE cFOR = "MD"
+   cRETU += cMES+cSEP+cDIA
+CASE cFOR = "Y"
+   cRETU += cANO
+CASE cFOR = "M"
+   cRETU += cMES
+CASE cFOR = "D"
+   cRETU += cDIA
+OTHERWISE   // DMY
+   cRETU += cDIA+cSEP+cMES+cSEP+cANO
+END CASE
 
 
-   IF cFORINI = "MYSQL" .OR. cFORINI = "MYSQL/" .OR. cFORINI = "MYSQL-"
-      IF StrZero( Year( dDATA ), 4 ) + "-" + StrZero( Month( dDATA ), 2 ) + "-" + StrZero( Day( dDATA ), 2 ) == "0000-00-00"
-         cRETU := "NULL"
-         cFIM  := ""
-      ENDIF
+IF cFORINI = "MYSQL" .OR. cFORINI = "MYSQL/" .OR. cFORINI = "MYSQL-"
+   IF StrZero(Year(dDATA),4)+"-"+StrZero(Month(dDATA),2)+"-"+StrZero(Day(dDATA),2) == "0000-00-00"
+      cRETU := "NULL"
+      cFIM  := ""
    ENDIF
+ENDIF
 
-   IF !Empty( cFIM )   // inicia e fecha com # abaixo
-      cRETU += cFIM
-   ENDIF
+IF !Empty(cFIM)   // inicia e fecha com # abaixo
+   cRETU += cFIM
+ENDIF
 
-   RETURN cRETU
+RETURN cRETU
 
 
 // +--------------------------------------------------------------------
@@ -488,72 +523,73 @@ FUNCTION data2str( dData, cFOR, cSEP, cDIG, cINI, cFIM )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION str2data( cDATA, cFOR, cSEP, cDIG )
+FUNCTION str2data(cDATA,cFOR,cSEP,cDIG)
 
-   LOCAL cDIA, cMES, cANO
-   LOCAL dDATA   := CToD( Space( 8 ) )
-   LOCAL nLENANO := 4
+
+LOCAL cDIA,cMES,cANO
+LOCAL dDATA   := CToD(Space(8))
+LOCAL nLENANO := 4
 
 // padrao para o case abaixo
-   IF ValType( cFOR ) # "C"
-      cFOR := "DMA"
-   ENDIF
-   IF cFOR = "DMY"
-      cFOR := "DMA"
-   ENDIF
-   IF ValType( cSEP ) # "C"
-      cSEP := ""
-   ENDIF
-   IF ValType( cDIG ) = "N"
-      cDIG := StrZero( cDIG, 1 )
-   ENDIF
-   IF ValType( cDIG ) # "C"
-      cDIG := ""
-   ENDIF
-   IF Len( cFOR ) = 5  // FFFSD EX: DMY/4
-      CDIG := SubStr( cFOR, 5, 1 )
-      cSEP := SubStr( cFOR, 4, 1 )
-      cFOR := SubStr( cFOR, 1, 3 )
-   ENDIF
-   cSEP := AllTrim( cSEP )   // espaco vira vazio
-   IF cSEP = "2" .OR. cSEP = "4"   // Ano 2 4 digitos passado na quarta posicao
-      cDIG := cSEP
-   ENDIF
-   nLENANO := Val( cDIG )
-   IF nLENANO = 0
-      nLENANO := 4
-   ENDIF
-   IF ValType( cSEP ) = "C"
-      cDATA := StrTran( cDATA, cSEP, "" )
-   ENDIF
-   DO CASE
-   CASE cFOR = "AMD" .OR. cFOR = "YMD"
-      cANO := SubStr( cDATA, 1, nLENANO )
-      cMES := SubStr( cDATA, nLENANO + 1, 2 )
-      cDIA := SubStr( cDATA, nLENANO + 3 )
-   CASE cFOR = "MDA" .OR. cFOR = "MDY"
-      cMES := SubStr( cDATA, 1, 2 )
-      cDIA := SubStr( cDATA, 3, 2 )
-      cANO := SubStr( cDATA, 5 )
-   CASE cFOR = "ADM" .OR. cFOR = "YDM"
-      cANO := SubStr( cDATA, 1, nLENANO )
-      cDIA := SubStr( cDATA, nLENANO + 1, 2 )
-      cMES := SubStr( cDATA, nLENANO + 3 )
-   OTHERWISE   // "DMA" //DMY //Padrao acima
-      cDIA := SubStr( cDATA, 1, 2 )
-      cMES := SubStr( cDATA, 3, 2 )
-      cANO := SubStr( cDATA, 5 )
-   END CASE
-   IF Val( cDIA ) > 0 .AND. Val( cMES ) > 0 .AND. Val( cANO ) > 0
-      IF Val( cDIA ) > 0 .AND. Val( cDIA ) < 32
-         IF Val( cMES ) > 0 .AND. Val( cMES ) < 13
-            cDATA := cDIA + "/" + cMES + "/" + cANO
-            dDATA := CToD( cDATA )
-         ENDIF
+IF ValType(cFOR) # "C"
+   cFOR := "DMA"
+ENDIF
+IF cFOR = "DMY"
+   cFOR := "DMA"
+ENDIF
+IF ValType(cSEP) # "C"
+   cSEP := ""
+ENDIF
+IF ValType(cDIG) = "N"
+   cDIG := StrZero(cDIG,1)
+ENDIF
+IF ValType(cDIG) # "C"
+   cDIG := ""
+ENDIF
+IF Len(cFOR) = 5  // FFFSD EX: DMY/4
+   CDIG := SubStr(cFOR,5,1)
+   cSEP := SubStr(cFOR,4,1)
+   cFOR := SubStr(cFOR,1,3)
+ENDIF
+cSEP := AllTrim(cSEP)   // espaco vira vazio
+IF cSEP = "2" .OR. cSEP = "4"   // Ano 2 4 digitos passado na quarta posicao
+   cDIG := cSEP
+ENDIF
+nLENANO := Val(cDIG)
+IF nLENANO = 0
+   nLENANO := 4
+ENDIF
+IF ValType(cSEP) = "C"
+   cDATA := StrTran(cDATA,cSEP,"")
+ENDIF
+DO CASE
+CASE cFOR = "AMD" .OR. cFOR = "YMD"
+   cANO := SubStr(cDATA,1,nLENANO)
+   cMES := SubStr(cDATA,nLENANO+1,2)
+   cDIA := SubStr(cDATA,nLENANO+3)
+CASE cFOR = "MDA" .OR. cFOR = "MDY"
+   cMES := SubStr(cDATA,1,2)
+   cDIA := SubStr(cDATA,3,2)
+   cANO := SubStr(cDATA,5)
+CASE cFOR = "ADM" .OR. cFOR = "YDM"
+   cANO := SubStr(cDATA,1,nLENANO)
+   cDIA := SubStr(cDATA,nLENANO+1,2)
+   cMES := SubStr(cDATA,nLENANO+3)
+OTHERWISE   // "DMA" //DMY //Padrao acima
+   cDIA := SubStr(cDATA,1,2)
+   cMES := SubStr(cDATA,3,2)
+   cANO := SubStr(cDATA,5)
+END CASE
+IF Val(cDIA) > 0 .AND. Val(cMES) > 0 .AND. Val(cANO) > 0
+   IF Val(cDIA) > 0 .AND. Val(cDIA) < 32
+      IF Val(cMES) > 0 .AND. Val(cMES) < 13
+         cDATA := cDIA+"/"+cMES+"/"+cANO
+         dDATA := CToD(cDATA)
       ENDIF
    ENDIF
+ENDIF
 
-   RETURN dDATA
+RETURN dDATA
 
 
 
@@ -565,41 +601,42 @@ FUNCTION str2data( cDATA, cFOR, cSEP, cDIG )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION DifDatas( dDataInicial, dDataFinal )
+FUNCTION DifDatas(dDataInicial,dDataFinal)
 
-   dDataInicial := UniversalToDate( dDataInicial )
-   dDataFinal   := UniversalToDate( dDataFinal )
 
-   v_dia  := v_mes := v_ano := 0
-   v_anof := Year( dDataFinal )
-   v_mesf := Month( dDataFinal )
-   v_diaf := Day( dDataFinal )
-   v_anoi := Year( dDataInicial )
-   v_mesi := Month( dDataInicial )
-   v_diai := Day( dDataInicial )
-   IF v_diaf < v_diai
-      v_diaf += 30
-      v_mesf -= 1
-   ENDIF
-   v_dia := v_diaf - v_diai
-   IF v_mesf < v_mesi
-      v_mesf += 12
-      v_anof -= 1
-   ENDIF
-   v_mes := v_mesf - v_mesi
-   v_ano := v_anof - v_anoi
-   v_ret := ''
-   IF v_ano > 0
-      v_ret := StrZero( v_ano, 2 ) + IF( v_ano = 1, ' ano', ' anos' ) + IF( v_mes > 0, IF( v_dia > 0, ',', ' e ' ), IF( v_dia > 0, ' e ', '' ) )
-   ENDIF
-   IF v_mes > 0
-      v_ret += StrZero( v_mes, 2 ) + IF( v_mes = 1, ' mes ', ' meses ' ) + IF( v_dia > 0, 'e ', '' )
-   ENDIF
-   IF v_dia > 0
-      v_ret += StrZero( v_dia, 2 ) + IF( v_dia = 1, ' dia', ' dias' )
-   ENDIF
+dDataInicial := UniversalToDate(dDataInicial)
+dDataFinal   := UniversalToDate(dDataFinal)
 
-   RETURN ( v_ret )
+v_dia  := v_mes := v_ano := 0
+v_anof := Year(dDataFinal)
+v_mesf := Month(dDataFinal)
+v_diaf := Day(dDataFinal)
+v_anoi := Year(dDataInicial)
+v_mesi := Month(dDataInicial)
+v_diai := Day(dDataInicial)
+IF v_diaf < v_diai
+   v_diaf += 30
+   v_mesf -= 1
+ENDIF
+v_dia := v_diaf - v_diai
+IF v_mesf < v_mesi
+   v_mesf += 12
+   v_anof -= 1
+ENDIF
+v_mes := v_mesf - v_mesi
+v_ano := v_anof - v_anoi
+v_ret := ''
+IF v_ano > 0
+   v_ret := StrZero(v_ano,2)+IF(v_ano = 1,' ano',' anos')+IF(v_mes > 0,IF(v_dia > 0,',',' e '),IF(v_dia > 0,' e ',''))
+ENDIF
+IF v_mes > 0
+   v_ret += StrZero(v_mes,2)+IF(v_mes = 1,' mes ',' meses ')+IF(v_dia > 0,'e ','')
+ENDIF
+IF v_dia > 0
+   v_ret += StrZero(v_dia,2)+IF(v_dia = 1,' dia',' dias')
+ENDIF
+
+RETURN (v_ret)
 
 
 
@@ -609,38 +646,39 @@ FUNCTION DifDatas( dDataInicial, dDataFinal )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION DIGADATA( dDATA, nDIA, nMES, nANO, cSEP )
+FUNCTION DIGADATA(dDATA,nDIA,nMES,nANO,cSEP)
 
-   LOCAL cDIA := cMES := cANO := cRETU := ""
 
-   dDATA := UniversalToDate( dDATA )
-   cDIA := StrZero( Day( dDATA ), 2 )
-   cMES := StrZero( Month( dDATA ), 2 )
-   cANO := StrZero( Year( dDATA ), 4 )
-   DO CASE
-   CASE nDIA = 1   // dia DD
-      cRETU += cDIA + cSEP
-   CASE nDIA = 2   // Seg  01
-      cRETU += Left( CDIA( dDATA ), 3 ) + cSEP + cDIA + cSEP
-   CASE nDIA = 3   // segunda 01
-      cRETU += CDIA( dDATA ) + cSEP + cDIA + cSEP
-   ENDCASE
-   DO CASE
-   CASE nMES = 1   // mes NN
-      cRETU += cMES + cSEP
-   CASE nMES = 2   // mes CCC jan,fev...
-      cRETU += Left( CMES( dDATA ), 3 ) + cSEP
-   CASE nMES = 3   // mes estenso janeiro,fevereito
-      cRETU += CMES( dDATA ) + cSEP
-   ENDCASE
-   DO CASE
-   CASE nANO = 1   // Ano 2 digitos
-      cRETU += Right( cANO, 2 )
-   CASE nANO = 2   // Ano 4 digitos
-      cRETU += cANO
-   ENDCASE
+LOCAL cDIA := cMES := cANO := cRETU := ""
 
-   RETURN cRETU
+dDATA := UniversalToDate(dDATA)
+cDIA  := StrZero(Day(dDATA),2)
+cMES  := StrZero(Month(dDATA),2)
+cANO  := StrZero(Year(dDATA),4)
+DO CASE
+CASE nDIA = 1   // dia DD
+   cRETU += cDIA+cSEP
+CASE nDIA = 2   // Seg  01
+   cRETU += Left(CDIA(dDATA),3)+cSEP+cDIA+cSEP
+CASE nDIA = 3   // segunda 01
+   cRETU += CDIA(dDATA)+cSEP+cDIA+cSEP
+ENDCASE
+DO CASE
+CASE nMES = 1   // mes NN
+   cRETU += cMES+cSEP
+CASE nMES = 2   // mes CCC jan,fev...
+   cRETU += Left(CMES(dDATA),3)+cSEP
+CASE nMES = 3   // mes estenso janeiro,fevereito
+   cRETU += CMES(dDATA)+cSEP
+ENDCASE
+DO CASE
+CASE nANO = 1   // Ano 2 digitos
+   cRETU += Right(cANO,2)
+CASE nANO = 2   // Ano 4 digitos
+   cRETU += cANO
+ENDCASE
+
+RETURN cRETU
 
 
 // +--------------------------------------------------------------------
@@ -649,11 +687,12 @@ FUNCTION DIGADATA( dDATA, nDIA, nMES, nANO, cSEP )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION Cmes( ddata )
+FUNCTION Cmes(ddata)
 
-   retorno := Mmes( Month( ddata ) )
 
-   RETURN retorno
+retorno := Mmes(Month(ddata))
+
+RETURN retorno
 
 // +--------------------------------------------------------------------
 // +
@@ -664,30 +703,32 @@ FUNCTION Cmes( ddata )
 // +--------------------------------------------------------------------
 // +  Função: Mmes() - Aprimorada com Cache Estático (Lazy Load)
 // +--------------------------------------------------------------------
-FUNCTION Mmes( nmes )
-   STATIC aMeses
+FUNCTION Mmes(nmes)
 
-   IF aMeses == NIL
-      aMeses := { "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", ;
-                  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }
-   ENDIF
+STATIC aMeses
 
-   IF nmes < 1 .OR. nmes > 12
-      RETURN "Erro MES"
-   ENDIF
+IF aMeses == NIL
+   aMeses := {"Janeiro","Fevereiro","Marco","Abril","Maio","Junho",;
+    "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"}
+ENDIF
 
-   RETURN aMeses[ nmes ]
+IF nmes < 1 .OR. nmes > 12
+   RETURN "Erro MES"
+ENDIF
+
+RETURN aMeses[nmes]
 // +--------------------------------------------------------------------
 // +
 // +    Function Cdia() VEM A DATA , RETORNA DIA POR EXTENSO
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION Cdia( ddata )
-    dDATA := UniversalToDate( dDATA )
-   retorno := Ddia( DoW( ddata ) )
+FUNCTION Cdia(ddata)
 
-   RETURN retorno
+dDATA   := UniversalToDate(dDATA)
+retorno := Ddia(DoW(ddata))
+
+RETURN retorno
 
 // +--------------------------------------------------------------------
 // +
@@ -698,18 +739,19 @@ FUNCTION Cdia( ddata )
 // +--------------------------------------------------------------------
 // +  Função: Ddia() - Aprimorada com Cache Estático (Lazy Load)
 // +--------------------------------------------------------------------
-FUNCTION Ddia( ndia )
-   STATIC aDias
+FUNCTION Ddia(ndia)
 
-   IF aDias == NIL
-      aDias := { "Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado" }
-   ENDIF
+STATIC aDias
 
-   IF ndia < 1 .OR. ndia > 7
-      RETURN "Erro DIA"
-   ENDIF
+IF aDias == NIL
+   aDias := {"Domingo","Segunda","Terca","Quarta","Quinta","Sexta","Sabado"}
+ENDIF
 
-   RETURN aDias[ ndia ]
+IF ndia < 1 .OR. ndia > 7
+   RETURN "Erro DIA"
+ENDIF
+
+RETURN aDias[ndia]
 
 // +--------------------------------------------------------------------
 // +
@@ -717,13 +759,14 @@ FUNCTION Ddia( ndia )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION CTOHORA( cHORA AS STRING )
+FUNCTION CTOHORA(cHORA AS STRING)
 
-   cHORA := Left( cHORA, 5 )  // Evita hora com milesimos de segundo mm:ss:dd
-   cHORA := StrTran( cHORA, ":", "." )
-   cHORA := StrTran( cHORA, ":", "." )
 
-   RETURN Val( Chora )
+cHORA := Left(cHORA,5)  // Evita hora com milesimos de segundo mm:ss:dd
+cHORA := StrTran(cHORA,":",".")
+cHORA := StrTran(cHORA,":",".")
+
+RETURN Val(Chora)
 
 
 
@@ -734,41 +777,42 @@ FUNCTION CTOHORA( cHORA AS STRING )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION StrLogic( cVAL, lDEFAULT )
+FUNCTION StrLogic(cVAL,lDEFAULT)
 
-   IF ValType( lDEFAULT ) <> "L"
-      lDEFAULT := .F.
-   ENDIF
-   SWITCH Upper( cVal )
-   CASE ".T."
-   CASE "TRUE"
-   CASE "YES"
-   CASE "SIM"
-   CASE "ON"
-   CASE "Y"
-   CASE "1"
-   CASE "T"
-   CASE "S"
-      RETURN .T.
-   CASE ".F."
-   CASE "FALSE"
-   CASE "NO"
-   CASE "NAO"
-   CASE "OFF"
-   CASE "N"
-   CASE "0"
-   CASE "F"
-   CASE "<NULL>"
-   CASE "NULL"
-   CASE "NUL"
-   CASE "NIL"
-      RETURN .F.
-   ENDSWITCH
 
-   RETURN lDEFAULT
-   
-   
-   
+IF ValType(lDEFAULT) <> "L"
+   lDEFAULT := .F.
+ENDIF
+SWITCH Upper(cVal)
+CASE ".T."
+CASE "TRUE"
+CASE "YES"
+CASE "SIM"
+CASE "ON"
+CASE "Y"
+CASE "1"
+CASE "T"
+CASE "S"
+   RETURN .T.
+CASE ".F."
+CASE "FALSE"
+CASE "NO"
+CASE "NAO"
+CASE "OFF"
+CASE "N"
+CASE "0"
+CASE "F"
+CASE "<NULL>"
+CASE "NULL"
+CASE "NUL"
+CASE "NIL"
+   RETURN .F.
+ENDSWITCH
+
+RETURN lDEFAULT
+
+
+
 
 
 // +--------------------------------------------------------------------
@@ -777,40 +821,41 @@ FUNCTION StrLogic( cVAL, lDEFAULT )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION Logic2Str( lValor, cFORMATO )
+FUNCTION Logic2Str(lValor,cFORMATO)
 
-   LOCAL cRETURN AS STRING
 
-   IF ValType( lVALOR ) <> "L"
-      lVALOR := .F.
-   ENDIF
-   IF ValType( cFORMATO ) <> "C"
-      cFORMATO := ""   // escolhe otherwise SIM NAO
-   ENDIF
-   cFORMATO := AllTrim( cFORMATO )
-   cRETURN  := ""
-   DO CASE
-   CASE cFORMATO = ".T."
-      cRETURN := IF( lVALOR, ".T.", ".F." )
-   CASE cFORMATO = "TRUE"
-      cRETURN := IF( lVALOR, "TRUE", "FALSE" )
-   CASE cFORMATO = "YES"
-      cRETURN := IF( lVALOR, "YES", "NO" )
-   CASE cFORMATO = "SIM"
-      cRETURN := IF( lVALOR, "SIM", "NAO" )
-   CASE cFORMATO = "ON"
-      cRETURN := IF( lVALOR, "ON", "OFF" )
-   CASE cFORMATO = "Y"
-      cRETURN := IF( lVALOR, "Y", "N" )
-   CASE cFORMATO = "1"
-      cRETURN := IF( lVALOR, "1", "0" )
-   CASE cFORMATO = "T"
-      cRETURN := IF( lVALOR, "T", "F" )
-   OTHERWISE
-      cRETURN := IF( lVALOR, "SIM", "NAO" )
-   ENDCASE
+LOCAL cRETURN AS STRING
 
-   RETURN cRETURN
+IF ValType(lVALOR) <> "L"
+   lVALOR := .F.
+ENDIF
+IF ValType(cFORMATO) <> "C"
+   cFORMATO := ""   // escolhe otherwise SIM NAO
+ENDIF
+cFORMATO := AllTrim(cFORMATO)
+cRETURN  := ""
+DO CASE
+CASE cFORMATO = ".T."
+   cRETURN := IF(lVALOR,".T.",".F.")
+CASE cFORMATO = "TRUE"
+   cRETURN := IF(lVALOR,"TRUE","FALSE")
+CASE cFORMATO = "YES"
+   cRETURN := IF(lVALOR,"YES","NO")
+CASE cFORMATO = "SIM"
+   cRETURN := IF(lVALOR,"SIM","NAO")
+CASE cFORMATO = "ON"
+   cRETURN := IF(lVALOR,"ON","OFF")
+CASE cFORMATO = "Y"
+   cRETURN := IF(lVALOR,"Y","N")
+CASE cFORMATO = "1"
+   cRETURN := IF(lVALOR,"1","0")
+CASE cFORMATO = "T"
+   cRETURN := IF(lVALOR,"T","F")
+OTHERWISE
+   cRETURN := IF(lVALOR,"SIM","NAO")
+ENDCASE
+
+RETURN cRETURN
 
 
 // +--------------------------------------------------------------------
@@ -825,73 +870,74 @@ FUNCTION Logic2Str( lValor, cFORMATO )
 // +--------------------------------------------------------------------
 // +
 
-FUNCTION Strval( xdado, nLEN, nDEC, cSEPDEC, lESPACO )
+FUNCTION Strval(xdado,nLEN,nDEC,cSEPDEC,lESPACO)
 
-   LOCAL retval := "", i, cVALTYPE
 
-   IF ValType( lESPACO ) # "L"
-      lESPACO := .F.
+LOCAL retval := "",i,cVALTYPE
+
+IF ValType(lESPACO) # "L"
+   lESPACO := .F.
+ENDIF
+cVALTYPE := ValType(xdado)
+DO CASE
+CASE Cvaltype = "C"
+   retval := xdado
+CASE Cvaltype = "M"
+   retval := hb_StrToExp(xDADO)
+CASE Cvaltype = "A"
+   retval := hb_ValToExp(xDADO)
+   IF ValType(cSEPDEC) = "C"
+      IF cSEPDEC <> ","
+         retval := StrTran(retval,",",cSEPDEC)
+      ENDIF
+      retval := StrTran(retval,"{","")
+      retval := StrTran(retval,"}","")
    ENDIF
-   cVALTYPE := ValType( xdado )
+CASE cvaltype = "B" .OR. cvaltype = "O" .OR. cvaltype = "S" .OR. cvaltype = "H"
+   retval := hb_ValToExp(xDADO)
+CASE cvaltype = "T"
+   retval := hb_TSToStr(xDADO)
+   IF ValType(cSEPDEC) = "C"
+      i      := At (" ",retval)
+      retval := data2str(SToD(StrTran(SubStr(retval,1,i - 1),"-","")),cSEPDEC)+" "+SubStr(retval,i+1,8)
+   ENDIF
+CASE cvaltype = "D"
+   IF ValType(cSEPDEC) = "C"
+      retval := data2str(xdado,cSEPDEC)
+   ELSE
+      retval := DToC(xdado)
+   ENDIF
+CASE cvaltype = "N"
    DO CASE
-   CASE Cvaltype = "C"
-      retval := xdado
-   CASE Cvaltype = "M"
-      retval := hb_StrToExp( xDADO )
-   CASE Cvaltype = "A"
-      retval := hb_ValToExp( xDADO )
-      IF ValType( cSEPDEC ) = "C"
-         IF cSEPDEC <> ","
-            retval := StrTran( retval, ",", cSEPDEC )
-         ENDIF
-         retval := StrTran( retval, "{", "" )
-         retval := StrTran( retval, "}", "" )
-      ENDIF
-   CASE cvaltype = "B" .OR. cvaltype = "O" .OR. cvaltype = "S" .OR. cvaltype = "H"
-      retval := hb_ValToExp( xDADO )
-   CASE cvaltype = "T"
-      retval := hb_TSToStr( xDADO )
-      IF ValType( cSEPDEC ) = "C"
-         i      := At( " ", retval )
-         retval := data2str( SToD( StrTran( SubStr( retval, 1, i - 1 ), "-", "" ) ), cSEPDEC ) + " " + SubStr( retval, i + 1, 8 )
-      ENDIF
-   CASE cvaltype = "D"
-      IF ValType( cSEPDEC ) = "C"
-         retval := data2str( xdado, cSEPDEC )
-      ELSE
-         retval := DToC( xdado )
-      ENDIF
-   CASE cvaltype = "N"
-      DO CASE
-      CASE ValType( nLEN ) = "N" .AND. ValType( nDEC ) = "N"
-         retval := Str( xdado, nLEN, nDEC )
-      CASE ValType( nLEN ) = "N"
-         retval := Str( xdado, nLEN )
-      OTHERWISE
-         retval := hb_ntos( xdado )
-      ENDCASE
-      IF ValType( cSEPDEC ) = "C"  // troca separador decimal . por outro como ,
-         IF cSEPDEC <> "."   // se for ponto nada faz
-            retval := StrTran( retval, ".", cSEPDEC )
-         ENDIF
-      ENDIF
-   CASE cvaltype = "L"
-      retval := Logic2Str( xdado, cSEPDEC )   // if( xdado, "Sim", "Nao" )
+   CASE ValType(nLEN) = "N" .AND. ValType(nDEC) = "N"
+      retval := Str(xdado,nLEN,nDEC)
+   CASE ValType(nLEN) = "N"
+      retval := Str(xdado,nLEN)
    OTHERWISE
-      DO CASE
-      CASE xDADO == NIL
-         cVal := "NIL"
-      CASE cvaltype = "U"
-         retval := "<NULL>"
-      OTHERWISE
-         retval := hb_ValToExp( xDADO )
-      ENDCASE
+      retval := hb_ntos(xdado)
    ENDCASE
-   IF lESPACO
-      retval := AllTrim( retval )
+   IF ValType(cSEPDEC) = "C"  // troca separador decimal . por outro como ,
+      IF cSEPDEC <> "."   // se for ponto nada faz
+         retval := StrTran(retval,".",cSEPDEC)
+      ENDIF
    ENDIF
+CASE cvaltype = "L"
+   retval := Logic2Str(xdado,cSEPDEC)   // if( xdado, "Sim", "Nao" )
+OTHERWISE
+   DO CASE
+   CASE xDADO == NIL
+      cVal := "NIL"
+   CASE cvaltype = "U"
+      retval := "<NULL>"
+   OTHERWISE
+      retval := hb_ValToExp(xDADO)
+   ENDCASE
+ENDCASE
+IF lESPACO
+   retval := AllTrim(retval)
+ENDIF
 
-   RETURN ( retval )
+RETURN (retval)
 
 
 // +--------------------------------------------------------------------
@@ -902,13 +948,14 @@ FUNCTION Strval( xdado, nLEN, nDEC, cSEPDEC, lESPACO )
 // +
 FUNCTION CHOR
 
-   PARA QTHOR
 
-   QT1 := Int( QTHOR )
-   QT2 := QTHOR - QT1
-   QT3 := QT2 * 10 / 6
+PARA QTHOR
 
-   RETURN ( QT1 + QT3 )
+QT1 := Int(QTHOR)
+QT2 := QTHOR - QT1
+QT3 := QT2 * 10 / 6
+
+RETURN (QT1+QT3)
 
 // +--------------------------------------------------------------------
 // +
@@ -918,35 +965,37 @@ FUNCTION CHOR
 // +
 FUNCTION BHOR
 
-   PARA QTHOR
 
-   QT1 := Int( QTHOR )
-   QT2 := QTHOR - QT1
-   QT3 := Round( QT2 * 6 / 10, 2 )
+PARA QTHOR
 
-   RETURN ( QT1 + QT3 )
+QT1 := Int(QTHOR)
+QT2 := QTHOR - QT1
+QT3 := Round(QT2 * 6 / 10,2)
+
+RETURN (QT1+QT3)
 
 
 // +--------------------------------------------------------------------
 // +
 // +    Function geotodec(cVAL,cHEM) convert posicao geo para decimal)
-// +                      posicao, hemisferio 
+// +                      posicao, hemisferio
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION geotodec( cVAL, cHEM )
+FUNCTION geotodec(cVAL,cHEM)
 
-   LOCAL nVAL
 
-   nVAL := Val( SubStr( cVAL, 1, 2 ) )
-   nVAL += Val( SubStr( cVAL, 3, 2 ) ) / 60
-   nVAL += Val( SubStr( cVAL, 5, 2 ) ) / 3600
-   nVAL += Val( SubStr( cVAL, 7, 2 ) ) / 216000
-   IF cHEM = "S"   // Hemisferio sul coordenada negativas
-      nVAL *= -1
-   ENDIF
+LOCAL nVAL
 
-   RETURN nVAL
+nVAL := Val(SubStr(cVAL,1,2))
+nVAL += Val(SubStr(cVAL,3,2)) / 60
+nVAL += Val(SubStr(cVAL,5,2)) / 3600
+nVAL += Val(SubStr(cVAL,7,2)) / 216000
+IF cHEM = "S"   // Hemisferio sul coordenada negativas
+   nVAL *= - 1
+ENDIF
+
+RETURN nVAL
 
 // +--------------------------------------------------------------------
 // +
@@ -962,24 +1011,25 @@ FUNCTION geotodec( cVAL, cHEM )
 // +--------------------------------------------------------------------
 // +
 
-FUNCTION calcgeokm( lat1, lon1, lat2, lon2, unit )
+FUNCTION calcgeokm(lat1,lon1,lat2,lon2,unit)
 
-   IF ValType( unit ) # "C"
-      UNIT := "K"
-   ENDIF
-   theta := lon1 - lon2
-   dist  := Sin( deg2rad( lat1 ) ) * Sin( deg2rad( lat2 ) ) + Cos( deg2rad( lat1 ) ) * Cos( deg2rad( lat2 ) ) * Cos( deg2rad( theta ) )
-   dist  := Acos( dist )
-   dist  := rad2deg( dist )
-   dist  := dist * 60 * 1.1515
-   IF unit = 'K'
-      dist := dist * 1.609344
-   ENDIF
-   IF unit = "N"
-      dist := dist * 0.8684
-   ENDIF
 
-   RETURN dist
+IF ValType(unit) # "C"
+   UNIT := "K"
+ENDIF
+theta := lon1 - lon2
+dist  := Sin(deg2rad(lat1)) * Sin(deg2rad(lat2))+Cos(deg2rad(lat1)) * Cos(deg2rad(lat2)) * Cos(deg2rad(theta))
+dist  := Acos(dist)
+dist  := rad2deg(dist)
+dist  := dist * 60 * 1.1515
+IF unit = 'K'
+   dist := dist * 1.609344
+ENDIF
+IF unit = "N"
+   dist := dist * 0.8684
+ENDIF
+
+RETURN dist
 
 // +--------------------------------------------------------------------
 // +
@@ -987,9 +1037,10 @@ FUNCTION calcgeokm( lat1, lon1, lat2, lon2, unit )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION deg2rad( deg )
+FUNCTION deg2rad(deg)
 
-   RETURN ( deg * PI() / 180.0 )
+
+RETURN (deg * PI() / 180.0)
 
 // +--------------------------------------------------------------------
 // +
@@ -997,9 +1048,10 @@ FUNCTION deg2rad( deg )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION rad2deg( rad )
+FUNCTION rad2deg(rad)
 
-   RETURN ( rad / PI() * 180.0 )
+
+RETURN (rad / PI() * 180.0)
 
 
 
@@ -1044,9 +1096,10 @@ FUNCTION rad2deg( rad )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION MinutoToHora( horas )
+FUNCTION MinutoToHora(horas)
 
-   RETURN Int( horas / 60 ) + ( Mod( horas, 60 ) / 100 )
+
+RETURN Int(horas / 60)+(Mod(horas,60) / 100)
 
 
 // +--------------------------------------------------------------------
@@ -1057,241 +1110,286 @@ FUNCTION MinutoToHora( horas )
 // +
 FUNCTION aconvertend()
 
-   LOCAL aCNV := {}
 
-   AAdd( aCNV, { "R ", "R" } )
-   AAdd( aCNV, { "RU ", "R" } )
-   AAdd( aCNV, { "R.", "R" } )
-   AAdd( aCNV, { "R:", "R" } )
-   AAdd( aCNV, { "RUA ", "R" } )
-   AAdd( aCNV, { "RUA:", "R" } )
-   AAdd( aCNV, { "AVENIDA ", "AV" } )
-   AAdd( aCNV, { "TRAVESSA ", "TV" } )
-   AAdd( aCNV, { "TRAVES ", "TV" } )
-   AAdd( aCNV, { "TRAV ", "TV" } )
-   AAdd( aCNV, { "TR ", "TV" } )
-   AAdd( aCNV, { "TR.", "TV" } )
-   AAdd( aCNV, { "ESTRADA ", "EST" } )
-   AAdd( aCNV, { "EST.", "EST" } )
-   AAdd( aCNV, { "E.", "EST" } )
-   AAdd( aCNV, { "EST ", "EST" } )
-   AAdd( aCNV, { "VIELA ", "VLA" } )
-   AAdd( aCNV, { "AV ", "AV" } )
-   AAdd( aCNV, { "AV.", "AV" } )
-   AAdd( aCNV, { "ALAMEDA ", "AL" } )
-   AAdd( aCNV, { "AL.", "AL" } )
-   AAdd( aCNV, { "AL ", "AL" } )
-   AAdd( aCNV, { "RODOVIA ", "ROD" } )
-   AAdd( aCNV, { "ROD ", "ROD" } )
-   AAdd( aCNV, { "PRACA ", "PC" } )
-   AAdd( aCNV, { "PCA ", "PC" } )
-   AAdd( aCNV, { "ACESSO ", "AC" } )
-   AAdd( aCNV, { "BECO ", "BC" } )
-   AAdd( aCNV, { "CALCADA ", "CALC" } )
-   AAdd( aCNV, { "VIADUTO", "VD" } )
-   AAdd( aCNV, { "LADEIRA", "LD" } )
-   AAdd( aCNV, { "PASSAGEM", "PSG" } )
+LOCAL aCNV := {}
 
-   RETURN aCNV
+AAdd(aCNV,{"R ","R"})
+AAdd(aCNV,{"RU ","R"})
+AAdd(aCNV,{"R.","R"})
+AAdd(aCNV,{"R:","R"})
+AAdd(aCNV,{"RUA ","R"})
+AAdd(aCNV,{"RUA:","R"})
+AAdd(aCNV,{"AVENIDA ","AV"})
+AAdd(aCNV,{"TRAVESSA ","TV"})
+AAdd(aCNV,{"TRAVES ","TV"})
+AAdd(aCNV,{"TRAV ","TV"})
+AAdd(aCNV,{"TR ","TV"})
+AAdd(aCNV,{"TR.","TV"})
+AAdd(aCNV,{"ESTRADA ","EST"})
+AAdd(aCNV,{"EST.","EST"})
+AAdd(aCNV,{"E.","EST"})
+AAdd(aCNV,{"EST ","EST"})
+AAdd(aCNV,{"VIELA ","VLA"})
+AAdd(aCNV,{"AV ","AV"})
+AAdd(aCNV,{"AV.","AV"})
+AAdd(aCNV,{"ALAMEDA ","AL"})
+AAdd(aCNV,{"AL.","AL"})
+AAdd(aCNV,{"AL ","AL"})
+AAdd(aCNV,{"RODOVIA ","ROD"})
+AAdd(aCNV,{"ROD ","ROD"})
+AAdd(aCNV,{"PRACA ","PC"})
+AAdd(aCNV,{"PCA ","PC"})
+AAdd(aCNV,{"ACESSO ","AC"})
+AAdd(aCNV,{"BECO ","BC"})
+AAdd(aCNV,{"CALCADA ","CALC"})
+AAdd(aCNV,{"VIADUTO","VD"})
+AAdd(aCNV,{"LADEIRA","LD"})
+AAdd(aCNV,{"PASSAGEM","PSG"})
+
+RETURN aCNV
 
 // +--------------------------------------------------------------------
 // +  Função: UniversalToDate
 // +  Aprimorada: hb_Hash() multi-idioma substituindo AScan (Performance)
 // +--------------------------------------------------------------------
-FUNCTION UniversalToDate( xData )
 
-   LOCAL dResult := CToD( "" )
-   LOCAL cFormatOrig := Set( _SET_DATEFORMAT, "dd/mm/yyyy" )
-   LOCAL cData, cLimpa, nLen, cTemp, aParts 
-   LOCAL i, nMes, cMes, cAno, cDia, nDia, nAno, cMesStr, cCleanData
-   
-   // Dicionário Estático para mapeamento ultra-rápido PT/EN
-   STATIC hMesesStr
-   
-   IF hMesesStr == NIL
-      hMesesStr := hb_Hash()
-      hb_HSet( hMesesStr, "JAN", 1 )
-      hb_HSet( hMesesStr, "FEV", 2 ); hb_HSet( hMesesStr, "FEB", 2 )
-      hb_HSet( hMesesStr, "MAR", 3 )
-      hb_HSet( hMesesStr, "ABR", 4 ); hb_HSet( hMesesStr, "APR", 4 )
-      hb_HSet( hMesesStr, "MAI", 5 ); hb_HSet( hMesesStr, "MAY", 5 )
-      hb_HSet( hMesesStr, "JUN", 6 )
-      hb_HSet( hMesesStr, "JUL", 7 )
-      hb_HSet( hMesesStr, "AGO", 8 ); hb_HSet( hMesesStr, "AUG", 8 )
-      hb_HSet( hMesesStr, "SET", 9 ); hb_HSet( hMesesStr, "SEP", 9 )
-      hb_HSet( hMesesStr, "OUT", 10); hb_HSet( hMesesStr, "OCT", 10)
-      hb_HSet( hMesesStr, "NOV", 11)
-      hb_HSet( hMesesStr, "DEZ", 12); hb_HSet( hMesesStr, "DEC", 12)
-   ENDIF
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function UniversalToDate()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION UniversalToDate(xData)
 
-   IF ValType( xData ) == "D" .OR. ValType( xData ) == "T"
-      Set( _SET_DATEFORMAT, cFormatOrig )
-      RETURN xData
-   ENDIF
 
-   IF ValType( xData ) <> "C" .OR. Empty( xData )
-      Set( _SET_DATEFORMAT, cFormatOrig )
-      RETURN dResult
-   ENDIF
+LOCAL dResult     := CToD("")
+LOCAL cFormatOrig := Set(_SET_DATEFORMAT,"dd/mm/yyyy")
+LOCAL cData,cLimpa,nLen,cTemp,aParts
+LOCAL i,nMes,cMes,cAno,cDia,nDia,nAno,cMesStr,cCleanData
 
-   cCleanData := Upper( AllTrim( xData ) )
+// Dicionário Estático para mapeamento ultra-rápido PT/EN
+STATIC hMesesStr
 
-   IF cCleanData == "NULL" .OR. cCleanData == "NIL" .OR. cCleanData == "<NULL>" .OR. cCleanData == "NUL" .OR. cCleanData == "/  /" .OR. cCleanData == "-  -"
-      RETURN dResult
-   ENDIF
+IF hMesesStr == NIL
+   hMesesStr := hb_Hash()
+   hb_HSet(hMesesStr,"JAN",1)
+   hb_HSet(hMesesStr,"FEV",2) 
+   hb_HSet(hMesesStr,"FEB",2)
+   hb_HSet(hMesesStr,"MAR",3)
+   hb_HSet(hMesesStr,"ABR",4) 
+   hb_HSet(hMesesStr,"APR",4)
+   hb_HSet(hMesesStr,"MAI",5) 
+   hb_HSet(hMesesStr,"MAY",5)
+   hb_HSet(hMesesStr,"JUN",6)
+   hb_HSet(hMesesStr,"JUL",7)
+   hb_HSet(hMesesStr,"AGO",8) 
+   hb_HSet(hMesesStr,"AUG",8)
+   hb_HSet(hMesesStr,"SET",9) 
+   hb_HSet(hMesesStr,"SEP",9)
+   hb_HSet(hMesesStr,"OUT",10) 
+   hb_HSet(hMesesStr,"OCT",10)
+   hb_HSet(hMesesStr,"NOV",11)
+   hb_HSet(hMesesStr,"DEZ",12) 
+   hb_HSet(hMesesStr,"DEC",12)
+ENDIF
 
-   cData := AllTrim( xData )
-   cTemp := cData
-   cTemp := StrTran( cTemp, ",", " " )
-   cTemp := StrTran( cTemp, "-", " " )
+IF ValType(xData) == "D" .OR. ValType(xData) == "T"
+   Set(_SET_DATEFORMAT,cFormatOrig)
+   RETURN xData
+ENDIF
 
-   DO WHILE "  " $ cTemp
-      cTemp := StrTran( cTemp, "  ", " " )
-   ENDDO
+IF ValType(xData) <> "C" .OR. Empty(xData)
+   Set(_SET_DATEFORMAT,cFormatOrig)
+   RETURN dResult
+ENDIF
 
-   aParts := hb_ATokens( AllTrim( cTemp ), " " )
+cCleanData := Upper(AllTrim(xData))
 
-   IF Len( aParts ) >= 4
-      FOR i := 1 TO Len( aParts )
-         cMesStr := Upper( Left( aParts[ i ], 3 ) )
-         
-         // Pesquisa instantânea via Tabela Hash
-         IF hb_HHasKey( hMesesStr, cMesStr )
-            nMes := hb_HGet( hMesesStr, cMesStr )
-            cMes := StrZero( nMes, 2 )
-            
-            IF i == 2 .AND. Len( aParts ) >= 5
-               cDia := StrZero( Val( aParts[ 3 ] ), 2 )
-               cAno := aParts[ 5 ]
-            ELSEIF i == 3 
-               cDia := StrZero( Val( aParts[ 2 ] ), 2 )
-               cAno := aParts[ 4 ]
-               IF Len( cAno ) == 2
-                  nAno := Val( cAno )
-                  cAno := iif( nAno < 50, "20" + cAno, "19" + cAno )
-               ENDIF
-            ELSE
-               LOOP 
+IF cCleanData == "NULL" .OR. cCleanData == "NIL" .OR. cCleanData == "<NULL>" .OR. cCleanData == "NUL" .OR. cCleanData == "/  /" .OR. cCleanData == "-  -"
+   RETURN dResult
+ENDIF
+
+cData := AllTrim(xData)
+cTemp := cData
+cTemp := StrTran(cTemp,","," ")
+cTemp := StrTran(cTemp,"-"," ")
+
+DO WHILE "  " $ cTemp
+   cTemp := StrTran(cTemp,"  "," ")
+ENDDO
+
+aParts := hb_ATokens(AllTrim(cTemp)," ")
+
+IF Len(aParts) >= 4
+   FOR i := 1 TO Len(aParts)
+      cMesStr := Upper(Left(aParts[i],3))
+
+      // Pesquisa instantânea via Tabela Hash
+      IF hb_HHasKey(hMesesStr,cMesStr)
+         nMes := hb_HGet(hMesesStr,cMesStr)
+         cMes := StrZero(nMes,2)
+
+         IF i == 2 .AND. Len(aParts) >= 5
+            cDia := StrZero(Val(aParts[3]),2)
+            cAno := aParts[5]
+         ELSEIF i == 3
+            cDia := StrZero(Val(aParts[2]),2)
+            cAno := aParts[4]
+            IF Len(cAno) == 2
+               nAno := Val(cAno)
+               cAno := iif(nAno < 50,"20"+cAno,"19"+cAno)
             ENDIF
-            
-            nDia := Val( cDia )
-            nAno := Val( cAno )
-            
-            IF nDia >= 1 .AND. nDia <= 31 .AND. nAno >= 1000 .AND. Len( cAno ) == 4
-               dResult := SToD( cAno + cMes + cDia )
-               IF !Empty( dResult )
-                  Set( _SET_DATEFORMAT, cFormatOrig )
-                  RETURN dResult
-               ENDIF
+         ELSE
+            LOOP
+         ENDIF
+
+         nDia := Val(cDia)
+         nAno := Val(cAno)
+
+         IF nDia >= 1 .AND. nDia <= 31 .AND. nAno >= 1000 .AND. Len(cAno) == 4
+            dResult := SToD(cAno+cMes+cDia)
+            IF !Empty(dResult)
+               Set(_SET_DATEFORMAT,cFormatOrig)
+               RETURN dResult
             ENDIF
          ENDIF
-      NEXT
+      ENDIF
+   NEXT
+ENDIF
+
+cTemp  := cData
+cTemp  := StrTran(cTemp,"-","/")
+cTemp  := StrTran(cTemp,".","/")
+aParts := hb_ATokens(cTemp,"/")
+
+IF Len(aParts) == 3
+   IF Len(aParts[1]) == 4
+      dResult := CToD(StrZero(Val(aParts[3]),2)+"/"+;
+       StrZero(Val(aParts[2]),2)+"/"+;
+       aParts[1])
+   ELSE
+      dResult := CToD(StrZero(Val(aParts[1]),2)+"/"+;
+       StrZero(Val(aParts[2]),2)+"/"+;
+       aParts[3])
    ENDIF
 
-   cTemp  := cData 
-   cTemp  := StrTran( cTemp, "-", "/" )
-   cTemp  := StrTran( cTemp, ".", "/" )
-   aParts := hb_ATokens( cTemp, "/" )
-
-   IF Len( aParts ) == 3
-      IF Len( aParts[ 1 ] ) == 4
-         dResult := CToD( StrZero( Val( aParts[ 3 ] ), 2 ) + "/" + ;
-                          StrZero( Val( aParts[ 2 ] ), 2 ) + "/" + ;
-                          aParts[ 1 ] )
-      ELSE
-         dResult := CToD( StrZero( Val( aParts[ 1 ] ), 2 ) + "/" + ;
-                          StrZero( Val( aParts[ 2 ] ), 2 ) + "/" + ;
-                          aParts[ 3 ] )
-      ENDIF
-      
-      Set( _SET_DATEFORMAT, cFormatOrig )
-      RETURN dResult
-   ENDIF
-
-   cLimpa := StrTran( cData, "/", "" )
-   cLimpa := StrTran( cLimpa, "-", "" )
-   cLimpa := StrTran( cLimpa, ".", "" )
-   cLimpa := AllTrim( cLimpa )
-   nLen   := Len( cLimpa )
-
-   DO CASE
-   CASE nLen == 8
-      IF Val( Left( cLimpa, 4 ) ) > 1900
-         dResult := CToD( SubStr( cLimpa, 7, 2 ) + "/" + SubStr( cLimpa, 5, 2 ) + "/" + Left( cLimpa, 4 ) )
-      ELSE
-         dResult := CToD( Left( cLimpa, 2 ) + "/" + SubStr( cLimpa, 3, 2 ) + "/" + Right( cLimpa, 4 ) )
-      ENDIF
-
-   CASE nLen == 6
-      dResult := CToD( Left( cLimpa, 2 ) + "/" + SubStr( cLimpa, 3, 2 ) + "/" + Right( cLimpa, 2 ) )
-
-   OTHERWISE
-      dResult := CToD( cData )
-   ENDCASE
-
-   Set( _SET_DATEFORMAT, cFormatOrig )
+   Set(_SET_DATEFORMAT,cFormatOrig)
    RETURN dResult
-   
-   
-   // +--------------------------------------------------------------------
+ENDIF
+
+cLimpa := StrTran(cData,"/","")
+cLimpa := StrTran(cLimpa,"-","")
+cLimpa := StrTran(cLimpa,".","")
+cLimpa := AllTrim(cLimpa)
+nLen   := Len(cLimpa)
+
+DO CASE
+CASE nLen == 8
+   IF Val(Left(cLimpa,4)) > 1900
+      dResult := CToD(SubStr(cLimpa,7,2)+"/"+SubStr(cLimpa,5,2)+"/"+Left(cLimpa,4))
+   ELSE
+      dResult := CToD(Left(cLimpa,2)+"/"+SubStr(cLimpa,3,2)+"/"+Right(cLimpa,4))
+   ENDIF
+
+CASE nLen == 6
+   dResult := CToD(Left(cLimpa,2)+"/"+SubStr(cLimpa,3,2)+"/"+Right(cLimpa,2))
+
+OTHERWISE
+   dResult := CToD(cData)
+ENDCASE
+
+Set(_SET_DATEFORMAT,cFormatOrig)
+RETURN dResult
+
+
+// +--------------------------------------------------------------------
 // +  Função: UniversalDateTime
 // +  Objetivo: Tratar datas complexas mantendo e corrigindo o horário
 // +  Retorna: Timestamp nativo (T) de alta precisão
 // +--------------------------------------------------------------------
-FUNCTION UniversalDateTime( xData )
 
-   LOCAL cStr, cDataLimpa, aParts, i, dData
-   LOCAL cTime := "00:00:00"
-   LOCAL nHour := 0, nMin := 0, nSec := 0
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function UniversalDateTime()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION UniversalDateTime(xData)
 
-   // 1. Já é Data ou Timestamp? Trata a conversão direta
-   IF ValType( xData ) == "T"
-      RETURN xData
-   ELSEIF ValType( xData ) == "D"
-      RETURN hb_DateTime( Year(xData), Month(xData), Day(xData) )
+
+LOCAL cStr,cDataLimpa,aParts,i,dData
+LOCAL cTime := "00:00:00"
+LOCAL nHour := 0,nMin := 0,nSec := 0
+
+// 1. Já é Data ou Timestamp? Trata a conversão direta
+IF ValType(xData) == "T"
+   RETURN xData
+ELSEIF ValType(xData) == "D"
+   RETURN hb_DateTime(Year(xData),Month(xData),Day(xData))
+ENDIF
+
+// 2. Barreira para nulos ou variáveis não suportadas
+IF ValType(xData) <> "C" .OR. Empty(xData)
+   RETURN hb_DateTime(0,0,0)
+ENDIF
+
+// 3. Limpa espaços e conserta erros como ";" ou tags ISO "T"
+cStr := AllTrim(xData)
+cStr := StrTran(cStr,";",":")
+cStr := StrTran(cStr,"T"," ")
+
+aParts     := hb_ATokens(cStr," ")
+cDataLimpa := ""
+
+// 4. Caçador de Horários
+FOR i := 1 TO Len(aParts)
+   IF ":" $ aParts[i] .AND. Val(StrTran(aParts[i],":","")) >= 0
+      cTime := aParts[i]  // Isola apenas a hora encontrada
+   ELSE
+      cDataLimpa += aParts[i]+" "   // Reconstrói string base só da data
    ENDIF
+NEXT
 
-   // 2. Barreira para nulos ou variáveis não suportadas
-   IF ValType( xData ) <> "C" .OR. Empty( xData )
-      RETURN hb_DateTime( 0, 0, 0 )
-   ENDIF
+cDataLimpa := AllTrim(cDataLimpa)
 
-   // 3. Limpa espaços e conserta erros como ";" ou tags ISO "T"
-   cStr := AllTrim( xData )
-   cStr := StrTran( cStr, ";", ":" )
-   cStr := StrTran( cStr, "T", " " )
+// 5. Utiliza o motor otimizado para extrair o calendário válido
+dData := UniversalToDate(cDataLimpa)
 
-   aParts := hb_ATokens( cStr, " " )
-   cDataLimpa := ""
+// Fallback se a rotina retornar vazio, checa direto via Harbour CToD
+IF Empty(dData) .AND. !Empty(CToD(cDataLimpa))
+   dData := CToD(cDataLimpa)
+ENDIF
 
-   // 4. Caçador de Horários
-   FOR i := 1 TO Len( aParts )
-      IF ":" $ aParts[i] .AND. Val( StrTran( aParts[i], ":", "" ) ) >= 0
-         cTime := aParts[i] // Isola apenas a hora encontrada
-      ELSE
-         cDataLimpa += aParts[i] + " " // Reconstrói string base só da data
-      ENDIF
-   NEXT
+IF Empty(dData)
+   RETURN hb_DateTime(0,0,0)
+ENDIF
 
-   cDataLimpa := AllTrim( cDataLimpa )
-   
-   // 5. Utiliza o motor otimizado para extrair o calendário válido
-   dData := UniversalToDate( cDataLimpa )
+// 6. Separa e converte as partes do Horário
+aParts := hb_ATokens(cTime,":")
+IF Len(aParts) >= 1 
+   nHour := Val(aParts[1])
+ENDIF
+IF Len(aParts) >= 2 
+   nMin := Val(aParts[2])
+ENDIF
+IF Len(aParts) >= 3 
+   nSec := Val(aParts[3])
+ENDIF
 
-   // Fallback se a rotina retornar vazio, checa direto via Harbour CToD
-   IF Empty( dData ) .AND. !Empty( CToD( cDataLimpa ) )
-      dData := CToD( cDataLimpa )
-   ENDIF
+// 7. Retorna o Objeto Timestamp Oficial
+RETURN hb_DateTime(Year(dData),Month(dData),Day(dData),nHour,nMin,nSec)
 
-   IF Empty( dData )
-      RETURN hb_DateTime( 0, 0, 0 )
-   ENDIF
-
-   // 6. Separa e converte as partes do Horário
-   aParts := hb_ATokens( cTime, ":" )
-   IF Len( aParts ) >= 1; nHour := Val( aParts[1] ); ENDIF
-   IF Len( aParts ) >= 2; nMin  := Val( aParts[2] ); ENDIF
-   IF Len( aParts ) >= 3; nSec  := Val( aParts[3] ); ENDIF
-
-   // 7. Retorna o Objeto Timestamp Oficial
-   RETURN hb_DateTime( Year( dData ), Month( dData ), Day( dData ), nHour, nMin, nSec )
+*+ EOF: disk55.prg
+*+

@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 28-Dez-2024 as 10:41 am
+*+    Documentado em 16-Out-2026 as  8:02 am
 *+
 *+
 *+
@@ -53,7 +53,15 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function hb_fopen()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -61,7 +69,12 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function hb_fopen(cARQ)
+
 
 return fopen(carq)
 
@@ -70,7 +83,15 @@ return fopen(carq)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function alltrue()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -78,7 +99,12 @@ return fopen(carq)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION alltrue()
+
 
 RETURN .t.
 
@@ -88,7 +114,15 @@ RETURN .t.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function clscor()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -96,7 +130,12 @@ RETURN .t.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function clscor()
+
 
 SetColor("")
 
@@ -105,7 +144,15 @@ SetColor("")
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function video()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -113,7 +160,12 @@ SetColor("")
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function video()
+
 
 Set(_SET_DEVICE,"SCREEN")   //set device to screen
 
@@ -122,7 +174,15 @@ Set(_SET_DEVICE,"SCREEN")   //set device to screen
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function impressora()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -130,7 +190,12 @@ Set(_SET_DEVICE,"SCREEN")   //set device to screen
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function impressora()
+
 
 Set(_SET_DEVICE,"PRINTER")  //set device to print
 
@@ -139,7 +204,15 @@ Set(_SET_DEVICE,"PRINTER")  //set device to print
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function clsrow()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -147,7 +220,12 @@ Set(_SET_DEVICE,"PRINTER")  //set device to print
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function clsrow(nROW)
+
 
 @ nROW,0 CLEAR TO nROW,MAXCOL()
 
@@ -156,7 +234,15 @@ function clsrow(nROW)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function clsbox()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -164,7 +250,12 @@ function clsrow(nROW)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function clsbox(nROWINI,nCOLINI,nROWFIM,nCOLFIM)
+
 
 HB_dispbox(nROWINI,nCOLINI,nROWFIM,nCOLFIM,space(8))
 
@@ -175,7 +266,15 @@ HB_dispbox(nROWINI,nCOLINI,nROWFIM,nCOLFIM,space(8))
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function NNETWHOAMI()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -183,7 +282,12 @@ HB_dispbox(nROWINI,nCOLINI,nROWFIM,nCOLFIM,space(8))
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function NNETWHOAMI()
+
 
 LOCAL cUSER
 cUSER := HB_USERNAME()
@@ -200,7 +304,15 @@ RETUrn cUSER
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MDG()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -208,7 +320,12 @@ RETUrn cUSER
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function MDG(cMES,nOPT)
+
 
 RETURN MsgYesNo(cMES)
 
@@ -218,7 +335,15 @@ RETURN MsgYesNo(cMES)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MDS()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -226,7 +351,12 @@ RETURN MsgYesNo(cMES)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function MDS(cMES)
+
 
 local OLDCOR := setcolor()
 SetColor("")  // set color to
@@ -241,7 +371,15 @@ return .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function Hotinkey()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -249,7 +387,12 @@ return .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION Hotinkey(waittime)
+
 
 LOCAL key,cblock
 
@@ -290,7 +433,15 @@ RETURN key
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function SALVAA()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -298,7 +449,12 @@ RETURN key
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function SALVAA
+
 
 
 aRETU := {setcursor(),;
@@ -313,7 +469,15 @@ return aRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function RESTAA()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -321,7 +485,12 @@ return aRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function RESTAA(aAMB)
+
 
 
 setcursor(aAMB[1])
@@ -333,47 +502,68 @@ if !empty(aAMB[6])
 endif
 return .T.
 
-FUNCTION MascararEmail( cEmail )
-    LOCAL nPosAt := AT("@", cEmail)
-    LOCAL cUser := ""
-    LOCAL cDominio := ""
-    LOCAL cUserMascarado := ""
-    LOCAL nLenUser := 0
-
-    // Se não encontrar o @, não é um e-mail válido, retorna como está
-    IF nPosAt == 0
-        RETURN cEmail
-    ENDIF
-
-    // Separa o usuário do domínio
-    cUser := SUBSTR(cEmail, 1, nPosAt - 1)
-    cDominio := SUBSTR(cEmail, nPosAt) // Mantém o '@' junto com o domínio
-    nLenUser := LEN(cUser)
-
-    // Aplica a regra de máscara no usuário
-    IF nLenUser <= 2
-        // E-mails curtíssimos (ex: jg@gmail.com) -> j*@gmail.com
-        cUserMascarado := SUBSTR(cUser, 1, 1) + "*"
-        
-    ELSEIF nLenUser <= 4  // CORREÇÃO: Mudado de IF para ELSEIF
-        // E-mails curtos (ex: jorg@gmail.com) -> jo**@gmail.com
-        cUserMascarado := SUBSTR(cUser, 1, 2) + REPLICATE("*", nLenUser - 2)
-        
-    ELSE
-        // E-mails normais -> Mostra as 2 primeiras, fixa 4 asteriscos, e mostra a última
-        cUserMascarado := SUBSTR(cUser, 1, 2) + "****" + SUBSTR(cUser, nLenUser, 1)
-        
-    ENDIF // CORREÇÃO: Agora este único ENDIF fecha toda a estrutura corretamente
-
-RETURN cUserMascarado + cDominio
 
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function MascararEmail()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION MascararEmail(cEmail)
+
+LOCAL nPosAt         := AT ("@",cEmail)
+LOCAL cUser          := ""
+LOCAL cDominio       := ""
+LOCAL cUserMascarado := ""
+LOCAL nLenUser       := 0
+
+// Se não encontrar o @, não é um e-mail válido, retorna como está
+IF nPosAt == 0
+   RETURN cEmail
+ENDIF
+
+// Separa o usuário do domínio
+cUser    := SUBSTR(cEmail,1,nPosAt - 1)
+cDominio := SUBSTR(cEmail,nPosAt)   // Mantém o '@' junto com o domínio
+nLenUser := LEN(cUser)
+
+// Aplica a regra de máscara no usuário
+IF nLenUser <= 2
+   // E-mails curtíssimos (ex: jg@gmail.com) -> j*@gmail.com
+   cUserMascarado := SUBSTR(cUser,1,1)+"*"
+
+ELSEIF nLenUser <= 4  // CORREÇÃO: Mudado de IF para ELSEIF
+   // E-mails curtos (ex: jorg@gmail.com) -> jo**@gmail.com
+   cUserMascarado := SUBSTR(cUser,1,2)+REPLICATE("*",nLenUser - 2)
+
+ELSE
+   // E-mails normais -> Mostra as 2 primeiras, fixa 4 asteriscos, e mostra a última
+   cUserMascarado := SUBSTR(cUser,1,2)+"****"+SUBSTR(cUser,nLenUser,1)
+
+ENDIF   // CORREÇÃO: Agora este único ENDIF fecha toda a estrutura corretamente
+
+RETURN cUserMascarado+cDominio
+
+*+--------------------------------------------------------------------
+*+
+*+
 *+
 *+    Function CheckEmail()
 *+
+*+
+*+
 *+--------------------------------------------------------------------
 *+
+*+
+*+
 FUNCTION CheckEmail(cEmail)
+
 
 //
 //  Purpose: validate an email addres for syntax
@@ -402,7 +592,7 @@ ELSE
    lReturn := .f.
 ENDIF
 
-if at("@",cEMAIL) = 0
+if at ("@",cEMAIL) = 0
    ZNERRO  := 2
    ZERRO   := "Email sem @"
    lReturn := .f.
@@ -429,7 +619,7 @@ FOR X := 1 TO LEN(aCHAR)
    endif
 NEXT
 
-if at(".",right(cEMAIL,4)) = 0 .and. at(".",right(cEMAIL,3)) = 0  // .com .ti dominius com 3 ou 2 digitos
+if at (".",right(cEMAIL,4)) = 0 .and. at (".",right(cEMAIL,3)) = 0  // .com .ti dominius com 3 ou 2 digitos
    ZNERRO  := 6
    ZERRO   := "tem que ter ponto . nos 3 ou 4 ultimos digitos"
    lReturn := .f.
@@ -446,7 +636,15 @@ RETURN lReturn
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function rmacro()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -454,7 +652,12 @@ RETURN lReturn
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function rmacro(eBLOCO,ePAD,lMES)
+
 
 IF VALTYPE(lMES) # "L"
    lMES := .F.
@@ -463,11 +666,11 @@ IF VALTYPE(ePAD) # "U"
    eRETU := ePAD
 ENDIF
 TRY
-eRETU := eVAL(eBLOCO)
+   eRETU := eVAL(eBLOCO)
 CATCH oERROR
-IF lMES
-   ALERT(HB_VALTOEXP(eBLOCO))
-ENDIF
+   IF lMES
+      ALERT(HB_VALTOEXP(eBLOCO))
+   ENDIF
 END
 RETURN eRETU
 
@@ -478,7 +681,15 @@ RETURN eRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function ArqLogDataHora()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -486,7 +697,12 @@ RETURN eRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function ArqLogDataHora(cEXT)
+
 
 IF VALTYPE(cEXT) <> "C"
    cEXT := ".log"
@@ -505,7 +721,15 @@ return dtos(date())+strtran(time(),":","")+cEXT
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function GetDrvMapLetter()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -513,7 +737,12 @@ return dtos(date())+strtran(time(),":","")+cEXT
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 function GetDrvMapLetter(strLocalDrive)   // UNC path
+
 
 local aGetDrvMapLetter := {}
 local objNetwork       := TOLEAuto():New("WScript.Network")
@@ -540,7 +769,15 @@ return aGetDrvMapLetter
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MsgYesNo()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -548,7 +785,12 @@ return aGetDrvMapLetter
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MsgYesNo(cText)
+
 
 
 LOCAL lValue
@@ -563,7 +805,15 @@ RETURN lValue
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MsgExclamation()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -571,7 +821,12 @@ RETURN lValue
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MsgExclamation(cText)
+
 
 
 wapi_MessageBox(wvgSetAppWindow() :hWnd,cText,"Atencao",WIN_MB_ICONASTERISK)
@@ -584,7 +839,15 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MsgWarning()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -592,7 +855,12 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MsgWarning(cText)
+
 
 
 wapi_MessageBox(wvgSetAppWindow() :hWnd,cText,"Atencao",WIN_MB_ICONEXCLAMATION)
@@ -605,7 +873,15 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MsgStop()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -613,7 +889,12 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MsgStop(cText)
+
 
 
 wapi_MessageBox(wvgSetAppWindow() :hWnd,cText,"Atencao",WIN_MB_ICONHAND)
@@ -626,7 +907,15 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function ALERTX()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -634,7 +923,12 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION ALERTX(cTEXT,cTIPO)
+
 
 IF VALTYPE(cTIPO) <> "C"
    cTIPO := "E"
@@ -657,7 +951,15 @@ ENDCASE
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function shellexecprint()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -665,7 +967,12 @@ ENDCASE
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION shellexecprint(cARQUIVO)
+
 
 LOCAL cPrn,ncop := 1
 
@@ -685,7 +992,15 @@ RETURN
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function shellexecopen()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -693,30 +1008,77 @@ RETURN
 *+
 *+
 *+
-FUNCTION ShellExecuteOpen( cFileName, cParameters, cPath, nShow )
+*+
+*+
+*+
+*+
 
-   wapi_ShellExecute( Nil, "open", cFileName, cParameters, cPath, hb_DefaultValue( nShow, 1 ) )
-   // hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
-    //#define WIN_SW_SHOWNORMAL   1
-   RETURN Nil
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function ShellExecuteOpen()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION ShellExecuteOpen(cFileName,cParameters,cPath,nShow)
+
+
+wapi_ShellExecute(Nil,"open",cFileName,cParameters,cPath,hb_DefaultValue(nShow,1))
+// hwnd,   lpOperation,  lpFile,   lpParameters,   lpDirectory,    nShowCmd
+//#define WIN_SW_SHOWNORMAL   1
+RETURN Nil
 
 
 
 
-FUNCTION ArraytoTexto( a, cDelim )  //usado filetoemial flib08 app thunder (outros usos futuros)
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function ArraytoTexto()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION ArraytoTexto(a,cDelim)   //usado filetoemial flib08 app thunder (outros usos futuros)
+
 LOCAL cRet := ""
-AEval( a, {|e| cRet := cRet + e + cDelim } )
-RETURN hb_strShrink( cRet )
+AEval(a,{| e | cRet := cRet+e+cDelim})
+RETURN hb_strShrink(cRet)
 
-FUNCTION WaitProcess( cProcess )   //usado filetoemial flib08 app thunder  (outros usos futuros)
-LOCAL hProcess := hb_ProcessOpen( cProcess )
-   IF ! ( hProcess == -1 )
-      DO WHILE hb_ProcessValue( hProcess, .T. ) == 0
-          hb_IdleSleep( 0.1 )
-      ENDDO
-      hb_ProcessClose( hProcess, .T. )
-   ENDIF
-   RETURN NIL
+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function WaitProcess()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION WaitProcess(cProcess)  //usado filetoemial flib08 app thunder  (outros usos futuros)
+
+LOCAL hProcess := hb_ProcessOpen(cProcess)
+IF !(hProcess == - 1)
+   DO WHILE hb_ProcessValue(hProcess,.T.) == 0
+      hb_IdleSleep(0.1)
+   ENDDO
+   hb_ProcessClose(hProcess,.T.)
+ENDIF
+RETURN NIL
+
 
 *+ EOF: comp.prg
 *+

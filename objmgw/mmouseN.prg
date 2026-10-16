@@ -1,58 +1,50 @@
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Programa  : mmouseN.prg
-// +
-// +
-// +
-// +     Sistema:
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024,  jcassiano
-// +
-// +
-// +
-// +
-// +
-// +    Documentado em 28-Dez-2024 as 10:42 am
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
-// +
-// +    Source Module => C:\DEVELOP\OBJ\MMOUSEN.PRG
-// +
-// +    Functions: Function OPCAO()
-// +               Function menu()
-// +
-// +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : mmousen.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 16-Out-2026 as  8:02 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
 
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Function OPCAO()
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-FUNCTION OPCAO( nRow, nCol, cText, nAccl, cMES, bEXE )
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function OPCAO()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION OPCAO(nRow,nCol,cText,nAccl,cMES,bEXE)
 
-   cTEXT := StrTran( ctext, "&", "" )
-   @ nRow, nCOL PROMPT cTEXT MESSAGE cMES
 
-   RETURN NIL
+cTEXT := StrTran(ctext,"&","")
+@ nRow,nCOL PROMPT cTEXT MESSAGE cMES
+
+RETURN NIL
 
 // +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 // +
@@ -73,14 +65,16 @@ FUNCTION OPCAO( nRow, nCol, cText, nAccl, cMES, bEXE )
 // +
 // +
 // +
-FUNCTION menu( nCurrentPrompt, nMES )
+FUNCTION menu(nCurrentPrompt,nMES)
 
-   IF ValType( nMES ) = "N"
-      Set( _SET_MESSAGE, nMES, .T. )
-   ENDIF
-   MENU TO nCurrentPrompt
 
-   RETURN nCurrentPrompt
+IF ValType(nMES) = "N"
+   Set(_SET_MESSAGE,nMES,.T.)
+ENDIF
+MENU TO nCurrentPrompt
 
-// + EOF: mmouseN.prg
-// +
+RETURN nCurrentPrompt
+
+
+*+ EOF: mmousen.prg
+*+

@@ -1,20 +1,29 @@
-// +--------------------------------------------------------------------
-// +
-// +    Programa  : f_ismemo.prg
-// +               identificação de campos Memo e cabeçalhos de arquivos DBF
-// +
-// +     Sistema:
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024,  jcassiano
-// +
-// +    Documentado em 28-Dez-2024 as 10:41 am
-// +
-// +--------------------------------------------------------------------
-// +
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : f_ismemo.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 16-Out-2026 as  8:02 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
 #include "dbinfo.ch"
 #include "fileio.ch"
@@ -52,7 +61,7 @@ LETO   NATIVE   any             any        any       Remote DBF over network (le
 SQLRDD NATIVE   —               —          —         SQL access (MySQL, PostgreSQL, SQLite, MSSQL) using xBase syntax.
 */
 
-   /*
+/*
      3† 0x03 —.NTX Single NATIVE DBFNTX Nantucket Clipper / CA-Clipper Uses 0x03 with exclusive .NTX. DBFNTX is Harbour's native RDD for this.
       — — — .NSX Compound NATIVE DBFNSX CA-harbour / Harbour NSX Harbour native compound index. Recommended over CDX in pure Harbour environments.
     ‡ 0x03 .DBT .DB/— — NOT SUPP. — Borland Paradox NOT DBF. Paradox .DB is proprietary. Access only via ODBC/BDE/ADO.
@@ -67,9 +76,9 @@ SQLRDD NATIVE   —               —          —         SQL access (MySQL, PostgreS
     EXTERNAL Support via external RDD/library not included in standard Harbour.
     
    */
-   
-   
-/*   
+
+
+/*
    OPCAO( 4,10,"DBF&NTX   DBF NTX DBT ",78)  //N  1 DBFNTX   DBF/DBFFPT/DBFNTX
 OPCAO( 5,10,"DBF&CDX   DBF CDX FPT ",67)  //C  2 DBFCDX   DBF/DBFFPT/CDXRDD
 OPCAO( 6,10,"&ADSCDX   DBF CDX FPT ",65)  //A  3 ADSCDX
@@ -93,8 +102,8 @@ OPCAO(12,35,"DBFCDXEX  DBF CDX FPT ",51)  //2 19 Crypto   DBFCDXEX   -lbcrypt
 OPCAO(13,35,"FCSVRDD   CSV         ",51)   //2 20 FCSVRDD csv
 OPCAO(13,35,"JSONRDD   JSON        ",51)   //2 21 JSONRDD json RDD
 */
-   
-   
+
+
 
 
 // +--------------------------------------------------------------------
@@ -103,42 +112,43 @@ OPCAO(13,35,"JSONRDD   JSON        ",51)   //2 21 JSONRDD json RDD
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION ISMEMO( cARQ, lMES, lINFO )
+FUNCTION ISMEMO(cARQ,lMES,lINFO)
 
-   LOCAL cMES, lRETU, i
-   IF ValType( lMES ) # "L"
-      lMES := .F.
-   ENDIF
-   IF ValType( lINFO ) # "L"
-      lINFO := .T.
-   ENDIF
 
-   lRETU := .F.
-   cMES  := "Parece Nao Ser DBF"
-   IF NETUSE( cARQ,,,,, .F., )
-      // FUNCTION ShortTableHasMemoField()Return Ascan( dbStruct(), {|x| x[ 2] == 'M'}) != 0
-      IF AScan( dbStruct(), {| x | x[ 2 ] == 'M' } ) != 0
-         lRETU := .T.
-      ENDIF
-      // for i:=1 to FCount()
-      // if FieldType( i ) == "M"
-      // lRETU:=.T.
-      // exit
-      // endif
-      // NEXT
-      dbCloseArea()
-   ELSE
-      cMES := "Nao foi possivel abrir: "
-   ENDIF
-   IF lINFO
-      Infotipodbf( cARQ, lMES )
-   ELSE
-      IF Lmes
-         ALERTX( cMES + ": " + cARQ )
-      ENDIF
-   ENDIF
+LOCAL cMES,lRETU,i
+IF ValType(lMES) # "L"
+   lMES := .F.
+ENDIF
+IF ValType(lINFO) # "L"
+   lINFO := .T.
+ENDIF
 
-   RETURN lRETU
+lRETU := .F.
+cMES  := "Parece Nao Ser DBF"
+IF NETUSE(cARQ,,,,,.F.,)
+   // FUNCTION ShortTableHasMemoField()Return Ascan( dbStruct(), {|x| x[ 2] == 'M'}) != 0
+   IF AScan(dbStruct(),{| x | x[2] == 'M'}) != 0
+      lRETU := .T.
+   ENDIF
+   // for i:=1 to FCount()
+   // if FieldType( i ) == "M"
+   // lRETU:=.T.
+   // exit
+   // endif
+   // NEXT
+   dbCloseArea()
+ELSE
+   cMES := "Nao foi possivel abrir: "
+ENDIF
+IF lINFO
+   Infotipodbf(cARQ,lMES)
+ELSE
+   IF Lmes
+      ALERTX(cMES+": "+cARQ)
+   ENDIF
+ENDIF
+
+RETURN lRETU
 
 
 
@@ -148,246 +158,247 @@ FUNCTION ISMEMO( cARQ, lMES, lINFO )
 // +
 // +--------------------------------------------------------------------
 // +
-FUNCTION INFOTIPODBF( filename, lMES )
+FUNCTION INFOTIPODBF(filename,lMES)
 
-   LOCAL cbuffer := ' ', nhandle, ret_value, cMES, cDRIVERPAD, aRETVAL, cEXTMEMO, nbuffer
-   LOCAL cEXTTABLE, cEXTINDEX // <-- NOVAS VARIÁVEIS ADICIONADAS
-   LOCAL cextensao 
-   LOCAL nPxVersion
 
-   IF ValType( lMES ) # "L"
-      lMES := .F.
-   ENDIF
-   
-   nbuffer    := 0
-   cDRIVERPAD := ""
-   cEXTMEMO   := ""
-   cEXTTABLE  := "" // <-- INICIALIZA VAZIO 
-   cEXTINDEX  := "" // <-- INICIALIZA VAZIO
-   
-   // Array agora com 6 posicoes
-   aRETVAL    := { 0, "", "", "", "", "" } 
+LOCAL cbuffer    := ' ',nhandle,ret_value,cMES,cDRIVERPAD,aRETVAL,cEXTMEMO,nbuffer
+LOCAL cEXTTABLE,cEXTINDEX   // <-- NOVAS VARIÁVEIS ADICIONADAS
+LOCAL cextensao
+LOCAL nPxVersion
 
-   ret_value  := 0 
-   cMES       := "Parece Nao Ser DBF"
-   
-   IF !File( filename )
-      aRETVAL[4] := "Arquivo nao encontrado"
-      RETURN aRETVAL
-   ENDIF
+IF ValType(lMES) # "L"
+   lMES := .F.
+ENDIF
 
-   nHANDLE := hb_FOPEN( filename, 0 ) // FO_READ
-   IF nHANDLE == -1
-      aRETVAL[4] := "Erro ao abrir arquivo"
-      RETURN aRETVAL
-   ENDIF
-   
-   cextensao := lower( hb_fnameext( filename ) )
+nbuffer    := 0
+cDRIVERPAD := ""
+cEXTMEMO   := ""
+cEXTTABLE  := ""  // <-- INICIALIZA VAZIO
+cEXTINDEX  := ""  // <-- INICIALIZA VAZIO
 
-   IF FError() = 0 .AND. FRead( nHANDLE, @cBUFFER, 1 ) = 1
+// Array agora com 6 posicoes
+aRETVAL := {0,"","","","",""}
 
-      nbuffer := Asc( cBUFFER )
-      
-      DO CASE
-      CASE nbuffer =  142   // dBASE IV SQL table
-         cMES      := "dBASE IV  SQL table"
-         ret_value := 142
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "MDX"
-      CASE nbuffer =  048   // Visual FoxPro DBC
-         cMES      := "Visual FoxPro DBC"
-         ret_value := 048
-         cDRIVERPAD:= "DBFCDX"
-         cEXTMEMO  := "FPT"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "CDX"
-      CASE nbuffer =  123   // dBASE IV with memo
-         cMES      := "dBASE IV com memo"
-         ret_value := 123
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "MDX"
-      CASE nbuffer = 005    // dBASE V w/o memo file
-         cMES      := "dbase V  Sem memo"
-         ret_value := 005
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "MDX"
-      CASE nbuffer =  004   // dBASE IV or IV w/o memo file
-         cMES      := "dbase IV  Sem memo"
-         ret_value := 004
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "MDX"
-      CASE nbuffer =  139   // dBASE IV w. memo
-         cMES      := "dbase IV  com memo"
-         cDRIVERPAD:= "DBFMDX"
-         cEXTMEMO  := "DBT"
-         ret_value := 139
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "MDX"
-      CASE nbuffer =  245   // FoxPro w. memo file
-         cMES      := "Foxpro  com memo"
-         ret_value := 245
-         cDRIVERPAD:= "DBFCDX"
-         cEXTMEMO  := "FPT"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "CDX"
-      CASE nbuffer =  131   // dBASE III+ with memo file
-         cMES      := "FoxBASE+ / dBASE III com memo"
-         ret_value := 131
-         cDRIVERPAD:= "DBFCDX" // ou DBFNTX conforme o legado
-         cEXTMEMO  := "DBT"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "CDX"
-      CASE nbuffer = 003    // dBASE III w/o memo file
-         cMES      := "FoxBASE+ / dBASE III sem memo"
-         ret_value := 003
-         cDRIVERPAD:= "DBFCDX" 
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "CDX"
-      CASE nbuffer =  002   // FoxBASE original
-         cMES      := "FoxBase"
-         ret_value := 2
-         cDRIVERPAD:= "DBFNTX"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "NTX"
-      CASE nbuffer =  007   // VO
-         cMES      := "VO"
-         ret_value := 7
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "NTX"
-      CASE nbuffer =  019   // Flagship
-         cMES      := "Flagship"
-         ret_value := 019
-         cEXTTABLE := "DBF"
-      CASE nbuffer =  035   // Flagship248
-         cMES      := "Flagship248"
-         ret_value := 035
-         cEXTTABLE := "DBF"
-      CASE nbuffer =  049   // Visual FoxPro (autoincrement)
-         cMES      := "VisualFoxProAutoIncrement"
-         ret_value := 049
-         cDRIVERPAD:= "DBFNTX"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "NTX"
-      CASE nbuffer =  050   // Visual FoxPro (VARCHAR/VARBINARY)
-         cMES      := "VisualFoxProVarChar"
-         ret_value := 050
-         cDRIVERPAD:= "DBFCDX"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "CDX"
-      CASE nbuffer =  051   // Flagship248WithDBV
-         cMES      := "Flagship248WithDBV"
-         ret_value := 051
-         cEXTTABLE := "DBF"
-      CASE nbuffer =  067   // dBASE IV SQL table (no memo)
-         cMES      := "dBase4SQLTableNoMemo"
-         ret_value := 067
-         cDRIVERPAD:= "DBFMDX"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "MDX"
-      CASE nbuffer = 099    // dBASE IV SQL system files
-         cMES      := "dBase4SQLSystemNoMemo"
-         ret_value := 099
-         cDRIVERPAD:= "DBFMDX"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "MDX"
-      CASE nbuffer =  135   // VOWithMemo
-         cMES      := "VOWithMemo"
-         ret_value := 135
-         cEXTTABLE := "DBF"
-      CASE nbuffer =  203   // dBASE IV SQL table (with memo)
-         cMES      := "dBase4SQLTableWithMemo"
-         ret_value := 203
-         cDRIVERPAD:= "DBFMDX"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "MDX"
-      CASE nbuffer =  229   // HiPer-Six / Six Driver
-         cMES      := "Six With SMT"
-         ret_value := 229
-         cDRIVERPAD:= "SMTCDX"
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "CDX"
-      CASE nbuffer =  251   // FoxBASE (variant)
-         cMES      := "FoxBASE"
-         cDRIVERPAD:= "DBFNTX"
-         ret_value := 251
-         cEXTTABLE := "DBF"
-         cEXTINDEX := "NTX"
-         
-      OTHERWISE //tenta expandido
-          FSeek( nHANDLE, 0, FS_SET )
-          cBuffer:=SPACE(32)
-          IF FRead( nHANDLE, @cBuffer, 32 ) == 32
-             DO CASE
-                // --- DBMS (Extensoes ficam em branco) ---
-                CASE Left( cBuffer, 15 ) == "SQLite format 3"
-                    cMES      := "Arquivo SQLite"
-                    ret_value := 999 
-                    cDRIVERPAD:= "SL3RDD"
-                CASE "DUCK" $  cBuffer .and. cextensao=".db" 
-                     cMES      := "DuckDB Database"
-                     ret_value := 998 
-                     cDRIVERPAD:= "DUCKDBRDD"   
-                CASE "Standard ACE DB" $  cBuffer .and. cextensao=".mdb" 
-                     cMES      := "Arquivo access MDB"
-                     ret_value := 997 
-                     cDRIVERPAD:= "MDB"  
-                CASE "Standard ACE DB" $  cBuffer .and. cextensao=".accdb" 
-                     cMES      := "Arquivo access accdb"
-                     ret_value := 997 
-                     cDRIVERPAD:= "ACCDB"       
-                CASE "Standard Jet DB" $  cBuffer .and. cextensao=".mdb" 
-                     cMES      := "Arquivo access MDB"
-                     ret_value := 995 
-                     cDRIVERPAD:= "MDB"            
-                CASE SubStr(cBuffer, 17, 2) == Chr(0) + Chr(32) .and. (cextensao=".fdb" .or. cextensao=".gdb" .or. cextensao=".ib" )
-                     cMES      := "Firebird Database"
-                     ret_value := 994
-                     cDRIVERPAD:= "FB5RDD"
-                     
-                // --- ADVANTAGE TABLE ---
-                CASE "Advantage Table" $ cBuffer .or. cextensao == ".adt"
-                     cMES      := "Advantage Table (ADT)"
-                     ret_value := 993
-                     cDRIVERPAD:= "ADSADT"
-                     cEXTMEMO  := "ADM"    
-                     cEXTTABLE := "ADT"
-                     cEXTINDEX := "ADI"
-                     
-                // --- NOVA IDENTIFICAÇÃO PARADOX ---
-                CASE cextensao == ".db" .AND. Bin2W( SubStr( cBuffer, 1, 2 ) ) > 0 .AND. Bin2W( SubStr( cBuffer, 5, 2 ) ) >= 1024
-                     cMES      := "Paradox Database"
-                     ret_value := 59 
-                     cDRIVERPAD:= "PXRDD"
-                     cEXTTABLE := "DB"
-                     cEXTINDEX := ""    // Paradox prop. usa outras libs, s/ idx nativo
-                     
-                     // Leitura adicional para obter a versão do Paradox
-                     FSeek( nHANDLE, 57, FS_SET ) 
-                     cBuffer := Space( 1 )
-                     IF FRead( nHANDLE, @cBuffer, 1 ) == 1
-                        nPxVersion := Asc( cBuffer )
-                        cMES := "Paradox Database (Version: " + AllTrim( Str( nPxVersion ) ) + ")"
-                     ENDIF        
-                     
-                ENDCASE
-          ENDIF       
-      ENDCASE
-   ELSE
-      ret_value := -2   // Nao Pode Ser Verificado
-      cMES      := "Nao Pode Ser Verificado"
-   ENDIF
+ret_value := 0
+cMES      := "Parece Nao Ser DBF"
 
-   FClose( nHANDLE )
-   
-   IF Lmes
-      ALERTX( Cmes )
-   ENDIF
-   
-   // --- NOVO RETORNO COM 6 ELEMENTOS ---
-   aRETVAL := { ret_value, cDRIVERPAD, cEXTMEMO, cMES, cEXTTABLE, cEXTINDEX }
-   RETURN aRETVAL   
-   
-   // DBF file format constants used when navigating the binary header.
+IF !File(filename)
+   aRETVAL[ 4 ] := "Arquivo nao encontrado"
+   RETURN aRETVAL
+ENDIF
+
+nHANDLE := hb_FOPEN(filename,0)   // FO_READ
+IF nHANDLE == - 1
+   aRETVAL[ 4 ] := "Erro ao abrir arquivo"
+   RETURN aRETVAL
+ENDIF
+
+cextensao := lower(hb_fnameext(filename))
+
+IF FError() = 0 .AND. FRead(nHANDLE,@cBUFFER,1) = 1
+
+   nbuffer := Asc(cBUFFER)
+
+   DO CASE
+   CASE nbuffer = 142   // dBASE IV SQL table
+      cMES      := "dBASE IV  SQL table"
+      ret_value := 142
+      cEXTTABLE := "DBF"
+      cEXTINDEX := "MDX"
+   CASE nbuffer = 048   // Visual FoxPro DBC
+      cMES       := "Visual FoxPro DBC"
+      ret_value  := 048
+      cDRIVERPAD := "DBFCDX"
+      cEXTMEMO   := "FPT"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "CDX"
+   CASE nbuffer = 123   // dBASE IV with memo
+      cMES      := "dBASE IV com memo"
+      ret_value := 123
+      cEXTTABLE := "DBF"
+      cEXTINDEX := "MDX"
+   CASE nbuffer = 005   // dBASE V w/o memo file
+      cMES      := "dbase V  Sem memo"
+      ret_value := 005
+      cEXTTABLE := "DBF"
+      cEXTINDEX := "MDX"
+   CASE nbuffer = 004   // dBASE IV or IV w/o memo file
+      cMES      := "dbase IV  Sem memo"
+      ret_value := 004
+      cEXTTABLE := "DBF"
+      cEXTINDEX := "MDX"
+   CASE nbuffer = 139   // dBASE IV w. memo
+      cMES       := "dbase IV  com memo"
+      cDRIVERPAD := "DBFMDX"
+      cEXTMEMO   := "DBT"
+      ret_value  := 139
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "MDX"
+   CASE nbuffer = 245   // FoxPro w. memo file
+      cMES       := "Foxpro  com memo"
+      ret_value  := 245
+      cDRIVERPAD := "DBFCDX"
+      cEXTMEMO   := "FPT"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "CDX"
+   CASE nbuffer = 131   // dBASE III+ with memo file
+      cMES       := "FoxBASE+ / dBASE III com memo"
+      ret_value  := 131
+      cDRIVERPAD := "DBFCDX"  // ou DBFNTX conforme o legado
+      cEXTMEMO   := "DBT"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "CDX"
+   CASE nbuffer = 003   // dBASE III w/o memo file
+      cMES       := "FoxBASE+ / dBASE III sem memo"
+      ret_value  := 003
+      cDRIVERPAD := "DBFCDX"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "CDX"
+   CASE nbuffer = 002   // FoxBASE original
+      cMES       := "FoxBase"
+      ret_value  := 2
+      cDRIVERPAD := "DBFNTX"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "NTX"
+   CASE nbuffer = 007   // VO
+      cMES      := "VO"
+      ret_value := 7
+      cEXTTABLE := "DBF"
+      cEXTINDEX := "NTX"
+   CASE nbuffer = 019   // Flagship
+      cMES      := "Flagship"
+      ret_value := 019
+      cEXTTABLE := "DBF"
+   CASE nbuffer = 035   // Flagship248
+      cMES      := "Flagship248"
+      ret_value := 035
+      cEXTTABLE := "DBF"
+   CASE nbuffer = 049   // Visual FoxPro (autoincrement)
+      cMES       := "VisualFoxProAutoIncrement"
+      ret_value  := 049
+      cDRIVERPAD := "DBFNTX"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "NTX"
+   CASE nbuffer = 050   // Visual FoxPro (VARCHAR/VARBINARY)
+      cMES       := "VisualFoxProVarChar"
+      ret_value  := 050
+      cDRIVERPAD := "DBFCDX"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "CDX"
+   CASE nbuffer = 051   // Flagship248WithDBV
+      cMES      := "Flagship248WithDBV"
+      ret_value := 051
+      cEXTTABLE := "DBF"
+   CASE nbuffer = 067   // dBASE IV SQL table (no memo)
+      cMES       := "dBase4SQLTableNoMemo"
+      ret_value  := 067
+      cDRIVERPAD := "DBFMDX"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "MDX"
+   CASE nbuffer = 099   // dBASE IV SQL system files
+      cMES       := "dBase4SQLSystemNoMemo"
+      ret_value  := 099
+      cDRIVERPAD := "DBFMDX"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "MDX"
+   CASE nbuffer = 135   // VOWithMemo
+      cMES      := "VOWithMemo"
+      ret_value := 135
+      cEXTTABLE := "DBF"
+   CASE nbuffer = 203   // dBASE IV SQL table (with memo)
+      cMES       := "dBase4SQLTableWithMemo"
+      ret_value  := 203
+      cDRIVERPAD := "DBFMDX"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "MDX"
+   CASE nbuffer = 229   // HiPer-Six / Six Driver
+      cMES       := "Six With SMT"
+      ret_value  := 229
+      cDRIVERPAD := "SMTCDX"
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "CDX"
+   CASE nbuffer = 251   // FoxBASE (variant)
+      cMES       := "FoxBASE"
+      cDRIVERPAD := "DBFNTX"
+      ret_value  := 251
+      cEXTTABLE  := "DBF"
+      cEXTINDEX  := "NTX"
+
+   OTHERWISE  //tenta expandido
+      FSeek(nHANDLE,0,FS_SET)
+      cBuffer := SPACE(32)
+      IF FRead(nHANDLE,@cBuffer,32) == 32
+         DO CASE
+            // --- DBMS (Extensoes ficam em branco) ---
+         CASE Left(cBuffer,15) == "SQLite format 3"
+            cMES       := "Arquivo SQLite"
+            ret_value  := 999
+            cDRIVERPAD := "SL3RDD"
+         CASE "DUCK" $ cBuffer .and. cextensao = ".db"
+            cMES       := "DuckDB Database"
+            ret_value  := 998
+            cDRIVERPAD := "DUCKDBRDD"
+         CASE "Standard ACE DB" $ cBuffer .and. cextensao = ".mdb"
+            cMES       := "Arquivo access MDB"
+            ret_value  := 997
+            cDRIVERPAD := "MDB"
+         CASE "Standard ACE DB" $ cBuffer .and. cextensao = ".accdb"
+            cMES       := "Arquivo access accdb"
+            ret_value  := 997
+            cDRIVERPAD := "ACCDB"
+         CASE "Standard Jet DB" $ cBuffer .and. cextensao = ".mdb"
+            cMES       := "Arquivo access MDB"
+            ret_value  := 995
+            cDRIVERPAD := "MDB"
+         CASE SubStr(cBuffer,17,2) == Chr(0)+Chr(32) .and. (cextensao = ".fdb" .or. cextensao = ".gdb" .or. cextensao = ".ib")
+            cMES       := "Firebird Database"
+            ret_value  := 994
+            cDRIVERPAD := "FB5RDD"
+
+            // --- ADVANTAGE TABLE ---
+         CASE "Advantage Table" $ cBuffer .or. cextensao == ".adt"
+            cMES       := "Advantage Table (ADT)"
+            ret_value  := 993
+            cDRIVERPAD := "ADSADT"
+            cEXTMEMO   := "ADM"
+            cEXTTABLE  := "ADT"
+            cEXTINDEX  := "ADI"
+
+            // --- NOVA IDENTIFICAÇÃO PARADOX ---
+         CASE cextensao == ".db" .AND. Bin2W(SubStr(cBuffer,1,2)) > 0 .AND. Bin2W(SubStr(cBuffer,5,2)) >= 1024
+            cMES       := "Paradox Database"
+            ret_value  := 59
+            cDRIVERPAD := "PXRDD"
+            cEXTTABLE  := "DB"
+            cEXTINDEX  := ""  // Paradox prop. usa outras libs, s/ idx nativo
+
+            // Leitura adicional para obter a versão do Paradox
+            FSeek(nHANDLE,57,FS_SET)
+            cBuffer := Space(1)
+            IF FRead(nHANDLE,@cBuffer,1) == 1
+               nPxVersion := Asc(cBuffer)
+               cMES       := "Paradox Database (Version: "+AllTrim(Str(nPxVersion))+")"
+            ENDIF
+
+         ENDCASE
+      ENDIF
+   ENDCASE
+ELSE
+   ret_value := - 2   // Nao Pode Ser Verificado
+   cMES      := "Nao Pode Ser Verificado"
+ENDIF
+
+FClose(nHANDLE)
+
+IF Lmes
+   ALERTX(Cmes)
+ENDIF
+
+// --- NOVO RETORNO COM 6 ELEMENTOS ---
+aRETVAL := {ret_value,cDRIVERPAD,cEXTMEMO,cMES,cEXTTABLE,cEXTINDEX}
+RETURN aRETVAL
+
+// DBF file format constants used when navigating the binary header.
 // Using symbolic names avoids hard-coded offsets and improves maintainability.
 #define FIELD_ENTRY_SIZE  32   // Size in bytes of a single DBF field descriptor.
 #define FIELD_NAME_SIZE   11   // Maximum field name length stored in the descriptor (including null terminator).
@@ -423,191 +434,205 @@ FUNCTION INFOTIPODBF( filename, lMES )
  *    RDD functions, making it suitable for inspecting the physical file
  *    format independently of the active database driver.
  */
-FUNCTION GetHeaderInfo( database, cTIPOINFO )
-   LOCAL aRet := {}
-   LOCAL nHandle, dbfhead, h1, h2, h3, h4
-   LOCAL dbftype, headrecs, headsize, recsize, nof
-   LOCAL fieldlist, nField, nPos, cFieldName, cType, cWidth, nWidth, nDec, cDec
-   LOCAL cErrorString
-   LOCAL aErrors := {}
-   LOCAL cFieldType, nFieldLen
-   LOCAL nFileLen, nCalcLen, cTerminator
-    
-   IF !'.DBF' $ Upper( database )
-      database += '.DBF'
-   ENDIF
-   
-   IF VALTYPE(cTIPOINFO) <> "C"
-      cTIPOINFO := "F"
-   ENDIF
 
-   IF ( nHandle := FOpen( database, FO_READ ) ) == -1
-      ALERT( 'Cannot open file ' + Upper( database ) + ' for reading!' )
-      RETURN aRet
-   ENDIF
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function GetHeaderInfo()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION GetHeaderInfo(database,cTIPOINFO)
 
-   dbfhead := Space( 4 )
-   FRead( nHandle, @dbfhead, 4 )
+LOCAL aRet         := {}
+LOCAL nHandle,dbfhead,h1,h2,h3,h4
+LOCAL dbftype,headrecs,headsize,recsize,nof
+LOCAL fieldlist,nField,nPos,cFieldName,cType,cWidth,nWidth,nDec,cDec
+LOCAL cErrorString
+LOCAL aErrors      := {}
+LOCAL cFieldType,nFieldLen
+LOCAL nFileLen,nCalcLen,cTerminator
 
-   h1 := FT_BYT2HEX( SubStr( dbfhead, 1, 1 ) )
-   dbftype := h1
+IF !'.DBF' $ Upper(database)
+   database += '.DBF'
+ENDIF
 
-   h2 := FT_BYT2HEX( SubStr( dbfhead, 2, 1 ) )
-   h3 := FT_BYT2HEX( SubStr( dbfhead, 3, 1 ) )
-   h4 := FT_BYT2HEX( SubStr( dbfhead, 4, 1 ) )
+IF VALTYPE(cTIPOINFO) <> "C"
+   cTIPOINFO := "F"
+ENDIF
 
-   IF hex2dec( h3 ) > 12 .OR. hex2dec( h4 ) > 31
-      ALERT( 'Date damage in header!' )
-   ENDIF
+IF (nHandle := FOpen(database,FO_READ)) == - 1
+   ALERT('Cannot open file '+Upper(database)+' for reading!')
+   RETURN aRet
+ENDIF
 
-   AAdd( aRet, { '0x' + dbftype, 'Type of file' } )
+dbfhead := Space(4)
+FRead(nHandle,@dbfhead,4)
 
-   AAdd( aRet, { StrZero( hex2dec( h4 ), 2 ) + '.' + StrZero( hex2dec( h3 ), 2 ) + '.' + ;
-                 StrZero( hex2dec( h2 ) - If( hex2dec( h2 ) > 100, 100, 0 ), 2 ), ;
-                 'Last update (DD.MM.YY)' } )
+h1      := FT_BYT2HEX(SubStr(dbfhead,1,1))
+dbftype := h1
 
-   headrecs := Space( 4 )
-   FSeek( nHandle, 4, FS_SET )
-   FRead( nHandle, @headrecs, 4 )
+h2 := FT_BYT2HEX(SubStr(dbfhead,2,1))
+h3 := FT_BYT2HEX(SubStr(dbfhead,3,1))
+h4 := FT_BYT2HEX(SubStr(dbfhead,4,1))
 
-   h1 := FT_BYT2HEX( SubStr( headrecs, 1, 1 ) )
-   h2 := FT_BYT2HEX( SubStr( headrecs, 2, 1 ) )
-   h3 := FT_BYT2HEX( SubStr( headrecs, 3, 1 ) )
-   h4 := FT_BYT2HEX( SubStr( headrecs, 4, 1 ) )
-   headrecs := Int( hex2dec( h1 ) + 256 * hex2dec( h2 ) + ( 256 ** 2 ) * hex2dec( h3 ) + ( 256 ** 3 ) * hex2dec( h4 ) )
+IF hex2dec(h3) > 12 .OR. hex2dec(h4) > 31
+   ALERT('Date damage in header!')
+ENDIF
 
-   AAdd( aRet, { headrecs, 'Number of records' } )
+AAdd(aRet,{'0x'+dbftype,'Type of file'})
 
-   headsize := Space( 2 )
-   FRead( nHandle, @headsize, 2 )
-   h1 := FT_BYT2HEX( SubStr( headsize, 1, 1 ) )
-   h2 := FT_BYT2HEX( SubStr( headsize, 2, 1 ) )
-   headsize := hex2dec( h1 ) + 256 * hex2dec( h2 )
+AAdd(aRet,{StrZero(hex2dec(h4),2)+'.'+StrZero(hex2dec(h3),2)+'.'+;
+ StrZero(hex2dec(h2) - If(hex2dec(h2) > 100,100,0),2),;
+ 'Last update (DD.MM.YY)'})
 
-   AAdd( aRet, { headsize, 'Header size' } )
+headrecs := Space(4)
+FSeek(nHandle,4,FS_SET)
+FRead(nHandle,@headrecs,4)
 
-   recsize := Space( 2 )
-   FRead( nHandle, @recsize, 2 )
-   h1 := FT_BYT2HEX( SubStr( recsize, 1, 1 ) )
-   h2 := FT_BYT2HEX( SubStr( recsize, 2, 1 ) )
-   recsize := hex2dec( h1 ) + 256 * hex2dec( h2 )
+h1       := FT_BYT2HEX(SubStr(headrecs,1,1))
+h2       := FT_BYT2HEX(SubStr(headrecs,2,1))
+h3       := FT_BYT2HEX(SubStr(headrecs,3,1))
+h4       := FT_BYT2HEX(SubStr(headrecs,4,1))
+headrecs := Int(hex2dec(h1)+256 * hex2dec(h2)+(256 ** 2) * hex2dec(h3)+(256 ** 3) * hex2dec(h4))
 
-   AAdd( aRet, { recsize, 'Record size' } )
+AAdd(aRet,{headrecs,'Number of records'})
 
-   nof := Int( headsize / FIELD_ENTRY_SIZE ) - 1
+headsize := Space(2)
+FRead(nHandle,@headsize,2)
+h1       := FT_BYT2HEX(SubStr(headsize,1,1))
+h2       := FT_BYT2HEX(SubStr(headsize,2,1))
+headsize := hex2dec(h1)+256 * hex2dec(h2)
 
-   AAdd( aRet, { nof, 'Fields count' } )
+AAdd(aRet,{headsize,'Header size'})
 
-   // Validação física integrada do VO incorporada ao Harbour
+recsize := Space(2)
+FRead(nHandle,@recsize,2)
+h1      := FT_BYT2HEX(SubStr(recsize,1,1))
+h2      := FT_BYT2HEX(SubStr(recsize,2,1))
+recsize := hex2dec(h1)+256 * hex2dec(h2)
+
+AAdd(aRet,{recsize,'Record size'})
+
+nof := Int(headsize / FIELD_ENTRY_SIZE) - 1
+
+AAdd(aRet,{nof,'Fields count'})
+
+// Validação física integrada do VO incorporada ao Harbour
 // Substituir o cálculo com ftell por FSeek relativo
-   FSeek( nHandle, 0, FS_END )
-   nFileLen := FSeek( nHandle, 0, FS_RELATIVE )
-   nCalcLen := ( recsize * headrecs ) + headsize + 1
-   IF Abs( nCalcLen - nFileLen ) > 1
-      AAdd( aErrors, { "File length error - header size:" + AllTrim(Str(nFileLen)) + " actual size:" + AllTrim(Str(nCalcLen)), "" } )
+FSeek(nHandle,0,FS_END)
+nFileLen := FSeek(nHandle,0,FS_RELATIVE)
+nCalcLen := (recsize * headrecs)+headsize+1
+IF Abs(nCalcLen - nFileLen) > 1
+   AAdd(aErrors,{"File length error - header size:"+AllTrim(Str(nFileLen))+" actual size:"+AllTrim(Str(nCalcLen)),""})
+ENDIF
+
+cTerminator := Space(1)
+FSeek(nHandle,(nof * 32)+32,FS_SET)
+FRead(nHandle,@cTerminator,1)
+IF FT_BYT2HEX(cTerminator) <> "0D"
+   AAdd(aErrors,{"Header terminator not 0Dh Value:"+FT_BYT2HEX(cTerminator),""})
+ENDIF
+
+fieldlist := {}
+
+FOR nField := 1 TO nof
+   nPos := nField * FIELD_ENTRY_SIZE
+   FSeek(nHandle,nPos,FS_SET)
+
+   cFieldName := Space(FIELD_NAME_SIZE)
+   FRead(nHandle,@cFieldName,FIELD_NAME_SIZE)
+   cFieldName := RTrim(StrTran(cFieldName,Chr(0),' '))
+
+   cType := Space(1)
+   FRead(nHandle,@cType,1)
+
+   FSeek(nHandle,4,FS_RELATIVE)
+
+   IF cType == 'C'
+      cWidth := Space(2)
+      FRead(nHandle,@cWidth,2)
+      h1     := FT_BYT2HEX(SubStr(cWidth,1,1))
+      h2     := FT_BYT2HEX(SubStr(cWidth,2,1))
+      nWidth := hex2dec(h1)+256 * hex2dec(h2)
+      nDec   := 0
+   ELSE
+      cWidth := Space(1)
+      FRead(nHandle,@cWidth,1)
+      nWidth := hex2dec(FT_BYT2HEX(cWidth))
+      cDec   := Space(1)
+      FRead(nHandle,@cDec,1)
+      nDec := hex2dec(FT_BYT2HEX(cDec))
    ENDIF
 
-   cTerminator := Space( 1 )
-   FSeek( nHandle, ( nof * 32 ) + 32, FS_SET )
-   FRead( nHandle, @cTerminator, 1 )
-   IF FT_BYT2HEX( cTerminator ) <> "0D"
-      AAdd( aErrors, { "Header terminator not 0Dh Value:" + FT_BYT2HEX( cTerminator ), "" } )
-   ENDIF
+   AAdd(fieldlist,{cFieldName,cType,nWidth,nDec})
 
-   fieldlist := {}
+   cFieldType := cType
+   nFieldLen  := nWidth
 
-   FOR nField := 1 TO nof
-      nPos := nField * FIELD_ENTRY_SIZE
-      FSeek( nHandle, nPos, FS_SET )
+   cErrorString := "Field No: "+AllTrim(Str(nField)) ;
+    +" Name: "+cFieldName ;
+    +" Type: "+cFieldType ;
+    +" Length: "+AllTrim(Str(nFieldLen)) ;
+    +" Dec: "+AllTrim(Str(nDec))
 
-      cFieldName := Space( FIELD_NAME_SIZE )
-      FRead( nHandle, @cFieldName, FIELD_NAME_SIZE )
-      cFieldName := RTrim( StrTran( cFieldName, Chr( 0 ), ' ' ) )
-
-      cType := Space( 1 )
-      FRead( nHandle, @cType, 1 )
-
-      FSeek( nHandle, 4, FS_RELATIVE )
-
-      IF cType == 'C'
-         cWidth := Space( 2 )
-         FRead( nHandle, @cWidth, 2 )
-         h1 := FT_BYT2HEX( SubStr( cWidth, 1, 1 ) )
-         h2 := FT_BYT2HEX( SubStr( cWidth, 2, 1 ) )
-         nWidth := hex2dec( h1 ) + 256 * hex2dec( h2 )
-         nDec := 0
-      ELSE
-         cWidth := Space( 1 )
-         FRead( nHandle, @cWidth, 1 )
-         nWidth := hex2dec( FT_BYT2HEX( cWidth ) )
-         cDec := Space( 1 )
-         FRead( nHandle, @cDec, 1 )
-         nDec := hex2dec( FT_BYT2HEX( cDec ) )
+   IF nFieldLen == 0
+      AAdd(aErrors,{"Field error - invalid length Field must have length > 0 ",cErrorString})
+   ELSEIF cFieldType == "L"
+      IF nFieldLen <> 1
+         AAdd(aErrors,{"Field error - invalid length LOGIC must be length 1",cErrorString})
       ENDIF
-
-      AAdd( fieldlist, { cFieldName, cType, nWidth, nDec } )
-      
-      cFieldType := cType
-      nFieldLen  := nWidth
-      
-      cErrorString := "Field No: " + AllTrim(Str(nField))	;
-					+ " Name: " + cFieldName	;
-					+ " Type: " + cFieldType 	;
-					+ " Length: " + AllTrim(Str(nFieldLen)) ;
-					+ " Dec: " + AllTrim(Str(nDec))
-      
-      IF nFieldLen == 0
-    		AAdd(aErrors, {"Field error - invalid length Field must have length > 0 ", cErrorString})
-    	ELSEIF cFieldType == "L"
-    		IF nFieldLen <> 1
-    			AAdd(aErrors, {"Field error - invalid length LOGIC must be length 1", cErrorString})			
-    		ENDIF
-    	ELSEIF cFieldType == "D"
-    		IF nFieldLen <> 8
-    			AAdd(aErrors, {"Field error - invalid length - DATE must be length 8", cErrorString})			
-    		ENDIF
-    	ELSEIF cFieldType == "M"
-    		IF nFieldLen <> 10
-    			AAdd(aErrors, {"Field error - invalid length - MEMO must be length 10", cErrorString})			
-    		ENDIF
-    	ELSEIF cFieldType == "O"
-    		IF nFieldLen <> 10
-    			AAdd(aErrors, {"Field error - invalid length - OLE must be length 10", cErrorString})			
-    		ENDIF
-    	ELSEIF cFieldType == "N" .or. cFieldType == "F"
-    		IF nFieldLen > 19
-    			AAdd(aErrors, {"Field error - invalid length - NUMERIC must have length not greater than 19", cErrorString})			
-    		ELSEIF nDec > nFieldLen
-    			AAdd(aErrors, {"Field error - invalid decimals - DECIMALS must not be greater than FIELD length", cErrorString})			
-    		ENDIF
-    	ELSEIF cFieldType == "C"
-    		IF nFieldLen > 64*1024	
-    			AAdd(aErrors, {"Field error - invalid length - CHAR must not be greater than 64k ", cErrorString})
-    		ENDIF
-    	ELSE
-    		AAdd(aErrors, {"Field error - invalid Data Type ", cErrorString})
-    	ENDIF
-   NEXT
-
-   FClose( nHandle )
-
-   AAdd( aRet, { '', 'Fields structure' } )
-
-   IF cTIPOINFO = "F" 
-      AEval( fieldlist, {|x, i| AAdd( aRet, { x[1] + " - " + x[2] + "(" + hb_ntos( x[3] ) + "," + hb_ntos( x[4] ) + ")", hb_ntos( i ) } ) } )
-   ENDIF   
-   
-   IF cTIPOINFO = "E" 
-      aRet := fieldlist
+   ELSEIF cFieldType == "D"
+      IF nFieldLen <> 8
+         AAdd(aErrors,{"Field error - invalid length - DATE must be length 8",cErrorString})
+      ENDIF
+   ELSEIF cFieldType == "M"
+      IF nFieldLen <> 10
+         AAdd(aErrors,{"Field error - invalid length - MEMO must be length 10",cErrorString})
+      ENDIF
+   ELSEIF cFieldType == "O"
+      IF nFieldLen <> 10
+         AAdd(aErrors,{"Field error - invalid length - OLE must be length 10",cErrorString})
+      ENDIF
+   ELSEIF cFieldType == "N" .or. cFieldType == "F"
+      IF nFieldLen > 19
+         AAdd(aErrors,{"Field error - invalid length - NUMERIC must have length not greater than 19",cErrorString})
+      ELSEIF nDec > nFieldLen
+         AAdd(aErrors,{"Field error - invalid decimals - DECIMALS must not be greater than FIELD length",cErrorString})
+      ENDIF
+   ELSEIF cFieldType == "C"
+      IF nFieldLen > 64 * 1024
+         AAdd(aErrors,{"Field error - invalid length - CHAR must not be greater than 64k ",cErrorString})
+      ENDIF
+   ELSE
+      AAdd(aErrors,{"Field error - invalid Data Type ",cErrorString})
    ENDIF
-  
-   IF cTIPOINFO = "V" 
-      aRet := aErrors
-   ENDIF
-   
-RETURN aRet 
- 
- 
+NEXT
+
+FClose(nHandle)
+
+AAdd(aRet,{'','Fields structure'})
+
+IF cTIPOINFO = "F"
+   AEval(fieldlist,{| x,i | AAdd(aRet,{x[1]+" - "+x[2]+"("+hb_ntos(x[3])+","+hb_ntos(x[4])+")",hb_ntos(i)})})
+ENDIF
+
+IF cTIPOINFO = "E"
+   aRet := fieldlist
+ENDIF
+
+IF cTIPOINFO = "V"
+   aRet := aErrors
+ENDIF
+
+RETURN aRet
+
+
 
 // Lookup table used for hexadecimal conversions.
 // Character positions correspond directly to hexadecimal digit values.
@@ -638,24 +663,38 @@ RETURN aRet
  *    The conversion is performed using positional notation, multiplying
  *    each hexadecimal digit by the appropriate power of sixteen.
  */
-FUNCTION HEX2DEC( cHexNum )
 
-   // Loop counter, accumulated decimal value, and current hexadecimal
-   // positional multiplier.
-   LOCAL n, nDec := 0, nHexPower := 1
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function HEX2DEC()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION HEX2DEC(cHexNum)
 
-   // Process digits from right to left, exactly as manual base conversion
-   // is performed in positional numeral systems.
-   FOR n := Len( cHexNum ) TO 1 STEP -1
 
-      // Convert the current hexadecimal digit into its numeric value and
-      // accumulate its contribution to the final decimal result.
-      nDec += ( At( Upper( SubStr( cHexNum, n, 1 ) ), HEXTABLE ) - 1 ) * nHexPower
+// Loop counter, accumulated decimal value, and current hexadecimal
+// positional multiplier.
+LOCAL n,nDec := 0,nHexPower := 1
 
-      // Advance to the next hexadecimal position.
-      nHexPower *= 16
+// Process digits from right to left, exactly as manual base conversion
+// is performed in positional numeral systems.
+FOR n := Len(cHexNum) TO 1 STEP - 1
 
-   NEXT
+   // Convert the current hexadecimal digit into its numeric value and
+   // accumulate its contribution to the final decimal result.
+   nDec += (At(Upper(SubStr(cHexNum,n,1)),HEXTABLE) - 1) * nHexPower
+
+   // Advance to the next hexadecimal position.
+   nHexPower *= 16
+
+NEXT
 
 RETURN nDec
 
@@ -684,31 +723,46 @@ RETURN nDec
  * Side Effects:
  *    None.
  */
-FUNCTION FT_BYT2HEX( cByte, plusH )
 
-   // Stores the formatted hexadecimal representation.
-   LOCAL xHexString
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Function FT_BYT2HEX()
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+FUNCTION FT_BYT2HEX(cByte,plusH)
 
-   // Default to the conventional two-character hexadecimal format.
-   IF VALTYPE(plusH)<>"L"
-      plusH := .F.
-   ENDIF
-   // Perform the conversion only for character values representing
-   // a single binary byte.
-   IF ValType( cByte ) == "C"
 
-      // Split the byte into its high and low nibbles and translate each
-      // nibble into its hexadecimal character using the lookup table.
-      xHexString := SubStr( HEXTABLE, Int( Asc( cByte ) / 16 ) + 1, 1 ) + ;
-                    SubStr( HEXTABLE, Int( Asc( cByte ) % 16 ) + 1, 1 ) + ;
-                    iif( plusH, "h", '' )
+// Stores the formatted hexadecimal representation.
+LOCAL xHexString
 
-   ENDIF
+// Default to the conventional two-character hexadecimal format.
+IF VALTYPE(plusH) <> "L"
+   plusH := .F.
+ENDIF
+// Perform the conversion only for character values representing
+// a single binary byte.
+IF ValType(cByte) == "C"
+
+   // Split the byte into its high and low nibbles and translate each
+   // nibble into its hexadecimal character using the lookup table.
+   xHexString := SubStr(HEXTABLE,Int(Asc(cByte) / 16)+1,1)+;
+    SubStr(HEXTABLE,Int(Asc(cByte) % 16)+1,1)+;
+    iif(plusH,"h",'')
+
+ENDIF
 
 RETURN xHexString
 
 
-   
 
-// + EOF: f_ismemo.prg
-// +
+
+
+*+ EOF: f_ismemo.prg
+*+

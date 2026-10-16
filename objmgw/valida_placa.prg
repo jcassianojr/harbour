@@ -1,29 +1,29 @@
-// +--------------------------------------------------------------------
-// +
-// +
-// +
-// +    Programa  : valida_placa.prg
-// +
-// +
-// +
-// +     Sistema:
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024,  jcassiano
-// +
-// +
-// +
-// +
-// +
-// +    Documentado em 28-Dez-2024 as 10:42 am
-// +
-// +
-// +
-// +--------------------------------------------------------------------
-// +
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : valida_placa.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 16-Out-2026 as  8:02 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
 #include "INKEY.CH"
 
@@ -56,32 +56,33 @@
 // +
 // +
 // +
-FUNCTION validaPlaca( cPlaca )
-
-   LOCAL lRetorno := .T.
-  // LOCAL nI:=0
-   //LOCAL cCHAR:=""
-   LOCAL cPLACA3:=""
-   LOCAL cRegExAntigo  := "^[A-Z]{3}[0-9]{4}$"
-   LOCAL cRegExMercosul := "^[A-Z]{3}[0-9][A-Z][0-9]{2}$"
-
-   ZNERRO := 0  // codigo do erro
-   ZERRO  := ""  //descritivo do erro
-
-   cPlaca:= AllTrim( STRVAL( cPlaca) )
-   cPlaca:= TIRAOUT( cPlaca)
-   cPlaca:= Upper( cPlaca)
+FUNCTION validaPlaca(cPlaca)
 
 
-   IF Len( cPlaca) = 7  // Antigo ABC1234  novo mercursul ABC1D23 5 posicao pode ser letra
-      lRetorno :=hb_regexHas( cRegExAntigo, cPlaca) .OR. hb_regexHas( cRegExMercosul, cPlaca)
-   ELSE
-      lRetorno := .F.
-      ZNERRO := 1
-      ZERRO := "Tamanho invalido"    
-   ENDIF
-   
-     /*
+LOCAL lRetorno := .T.
+// LOCAL nI:=0
+//LOCAL cCHAR:=""
+LOCAL cPLACA3        := ""
+LOCAL cRegExAntigo   := "^[A-Z]{3}[0-9]{4}$"
+LOCAL cRegExMercosul := "^[A-Z]{3}[0-9][A-Z][0-9]{2}$"
+
+ZNERRO := 0   // codigo do erro
+ZERRO  := ""  //descritivo do erro
+
+cPlaca := AllTrim(STRVAL(cPlaca))
+cPlaca := TIRAOUT(cPlaca)
+cPlaca := Upper(cPlaca)
+
+
+IF Len(cPlaca) = 7  // Antigo ABC1234  novo mercursul ABC1D23 5 posicao pode ser letra
+   lRetorno := hb_regexHas(cRegExAntigo,cPlaca) .OR. hb_regexHas(cRegExMercosul,cPlaca)
+ELSE
+   lRetorno := .F.
+   ZNERRO   := 1
+   ZERRO    := "Tamanho invalido"
+ENDIF
+
+/*
       FOR nI := 1 TO Len( cPlaca)
          DO CASE
             CASE nI <= 3 .OR. nI == 5  // 1ª, 2ª, 3ª e 5ª posições devem ser LETRAS
@@ -111,73 +112,73 @@ FUNCTION validaPlaca( cPlaca )
    ENDIF
    */
 
-   IF cPlaca= "XXX9999" .OR. cPlaca= "XXX999" .OR. cPlaca= "XX9999" .OR. cPlaca= "XXXX999"
-      LRetorno := .F.  // placas genericas
-      ZNERRO   := 3
-      ZERRO    := "placa generica" + cPlaca 
-   ENDIF
+IF cPlaca = "XXX9999" .OR. cPlaca = "XXX999" .OR. cPlaca = "XX9999" .OR. cPlaca = "XXXX999"
+   LRetorno := .F.  // placas genericas
+   ZNERRO   := 3
+   ZERRO    := "placa generica"+cPlaca
+ENDIF
 
 
-    //// Verifica o estado somente se for o padrão antigo - mercosul implentacao futura
-   IF lRETORNO .AND. hb_regexHas( cRegExAntigo, cPlaca)
-      cPLACA3 := SubStr( cPlaca , 1, 3 )
-      DO CASE
-      CASE cPLACA3 >= "MZN" .AND. cPLACA3 <= "NAG"   // AC|MZN|NAG|
-         ZERRO := "AC"
-      CASE cPLACA3 >= "MUA" .AND. cPLACA3 <= "MVK"   // AL|MUA|MVK|
-         ZERRO := "AL"
-      CASE cPLACA3 >= "JWF" .AND. cPLACA3 <= "JXY"   // AM|JWF|JXY|
-         ZERRO := "AM"
-      CASE cPLACA3 >= "NEI" .AND. cPLACA3 <= "NFB"   // AP|NEI|NFB|
-         ZERRO := "AP"
-      CASE cPLACA3 >= "JKS" .AND. cPLACA3 <= "JSZ"   // BA|JKS|JSZ|
-         ZERRO := "BA"
-      CASE cPLACA3 >= "HTX" .AND. cPLACA3 <= "HZA"   // CE|HTX|HZA|
-         ZERRO := "CE"
-      CASE cPLACA3 >= "JDP" .AND. cPLACA3 <= "JKR"   // DF|JDP|JKR|
-         ZERRO := "DF"
-      CASE cPLACA3 >= "MOX" .AND. cPLACA3 <= "MTZ"   // ES|MOX|MTZ|
-         ZERRO := "ES"
-      CASE cPLACA3 >= "KAV" .AND. cPLACA3 <= "KFC"   // GO|KAV|KFC|
-         ZERRO := "GO"
-      CASE cPLACA3 >= "HOL" .AND. cPLACA3 <= "HQE"   // MA|HOL|HQE|
-         ZERRO := "MA"
-      CASE cPLACA3 >= "GKJ" .AND. cPLACA3 <= "HOK"   // MG|GKJ|HOK|
-         ZERRO := "MG"
-      CASE cPLACA3 >= "HQF" .AND. cPLACA3 <= "HTW"   // MS|HQF|HTW|
-         ZERRO := "MS"
-      CASE cPLACA3 >= "JXZ" .AND. cPLACA3 <= "KAU"   // MT|JXZ|KAU|
-         ZERRO := "MT"
-      CASE cPLACA3 >= "JTA" .AND. cPLACA3 <= "JWE"   // PA|JTA|JWE|
-         ZERRO := "PA"
-      CASE cPLACA3 >= "MMN" .AND. cPLACA3 <= "MOW"   // PB|MMN|MOW|
-         ZERRO := "PB"
-      CASE cPLACA3 >= "KFD" .AND. cPLACA3 <= "KME"   // PE|KFD|KME|
-         ZERRO := "PE"
-      CASE cPLACA3 >= "LVF" .AND. cPLACA3 <= "LWQ"   // PI|LVF|LWQ|
-         ZERRO := "PI"
-      CASE cPLACA3 >= "AAA" .AND. cPLACA3 <= "BEZ"   // PR|AAA|BEZ|
-         ZERRO := "PR"
-      CASE cPLACA3 >= "KMF" .AND. cPLACA3 <= "LVE"   // RJ|KMF|LVE|
-         ZERRO := "RJ"
-      CASE cPLACA3 >= "MXH" .AND. cPLACA3 <= "MZM"   // RN|MXH|MZM|
-         ZERRO := "RN"
-      CASE cPLACA3 >= "NBB" .AND. cPLACA3 <= "NEH"   // RO|NBB|NEH|
-         ZERRO := "RO"
-      CASE cPLACA3 >= "NAH" .AND. cPLACA3 <= "NBA"   // RR|NAH|NBA|
-         ZERRO := "RR"
-      CASE cPLACA3 >= "IAQ" .AND. cPLACA3 <= "JDO"   // RS|IAQ|JDO|
-         ZERRO := "RS"
-      CASE cPLACA3 >= "LWR" .AND. cPLACA3 <= "MMM"   // SC|LWR|MMM|
-         ZERRO := "SC"
-      CASE cPLACA3 >= "HZB" .AND. cPLACA3 <= "IAP"   // SE|HZB|IAP|
-         ZERRO := "SE"
-      CASE cPLACA3 >= "BFA" .AND. cPLACA3 <= "GKI"   // SP|BFA|GKI|
-         ZERRO := "SP"
-      CASE cPLACA3 >= "MVL" .AND. cPLACA3 <= "MXG"   // TO|MVL|MXG|
-         ZERRO := "TO"
-      ENDCASE
-   ENDIF
+//// Verifica o estado somente se for o padrão antigo - mercosul implentacao futura
+IF lRETORNO .AND. hb_regexHas(cRegExAntigo,cPlaca)
+   cPLACA3 := SubStr(cPlaca,1,3)
+   DO CASE
+   CASE cPLACA3 >= "MZN" .AND. cPLACA3 <= "NAG"   // AC|MZN|NAG|
+      ZERRO := "AC"
+   CASE cPLACA3 >= "MUA" .AND. cPLACA3 <= "MVK"   // AL|MUA|MVK|
+      ZERRO := "AL"
+   CASE cPLACA3 >= "JWF" .AND. cPLACA3 <= "JXY"   // AM|JWF|JXY|
+      ZERRO := "AM"
+   CASE cPLACA3 >= "NEI" .AND. cPLACA3 <= "NFB"   // AP|NEI|NFB|
+      ZERRO := "AP"
+   CASE cPLACA3 >= "JKS" .AND. cPLACA3 <= "JSZ"   // BA|JKS|JSZ|
+      ZERRO := "BA"
+   CASE cPLACA3 >= "HTX" .AND. cPLACA3 <= "HZA"   // CE|HTX|HZA|
+      ZERRO := "CE"
+   CASE cPLACA3 >= "JDP" .AND. cPLACA3 <= "JKR"   // DF|JDP|JKR|
+      ZERRO := "DF"
+   CASE cPLACA3 >= "MOX" .AND. cPLACA3 <= "MTZ"   // ES|MOX|MTZ|
+      ZERRO := "ES"
+   CASE cPLACA3 >= "KAV" .AND. cPLACA3 <= "KFC"   // GO|KAV|KFC|
+      ZERRO := "GO"
+   CASE cPLACA3 >= "HOL" .AND. cPLACA3 <= "HQE"   // MA|HOL|HQE|
+      ZERRO := "MA"
+   CASE cPLACA3 >= "GKJ" .AND. cPLACA3 <= "HOK"   // MG|GKJ|HOK|
+      ZERRO := "MG"
+   CASE cPLACA3 >= "HQF" .AND. cPLACA3 <= "HTW"   // MS|HQF|HTW|
+      ZERRO := "MS"
+   CASE cPLACA3 >= "JXZ" .AND. cPLACA3 <= "KAU"   // MT|JXZ|KAU|
+      ZERRO := "MT"
+   CASE cPLACA3 >= "JTA" .AND. cPLACA3 <= "JWE"   // PA|JTA|JWE|
+      ZERRO := "PA"
+   CASE cPLACA3 >= "MMN" .AND. cPLACA3 <= "MOW"   // PB|MMN|MOW|
+      ZERRO := "PB"
+   CASE cPLACA3 >= "KFD" .AND. cPLACA3 <= "KME"   // PE|KFD|KME|
+      ZERRO := "PE"
+   CASE cPLACA3 >= "LVF" .AND. cPLACA3 <= "LWQ"   // PI|LVF|LWQ|
+      ZERRO := "PI"
+   CASE cPLACA3 >= "AAA" .AND. cPLACA3 <= "BEZ"   // PR|AAA|BEZ|
+      ZERRO := "PR"
+   CASE cPLACA3 >= "KMF" .AND. cPLACA3 <= "LVE"   // RJ|KMF|LVE|
+      ZERRO := "RJ"
+   CASE cPLACA3 >= "MXH" .AND. cPLACA3 <= "MZM"   // RN|MXH|MZM|
+      ZERRO := "RN"
+   CASE cPLACA3 >= "NBB" .AND. cPLACA3 <= "NEH"   // RO|NBB|NEH|
+      ZERRO := "RO"
+   CASE cPLACA3 >= "NAH" .AND. cPLACA3 <= "NBA"   // RR|NAH|NBA|
+      ZERRO := "RR"
+   CASE cPLACA3 >= "IAQ" .AND. cPLACA3 <= "JDO"   // RS|IAQ|JDO|
+      ZERRO := "RS"
+   CASE cPLACA3 >= "LWR" .AND. cPLACA3 <= "MMM"   // SC|LWR|MMM|
+      ZERRO := "SC"
+   CASE cPLACA3 >= "HZB" .AND. cPLACA3 <= "IAP"   // SE|HZB|IAP|
+      ZERRO := "SE"
+   CASE cPLACA3 >= "BFA" .AND. cPLACA3 <= "GKI"   // SP|BFA|GKI|
+      ZERRO := "SP"
+   CASE cPLACA3 >= "MVL" .AND. cPLACA3 <= "MXG"   // TO|MVL|MXG|
+      ZERRO := "TO"
+   ENDCASE
+ENDIF
 /*
 UF|De|Ate|
 AC|MZN|NAG|
@@ -209,9 +210,9 @@ SP|BFA|GKI|
 TO|MVL|MXG|
 */
 
-   RETURN lRetorno
-   
-   
+RETURN lRetorno
+
+
 // +--------------------------------------------------------------------
 // +
 // +
@@ -224,16 +225,17 @@ TO|MVL|MXG|
 // +
 // +
 // +
-FUNCTION validacnh( eVALOR )
+FUNCTION validacnh(eVALOR)
 
-   IF ValType( eVALOR ) <> "C"
-      eVALOR := AllTrim( Str( eVALOR ) )
-   ENDIF
-   IF !ValidCnhAntiga( StrZero( Val( eVALOR ), 9 ) ) .AND. !ValidCnhAtual( StrZero( Val( eVALOR ), 11 ) ) .AND. !ValidCnhImpresso( eVALOR )
-      RETURN .F.
-   ENDIF
 
-   RETURN .T.
+IF ValType(eVALOR) <> "C"
+   eVALOR := AllTrim(Str(eVALOR))
+ENDIF
+IF !ValidCnhAntiga(StrZero(Val(eVALOR),9)) .AND. !ValidCnhAtual(StrZero(Val(eVALOR),11)) .AND. !ValidCnhImpresso(eVALOR)
+   RETURN .F.
+ENDIF
+
+RETURN .T.
 
 
 
@@ -249,7 +251,8 @@ FUNCTION validacnh( eVALOR )
 // +
 // +
 // +
-FUNCTION CheckCNHCat( cCNHCAT )
+FUNCTION CheckCNHCat(cCNHCAT)
+
 
 /*
 CATEGORIA TIPOS DE VEÍCULOS EXEMPLOS
@@ -261,20 +264,21 @@ D Veículos com mais de oito lugares para passageiros. Ônibus, micro-ônibus e 
 E Todos os veículos das outras categorias, combinações de veículos, tratores e veículos com mais de 6.000kg. Automóvel tracionando, trailer, caminhão tracionando, duas carretas (treminhão) e ônibus articulado.
 */
 
-   LOCAL aCAT := { 'A', 'B', 'C', 'D', 'E', 'AB', 'AC', 'AD', 'AE', 'ACC' }
+LOCAL aCAT := {'A','B','C','D','E','AB','AC','AD','AE','ACC'}
 
-   znerro  := 0
-   zerro   := ''
-   cCNHCAT := AllTrim( cCNHCAT )
-   IF !Empty( cCNHCAT )
-      IF AScan( aCAT, cCNHCAT ) = 0
-         znerro := 1
-         zerro  := 'Categoria Habilitacao invalida: ' + cCNHCAT
-         RETURN .F.
-      ENDIF
+znerro  := 0
+zerro   := ''
+cCNHCAT := AllTrim(cCNHCAT)
+IF !Empty(cCNHCAT)
+   IF AScan(aCAT,cCNHCAT) = 0
+      znerro := 1
+      zerro  := 'Categoria Habilitacao invalida: '+cCNHCAT
+      RETURN .F.
    ENDIF
+ENDIF
 
-   RETURN .T.
+RETURN .T.
 
-// + EOF: valida_placa.prg
-// +
+
+*+ EOF: valida_placa.prg
+*+

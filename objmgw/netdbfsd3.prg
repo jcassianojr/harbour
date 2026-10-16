@@ -1,19 +1,29 @@
-// +--------------------------------------------------------------------
-// +
-// +    Programa  : netdbf.prg
-// +
-// +     Sistema:
-// +
-// +     Linguagem: Harbour
-// +
-// +     Autor: jcassiano
-// +
-// +     Copyright (c) 2024-2026,  jcassiano
-// +
-// + 1. DbGetRec() — Lê o registro atual para um Array
-// + 2. DbPutRec( aRegistro ) — Grava um Array de volta no Registro
-// + 3.HB_RecToStr() Converte o registro todo para string
-// +--------------------------------------------------------------------
+*+--------------------------------------------------------------------
+*+
+*+
+*+
+*+    Programa  : netdbfsd3.prg
+*+
+*+
+*+
+*+     Sistema:
+*+
+*+     Linguagem: Harbour
+*+
+*+     Autor: jcassiano
+*+
+*+     Copyright (c) 2024,  jcassiano
+*+
+*+     
+*+
+*+
+*+
+*+    Documentado em 16-Out-2026 as  8:02 am
+*+
+*+
+*+
+*+--------------------------------------------------------------------
+*+
 
 #include "INKEY.CH"
 #include "try.ch"
@@ -25,7 +35,7 @@
 REQUEST ADSADT
 
 #ifdef USE_PXRDD
-    REQUEST PXRDD   //-20 Carrega a RDD do Paradox criada acima
+REQUEST PXRDD   //-20 Carrega a RDD do Paradox criada acima
 #endif
 
 // +--------------------------------------------------------------------
@@ -33,27 +43,51 @@ REQUEST ADSADT
 // +--------------------------------------------------------------------
 FUNCTION netregosok()
 
-   IF !WIN_OSNETREGOK()  // Precisa direitos ADM
-      IF !WIN_OSNETREGOK( .T., .T. )  // primeiro .t. para ajustar XP/W98..., o segundo ajusta no vista.
-         // ALERTX('Registro do windows não ajustado !')
-      ELSE
-         // ALERTX('Registro windows ajustado')
-      ENDIF
-   ELSE
-      // ALERTX('Ja Ajustado')
-   ENDIF
 
-   RETURN .T.
+IF !WIN_OSNETREGOK()  // Precisa direitos ADM
+   IF !WIN_OSNETREGOK(.T.,.T.)  // primeiro .t. para ajustar XP/W98..., o segundo ajusta no vista.
+      // ALERTX('Registro do windows não ajustado !')
+   ELSE
+      // ALERTX('Registro windows ajustado')
+   ENDIF
+ELSE
+   // ALERTX('Ja Ajustado')
+ENDIF
+
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
 // +    Function netgrvcam(cCAMPO, eVAL, lLOCK )
 // +--------------------------------------------------------------------
-FUNCTION netgrvcam( cCAMPO, eVAL, lLOCK )
+FUNCTION netgrvcam(cCAMPO,eVAL,lLOCK)
 
-   IF ValType( lLOCK ) <> "L"
-      lLOCK := .T.
-   ENDIF
+
+IF ValType(lLOCK) <> "L"
+   lLOCK := .T.
+ENDIF
+IF lLOCK
+   netreclock()
+ENDIF
+field->&cCAMPO. := eVAL
+IF lLOCK
+   dbUnlock()
+ENDIF
+
+RETURN .T.
+
+
+// +--------------------------------------------------------------------
+// +    Function netgrvd(cCAMPO, eVAL, lLOCK )
+// +    grava se houver diferenca e o valor passado nao for em branco (nao zerara o campo)
+// +--------------------------------------------------------------------
+FUNCTION netgrvd(cCAMPO,eVAL,lLOCK)
+
+
+IF ValType(lLOCK) <> "L"
+   lLOCK := .T.
+ENDIF
+IF !Empty(eVAL) .AND. eVAL <> &cCAMPO.
    IF lLOCK
       netreclock()
    ENDIF
@@ -61,71 +95,52 @@ FUNCTION netgrvcam( cCAMPO, eVAL, lLOCK )
    IF lLOCK
       dbUnlock()
    ENDIF
+ENDIF
 
-   RETURN .T.
-
-
-// +--------------------------------------------------------------------
-// +    Function netgrvd(cCAMPO, eVAL, lLOCK )
-// +    grava se houver diferenca e o valor passado nao for em branco (nao zerara o campo)
-// +--------------------------------------------------------------------
-FUNCTION netgrvd( cCAMPO, eVAL, lLOCK )
-
-   IF ValType( lLOCK ) <> "L"
-      lLOCK := .T.
-   ENDIF
-   IF !Empty( eVAL ) .AND. eVAL <> &cCAMPO.
-      IF lLOCK
-         netreclock()
-      ENDIF
-      field->&cCAMPO. := eVAL
-      IF lLOCK
-         dbUnlock()
-      ENDIF
-   ENDIF
-
-   RETURN .T.
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
 // +    Function netgrvz(cCAMPO, eVAL, lLOCK )
 // +    grava se o banco estiver vazio e o valor nao
 // +--------------------------------------------------------------------
-FUNCTION netgrvz( cCAMPO, eVAL, lLOCK )
+FUNCTION netgrvz(cCAMPO,eVAL,lLOCK)
 
-   IF ValType( lLOCK ) <> "L"
-      lLOCK := .T.
-   ENDIF
-   IF !Empty( eVAL ) .AND. Empty( &cCAMPO. )
-      IF lLOCK
-         netreclock()
-      ENDIF
-      field->&cCAMPO. := eVAL
-      IF lLOCK
-         dbUnlock()
-      ENDIF
-   ENDIF
 
-   RETURN .T.
+IF ValType(lLOCK) <> "L"
+   lLOCK := .T.
+ENDIF
+IF !Empty(eVAL) .AND. Empty(&cCAMPO.)
+   IF lLOCK
+      netreclock()
+   ENDIF
+   field->&cCAMPO. := eVAL
+   IF lLOCK
+      dbUnlock()
+   ENDIF
+ENDIF
+
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
 // +    Function dbSkipEx(nSKIP)
 // +--------------------------------------------------------------------
-FUNCTION dbSkipEx( nSKIP )
+FUNCTION dbSkipEx(nSKIP)
 
-   IF ValType( nSKIP ) # "N"
-      nSKIP := 1
-   ENDIF
-   dbSkip( nSKIP )
-   IF Bof()
-      dbGoTop()
-   ENDIF
-   IF Eof()
-      dbGoBottom()
-   ENDIF
 
-   RETURN .T.
+IF ValType(nSKIP) # "N"
+   nSKIP := 1
+ENDIF
+dbSkip(nSKIP)
+IF Bof()
+   dbGoTop()
+ENDIF
+IF Eof()
+   dbGoBottom()
+ENDIF
+
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
@@ -133,20 +148,21 @@ FUNCTION dbSkipEx( nSKIP )
 // +--------------------------------------------------------------------
 FUNCTION netrecapp()
 
-   LOCAL nkey := 0
 
+LOCAL nkey := 0
+
+dbAppend()
+WHILE NetErr()
    dbAppend()
-   WHILE NetErr()
-      dbAppend()
-      WaitPeriod( 100 )
-      nKEY := Inkey( 1 )
-      IF nKEY = K_ESC
-         RETURN .F.
-      ENDIF
-      MDS( "Tentando Incluir Registro: " + Alias() )
-   ENDDO
+   WaitPeriod(100)
+   nKEY := Inkey(1)
+   IF nKEY = K_ESC
+      RETURN .F.
+   ENDIF
+   MDS("Tentando Incluir Registro: "+Alias())
+ENDDO
 
-   RETURN .T.
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
@@ -154,25 +170,26 @@ FUNCTION netrecapp()
 // +--------------------------------------------------------------------
 FUNCTION netrecdel()
 
-   LOCAL nKey := 0
-   LOCAL nTentativas := 0
 
-   WHILE !dbRLock( RecNo() )
-      WaitPeriod( 100 )
-      nKey := Inkey( 1 )
-      IF nKey = K_ESC
-         RETURN .F.
-      ENDIF
-      nTentativas++
-      IF nTentativas > 50  // Aproximadamente 5 segundos tentando
-         MDS( "Não foi possível travar o registro para exclusão." )
-         RETURN .F.
-      ENDIF
-   ENDDO
-   dbDelete()
-   dbUnlock()
+LOCAL nKey        := 0
+LOCAL nTentativas := 0
 
-   RETURN .T.
+WHILE !dbRLock(RecNo())
+   WaitPeriod(100)
+   nKey := Inkey(1)
+   IF nKey = K_ESC
+      RETURN .F.
+   ENDIF
+   nTentativas ++
+   IF nTentativas > 50  // Aproximadamente 5 segundos tentando
+      MDS("Não foi possível travar o registro para exclusão.")
+      RETURN .F.
+   ENDIF
+ENDDO
+dbDelete()
+dbUnlock()
+
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
@@ -180,23 +197,24 @@ FUNCTION netrecdel()
 // +--------------------------------------------------------------------
 FUNCTION netreclock()
 
-   LOCAL nKey := 0
-   LOCAL nTentativas := 0
 
-   WHILE !dbRLock( RecNo() )
-      WaitPeriod( 100 )
-      nKey := Inkey( 1 )
-      IF nKey = K_ESC
-         RETURN .F.
-      ENDIF
-      nTentativas++
-      IF nTentativas > 50  // Aproximadamente 5 segundos tentando
-         MDS( "Não foi possível travar o registro." )
-         RETURN .F.
-      ENDIF
-   ENDDO
+LOCAL nKey        := 0
+LOCAL nTentativas := 0
 
-   RETURN .T.
+WHILE !dbRLock(RecNo())
+   WaitPeriod(100)
+   nKey := Inkey(1)
+   IF nKey = K_ESC
+      RETURN .F.
+   ENDIF
+   nTentativas ++
+   IF nTentativas > 50  // Aproximadamente 5 segundos tentando
+      MDS("Não foi possível travar o registro.")
+      RETURN .F.
+   ENDIF
+ENDDO
+
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
@@ -204,384 +222,395 @@ FUNCTION netreclock()
 // +--------------------------------------------------------------------
 FUNCTION netrecunlcom()
 
-   dbUnlock()
-   dbCommit()
 
-   RETURN .T.
+dbUnlock()
+dbCommit()
+
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
 // +    Function netpack(cARQ,lPCK)
 // +--------------------------------------------------------------------
-FUNCTION netpack( cARQ, lPCK )
+FUNCTION netpack(cARQ,lPCK)
 
-   IF ValType( lPCK ) # "L"
-      lPCK := .T.
-   ENDIF
-   IF lPCK
-      IF !netuse( cARQ,, .F.,,,, )  // .F. nao compartilhado
-         RETURN .F.
-      ENDIF
-      PACK
-      dbCloseArea()
-   ENDIF
 
-   RETURN .T.
+IF ValType(lPCK) # "L"
+   lPCK := .T.
+ENDIF
+IF lPCK
+   IF !netuse(cARQ,,.F.,,,,)  // .F. nao compartilhado
+      RETURN .F.
+   ENDIF
+   PACK
+   dbCloseArea()
+ENDIF
+
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
 // +    Function netzap(cARQ, lINDEX)
 // +--------------------------------------------------------------------
-FUNCTION netzap( cARQ, lINDEX )
+FUNCTION netzap(cARQ,lINDEX)
 
-   IF ValType( lINDEX ) # "L"
-      lINDEX := .T.
-   ENDIF
-   IF !netuse( cARQ,, .F.,,, lINDEX, )   // .F. nao compartilhado
-      RETURN .F.
-   ENDIF
-   ZAP
-   dbCloseArea()
 
-   RETURN .T.
+IF ValType(lINDEX) # "L"
+   lINDEX := .T.
+ENDIF
+IF !netuse(cARQ,,.F.,,,lINDEX,)   // .F. nao compartilhado
+   RETURN .F.
+ENDIF
+ZAP
+dbCloseArea()
+
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
 // +    Function NetRegCount(cARQ)
 // +--------------------------------------------------------------------
-FUNCTION NetRegCount( cARQ )
+FUNCTION NetRegCount(cARQ)
 
-   LOCAL nREG
-   LOCAL cALIAS := Alias()
 
-   nREG := 0
-   IF !netuse( cARQ,,,,, .F., )   // abre sem index
-      IF !Empty( cALIAS )
-         dbSelectAr( cALIAS )
-      ENDIF
-      RETURN nREG
+LOCAL nREG
+LOCAL cALIAS := Alias()
+
+nREG := 0
+IF !netuse(cARQ,,,,,.F.,)   // abre sem index
+   IF !Empty(cALIAS)
+      dbSelectAr(cALIAS)
    ENDIF
-   nREG := LastRec()
-   dbCloseArea()
-   IF !Empty( cALIAS )
-      dbSelectAr( cALIAS )
-   ENDIF
-
    RETURN nREG
+ENDIF
+nREG := LastRec()
+dbCloseArea()
+IF !Empty(cALIAS)
+   dbSelectAr(cALIAS)
+ENDIF
+
+RETURN nREG
 
 
 // +--------------------------------------------------------------------
 // +    Function netuse(cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
 // +--------------------------------------------------------------------
-FUNCTION netuse( cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME, lOPENCON )
+FUNCTION netuse(cARQ,cDRIVER,lSHA,lREAD,lNEW,lINDEX,nTIME,lOPENCON)
 
-   LOCAL cEXT
-   LOCAL cIND
-   LOCAL nKEY
-   LOCAL cTableExt := "", cMemoExt := "", cOrdExt := ""
-   LOCAL cDbfFile
-   LOCAL nPosCol
-   LOCAL cDbPath, cTableName
-   LOCAL cOldRdd := RddSetDefault()  // Salva a RDD padrão atual
 
-   // Tratamento com TRY/CATCH para recuperacao de extensoes via rddInfo
-   TRY
-      cTableExt := hb_rddInfo( RDDI_TABLEEXT )
-      cTableExt := strtran(cTableExt,".","")
-   CATCH
-      cTableExt := ""
-   END
+LOCAL cEXT
+LOCAL cIND
+LOCAL nKEY
+LOCAL cTableExt := "",cMemoExt := "",cOrdExt := ""
+LOCAL cDbfFile
+LOCAL nPosCol
+LOCAL cDbPath,cTableName
+LOCAL cOldRdd   := RddSetDefault()  // Salva a RDD padrão atual
 
-   IF Empty( cTableExt )
-      cTableExt := "dbf"
+// Tratamento com TRY/CATCH para recuperacao de extensoes via rddInfo
+TRY
+   cTableExt := hb_rddInfo(RDDI_TABLEEXT)
+   cTableExt := strtran(cTableExt,".","")
+CATCH
+   cTableExt := ""
+END
+
+IF Empty(cTableExt)
+   cTableExt := "dbf"
+ENDIF
+
+TRY
+   cMemoExt := hb_rddInfo(RDDI_MEMOEXT)
+   cMemoExt := strtran(cMemoExt,".","")
+CATCH
+   cMemoExt := ""
+END
+
+IF Empty(cMemoExt)
+   cMemoExt := "fpt"
+ENDIF
+
+TRY
+   cOrdExt := hb_rddInfo(RDDI_ORDBAGEXT)
+   cOrdExt := strtran(cOrdExt,".","")
+CATCH
+   cOrdExt := ""
+END
+
+IF Empty(cOrdExt)
+   cOrdExt := "cdx"
+ENDIF
+
+cEXT := StrTran(Upper(cTableExt),".","")
+
+IF ValType(cDRIVER) # "C" .OR. Empty(cDRIVER)
+   DO CASE
+   CASE cEXT == "SQLITE" .OR. "SL3" $ Upper(cTableExt)
+      cDRIVER := "SL3RDD"
+   CASE cEXT == "ADT"
+      cDRIVER := "ADSADT"
+#ifdef USE_PXRDD
+   CASE cEXT == "DB"
+      cDRIVER := "PXRDD"
+#endif           
+   OTHERWISE
+      cDRIVER := "DBFCDX"
+   ENDCASE
+ELSE
+   cDRIVER := AllTrim(cDRIVER)
+ENDIF
+
+// Se o driver for ADSADT, define o RddSetDefault explicitamente
+IF cDRIVER == "ADSADT"
+   RddSetDefault("ADSADT")
+ENDIF
+
+IF ValType(lNEW) # "L"
+   lNEW := .T.
+ENDIF
+IF ValType(lSHA) # "L"
+   lSHA := .T.
+ENDIF
+IF ValType(nTIME) # "N"
+   nTIME := - 1
+ENDIF
+IF ValType(lREAD) # "L"
+   lREAD := .F.
+ENDIF
+IF ValType(lINDEX) # "L"
+   lINDEX := .T.
+ENDIF
+IF cDRIVER == "SL3RDD" .OR. cDRIVER == "PXRDD"
+   lINDEX := .F.
+ENDIF
+
+// Tratamento especifico para SL3RDD dividindo por dois pontos (:) se houver
+IF cDRIVER == "SL3RDD"
+   AdsSetServerType(ADS_LOCAL_SERVER)
+   AdsSetFileType(ADS_ADT)
+   lINDEX := .F.
+   IF ValType(lOPENCON) # "L"
+      lOPENCON := .T.
    ENDIF
 
-   TRY
-      cMemoExt := hb_rddInfo( RDDI_MEMOEXT )
-      cMemoExt := strtran(cMemoExt,".","")
-   CATCH
-      cMemoExt := ""
-   END
+   nPosCol := At (":",cARQ)
+   IF nPosCol > 0
+      cDbPath    := SubStr(cARQ,1,nPosCol - 1)
+      cTableName := SubStr(cARQ,nPosCol+1)
 
-   IF Empty( cMemoExt )
-      cMemoExt := "fpt"
-   ENDIF
-
-   TRY
-      cOrdExt := hb_rddInfo( RDDI_ORDBAGEXT )
-      cOrdExt := strtran(cOrdExt,".","")
-   CATCH
-      cOrdExt := ""
-   END
-
-   IF Empty( cOrdExt )
-      cOrdExt := "cdx"
-   ENDIF
-
-   cEXT := StrTran( Upper( cTableExt ), ".", "" )
-
-   IF ValType( cDRIVER ) # "C" .OR. Empty( cDRIVER )
-      DO CASE
-        CASE cEXT == "SQLITE" .OR. "SL3" $ Upper( cTableExt )
-             cDRIVER := "SL3RDD"
-        CASE cEXT == "ADT"
-             cDRIVER := "ADSADT"
-       #ifdef USE_PXRDD
-         CASE cEXT == "DB"
-             cDRIVER := "PXRDD"
-       #endif           
-      OTHERWISE
-        cDRIVER := "DBFCDX"
-      ENDCASE 
-   ELSE
-      cDRIVER := AllTrim( cDRIVER )
-   ENDIF
-
-   // Se o driver for ADSADT, define o RddSetDefault explicitamente
-   IF cDRIVER == "ADSADT"
-      RddSetDefault( "ADSADT" )
-   ENDIF
-
-   IF ValType( lNEW ) # "L"
-      lNEW := .T.  
-   ENDIF
-   IF ValType( lSHA ) # "L"
-      lSHA := .T.  
-   ENDIF
-   IF ValType( nTIME ) # "N"
-      nTIME := -1   
-   ENDIF
-   IF ValType( lREAD ) # "L"
-      lREAD := .F.   
-   ENDIF
-   IF ValType( lINDEX ) # "L"
-      lINDEX := .T.  
-   ENDIF
-   IF cDRIVER == "SL3RDD" .OR. cDRIVER == "PXRDD"
-      lINDEX := .F.
-   ENDIF
-
-   // Tratamento especifico para SL3RDD dividindo por dois pontos (:) se houver
-   IF cDRIVER == "SL3RDD"
-      AdsSetServerType(ADS_LOCAL_SERVER)
-      AdsSetFileType(ADS_ADT)
-      lINDEX := .F.
-      IF ValType( lOPENCON ) # "L"
-         lOPENCON := .T.  
+      IF lOPENCON
+         DBSL3CONNECTION(cDbPath,.T.)
       ENDIF
-
-      nPosCol := At( ":", cARQ )
-      IF nPosCol > 0
-         cDbPath    := SubStr( cARQ, 1, nPosCol - 1 )
-         cTableName := SubStr( cARQ, nPosCol + 1 )
-         
-         IF lOPENCON
-            DBSL3CONNECTION( cDbPath, .T. )
-         ENDIF
-         cARQ := cTableName
-      ENDIF
-   ELSE
-      IF ValType( lOPENCON ) # "L"
-         lOPENCON := .F.  
-      ENDIF
-   ENDIF   
-
-   // Só inclui a extensão padrão se ela já não foi passada explicitamente no nome do arquivo
-   IF Lower( Right( cARQ, Len( cTableExt ) + 1 ) ) != "." + Lower( cTableExt )
-      cDbfFile := cARQ +"."+ cTableExt
-   ELSE
-      cDbfFile := cARQ
+      cARQ := cTableName
    ENDIF
+ELSE
+   IF ValType(lOPENCON) # "L"
+      lOPENCON := .F.
+   ENDIF
+ENDIF
 
-   IF cDRIVER != "SL3RDD" .AND. !File( cDbfFile ) .AND. !File( cARQ )   
-      ALERTX( "Netuse: Falta Arquivo: " + cARQ )
-      RddSetDefault( cOldRdd )  // Restaura a RDD antes de sair com .F.
+// Só inclui a extensão padrão se ela já não foi passada explicitamente no nome do arquivo
+IF Lower(Right(cARQ,Len(cTableExt)+1)) != "."+Lower(cTableExt)
+   cDbfFile := cARQ+"."+cTableExt
+ELSE
+   cDbfFile := cARQ
+ENDIF
+
+IF cDRIVER != "SL3RDD" .AND. !File(cDbfFile) .AND. !File(cARQ)
+   ALERTX("Netuse: Falta Arquivo: "+cARQ)
+   RddSetDefault(cOldRdd)   // Restaura a RDD antes de sair com .F.
+   RETURN .F.
+ENDIF
+
+WHILE .T.
+   dbUseArea(lNEW,cDRIVER,cARQ,,lSHA,lREAD)
+   IF !NetErr()
+      EXIT
+   ENDIF
+   IF nTIME > 0
+      nTIME := nTIME - 1
+   ENDIF
+   IF nTIME = 0
+      RddSetDefault(cOldRdd)  // Restaura a RDD antes de sair com .F.
       RETURN .F.
    ENDIF
-
-   WHILE .T.
-      dbUseArea( lNEW, cDRIVER, cARQ,, lSHA, lREAD )
-      IF !NetErr()
-         EXIT
-      ENDIF
-      IF nTIME > 0
-         nTIME := nTIME - 1
-      ENDIF
-      IF nTIME = 0
-         RddSetDefault( cOldRdd )  // Restaura a RDD antes de sair com .F.
+   IF nTIME = - 2
+      IF !MDG("Deseja Retentar")
+         RddSetDefault(cOldRdd)   // Restaura a RDD antes de sair com .F.
          RETURN .F.
       ENDIF
-      IF nTIME = -2
-         IF !MDG( "Deseja Retentar" )
-            RddSetDefault( cOldRdd )  // Restaura a RDD antes de sair com .F.
-            RETURN .F.
-         ENDIF
-      ENDIF
-      MDS( "Nao Estou Conseguindo Abrir arquivo " + cARQ )
-      WaitPeriod( 100 )
-      nKEY := Inkey( 1 )
-      IF nKEY = K_ESC
-         RddSetDefault( cOldRdd )  // Restaura a RDD antes de sair com .F.
-         RETURN .F.
-      ENDIF
-   ENDDO
+   ENDIF
+   MDS("Nao Estou Conseguindo Abrir arquivo "+cARQ)
+   WaitPeriod(100)
+   nKEY := Inkey(1)
+   IF nKEY = K_ESC
+      RddSetDefault(cOldRdd)  // Restaura a RDD antes de sair com .F.
+      RETURN .F.
+   ENDIF
+ENDDO
 
-   IF lINDEX .AND. !Empty( cOrdExt )
-      cIND := cARQ + "." + cOrdExt
-      IF File( cIND )
-         IF cDRIVER = "DBFCDX"
-            ordListAdd( cIND )
-         ELSE
-            dbSetIndex( cIND )
-         ENDIF
+IF lINDEX .AND. !Empty(cOrdExt)
+   cIND := cARQ+"."+cOrdExt
+   IF File(cIND)
+      IF cDRIVER = "DBFCDX"
+         ordListAdd(cIND)
       ELSE
-         ALERTX( "Arquivo Indice nao encontrado : " + cIND )
+         dbSetIndex(cIND)
       ENDIF
+   ELSE
+      ALERTX("Arquivo Indice nao encontrado : "+cIND)
    ENDIF
+ENDIF
 
-   IF cDRIVER = "DBFCDX"
-      rddInfo( RDDI_LOCKSCHEME, DB_DBFLOCK_HB32 )
-   ENDIF
-   IF cDRIVER = "DBFNTX"
-      rddInfo( RDDI_LOCKSCHEME, DB_DBFLOCK_HB32 )
-   ENDIF
+IF cDRIVER = "DBFCDX"
+   rddInfo(RDDI_LOCKSCHEME,DB_DBFLOCK_HB32)
+ENDIF
+IF cDRIVER = "DBFNTX"
+   rddInfo(RDDI_LOCKSCHEME,DB_DBFLOCK_HB32)
+ENDIF
 
-   RddSetDefault( cOldRdd )  // Restaura a RDD original antes de concluir com sucesso
+RddSetDefault(cOldRdd)  // Restaura a RDD original antes de concluir com sucesso
 
-   RETURN .T.
+RETURN .T.
 
 
 
 // +--------------------------------------------------------------------
 // +    Function zei_fort(nLASTREC,lSAYREC,nPOS,nINC )
 // +--------------------------------------------------------------------
-FUNCTION zei_fort( nLASTREC, lSAYREC, nPOS, nINC )
+FUNCTION zei_fort(nLASTREC,lSAYREC,nPOS,nINC)
 
-   STATIC LD_CHA   := "|"
-   STATIC nPOSZEI
-   LOCAL cComplete
 
-   IF ValType( nLASTREC ) # "N"
-      nLASTREC := LastRec()
-   ENDIF
-   IF ValType( lSAYREC ) # "L"
-      lSAYREC := .T.
-   ENDIF
-   IF ValType( nINC ) = "N"
-      IF nINC = 0
-         nPOSZEI := 0
-      ELSE
-         nPOSZEI += nINC
-      ENDIF
-      nPOS := nPOSZEI
-   ENDIF
-   IF nLASTREC = 0   // evita divisao por zero
-      nLASTREC := 100
-   ENDIF
-   IF ValType( nPOS ) = "N"
-      cComplete := Int( ( nPOS / nLASTREC ) * 100 )
+STATIC LD_CHA   := "|"
+STATIC nPOSZEI
+LOCAL cComplete
+
+IF ValType(nLASTREC) # "N"
+   nLASTREC := LastRec()
+ENDIF
+IF ValType(lSAYREC) # "L"
+   lSAYREC := .T.
+ENDIF
+IF ValType(nINC) = "N"
+   IF nINC = 0
+      nPOSZEI := 0
    ELSE
-      cComplete := Int( ( RecNo() / nLASTREC ) * 100 )
+      nPOSZEI += nINC
    ENDIF
-   IF ld_cha = '|'
-      ld_cha := '/'
-   ELSEIF ld_cha = '/'
-      ld_cha := '\'
-   ELSEIF ld_cha = '\'
-      ld_cha := '-'
-   ELSEIF ld_cha = '-'
-      ld_cha := '|'
+   nPOS := nPOSZEI
+ENDIF
+IF nLASTREC = 0   // evita divisao por zero
+   nLASTREC := 100
+ENDIF
+IF ValType(nPOS) = "N"
+   cComplete := Int((nPOS / nLASTREC) * 100)
+ELSE
+   cComplete := Int((RecNo() / nLASTREC) * 100)
+ENDIF
+IF ld_cha = '|'
+   ld_cha := '/'
+ELSEIF ld_cha = '/'
+   ld_cha := '\'
+ELSEIF ld_cha = '\'
+   ld_cha := '-'
+ELSEIF ld_cha = '-'
+   ld_cha := '|'
+ENDIF
+IF lSAYREC
+   IF ValType(nPOS) = "N"
+      @ MaxRow(),38 SAY Str(nPOS,8)+"/"+Str(nLASTREC,8)         
+   ELSE
+      @ MaxRow(),38 SAY Str(RecNo(),8)+"/"+Str(nLASTREC,8)         
    ENDIF
-   IF lSAYREC
-      IF ValType( nPOS ) = "N"
-         @ MaxRow(), 38 SAY Str( nPOS, 8 ) + "/" + Str( nLASTREC, 8 )
-      ELSE
-         @ MaxRow(), 38 SAY Str( RecNo(), 8 ) + "/" + Str( nLASTREC, 8 )
-      ENDIF
-   ENDIF
-   @ MaxRow(), 57                     SAY "["
-   @ MaxRow(), 69                     SAY "]"
-   @ MaxRow(), 58 + Int( cCOMPLETE / 10 ) SAY "#" + ld_cha
-   @ MaxRow(), 71                     SAY Transform( cComplete, '999' )
+ENDIF
+@ MaxRow(),57                     SAY "["                                
+@ MaxRow(),69                     SAY "]"                                
+@ MaxRow(),58+Int(cCOMPLETE / 10) SAY "#"+ld_cha                         
+@ MaxRow(),71                     SAY Transform(cComplete,'999')         
 
-   RETURN .T.
+RETURN .T.
 
 
 // +--------------------------------------------------------------------
 // +    Function sdvpegpos(Pstring,aCAMPOS, PnCampo,lCONV,eCONV)
 // +--------------------------------------------------------------------
-FUNCTION sdvpegpos( Pstring, aCAMPOS, PnCampo, lCONV, eCONV )
+FUNCTION sdvpegpos(Pstring,aCAMPOS,PnCampo,lCONV,eCONV)
 
-   LOCAL eRETU
 
-   eRetu := SubStr( Pstring, aCAMPOS[ PnCampo, 5 ], aCAMPOS[ PnCampo, 3 ] )
-   IF ValType( lCONV ) # "L"
-      lCONV := .F.
-   ENDIF
-   IF ValType( eCONV ) # "C"
-      eCONV := aCAMPOS[ PnCampo, 6 ]
-   ENDIF
-   IF lCONV
-      IF !Empty( eCONV )
-         DO CASE
-         CASE eCONV = "DMY/2" .OR. eCONV = "DMY/4"
-            eRETU := SubStr( eRETU, 1, 2 ) + "/" + SubStr( eRETU, 3, 2 ) + "/" + SubStr( eRETU, 5 )
-         ENDCASE
-      ELSE
-         DO CASE
-         CASE aCAMPOS[ PnCampo,  2 ] = "SD"
-            eRETU := SToD( eRETU )
-         CASE aCAMPOS[ PnCampo,  2 ] = "D"
-            eRETU := CToD( eRETU )
-         CASE aCAMPOS[ PnCampo,  2 ] = "L"
-            eRETU := StrLogic( eRETU )
-         CASE aCAMPOS[ PnCampo,  2 ] = "N"
-            eRETU := Val( eRETU )
-            IF aCAMPOS[ PnCampo,  4 ] > 0
-               eRETU := eRETU / ( 10 ^ aCAMPOS[ PnCampo, 4 ] )
-            ENDIF
-         ENDCASE
-      ENDIF
-   ENDIF
+LOCAL eRETU
 
-   RETURN eRETU
+eRetu := SubStr(Pstring,aCAMPOS[PnCampo,5],aCAMPOS[PnCampo,3])
+IF ValType(lCONV) # "L"
+   lCONV := .F.
+ENDIF
+IF ValType(eCONV) # "C"
+   eCONV := aCAMPOS[PnCampo,6]
+ENDIF
+IF lCONV
+   IF !Empty(eCONV)
+      DO CASE
+      CASE eCONV = "DMY/2" .OR. eCONV = "DMY/4"
+         eRETU := SubStr(eRETU,1,2)+"/"+SubStr(eRETU,3,2)+"/"+SubStr(eRETU,5)
+      ENDCASE
+   ELSE
+      DO CASE
+      CASE aCAMPOS[PnCampo,2] = "SD"
+         eRETU := SToD(eRETU)
+      CASE aCAMPOS[PnCampo,2] = "D"
+         eRETU := CToD(eRETU)
+      CASE aCAMPOS[PnCampo,2] = "L"
+         eRETU := StrLogic(eRETU)
+      CASE aCAMPOS[PnCampo,2] = "N"
+         eRETU := Val(eRETU)
+         IF aCAMPOS[PnCampo,4] > 0
+            eRETU := eRETU / (10 ^ aCAMPOS[PnCampo,4])
+         ENDIF
+      ENDCASE
+   ENDIF
+ENDIF
+
+RETURN eRETU
 
 
 // +--------------------------------------------------------------------
 // +    Function sdvarrpos(aDBF,lESP)
 // +--------------------------------------------------------------------
-FUNCTION sdvarrpos( aDBF, lESP )
+FUNCTION sdvarrpos(aDBF,lESP)
 
-   LOCAL nFIELDS, nPOS, aRETU, X
 
-   nFIELDS := Len( aDBF )
-   IF ValType( lESP ) # "L"
-      lESP := .F.
-   ENDIF
-   aRETU := {}
-   nPOS  := 1
-   FOR X := 1 TO nFIELDS
-      AAdd( aRETU, { aDBF[ X,  1 ], aDBF[ X,  2 ], aDBF[ X,  3 ], ADBF[ X,  4 ], nPOS, "" } )
-      nPOS += aDBF[ X, 3 ] + IF( lESP, 1, 0 )
-   NEXT X
+LOCAL nFIELDS,nPOS,aRETU,X
 
-   RETURN aRETU
+nFIELDS := Len(aDBF)
+IF ValType(lESP) # "L"
+   lESP := .F.
+ENDIF
+aRETU := {}
+nPOS  := 1
+FOR X := 1 TO nFIELDS
+   AAdd(aRETU,{aDBF[X,1],aDBF[X,2],aDBF[X,3],ADBF[X,4],nPOS,""})
+   nPOS += aDBF[X,3]+IF(lESP,1,0)
+NEXT X
+
+RETURN aRETU
 
 
 // +--------------------------------------------------------------------
 // +    Function sdvarrcam(LINHA,aDBF,lCONV)
 // +--------------------------------------------------------------------
-FUNCTION sdvarrcam( cLINHA, aDBF, lCONV )
+FUNCTION sdvarrcam(cLINHA,aDBF,lCONV)
 
-   LOCAL X, aRETU, nFIELDS
 
-   nFIELDS := Len( aDBF )
-   aRETU   := {}
-   FOR X := 1 TO nFIELDS
-      AAdd( aRETU, sdvpegpos( cLINHA, aDBF, X, lCONV ) )
-   NEXT X
+LOCAL X,aRETU,nFIELDS
 
-   RETURN aRETU
-   
+nFIELDS := Len(aDBF)
+aRETU   := {}
+FOR X := 1 TO nFIELDS
+   AAdd(aRETU,sdvpegpos(cLINHA,aDBF,X,lCONV))
+NEXT X
 
-// + EOF: netdbf.prg
+RETURN aRETU
+
+
+
+*+ EOF: netdbfsd3.prg
+*+
