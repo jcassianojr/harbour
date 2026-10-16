@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -47,6 +47,7 @@
 // +
 // +
 FUNC LERMOUSE(nKEY)
+
 
 
 IF !lMOUSE
@@ -78,6 +79,7 @@ CASE nKey == K_MWBACKWARD
 ENDCASE
 
 RETURN nkey
+
 
 
 

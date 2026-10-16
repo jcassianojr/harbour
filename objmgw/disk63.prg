@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -35,6 +35,7 @@
 // +--------------------------------------------------------------------
 // +
 FUNCTION PEGAPASS(PW_ROW,PW_COL,PW_LEN,PW_COR,ECHO_CHAR,p_upcase,p_echochar)
+
 
 
 LOCAL OLD_COLOR
@@ -119,6 +120,7 @@ RETURN f_str
 FUNCTION CheckPass(Ctexto,lMES)
 
 
+
 LOCAL nI,lMAIS,lMINUS,lDIG,lSYMBOL
 
 lMAIS   := .F.
@@ -167,6 +169,7 @@ ELSE
 ENDIF
 
 RETURN .F.
+
 
 
 *+ EOF: disk63.prg

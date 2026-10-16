@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -36,7 +36,15 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function CARDCHEK()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -44,7 +52,12 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION CARDCHEK(cArg1,lMes)
+
 
 LOCAL nSum   := 0
 LOCAL nLen,i,nDigit
@@ -75,7 +88,7 @@ FOR i := nLen TO 1 STEP - 1
    nDigit := Val(SubStr(cArg1,i,1))
    IF lEven
       nDigit *= 2
-      IF nDigit > 9 
+      IF nDigit > 9
          nDigit -= 9
       ENDIF
    ENDIF
@@ -109,12 +122,12 @@ ENDIF
 
 IF nBrand > 0
    lRetu := .T.
-   IF lMes 
-      AlertX(aCards[nBrand]) 
+   IF lMes
+      AlertX(aCards[nBrand])
    ENDIF
 ELSE
-   IF lMes 
-      AlertX("Numero Invalido") 
+   IF lMes
+      AlertX("Numero Invalido")
    ENDIF
 ENDIF
 
@@ -129,7 +142,15 @@ RETURN lRetu
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function CHECKCTA()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -137,7 +158,12 @@ RETURN lRetu
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION CHECKCTA(cBANCO,cAGENCIA,cCONTA,lMes)
+
 
 LOCAL eTOT      := 0
 LOCAL nX,nPeso,nResto,cDVCalc
@@ -236,7 +262,15 @@ RETURN .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function CALCDIG()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -244,7 +278,12 @@ RETURN .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION CALCDIG(nPeso,xVal)
+
 
 RETURN ((nPeso * Val(hb_ValToStr(xVal))) % 10)
 
@@ -253,7 +292,15 @@ RETURN ((nPeso * Val(hb_ValToStr(xVal))) % 10)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function DAC10()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -261,7 +308,12 @@ RETURN ((nPeso * Val(hb_ValToStr(xVal))) % 10)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION DAC10(cString)
+
 
 LOCAL nSum := 0,i,nDigit,lMult2 := .T.
 cString := AllTrim(cString)
@@ -269,7 +321,7 @@ FOR i := Len(cString) TO 1 STEP - 1
    nDigit := Val(SubStr(cString,i,1))
    IF lMult2
       nDigit *= 2
-      IF nDigit > 9 
+      IF nDigit > 9
          nDigit -= 9
       ENDIF
    ENDIF
@@ -278,6 +330,7 @@ FOR i := Len(cString) TO 1 STEP - 1
 NEXT
 nSum := nSum % 10
 RETURN AllTrim(Str(IF(nSum == 0,0,10 - nSum)))
+
 
 *+ EOF: disk68.prg
 *+

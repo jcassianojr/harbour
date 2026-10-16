@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -45,7 +45,15 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function FtsBuscaPorArquivo()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -53,7 +61,12 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION FtsBuscaPorArquivo(cCaminhoDbf,cTermoBusca,cRegExp,cKEYWILD,lIncluiMemos,aCampos)
+
 
 LOCAL pHandle,cRecord,nRecno,aRetu := {},nLastRec,nHeader,nRecSize
 LOCAL cAliasTemp  := "FTS_"+AllTrim(Str(HB_RandomInt(1000,9999)))
@@ -161,7 +174,15 @@ RETURN aRetu
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function FtsBuscaDbf()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -169,7 +190,12 @@ RETURN aRetu
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION FtsBuscaDbf(cArquivoDbf,cTermoBusca,cRegExp,cKEYWILD,lIncluiMemos,aCampos)
+
 
 LOCAL cAlias    := "FTS_ALIAS_"+AllTrim(Str(HB_RandomInt(1000,9999)))
 LOCAL aRecnos   := {},cRegistroStr,cTermoUpper
@@ -230,7 +256,15 @@ RETURN aRecnos
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function ftshsx()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -238,7 +272,12 @@ RETURN aRecnos
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION ftshsx(cDbfFile,cTermoBusca,cKeyExpr,cRegExp,cKEYWILD,lIncluiMemos,aCampos,lRecriar)
+
 
 LOCAL hs,nRec,aRetu := {},cHsxPath,cRddAnterior,xExprIndex := NIL
 LOCAL cAliasTemp,cRegistroStr
@@ -339,7 +378,15 @@ RETURN aRetu
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function RecToStr()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -347,7 +394,12 @@ RETURN aRetu
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION RecToStr(lIncluiMemos,aCampos)
+
 
 LOCAL cStr     := ""
 LOCAL i,xValor
@@ -382,7 +434,15 @@ RETURN cStr
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function FilterFtsBusca()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -390,7 +450,12 @@ RETURN cStr
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION FilterFtsBusca(cTermoBusca,cRegExp,cKEYWILD)
+
 
 LOCAL cExprFiltro
 
@@ -404,6 +469,7 @@ ENDIF
 
 DBSETFILTER(&(cExprFiltro),cExprFiltro)
 RETURN NIL
+
 
 *+ EOF: netdbffts.prg
 *+

@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -43,6 +43,7 @@
 FUNCTION valcnpj(cCNPJ,lMES,cUF)
 
 
+
 RETURN VALCGC(cCNPJ,"",lMES,cUF)
 
 
@@ -59,6 +60,7 @@ RETURN VALCGC(cCNPJ,"",lMES,cUF)
 // +
 // +
 FUNCTION VALCGC(cCNPJ,xTIPO,lMES,cUF)
+
 
 
 LOCAL x
@@ -197,6 +199,7 @@ RETURN .T.
 FUNCTION Valcpf(xCPF,lMES)
 
 
+
 LOCAL X,cDIGEST
 
 ZNERRO := 0
@@ -296,6 +299,7 @@ RETURN .T.
 FUNCTION CNPJ_Novo(pCNPJ)   // , plMsg )
 
 
+
 LOCAL lResult := .T.
 LOCAL soma    := 0
 LOCAL dv      := ""
@@ -376,6 +380,7 @@ RETURN lResult
 FUNCTION Mod11(campo,posdv,pesomax)
 
 
+
 dv   := 0
 peso := 1
 FOR imod := posdv TO 1 STEP - 1
@@ -415,6 +420,7 @@ RETU .T.
 FUNCTION formatacpf(xCPF)
 
 
+
 IF ValType(xCPF) = 'N'
    xCPF := AllTrim(Str(xCPF))
 ENDIF
@@ -441,6 +447,7 @@ RETURN Transform(xCPF,"@R 999.999.999-99")
 // +
 // +
 FUNCTION formatacnpj(xCNPJ)
+
 
 
 // @ 01,10 GET CGC1 PICTURE "99.999.999/9999-99" so numeros
@@ -472,6 +479,7 @@ RETURN Transform(xCNPJ,"@R! NN.NNN.NNN/NNNN-99")  // ! Para converter maisculas 
 // +
 // +
 FUNCTION CNPJCPFPICT(oGet,v_Tipo,nROW,nCOL)
+
 
 
 // @ 01,10 GET CGC1 PICTURE "99.999.999/9999-99" so numeros
@@ -508,6 +516,7 @@ RETURN .T.
 FUNCTION CNPJCPFVAL(cCGC,cPESSOA,cESTADO)
 
 
+
 LOCAL lRETU
 
 lRETU := .T.
@@ -538,6 +547,7 @@ RETURN lRETU
 // +
 // +
 FUNCTION VALCEI(wk_cei,Lmes)  // mascara="  .   .     /  "
+
 
 
 PRIVATE nTot,cAux,i
@@ -596,7 +606,15 @@ RETURN .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MascararNumGenerico()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -604,7 +622,12 @@ RETURN .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MascararNumGenerico(cNumero,nExibeInicio,nExibeFinal)
+
 
 LOCAL cLimpo          := ALLTRIM(cNumero)
 LOCAL nLen            := LEN(cLimpo)
@@ -612,10 +635,10 @@ LOCAL cInicio,cFinal,cMeio
 LOCAL nDigitosOcultos
 
 // Se o parâmetro de exibição não for passado, define um padrão
-IF VALTYPE(nExibeInicio) != "N" 
+IF VALTYPE(nExibeInicio) != "N"
    nExibeInicio := 2
 ENDIF
-IF VALTYPE(nExibeFinal) != "N" 
+IF VALTYPE(nExibeFinal) != "N"
    nExibeFinal := 2
 ENDIF
 
@@ -661,7 +684,15 @@ RETURN cInicio + ".***.***-" + cFinal
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MascaraCNPJ()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -669,7 +700,12 @@ RETURN cInicio + ".***.***-" + cFinal
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MascaraCNPJ(cCnpjRaw)
+
 
 LOCAL cCnpjLimpo     := ""
 LOCAL cCnpjMascarado := ""
@@ -708,7 +744,15 @@ RETURN cCnpjMascarado
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MascararNome()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -716,7 +760,12 @@ RETURN cCnpjMascarado
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MascararNome(cNomeRaw)
+
 
 LOCAL cNomeTrimmed   := ALLTRIM(cNomeRaw)
 LOCAL aPalavras      := {}
@@ -762,7 +811,15 @@ RETURN cNomeMascarado
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function OfuscarDataAleatoria()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -770,7 +827,12 @@ RETURN cNomeMascarado
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION OfuscarDataAleatoria(uDataRaw)
+
 
 LOCAL cDataText := ""
 LOCAL cDia,cMes,cAno
@@ -823,7 +885,15 @@ RETURN cDia+"/"+cMes+"/"+cAno
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MascararCPF()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -831,7 +901,12 @@ RETURN cDia+"/"+cMes+"/"+cAno
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MascararCPF(cCPF)
+
 
 // Remove pontos e traços temporariamente para garantir o tamanho (11 digitos)
 cLimpo := TIRAOUT(cCPF)
@@ -842,6 +917,7 @@ cFinal  := Substr(cLimpo,10,2)
 
 // Monta a string mascarada de retorno
 RETURN cInicio+".***.***-"+cFinal
+
 
 
 

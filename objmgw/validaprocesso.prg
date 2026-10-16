@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -83,6 +83,7 @@ fclose(nGRV)
 FUNCTION formataprocesso(cPROCESSO)
 
 
+
 IF validaprocesso(cPROCESSO)
    // 1009084-88.2015.8.26.0161
    // 1234567-89-0123.4.56.7890
@@ -108,6 +109,7 @@ ENDIF
 // +
 
 FUNCTION validaprocesso(cPROCESSO)
+
 
 
 cPROCESSO := TIRAOUT(cPROCESSO)
@@ -141,6 +143,7 @@ cFINAL :=SUBSTR(cPROCESSO,17,4)
     calcula_mod97 = STRZERO(98 - MOD(valor3,97), 2)
 return calcula_mod97
 */
+
 
 
 *+ EOF: validaprocesso.prg

@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -39,6 +39,7 @@
 *+
 *+
 FUNCTION FILENAMES(GRUPO,cCASE)
+
 
 LOCAL aARQUIVOS
 LOCAL X
@@ -78,6 +79,7 @@ RETURN aRETU
 FUNCTION TIRAEXT(cFile,cEXT)  // Arquivo teste.txt ->teste se cext="tmp" test.tmp
 
 
+
 LOCAL cFILENAME
 
 hb_FNameSplit(cFile,,@cFILENAME)
@@ -100,6 +102,7 @@ RETU cFileName
 FUNCTION TROCAEXT(cFile,cEXT)
 
 
+
 RETURN TIRAEXT(cFile,cEXT)
 
 
@@ -113,6 +116,7 @@ RETURN TIRAEXT(cFile,cEXT)
 FUNCTION DELETAARQ(cGRUPO)
 
 
+
 LOCAL aRETU
 LOCAL X
 
@@ -123,6 +127,7 @@ aRETU := FILENAMES(cGRUPO)
 FOR X := 1 TO Len(aRETU)
    FErase(aRETU[X])
 NEXT X
+
 
 
 *+ EOF: disk72.prg

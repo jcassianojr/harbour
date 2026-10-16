@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -38,7 +38,15 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function SelectFolder()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -46,7 +54,12 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION SelectFolder(cTitle,cInitialPath,lAllowNewFolder)
+
 
 LOCAL oShell,oFolder,cPath := ""
 LOCAL nOptions := BIF_RETURNONLYFSDIRS
@@ -88,6 +101,7 @@ CATCH
 END
 
 RETURN cPath
+
 
 *+ EOF: escolherpasta.prg
 *+

@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -42,6 +42,7 @@
 // +
 // +
 FUNCTION MEMOPACK(packlist,lMES,lINFO,cUSORDD)  // Array Arquivos se texto convert array
+
 
 
 LOCAL counter
@@ -207,6 +208,7 @@ NEXT
 rddSetDefault(cOLDRDD)
 
 RETURN ret_value
+
 
 
 *+ EOF: f_mmopac.prg

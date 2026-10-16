@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -40,6 +40,7 @@
 // +
 // +
 FUNCTION TMPFILE(extension,path)
+
 
 
 // ****************************************************************
@@ -101,6 +102,7 @@ ELSE
 ENDIF
 
 RETURN (file_name)
+
 
 
 *+ EOF: f_tempfi.prg

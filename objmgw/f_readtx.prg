@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -40,6 +40,7 @@
 // +
 // +
 FUNCTION READTEXT
+
 
 
 // ****************************************************************
@@ -134,6 +135,7 @@ RETURN NIL
 // +
 // +
 STATIC FUNCTION PROCESS_KEY
+
 
 
 // ****************************************************************
@@ -290,6 +292,7 @@ RETURN NIL
 STATIC FUNCTION FILL_ARRAY
 
 
+
 // ****************************************************************
 
 // Carrega o array de visualizacao c/ o ponteiro e o texto de cada linha.
@@ -331,6 +334,7 @@ RETURN NIL
 STATIC FUNCTION DISP_ARRAY
 
 
+
 // ****************************************************************
 
 // Mostra array. Retorna imediatamente se uma tecla nao for pressionada.
@@ -367,6 +371,7 @@ RETURN keypress
 // +
 // +
 STATIC FUNCTION REWIND(handle,num_lines,pointer)
+
 
 
 // ****************************************************************
@@ -422,6 +427,7 @@ DO WHILE num_lines > 0
 ENDDO
 
 RETURN pointer
+
 
 
 *+ EOF: f_readtx.prg

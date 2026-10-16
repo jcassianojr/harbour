@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:12 pm
 *+
 *+
 *+
@@ -39,6 +39,7 @@
 *+
 *+
 FUNCTION FixSRTExtendido(cVALOR,lLOW,lUP,lACE,lUTF,lESP)
+
 
 
 IF Empty(cVALOR)
@@ -101,6 +102,7 @@ RETURN cVALOR
 FUNCTION FIXINT(eVALOR)
 
 
+
 RETURN Int(FIXNUM(eVALOR))
 
 
@@ -111,6 +113,7 @@ RETURN Int(FIXNUM(eVALOR))
 // +--------------------------------------------------------------------
 // +
 FUNCTION FIXNUM(cCAMPO)
+
 
 
 IF ValType(cCAMPO) # "N"
@@ -127,6 +130,7 @@ RETURN cCAMPO
 // +--------------------------------------------------------------------
 // +
 FUNCTION FIXSTR(cCAMPO,lESP)
+
 
 IF ValType(lESP) <> 'L'
    lESP := .F.
@@ -146,7 +150,15 @@ RETURN FixSRTExtendido(cCAMPO,.F.,.F.,.F.,.F.,lESP)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function FIXDATS()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -154,7 +166,12 @@ RETURN FixSRTExtendido(cCAMPO,.F.,.F.,.F.,.F.,lESP)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION FIXDATS(cCAMPO)
+
 
 
 LOCAL cLimpa
@@ -195,7 +212,15 @@ RETURN cCAMPO
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function FIXDATA()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -203,7 +228,12 @@ RETURN cCAMPO
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION FIXDATA(cCAMPO)
+
 
 
 LOCAL dResult := CToD("")
@@ -243,7 +273,15 @@ RETURN dResult
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function FIXLOGIC()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -251,7 +289,12 @@ RETURN dResult
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION FIXLOGIC(cCAMPO)
+
 
 
 LOCAL cType := ValType(cCAMPO)
@@ -283,6 +326,7 @@ RETURN .F.
 FUNCTION FIXHORA(cCampo)
 
 
+
 cCAMPO := FIXSTR(cCAMPO)
 cCAMPO := SubStr(cCAMPO,At(" ",cCAMPO)+1)
 cCAMPO := Left(cCAMPO,5)
@@ -299,6 +343,7 @@ RETURN cCAMPO
 // +
 
 FUNCTION FIXESCAPECODES(cText)
+
 
 LOCAL c
 
@@ -322,7 +367,9 @@ RETURN c
 // +
 FUNCTION DateToMySQL(dDate)
 
+
 RETURN data2str(dDate,"MYS","-","4")
+
 
 
 *+ EOF: adofix.prg

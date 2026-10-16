@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -39,6 +39,7 @@
 *+
 *+
 FUNCTION OPCAO(nRow,nCol,cText,nAccl,cMES,bEXE)
+
 
 
 cTEXT := StrTran(ctext,"&","")
@@ -68,12 +69,14 @@ RETURN NIL
 FUNCTION menu(nCurrentPrompt,nMES)
 
 
+
 IF ValType(nMES) = "N"
    Set(_SET_MESSAGE,nMES,.T.)
 ENDIF
 MENU TO nCurrentPrompt
 
 RETURN nCurrentPrompt
+
 
 
 *+ EOF: mmousen.prg

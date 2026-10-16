@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:12 pm
 *+
 *+
 *+
@@ -42,7 +42,15 @@ A função tenta extrair o máximo de contexto possível para facilitar o debug:
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function ShowAdoError()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -50,7 +58,12 @@ A função tenta extrair o máximo de contexto possível para facilitar o debug:
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION ShowAdoError(oERR,oCon,cMESSAGE,lMES)
+
 
 
 LOCAL nAdoErrors := 0
@@ -117,6 +130,7 @@ IF lMES
 ENDIF
 
 RETURN NIL
+
 
 
 *+ EOF: adoerror.prg

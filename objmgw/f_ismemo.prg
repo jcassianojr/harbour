@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -115,6 +115,7 @@ OPCAO(13,35,"JSONRDD   JSON        ",51)   //2 21 JSONRDD json RDD
 FUNCTION ISMEMO(cARQ,lMES,lINFO)
 
 
+
 LOCAL cMES,lRETU,i
 IF ValType(lMES) # "L"
    lMES := .F.
@@ -159,6 +160,7 @@ RETURN lRETU
 // +--------------------------------------------------------------------
 // +
 FUNCTION INFOTIPODBF(filename,lMES)
+
 
 
 LOCAL cbuffer    := ' ',nhandle,ret_value,cMES,cDRIVERPAD,aRETVAL,cEXTMEMO,nbuffer
@@ -439,7 +441,15 @@ RETURN aRETVAL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function GetHeaderInfo()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -447,7 +457,12 @@ RETURN aRETVAL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION GetHeaderInfo(database,cTIPOINFO)
+
 
 LOCAL aRet         := {}
 LOCAL nHandle,dbfhead,h1,h2,h3,h4
@@ -668,7 +683,15 @@ RETURN aRet
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function HEX2DEC()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -676,7 +699,12 @@ RETURN aRet
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION HEX2DEC(cHexNum)
+
 
 
 // Loop counter, accumulated decimal value, and current hexadecimal
@@ -728,7 +756,15 @@ RETURN nDec
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function FT_BYT2HEX()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -736,7 +772,12 @@ RETURN nDec
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION FT_BYT2HEX(cByte,plusH)
+
 
 
 // Stores the formatted hexadecimal representation.
@@ -759,6 +800,7 @@ IF ValType(cByte) == "C"
 ENDIF
 
 RETURN xHexString
+
 
 
 

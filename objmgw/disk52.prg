@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:12 pm
 *+
 *+
 *+
@@ -47,6 +47,7 @@
 // +
 // +
 FUNC HELP(programa,linha,variavel)  // F1- AJUDA AO USUARIO
+
 
 
 LOCAL aAMBIENTE
@@ -96,6 +97,7 @@ dbCloseArea()
 MEMOVIEW(HLP_DESC,02,00,MaxRow() - 2,MaxCol(),,HLP_DADO,"W/N,N/W,N,N,N/W")
 restaa(aAMBIENTE)
 RETU .T.
+
 
 
 

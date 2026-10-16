@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -47,6 +47,7 @@
 // +
 // +
 FUNCTION ValIE(cinsc,cUF,cPESSOA,lMES,lOLD)   // mantida lold telas com get via macro ainda usam este parametro
+
 
 
 LOCAL lRETU
@@ -240,6 +241,7 @@ RETURN .T.
 FUNCTION FormataIE(Valor,cUF,cPESSOA)
 
 
+
 LOCAL cMASK
 
 IF ValType(cPESSOA) <> "C"
@@ -348,6 +350,7 @@ IF Len(cMASK) > 0
    cRETU := StrTran(CRETU,"|",".")
 ENDIF
 RETU cRETU
+
 
 
 *+ EOF: validaie.prg

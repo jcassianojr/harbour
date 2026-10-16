@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:12 pm
 *+
 *+
 *+
@@ -57,6 +57,14 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function hb_fopen()
 *+
 *+
@@ -65,7 +73,23 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -76,10 +100,19 @@
 function hb_fopen(cARQ)
 
 
+
 return fopen(carq)
 
 
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -95,7 +128,23 @@ return fopen(carq)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -106,11 +155,20 @@ return fopen(carq)
 FUNCTION alltrue()
 
 
+
 RETURN .t.
 
 
 
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -126,7 +184,23 @@ RETURN .t.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -137,10 +211,19 @@ RETURN .t.
 function clscor()
 
 
+
 SetColor("")
 
 
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -156,7 +239,23 @@ SetColor("")
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -167,10 +266,19 @@ SetColor("")
 function video()
 
 
+
 Set(_SET_DEVICE,"SCREEN")   //set device to screen
 
 
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -186,7 +294,23 @@ Set(_SET_DEVICE,"SCREEN")   //set device to screen
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -197,10 +321,19 @@ Set(_SET_DEVICE,"SCREEN")   //set device to screen
 function impressora()
 
 
+
 Set(_SET_DEVICE,"PRINTER")  //set device to print
 
 
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -216,7 +349,23 @@ Set(_SET_DEVICE,"PRINTER")  //set device to print
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -227,10 +376,19 @@ Set(_SET_DEVICE,"PRINTER")  //set device to print
 function clsrow(nROW)
 
 
+
 @ nROW,0 CLEAR TO nROW,MAXCOL()
 
 
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -246,6 +404,14 @@ function clsrow(nROW)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
 *+
 *+
@@ -254,7 +420,16 @@ function clsrow(nROW)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 function clsbox(nROWINI,nCOLINI,nROWFIM,nCOLFIM)
+
 
 
 HB_dispbox(nROWINI,nCOLINI,nROWFIM,nCOLFIM,space(8))
@@ -270,7 +445,23 @@ HB_dispbox(nROWINI,nCOLINI,nROWFIM,nCOLFIM,space(8))
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function NNETWHOAMI()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -286,7 +477,16 @@ HB_dispbox(nROWINI,nCOLINI,nROWFIM,nCOLFIM,space(8))
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 function NNETWHOAMI()
+
 
 
 LOCAL cUSER
@@ -308,6 +508,14 @@ RETUrn cUSER
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function MDG()
 *+
 *+
@@ -316,7 +524,23 @@ RETUrn cUSER
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -327,11 +551,20 @@ RETUrn cUSER
 function MDG(cMES,nOPT)
 
 
+
 RETURN MsgYesNo(cMES)
 
 
 
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -347,6 +580,14 @@ RETURN MsgYesNo(cMES)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
 *+
 *+
@@ -355,7 +596,16 @@ RETURN MsgYesNo(cMES)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 function MDS(cMES)
+
 
 
 local OLDCOR := setcolor()
@@ -375,7 +625,23 @@ return .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function Hotinkey()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -391,7 +657,16 @@ return .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 FUNCTION Hotinkey(waittime)
+
 
 
 LOCAL key,cblock
@@ -437,7 +712,23 @@ RETURN key
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function SALVAA()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -453,7 +744,16 @@ RETURN key
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 function SALVAA
+
 
 
 
@@ -473,7 +773,23 @@ return aRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function RESTAA()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -489,7 +805,16 @@ return aRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 function RESTAA(aAMB)
+
 
 
 
@@ -507,7 +832,15 @@ return .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MascararEmail()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -515,7 +848,12 @@ return .T.
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MascararEmail(cEmail)
+
 
 LOCAL nPosAt         := AT ("@",cEmail)
 LOCAL cUser          := ""
@@ -554,7 +892,15 @@ RETURN cUserMascarado+cDominio
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function CheckEmail()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -562,7 +908,12 @@ RETURN cUserMascarado+cDominio
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION CheckEmail(cEmail)
+
 
 
 //
@@ -640,7 +991,23 @@ RETURN lReturn
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function rmacro()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -656,7 +1023,16 @@ RETURN lReturn
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 function rmacro(eBLOCO,ePAD,lMES)
+
 
 
 IF VALTYPE(lMES) # "L"
@@ -685,7 +1061,23 @@ RETURN eRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function ArqLogDataHora()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -701,7 +1093,16 @@ RETURN eRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 function ArqLogDataHora(cEXT)
+
 
 
 IF VALTYPE(cEXT) <> "C"
@@ -725,7 +1126,23 @@ return dtos(date())+strtran(time(),":","")+cEXT
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function GetDrvMapLetter()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -741,7 +1158,16 @@ return dtos(date())+strtran(time(),":","")+cEXT
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 function GetDrvMapLetter(strLocalDrive)   // UNC path
+
 
 
 local aGetDrvMapLetter := {}
@@ -773,7 +1199,23 @@ return aGetDrvMapLetter
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function MsgYesNo()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -789,7 +1231,16 @@ return aGetDrvMapLetter
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 FUNCTION MsgYesNo(cText)
+
 
 
 
@@ -809,7 +1260,23 @@ RETURN lValue
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function MsgExclamation()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -825,7 +1292,16 @@ RETURN lValue
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 FUNCTION MsgExclamation(cText)
+
 
 
 
@@ -843,7 +1319,23 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function MsgWarning()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -859,7 +1351,16 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 FUNCTION MsgWarning(cText)
+
 
 
 
@@ -877,7 +1378,23 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function MsgStop()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -893,7 +1410,16 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 FUNCTION MsgStop(cText)
+
 
 
 
@@ -911,7 +1437,23 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function ALERTX()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -927,7 +1469,16 @@ RETURN NIL
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 FUNCTION ALERTX(cTEXT,cTIPO)
+
 
 
 IF VALTYPE(cTIPO) <> "C"
@@ -955,7 +1506,23 @@ ENDCASE
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function shellexecprint()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -971,7 +1538,16 @@ ENDCASE
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 FUNCTION shellexecprint(cARQUIVO)
+
 
 
 LOCAL cPrn,ncop := 1
@@ -996,6 +1572,14 @@ RETURN
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function shellexecopen()
 *+
 *+
@@ -1004,7 +1588,23 @@ RETURN
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+--------------------------------------------------------------------
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -1017,7 +1617,15 @@ RETURN
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function ShellExecuteOpen()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -1025,7 +1633,12 @@ RETURN
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION ShellExecuteOpen(cFileName,cParameters,cPath,nShow)
+
 
 
 wapi_ShellExecute(Nil,"open",cFileName,cParameters,cPath,hb_DefaultValue(nShow,1))
@@ -1041,7 +1654,15 @@ RETURN Nil
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function ArraytoTexto()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -1049,7 +1670,12 @@ RETURN Nil
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION ArraytoTexto(a,cDelim)   //usado filetoemial flib08 app thunder (outros usos futuros)
+
 
 LOCAL cRet := ""
 AEval(a,{| e | cRet := cRet+e+cDelim})
@@ -1060,7 +1686,15 @@ RETURN hb_strShrink(cRet)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function WaitProcess()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -1068,7 +1702,12 @@ RETURN hb_strShrink(cRet)
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION WaitProcess(cProcess)  //usado filetoemial flib08 app thunder  (outros usos futuros)
+
 
 LOCAL hProcess := hb_ProcessOpen(cProcess)
 IF !(hProcess == - 1)
@@ -1078,6 +1717,7 @@ IF !(hProcess == - 1)
    hb_ProcessClose(hProcess,.T.)
 ENDIF
 RETURN NIL
+
 
 
 *+ EOF: comp.prg

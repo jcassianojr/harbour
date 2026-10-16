@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -102,6 +102,7 @@ STATIC s_lErrorLogAppend := .F.
 FUNCTION xhb_ErrorLog(cErrorLog,lErrorLogAppend)
 
 
+
 LOCAL aValueOld := {s_cErrorLog,s_lErrorLogAppend}
 
 IF HB_ISSTRING(cErrorLog)
@@ -129,6 +130,7 @@ RETURN aValueOld
 FUNCTION ErrorSys
 
 
+
 // ------------------------------------------------------------------------------*
 
 // ErrorBlock( { | oError | DefError( oError ) } )
@@ -153,6 +155,7 @@ RETURN
 PROCEDURE xhb_ErrorSys()
 
 
+
 ErrorBlock({| oError | xhb_DefError(oError)})
 
 RETURN
@@ -171,6 +174,7 @@ RETURN
 // +
 // +
 STATIC FUNCTION err_ModuleName(oError,n)
+
 
 
 
@@ -194,6 +198,7 @@ STATIC FUNCTION err_ProcName(oError,n)
 
 
 
+
 RETURN iif(__objHasMsg(oError,"PROCNAME"),oError:ProcName,;
  iif(n != NIL,ProcName(n),NIL))
 
@@ -214,6 +219,7 @@ STATIC FUNCTION err_ProcLine(oError,n)
 
 
 
+
 RETURN iif(__objHasMsg(oError,"PROCLINE"),oError:ProcLine,;
  iif(n != NIL,ProcLine(n),NIL))
 
@@ -231,6 +237,7 @@ RETURN iif(__objHasMsg(oError,"PROCLINE"),oError:ProcLine,;
 // +
 // +
 STATIC FUNCTION xhb_DefError(oError)
+
 
 
 LOCAL cMessage
@@ -387,6 +394,7 @@ RETURN .F.
 STATIC FUNCTION ErrorMessage(oError)
 
 
+
 LOCAL cMessage
 
 // start error message
@@ -435,6 +443,7 @@ RETURN cMessage
 // +
 // +
 STATIC FUNCTION LogError(oErr)
+
 
 
 LOCAL cScreen
@@ -769,6 +778,7 @@ RETURN .F.
 STATIC FUNCTION strvalue(c,l)
 
 
+
 LOCAL cr := ""
 
 __defaultNIL(@l,.F.)
@@ -809,6 +819,7 @@ RETURN Upper(cr)
 STATIC PROCEDURE FWriteLine(nh,c)
 
 
+
 FWrite(nh,c+hb_eol())
 // hb_OutDebug( c + hb_eol() )
 
@@ -828,6 +839,7 @@ RETURN
 // +
 // +
 STATIC FUNCTION Arguments(oErr)
+
 
 
 LOCAL xArg,cArguments := ""
@@ -861,6 +873,7 @@ FUNCTION __ErrorBlock()
 
 
 
+
 RETURN {| e | __MinimalErrorHandler(e)}
 
 
@@ -877,6 +890,7 @@ RETURN {| e | __MinimalErrorHandler(e)}
 // +
 // +
 PROCEDURE __MinimalErrorHandler(oError)
+
 
 
 LOCAL cError
@@ -933,6 +947,7 @@ RETURN
 // +
 // +
 FUNCTION PS_OS_ERR(Arg1)
+
 
 
 DO CASE
@@ -1135,6 +1150,7 @@ CASE arg1 == 120
 ENDCASE
 
 RETURN "<Outros>"
+
 
 
 *+ EOF: xhberr_mode.prg

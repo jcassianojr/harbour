@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:12 pm
 *+
 *+
 *+
@@ -80,7 +80,15 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function Acentuar()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -88,7 +96,12 @@
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION Acentuar(cTIPO)
+
 
 LOCAL cBUS,cDEST,nPOS,yKEY,kkey,xkey
 
@@ -149,6 +162,7 @@ RETURN NIL
 FUNCTION AC_AGUDO
 
 
+
 //  SET KEY 39 to
 ACENTUAR("AGU")
 //  SetKey( 39, {|| AC_AGUDO() } )
@@ -165,6 +179,7 @@ RETURN
 FUNCTION AC_CRASE
 
 
+
 Acentuar("CRA")
 RETURN
 
@@ -177,6 +192,7 @@ RETURN
 // +
 
 FUNCTION AC_TIL
+
 
 
 Acentuar("TIL")
@@ -192,6 +208,7 @@ RETURN
 
 FUNCTION AC_CIRC
 
+
 ACENTUAR("CIR")
 RETURN
 
@@ -203,6 +220,7 @@ RETURN
 // +
 
 FUNCTION liga_acento
+
 
 
 IF mdg("Ligar Acentuacao")
@@ -229,7 +247,15 @@ RETURN
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function Acento()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -237,7 +263,12 @@ RETURN
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION Acento(texto)
+
 
 
 LOCAL ag := Chr(8)+Chr(39)  // Agudo
@@ -285,6 +316,7 @@ IF sp > 0
 ENDIF
 
 RETURN (texto)
+
 
 *+ EOF: disk54.prg
 *+

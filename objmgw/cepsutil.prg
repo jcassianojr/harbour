@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:12 pm
 *+
 *+
 *+
@@ -39,6 +39,7 @@
 *+
 *+
 FUNCTION pegcidconv(cUF,cNOME)
+
 
 
 LOCAL cDBF
@@ -73,6 +74,7 @@ RETURN cNOME
 // +
 // +
 FUNCTION BUSCAIBGE(cUF,cCIDADE)
+
 
 
 LOCAL cIBGE
@@ -120,6 +122,7 @@ RETURN cIBGE
 FUNCTION IRRFIBGE(cBUSCA)
 
 
+
 LOCAL cIBGE
 LOCAL cALIAS
 
@@ -151,6 +154,7 @@ RETURN cIBGE
 // +
 // +
 FUNCTION coduf(cBUSCA,cTIPO)  // ibge
+
 
 
 LOCAL nPos  := 0
@@ -205,6 +209,7 @@ RETURN cRETU
 FUNCTION tratanome(mNOME,lANSI,lACEN,lRANG)
 
 
+
 LOCAL nPOS
 
 IF ValType(lANSI) <> "L"
@@ -242,6 +247,7 @@ IF lRANG  // remove nao carateres numero e simbolos //analisar implantacao fixst
 ENDIF
 
 RETURN mNOME
+
 
 
 *+ EOF: cepsutil.prg

@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:12 pm
 *+
 *+
 *+
@@ -127,6 +127,7 @@
 FUNCTION convansi(ctexto)
 
 
+
 IF ValType(cTEXTO) # "C"
    RETU cTEXTO
 ENDIF
@@ -144,6 +145,7 @@ RETURN cTEXTO
 FUNCTION convoem(ctexto)
 
 
+
 IF ValType(cTEXTO) # "C"
    RETU cTEXTO
 ENDIF
@@ -159,6 +161,7 @@ RETURN cTEXTO
 // +--------------------------------------------------------------------
 // +
 FUNCTION str2html(cStr,lAnsi,loem)
+
 
 
 IF ValType(lANSI) <> "L"
@@ -184,6 +187,7 @@ RETURN cSTR
 // +--------------------------------------------------------------------
 // +
 FUNCTION CAPFIRS2(string)
+
 
 
 LOCAL ret_string := ''
@@ -214,6 +218,7 @@ RETURN ret_string
 // +--------------------------------------------------------------------
 // +
 FUNCTION SonumeroX(cInString,lPONTO,lVIRGULA)
+
 
 
 LOCAL nIter,cThisLetter
@@ -253,6 +258,7 @@ RETURN cOutValue
 FUNCTION TIRAOUT(TEXTO)
 
 
+
 texto := StrTran(texto,".","")
 texto := StrTran(texto,":","")
 texto := StrTran(texto,"-","")
@@ -269,6 +275,7 @@ RETURN texto
 // +--------------------------------------------------------------------
 // +
 FUNCTION GRVVAL(nVAL,nTAM,nDEC)
+
 
 
 LOCAL cVAR := ""
@@ -290,6 +297,7 @@ RETURN cVAR
 // +
 
 FUNCTION data2str(dData,cFOR,cSEP,cDIG,cINI,cFIM)
+
 
 
 LOCAL cDIA    := cMES := cANO := cRETU := ""
@@ -526,6 +534,7 @@ RETURN cRETU
 FUNCTION str2data(cDATA,cFOR,cSEP,cDIG)
 
 
+
 LOCAL cDIA,cMES,cANO
 LOCAL dDATA   := CToD(Space(8))
 LOCAL nLENANO := 4
@@ -604,6 +613,7 @@ RETURN dDATA
 FUNCTION DifDatas(dDataInicial,dDataFinal)
 
 
+
 dDataInicial := UniversalToDate(dDataInicial)
 dDataFinal   := UniversalToDate(dDataFinal)
 
@@ -649,6 +659,7 @@ RETURN (v_ret)
 FUNCTION DIGADATA(dDATA,nDIA,nMES,nANO,cSEP)
 
 
+
 LOCAL cDIA := cMES := cANO := cRETU := ""
 
 dDATA := UniversalToDate(dDATA)
@@ -690,6 +701,7 @@ RETURN cRETU
 FUNCTION Cmes(ddata)
 
 
+
 retorno := Mmes(Month(ddata))
 
 RETURN retorno
@@ -704,6 +716,7 @@ RETURN retorno
 // +  Função: Mmes() - Aprimorada com Cache Estático (Lazy Load)
 // +--------------------------------------------------------------------
 FUNCTION Mmes(nmes)
+
 
 STATIC aMeses
 
@@ -725,6 +738,7 @@ RETURN aMeses[nmes]
 // +
 FUNCTION Cdia(ddata)
 
+
 dDATA   := UniversalToDate(dDATA)
 retorno := Ddia(DoW(ddata))
 
@@ -740,6 +754,7 @@ RETURN retorno
 // +  Função: Ddia() - Aprimorada com Cache Estático (Lazy Load)
 // +--------------------------------------------------------------------
 FUNCTION Ddia(ndia)
+
 
 STATIC aDias
 
@@ -762,6 +777,7 @@ RETURN aDias[ndia]
 FUNCTION CTOHORA(cHORA AS STRING)
 
 
+
 cHORA := Left(cHORA,5)  // Evita hora com milesimos de segundo mm:ss:dd
 cHORA := StrTran(cHORA,":",".")
 cHORA := StrTran(cHORA,":",".")
@@ -778,6 +794,7 @@ RETURN Val(Chora)
 // +--------------------------------------------------------------------
 // +
 FUNCTION StrLogic(cVAL,lDEFAULT)
+
 
 
 IF ValType(lDEFAULT) <> "L"
@@ -822,6 +839,7 @@ RETURN lDEFAULT
 // +--------------------------------------------------------------------
 // +
 FUNCTION Logic2Str(lValor,cFORMATO)
+
 
 
 LOCAL cRETURN AS STRING
@@ -871,6 +889,7 @@ RETURN cRETURN
 // +
 
 FUNCTION Strval(xdado,nLEN,nDEC,cSEPDEC,lESPACO)
+
 
 
 LOCAL retval := "",i,cVALTYPE
@@ -949,6 +968,7 @@ RETURN (retval)
 FUNCTION CHOR
 
 
+
 PARA QTHOR
 
 QT1 := Int(QTHOR)
@@ -964,6 +984,7 @@ RETURN (QT1+QT3)
 // +--------------------------------------------------------------------
 // +
 FUNCTION BHOR
+
 
 
 PARA QTHOR
@@ -983,6 +1004,7 @@ RETURN (QT1+QT3)
 // +--------------------------------------------------------------------
 // +
 FUNCTION geotodec(cVAL,cHEM)
+
 
 
 LOCAL nVAL
@@ -1014,6 +1036,7 @@ RETURN nVAL
 FUNCTION calcgeokm(lat1,lon1,lat2,lon2,unit)
 
 
+
 IF ValType(unit) # "C"
    UNIT := "K"
 ENDIF
@@ -1040,6 +1063,7 @@ RETURN dist
 FUNCTION deg2rad(deg)
 
 
+
 RETURN (deg * PI() / 180.0)
 
 // +--------------------------------------------------------------------
@@ -1049,6 +1073,7 @@ RETURN (deg * PI() / 180.0)
 // +--------------------------------------------------------------------
 // +
 FUNCTION rad2deg(rad)
+
 
 
 RETURN (rad / PI() * 180.0)
@@ -1099,6 +1124,7 @@ RETURN (rad / PI() * 180.0)
 FUNCTION MinutoToHora(horas)
 
 
+
 RETURN Int(horas / 60)+(Mod(horas,60) / 100)
 
 
@@ -1109,6 +1135,7 @@ RETURN Int(horas / 60)+(Mod(horas,60) / 100)
 // +--------------------------------------------------------------------
 // +
 FUNCTION aconvertend()
+
 
 
 LOCAL aCNV := {}
@@ -1157,7 +1184,15 @@ RETURN aCNV
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function UniversalToDate()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -1165,7 +1200,12 @@ RETURN aCNV
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION UniversalToDate(xData)
+
 
 
 LOCAL dResult     := CToD("")
@@ -1179,23 +1219,23 @@ STATIC hMesesStr
 IF hMesesStr == NIL
    hMesesStr := hb_Hash()
    hb_HSet(hMesesStr,"JAN",1)
-   hb_HSet(hMesesStr,"FEV",2) 
+   hb_HSet(hMesesStr,"FEV",2)
    hb_HSet(hMesesStr,"FEB",2)
    hb_HSet(hMesesStr,"MAR",3)
-   hb_HSet(hMesesStr,"ABR",4) 
+   hb_HSet(hMesesStr,"ABR",4)
    hb_HSet(hMesesStr,"APR",4)
-   hb_HSet(hMesesStr,"MAI",5) 
+   hb_HSet(hMesesStr,"MAI",5)
    hb_HSet(hMesesStr,"MAY",5)
    hb_HSet(hMesesStr,"JUN",6)
    hb_HSet(hMesesStr,"JUL",7)
-   hb_HSet(hMesesStr,"AGO",8) 
+   hb_HSet(hMesesStr,"AGO",8)
    hb_HSet(hMesesStr,"AUG",8)
-   hb_HSet(hMesesStr,"SET",9) 
+   hb_HSet(hMesesStr,"SET",9)
    hb_HSet(hMesesStr,"SEP",9)
-   hb_HSet(hMesesStr,"OUT",10) 
+   hb_HSet(hMesesStr,"OUT",10)
    hb_HSet(hMesesStr,"OCT",10)
    hb_HSet(hMesesStr,"NOV",11)
-   hb_HSet(hMesesStr,"DEZ",12) 
+   hb_HSet(hMesesStr,"DEZ",12)
    hb_HSet(hMesesStr,"DEC",12)
 ENDIF
 
@@ -1318,7 +1358,15 @@ RETURN dResult
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function UniversalDateTime()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -1326,7 +1374,12 @@ RETURN dResult
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION UniversalDateTime(xData)
+
 
 
 LOCAL cStr,cDataLimpa,aParts,i,dData
@@ -1378,18 +1431,19 @@ ENDIF
 
 // 6. Separa e converte as partes do Horário
 aParts := hb_ATokens(cTime,":")
-IF Len(aParts) >= 1 
+IF Len(aParts) >= 1
    nHour := Val(aParts[1])
 ENDIF
-IF Len(aParts) >= 2 
+IF Len(aParts) >= 2
    nMin := Val(aParts[2])
 ENDIF
-IF Len(aParts) >= 3 
+IF Len(aParts) >= 3
    nSec := Val(aParts[3])
 ENDIF
 
 // 7. Retorna o Objeto Timestamp Oficial
 RETURN hb_DateTime(Year(dData),Month(dData),Day(dData),nHour,nMin,nSec)
+
 
 *+ EOF: disk55.prg
 *+

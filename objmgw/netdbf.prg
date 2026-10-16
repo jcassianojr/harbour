@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -35,6 +35,7 @@
 // +    Function netregosok()
 // +--------------------------------------------------------------------
 FUNCTION netregosok()
+
 
 
 IF !WIN_OSNETREGOK()  // Precisa direitos ADM
@@ -56,6 +57,7 @@ RETURN .T.
 FUNCTION netgrvcam(cCAMPO,eVAL,lLOCK)
 
 
+
 IF ValType(lLOCK) <> "L"
    lLOCK := .T.
 ENDIF
@@ -75,6 +77,7 @@ RETURN .T.
 // +    grava se houver diferenca e o valor passado nao for em branco (nao zerara o campo)
 // +--------------------------------------------------------------------
 FUNCTION netgrvd(cCAMPO,eVAL,lLOCK)
+
 
 
 IF ValType(lLOCK) <> "L"
@@ -100,6 +103,7 @@ RETURN .T.
 FUNCTION netgrvz(cCAMPO,eVAL,lLOCK)
 
 
+
 IF ValType(lLOCK) <> "L"
    lLOCK := .T.
 ENDIF
@@ -122,6 +126,7 @@ RETURN .T.
 FUNCTION dbSkipEx(nSKIP)
 
 
+
 IF ValType(nSKIP) # "N"
    nSKIP := 1
 ENDIF
@@ -140,6 +145,7 @@ RETURN .T.
 // +    Function netrecapp()
 // +--------------------------------------------------------------------
 FUNCTION netrecapp()
+
 
 
 LOCAL nkey := 0
@@ -162,6 +168,7 @@ RETURN .T.
 // +    Function netrecdel() [Protegido contra loop infinito]
 // +--------------------------------------------------------------------
 FUNCTION netrecdel()
+
 
 
 LOCAL nKey        := 0
@@ -191,6 +198,7 @@ RETURN .T.
 FUNCTION netreclock()
 
 
+
 LOCAL nKey        := 0
 LOCAL nTentativas := 0
 
@@ -216,6 +224,7 @@ RETURN .T.
 FUNCTION netrecunlcom()
 
 
+
 dbUnlock()
 dbCommit()
 
@@ -226,6 +235,7 @@ RETURN .T.
 // +    Function netpack(cARQ,lPCK)
 // +--------------------------------------------------------------------
 FUNCTION netpack(cARQ,lPCK)
+
 
 
 IF ValType(lPCK) # "L"
@@ -248,6 +258,7 @@ RETURN .T.
 FUNCTION netzap(cARQ,lINDEX)
 
 
+
 IF ValType(lINDEX) # "L"
    lINDEX := .T.
 ENDIF
@@ -264,6 +275,7 @@ RETURN .T.
 // +    Function NetRegCount(cARQ)
 // +--------------------------------------------------------------------
 FUNCTION NetRegCount(cARQ)
+
 
 
 LOCAL nREG
@@ -289,6 +301,7 @@ RETURN nREG
 // +    Function netuse(cARQ, cDRIVER, lSHA, lREAD, lNEW, lINDEX, nTIME )
 // +--------------------------------------------------------------------
 FUNCTION netuse(cARQ,cDRIVER,lSHA,lREAD,lNEW,lINDEX,nTIME)
+
 
 
 LOCAL cEXT
@@ -395,6 +408,7 @@ RETURN .T.
 FUNCTION zei_fort(nLASTREC,lSAYREC,nPOS,nINC)
 
 
+
 STATIC LD_CHA   := "|"
 STATIC nPOSZEI
 LOCAL cComplete
@@ -451,6 +465,7 @@ RETURN .T.
 FUNCTION sdvpegpos(Pstring,aCAMPOS,PnCampo,lCONV,eCONV)
 
 
+
 LOCAL eRETU
 
 eRetu := SubStr(Pstring,aCAMPOS[PnCampo,5],aCAMPOS[PnCampo,3])
@@ -492,6 +507,7 @@ RETURN eRETU
 FUNCTION sdvarrpos(aDBF,lESP)
 
 
+
 LOCAL nFIELDS,nPOS,aRETU,X
 
 nFIELDS := Len(aDBF)
@@ -514,6 +530,7 @@ RETURN aRETU
 FUNCTION sdvarrcam(cLINHA,aDBF,lCONV)
 
 
+
 LOCAL X,aRETU,nFIELDS
 
 nFIELDS := Len(aDBF)
@@ -523,6 +540,7 @@ FOR X := 1 TO nFIELDS
 NEXT X
 
 RETURN aRETU
+
 
 
 *+ EOF: netdbf.prg

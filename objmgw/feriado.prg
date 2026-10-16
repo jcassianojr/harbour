@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -47,6 +47,7 @@
 // +
 // +
 FUNCTION DomingoDePascoa(nAno)
+
 
 
 LOCAL nA,nB,nC,nD,nE,nF,nG,nH,nI,nK,nL,nM,nMes,nDia
@@ -92,7 +93,9 @@ FUNCTION TercaDeCarnaval(nAno)
 
 
 
+
 RETURN DomingoDePascoa(nAno) - 47
+
 
 
 *+ EOF: feriado.prg

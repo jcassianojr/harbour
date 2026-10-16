@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -48,6 +48,7 @@
 // +--------------------------------------------------------------------
 // +
 FUNCTION GravaCampo(aCAMPO,aVAR,cUSO,lLOCK,lMES,lMACRO,lLOG)
+
 
 
 LOCAL cERRO
@@ -186,6 +187,7 @@ RETURN .T.
 FUNCTION GravaERRO(cARQ,aMES)
 
 
+
 LOCAL X
 
 IF ValType(cARQ) # "C"
@@ -217,6 +219,7 @@ RETURN .T.
 FUNCTION CLRVARS()
 
 
+
 LOCAL aSTRU
 
 aSTRU := dbStruct()
@@ -234,6 +237,7 @@ RETURN .T.
 // +--------------------------------------------------------------------
 // +
 FUNCTION EQUVARS
+
 
 
 // Carrega dos campos da b. de dados as variaveis de memoria criadas por INITVARS.
@@ -258,6 +262,7 @@ RETURN .T.
 FUNCTION FREEVARS
 
 
+
 // Libera as variaveis criadas por INITVARS.
 LOCAL counter      := 0
 LOCAL field_cnt    := FCount()
@@ -277,6 +282,7 @@ RETURN .T.
 // +--------------------------------------------------------------------
 // +
 FUNCTION INITVARS
+
 
 
 // Cria variaveis de memoria para cada campo da base de dados ativa.
@@ -304,6 +310,7 @@ RETURN .T.
 // +--------------------------------------------------------------------
 // +
 FUNCTION REPLVARS(lCHECK,lVAZIO)
+
 
 
 // Substitui o registro pelo valor das variaveis de memoria.
@@ -354,6 +361,7 @@ RETURN .T.
 FUNCTION MAKEVAR(cTIPO,nLEN,nDEC)
 
 
+
 LOCAL eRETU
 
 eRETU := NIL
@@ -386,6 +394,7 @@ RETURN eRETU
 FUNCTION MAKE_EMPTY(eCAMPO)
 
 
+
 LOCAL eRETU
 LOCAL aSTRU
 LOCAL xPOSDBF
@@ -405,6 +414,7 @@ IF !Empty(Alias())
    ENDIF
 ENDIF
 RETU eRETU
+
 
 
 

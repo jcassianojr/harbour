@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -46,6 +46,7 @@
 // +
 // +
 FUNCTION ENCODE(in_string,lUPPER)
+
 
 
 LOCAL counter := in_len := 0,next_char := out_string := '',nASC
@@ -107,6 +108,7 @@ RETURN out_string
 FUNCTION DECODE(in_string)
 
 
+
 // # define ADJVAL  30
 LOCAL counter := in_len := 0,out_string := '',nASC
 IF in_string != NIL
@@ -151,6 +153,7 @@ RETURN out_string
 FUNCTION ENCODEVAL(in_string)
 
 
+
 LOCAL counter,next_char,aCHAVE
 
 aCHAVE := Array(10)
@@ -188,6 +191,7 @@ RETURN aCHAVE
 // +
 // +
 FUNCTION DECODEVAL(aVALOR)
+
 
 
 LOCAL in_string,nVALOR,counter,nLEN,nPOSREV
@@ -229,6 +233,7 @@ RETURN in_string
 FUNCTION XDECODE(cVAR)
 
 
+
 RETURN if(Empty(cVAR),cVAR,DECODE(cVAR))
 
 // +--------------------------------------------------------------------
@@ -251,6 +256,7 @@ RETURN if(Empty(cVAR),cVAR,DECODE(cVAR))
 // +
 // +
 FUNCTION XENCODE(cVAR,lUPPER)
+
 
 
 RETURN if(Empty(cVAR),cVAR,ENCODE(cVAR,lUPPER))
@@ -277,10 +283,12 @@ RETURN if(Empty(cVAR),cVAR,ENCODE(cVAR,lUPPER))
 FUNCTION XDECDAT(cVAR)
 
 
+
 cVAR := XDECODE(cVAR)
 cVAR := CToD(Left(cVAR,2)+'/'+SubStr(cVAR,3,2)+'/'+Right(cVAR,2))
 
 RETURN cVAR
+
 
 
 *+ EOF: f_encode.prg

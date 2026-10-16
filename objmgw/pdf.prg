@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -43,6 +43,7 @@
 // +
 // +
 FUNCTION FILETOPDF(cARQ,cFileToSave)
+
 
 
 // **********************
@@ -171,6 +172,7 @@ RETURN cFileToSave
 
 // Function PdfCol(nCol)
 // Return nCol*6/1.5
+
 
 
 *+ EOF: pdf.prg

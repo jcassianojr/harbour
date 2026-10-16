@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -42,6 +42,7 @@
 // +
 // +
 FUNCTION MVINFOConfTela(cAPPName)   // ajusta tamanho da tela
+
 
 
 LOCAL nWidth := hb_gtInfo(HB_GTI_DESKTOPWIDTH)
@@ -102,6 +103,7 @@ ENDIF
 Wvt_Maximize()
 
 RETURN NIL
+
 
 
 *+ EOF: wvgini.prg

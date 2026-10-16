@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -42,6 +42,7 @@
 // +
 // +
 FUNCTION editarq(cfile)
+
 
 
 // Verificando tamanho do arquivo
@@ -79,6 +80,7 @@ WHILE (nKey := Inkey(0)) != K_ESC
 END
 
 RETURN NIL
+
 
 
 *+ EOF: disk57.prg

@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -43,6 +43,7 @@
 // +
 // +
 FUNCTION INFOR
+
 
 
 PARA mARQUIVO,aCHAVE,aINDICE,lCHECA,aTAG,lAPA
@@ -162,6 +163,7 @@ RETURN .T.
 FUNCTION REDEFILE(cARQ,cEXT,lMES)
 
 
+
 IF ValType(Lmes) # "L"
    lMES := .T.
 ENDIF
@@ -179,6 +181,7 @@ IF !hb_FileExists(cARQ+cEXT)
    ENDIF
 ENDIF
 RETU .T.
+
 
 
 

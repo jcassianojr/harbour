@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -38,6 +38,7 @@
 // +--------------------------------------------------------------------
 // +
 FUNCTION FormataRG(Valor,cTIPO)
+
 
 
 LOCAL cRETU
@@ -141,7 +142,15 @@ RETURN cRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+    Function MascararRG()
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -149,7 +158,12 @@ RETURN cRETU
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 FUNCTION MascararRG(cRgRaw)
+
 
 LOCAL cRgLimpo     := ""
 LOCAL cRgMascarado := ""
@@ -201,6 +215,7 @@ RETURN cRgMascarado
 // +--------------------------------------------------------------------
 // +
 FUNCTION CheckRG(Valor,lMES,cTIPO,dDATANASC,cUF)
+
 
 
 LOCAL d
@@ -356,6 +371,7 @@ RETURN .T.
 FUNCTION PEGDDD(cTEL)
 
 
+
 LOCAL cPEGDDD
 
 cTEL    := formataTel(cTEL)
@@ -389,6 +405,7 @@ RETURN cPEGDDD
 FUNCTION PEGTEL(cTEL)
 
 
+
 LOCAL cPEGTEL
 
 cTEL    := formataTel(cTEL)
@@ -419,6 +436,7 @@ RETURN cPEGTEL
 // +
 // +
 FUNCTION PEGPREF(cTEL,lCEL)
+
 
 
 LOCAL cPEGREF
@@ -462,6 +480,7 @@ RETU cPEGREF
 // +
 
 FUNCTION formataTel(cNUMERO)
+
 
 
 /*
@@ -584,6 +603,7 @@ RETURN cNUMERO
 FUNCTION ForTel2(cNUMERO)
 
 
+
 cNUMERO := AllTrim(tiraout(cNUMERO))  // nao checa mais o traco, ponto, ponto virgula pois foi usado tiraout
 IF Len(cNUMERO) = 9   // .And. SUBSTR(cNUMERO, 6, 1)='-'    //912345678 91234-5678 Novo celular 9
    cNUMERO := SubStr(cNUMERO,1,5)+"-"+SubStr(cNUMERO,6)
@@ -613,6 +633,7 @@ RETURN cNUMERO
 FUNCTION FormataCEP(eCEP)
 
 
+
 IF ValType(eCEP) = "N"
    eCEP := StrZero(eCEP,8)
 ENDIF
@@ -633,6 +654,7 @@ RETURN eCEP
 // +--------------------------------------------------------------------
 // +
 FUNCTION chkufcep(cCEP,cUF,lMES)
+
 
 
 IF LastKey() = K_UP .OR. LastKey() = K_DOWN
@@ -658,6 +680,7 @@ RETU .T.
 // +
 
 FUNCTION cep2uf(cepuso)
+
 
 
 LOCAL cep2uf
@@ -731,6 +754,7 @@ OTHERWISE
 ENDCASE
 
 RETURN cep2uf
+
 
 
 *+ EOF: disk71.prg

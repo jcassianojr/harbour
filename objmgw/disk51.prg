@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:12 pm
 *+
 *+
 *+
@@ -39,6 +39,7 @@
 *+
 *+
 FUNC Ext(val_ext,lin,tam1,tam2,tam3)
+
 
 
 PRIV cen
@@ -173,6 +174,7 @@ RETU AllTrim(ret_ext)
 FUNC Extx(pp)   // VERIFICANDO DEZENA E UNIDADES
 
 
+
 PRIV retorno
 PRIV pp01
 PRIV pp02
@@ -200,6 +202,7 @@ IF pp03 > 0 .AND. pp02 # 1
    retorno += if(Empty(retorno),'',' e ')+uni[PP03]
 ENDIF
 RETU (retorno)
+
 
 
 *+ EOF: disk51.prg

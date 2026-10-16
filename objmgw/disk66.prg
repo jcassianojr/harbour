@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -39,6 +39,7 @@
 *+
 *+
 FUNCTION TECLAS(cPRO,nLIN,cVAR)   // ajuda nas teclas
+
 
 
 LOCAL I      := 0
@@ -79,6 +80,7 @@ WHILE .T.
 ENDDO
 HELP("TECLAS",0,cPRO)
 RETU .T.
+
 
 
 

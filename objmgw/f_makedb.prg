@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -40,6 +40,7 @@
 // +
 // +
 FUNCTION MAKEDBF(cArqDic,lQUIT,lCRIA,cDRIVER,cCAMINHO)
+
 
 
 // ****************************************************************
@@ -442,6 +443,7 @@ RETURN .T.
 STATIC FUNCTION ERROUSO(cMES,lQUIT,cOLDRDD)
 
 
+
 ?? Chr(7)
 ALERTX(cMES)
 IF lQUIT
@@ -466,6 +468,7 @@ RETU .T.
 // +
 
 STATIC FUNCTION GETDBFDEF
+
 
 
 // ****************************************************************
@@ -513,6 +516,7 @@ STATIC FUNCTION NEXTLINE
 
 
 
+
 // Obtem a proxima linha de instrucao do arquivo de definicoes.
 
 // Verifica o primeiro caracter da linha
@@ -544,6 +548,7 @@ RETURN NIL
 STATIC FUNCTION LOADSTRU
 
 
+
 LOCAL fld_dec   := fld_len := fld_name := fld_type := MESSAGE := ''
 LOCAL cTAG
 LOCAL cCHAVEDBF
@@ -570,13 +575,13 @@ DO WHILE Upper(SubStr(textline,1,6)) != 'ENDDEF'
    fld_dec  := PARSE(@textline)   // Obtem casas decimais campo
 
 
-   IF fld_type == "D" .AND. fld_len == 0 
+   IF fld_type == "D" .AND. fld_len == 0
       fld_len := 8
    ENDIF
-   IF fld_type == "L" .AND. fld_len == 0 
+   IF fld_type == "L" .AND. fld_len == 0
       fld_len := 1
    ENDIF
-   IF fld_type == "M" .AND. fld_len == 0 
+   IF fld_type == "M" .AND. fld_len == 0
       fld_len := 4
    ENDIF
 
@@ -655,6 +660,7 @@ RETURN NIL
 FUNCTION parse(string)
 
 
+
 // Extrai de uma cadeia uma palavra delimitada por espacos.
 LOCAL space_char
 LOCAL ret_string
@@ -674,6 +680,7 @@ ELSE
 ENDIF
 
 RETURN ret_string
+
 
 
 *+ EOF: f_makedb.prg

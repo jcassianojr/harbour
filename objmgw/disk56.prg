@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:12 pm
 *+
 *+
 *+
@@ -122,6 +122,7 @@ RETURN ascrollbar
 FUNCTION SCROLLBARDISPLAY(ASCROLLBAR)
 
 
+
 LOCAL coldcolor
 LOCAL nrow
 
@@ -145,7 +146,19 @@ RETURN ascrollbar
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+     <lForceUpdate> ) --> aScrollBar
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -161,7 +174,23 @@ RETURN ascrollbar
 *+
 *+
 *+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+    Function SCROLLBARUPDATE()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -173,7 +202,19 @@ RETURN ascrollbar
 *+
 *+
 *+
+*+
+*+
+*+
+*+
 *+                ( mlib16.prg   )   1 - function basbro()
+*+
+*+
+*+
+*+
+*+
+*+
+*+
+*+
 *+
 *+
 *+
@@ -197,6 +238,7 @@ RETURN ascrollbar
 // +
 // +
 FUNCTION SCROLLBARUPDATE(ascrollbar,ncurrent,ntotal,lforceupdate)
+
 
 
 LOCAL coldcolor
@@ -263,6 +305,7 @@ RETURN ascrollbar
 // +
 // +
 FUNCTION ACHRETB(nStatus,nElement,nRelative)
+
 
 
 LOCAL nKEY := 0
@@ -342,6 +385,7 @@ OTHERWISE
    RETU 2
 ENDCASE
 RETU 2
+
 
 
 *+ EOF: disk56.prg

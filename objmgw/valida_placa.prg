@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -57,6 +57,7 @@
 // +
 // +
 FUNCTION validaPlaca(cPlaca)
+
 
 
 LOCAL lRetorno := .T.
@@ -228,6 +229,7 @@ RETURN lRetorno
 FUNCTION validacnh(eVALOR)
 
 
+
 IF ValType(eVALOR) <> "C"
    eVALOR := AllTrim(Str(eVALOR))
 ENDIF
@@ -254,6 +256,7 @@ RETURN .T.
 FUNCTION CheckCNHCat(cCNHCAT)
 
 
+
 /*
 CATEGORIA TIPOS DE VEÍCULOS EXEMPLOS
 ACC Ciclomotores de duas até três rodas, com velocidade máxima até 50km/h.  Bicicleta motorizada e cinquentinha.
@@ -278,6 +281,7 @@ IF !Empty(cCNHCAT)
 ENDIF
 
 RETURN .T.
+
 
 
 *+ EOF: valida_placa.prg

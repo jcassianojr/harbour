@@ -18,7 +18,7 @@
 *+
 *+
 *+
-*+    Documentado em 16-Out-2026 as  8:02 am
+*+    Documentado em 16-Out-2026 as  4:13 pm
 *+
 *+
 *+
@@ -39,6 +39,7 @@
 *+
 *+
 FUNC VERTXT(cARQ,cCOR1,cCOR2,aPOS,lTELA)
+
 
 
 LOCAL nLINI := 0
@@ -72,6 +73,7 @@ FILEVIEWG(cARQ,nLINI+1,nCOLI,nLINF - 1,nCOLF,,cARQ,)
 restaa(aAMB)
 
 RETURN
+
 
 
 *+ EOF: disk64.prg
