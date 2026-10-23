@@ -93,3 +93,7 @@ ZPL
 
 DOC  
 https://github.com/BadaSystem/harbour-doc
+
+CACHERDD  
+https://github.com/harbour-addons/cacherdd  
+
