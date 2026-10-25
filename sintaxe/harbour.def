@@ -1,0 +1,2733 @@
+[Aadd |F AAdd( <aArray>, [<xValue>] ) --> xValue|Dynamically add an element to an array ]
+AAdd( <aArray>, [<xValue>] ) --> xValue
+
+[Abs |F Abs( <nNumber> ) --> nAbsNumber|Return the absolute value of a number. ]
+Abs( <nNumber> ) --> nAbsNumber
+
+[Achoice |F AChoice( <nTop>, <nLeft>, <nBottom>, <nRight>, <acMenuItems>, [<alSelableItems> | <lSelableItems>], [<cUserFunction> | <bUserBlock>], [<nInitialItem>]|Allows selection of an element from an array ]
+AChoice( <nTop>, <nLeft>, <nBottom>, <nRight>, <acMenuItems>, [<alSelableItems> | <lSelableItems>], [<cUserFunction> | <bUserBlock>], [<nInitialItem>]
+
+[Aclone |F AClone( <aSource> ) --> aDuplicate|Duplicate a  multidimensional array ]
+AClone( <aSource> ) --> aDuplicate
+
+[Acopy |F ACopy( <aSource>, <aTarget>, [<nStart>], [<nCount>], [<nTargetPos>] ) --> aTarget|Copy elements from one array to another ]
+ACopy( <aSource>, <aTarget>, [<nStart>], [<nCount>], [<nTargetPos>] ) --> aTarget
+
+[Acos |F Acos( nCosine ) -> nRadiant|Arcus cosine of the argument ]
+Acos( nCosine ) -> nRadiant
+
+[Addascii |F AddAscii( <[@]cString>, <nValue>, [<nPosition>], [<lCarryOver>] ) --> cString|Add an integer value to an ascii value of a string ]
+AddAscii( <[@]cString>, <nValue>, [<nPosition>], [<lCarryOver>] ) --> cString
+
+[Addmonth |F AddMonth( [<dDate>,] <nMonths> ) -> dShiftedDate|add months to a date ]
+AddMonth( [<dDate>,] <nMonths> ) -> dShiftedDate
+
+[Adel |F ADel( <aArray>, <nPos> ) --> aArray|Delete an element from an array. - Array - Array ]
+ADel( <aArray>, <nPos> ) --> aArray
+
+[Adir |F ADir( [<cFileMask>], [<aName>], [<aSize>], [<aDate>],|Fill pre-defined arrays with file/directory information - File Array - File Array ]
+ADir( [<cFileMask>], [<aName>], [<aSize>], [<aDate>],
+
+[Aeval |F AEval( <aArray>, <bBlock>, [<nStart>], [<nCount>] ) --> aArray|Evaluates the subscript element of an array - Array Codeblock ]
+AEval( <aArray>, <bBlock>, [<nStart>], [<nCount>] ) --> aArray
+
+[Afields |F AFields( <aNames>, [<aTypes>], [<aLen>], [<aDecs>] ) --> nFields|Fills referenced arrays with database field information - Dbf Array - Dbf Array ]
+AFields( <aNames>, [<aTypes>], [<aLen>], [<aDecs>] ) --> nFields
+
+[Afill |F AFill( <aArray>, <xValue>, [<nStart>], [<nCount>] ) --> aArray|Fill an array with a specified value - Array ]
+AFill( <aArray>, <xValue>, [<nStart>], [<nCount>] ) --> aArray
+
+[Afteratnum |F AfterAtNum( <cStringToMatch>, <cString>, [<nCounter>],|Returns string portion after nth occurence of substring ]
+AfterAtNum( <cStringToMatch>, <cString>, [<nCounter>],
+
+[Ains |F AIns( <aArray>, <nPos> ) --> aArray|Insert a NIL value at an array subscript position. - Array - Array ]
+AIns( <aArray>, <nPos> ) --> aArray
+
+[Alenalloc |F ALENALLOC( <aArray> ) --> nElements|Determines for how much array elements memory is pre-allocated. - Array - Array ]
+ALENALLOC( <aArray> ) --> nElements
+
+[Alert |F Alert( <xMessage>, [<aOptions>], [<cColorNorm>], [<nDelay>] ) --> nChoice or NIL|Display a dialog box with a message ]
+Alert( <xMessage>, [<aOptions>], [<cColorNorm>], [<nDelay>] ) --> nChoice or NIL
+
+[Alias |F Alias( [<nWorkArea>] ) --> cWorkArea|Returns the alias name of a work area - Cursor - Cursor ]
+Alias( [<nWorkArea>] ) --> cWorkArea
+
+[Alltrim |F AllTrim( <cString> ) --> cExpression|Removes leading and trailing blank spaces from a string - String - String ]
+AllTrim( <cString> ) --> cExpression
+
+[Altd |F ALTD( [<nAction>] )|Invoke the CA-Clipper debugger ( Library:RTL ) - Debug ]
+ALTD( [<nAction>] )
+
+[Ampm |F AMPM( <cTime> ) --> cFormattedTime|Converts a time string into am/pm format. - Time ]
+AMPM( <cTime> ) --> cFormattedTime
+
+[Ansitohtml |F ANSITOHTML( <cAnsiString> ) --> cHtmlString|Inserts HTML character entities into an ANSI text string ]
+ANSITOHTML( <cAnsiString> ) --> cHtmlString
+
+[Array |F Array( <nElements>[, <nElements>...] ) --> aArray|Create an uninitialized array of specified length - Array ]
+Array( <nElements>[, <nElements>...] ) --> aArray
+
+[Ascan |F AScan( <aArray>, <xSearch>, [<nStart>], [<nCount>] ) --> nStoppedAt|Scan array elements for a specified condition - String Conversion - String Conversion - String - Array - Array ]
+AScan( <aArray>, <xSearch>, [<nStart>], [<nCount>] ) --> nStoppedAt
+
+[Asciisum |F AsciiSum( <cString> ) --> nAsciiSum|calculate the sum of the ASCII values of the characters in a string ]
+AsciiSum( <cString> ) --> nAsciiSum
+
+[Ascpos |F AscPos( <cString>, [<nPosition>] ) --> nAsciiValue|ASCII value of a character at a certain position ]
+AscPos( <cString>, [<nPosition>] ) --> nAsciiValue
+
+[Asin |F Asin( nSine ) -> nRadiant|Arcus sine of the argument - Numeric - Numeric ]
+Asin( nSine ) -> nRadiant
+
+[Asize |F ASize( <aArray>, <nLen> ) --> aArray|Adjust the size of an array - Array - Array ]
+ASize( <aArray>, <nLen> ) --> aArray
+
+[Asizealloc |F Asizealloc( <aArray>, <nCount>  ) --> aArray|Pre-allocates memory for an array. ]
+Asizealloc( <aArray>, <nCount>  ) --> aArray
+
+[Asort |F ASort( <aArray>, [<nStart>], [<nCount>], [<bSort>] ) --> aArray|Sort an array - Array - Array ]
+ASort( <aArray>, [<nStart>], [<nCount>], [<bSort>] ) --> aArray
+
+[Atadjust |F AtAdjust( <cStringToMatch>, <cString>, <nAdjustPosition>,|Adjusts a sequence within a string to a specified position - String - String ]
+AtAdjust( <cStringToMatch>, <cString>, <nAdjustPosition>,
+
+[Atail |F ATail( <aArray> ) --> xValue|Returns the last element of an array - Array ]
+ATail( <aArray> ) --> xValue
+
+[Atan |F Acos( nTangent ) -> nRadiant|Arcus tangent of the argument - Numeric - Numeric ]
+Acos( nTangent ) -> nRadiant
+
+[Atn2 |F Atn2( nSine, nCosine ) -> nRadiant|Arcus tangent a sine and a cosine argument - Numeric ]
+Atn2( nSine, nCosine ) -> nRadiant
+
+[Atnum |F AtNum( <cStringToMatch>, <cString>, [<nCounter>],|Returns the start position of the nth occurence of a substring in a string ]
+AtNum( <cStringToMatch>, <cString>, [<nCounter>],
+
+[Atrepl |F AtRepl( <cStringToMatch>, <cString>, <cReplacement>, [<nCounter>],|Search and replace sequences in a string ]
+AtRepl( <cStringToMatch>, <cString>, <cReplacement>, [<nCounter>],
+
+[Atskipstrings |F ATSKIPSTRINGS( <cSearch>, <cString> ) --> nPos|Locates the position of a substring within a character string. ]
+ATSKIPSTRINGS( <cSearch>, <cString> ) --> nPos
+
+[Attoken |F AtToken( <cString>, [<cTokenizer>],|Position of a token in a string ]
+AtToken( <cString>, [<cTokenizer>],
+
+[Beforatnum |F BeforAtNum( <cStringToMatch>, <cString>, [<nCounter>],|Returns string portion before nth occurence of substring ]
+BeforAtNum( <cStringToMatch>, <cString>, [<nCounter>],
+
+[Bin2i |F Bin2I( <cBuffer> ) --> nNumber|Convert signed short encoded bytes into Harbour numeric - Conversion ]
+Bin2I( <cBuffer> ) --> nNumber
+
+[Bin2l |F Bin2L( <cBuffer> ) --> nNumber|Convert signed long encoded bytes into Harbour numeric - Conversion ]
+Bin2L( <cBuffer> ) --> nNumber
+
+[Bin2u |F Bin2U( <cBuffer> ) --> nNumber|Convert unsigned long encoded bytes into Harbour numeric ]
+Bin2U( <cBuffer> ) --> nNumber
+
+[Bin2w |F Bin2W( <cBuffer> ) --> nNumber|Convert unsigned short encoded bytes into Harbour numeric - Conversion ]
+Bin2W( <cBuffer> ) --> nNumber
+
+[Bittoc |F BitToC( <nInteger>, <cBitPattern>[, <lMode>] ) -> <cBitString> ]
+BitToC( <nInteger>, <cBitPattern>[, <lMode>] ) -> <cBitString>
+
+[Blank |F BLANK( <xValue>, [<lSpaces>] ) --> xEmptyValue|Returns empty values for the data types A, C, D, L, M and N. ]
+BLANK( <xValue>, [<lSpaces>] ) --> xEmptyValue
+
+[Blobdirectexpo |F BLOBDIRECTEXPO( <nBlobID>, <cTargetFile>, [<nMode>] ) --> lSuccess|Export the contents of a BLOB pointer to a file ( Library:RTL ) ]
+BLOBDIRECTEXPO( <nBlobID>, <cTargetFile>, [<nMode>] ) --> lSuccess
+
+[Blobdirectget |F BLOBDIRECTGET( <nBlobID>, [<nStart>], [<nCount>] ) --> xBlobData|Retrieve data from a BLOB file without referencing a field ( Library:RTL ) - Blob ]
+BLOBDIRECTGET( <nBlobID>, [<nStart>], [<nCount>] ) --> xBlobData
+
+[Blobdirectimp |F BLOBDIRECTIMP( <nOldBlobID>, <cSourceFile> ) --> nNewBlobID|Import a file into a BLOB file and return pointer to the data ( Library:RTL ) ]
+BLOBDIRECTIMP( <nOldBlobID>, <cSourceFile> ) --> nNewBlobID
+
+[Blobdirectput |F BLOBDIRECTPUT( <nOldblobID>, <xBlobData> ) --> nNewblobID|Put data in a BLOB file without referencing a specific field ( Library:RTL ) - Blob ]
+BLOBDIRECTPUT( <nOldblobID>, <xBlobData> ) --> nNewblobID
+
+[Blobexport |F BLOBEXPORT( <nFieldPos>, <cTargetFile>, [<nMode>] ) --> lSuccess|Copy the contents of a memo field number to a BLOB file ( Library:RTL ) - Blob ]
+BLOBEXPORT( <nFieldPos>, <cTargetFile>, [<nMode>] ) --> lSuccess
+
+[Blobget |F BLOBGET( <nFieldPos>, [<nStart>], [<nCount>] ) --> xBlobData|Get the contents of a BLOB, identified by memo field number ( Library:RTL ) - Blob ]
+BLOBGET( <nFieldPos>, [<nStart>], [<nCount>] ) --> xBlobData
+
+[Blobimport |F BLOBIMPORT( <nFieldPos>, <cSourceFile> ) --> lSuccess|Read the contents of a BLOB file into a memo field ( Library:RTL ) - Blob ]
+BLOBIMPORT( <nFieldPos>, <cSourceFile> ) --> lSuccess
+
+[Blobrootdelete |F BLOBROOTDELETE() --> lSuccess|Deleted the root area of a BLOB file ( Library:RTL ) ]
+BLOBROOTDELETE() --> lSuccess
+
+[Blobrootget |F BLOBROOTGET() --> xBlobData|Retrieve the data from the root area of a BLOB file  ( Library:RTL ) - Blob ]
+BLOBROOTGET() --> xBlobData
+
+[Blobrootlock |F BLOBROOTLOCK() --> lSuccess|Obtain a lock on the root area of a BLOB file ( Library:RTL ) - Blob Locking ]
+BLOBROOTLOCK() --> lSuccess
+
+[Blobrootput |F BLOBROOTPUT() --> lSuccess|Store data in the root area of a BLOB file ( Library:RTL ) - Blob ]
+BLOBROOTPUT() --> lSuccess
+
+[Blobrootunloc |F BLOBROOTUNLOC()|Release the lock on a BLOB file's root area ( Library:RTL ) ]
+BLOBROOTUNLOC()
+
+[Bof |F Bof() --> lBegin|Test for the beginning-of-file condition - Dbf - Dbf ]
+Bof() --> lBegin
+
+[Bom |F BoM( <dDate> ) --> dBOM|Gets the first day in a month. ]
+BoM( <dDate> ) --> dBOM
+
+[Boq |F BoQ( [<dDate>] ) -> dDateBeginOfQuarter|_B_egin _O_f _Q_uarter ]
+BoQ( [<dDate>] ) -> dDateBeginOfQuarter
+
+[Boy |F BoY( <dDate> ) --> dBOY|Gets the first date of the year. ]
+BoY( <dDate> ) --> dBOY
+
+[Break |F Break( <xExp> )|Exits from a `BEGIN SEQUENCE` block ]
+Break( <xExp> )
+
+[Browse |F Browse( [<nTop>, <nLeft>, <nBottom>, <nRight>] ) --> lOk|Browse a database file ]
+Browse( [<nTop>, <nLeft>, <nBottom>, <nRight>] ) --> lOk
+
+[Cdow |F CDoW( <dDate> ) --> cDay|Converts a date to the day of week - Date Conversion String - Date Conversion String ]
+CDoW( <dDate> ) --> cDay
+
+[Ceiling |F Ceiling( <nNumber> ) -> nUpRoundedNumber|Rounds up a number to the next integer - Numeric - Numeric ]
+Ceiling( <nNumber> ) -> nUpRoundedNumber
+
+[Celsius |F Celsius( nDegreeFahrenheit ) --> nDegreeCelsius|Temperature conversion Fahrenheit to Celsius ]
+Celsius( nDegreeFahrenheit ) --> nDegreeCelsius
+
+[Center |F CENTER( <cString>, [<nLength>], [<cPadChar>], [<lBothSides>] ) --> cCenteredString|Returns a string for centered display ]
+CENTER( <cString>, [<nLength>], [<cPadChar>], [<lBothSides>] ) --> cCenteredString
+
+[Charadd |F CharAdd( <[@]cString1>, <cString2> ) --> cAddString|Adds corresponding ASCII value of two strings ]
+CharAdd( <[@]cString1>, <cString2> ) --> cAddString
+
+[Charand |F CharAnd( <[@]cString1>, <cString2> ) --> cAndString|Combine corresponding ASCII value of two strings with bitwise AND ]
+CharAnd( <[@]cString1>, <cString2> ) --> cAndString
+
+[Chareven |F CharEven( <cString> ) --> cEvenString|Returns the characters on the even positions in a string - String ]
+CharEven( <cString> ) --> cEvenString
+
+[Charhist |F CharHist( [<cString>] ) -> aCharacterCount|Generates a character histogram of a string ]
+CharHist( [<cString>] ) -> aCharacterCount
+
+[Charlist |F CharList( [<cString>] ) -> cCharacterList|Generates a list of all characters in a string ]
+CharList( [<cString>] ) -> cCharacterList
+
+[Charmirr |F CharMirr( <[@]cString>, [<lDontMirrorSpaces>] ) -> cMirroredString|Mirror a string ]
+CharMirr( <[@]cString>, [<lDontMirrorSpaces>] ) -> cMirroredString
+
+[Charmix |F CharMix( <cString1>[, <cString2>] ) --> cMixedString|Mix two strings - String ]
+CharMix( <cString1>[, <cString2>] ) --> cMixedString
+
+[Charnolist |F CharNoList( [<cString>] ) -> cCharacterList|Generates a list of all characters not contained in a string ]
+CharNoList( [<cString>] ) -> cCharacterList
+
+[Charnot |F CharNot( <[@]cString> ) --> cNotString|Process each character in a string with bitwise NOT operation ]
+CharNot( <[@]cString> ) --> cNotString
+
+[Charodd |F CharOdd( <cString> ) --> cOddString|Returns the characters on the odd positions in a string - String ]
+CharOdd( <cString> ) --> cOddString
+
+[Charone |F CharOne( [<cCharactersToReduce>,] <cString> ) -> cReducedString|Reduce multiple occurences of a character to one ]
+CharOne( [<cCharactersToReduce>,] <cString> ) -> cReducedString
+
+[Charonly |F CharOnly( <cThisCharactersOnly>, <cString> ) -> cReducedString|Intersectional set of two strings based on characters ]
+CharOnly( <cThisCharactersOnly>, <cString> ) -> cReducedString
+
+[Charor |F CharOr( <[@]cString1>, <cString2> ) --> cOrString|Combine corresponding ASCII value of two strings with bitwise OR ]
+CharOr( <[@]cString1>, <cString2> ) --> cOrString
+
+[Charpack |F CHARPACK( <cString> ) --> cCompressed|Compresses a string. ]
+CHARPACK( <cString> ) --> cCompressed
+
+[Charpix |F CharPix() --> nHeight|Gets the number of scan lines per character. ]
+CharPix() --> nHeight
+
+[Charrela |F CharRelA( <cStringToMatch1>, <cString1>,|Character relation of two strings ]
+CharRelA( <cStringToMatch1>, <cString1>,
+
+[Charrelrep |F CharRelRep( <cStringToMatch1>, <cString1>,|Relation dependant character replacement ]
+CharRelRep( <cStringToMatch1>, <cString1>,
+
+[Charrem |F CharRem( <cDeleteThisCharacters>, <cString> ) -> cReducedString|Removes characters from a string ]
+CharRem( <cDeleteThisCharacters>, <cString> ) -> cReducedString
+
+[Charrepl |F CharRepl( <cSearchString>, <[@]cString>,|Replacement of characters ]
+CharRepl( <cSearchString>, <[@]cString>,
+
+[Charrll |F CharRll( <[@]cString>, <nBitsToRLL> ) --> cRLLString|Process each character in a string with bitwise ROLL LEFT operation ]
+CharRll( <[@]cString>, <nBitsToRLL> ) --> cRLLString
+
+[Charrlr |F CharRlr( <[@]cString>, <nBitsToRLR> ) --> cRLRString|Process each character in a string with bitwise ROLL RIGHT operation ]
+CharRlr( <[@]cString>, <nBitsToRLR> ) --> cRLRString
+
+[Charshl |F CharShl( <[@]cString>, <nBitsToSHL> ) --> cSHLString|Process each character in a string with bitwise SHIFT LEFT operation ]
+CharShl( <[@]cString>, <nBitsToSHL> ) --> cSHLString
+
+[Charshr |F CharShr( <[@]cString>, <nBitsToSHR> ) --> cSHRString|Process each character in a string with bitwise SHIFT RIGHT operation ]
+CharShr( <[@]cString>, <nBitsToSHR> ) --> cSHRString
+
+[Charslist |F CharSList( [<cString>] ) -> cSortedCharacterList|Generates a sorted list of all characters in a string ]
+CharSList( [<cString>] ) -> cSortedCharacterList
+
+[Charsort |F CharSort( <[@]cString>, [<nElementLength>], [<nCompareLength>],|Sort sequences within a string. ]
+CharSort( <[@]cString>, [<nElementLength>], [<nCompareLength>],
+
+[Charspread |F CHARSPREAD( <cString>, <nLineLen>, [<xInsChar>]  ) --> cResult|Formats a character string for block paragraphs. ]
+CHARSPREAD( <cString>, <nLineLen>, [<xInsChar>]  ) --> cResult
+
+[Charsub |F CharSub( <[@]cString1>, <cString2>) --> cSubString|Subtracts corresponding ASCII value of two strings ]
+CharSub( <[@]cString1>, <cString2>) --> cSubString
+
+[Charswap |F CharSwap( <[@]cString> ) -> cSwappedString|Swap neighbouring characters in a string ]
+CharSwap( <[@]cString> ) -> cSwappedString
+
+[Charunpack |F CHARUNPACK( <cCompressed> ) --> cUncompressed|Uncompresses a CharPack() compressed string. ]
+CHARUNPACK( <cCompressed> ) --> cUncompressed
+
+[Charwin |F CharWin( <nTop>, <nLeft>, <nBottom>, <nRight>, [<cNewChar|nNewChar>],|nOldChar>] ) --> <cEmptyString> ]
+CharWin( <nTop>, <nLeft>, <nBottom>, <nRight>, [<cNewChar|nNewChar>],
+
+[Charxor |F CharXor( <[@]cString1>, <cString2> ) --> cXOrString|Combine corresponding ASCII value of two strings with bitwise XOR ]
+CharXor( <[@]cString1>, <cString2> ) --> cXOrString
+
+[Checksum |F CHECKSUM( <cString> ) --> nCheckSum|Calculates the checksum for a character string. ]
+CHECKSUM( <cString> ) --> nCheckSum
+
+[Chr |F Chr( <nAsciiNum> ) --> cReturn|Converts an ASCII value to it character value - String Conversion - String Conversion ]
+Chr( <nAsciiNum> ) --> cReturn
+
+[Clearbit |F CLEARBIT( <nInteger> OR <cHex>,[<nBitPos,...>]) --> nNewValue|Sets one or more bits of a numeric integer value to 0. ]
+CLEARBIT( <nInteger> OR <cHex>,[<nBitPos,...>]) --> nNewValue
+
+[Cleareol |F CLEAREOL( [<nRow>], [<nCol>], [<xColor>], [<xChar>] )|Clears a row on the screen beginning at a specified position. ]
+CLEAREOL( [<nRow>], [<nCol>], [<xColor>], [<xChar>] )
+
+[Clearslow |F CLEARSLOW( <nDelay>, [<nTop>], [<nLeft>], [<nBottom>], [<nRight>], [<xChar>] )|Clears a screen area incrementally with a delayed imploding effect. ]
+CLEARSLOW( <nDelay>, [<nTop>], [<nLeft>], [<nBottom>], [<nRight>], [<xChar>] )
+
+[Clearwin |F CLEARWIN( [<nTop>], [<nLeft>], [<nBottom>], [<nRight>],  [<xColor>], [<xChar>] )|Clears all or parts of the screen. ]
+CLEARWIN( [<nTop>], [<nLeft>], [<nBottom>], [<nRight>],  [<xColor>], [<xChar>] )
+
+[Cleol |F CLEOL( [<nRow>], [<nCol>] )|Clears characters and colors in a row on the screen. ]
+CLEOL( [<nRow>], [<nCol>] )
+
+[Clipinit |F CLIPINIT() --> NIL|Initialize various Harbour sub-systems ]
+CLIPINIT() --> NIL
+
+[Clwin |F CLWIN( [<nTop>], [<nLeft>], [<nBottom>], [<nRight>] )|Clears characters and colors on the screen. ]
+CLWIN( [<nTop>], [<nLeft>], [<nBottom>], [<nRight>] )
+
+[Cmonth |F CMonth( <dDate> ) --> cMonth|Return the name of the month. - Date Conversion String - Date Conversion String ]
+CMonth( <dDate> ) --> cMonth
+
+[Colorrepl |F ColorRepl( [<cNewAttr|nNewAttr>], [<cOldAttr|nOldAttr>] ) --> cNull|Returns the current screen column position - Terminal - Terminal ]
+ColorRepl( [<cNewAttr|nNewAttr>], [<cOldAttr|nOldAttr>] ) --> cNull
+
+[Colorselect |F COLORSELECT( <nColorIndex> )|Activate attribute in current color settings. ( Library:RTL ) ]
+COLORSELECT( <nColorIndex> )
+
+[Colorton |F ColorToN( <cAttr> ) -> <nAttr> ]
+ColorToN( <cAttr> ) -> <nAttr>
+
+[Colorwin |F ColorWin( [<nTopLine>], [<nLeftCol>], [<nBottomLine>], [<nRightCol>],|nOldAttr>] ) --> cNull ]
+ColorWin( [<nTopLine>], [<nLeftCol>], [<nBottomLine>], [<nRightCol>],
+
+[Complement |F COMPLEMENT( <xValue> ) --> xComplement|Creates the complement for values of data type C, D, L, M, N ]
+COMPLEMENT( <xValue> ) --> xComplement
+
+[Convtoansicp |F CONVTOANSICP( <cOEM_String> ) --> cANSI_String|Converts an OEM string to the ANSI character set. ]
+CONVTOANSICP( <cOEM_String> ) --> cANSI_String
+
+[Convtooemcp |F CONVTOOEMCP( <cANSI_String> ) --> cOEM_String|Converts an ANSI string to the OEM character set. ]
+CONVTOOEMCP( <cANSI_String> ) --> cOEM_String
+
+[Cos |F Cos( nRadiant ) -> nCosine|Cosine of the argument - Numeric - Numeric ]
+Cos( nRadiant ) -> nCosine
+
+[Cosh |F Cosh( nArea ) -> nHyperbolicCosine|Hyperbolic Cosine of the argument ]
+Cosh( nArea ) -> nHyperbolicCosine
+
+[Cot |F Cot( nRadiant ) -> nCotangent|Cotangent of the argument - Numeric ]
+Cot( nRadiant ) -> nCotangent
+
+[Countgets |F COUNTGETS() --> nGetCount|Returns the number of Get fields in the current Getlist array. ]
+COUNTGETS() --> nGetCount
+
+[Countleft |F CountLeft( <cString>, [<cSearch|nSearch>] ) -> nCount|Count a certain character at the beginning of a string ]
+CountLeft( <cString>, [<cSearch|nSearch>] ) -> nCount
+
+[Countright |F CountRight( <cString>, [<cSearch|nSearch>] ) -> nCount|Count a certain character at the end of a string ]
+CountRight( <cString>, [<cSearch|nSearch>] ) -> nCount
+
+[Createobject |F CREATEOBJECT( <cProgID> ) --> oOleAuto|Instantiates a new OLE Automation object. - Programming Metadata ]
+CREATEOBJECT( <cProgID> ) --> oOleAuto
+
+[Crypt |F CRYPT( <cString>, <cPassWord> ) --> cResult|Encrypts or decrypts a character string. - String ]
+CRYPT( <cString>, <cPassWord> ) --> cResult
+
+[Csetargerr |F CSetArgErr( [<nNewMode>] ) -> <nOldMode>|Sets argument error behaviour ]
+CSetArgErr( [<nNewMode>] ) -> <nOldMode>
+
+[Csetatmupa |F CSetAtMupa( [<lNewSwitch>] ) -> lOldSwitch|Determine "multi-pass" behaviour in some string functions ]
+CSetAtMupa( [<lNewSwitch>] ) -> lOldSwitch
+
+[Csetcent |F CSETCENT( [<lNewMode>] ) --> lOldMode|Queries or changes the SET CENTURY setting. ]
+CSETCENT( [<lNewMode>] ) --> lOldMode
+
+[Csetcurs |F CSETCURS( [<lNewMode>] ) --> lOldMode|Queries or changes the SET CURSOR setting. ]
+CSETCURS( [<lNewMode>] ) --> lOldMode
+
+[Csetkey |F CSETKEY( <nKey> ) --> bCodeBlock|Retrieves the code block associated with a key. ]
+CSETKEY( <nKey> ) --> bCodeBlock
+
+[Csetref |F CSetRef( [<lNewSwitch>] ) -> lOldSwitch|Determine return value of reference sensitive CT3 string functions ]
+CSetRef( [<lNewSwitch>] ) -> lOldSwitch
+
+[Csetsafety |F CSETSAFETY( [<lNewMode>] ) --> lOldMode|Retrieves and/or changes the safety switch used in CA-Tools file operations. ]
+CSETSAFETY( [<lNewMode>] ) --> lOldMode
+
+[Cstr |F CSTR( <xValue> ) --> cString|Converts a value to a character string. ]
+CSTR( <xValue> ) --> cString
+
+[Cstrtoval |F CSTRTOVAL( <cString>, <cValtype> ) --> xValue|Converts a character string to a value of specific data type. ]
+CSTRTOVAL( <cString>, <cValtype> ) --> xValue
+
+[Ctobit |F CToBit( <cBitString>, <cBitPattern> ) -> <nWord> ]
+CToBit( <cBitString>, <cBitPattern> ) -> <nWord>
+
+[Ctod |F CToD( <cDateString> ) --> dDate|Converts a character string to a date expression - Date Conversion - Date Conversion ]
+CToD( <cDateString> ) --> dDate
+
+[Ctodow |F CToDoW( <cName> ) -> nOrdinal|convert name of day of the week to its ordinal number ]
+CToDoW( <cName> ) -> nOrdinal
+
+[Ctof |F CToF( <cFloatingPointNumber> ) --> nFloatingPointNumber ]
+CToF( <cFloatingPointNumber> ) --> nFloatingPointNumber
+
+[Ctomonth |F CToMonth( <cName> ) -> nOrdinal|convert name of month to its ordinal number ]
+CToMonth( <cName> ) -> nOrdinal
+
+[Cton |F CToN( <xNumber>[, <nBase>][, <lMode>] ) -> <nNumber> ]
+CToN( <xNumber>[, <nBase>][, <lMode>] ) -> <nNumber>
+
+[Ctot |F CTOT( <cDateTimeString> ) --> dDateTime|Converts a character string into a DateTime value - String Conversion ]
+CTOT( <cDateTimeString> ) --> dDateTime
+
+[Curdir |F CurDir( [<cDrive>] ) --> cPath|Returns the current OS directory name. - Disk - Disk ]
+CurDir( [<cDrive>] ) --> cPath
+
+[Curdirx |F CURDIRX( [<cDrive>] ) --> cDirPath|Returns the current directory of a drive including directory separators. ]
+CURDIRX( [<cDrive>] ) --> cDirPath
+
+[Curdrive |F CURDRIVE( [<cNewDrive>] ) --> cOldDrive|Determines or changes the current disk drive - Disk ]
+CURDRIVE( [<cNewDrive>] ) --> cOldDrive
+
+[Currentget |F CURRENTGET() --> nCurrentGetPos|Returns the position of the current Get field in the Getlist array. ]
+CURRENTGET() --> nCurrentGetPos
+
+[Date |F Date() --> dCurDate|Return the Current OS Date - Date - Date ]
+Date() --> dCurDate
+
+[Datetime |F DATETIME() --> dDateTime|Returns the current date and time from the operating system.( Library:RTL ) ]
+DATETIME() --> dDateTime
+
+[Day |F Day( <cDate> ) --> nMonth|Return the numeric day of the month. - Date - Date ]
+Day( <cDate> ) --> nMonth
+
+[Days |F Days( <nSecs> ) --> nDay|Convert elapsed seconds into days - Date ]
+Days( <nSecs> ) --> nDay
+
+[Daysinmonth |F DAYSINMONTH (<nMonth>, <lLeapYear>) -> nDaysInMonth|Returns the number of days in month ]
+DAYSINMONTH (<nMonth>, <lLeapYear>) -> nDaysInMonth
+
+[Daystomonth |F DaysToMonth( <nMonth>, <lLeapYear> ) -> nDaysToMonth|Total number of days from first of Jan to beginning of nMonth. ]
+DaysToMonth( <nMonth>, <lLeapYear> ) -> nDaysToMonth
+
+[Dbappend |F dbAppend( [<lUnlockAll>] ) --> lSuccess|Appends a new record to a database file. - Dbf - Dbf ]
+dbAppend( [<lUnlockAll>] ) --> lSuccess
+
+[Dbclearfilter |F dbClearFilter() --> NIL|Clears the current filter condition in a work area - DBC - Dbf ]
+dbClearFilter() --> NIL
+
+[Dbclearind |F DBCLEARIND()|Close all indexes for the current work area. ( Library:RTL ) ]
+DBCLEARIND()
+
+[Dbclearrel |F DBCLEARREL()|Clear active relations. ( Library:RTL ) ]
+DBCLEARREL()
+
+[Dbcloseall |F dbCloseAll() --> NIL|Close all open files in all work areas. - Dbf ]
+dbCloseAll() --> NIL
+
+[Dbclosearea |F dbCloseArea()|Close a database file in a work area. - Dbf ]
+dbCloseArea()
+
+[Dbcommit |F dbCommit()|Updates all index and database buffers for a given work area - Dbf ]
+dbCommit()
+
+[Dbcommitall |F dbCommit()|Flushes the memory buffer and performs a hard-disk write - Dbf ]
+dbCommit()
+
+[Dbcopyextstruct |F DBCOPYEXTSTRUCT( <cDatabaseExt> ) --> lSuccess|Creates a structure extended database file. - Dbf ]
+DBCOPYEXTSTRUCT( <cDatabaseExt> ) --> lSuccess
+
+[Dbcopystruct |F DBCOPYSTRUCT( <cDatabase>, [<aFieldList>] )|Creates a new database based on the current database structure. - Dbf ]
+DBCOPYSTRUCT( <cDatabase>, [<aFieldList>] )
+
+[Dbcreate |F dbCreate( <cFile>, <aStruct>, [<cRDD>], [<lKeepOpen>], [<cAlias>],|Creates an empty database from a array. - Dbf ]
+dbCreate( <cFile>, <aStruct>, [<cRDD>], [<lKeepOpen>], [<cAlias>],
+
+[Dbcreateind |F DBCREATEIND(<cIndexFile>, <cIndexExpr>, [<bIndexExpr>], [<lUnique>], [<cIndexName>]  )|Create an index file. ( Library:RTL ) ]
+DBCREATEIND(<cIndexFile>, <cIndexExpr>, [<bIndexExpr>], [<lUnique>], [<cIndexName>]  )
+
+[Dbdelete |F dbDelete()|Mark a record for deletion in a database. - Dbf ]
+dbDelete()
+
+[Dbedit |F dbEdit( [<nTop>], [<nLeft>], [<nBottom>], [<nRight>], [<acColumns>], [<xUserFunc>], [<xColumnSayPictures>], [<xColumnHeaders>], [<xHeadingSeparators>]|Browse records in a table ]
+dbEdit( [<nTop>], [<nLeft>], [<nBottom>], [<nRight>], [<acColumns>], [<xUserFunc>], [<xColumnSayPictures>], [<xColumnHeaders>], [<xHeadingSeparators>]
+
+[Dbeval |F dbEval( <bBlock>,|Performs a code block operation on the current Database - Dbf Codeblock ]
+dbEval( <bBlock>,
+
+[Dbf |F Dbf() --> cWorkArea|Alias name of a work area - Dbf - Dbf ]
+Dbf() --> cWorkArea
+
+[Dbfieldinfo |F DBFIELDINFO( <nInfo>, <nFieldPos> ) --> xFieldInfo|Return and optionally change information about a field. ( Library:RTL ) - Dbf ]
+DBFIELDINFO( <nInfo>, <nFieldPos> ) --> xFieldInfo
+
+[Dbfileget |F DBFILEGET( <nFieldPos>, <cTargetFile>, <nMode> ) --> lSuccess|Insert the contents of a field into a file. ( Library:RTL ) ]
+DBFILEGET( <nFieldPos>, <cTargetFile>, <nMode> ) --> lSuccess
+
+[Dbfileput |F DBFILEPUT( <nFieldPos>, <cSourceFile> [,<Mode>] ) --> lSuccess|Insert the contents of a file into a field. ( Library:RTL ) ]
+DBFILEPUT( <nFieldPos>, <cSourceFile> [,<Mode>] ) --> lSuccess
+
+[Dbfilter |F dbFilter() --> cFilter|Return the filter expression in a work area - Dbf ]
+dbFilter() --> cFilter
+
+[Dbfsize |F DBFSIZE() --> nFileSize|Returns the size of a database file in memory that is opened in a workarea. ]
+DBFSIZE() --> nFileSize
+
+[Dbgobottom |F dbGoBottom()|Moves the record pointer to the bottom of the database. - Dbf ]
+dbGoBottom()
+
+[Dbgoto |F dbGoto( <xRecordNumber> )|Position the record pointer to a specific location. - Dbf ]
+dbGoto( <xRecordNumber> )
+
+[Dbgotop |F dbGoTop()|Moves the record pointer to the top of the database. - Dbf ]
+dbGoTop()
+
+[Dbinfo |F DBINFO( <nDefine>, [<xNewSetting>] ) --> xCurrentSetting|Return and optionally change database file information. ( Library:RTL ) - Dbf ]
+DBINFO( <nDefine>, [<xNewSetting>] ) --> xCurrentSetting
+
+[Dborderinfo |F DBORDERINFO( <nDefine>, [<cIndexFile>], [<nOrder> OR <cIndexName>], [<xNewSetting>] ) --> xCurrentSetting|Return and optionally change order and index file information. ( Library:RTL ) - Dbf ]
+DBORDERINFO( <nDefine>, [<cIndexFile>], [<nOrder> OR <cIndexName>], [<xNewSetting>] ) --> xCurrentSetting
+
+[Dbrecall |F dbRecall()|Recalls a record previously marked for deletion. - Dbf ]
+dbRecall()
+
+[Dbrecordinfo |F DBRECORDINFO( <nDefine>, [<nRecord>], [<xNewSetting>] ) --> xOldSetting|Return and optionally change information about a record. ( Library:RTL ) - Dbf ]
+DBRECORDINFO( <nDefine>, [<nRecord>], [<xNewSetting>] ) --> xOldSetting
+
+[Dbreindex |F DBREINDEX()|Recreate all active indexes for the current work area. ( Library:RTL ) - Dbf ]
+DBREINDEX()
+
+[Dbrelation |F DBRELATION( <nRelation> ) --> cLinkExpression|Return the linking expression of a specified relation. ( Library:RTL ) - Dbf ]
+DBRELATION( <nRelation> ) --> cLinkExpression
+
+[Dbrlock |F dbRLock( [<xIdentity>] ) --> lSuccess|This function locks the record based on identity - Dbf Locking ]
+dbRLock( [<xIdentity>] ) --> lSuccess
+
+[Dbrlocklist |F dbRLockList() --> aRecordLocks|This function return a list of locked records in the database work area - Dbf Locking ]
+dbRLockList() --> aRecordLocks
+
+[Dbrselect |F DBRSELECT( <nRelation> ) --> nWorkArea|Return the target work area number of a relation. ( Library:RTL ) - Dbf ]
+DBRSELECT( <nRelation> ) --> nWorkArea
+
+[Dbrunlock |F dbRUnlock( [<xIdentity>] )|Unlocks a record based on its identifier - Dbf Locking ]
+dbRUnlock( [<xIdentity>] )
+
+[Dbseek |F dbSeek( <expKey>, [<lSoftSeek>], [<lFindLast>] ) --> lFound|Searches for a value based on an active index. - Dbf ]
+dbSeek( <expKey>, [<lSoftSeek>], [<lFindLast>] ) --> lFound
+
+[Dbselectarea |F dbSelectArea( <xArea> ) --> NIL|Change to another work area - Dbf - Dbf ]
+dbSelectArea( <xArea> ) --> NIL
+
+[Dbsetdriver |F dbSetDriver( [<cDriver>] ) --> cCurrentDriver|Establishes the RDD name for the selected work area - Dbf ]
+dbSetDriver( [<cDriver>] ) --> cCurrentDriver
+
+[Dbsetfilter |F dbSetFilter( <bCondition>, [<cCondition>] )|Establishes a filter condition for a work area. - Dbf ]
+dbSetFilter( <bCondition>, [<cCondition>] )
+
+[Dbsetindex |F DBSETINDEX( <cIndexFile> )|Empty orders from an order bag into the order list. ( Library:RTL ) - Dbf ]
+DBSETINDEX( <cIndexFile> )
+
+[Dbsetorder |F DBSETORDER( <nIndexPos> )|Set the controlling order. ( Library:RTL ) - Dbf ]
+DBSETORDER( <nIndexPos> )
+
+[Dbsetrelation |F DBSETRELATION( <nArea> OR <cAlias>, <bRelation>, <cRelation>, [<lScoped>] )|Relate two work areas. ( Library:RTL ) - Dbf ]
+DBSETRELATION( <nArea> OR <cAlias>, <bRelation>, <cRelation>, [<lScoped>] )
+
+[Dbskipper |F dbSkipper( <nRecs> ) --> nSkipped|Helper function to skip a database - Dbf ]
+dbSkipper( <nRecs> ) --> nSkipped
+
+[Dbsort |F DBSORT( <cDatabase>, <aFields>, [<bFor>], [<bWhile>], [<nNext>], [<nRecord>], [<lRest>] ) --> lSuccess|Creates a new, physically sorted database. ( Library:RTL ) - Dbf - Dbf ]
+DBSORT( <cDatabase>, <aFields>, [<bFor>], [<bWhile>], [<nNext>], [<nRecord>], [<lRest>] ) --> lSuccess
+
+[Dbstruct |F dbStruct() --> aStruct|Creates a multidimensional array of a database structure. - Dbf ]
+dbStruct() --> aStruct
+
+[Dbtableext |F DBTABLEEXT() --> cFileExtension|Retrieves the default database file extension of the current RDD. ]
+DBTABLEEXT() --> cFileExtension
+
+[Dbunlock |F dbUnlock()|Unlock a record or release a file lock - Dbf Locking ]
+dbUnlock()
+
+[Dbunlockall |F dbUnlockAll()|Unlocks all records and releases all file locks in all work areas. - Dbf Locking ]
+dbUnlockAll()
+
+[Dbupdate |F DBUPDATE( <cAlias>, <bReplace>, <bExpression>, [<lRandom>] ) --> lSuccess|Updates records in the current work area from a second work area. - Dbf ]
+DBUPDATE( <cAlias>, <bReplace>, <bExpression>, [<lRandom>] ) --> lSuccess
+
+[Dbusearea |F dbUseArea( [<lNewArea>], [<cDriver>], <cName>, [<xcAlias>],|Opens a work area and uses a database file. - Dbf ]
+dbUseArea( [<lNewArea>], [<cDriver>], <cName>, [<xcAlias>],
+
+[Default |F DEFAULT( @<varName>, <xDefaultValue> )|Assigns a default value to a variable. - Programming ]
+DEFAULT( @<varName>, <xDefaultValue> )
+
+[Defpath |F DEFPATH() --> cDefaultPath|Returns the SET DEFAULT directory. ]
+DEFPATH() --> cDefaultPath
+
+[Deleted |F Deleted() --> lDeleted|Tests the record's deletion flag. - Dbf - Dbf ]
+Deleted() --> lDeleted
+
+[Deletefile |F DELETEFILE( <cFileName> ) --> nErrorCode|Deletes a file with error handling. ]
+DELETEFILE( <cFileName> ) --> nErrorCode
+
+[Descend |F Descend( <xExp> ) --> xExpInverted|Inverts an expression of string, logical, date or numeric type. - String ]
+Descend( <xExp> ) --> xExpInverted
+
+[Devoutpict |F DevOutPict( <xExp>, <cPicture>, [<cColorString>] )|Displays a value to a device using a picture template ]
+DevOutPict( <xExp>, <cPicture>, [<cColorString>] )
+
+[Devpos |F DEVPOS( <nRow>, <nCol> )|Move the cursor or printhead to a new position. ( Library:RTL ) ]
+DEVPOS( <nRow>, <nCol> )
+
+[Dirchange |F DirChange( <cDirectory> ) --> nError|Changes the directory - Disk - Disk ]
+DirChange( <cDirectory> ) --> nError
+
+[Directory |F DIRECTORY(  <cDirSpec>, [<cAttributes>] ) --> aDirectory|Create an array of directory and file information. ( Library:RTL ) - Disk - Disk ]
+DIRECTORY(  <cDirSpec>, [<cAttributes>] ) --> aDirectory
+
+[Directoryrecurse |F DIRECTORYRECURSE( <cDirSpec>, [<cAttributes>] ) --> aDirectory|Loads file information recursively into a two-dimensional array. ]
+DIRECTORYRECURSE( <cDirSpec>, [<cAttributes>] ) --> aDirectory
+
+[Dirmake |F DIRMAKE( <cDirectory> ) --> nErrorCode|Create a directory - Disk - Disk ]
+DIRMAKE( <cDirectory> ) --> nErrorCode
+
+[Dirname |F DIRNAME() --> cDirectory|Returns the current directory. ]
+DIRNAME() --> cDirectory
+
+[Dirremove |F DirRemove( <cDirectory> ) --> nError|Attempt to remove an directory - Disk - Disk ]
+DirRemove( <cDirectory> ) --> nError
+
+[Disablewaitlocks |F DISABLEWAITLOCKS( [<lNewMode>] ) --> lOldMode|Toggles the exclusive file opening mode. ]
+DISABLEWAITLOCKS( [<lNewMode>] ) --> lOldMode
+
+[Diskchange |F DISKCHANGE( <cDrive> ) --> lSuccess|Change the current DOS disk drive - Disk - Disk ]
+DISKCHANGE( <cDrive> ) --> lSuccess
+
+[Diskfree |F DISKFREE( [<cDrive>] ) --> nFreeDiskSpace|Returns the free storage space of a disk drive in bytes. - Disk ]
+DISKFREE( [<cDrive>] ) --> nFreeDiskSpace
+
+[Diskname |F DISKNAME() --> cDrive|Return the current DOS drive - Disk ]
+DISKNAME() --> cDrive
+
+[Diskready |F DISKREADY( [<cDrive>], [<lOSErrorMsg>] ) --> lDriveIsReady|Test if a disk drive is ready. ]
+DISKREADY( [<cDrive>], [<lOSErrorMsg>] ) --> lDriveIsReady
+
+[Diskreadyw |F DISKREADYW( [<cDrive>], [<lOSErrorMsg>] ) --> lIsWriteable|Tests if a drive can be written to. ]
+DISKREADYW( [<cDrive>], [<lOSErrorMsg>] ) --> lIsWriteable
+
+[Diskspace |F DiskSpace( [<nDrive>] ) --> nDiskBytes|Get the amount of space available on a disk - Disk - Disk ]
+DiskSpace( [<nDrive>] ) --> nDiskBytes
+
+[Disktotal |F DISKTOTAL( [<cDrive>] ) --> nTotalBytes|Returns the totl storage space of a disk drive in bytes. ]
+DISKTOTAL( [<cDrive>] ) --> nTotalBytes
+
+[Diskused |F DISKUSED( [<cDrive>] ) --> nUsedDiskSpace|Returns the used storage space of a disk drive in bytes. ]
+DISKUSED( [<cDrive>] ) --> nUsedDiskSpace
+
+[Dispbegin |F DISPBEGIN()|Begin buffering screen output. ( Library:RTL ) ]
+DISPBEGIN()
+
+[Dispbox |F DISPBOX( <nTop>, <nLeft>, <nBottom>, <nRight>, [<cnBoxString>], [<cColor>]|Display a box on the screen. ( Library:RTL ) ]
+DISPBOX( <nTop>, <nLeft>, <nBottom>, <nRight>, [<cnBoxString>], [<cColor>]
+
+[Dispcount |F DISPCOUNT() --> nDispCount|Return the number of pending DISPEND() requests ]
+DISPCOUNT() --> nDispCount
+
+[Dispend |F DISPEND()|Display buffered screen updates. ( Library:RTL ) ]
+DISPEND()
+
+[Dispout |F DISPOUT( <expression>, [<cColor>] )|Write a value to the dislay.( Library:RTL ) ]
+DISPOUT( <expression>, [<cColor>] )
+
+[Dispoutat |F DISPOUTAT( <nRow>, <nCol>, <expression>, [<cColor>], [<lSetPos>] )|Displays a value on the screen at a certain position.( Library:RTL ) ]
+DISPOUTAT( <nRow>, <nCol>, <expression>, [<cColor>], [<lSetPos>] )
+
+[Dispoutatsetpos |F DISPOUTATSETPOS( [<lNewSetting>] ) --> lOldSetting|Toggles update of the screen cursor with DispOutAt(). ( Library:RTL ) ]
+DISPOUTATSETPOS( [<lNewSetting>] ) --> lOldSetting
+
+[Dmy |F DMY( [<dDate>][, <lMode>] ) -> cDateString|Returns the date as a string in DD Month YY format - Date String ]
+DMY( [<dDate>][, <lMode>] ) -> cDateString
+
+[Doserror |F DOSERROR( [<nNewErrorCode>] ) --> nOsErrorCode|Return the last DOS error number. ( Library:RTL ) - Error ]
+DOSERROR( [<nNewErrorCode>] ) --> nOsErrorCode
+
+[Dosparam |F DOSPARAM() --> cCommandLine|Returns the command line parameters passed to an application. ( Library:RTL ) ]
+DOSPARAM() --> cCommandLine
+
+[Dow |F DoW( <dDate> ) --> nDay|Value for the day of week. - Date Conversion - Date Conversion ]
+DoW( <dDate> ) --> nDay
+
+[Doy |F DoY( <dDate> ) --> nDay|Gets the day number of the year. - Date ]
+DoY( <dDate> ) --> nDay
+
+[Drivetype |F DRIVETYPE( [<cDrive>] ) --> nDriveType|Determines the type of a drive. - Disk ]
+DRIVETYPE( [<cDrive>] ) --> nDriveType
+
+[Dtoc |F DToC( <dDateString> ) --> cDate|Date to character conversion - Date String Conversion - Date String Conversion ]
+DToC( <dDateString> ) --> cDate
+
+[Dtor |F DToR( nDegree ) -> nRadiant|Convert degree to radiant - Numeric Conversion - Numeric Conversion ]
+DToR( nDegree ) -> nRadiant
+
+[Dtos |F DToS( <dDateString> ) --> cDate|Date to string conversion - Date String Conversion - Date String Conversion ]
+DToS( <dDateString> ) --> cDate
+
+[Elaptime |F ElapTime( <cStartTime>, <cEndTime> ) --> cDifference|Calculates elapsed time. - Time ]
+ElapTime( <cStartTime>, <cEndTime> ) --> cDifference
+
+[Empty |F Empty( <xExp> ) --> lIsEmpty|Checks if the passed argument is empty. - Programming - Programming ]
+Empty( <xExp> ) --> lIsEmpty
+
+[Enhanced |F Enhanced() -> <cEmptyString>|Select the "ENHANCED" color value for output ]
+Enhanced() -> <cEmptyString>
+
+[Eof |F Eof() --> lEnd|Test for end-of-file condition. - Dbf - Dbf ]
+Eof() --> lEnd
+
+[Eom |F EoM( <dDate> ) --> dEOM|Gets the last day in a month. ]
+EoM( <dDate> ) --> dEOM
+
+[Eoq |F EoQ( [<dDate>] ) -> dDateEndOfQuarter|_E_nd _O_f _Q_uarter ]
+EoQ( [<dDate>] ) -> dDateEndOfQuarter
+
+[Eoy |F EoY( <dDate> ) --> dEOY|Gets the last date of the year. ]
+EoY( <dDate> ) --> dEOY
+
+[Errorblock |F ERRORBLOCK([<bErrorBlock>] ) --> bLastErrorBlock|Post a code block to execute when a runtime error occurs ]
+ERRORBLOCK([<bErrorBlock>] ) --> bLastErrorBlock
+
+[Errorlevel |F ERRORLEVEL( [<cSubSystem>  ], [<nGenCode>], [<nSubCode>], [<cOperation>], [<cDescription>], [ <aArgs> ], [<cModuleName> ], [<cProcName>], [<nProcLine|Set the CA-Clipper return code. ( Library:RTL ) ]
+ERRORLEVEL( [<cSubSystem>  ], [<nGenCode>], [<nSubCode>], [<cOperation>], [<cDescription>], [ <aArgs> ], [<cModuleName> ], [<cProcName>], [<nProcLine
+
+[Errorsys |F ErrorSys() --> NIL|Install default error handler ]
+ErrorSys() --> NIL
+
+[Eval |F Eval( <bBlock> [, <xVal> [,...] ] ) --> xExpression|Evaluate a code block - Programming Codeblock ]
+Eval( <bBlock> [, <xVal> [,...] ] ) --> xExpression
+
+[Exename |F EXENAME() --> cExeFileName|Returns the EXE file name of an xHarbour application. ]
+EXENAME() --> cExeFileName
+
+[Expand |F EXPAND( <cString>, [<nCount>], [<xChar>] ) --> cResult|Inserts characters between all characters in a string. - Numeric - Numeric ]
+EXPAND( <cString>, [<nCount>], [<xChar>] ) --> cResult
+
+[Exponent |F Exponent( <nFloatingPointNumber> ) --> nExponent|Evaluate the exponent of a floating point number ]
+Exponent( <nFloatingPointNumber> ) --> nExponent
+
+[Fact |F Fact( <nNumber> ) -> nFaculty|Calculates faculty - Numeric ]
+Fact( <nNumber> ) -> nFaculty
+
+[Fahrenheit |F Fahrenheit( nDegreeCelsius ) --> nDegreeFahrenheit|Temperature conversion Celsius to Fahrenheit ]
+Fahrenheit( nDegreeCelsius ) --> nDegreeFahrenheit
+
+[Fclose |F FClose( <nHandle> ) --> lSuccess|Closes an open file - File - File ]
+FClose( <nHandle> ) --> lSuccess
+
+[Fcount |F FCount() --> nFields|Counts the number of fields in an active database. - Dbf - Dbf ]
+FCount() --> nFields
+
+[Fcreate |F FCreate( <cFile>, [<nAttribute>] ) --> nHandle|Creates a file. - File - File ]
+FCreate( <cFile>, [<nAttribute>] ) --> nHandle
+
+[Ferase |F FErase( <cFile> ) --> nSuccess|Erase a file from disk - File ]
+FErase( <cFile> ) --> nSuccess
+
+[Ferror |F FError() --> nErrorCode|Reports the error status of low-level file functions - File - File ]
+FError() --> nErrorCode
+
+[Fieldblock |F FieldBlock( <cFieldName> ) --> bFieldBlock|Return a code block that sets/gets a value for a given field ]
+FieldBlock( <cFieldName> ) --> bFieldBlock
+
+[Fielddeci |F FIELDDECI( <nFieldPos> ) --> nDecimals|Returns the decimal places of a database field. ]
+FIELDDECI( <nFieldPos> ) --> nDecimals
+
+[Fieldget |F FieldGet( <nField> ) --> ValueField|Obtains the value  of a specified field ]
+FieldGet( <nField> ) --> ValueField
+
+[Fieldlen |F FIELDLEN( <nFieldPos> ) --> nFieldLength|FieldLen( <nFieldPos> ) --> nFieldLength ]
+FIELDLEN( <nFieldPos> ) --> nFieldLength
+
+[Fieldname |F FieldName()/Field( <nPosition> ) --> cFieldName|Return the name of a field at a numeric field location. ]
+FieldName()/Field( <nPosition> ) --> cFieldName
+
+[Fieldnum |F FIELDNUM( <cFieldName> ) --> nFieldPos|Returns the ordinal position of a field in a database. ]
+FIELDNUM( <cFieldName> ) --> nFieldPos
+
+[Fieldpos |F FieldPos( <cFieldName> ) --> nFieldPos|Return the ordinal position of a field. ]
+FieldPos( <cFieldName> ) --> nFieldPos
+
+[Fieldput |F FieldPut( <nField>, <expAssign> ) --> ValueAssigned|Set the value of a field variable ]
+FieldPut( <nField>, <expAssign> ) --> ValueAssigned
+
+[Fieldsize |F FIELDSIZE( <nFieldPos> ) --> nFieldLength|Returns the length of a database field. ]
+FIELDSIZE( <nFieldPos> ) --> nFieldLength
+
+[Fieldtype |F FIELDTYPE( <nFieldPos> ) --> cFieldType|Retrieves the data type of a field variable. ]
+FIELDTYPE( <nFieldPos> ) --> cFieldType
+
+[Fieldwblock |F FieldWBlock( <cFieldName>, <nWorkArea> ) --> bFieldBlock|Return a sets/gets code block for field in a given work area ]
+FieldWBlock( <cFieldName>, <nWorkArea> ) --> bFieldBlock
+
+[File |F File( <cFileSpec> ) --> lExists|Tests for the existence of file(s) ]
+File( <cFileSpec> ) --> lExists
+
+[Fileappend |F FILEAPPEND( <cSourceFile>, <cTargetFile> ) --> nBytesAdded|Concatenates two files. ]
+FILEAPPEND( <cSourceFile>, <cTargetFile> ) --> nBytesAdded
+
+[Fileattr |F FILEATTR( [<cFileName>] ) --> nAttributes|Returns the attributes of a file. ]
+FILEATTR( [<cFileName>] ) --> nAttributes
+
+[Filedate |F FILEDATE( [<cFileName>] ) --> dDate|Returns the date of a file. ]
+FILEDATE( [<cFileName>] ) --> dDate
+
+[Filedelete |F FILEDELETE( <cFileMask>, [<nAttributes>] ) --> lDeleted|Deletes one or more files specified by a file mask and file attributes. ]
+FILEDELETE( <cFileMask>, [<nAttributes>] ) --> lDeleted
+
+[Filemove |F FILEMOVE( <cSourceFile>, <cTargetFile> ) --> nErrorCode|Moves a file to another directory. ]
+FILEMOVE( <cSourceFile>, <cTargetFile> ) --> nErrorCode
+
+[Fileseek |F FILESEEK( [<cFileMask>], [<nAttributes>] ) --> cFileName|Seeks files specified by a file mask and file attributes. ]
+FILESEEK( [<cFileMask>], [<nAttributes>] ) --> cFileName
+
+[Filesize |F FILESIZE( [<cFileName>], [<nAttributes>] ) --> nFileSize|Returns the size of a file. ]
+FILESIZE( [<cFileName>], [<nAttributes>] ) --> nFileSize
+
+[Filestats |F FILESTATS( <cFileName>, [@<cFileAttr>], [@<nFileSize>], [@<dCreateDate>], [@<nCreateTime>], [@<dChangeDate>], [@<nChangeTime>] ) --> lSuccess|Retrieves file information for a single file. ]
+FILESTATS( <cFileName>, [@<cFileAttr>], [@<nFileSize>], [@<dCreateDate>], [@<nCreateTime>], [@<dChangeDate>], [@<nChangeTime>] ) --> lSuccess
+
+[Filetime |F FILETIME( [<cFileName>], [<nAttributes>] ) --> cFileTime|Returns the change time of a file. ]
+FILETIME( [<cFileName>], [<nAttributes>] ) --> cFileTime
+
+[Fklabel |F FKLABEL( <nKey> ) --> cKeyLabel|Returns a function key name. ]
+FKLABEL( <nKey> ) --> cKeyLabel
+
+[Fkmax |F FKMAX() --> nFKeyCount|Returns the number of available function keys. ]
+FKMAX() --> nFKeyCount
+
+[Flinecount |F FLINECOUNT( <cFileName> ) --> nLineCount|Counts the lines in an ASCII text file. ]
+FLINECOUNT( <cFileName> ) --> nLineCount
+
+[Flock |F FLock() --> lSuccess|Locks a file - Dbf Locking - Dbf Locking ]
+FLock() --> lSuccess
+
+[Floor |F Floor( <nNumber> ) -> nDownRoundedNumber|Rounds down a number to the next integer - Numeric - Numeric ]
+Floor( <nNumber> ) -> nDownRoundedNumber
+
+[Fopen |F FOpen( <cFile>, [<nMode>] ) --> nHandle|Open a file. - File - File ]
+FOpen( <cFile>, [<nMode>] ) --> nHandle
+
+[Found |F Found() --> lSuccess|Determine the success of a previous search operation. - Dbf - Dbf ]
+Found() --> lSuccess
+
+[Fparse |F FPARSE( <cFileName>, <cDelimiter> ) --> aTextArray|Parses a delimited text file and loads it into an array. ]
+FPARSE( <cFileName>, <cDelimiter> ) --> aTextArray
+
+[Fparseex |F FPARSEEX( <cFileName>, [<cDelimiter>] ) --> aTextArray|Parses a delimited text file and loads it into an array (optimized). ]
+FPARSEEX( <cFileName>, [<cDelimiter>] ) --> aTextArray
+
+[Fparseline |F FPARSELINE( <cTextLine>, [<cDelimiter>]  ) --> aTextFields|Parses one line of a delimited text and loads it into an array. ]
+FPARSELINE( <cTextLine>, [<cDelimiter>]  ) --> aTextFields
+
+[Fread |F FRead( <nHandle>, @<cBuffer>, <nBytes> ) --> nBytes|Reads a specified number of bytes from a file. - File - File - File ]
+FRead( <nHandle>, @<cBuffer>, <nBytes> ) --> nBytes
+
+[Freadstr |F FReadStr( <nHandle>, <nBytes> ) --> cString|Reads a string from a file. - File ]
+FReadStr( <nHandle>, <nBytes> ) --> cString
+
+[Frename |F FRename( <cOldFile>, <cNewFile> ) --> nSuccess|Renames a file - File ]
+FRename( <cOldFile>, <cNewFile> ) --> nSuccess
+
+[Fseek |F FSeek( <nHandle>, <nOffset>, [<nOrigin>] ) --> nPosition|Positions the file pointer in a file. - File - File ]
+FSeek( <nHandle>, <nOffset>, [<nOrigin>] ) --> nPosition
+
+[Ftoc |F FToC( <nFloatingPointNumber> ) --> cFloatingPointNumber ]
+FToC( <nFloatingPointNumber> ) --> cFloatingPointNumber
+
+[Fv |F FV( nDeposit, nInterest, nPeriods ) --> nFutureValue|Future value of a capital - Numeric ]
+FV( nDeposit, nInterest, nPeriods ) --> nFutureValue
+
+[Fwordcount |F FWordCount( <cFileName> ) -> nWordCount|Counts the words in a text file. ]
+FWordCount( <cFileName> ) -> nWordCount
+
+[Fwrite |F FWrite(<nHandle>, <cBuffer>, <nBytes> ) -> nBytesWritten|Grava em um arquivo binario - File - File - File ]
+FWrite(<nHandle>, <cBuffer>, <nBytes> ) -> nBytesWritten
+
+[Gbmpdisp |F GBMPDISP()|Display a bitmap (.BMP) file on screen ]
+GBMPDISP()
+
+[Gbmpload |F GBMPLOAD()|Load a bitmap (.bmp) or icon (.ico) file into memory ]
+GBMPLOAD()
+
+[Gellipse |F GELLIPSE()|Draw an ellipse or circle ]
+GELLIPSE()
+
+[Getactive |F GETACTIVE( [<oGet>] ) --> oGet OR NIL|Return the currently active Get object ]
+GETACTIVE( [<oGet>] ) --> oGet OR NIL
+
+[Getapplykey |F GETAPPLYKEY( <oGet>, <nKey> )|Apply a key to a Get object from within a  reader ]
+GETAPPLYKEY( <oGet>, <nKey> )
+
+[Getcleara |F GETCLEARA() --> nClearAttribute|Returns the default color attribute for clearing the screen. ]
+GETCLEARA() --> nClearAttribute
+
+[Getclearb |F GETCLEARB() --> nClearCharacter|Returns the default character for clearing the screen. ]
+GETCLEARB() --> nClearCharacter
+
+[Getclrback |F GETCLRBACK( <cColor> ) --> cBackgroundColor|Returns the background color of a color value. ]
+GETCLRBACK( <cColor> ) --> cBackgroundColor
+
+[Getclrfore |F GETCLRFORE( <cColor> ) --> cForegroundColor|Returns the foreground color of a color value. ]
+GETCLRFORE( <cColor> ) --> cForegroundColor
+
+[Getclrpair |F GETCLRPAIR( <cColorString>, <nPos> ) --> cColorValue|Extracts a color value from a color string. ]
+GETCLRPAIR( <cColorString>, <nPos> ) --> cColorValue
+
+[Getcurrentthread |F GetCurrentThread( ) -> pThreadHandle|Retrieves the handle of the current thread. ]
+GetCurrentThread( ) -> pThreadHandle
+
+[Getdefaultprinter |F GetDefaultPrinter( ) -> cPrinterName|Retrieves the name of a computer's default printer. - Settings ]
+GetDefaultPrinter( ) -> cPrinterName
+
+[Getdosetkey |F GETDOSETKEY( <bBlock>, <oGet> )|Process SET KEY during GET editing ]
+GETDOSETKEY( <bBlock>, <oGet> )
+
+[Gete |F GetE( <cEnviroment> ) --> <cReturn>|Obtains a system environmental setting. ]
+GetE( <cEnviroment> ) --> <cReturn>
+
+[Getenv |F GetEnv(<cEnvironmentVariable>) -> cString|Tem como objetivo determinar o valor de uma variavel do environment da plataforma(Sistema Operacional) em uso, no ambiente do Protheus Server - Settin ]
+GetEnv(<cEnvironmentVariable>) -> cString
+
+[Getfldcol |F GETFLDCOL( [<nGetPos>] ) --> nScreenColumn|Returns the screen column position of a Get field. ]
+GETFLDCOL( [<nGetPos>] ) --> nScreenColumn
+
+[Getfldrow |F GETFLDROW( [<nGetPos>] ) --> nScreenRow|Returns the screen row position of a Get field. ]
+GETFLDROW( [<nGetPos>] ) --> nScreenRow
+
+[Getfldvar |F GETFLDVAR( [<nGetPos>] ) --> cGetVarName|Returns the name of a Get variable. ]
+GETFLDVAR( [<nGetPos>] ) --> cGetVarName
+
+[Getlasterror |F GetLastError( ) -> nErrorCode|Retrieves the error code of the last dynamically called DLL function. ]
+GetLastError( ) -> nErrorCode
+
+[Getnew |F GetNew( <nRow> , <nCol> , <bVarBlock>, <cVarName> , <cPicture> , <cColorSpec> ) -> oGet|Creates a new Get object. ]
+GetNew( <nRow> , <nCol> , <bVarBlock>, <cVarName> , <cPicture> , <cColorSpec> ) -> oGet
+
+[Getpairlen |F GETPAIRLEN( <cColorString>, <nPos> ) --> nLength|Returns the length of a color value within a color string. ]
+GETPAIRLEN( <cColorString>, <nPos> ) --> nLength
+
+[Getpairpos |F GETPAIRPOS( <cColorString>, <nPos> ) --> nAbsPos|Returns the absolute position of a color value in a color string. ]
+GETPAIRPOS( <cColorString>, <nPos> ) --> nAbsPos
+
+[Getpostvalidate |F GETPOSTVALIDATE(<oGet> ) --> lDataIsValid)|Postvalidate the current Get object ]
+GETPOSTVALIDATE(<oGet> ) --> lDataIsValid)
+
+[Getprec |F GetPrec() -> nDigits|Get precision of math functions ]
+GetPrec() -> nDigits
+
+[Getprevalidate |F GETPREVALIDATE(  <oGet> ) --> lCanEdit|Prevalidate a Get object ]
+GETPREVALIDATE(  <oGet> ) --> lCanEdit
+
+[Getprinters |F GetPrinters( <lPortInfo> , <lLocalPrinters> ) -> aPrinterInfo|Retrieves information about available printers. - Dialog Printing ]
+GetPrinters( <lPortInfo> , <lLocalPrinters> ) -> aPrinterInfo
+
+[Getprocaddress |F GetProcAddress( <nDllHandle>, <cFuncName_or_nOrdinal> ) -> pAddress ]
+GetProcAddress( <nDllHandle>, <cFuncName_or_nOrdinal> ) -> pAddress
+
+[Getreader |F GETREADER()|Execute standard READ behavior for a Get object ]
+GETREADER()
+
+[Getregistry |F GetRegistry( <nHKEY>, <cRegPath>, <cRegKey> ) -> xRegValue|Retrieves the value of a registry entry ]
+GetRegistry( <nHKEY>, <cRegPath>, <cRegKey> ) -> xRegValue
+
+[Getsystemthreadid |F GetSystemThreadID( <pThreadHandle> ) -> nSystemTID|Retrieves the numeric system Thread ID of a thread. ]
+GetSystemThreadID( <pThreadHandle> ) -> nSystemTID
+
+[Getthreadid |F GetThreadID( <pThreadHandle> ) -> nApplicationTID|Retrieves the numeric application Thread ID of a thread. ]
+GetThreadID( <pThreadHandle> ) -> nApplicationTID
+
+[Getvolinfo |F GETVOLINFO( <cDrive> ) --> lSuccess|Retrieves the volume label of a disk. ]
+GETVOLINFO( <cDrive> ) --> lSuccess
+
+[Gfnterase |F GFNTERASE()|Erase a font from memory ]
+GFNTERASE()
+
+[Gfntload |F GFNTLOAD()|Load a font file into memory ]
+GFNTLOAD()
+
+[Gfntset |F GFNTSET()|Set an already loaded font as active ]
+GFNTSET()
+
+[Gframe |F GFRAME()|Draw a frame with a 3-D look ]
+GFRAME()
+
+[Ggetpixel |F GGETPIXEL()|Get color information for a pixel ]
+GGETPIXEL()
+
+[Gline |F GLINE()|Draw a line in graphic mode ]
+GLINE()
+
+[Gmode |F GMODE()|Switch video mode ]
+GMODE()
+
+[Gpolygon |F GPOLYGON()|Draw a polygon on screen ]
+GPOLYGON()
+
+[Gputpixel |F GPUTPIXEL()|Draw a pixel on the screen ]
+GPUTPIXEL()
+
+[Grect |F GRECT()|Draw a rectangle in graphic mode ]
+GRECT()
+
+[Gsetclip |F GSETCLIP()|Define the allowed display area ]
+GSETCLIP()
+
+[Gsetexcl |F GSETEXCL()|Define a screen region to be excluded from display ]
+GSETEXCL()
+
+[Gsetpal |F GSETPAL()|Change components of a color ]
+GSETPAL()
+
+[Gwriteat |F GWRITEAT()|Draw graphic text without background ]
+GWRITEAT()
+
+[Haadelat |F HaaDelAt( <hArray>, <nPos> ) -> NIL ]
+HaaDelAt( <hArray>, <nPos> ) -> NIL
+
+[Haagetkeyat |F HaaGetKeyAt( <hArray>, <nPos> ) -> xKey ]
+HaaGetKeyAt( <hArray>, <nPos> ) -> xKey
+
+[Haagetpos |F HaaGetPos( <hArray>, <xKey> ) -> nPos ]
+HaaGetPos( <hArray>, <xKey> ) -> nPos
+
+[Haagetrealpos |F HaaGetRealPos( <hArray>, <nPos> ) -> nSortOrder ]
+HaaGetRealPos( <hArray>, <nPos> ) -> nSortOrder
+
+[Haagetvalueat |F HaaGetValueAt( <hArray>, <nPos> ) -> xValue ]
+HaaGetValueAt( <hArray>, <nPos> ) -> xValue
+
+[Haasetvalueat |F HaaSetValueAt( <hArray>, <nPos>, <xValue> ) -> NIL ]
+HaaSetValueAt( <hArray>, <nPos>, <xValue> ) -> NIL
+
+[Hallocate |F HAllocate( <hHash>, <nCount> ) -> NIL ]
+HAllocate( <hHash>, <nCount> ) -> NIL
+
+[Hardcr |F HardCR(<cString>) -> cConvertedString|Replace all soft carriage returns with hard carriages returns. - Memo ]
+HardCR(<cString>) -> cConvertedString
+
+[Hash |F Hash( <xKey1> , <xValue1> , <xKeyN> , <xValueN> ) -> hHash|Creates a new hash. ]
+Hash( <xKey1> , <xValue1> , <xKeyN> , <xValueN> ) -> hHash
+
+[Hbconsolelock |F HBCONSOLELOCK()|Locks the console for the current thread ]
+HBCONSOLELOCK()
+
+[Hbconsoleunlock |F HBCONSOLEUNLOCK()|Releases the console lock. ]
+HBCONSOLEUNLOCK()
+
+[Hb_ansitooem |F HB_AnsiToOem( <cANSI_String> ) -> cOEM_String ]
+HB_AnsiToOem( <cANSI_String> ) -> cOEM_String
+
+[Hb_aparams |F HB_AParams( ) -> aValues ]
+HB_AParams( ) -> aValues
+
+[Hb_argcheck |F HB_ArgCheck( <cSwitch> ) -> lExists ]
+HB_ArgCheck( <cSwitch> ) -> lExists
+
+[Hb_argstring |F HB_ArgString( <cSwitch> ) -> cValue | NIL ]
+HB_ArgString( <cSwitch> ) -> cValue | NIL
+
+[Hb_argv |F HB_ArgV( <nPos> ) -> cArgValue ]
+HB_ArgV( <nPos> ) -> cArgValue
+
+[Hb_arrayid |F HB_ArrayId( <aArray_or_oObject> ) -> pID ]
+HB_ArrayId( <aArray_or_oObject> ) -> pID
+
+[Hb_arraytostructure |F HB_ArrayToStructure( <aMembers>, <aTypes>, <nAlign> ) -> cBinaryStructure ]
+HB_ArrayToStructure( <aMembers>, <aTypes>, <nAlign> ) -> cBinaryStructure
+
+[Hb_at |F hb_At( <cSearch>, <cString>, [<nStart>], [<nEnd>] ) --> nPos|Locates the position of a substring in a main string. ]
+hb_At( <cSearch>, <cString>, [<nStart>], [<nEnd>] ) --> nPos
+
+[Hb_atokens |F HB_ATokens( <cString> , <cDelimiter> , <lSkipQuotes> , <lDoubleQuotesOnly> ) -> aTokens|Parses a complex string (e.g. a sentence or multi-line text) into individual ]
+HB_ATokens( <cString> , <cDelimiter> , <lSkipQuotes> , <lDoubleQuotesOnly> ) -> aTokens
+
+[Hb_atx |F HB_AtX( <cRegEx> , <cString>, <lCaseSensitive> , <@nStart> , <@nLen> ) -> cFoundString ]
+HB_AtX( <cRegEx> , <cString>, <lCaseSensitive> , <@nStart> , <@nLen> ) -> cFoundString
+
+[Hb_backgroundactive |F HB_BackGroundActive( <nTaskHandle> , <lNewActive> ) -> lOldActive ]
+HB_BackGroundActive( <nTaskHandle> , <lNewActive> ) -> lOldActive
+
+[Hb_backgroundadd |F HB_BackGroundAdd( <bAction>, <nMillisecs> , <lActive> ) -> nTaskHandle ]
+HB_BackGroundAdd( <bAction>, <nMillisecs> , <lActive> ) -> nTaskHandle
+
+[Hb_backgrounddel |F HB_BackGroundDel( <nTaskHandle> ) -> bAction ]
+HB_BackGroundDel( <nTaskHandle> ) -> bAction
+
+[Hb_backgroundreset |F HB_BackGroundReset( ) -> NIL ]
+HB_BackGroundReset( ) -> NIL
+
+[Hb_backgroundrun |F HB_BackGroundRun( <nTaskHandle> ) -> NIL ]
+HB_BackGroundRun( <nTaskHandle> ) -> NIL
+
+[Hb_backgroundtime |F HB_BackGroundTime( <nTaskHandle>, <nNewInterval> ) -> nOldInterval ]
+HB_BackGroundTime( <nTaskHandle>, <nNewInterval> ) -> nOldInterval
+
+[Hb_base64decode |F HB_BASE64DECODE( <cBase64> ) --> cString|Decodes a base 64 encoded character string. ]
+HB_BASE64DECODE( <cBase64> ) --> cString
+
+[Hb_base64decodefile |F HB_BASE64DECODEFILE( <cBase64File>, <cTargetFile> )|Decodes a base 64 encoded file. ]
+HB_BASE64DECODEFILE( <cBase64File>, <cTargetFile> )
+
+[Hb_base64encode |F HB_BASE64ENCODE( <cString>, <nBytes> ) --> cBase64|Encodes a character string base 64. ]
+HB_BASE64ENCODE( <cString>, <nBytes> ) --> cBase64
+
+[Hb_base64encodefile |F HB_BASE64ENCODEFILE( <cFilename>, <cBase64File> )|Encodes a file base 64. ]
+HB_BASE64ENCODEFILE( <cFilename>, <cBase64File> )
+
+[Hb_bitand |F HB_BitAnd( <nInteger1>, <nInteger2> ) -> nResult ]
+HB_BitAnd( <nInteger1>, <nInteger2> ) -> nResult
+
+[Hb_bitnot |F HB_BitNot( <nInteger> ) -> nResult ]
+HB_BitNot( <nInteger> ) -> nResult
+
+[Hb_bitor |F HB_BitOr( <nInteger1>, <nInteger2> ) -> nResult ]
+HB_BitOr( <nInteger1>, <nInteger2> ) -> nResult
+
+[Hb_bitreset |F HB_BitReset( <nInteger>, <nPosition> ) -> nResult ]
+HB_BitReset( <nInteger>, <nPosition> ) -> nResult
+
+[Hb_bitset |F HB_BitSet( <nInteger>, <nPosition> ) -> nResult ]
+HB_BitSet( <nInteger>, <nPosition> ) -> nResult
+
+[Hb_bitshift |F HB_Bitshift( <nInteger>, <nShift> ) -> nResult ]
+HB_Bitshift( <nInteger>, <nShift> ) -> nResult
+
+[Hb_bitxor |F HB_BitXOr( <nInteger1>, <nInteger2> ) -> nResult ]
+HB_BitXOr( <nInteger1>, <nInteger2> ) -> nResult
+
+[Hb_builddate |F HB_BuildDate( ) -> cDateTime ]
+HB_BuildDate( ) -> cDateTime
+
+[Hb_buildinfo |F HB_BuildInfo( <nWhichInfo> ) -> cBuildInfo|Retrieves build information of the Harbour compiler. ]
+HB_BuildInfo( <nWhichInfo> ) -> cBuildInfo
+
+[Hb_cdpselect |F hb_cdpSelect( [<cNewLang>] ) --> cOldLang|Select the active code page by language ID ]
+hb_cdpSelect( [<cNewLang>] ) --> cOldLang
+
+[Hb_checksum |F HB_CheckSum( <cString> ) -> nAdler32|Calculates the checksum for a stream of data using the Adler32 algorithm. ]
+HB_CheckSum( <cString> ) -> nAdler32
+
+[Hb_cmdargargv |F HB_CmdArgArgV( ) -> cExeFile|Returns the first command line argument (EXE file name). ]
+HB_CmdArgArgV( ) -> cExeFile
+
+[Hb_colorindex |F hb_ColorIndex( <cColorSpec>, <nIndex> ) --> <cColor>|Extract one color from a full colorspec string. ]
+hb_ColorIndex( <cColorSpec>, <nIndex> ) --> <cColor>
+
+[Hb_compiler |F HB_Compiler( ) -> cCompilerVersion|Retrieves the version of the C compiler shipped with Harbour. ]
+HB_Compiler( ) -> cCompilerVersion
+
+[Hb_crc32 |F HB_CRC32( <cString> ) -> nCRC32|Calculates the checksum for a stream of data using the CRC 32 algorithm. ]
+HB_CRC32( <cString> ) -> nCRC32
+
+[Hb_crypt |F HB_Crypt( <cString>, <cKey> ) -> cEncryptedString|Encrypts a character string. ]
+HB_Crypt( <cString>, <cKey> ) -> cEncryptedString
+
+[Hb_decrypt |F HB_Decrypt( <cEncryptedString>, <cKey> ) -> cString|Decrypts an encrypted character string. ]
+HB_Decrypt( <cEncryptedString>, <cKey> ) -> cString
+
+[Hb_deserialize |F HB_DeSerialize( <cBinary> ) -> xValue|Converts a binary string back to its original data type. ]
+HB_DeSerialize( <cBinary> ) -> xValue
+
+[Hb_diskspace |F hb_DiskSpace( [<cDrive>] [, <nType>] ) --> nDiskbytes|Get the amount of space available on a disk ]
+hb_DiskSpace( [<cDrive>] [, <nType>] ) --> nDiskbytes
+
+[Hb_enumindex |F HB_EnumIndex( ) -> nIteration|Returns the current ordinal position of a FOR EACH iteration. ]
+HB_EnumIndex( ) -> nIteration
+
+[Hb_eol |F hb_eol() --> cString|Returns the newline character(s) to use with the current OS ]
+hb_eol() --> cString
+
+[Hb_execfromarray |F HB_ExecFromArray( <aExecutableArray> )|Executes a function, procedure or method from its pointer. ]
+HB_ExecFromArray( <aExecutableArray> )
+
+[Hb_feof |F hb_FEof( <nHandle> ) --> lIsEof|Check for end-of-file. ]
+hb_FEof( <nHandle> ) --> lIsEof
+
+[Hb_flock |F hb_FLock( <nHandle>, <nOffset>, <nBytes> [, <nType ] )--> <lSuccess>|Locks part or all of any file ]
+hb_FLock( <nHandle>, <nOffset>, <nBytes> [, <nType ] )--> <lSuccess>
+
+[Hb_fnamemerge |F HB_FNameMerge( <cPath> , <cFileName> , <cExtension> ) -> cResult ]
+HB_FNameMerge( <cPath> , <cFileName> , <cExtension> ) -> cResult
+
+[Hb_fnamesplit |F HB_FNameSplit( <cString>, <@cPath> , <@cFileName> , <@cExtension> ) -> NIL ]
+HB_FNameSplit( <cString>, <@cPath> , <@cFileName> , <@cExtension> ) -> NIL
+
+[Hb_freadline |F HB_FReadLine( <nFileHandle>, <@cLine>, <caEndOfLine> , <nLineLength> ) -> nReturn ]
+HB_FReadLine( <nFileHandle>, <@cLine>, <caEndOfLine> , <nLineLength> ) -> nReturn
+
+[Hb_fsize |F HB_FSize( <cFileName> ) -> nFileSize ]
+HB_FSize( <cFileName> ) -> nFileSize
+
+[Hb_ftempcreate |F HB_FTempCreate( <cTempDir> , <cPrefix> , <nFileAttr> , <@cFileName> ) -> nFileHandle ]
+HB_FTempCreate( <cTempDir> , <cPrefix> , <nFileAttr> , <@cFileName> ) -> nFileHandle
+
+[Hb_funcptr |F HB_FuncPtr( <cFuncName> ) -> pFuncPointer|Obtains the pointer to a function or procedure. ]
+HB_FuncPtr( <cFuncName> ) -> pFuncPointer
+
+[Hb_funlock |F hb_FUnlock( <nHandle>, <nOffset>, <nBytes> ) --> <lSuccess>|Unlocks part or all of any file ]
+hb_FUnlock( <nHandle>, <nOffset>, <nBytes> ) --> <lSuccess>
+
+[Hb_gcall |F HB_GCAll( <lForce> ) -> NIL|Scans the memory and releases all garbage memory blocks. ]
+HB_GCAll( <lForce> ) -> NIL
+
+[Hb_gcstep |F HB_GCStep( ) -> NIL|Invokes the garbage collector for one collection cycle. ]
+HB_GCStep( ) -> NIL
+
+[Hb_getenv |F hb_GetEnv( <cEnviroment>, [<cDefaultValue>] ) --> <cReturn>|Obtains a system environmental setting. ]
+hb_GetEnv( <cEnviroment>, [<cDefaultValue>] ) --> <cReturn>
+
+[Hb_hash |F hb_Hash( [ <Key1>, <Value1> ], [ <KeyN>, <ValueN> ], ... ) -> hsTable|Returns a hash table ]
+hb_Hash( [ <Key1>, <Value1> ], [ <KeyN>, <ValueN> ], ... ) -> hsTable
+
+[Hb_hautoadd |F hb_HAutoAdd( <hsTable>, [<lFlag>] ) -> <lPreviousFlag>|Sets the 'auto add' flag for the hash table ]
+hb_HAutoAdd( <hsTable>, [<lFlag>] ) -> <lPreviousFlag>
+
+[Hb_hbinary |F hb_HBinary( <hsTable>, [<lFlag>] ) -> <lPreviousFlag>|Sets the 'binary' flag for the hash table ]
+hb_HBinary( <hsTable>, [<lFlag>] ) -> <lPreviousFlag>
+
+[Hb_hcasematch |F hb_HCaseMatch( <hsTable>, [<lFlag>] ) -> <lPreviousFlag>|Sets the 'case match' flag for the hash table ]
+hb_HCaseMatch( <hsTable>, [<lFlag>] ) -> <lPreviousFlag>
+
+[Hb_hclone |F hb_HClone( <hsTable> ) -> <hsDestination>|Creates a copy of a hash table ]
+hb_HClone( <hsTable> ) -> <hsDestination>
+
+[Hb_hcopy |F hb_HCopy( <hsDestination>, <hsSource>, [<nStart>], [<nCount>] ) -> <hsDestination>|Adds entries from the source hash table to the destination hash table ]
+hb_HCopy( <hsDestination>, <hsSource>, [<nStart>], [<nCount>] ) -> <hsDestination>
+
+[Hb_hdefault |F hb_HDefault( <hsTable>, <DefaultValue> ) -> <OldDefaultValye>|Returns/sets a default value for a hash table. ]
+hb_HDefault( <hsTable>, <DefaultValue> ) -> <OldDefaultValye>
+
+[Hb_hdel |F hb_HDel( <hsTable>, <Key> ) -> <hsTable>|Removes a key/value pair from a hash table ]
+hb_HDel( <hsTable>, <Key> ) -> <hsTable>
+
+[Hb_hdelat |F hb_HDelAt( <hsTable>, <nPosition> ) -> <hsTable>|Removes an entry from a hash table based on its index position ]
+hb_HDelAt( <hsTable>, <nPosition> ) -> <hsTable>
+
+[Hb_heval |F hb_HEval( <hsTable>, <bBlock>, [<nStart>], [<nCount>] ) -> <hsTable>|Evaluate a code block across the contents of a hash table ]
+hb_HEval( <hsTable>, <bBlock>, [<nStart>], [<nCount>] ) -> <hsTable>
+
+[Hb_hfill |F hb_HFill( <hsTable>, <Value> ) -> <hsTable>|Fills a hash table with a value ]
+hb_HFill( <hsTable>, <Value> ) -> <hsTable>
+
+[Hb_hget |F hb_HGet( <hsTable>, <Key> ) -> <Value>|Returns a hash value ]
+hb_HGet( <hsTable>, <Key> ) -> <Value>
+
+[Hb_hgetdef |F hb_HGetDef( <hsTable>, <Key>, [<DefaultValue>] ) -> <Value>|Returns a hash value, or a default value if the key is not present ]
+hb_HGetDef( <hsTable>, <Key>, [<DefaultValue>] ) -> <Value>
+
+[Hb_hhaskey |F hb_HHasKey( <hsTable>, <Key> ) -> lExists|Determines whether a hash table has an entry with a give key ]
+hb_HHasKey( <hsTable>, <Key> ) -> lExists
+
+[Hb_hkeyat |F hb_HKeyAt( <hsTable>, <nPosition> ) -> <Key>|Gets a hash table key at a given position ]
+hb_HKeyAt( <hsTable>, <nPosition> ) -> <Key>
+
+[Hb_hkeys |F hb_HKeys( <hsTable> ) -> <aKeys>|Returns an array of the keys of a hash table ]
+hb_HKeys( <hsTable> ) -> <aKeys>
+
+[Hb_hmerge |F hb_HMerge( <hsDestination>, <hsSource>, <bBlock> OR <nPosition> ) -> <hsDestination>|Merges a source hash table into a destination hash table ]
+hb_HMerge( <hsDestination>, <hsSource>, <bBlock> OR <nPosition> ) -> <hsDestination>
+
+[Hb_hpairat |F hb_HPairAt( <hsTable>, <nPosition> ) -> <aKeyValue>|Returns a two-dimensional array of a hash table entry key/value pair ]
+hb_HPairAt( <hsTable>, <nPosition> ) -> <aKeyValue>
+
+[Hb_hpos |F hb_HPos( <hsTable>, <Key> ) -> nPosition|Locates the index of a key within a hash table ]
+hb_HPos( <hsTable>, <Key> ) -> nPosition
+
+[Hb_hscan |F hb_HScan( <hsTable>, <Value>, [<nStart>], [<nCount>, [<lExact>] ) -> nPosition|Scans a hash table ]
+hb_HScan( <hsTable>, <Value>, [<nStart>], [<nCount>, [<lExact>] ) -> nPosition
+
+[Hb_hset |F hb_HSet( <hsTable>, <Key>, <Value> ) -> <hsTable>|Sets a hash value ]
+hb_HSet( <hsTable>, <Key>, <Value> ) -> <hsTable>
+
+[Hb_hsort |F hb_HSort( <hsTable> ) -> <hsSortedTable>|Reorganizes the internal list of the hash table to be sorted ]
+hb_HSort( <hsTable> ) -> <hsSortedTable>
+
+[Hb_hvalueat |F hb_HValueAt( <hsTable>, <nPosition>, [<NewValue>] ) -> <Value>|Gets/sets a hash value at a given position ]
+hb_HValueAt( <hsTable>, <nPosition>, [<NewValue>] ) -> <Value>
+
+[Hb_hvalues |F hb_HValues( <hsTable> ) -> <aValues>|Returns an array of the values of a hash table ]
+hb_HValues( <hsTable> ) -> <aValues>
+
+[Hb_idleadd |F HB_IdleAdd( <bAction> ) -> nTaskHandle|Adds the background task. ]
+HB_IdleAdd( <bAction> ) -> nTaskHandle
+
+[Hb_idledel |F HB_IdleDel( <nTaskHandle> ) -> bAction|Removes the background task from the list of tasks. ]
+HB_IdleDel( <nTaskHandle> ) -> bAction
+
+[Hb_idlereset |F HB_IdleReset( ) -> NIL ]
+HB_IdleReset( ) -> NIL
+
+[Hb_idlesleepmsec |F HB_IdleSleepMSec( <nNewInterval> ) -> nOldInterval ]
+HB_IdleSleepMSec( <nNewInterval> ) -> nOldInterval
+
+[Hb_idlestate |F HB_IdleState( ) -> NIL|Evaluates a single background task and calls the garbage collector. ]
+HB_IdleState( ) -> NIL
+
+[Hb_inetaccept |F hb_inetAccept( <socket> ) -> SOCKET|Wait until a socket is ready ]
+hb_inetAccept( <socket> ) -> SOCKET
+
+[Hb_inetaddress |F hb_inetAddress( <socket> ) -> cResult|Get a remote server address ]
+hb_inetAddress( <socket> ) -> cResult
+
+[Hb_inetclose |F hb_inetClose( <socket> ) -> nResult|Close an INET socket ]
+hb_inetClose( <socket> ) -> nResult
+
+[Hb_inetconnect |F hb_inetConnect( <cAddress>, <nPort> ) -> SOCKEThb_inetConnect( <cAddress>, <nPort>, <socket> ) -> NIL|Connect a socket to a remote server by IP address or name ]
+hb_inetConnect( <cAddress>, <nPort> ) -> SOCKEThb_inetConnect( <cAddress>, <nPort>, <socket> ) -> NIL
+
+[Hb_inetconnectip |F hb_inetConnectIP( <cAddress>, <nPort> ) -> SOCKEThb_inetConnectIP( <cAddress>, <nPort>, <socket> ) -> NIL|Connect to a remote server by IP address ]
+hb_inetConnectIP( <cAddress>, <nPort> ) -> SOCKEThb_inetConnectIP( <cAddress>, <nPort>, <socket> ) -> NIL
+
+[Hb_inetcount |F hb_inetCount( <socket> ) -> nResult|Get the number of bytes last read or sent ]
+hb_inetCount( <socket> ) -> nResult
+
+[Hb_inetcreate |F hb_inetCreate( [ <nTimeout> ] ) -> SOCKET|Create an INET socket ]
+hb_inetCreate( [ <nTimeout> ] ) -> SOCKET
+
+[Hb_inetcrlf |F hb_inetCRLF() -> cResult|Get a CRLF sequence for internet protocols ]
+hb_inetCRLF() -> cResult
+
+[Hb_inetdataready |F hb_inetDataReady( <socket>, [ <nMillisec> ] ) -> nResult|Get whether there is data ready in a socket ]
+hb_inetDataReady( <socket>, [ <nMillisec> ] ) -> nResult
+
+[Hb_inetdgram |F hb_inetDGram( [<lBroadcast>] ) -> SOCKET|Create a datagram socket ]
+hb_inetDGram( [<lBroadcast>] ) -> SOCKET
+
+[Hb_inetdgrambind |F hb_inetDGramBind( <nPort>, [<cAddress> [, <lBroadcast>] ] ) -> SOCKET|Create a bound datagram socket ]
+hb_inetDGramBind( <nPort>, [<cAddress> [, <lBroadcast>] ] ) -> SOCKET
+
+[Hb_inetdgramrecv |F hb_inetDGramRecv( <socket>, @<cBuffer> [, <nSize> ] ) -> nBytesRead|Get data from a datagram socket ]
+hb_inetDGramRecv( <socket>, @<cBuffer> [, <nSize> ] ) -> nBytesRead
+
+[Hb_inetdgramsend |F hb_inetDGramSend( <socket>, <cAddress>, <nPort>, <cBuffer> [, <nSize> ] ) -> nBytesSent|Send data to a datagram socket ]
+hb_inetDGramSend( <socket>, <cAddress>, <nPort>, <cBuffer> [, <nSize> ] ) -> nBytesSent
+
+[Hb_ineterrorcode |F hb_inetErrorCode( <socket> ) -> nResult|Get the last INET error code ]
+hb_inetErrorCode( <socket> ) -> nResult
+
+[Hb_ineterrordesc |F hb_inetErrorDesc( <socket> ) -> cResult|Get the last INET error code description ]
+hb_inetErrorDesc( <socket> ) -> cResult
+
+[Hb_inetfd |F hb_inetFD( <socket> [, <lNoSocket> ] ) -> nResult|? ]
+hb_inetFD( <socket> [, <lNoSocket> ] ) -> nResult
+
+[Hb_inetgetalias |F hb_inetGetAlias( <cName> ) -> aHosts|Get an array of aliases of a server ]
+hb_inetGetAlias( <cName> ) -> aHosts
+
+[Hb_inetgethosts |F hb_inetGetHosts( <cName> ) -> aHosts|Get an array of IP addresses of a host ]
+hb_inetGetHosts( <cName> ) -> aHosts
+
+[Hb_inetgetrcvbufsize |F hb_inetGetRcvBufSize( <socket> ) -> nResult|Get the socket receive buffer size ]
+hb_inetGetRcvBufSize( <socket> ) -> nResult
+
+[Hb_inetgetsndbufsize |F hb_inetGetSndBufSize( <socket> ) -> nResult|Get the socket send buffer size ]
+hb_inetGetSndBufSize( <socket> ) -> nResult
+
+[Hb_inetinit |F hb_inetInit() -> lResult|Activate Harbour INET support ]
+hb_inetInit() -> lResult
+
+[Hb_inetissocket |F hb_inetIsSocket( <socket> ) -> lResult|Get whether a variable is a socket ]
+hb_inetIsSocket( <socket> ) -> lResult
+
+[Hb_inetperiodcallback |F hb_inetPeriodCallback( <socket> [, <xCallback> ] ) -> xPreviousCallback|Get or change the periodic callback value of a socket ]
+hb_inetPeriodCallback( <socket> [, <xCallback> ] ) -> xPreviousCallback
+
+[Hb_inetport |F hb_inetPort( <socket> ) -> cResult|Get the port a socket is bound to. ]
+hb_inetPort( <socket> ) -> cResult
+
+[Hb_inetrecv |F hb_inetRecv( <socket>, @<cResult>, [ <nAmount> ] ) -> nResult|Read from a socket ]
+hb_inetRecv( <socket>, @<cResult>, [ <nAmount> ] ) -> nResult
+
+[Hb_inetrecvall |F hb_inetRecvAll( <socket>, @<cResult>, [ <nAmount> ] ) -> nResult|Read from a socket without blocking ]
+hb_inetRecvAll( <socket>, @<cResult>, [ <nAmount> ] ) -> nResult
+
+[Hb_inetrecvendblock |F hb_inetRecvEndblock( <socket> [, <cBlock >[, @<nBytesRead> [, <nMaxLength> [, <nBufSize> ]]]] ) -> cResult|Read a block from a socket ]
+hb_inetRecvEndblock( <socket> [, <cBlock >[, @<nBytesRead> [, <nMaxLength> [, <nBufSize> ]]]] ) -> cResult
+
+[Hb_inetrecvline |F hb_inetRecvLine( <socket> [, @<nBytesRead>, [, <nMaxLength> [, <nBufSize> ]]] ) -> cResult|Read a line from a socket ]
+hb_inetRecvLine( <socket> [, @<nBytesRead>, [, <nMaxLength> [, <nBufSize> ]]] ) -> cResult
+
+[Hb_inetsend |F hb_inetSend( <socket>, <cBuffer> [, <nLength> ] ) -> nResult|Sent data through a socket ]
+hb_inetSend( <socket>, <cBuffer> [, <nLength> ] ) -> nResult
+
+[Hb_inetsendall |F hb_inetSendAll( <socket>, <cBuffer> [, <nLength> ] ) -> nResult|Send data through a socket with blocking ]
+hb_inetSendAll( <socket>, <cBuffer> [, <nLength> ] ) -> nResult
+
+[Hb_inetserver |F hb_inetServer( <port> [, <cBindAddr> [, <nListenLimit> ]]  ) -> SOCKET|Create a socket bound to a port ]
+hb_inetServer( <port> [, <cBindAddr> [, <nListenLimit> ]]  ) -> SOCKET
+
+[Hb_inetsetrcvbufsize |F hb_inetSetRcvBufSize( <socket>, nSize ) -> nSize|Set the receive buffer size of a socket ]
+hb_inetSetRcvBufSize( <socket>, nSize ) -> nSize
+
+[Hb_inetsetsndbufsize |F hb_inetSetSndBufSize( <socket>, <nSize> ) -> nSize|Set the send buffer size of a socket ]
+hb_inetSetSndBufSize( <socket>, <nSize> ) -> nSize
+
+[Hb_inetstatus |F hb_inetstatus( <socket> ) -> nResult|Get the status of a socket ]
+hb_inetstatus( <socket> ) -> nResult
+
+[Hb_inettimelimit |F hb_inetTimeLimit( <socket> [, <nTimeLimit> ) -> NIL|Get or change the time limit value of a socket ]
+hb_inetTimeLimit( <socket> [, <nTimeLimit> ) -> NIL
+
+[Hb_inettimeout |F hb_inetTimeout( <socket> [, <nTimeout> ] ) -> nPreviousTimeout|Get or change the timeout value of a socket ]
+hb_inetTimeout( <socket> [, <nTimeout> ] ) -> nPreviousTimeout
+
+[Hb_isarray |F HB_IsArray( <expression> ) -> lIsArray ]
+HB_IsArray( <expression> ) -> lIsArray
+
+[Hb_isblock |F HB_IsBlock( <expression> ) -> lIsCodeblock ]
+HB_IsBlock( <expression> ) -> lIsCodeblock
+
+[Hb_isdate |F HB_IsDate( <expression> ) -> lIsDate ]
+HB_IsDate( <expression> ) -> lIsDate
+
+[Hb_ishash |F HB_IsHash( <expression> ) -> lIsHash ]
+HB_IsHash( <expression> ) -> lIsHash
+
+[Hb_islogical |F HB_IsLogical( <expression> ) -> lIsLogical ]
+HB_IsLogical( <expression> ) -> lIsLogical
+
+[Hb_ismemo |F HB_IsMemo( <expression> ) -> lIsMemo ]
+HB_IsMemo( <expression> ) -> lIsMemo
+
+[Hb_isnil |F HB_IsNIL( <expression> ) -> lIsNIL ]
+HB_IsNIL( <expression> ) -> lIsNIL
+
+[Hb_isnull |F HB_IsNull( <expression> ) -> lIsNull ]
+HB_IsNull( <expression> ) -> lIsNull
+
+[Hb_isnumeric |F HB_IsNumeric( <expression> ) -> lIsNumeric ]
+HB_IsNumeric( <expression> ) -> lIsNumeric
+
+[Hb_isobject |F HB_IsObject( <expression> ) -> lIsObject ]
+HB_IsObject( <expression> ) -> lIsObject
+
+[Hb_ispointer |F HB_IsPointer( <expression> ) -> lIsPointer ]
+HB_IsPointer( <expression> ) -> lIsPointer
+
+[Hb_isregexstring |F HB_IsRegExString( <cString> ) -> lIsRegExComp ]
+HB_IsRegExString( <cString> ) -> lIsRegExComp
+
+[Hb_isstring |F HB_IsString( <expression> ) -> lIsString ]
+HB_IsString( <expression> ) -> lIsString
+
+[Hb_keyput |F HB_KeyPut( <nInkeyCode> ) -> NIL|Put an inkey code to the keyboard buffer. ]
+HB_KeyPut( <nInkeyCode> ) -> NIL
+
+[Hb_langerrmsg |F hb_langErrMsg( <nErrorCode> ) --> cErrorMessage|Description of an error code using current language ]
+hb_langErrMsg( <nErrorCode> ) --> cErrorMessage
+
+[Hb_langmessage |F hb_langMessage( <nMsg>[, <cLangID>] ) --> cMessage|Returns international strings messages and errors ]
+hb_langMessage( <nMsg>[, <cLangID>] ) --> cMessage
+
+[Hb_langname |F hb_langName( [<cLangID>] ) --> cLangName|Return the name of the language module ]
+hb_langName( [<cLangID>] ) --> cLangName
+
+[Hb_langselect |F HB_LangSelect( <cLanguageID> ) -> cOldLanguageID|Select a specific nation message module ]
+HB_LangSelect( <cLanguageID> ) -> cOldLanguageID
+
+[Hb_matherblock |F hb_matherBlock( [<bNewBlock>] ) --> <bOldBlock>|Set/Get math error handling codeblock ]
+hb_matherBlock( [<bNewBlock>] ) --> <bOldBlock>
+
+[Hb_mathermode |F hb_matherMode( [<nNewMode>] ) --> <nOldMode>|Set/Get math error handling mode ]
+hb_matherMode( [<nNewMode>] ) --> <nOldMode>
+
+[Hb_md5file |F HB_MD5File( <cFileName> ) -> cMD5 ]
+HB_MD5File( <cFileName> ) -> cMD5
+
+[Hb_memoread |F hb_MemoRead( <cFileName> ) --> cString|Return the text file's contents as a character string ]
+hb_MemoRead( <cFileName> ) --> cString
+
+[Hb_memowrit |F hb_MemoWrit( <cFileName>, <cString>, [<lWriteEof>] ) --> lSuccess|Write a memo field or character string to a text file on disk ]
+hb_MemoWrit( <cFileName>, <cString>, [<lWriteEof>] ) --> lSuccess
+
+[Hb_multithread |F HB_MultiThread( ) -> lIsMultiThread ]
+HB_MultiThread( ) -> lIsMultiThread
+
+[Hb_mutexcreate |F HB_MutexCreate( ) -> pMutexHandle ]
+HB_MutexCreate( ) -> pMutexHandle
+
+[Hb_mutexlock |F HB_MutexLock( <pMutexHandle> ) -> lSuccess ]
+HB_MutexLock( <pMutexHandle> ) -> lSuccess
+
+[Hb_mutextimeoutlock |F HB_MutexTimeoutLock( <pMutexHandle>, <nWaitMilliSecs> ) -> lSuccess ]
+HB_MutexTimeoutLock( <pMutexHandle>, <nWaitMilliSecs> ) -> lSuccess
+
+[Hb_mutextrylock |F HB_MutexTryLock( <pMutexHandle> ) -> lSuccess ]
+HB_MutexTryLock( <pMutexHandle> ) -> lSuccess
+
+[Hb_mutexunlock |F HB_MutexUnlock( <pMutexHandle> ) -> NIL ]
+HB_MutexUnlock( <pMutexHandle> ) -> NIL
+
+[Hb_oemtoansi |F HB_OemToAnsi( <cOEM_String> ) -> cANSI_String ]
+HB_OemToAnsi( <cOEM_String> ) -> cANSI_String
+
+[Hb_osnewline |F HB_OsNewLine( ) -> cEndOfLine ]
+HB_OsNewLine( ) -> cEndOfLine
+
+[Hb_pisbyref |F hb_PIsByRef( nParam ) --> <lParamIsByRef>|Determine if a parameter is passed by reference. ]
+hb_PIsByRef( nParam ) --> <lParamIsByRef>
+
+[Hb_pvalue |F hb_PValue( <nArg> ) --> <xExp>|Retrieves the value of an argument. ]
+hb_PValue( <nArg> ) --> <xExp>
+
+[Hb_qself |F HB_QSelf( ) -> self ]
+HB_QSelf( ) -> self
+
+[Hb_qwith |F HB_QWith( ) -> oObject ]
+HB_QWith( ) -> oObject
+
+[Hb_randomint |F HB_RandomInt( <nMaxLimit> ) ]
+HB_RandomInt( <nMaxLimit> )
+
+[Hb_randomseed |F HB_RandomSeed( <nSeed> ) -> NIL ]
+HB_RandomSeed( <nSeed> ) -> NIL
+
+[Hb_rat |F hb_RAt( <cSearch>, <cString>, [<nStart>], [<nEnd>]  ) --> nPos|Searches for last occurrence a substring of a string. ]
+hb_RAt( <cSearch>, <cString>, [<nStart>], [<nEnd>]  ) --> nPos
+
+[Hb_readini |F HB_ReadIni( <cFileName>, <lCaseSens> , <cDelimiter> , <lAutoMain> ) -> hIniData ]
+HB_ReadIni( <cFileName>, <lCaseSens> , <cDelimiter> , <lAutoMain> ) -> hIniData
+
+[Hb_regexall |F HB_RegExAll( <cRegEx> , <cString>, <lCaseSensitive> , <lNewLine> , <nMaxMatches> , <nWichMatch> , <lMatchOnly> ) -> aAllRegexMatches ]
+HB_RegExAll( <cRegEx> , <cString>, <lCaseSensitive> , <lNewLine> , <nMaxMatches> , <nWichMatch> , <lMatchOnly> ) -> aAllRegexMatches
+
+[Hb_regexcomp |F HB_RegExComp( <cRegEx> , <lCaseSensitive> , <lNewLine> ) -> cBinaryRegEx ]
+HB_RegExComp( <cRegEx> , <lCaseSensitive> , <lNewLine> ) -> cBinaryRegEx
+
+[Hb_regexmatch |F HB_RegExMatch( <cRegEx> , <cString>, <lCaseSensitive> , <lNewLine> ) -> lFound ]
+HB_RegExMatch( <cRegEx> , <cString>, <lCaseSensitive> , <lNewLine> ) -> lFound
+
+[Hb_regexsplit |F HB_RegExSplit( <cRegEx>, <cString>, <lCaseSensitive>, <lNewLine> , <nMaxMatches> ) -> aSplitString ]
+HB_RegExSplit( <cRegEx>, <cString>, <lCaseSensitive>, <lNewLine> , <nMaxMatches> ) -> aSplitString
+
+[Hb_resetwith |F HB_ResetWith( <oObject> ) -> NIL ]
+HB_ResetWith( <oObject> ) -> NIL
+
+[Hb_serialize |F HB_Serialize( <xValue> ) -> cBinary ]
+HB_Serialize( <xValue> ) -> cBinary
+
+[Hb_setcodepage |F HB_SetCodePage( <cCodePageID> ) -> cOldCodePageID ]
+HB_SetCodePage( <cCodePageID> ) -> cOldCodePageID
+
+[Hb_setinicomment |F HB_SetIniComment( <cLineComment>, <cInlineComment> ) -> NIL ]
+HB_SetIniComment( <cLineComment>, <cInlineComment> ) -> NIL
+
+[Hb_setkeycheck |F hb_SetKeyCheck( <nKey> [, <p1> ][, <p2> ][, <p3> ] )|Implements common hot-key activation code ]
+hb_SetKeyCheck( <nKey> [, <p1> ][, <p2> ][, <p3> ] )
+
+[Hb_setkeyget |F hb_SetKeyGet( <nKey> [, <bConditionByRef> ] )|Determine a set-key code block and condition-block ]
+hb_SetKeyGet( <nKey> [, <bConditionByRef> ] )
+
+[Hb_setkeysave |F hb_SetKeySave( [ <OldKeys> ] )|Returns a copy of internal set-key list, optionally overwriting ]
+hb_SetKeySave( [ <OldKeys> ] )
+
+[Hb_setmacro |F HB_SetMacro( <nMode>, <lOnOff> ) -> lOldSetting|Enable/disable the macro compiler runtime features. ]
+HB_SetMacro( <nMode>, <lOnOff> ) -> lOldSetting
+
+[Hb_sizeofcstructure |F HB_SizeofCStructure( <aTypes>, <nAlign> ) -> nBytes ]
+HB_SizeofCStructure( <aTypes>, <nAlign> ) -> nBytes
+
+[Hb_structuretoarray |F HB_StructureToArray( <cBinary>, <aTypes>, <nAlign> , <lRecurse> , <aStructure> ) -> aStructure ]
+HB_StructureToArray( <cBinary>, <aTypes>, <nAlign> , <lRecurse> , <aStructure> ) -> aStructure
+
+[Hb_translate |F hb_Translate( <cSrcText>, [<cPageFrom>], [<cPageTo>] ) --> cDstText|Translate a string from one code page to the other ]
+hb_Translate( <cSrcText>, [<cPageFrom>], [<cPageTo>] ) --> cDstText
+
+[Hb_valtostr |F hb_ValToStr( <xValue> ) --> cString|Converts any scalar type to a string. ]
+hb_ValToStr( <xValue> ) --> cString
+
+[Hb_vmmode |F HB_VMMode( ) -> nCreationMode ]
+HB_VMMode( ) -> nCreationMode
+
+[Hb_withobjectcounter |F HB_WithObjectCounter( ) -> nNestingLevel ]
+HB_WithObjectCounter( ) -> nNestingLevel
+
+[Hb_writeini |F HB_WriteIni( <cFileName>, <hIniData>, <cCommentBegin> , <cCommentEnd> , <lAutoMain> ) -> lSuccess ]
+HB_WriteIni( <cFileName>, <hIniData>, <cCommentBegin> , <cCommentEnd> , <lAutoMain> ) -> lSuccess
+
+[Hb_xmlerrordesc |F HB_XmlErrorDesc( <nErrorCode> ) -> cErrorMessage ]
+HB_XmlErrorDesc( <nErrorCode> ) -> cErrorMessage
+
+[Hclone |F HClone( <hHash> ) -> hClone ]
+HClone( <hHash> ) -> hClone
+
+[Hcopy |F HCopy( <hSource>, <hTarget>, <nStart> , <nCount> , <xMode> ) -> hTarget ]
+HCopy( <hSource>, <hTarget>, <nStart> , <nCount> , <xMode> ) -> hTarget
+
+[Hdelat |F HDelAt( <hHash>, <nPos> ) -> NIL ]
+HDelAt( <hHash>, <nPos> ) -> NIL
+
+[Header |F Header() -> nBytes|Verifica o tamanho do cabecalho da tabela corrente - Dbf - Dbf ]
+Header() -> nBytes
+
+[Heval |F HEval( <hHash>, <bBlock>, <nStart> , <nCount> ) -> hHash ]
+HEval( <hHash>, <bBlock>, <nStart> , <nCount> ) -> hHash
+
+[Hextonum |F HexToNum( <cHexString> ) -> nNumber ]
+HexToNum( <cHexString> ) -> nNumber
+
+[Hextostr |F HexToStr( <cHexString> ) -> cASCIIstring ]
+HexToStr( <cHexString> ) -> cASCIIstring
+
+[Hfill |F HFILL( <Hash>, <xValue> ) -> NIL ]
+HFILL( <Hash>, <xValue> ) -> NIL
+
+[Hgetaacompatibility |F HGetAACompatibility( <hHash> ) -> lIsAssocArray ]
+HGetAACompatibility( <hHash> ) -> lIsAssocArray
+
+[Hgetautoadd |F HGetAutoAdd( <hHash> ) -> lIsAutoAdd ]
+HGetAutoAdd( <hHash> ) -> lIsAutoAdd
+
+[Hgetcasematch |F HGetCaseMatch( <hHash> ) -> lIsCaseSensitive ]
+HGetCaseMatch( <hHash> ) -> lIsCaseSensitive
+
+[Hgetkeyat |F HGetKeyAt( <hHash>, <nPos> ) -> xKey ]
+HGetKeyAt( <hHash>, <nPos> ) -> xKey
+
+[Hgetkeys |F HGetKeys( <hHash> ) -> aKeys ]
+HGetKeys( <hHash> ) -> aKeys
+
+[Hgetpairat |F HGetPairAt( <hHash>, <nPos> ) -> { xKey, xValue } ]
+HGetPairAt( <hHash>, <nPos> ) -> { xKey, xValue }
+
+[Hgetpartition |F HGetPartition( <hHash>, <@nPageSize> , <@nLevel> ) -> lIsPartitioned ]
+HGetPartition( <hHash>, <@nPageSize> , <@nLevel> ) -> lIsPartitioned
+
+[Hgetpos |F HGetPos( <hHash>, <xKey>) -> nPos ]
+HGetPos( <hHash>, <xKey>) -> nPos
+
+[Hgetvaapos |F HGetVaaPos( <hArray> ) -> aSortOrder ]
+HGetVaaPos( <hArray> ) -> aSortOrder
+
+[Hgetvalueat |F HGetValueAt( <hHash>, <nPos> ) -> xValue ]
+HGetValueAt( <hHash>, <nPos> ) -> xValue
+
+[Hgetvalues |F HGetValues( <hHash> ) -> aValues ]
+HGetValues( <hHash> ) -> aValues
+
+[Hhaskey |F HHasKey( <hHash>, <xKey> ) -> lExists ]
+HHasKey( <hHash>, <xKey> ) -> lExists
+
+[Hmerge |F HMerge( <hTarget>, <hSource>, <xMode> ) -> hTarget ]
+HMerge( <hTarget>, <hSource>, <xMode> ) -> hTarget
+
+[Hscan |F HScan( <hHash>, <xValue>, <nStart> , <nCount> , <lExact> , <lASCII> ) -> nPos ]
+HScan( <hHash>, <xValue>, <nStart> , <nCount> , <lExact> , <lASCII> ) -> nPos
+
+[Hsetaacompatibility |F HSetAACompatibility( <hHash>, <lToggle> ) -> lSuccess ]
+HSetAACompatibility( <hHash>, <lToggle> ) -> lSuccess
+
+[Hsetautoadd |F HSetAutoAdd( <hHash>, <lOnOff> ) -> hHash ]
+HSetAutoAdd( <hHash>, <lOnOff> ) -> hHash
+
+[Hsetcasematch |F HSetCaseMatch( <hHash>, <lOnOff> ) -> hHash ]
+HSetCaseMatch( <hHash>, <lOnOff> ) -> hHash
+
+[Hsetpartition |F HSetPartition( <hHash>, <nPageSize>, <nLevel> ) -> NIL ]
+HSetPartition( <hHash>, <nPageSize>, <nLevel> ) -> NIL
+
+[Hsetvalueat |F HSetValueAt( <hHash>, <nPos>, <xValue> ) -> NIL ]
+HSetValueAt( <hHash>, <nPos>, <xValue> ) -> NIL
+
+[I2bin |F I2Bin(<nInteger>) -> cBinaryInteger|Converte um numerico para um inteiro binario de 16 bits. - Numeric Conversion String ]
+I2Bin(<nInteger>) -> cBinaryInteger
+
+[Indexext |F IndexExt() -> cExtension|Returns the file extension of the index module used in an application - Index ]
+IndexExt() -> cExtension
+
+[Indexkey |F IndexKey(nOrder) -> cKeyExp|Verifica qual a expressao de chave de um indice - Index ]
+IndexKey(nOrder) -> cKeyExp
+
+[Indexord |F IndexOrd() -> nOrder|Verifica a posicao do indice correte - Index ]
+IndexOrd() -> nOrder
+
+[Infinity |F Infinity( [<lPlatformIndependant>] ) --> nLargestNumber|Returns the largest floating point number available in the system ]
+Infinity( [<lPlatformIndependant>] ) --> nLargestNumber
+
+[Inkey |F Inkey( <nSeconds> ) -> nInkeyCode|Extracts the next key code from the Harbour keyboard buffer. ]
+Inkey( <nSeconds> ) -> nInkeyCode
+
+[Int |F Int(<nExp>) -> nInteger|Return the integer port of a numeric value. - Numeric ]
+Int(<nExp>) -> nInteger
+
+[Isaffirm |F IsAffirm( <cChar> ) --> <lTrueOrFalse>|Checks if passed char is an affirmation char ]
+IsAffirm( <cChar> ) --> <lTrueOrFalse>
+
+[Isalnum |F IsAlNum( <cString> ) -> lIsAlphaNumeric|Programming String ]
+IsAlNum( <cString> ) -> lIsAlphaNumeric
+
+[Isalpha |F IsAlpha(<cString>) -> lBoolean|Determina se o caractere mais a esquerda em uma cadeia de caracteres e alfabetico - Programming String - Programming String ]
+IsAlpha(<cString>) -> lBoolean
+
+[Isascii |F IsAscii( <cString> ) -> lIs7BitChar ]
+IsAscii( <cString> ) -> lIs7BitChar
+
+[Iscntrl |F IsCntrl( <cString> ) -> lIsCtrlChar ]
+IsCntrl( <cString> ) -> lIsCtrlChar
+
+[Iscolor |F IsColor() -> lBoolean|Programming ]
+IsColor() -> lBoolean
+
+[Isdigit |F IsDigit(<cString>) -> lBoolean|Determina se o caractere mais a esquerda em uma cadeia de caracteres e um digito - Programming String - Programming String ]
+IsDigit(<cString>) -> lBoolean
+
+[Isdirectory |F IsDirectory( <cDirSpec> ) -> lIsDirectory ]
+IsDirectory( <cDirSpec> ) -> lIsDirectory
+
+[Isdisk |F IsDisk( <cDrive> ) -> lDriveIsReady|Verify if a drive is ready ]
+IsDisk( <cDrive> ) -> lDriveIsReady
+
+[Isgraph |F IsGraph( <cString> ) -> lIs7BitGraphicalChar ]
+IsGraph( <cString> ) -> lIs7BitGraphicalChar
+
+[Isleap |F IsLeap( [<dDate>] ) -> lIsLeap|determines of year of date is a leap year ]
+IsLeap( [<dDate>] ) -> lIsLeap
+
+[Islower |F IsLower(<cString>) -> lBoolean|Determina se o caractere mais a esquerda e uma letra minuscula - Programming String - Programming String ]
+IsLower(<cString>) -> lBoolean
+
+[Isnegative |F IsNegative( <cChar> ) --> <lTrueOrFalse>|Checks if passed char is a negation char. ]
+IsNegative( <cChar> ) --> <lTrueOrFalse>
+
+[Isprinter |F IsPrinter() -> lReady|Verifica se impressora esta disponivel ]
+IsPrinter() -> lReady
+
+[Ispunct |F IsPunct( <cString> ) -> lIsPunctuationChar ]
+IsPunct( <cString> ) -> lIsPunctuationChar
+
+[Issamethread |F IsSameThread( <pThreadHandle1>, <pThreadHandle2> ) -> lIsSameThread ]
+IsSameThread( <pThreadHandle1>, <pThreadHandle2> ) -> lIsSameThread
+
+[Isspace |F IsSpace( <cString> ) -> lIsWhiteSpaceChar|Programming String ]
+IsSpace( <cString> ) -> lIsWhiteSpaceChar
+
+[Isupper |F IsUpper(<cString>) -> lBoolean|Determina se o caractere mais a esquerda e uma letra maiuscula - Programming String - Programming String ]
+IsUpper(<cString>) -> lBoolean
+
+[Isvalidthread |F IsValidThread( <xValue> ) -> lIsValid ]
+IsValidThread( <xValue> ) -> lIsValid
+
+[Isxdigit |F IsXDigit( <cString> ) -> lIsHexDigit|Programming ]
+IsXDigit( <cString> ) -> lIsHexDigit
+
+[Jointhread |F JoinThread( <pThreadHandle> ) -> NIL|Create a new database file by merging from two work areas ]
+JoinThread( <pThreadHandle> ) -> NIL
+
+[Justleft |F JustLeft( <[@]cString>, [<cChar> OR <nChar>] ) -> cJustifiedString|Move characters from the beginning to the end of a string ]
+JustLeft( <[@]cString>, [<cChar> OR <nChar>] ) -> cJustifiedString
+
+[Justright |F JustRight( <[@]cString>, [<cChar> OR <nChar>] ) -> cJustifiedString|Move characters from the end to the beginning of a string ]
+JustRight( <[@]cString>, [<cChar> OR <nChar>] ) -> cJustifiedString
+
+[Killallthreads |F KillAllThreads( ) -> NIL ]
+KillAllThreads( ) -> NIL
+
+[Killthread |F KillThread( <pThreadHandle> ) -> NIL ]
+KillThread( <pThreadHandle> ) -> NIL
+
+[Ksetcaps |F KSetCaps( [<lNewSwitch>] ) -> lOldSwitch ]
+KSetCaps( [<lNewSwitch>] ) -> lOldSwitch
+
+[Ksetins |F KSetIns( [<lNewSwitch>] ) -> lOldSwitch ]
+KSetIns( [<lNewSwitch>] ) -> lOldSwitch
+
+[Ksetnum |F KSetNum( [<lNewSwitch>] ) -> lOldSwitch ]
+KSetNum( [<lNewSwitch>] ) -> lOldSwitch
+
+[Ksetscroll |F KSetScroll( [<lNewSwitch>] ) -> lOldSwitch ]
+KSetScroll( [<lNewSwitch>] ) -> lOldSwitch
+
+[L2bin |F L2Bin(<nExp> -> cBinaryInteger|Converte um numerico para um inteiro binario de 32 bits. - Numeric String Conversion ]
+L2Bin(<nExp> -> cBinaryInteger
+
+[Lastdayom |F LastDayOM( [<dDate OR nMonth>] ) -> nDaysInMonth|Returns the the number of days in the month. ]
+LastDayOM( [<dDate OR nMonth>] ) -> nDaysInMonth
+
+[Lastkey |F LastKey() -> nInkeyCode|Get the last key extracted from the keyboard buffer. ]
+LastKey() -> nInkeyCode
+
+[Lastrec |F LastRec() -> nRecords|Returns the number of records in an active work area or database. - Dbf ]
+LastRec() -> nRecords
+
+[Left |F Left(<cString>, <nCount>) -> cSubString|Extract the leftmost substring of a character expression - String - String ]
+Left(<cString>, <nCount>) -> cSubString
+
+[Len |F Len(<cString> | <aTarget>) -> nCount|Returns size of a string or size of an array. - String Numeric - String Numeric ]
+Len(<cString> | <aTarget>) -> nCount
+
+[Lennum |F LenNum( <nNumber> ) -> nLength ]
+LenNum( <nNumber> ) -> nLength
+
+[Libfree |F LibFree( <pDllHandle> ) -> lSuccess ]
+LibFree( <pDllHandle> ) -> lSuccess
+
+[Libload |F LibLoad( <cDllFile> ) -> pDLL ]
+LibLoad( <cDllFile> ) -> pDLL
+
+[Loadlibrary |F LoadLibrary( <cDLLFile> ) -> nDllHandle ]
+LoadLibrary( <cDLLFile> ) -> nDllHandle
+
+[Log |F Log(<nExp>) -> nNaturalLog|Returns the natural logarithm of a number. - Numeric - Numeric ]
+Log(<nExp>) -> nNaturalLog
+
+[Log10 |F Log10( <nNumber> ) -> nLogarithm|Decadic logarithm of a number - Numeric - Numeric ]
+Log10( <nNumber> ) -> nLogarithm
+
+[Lower |F Lower(<cString>) -> cLowerString|Universally lowercases a character string expression. - String - String ]
+Lower(<cString>) -> cLowerString
+
+[Ltrim |F LTrim(<cString>) -> cTrimString|Formata cadeias de caracteres que possuam espacos em branco a esquerda - String - String ]
+LTrim(<cString>) -> cTrimString
+
+[Lupdate |F LUpdate() -> dModification|Verifica a data da utltima modificacao da tabela corrente - Dbf - Dbf ]
+LUpdate() -> dModification
+
+[Makedir |F MakeDir( <cDirectory> ) -> nOSError|Cria um diretorio ]
+MakeDir( <cDirectory> ) -> nOSError
+
+[Mantissa |F Mantissa( <nFloatingPointNumber> ) --> nMantissa|Evaluate the mantissa of a floating point number ]
+Mantissa( <nFloatingPointNumber> ) --> nMantissa
+
+[Max |F Max(<xExp1>, <xExp2>) -> xLarger|Tem o objetivo de retornar o maior entre dois valores numericos ou data - Programming Numeric - Programming Numeric ]
+Max(<xExp1>, <xExp2>) -> xLarger
+
+[Maxcol |F MaxCol() -> nColumn|Returns the maximun number of columns in the current video mode ]
+MaxCol() -> nColumn
+
+[Maxrow |F MaxRow() -> nRow|Returns the current screen row position ]
+MaxRow() -> nRow
+
+[Mcol |F MCol( ) -> nMouseCol|Returns the mouse cursor column position. - ]
+MCol( ) -> nMouseCol
+
+[Mdblclk |F MDblClk( <nNewInterval> ) -> nMilliSeconds|Determine the double-click speed threshold of the mouse ]
+MDblClk( <nNewInterval> ) -> nMilliSeconds
+
+[Mdy |F MDY( [<dDate>] ) -> cDateString|Returns the date as a string in Month DD, YY or Month DD, YYYY - Date Conversion String ]
+MDY( [<dDate>] ) -> cDateString
+
+[Memoedit |F MEMOEDIT()|Display or edit character strings and memo fields ]
+MEMOEDIT()
+
+[Memoline |F MemoLine(<cString>, <nLineLength> , <nLineNumber> , <nTabSize> , <lWrap> ) -> cLine|Extrai uma linha de uma string ou de um campo memo - Memo ]
+MemoLine(<cString>, <nLineLength> , <nLineNumber> , <nTabSize> , <lWrap> ) -> cLine
+
+[Memoread |F MemoRead(<cFile>) -> cString|Le um arquivo texto e retorna uma string - Memo ]
+MemoRead(<cFile>) -> cString
+
+[Memory |F Memory(<nExp>) -> nKBytes ]
+Memory(<nExp>) -> nKBytes
+
+[Memosetsuper |F MEMOSETSUPER()|Set an RDD inheritance chain for the DBFMEMO database driver ]
+MEMOSETSUPER()
+
+[Memotran |F MemoTran(<cString>, <cReplaceHardCR> , <cReplaceSoftCR> ) -> cNewString|Converts hard and soft carriage returns within strings. - String Memo ]
+MemoTran(<cString>, <cReplaceHardCR> , <cReplaceSoftCR> ) -> cNewString
+
+[Memowrit |F MemoWrit(<cFile>, <cString>) -> lSuccess|Write a memo field or character string to a text file on disk - Memo ]
+MemoWrit(<cFile>, <cString>) -> lSuccess
+
+[Memvarblock |F MemvarBlock(<cMemvarName>) -> bMemvarBlock|Returns a codeblock that sets/gets a value of memvar variable - MemVar ]
+MemvarBlock(<cMemvarName>) -> bMemvarBlock
+
+[Menumodal |F MenuModal( <oTopBarMenu>, <nStartItem> , <nMsgRow> , <nMsgLeft> , <nMsgRight> , <cMsgColor> , <GetList> ) -> nMenuItemID ]
+MenuModal( <oTopBarMenu>, <nStartItem> , <nMsgRow> , <nMsgLeft> , <nMsgRight> , <cMsgColor> , <GetList> ) -> nMenuItemID
+
+[Mhide |F MHide( ) -> NIL|Hide the mouse pointer ]
+MHide( ) -> NIL
+
+[Min |F Min(<xExp1>, <xExp2>) -> xSmaller|Tem o objetivo de retornar o menor entre dois valores numericos ou data - Numeric - Numeric ]
+Min(<xExp1>, <xExp2>) -> xSmaller
+
+[Mlcount |F MLCount(<cString>, <nLineLength> , <nTabSize> , <lWrap> ) -> nLines|Conta o numero de linhas de uma string - Memo ]
+MLCount(<cString>, <nLineLength> , <nTabSize> , <lWrap> ) -> nLines
+
+[Mlctopos |F MLCToPos(<cText>, <nWidth>, <nLine>, <nCol>, <nTabSize> , <lWrap> ) -> nPosition|Return position of a string based on line and column position - Memo - Memo ]
+MLCToPos(<cText>, <nWidth>, <nLine>, <nCol>, <nTabSize> , <lWrap> ) -> nPosition
+
+[Mleftdown |F MLeftDown( ) -> lLeftButtonIsPressed|Determine the press status of the left mouse button ]
+MLeftDown( ) -> lLeftButtonIsPressed
+
+[Mlpos |F MLPos(<cString>, <nLineLenght>, <nLine>, <nTabSize> , <lWrap> ) -> nPosition|Determine the position of a line in a string or memo field - Memo ]
+MLPos(<cString>, <nLineLenght>, <nLine>, <nTabSize> , <lWrap> ) -> nPosition
+
+[Mod |F Mod(<nDivident>, <nDivisior>) -> nRemainder|Return the modulus of two numbers. - Numeric - Numeric - Numeric ]
+Mod(<nDivident>, <nDivisior>) -> nRemainder
+
+[Month |F Month(<dDate>) -> nMonth|Converte o valor da data para o numero do mes - Date - Date ]
+Month(<dDate>) -> nMonth
+
+[Mpostolc |F MPosToLC(<cText>, <nWidth>, <nPos>, <nTabSize> , <lWrap> ) -> aLineColumn|Return line/ column position of a string based on a position - Memo ]
+MPosToLC(<cText>, <nWidth>, <nPos>, <nTabSize> , <lWrap> ) -> aLineColumn
+
+[Mpresent |F MPresent( ) -> lMouseIsPresent|Determine if a mouse is present ]
+MPresent( ) -> lMouseIsPresent
+
+[Mreststate |F MRestState( <cSavedState> ) -> NIL|Re-establish the previous state of a mouse ]
+MRestState( <cSavedState> ) -> NIL
+
+[Mrightdown |F MRightDown( ) -> lRightButtonIsPressed|Determine the status of the right mouse button ]
+MRightDown( ) -> lRightButtonIsPressed
+
+[Mrow |F MRow( ) -> nMouseRow|Returns the mouse cursor row position. ]
+MRow( ) -> nMouseRow
+
+[Msavestate |F MSaveState( ) -> cSavedState|Save the current state of a mouse ]
+MSaveState( ) -> cSavedState
+
+[Msetbounds |F MSetBounds( <nTop> , <nLeft> , <nBottom> , <nRight> ) -> NIL|Set screen boundaries for the mouse cursor ]
+MSetBounds( <nTop> , <nLeft> , <nBottom> , <nRight> ) -> NIL
+
+[Msetclip |F MSETCLIP()|Define an inclusion region ]
+MSETCLIP()
+
+[Msetcursor |F MSetCursor( <lOnOff> ) -> lPreviousSetting|Determine a mouse's visibility ]
+MSetCursor( <lOnOff> ) -> lPreviousSetting
+
+[Msetpos |F MSetPos( <nRow>, <nCol> ) -> NIL|Set a new position for the mouse cursor ]
+MSetPos( <nRow>, <nCol> ) -> NIL
+
+[Mshow |F MShow( ) -> NIL|Display the mouse pointer ]
+MShow( ) -> NIL
+
+[Mstate |F MSTATE()|Return the current mouse state ]
+MSTATE()
+
+[Neterr |F NetErr(<lNewError>) -> lError|Tests the success of a network function - Programming Error Network ]
+NetErr(<lNewError>) -> lError
+
+[Netname |F NetName() -> cWorkstationName|Return the current workstation identification - Network ]
+NetName() -> cWorkstationName
+
+[Nextkey |F NextKey() -> nInkeyCode|Get the next key code in the buffer without extracting it. ]
+NextKey() -> nInkeyCode
+
+[Nosnow |F NoSnow(<lToggle>) -> Nil ]
+NoSnow(<lToggle>) -> Nil
+
+[Notifyall |F NotifyAll( <pMutexHandle> ) -> NIL ]
+NotifyAll( <pMutexHandle> ) -> NIL
+
+[Ntoc |F NToC( <xNumber>[, <nBase>][, <nLength>][, <cPadChar>] ) -> <cNumber> ]
+NToC( <xNumber>[, <nBase>][, <nLength>][, <cPadChar>] ) -> <cNumber>
+
+[Ntocdow |F NToCDoW( <nDay> ) -> cDay|(num of day) -> day name - Date Conversion ]
+NToCDoW( <nDay> ) -> cDay
+
+[Ntocmonth |F NToCMonth( <nMonth> ) -> cMonth|(num of month ) -> Month Name - Date Conversion ]
+NToCMonth( <nMonth> ) -> cMonth
+
+[Ntocolor |F NToColor( <nAttr>, [<lColorCode>] ) -> <cAttr> ]
+NToColor( <nAttr>, [<lColorCode>] ) -> <cAttr>
+
+[Numat |F NumAt( <cStringToMatch>, <cString>, [<nIgnore>] ) --> nCount|Number of occurrences of a sequence in a string ]
+NumAt( <cStringToMatch>, <cString>, [<nIgnore>] ) --> nCount
+
+[Numbuttons |F NumButtons( ) -> nButtonCount ]
+NumButtons( ) -> nButtonCount
+
+[Numtohex |F NumToHex( <nNum_or_pPointer>, <nLen> ) -> cHexString ]
+NumToHex( <nNum_or_pPointer>, <nLen> ) -> cHexString
+
+[Numtoken |F NumToken( <cString>, [<cTokenizer>], [<nSkipWidth>] ) -> nTokenCount|Retrieves the number of tokens in a string ]
+NumToken( <cString>, [<cTokenizer>], [<nSkipWidth>] ) -> nTokenCount
+
+[Ordbagext |F OrdBagExt( ) -> cFileExtension|Returns the Order Bag extension - Index ]
+OrdBagExt( ) -> cFileExtension
+
+[Ordbagname |F OrdBagName( <nOrder_or_cIndexName> ) -> cIndexFilename|Returns the Order Bag Name. - Index ]
+OrdBagName( <nOrder_or_cIndexName> ) -> cIndexFilename
+
+[Ordcondset |F ORDCOND()|Set a condicao e o escopo para a ordem corrente - Index ]
+ORDCOND()
+
+[Ordcount |F OrdCount( <cIndexFile> ) -> nOpenIndexes|Index ]
+OrdCount( <cIndexFile> ) -> nOpenIndexes
+
+[Ordcreate |F OrdCreate( <cIndexFile>, <cIndexName> , <cIndexExpr>, <bIndexExpr>, <lUnique> ) -> NIL|Cria uma ordem em determinado arquivo de indice - Index ]
+OrdCreate( <cIndexFile>, <cIndexName> , <cIndexExpr>, <bIndexExpr>, <lUnique> ) -> NIL
+
+[Ordcustom |F OrdCustom( <cIndexName> | <nOrder> , <cIndexFile> , <lNewCustomFlag> ) -> lOldCustomFlag ]
+OrdCustom( <cIndexName> | <nOrder> , <cIndexFile> , <lNewCustomFlag> ) -> lOldCustomFlag
+
+[Orddescend |F OrdDescend( <cIndexName> | <nOrder> , <cIndexFile> , <lNewDescendFlag> ) -> lOldDescendFlag|Return and optionally change the descending flag of an order - Index ]
+OrdDescend( <cIndexName> | <nOrder> , <cIndexFile> , <lNewDescendFlag> ) -> lOldDescendFlag
+
+[Orddestroy |F OrdDestroy( <cIndexName> , <cIndexFile> ) -> NIL|Remove a specified order from an order bag - Index ]
+OrdDestroy( <cIndexName> , <cIndexFile> ) -> NIL
+
+[Ordfindrec |F OrdFindRec( <nRecno>, <lCurrentRec> ) -> lFound ]
+OrdFindRec( <nRecno>, <lCurrentRec> ) -> lFound
+
+[Ordfor |F OrdFor( <nOrder_or_cIndexName> , <cIndexFile> ) -> cForExpression|Return the FOR expression of an Order - Index ]
+OrdFor( <nOrder_or_cIndexName> , <cIndexFile> ) -> cForExpression
+
+[Ordisunique |F OrdIsUnique( <nOrder_or_cIndexName> , <cIndexFile> ) -> lUniqueFlag|Return the status of the unique flag for a given order - Index ]
+OrdIsUnique( <nOrder_or_cIndexName> , <cIndexFile> ) -> lUniqueFlag
+
+[Ordkey |F ordKey( <cOrderName>  OR  <nOrder> [, <cOrderBagName>] ) --> cExpKey|Return the key expression of an Order - Index ]
+ordKey( <cOrderName>  OR  <nOrder> [, <cOrderBagName>] ) --> cExpKey
+
+[Ordkeyadd |F OrdKeyAdd( <nOrder_or_cIndexName> , <cIndexFile> , <xIndexValue> ) -> lSuccess|Add a key to a custom built order - Index ]
+OrdKeyAdd( <nOrder_or_cIndexName> , <cIndexFile> , <xIndexValue> ) -> lSuccess
+
+[Ordkeycount |F OrdKeyCount( <nOrder_or_cIndexName> , <cIndexFile> ) -> nKeyCount|Return the number of keys in an order - Index ]
+OrdKeyCount( <nOrder_or_cIndexName> , <cIndexFile> ) -> nKeyCount
+
+[Ordkeydel |F OrdKeyDel( <nOrder_or_cIndexName> , <cIndexFile> , <xIndexValue> ) -> lSuccess|Delete a key from a custom built order - Index ]
+OrdKeyDel( <nOrder_or_cIndexName> , <cIndexFile> , <xIndexValue> ) -> lSuccess
+
+[Ordkeygoto |F OrdKeyGoTo( <nIndexKeyNo> ) -> lSuccess|Move to a record specified by its logical record number - Index ]
+OrdKeyGoTo( <nIndexKeyNo> ) -> lSuccess
+
+[Ordkeyno |F OrdKeyNo( <nOrder_or_cIndexName> , <cIndexFile> ) -> nOrdKeyNo|Get the logical record number of the current record - Index ]
+OrdKeyNo( <nOrder_or_cIndexName> , <cIndexFile> ) -> nOrdKeyNo
+
+[Ordkeyrelpos |F OrdKeyRelPos( <nNewPosition> ) -> nRelativePosition ]
+OrdKeyRelPos( <nNewPosition> ) -> nRelativePosition
+
+[Ordkeyval |F OrdKeyVal( ) -> xIndexValue|Get key value of the current record from controlling order - Index ]
+OrdKeyVal( ) -> xIndexValue
+
+[Ordlistadd |F OrdListAdd( <cIndexFile> ) -> NIL|Acrescenta uma ou mais ordens a lista - Index - Index ]
+OrdListAdd( <cIndexFile> ) -> NIL
+
+[Ordlistclear |F OrdListClear( ) -> NIL|Clear the current order list - Index ]
+OrdListClear( ) -> NIL
+
+[Ordlistrebuild |F OrdListRebuild( ) -> NIL|Rebuild all orders in the order list of the current work area - Index ]
+OrdListRebuild( ) -> NIL
+
+[Ordname |F OrdName( <nOrder> , <cIndexFile> ) -> cIndexName|Return the name of an order in the order list - Index ]
+OrdName( <nOrder> , <cIndexFile> ) -> cIndexName
+
+[Ordnumber |F OrdNumber( <cIndexName> , <cIndexFile> ) -> nOrder|Return the position of an order in the current order list - Index ]
+OrdNumber( <cIndexName> , <cIndexFile> ) -> nOrder
+
+[Ordscope |F OrdScope( <nScope>, <xNewValue> ) -> xOldValue|Set or clear the boundaries for scoping key values - Index ]
+OrdScope( <nScope>, <xNewValue> ) -> xOldValue
+
+[Ordsetfocus |F OrdSetFocus( <nOrder_or_cIndexName> , <cIndexFile> ) -> cOldIndexName|Set focus to an order in an order list - Index ]
+OrdSetFocus( <nOrder_or_cIndexName> , <cIndexFile> ) -> cOldIndexName
+
+[Ordsetrelation |F OrdSetRelation( <nArea_or_cAlias>, <bRelation>, <cRelation> ) -> NIL|Relate a specified work - Index ]
+OrdSetRelation( <nArea_or_cAlias>, <bRelation>, <cRelation> ) -> NIL
+
+[Ordskipraw |F OrdSkipRaw( <nRecords> ) -> NIL ]
+OrdSkipRaw( <nRecords> ) -> NIL
+
+[Ordskipunique |F OrdSkipUnique( <nDirection> ) -> lSuccess|Move record pointer to the next or previous unique key - Index ]
+OrdSkipUnique( <nDirection> ) -> lSuccess
+
+[Ordwildseek |F OrdWildSeek( <cWildCardString>, <lCurrentRec> , <lBackwards> ) -> lFound ]
+OrdWildSeek( <cWildCardString>, <lCurrentRec> , <lBackwards> ) -> lFound
+
+[Os |F OS() -> cOSName|Return the current operating system. - Programming - Programming ]
+OS() -> cOSName
+
+[Os_iswin2000 |F Os_IsWin2000( ) -> lIsWin2000 ]
+Os_IsWin2000( ) -> lIsWin2000
+
+[Os_iswin2000_or_later |F Os_IsWin2000_Or_Later( ) -> lIsWin2000_Or_Later ]
+Os_IsWin2000_Or_Later( ) -> lIsWin2000_Or_Later
+
+[Os_iswin2003 |F Os_IsWin2003( ) -> lIsWin2003 ]
+Os_IsWin2003( ) -> lIsWin2003
+
+[Os_iswin95 |F Os_IsWin95( ) -> lIsWin95 ]
+Os_IsWin95( ) -> lIsWin95
+
+[Os_iswin98 |F Os_IsWin98( ) -> lIsWin98 ]
+Os_IsWin98( ) -> lIsWin98
+
+[Os_iswin9x |F Os_IsWin9X( ) -> lIsWin9X ]
+Os_IsWin9X( ) -> lIsWin9X
+
+[Os_iswinme |F Os_IsWinME( ) -> lIsWinME ]
+Os_IsWinME( ) -> lIsWinME
+
+[Os_iswinnt351 |F Os_IsWinNT351( ) -> lIsWinNT351 ]
+Os_IsWinNT351( ) -> lIsWinNT351
+
+[Os_iswinnt4 |F Os_IsWinNT4( ) -> lIsWinNT40 ]
+Os_IsWinNT4( ) -> lIsWinNT40
+
+[Os_iswinvista |F Os_IsWinVISTA( ) -> lIsWinVista ]
+Os_IsWinVISTA( ) -> lIsWinVista
+
+[Os_iswinxp |F Os_IsWinXP( ) -> lIsWinXP ]
+Os_IsWinXP( ) -> lIsWinXP
+
+[Os_iswtsclient |F Os_IsWtsClient( ) -> lIsWtsClient ]
+Os_IsWtsClient( ) -> lIsWtsClient
+
+[Os_versioninfo |F Os_VersionInfo( ) -> aVersionInfo ]
+Os_VersionInfo( ) -> aVersionInfo
+
+[Outerr |F OutErr(<exp list>) -> Nil|Write a list of values to the standard error device ]
+OutErr(<exp list>) -> Nil
+
+[Outstd |F OutStd(<exp list>) -> Nil|Write a list of values to the standard output device ]
+OutStd(<exp list>) -> Nil
+
+[Pad |F Pad(<exp>, <nLength>, <cFillChar> ) -> cPaddedString ]
+Pad(<exp>, <nLength>, <cFillChar> ) -> cPaddedString
+
+[Padc |F PadC(<exp>, <nLength>, <cFillChar> ) -> cPaddedString|Insere caracteres de preenchimento centraliza &lt;exp&gt;, adicionando caracteres de preenchimento a direita e a esquerda - String - String ]
+PadC(<exp>, <nLength>, <cFillChar> ) -> cPaddedString
+
+[Padl |F PadL(<exp>, <nLength>, <cFillChar> ) -> cPaddedString|Insere caracteres de preenchimentoAdiciona caracteres de preenchimento a esquerda - String - String ]
+PadL(<exp>, <nLength>, <cFillChar> ) -> cPaddedString
+
+[Padleft |F PadLeft( <cString>, <nLength>, [<cChar OR nChar>] ) -> cString|Fills string to a certain length on the left ]
+PadLeft( <cString>, <nLength>, [<cChar OR nChar>] ) -> cString
+
+[Padr |F PadR(<exp>, <nLength>, <cFillChar> ) -> cPaddedString|Insere caracteres de preenchimento Adiciona caracteres de preenchimento a direita - String - String ]
+PadR(<exp>, <nLength>, <cFillChar> ) -> cPaddedString
+
+[Padright |F PadRight( <cString>, <nLength>, [<cChar OR nChar>] ) -> cString|Fills string to a certain length on the right ]
+PadRight( <cString>, <nLength>, [<cChar OR nChar>] ) -> cString
+
+[Payment |F Payment( nLoan, nInterest, nPeriods ) --> nPayment|Payments for a loan - Numeric ]
+Payment( nLoan, nInterest, nPeriods ) --> nPayment
+
+[Pcol |F PCol() -> nColumn|Informa ou muda a coluna corrente de impressao - Printing ]
+PCol() -> nColumn
+
+[Pcount |F PCount() -> nLastArgumentPos|Retrieves the number of arguments passed to a function. ]
+PCount() -> nLastArgumentPos
+
+[Periods |F Periods( nLoan, nPayment, nInterest ) --> nPeriods|Number of periods for a loan ]
+Periods( nLoan, nPayment, nInterest ) --> nPeriods
+
+[Pi |F Pi() -> nPi|Returns Pi, the perimeter-to-diameter-ratio of a circle - Numeric - Numeric ]
+Pi() -> nPi
+
+[Posalpha |F PosAlpha( <cString>, [<lMode>], [<nIgnore>] ) -> nPosition|Left-most position of a letter in a string - String ]
+PosAlpha( <cString>, [<lMode>], [<nIgnore>] ) -> nPosition
+
+[Poschar |F PosChar( <[@]cString>, <cCharacter OR nCharacter>, [<nPosition>] ) -> cString|Replace character at a certain position within a string - String ]
+PosChar( <[@]cString>, <cCharacter OR nCharacter>, [<nPosition>] ) -> cString
+
+[Posdel |F PosDel( <cString>, [<nStartPosition>], <nLength> ) -> cString|Delete characters at a certain position within a string - String ]
+PosDel( <cString>, [<nStartPosition>], <nLength> ) -> cString
+
+[Posdiff |F PosDiff( <cString1>, <cString2>, [<nIgnore>] ) -> nPosition|The left-most position there two string differ ]
+PosDiff( <cString1>, <cString2>, [<nIgnore>] ) -> nPosition
+
+[Posequal |F PosEqual( <cString1>, <cString2>, [<nCompare>], [<nIgnore>] ) -> nPosition|The left-most position there two string begin to be equal ]
+PosEqual( <cString1>, <cString2>, [<nCompare>], [<nIgnore>] ) -> nPosition
+
+[Posins |F PosIns( <cString>, <cInsert>, [<nPosition>] ) -> cString|Insert characters at a certain position within a string - String ]
+PosIns( <cString>, <cInsert>, [<nPosition>] ) -> cString
+
+[Poslower |F PosLower( <cString>, [<lMode>], [<nIgnore>] ) -> nPosition|Left-most position of a lowercase letter in a string - String ]
+PosLower( <cString>, [<lMode>], [<nIgnore>] ) -> nPosition
+
+[Posrange |F PosRange( <cChar1>, <cChar2>, <cString>, [<lMode>],[<nIgnore>] ) -> nPosition|Left-most position of a character from a set in a string ]
+PosRange( <cChar1>, <cChar2>, <cString>, [<lMode>],[<nIgnore>] ) -> nPosition
+
+[Posrepl |F PosRepl( <[@]cString>, <cReplacement>, [<nStartPosition>] ) -> cString|Replace characters at a certain position within a string - String ]
+PosRepl( <[@]cString>, <cReplacement>, [<nStartPosition>] ) -> cString
+
+[Posupper |F PosUpper( <cString>, [<lMode>], [<nIgnore>] ) -> nPosition|Left-most position of an uppercase letter in a string - String ]
+PosUpper( <cString>, [<lMode>], [<nIgnore>] ) -> nPosition
+
+[Printerexists |F PrinterExists( <cPrinterName> ) -> lInstalled ]
+PrinterExists( <cPrinterName> ) -> lInstalled
+
+[Printerporttoname |F PrinterPortToName( <cPortName> ) -> cPrinterName ]
+PrinterPortToName( <cPortName> ) -> cPrinterName
+
+[Printfileraw |F PrintFileRaw( <cPrinterName>, <cFileName>, <cJobTitle> ) -> nErrorCode ]
+PrintFileRaw( <cPrinterName>, <cFileName>, <cJobTitle> ) -> nErrorCode
+
+[Printready |F PrintReady( [<nPrinter>] ) -> lPrinterReady ]
+PrintReady( [<nPrinter>] ) -> lPrinterReady
+
+[Printstat |F PrintStat( [<nPrinter>] ) -> nState ]
+PrintStat( [<nPrinter>] ) -> nState
+
+[Procfile |F ProcFile( <nCallStack> ) -> cPrgFilename|This function allways returns an empty string. - Programming ]
+ProcFile( <nCallStack> ) -> cPrgFilename
+
+[Procline |F ProcLine(<nActivation>) -> nSourceLine|Tem como objetivo retornar o numero de linha do codigo fonte da ativacao corrente ou anterior. - Programming ]
+ProcLine(<nActivation>) -> nSourceLine
+
+[Procname |F ProcName(<nActivation>) -> cProcedureName|Tem o objetivo de retornar o nome da rotina ou funcao definida pelo usuario corrente ou anterior. - Programming ]
+ProcName(<nActivation>) -> cProcedureName
+
+[Prow |F PRow() -> nRow|Informa ou muda a linha corrente de impressao - Printing ]
+PRow() -> nRow
+
+[Pvalue |F PValue( <nParamPos> ) -> xParamValue|Present value of a loan - Numeric ]
+PValue( <nParamPos> ) -> xParamValue
+
+[Qout |F QOut(<exp list>) -> Nil|Display a list of expressions to the console - Terminal ]
+QOut(<exp list>) -> Nil
+
+[Qqout |F QQOut(<exp list>) -> Nil|Terminal ]
+QQOut(<exp list>) -> Nil
+
+[Quarter |F Quarter( [<dDate>] ) -> nQuarter|Returns a number equal to the quarter in which a date falls - Date ]
+Quarter( [<dDate>] ) -> nQuarter
+
+[Queryregistry |F QueryRegistry( <nHKEY>, <cRegPath>, <cRegKey>, <xValue>, <lCreate> ) -> lExists ]
+QueryRegistry( <nHKEY>, <cRegPath>, <cRegKey>, <xValue>, <lCreate> ) -> lExists
+
+[Rangerem |F RangeRem( <cChar1 OR nChar1>, <cChar2|nChar2>, <cString> ) -> cString ]
+RangeRem( <cChar1 OR nChar1>, <cChar2
+
+[Rangerepl |F RangeRepl( <cChar1 OR nChar1>, <cChar2|nChar2>,<[@]cString>, <cReplacementChar ]
+RangeRepl( <cChar1 OR nChar1>, <cChar2
+
+[Rascan |F RAscan( <aArray>, <xbSearch>, <nStart> , <nCount> , <lExact> , <lASCII> ) -> nElement ]
+RAscan( <aArray>, <xbSearch>, <nStart> , <nCount> , <lExact> , <lASCII> ) -> nElement
+
+[Rat |F RAt(<cSearch>, <cTarget>) -> nPosition|Retorna a posicao da ultima ocorrencia de um substring. - String - String ]
+RAt(<cSearch>, <cTarget>) -> nPosition
+
+[Rate |F Rate( nLoan, nPayment, nPeriods ) --> nRate|Estimate rate of interest for a loan ]
+Rate( nLoan, nPayment, nPeriods ) --> nRate
+
+[Rddinfo |F RddInfo( <nDefine>, <xNewSetting> , <cRddName> ) -> xOldSetting|Remove a Directory ]
+RddInfo( <nDefine>, <xNewSetting> , <cRddName> ) -> xOldSetting
+
+[Rddlist |F RddList( <nRddType> ) -> aRDDNames|Return an array of the RDDs - RDD ]
+RddList( <nRddType> ) -> aRDDNames
+
+[Rddname |F RddName( ) -> cRDDName|Return name of RDD active in current or specified work area - RDD ]
+RddName( ) -> cRDDName
+
+[Rddsetdefault |F RddSetDefault( <cNewRDD> ) -> cOldRDD|Modifica ou verifica o RDD padrao - RDD ]
+RddSetDefault( <cNewRDD> ) -> cOldRDD
+
+[Readexit |F ReadExit(<lToggle>) -> lCurrentState|Activate full-screen editing mode using Get objects ]
+ReadExit(<lToggle>) -> lCurrentState
+
+[Readformat |F READFORMAT()|Return and optionally set code block to implement format file ]
+READFORMAT()
+
+[Readinsert |F ReadInsert(<lToggle>) ->lCurrentMode|Toggle the current insert mode for READ and MEMOEDIT() ]
+ReadInsert(<lToggle>) ->lCurrentMode
+
+[Readkey |F ReadKey() -> nReadkeyCode|Determine which key terminated a READ. ]
+ReadKey() -> nReadkeyCode
+
+[Readkill |F READKILL()|Return and optionally set whether current READ can be exited ]
+READKILL()
+
+[Readmodal |F ReadModal(<aGetList>) -> Nil|Activate a full-screen editing mode for a GetList ]
+ReadModal(<aGetList>) -> Nil
+
+[Readupdated |F READUPDATED()|Determine whether any GET variables changed during a READ ]
+READUPDATED()
+
+[Readvar |F ReadVar() -> cVarName|Retorna o nome da variavel que esta sendo editada ]
+ReadVar() -> cVarName
+
+[Reccount |F RecCount() -> nRecords|Counts the number of records in a database. - Dbf - Dbf ]
+RecCount() -> nRecords
+
+[Recno |F RecNo() -> nRecord|Returns the current record number or identity. - Dbf - Dbf ]
+RecNo() -> nRecord
+
+[Recsize |F RecSize() -> nBytes|Verifica o tamanho do registro da tabela corrente - Dbf - Dbf ]
+RecSize() -> nBytes
+
+[Remall |F RemAll( <cString>, [<cSearch OR nSearch>] ) -> cString|Remove certain characters at the left and right of a string ]
+RemAll( <cString>, [<cSearch OR nSearch>] ) -> cString
+
+[Remleft |F RemLeft( <cString>, [<cSearch OR nSearch>] ) -> cString|Remove certain characters at the left of a string ]
+RemLeft( <cString>, [<cSearch OR nSearch>] ) -> cString
+
+[Remright |F RemRight( <cString>, [<cSearch OR nSearch>] ) -> cString|Remove certain characters at the right of a string ]
+RemRight( <cString>, [<cSearch OR nSearch>] ) -> cString
+
+[Replall |F ReplAll( <cString>, <cReplace OR nReplace>, [<cSearch|nSearch>] ) -> cString ]
+ReplAll( <cString>, <cReplace OR nReplace>, [<cSearch
+
+[Replicate |F Replicate(<cString>, <nCount>) -> cRepeatedString|Repeats a single character expression - String - String ]
+Replicate(<cString>, <nCount>) -> cRepeatedString
+
+[Replleft |F ReplLeft( <cString>, <cReplace OR nReplace>, [<cSearch|nSearch>] ) -> cString ]
+ReplLeft( <cString>, <cReplace OR nReplace>, [<cSearch
+
+[Replright |F ReplRight( <cString>, <cReplace OR nReplace>, [<cSearch|nSearch>] ) -> cString ]
+ReplRight( <cString>, <cReplace OR nReplace>, [<cSearch
+
+[Restscreen |F RestScreen( <nTop> , <nLeft> , <nBottom> , <nRight> , <cScreen>) -> Nil ]
+RestScreen( <nTop> , <nLeft> , <nBottom> , <nRight> , <cScreen>) -> Nil
+
+[Resttoken |F RestToken( <cStaticTokenEnvironment> ) -> cOldStaticEnvironment|Restore global token environment ]
+RestToken( <cStaticTokenEnvironment> ) -> cOldStaticEnvironment
+
+[Right |F Right(<cString>, <nCount>) -> cSubString|Extract the rightmost substring of a character expression - String - String ]
+Right(<cString>, <nCount>) -> cSubString
+
+[Rlock |F RLock() -> lSuccess|Bloqueia o registro ccorrente dca tabela ativa - Dbf Locking - Dbf Locking ]
+RLock() -> lSuccess
+
+[Round |F Round(<nNumber>, <nDecimals>) -> nRounded|Rounds off a numeric expression. - Numeric - Numeric ]
+Round(<nNumber>, <nDecimals>) -> nRounded
+
+[Row |F Row() -> nRow|Returns the current screen row position - Terminal - Terminal ]
+Row() -> nRow
+
+[Rtod |F RToD( nRadiant ) -> nDegree|Convert radiant to degree - Numeric Conversion - Numeric Conversion ]
+RToD( nRadiant ) -> nDegree
+
+[Rtrim |F RTrim(<cString>) -> cTrimString|Formata cadeias de caracteres que contenham espacos em branco a direita - String - String ]
+RTrim(<cString>) -> cTrimString
+
+[Savescreen |F SaveScreen( <nTop> , <nLeft> , <nBottom> , <nRight> ) -> cScreen ]
+SaveScreen( <nTop> , <nLeft> , <nBottom> , <nRight> ) -> cScreen
+
+[Savetoken |F SaveToken() -> cStaticTokenEnvironment|Save the global token environment ]
+SaveToken() -> cStaticTokenEnvironment
+
+[Sayscreen |F SayScreen( <cString>, [<nRow>], [<nCol>] ) -> <cEmptyString> ]
+SayScreen( <cString>, [<nRow>], [<nCol>] ) -> <cEmptyString>
+
+[Screenattr |F ScreenAttr( [<nRow>], [<nColumn>] ) -> <nAttr> ]
+ScreenAttr( [<nRow>], [<nColumn>] ) -> <nAttr>
+
+[Screenmix |F ScreenMix( <cCharString>, <cAttributeString>, [<nRow>], [<nCol>] ) -> <cEmptyString> ]
+ScreenMix( <cCharString>, <cAttributeString>, [<nRow>], [<nCol>] ) -> <cEmptyString>
+
+[Screentext |F ScreenText( <nTop>, <nLeft>, <nBottom>, <nRight> ) ]
+ScreenText( <nTop>, <nLeft>, <nBottom>, <nRight> )
+
+[Scroll |F Scroll( <nTop> , <nLeft> , <nBottom> , <nRight> , <nVert> , <nHoriz> ) -> Nil ]
+Scroll( <nTop> , <nLeft> , <nBottom> , <nRight> , <nVert> , <nHoriz> ) -> Nil
+
+[Seconds |F Seconds() -> nSeconds|Retorna o numero de segundos decorridos desde a meia noite - Time - Time - Time ]
+Seconds() -> nSeconds
+
+[Secondssleep |F SecondsSleep( <nSeconds> ) -> NIL ]
+SecondsSleep( <nSeconds> ) -> NIL
+
+[Secs |F Secs( <cTime> ) -> nSeconds|Return the number of seconds from the system date. - Time ]
+Secs( <cTime> ) -> nSeconds
+
+[Select |F Select( <cAlias> ) -> nWorkArea|Change the current work area - Dbf - Dbf ]
+Select( <cAlias> ) -> nWorkArea
+
+[Set |F Set(<nSpecifier>, <expNewSetting> , <lOpenMode> ) -> lCurrentSetting|Changes or evaluated environmental settings - Settings - Settings ]
+Set(<nSpecifier>, <expNewSetting> , <lOpenMode> ) -> lCurrentSetting
+
+[Setatlike |F SETATLIKE ([<nMode>] [, <[@]cWildcard>]) --> nOldMode|Determine scan behaviour in some string functions ]
+SETATLIKE ([<nMode>] [, <[@]cWildcard>]) --> nOldMode
+
+[Setblink |F SetBlink( <lToggle> ) -> lCurrentSetting|Toggle * interpretation between blinking/background intensity ]
+SetBlink( <lToggle> ) -> lCurrentSetting
+
+[Setcancel |F SetCancel( <lToggle> ) -> lCurrentSetting|Toggle Alt+C and Ctrl+Break as program termination keys ]
+SetCancel( <lToggle> ) -> lCurrentSetting
+
+[Setcolor |F SetColor( <cColorString> ) -> cColorString|Return the current colors and optionally set new colors - Settings GDI ]
+SetColor( <cColorString> ) -> cColorString
+
+[Setcursor |F SetCursor( <nCursorShape> ) -> nCurrentSetting|Set the cursor shape ]
+SetCursor( <nCursorShape> ) -> nCurrentSetting
+
+[Setdate |F SetDate( <nDay>, <nMonth>, <nYear> ) -> <lSuccess>|Sets the system date ]
+SetDate( <nDay>, <nMonth>, <nYear> ) -> <lSuccess>
+
+[Setkey |F SetKey(<nInkeyCode>, <bAction> ) -> bCurrentAction|Assign an action block to a key ]
+SetKey(<nInkeyCode>, <bAction> ) -> bCurrentAction
+
+[Setlasterror |F SetLastError( <nNewErrorCode> ) -> nOldErrorCode ]
+SetLastError( <nNewErrorCode> ) -> nOldErrorCode
+
+[Setmode |F SetMode(<nRows>, <nCols>) -> lSuccess|Change the video mode to a specified number of rows and columns ]
+SetMode(<nRows>, <nCols>) -> lSuccess
+
+[Setmouse |F SetMouse( <lOnOff> , <nRow> , <nCol> ) -> lIsMouseVisible ]
+SetMouse( <lOnOff> , <nRow> , <nCol> ) -> lIsMouseVisible
+
+[Setpos |F SetPos(<nRow>, <nCol>) -> Nil|Settings ]
+SetPos(<nRow>, <nCol>) -> Nil
+
+[Setprc |F SetPrc(<nRow>, <nCol>) -> Nil|Configura a linha e coluna correntes de impressao ]
+SetPrc(<nRow>, <nCol>) -> Nil
+
+[Setprec |F SetPREC( <nPrecision> ) -> cEmptyString|Set precision of math functions ]
+SetPREC( <nPrecision> ) -> cEmptyString
+
+[Setregistry |F SetRegistry( <nHKEY>, <cRegPath>, <cRegKey>, <xValue> ) -> lSuccess ]
+SetRegistry( <nHKEY>, <cRegPath>, <cRegKey>, <xValue> ) -> lSuccess
+
+[Settime |F SetTime( <nHour>, <nMinutes>, [<nSeconds>], [<nMillSecs>] ) -> <lSuccess>|Sets the system clock ]
+SetTime( <nHour>, <nMinutes>, [<nSeconds>], [<nMillSecs>] ) -> <lSuccess>
+
+[Settypeahead |F SetTypeahead( <nSize> ) --> <nPreviousSize>|Sets the typeahead buffer to given size. ]
+SetTypeahead( <nSize> ) --> <nPreviousSize>
+
+[Sign |F Sign( <nNumber> ) -> nSign|Sign of a number - Numeric Programming ]
+Sign( <nNumber> ) -> nSign
+
+[Sin |F Sin( <nAngle> ) -> nSin|Sine of the argument - Numeric - Numeric ]
+Sin( <nAngle> ) -> nSin
+
+[Sinh |F Sinh( nArea ) -> nHyperbolicSine|Hyperbolic Sine of the argument ]
+Sinh( nArea ) -> nHyperbolicSine
+
+[Soundex |F SoundEx(<cString>) -> cSoundExString|String - String ]
+SoundEx(<cString>) -> cSoundExString
+
+[Space |F Space(<nCount>) -> cSpaces|Retorna uma string de espacos ]
+Space(<nCount>) -> cSpaces
+
+[Sqrt |F Sqrt(<nNumber>) -> nRoot|Retorna a raiz quadrada de um numero positivo - Numeric - Numeric ]
+Sqrt(<nNumber>) -> nRoot
+
+[Standard |F Standard() -> <cEmptyString>|Select the "STANDARD" color value for output ]
+Standard() -> <cEmptyString>
+
+[Startthread |F StartThread( <bBlock_or_cFuncName_or_pFuncPtr>, <xParams> ) ]
+StartThread( <bBlock_or_cFuncName_or_pFuncPtr>, <xParams> )
+
+[Stod |F StoD( <cDate> ) -> dDate|Date String ]
+StoD( <cDate> ) -> dDate
+
+[Stopthread |F StopThread( <pThreadHandle>, <pMutexHandle> ) -> NIL ]
+StopThread( <pThreadHandle>, <pMutexHandle> ) -> NIL
+
+[Str |F Str(<nNumber>, <nLength> , <nDecimals> ) -> cNumber|Convert a numeric expression to a character string. - String Numeric Conversion - String Numeric Conversion ]
+Str(<nNumber>, <nLength> , <nDecimals> ) -> cNumber
+
+[Strdiff |F StrDiff( <cString1>, <cString2>, [<nReplacementPenalty>], [<nDeletionPenalty>],[<nInsertionPenalty>] ) -> <nDistance>|Evaluate the "Edit (Levensthein) Distance" of two strings ]
+StrDiff( <cString1>, <cString2>, [<nReplacementPenalty>], [<nDeletionPenalty>],[<nInsertionPenalty>] ) -> <nDistance>
+
+[Strswap |F StrSwap( <[@]cString1>, <[@]cString2> ) -> cString|Swap the contents of two strings ]
+StrSwap( <[@]cString1>, <[@]cString2> ) -> cString
+
+[Strtohex |F StrToHex( <cString>, <cSeparator> ) -> cHexString ]
+StrToHex( <cString>, <cSeparator> ) -> cHexString
+
+[Strtran |F StrTran(<cString>, <cSearch>, <cReplace> , <nStart> , <nCount> ) -> cNewString|Realiza a busca da ocorrencia da string. A funcao Strtran() e case-sensitive. - String - String ]
+StrTran(<cString>, <cSearch>, <cReplace> , <nStart> , <nCount> ) -> cNewString
+
+[Strzero |F StrZero( <nNumber>, <nLength> , <nDecimals> ) -> cString|Convert a numeric expression to a character string, zero padded. - String Conversion Numeric ]
+StrZero( <nNumber>, <nLength> , <nDecimals> ) -> cString
+
+[Stuff |F Stuff(<cString>, <nStart>, <nDelete>, <cInsert>) -> cNewString|Eliminar e inseri caracteres em um string. - String - String ]
+Stuff(<cString>, <nStart>, <nDelete>, <cInsert>) -> cNewString
+
+[Subscribenow |F SubscribeNow( <pMutexHandle>, <nWaitMilliSecs>, <@lNotified> ) -> xReturn ]
+SubscribeNow( <pMutexHandle>, <nWaitMilliSecs>, <@lNotified> ) -> xReturn
+
+[Substr |F SubStr(<cString>, <nStart>, <nCount> ) -> cSubstring|Returns a substring from a main string - String - String ]
+SubStr(<cString>, <nStart>, <nCount> ) -> cSubstring
+
+[Tabexpand |F TABEXPAND (<cString>, [<nTabWidth>], [<cFillChar OR nFillChar>],[<cNewLineCharacters>], [<cTabChar|nTabChar>],[<lIgnore141>]) -> cExpandedString ]
+TABEXPAND (<cString>, [<nTabWidth>], [<cFillChar OR nFillChar>],[<cNewLineCharacters>], [<cTabChar
+
+[Tabpack |F TabPack( <cString>, [<nTabWidth>], [<cFillChar OR nFillChar>],[<cNewLineCharacters>], [<cTabChar|nTabChar>],[<lIgnore141>] ) -> cPackedString ]
+TabPack( <cString>, [<nTabWidth>], [<cFillChar OR nFillChar>],[<cNewLineCharacters>], [<cTabChar
+
+[Tan |F Tan( nRadiant ) -> nTangent|Tangent of the argument - Numeric - Numeric ]
+Tan( nRadiant ) -> nTangent
+
+[Tanh |F Tanh( nArea ) -> nHyperbolicTangent|Hyperbolic Tangent of the argument ]
+Tanh( nArea ) -> nHyperbolicTangent
+
+[Tbmouse |F TBMouse( <oTBrowse>, <nMouseRow>, <nMouseCol> ) -> nHandled ]
+TBMouse( <oTBrowse>, <nMouseRow>, <nMouseCol> ) -> nHandled
+
+[Tbrowsedb |F TBrowseDB( <nTop> , <nLeft> , <nBottom> , <nRight> ) -> oTBrowse|Create a new TBrowse object to be used with database file ]
+TBrowseDB( <nTop> , <nLeft> , <nBottom> , <nRight> ) -> oTBrowse
+
+[Tbrowsenew |F TBrowseNew( <nTop> , <nLeft> , <nBottom> , <nRight> ) -> oTBrowse|Create a Browse Object ]
+TBrowseNew( <nTop> , <nLeft> , <nBottom> , <nRight> ) -> oTBrowse
+
+[Threadsleep |F ThreadSleep( <nMilliSeconds>, <lNoCpu> ) -> NIL ]
+ThreadSleep( <nMilliSeconds>, <lNoCpu> ) -> NIL
+
+[Throw |F Throw( <oError> ) -> NIL ]
+Throw( <oError> ) -> NIL
+
+[Time |F Time() -> cTimeString|Utilizada para exibir ou imprimir a hora do sistema em um relatorio ou na tela - Time - Time ]
+Time() -> cTimeString
+
+[Timevalid |F TimeValid( <cTime> ) --> lValid|Determines whether a specIFied time is valid ]
+TimeValid( <cTime> ) --> lValid
+
+[Token |F Token( <cString>, [<cTokenizer>],[<nTokenCount], [<nSkipWidth>],[<@cPreTokenSep>], [<@cPostTokenSep>] ) -> cToken|Tokens of a string ]
+Token( <cString>, [<cTokenizer>],[<nTokenCount], [<nSkipWidth>],[<@cPreTokenSep>], [<@cPostTokenSep>] ) -> cToken
+
+[Tokenat |F TokenAt( [<lSeparatorPositionBehindToken>], [<nToken>],[<@cTokenEnvironment>] ) -> nPosition|Get start and end positions of tokens in a token environment ]
+TokenAt( [<lSeparatorPositionBehindToken>], [<nToken>],[<@cTokenEnvironment>] ) -> nPosition
+
+[Tokenend |F TokenEnd( [<@cTokenEnvironment>] ) -> lTokenEnd|Check whether additional tokens are available with TokenNext() ]
+TokenEnd( [<@cTokenEnvironment>] ) -> lTokenEnd
+
+[Tokenexit |F TokenExit() -> lStaticEnvironmentReleased|Release global token environment ]
+TokenExit() -> lStaticEnvironmentReleased
+
+[Tokeninit |F TokenInit( <[@]cString>], [<cTokenizer>], [<nSkipWidth>],[<@cTokenEnvironment>] ) -> lState|Initializes a token environment ]
+TokenInit( <[@]cString>], [<cTokenizer>], [<nSkipWidth>],[<@cTokenEnvironment>] ) -> lState
+
+[Tokenlower |F TokenLower( <[@]cString>, [<cTokenizer>], [<nTokenCount>],[<nSkipWidth>] ) -> cString|Change the first letter of tokens to lower case ]
+TokenLower( <[@]cString>, [<cTokenizer>], [<nTokenCount>],[<nSkipWidth>] ) -> cString
+
+[Tokennext |F TokenNext( <[@]cString>, [<nToken>],[<@cTokenEnvironment>] ) -> cToken|Successivly obtains tokens from a string ]
+TokenNext( <[@]cString>, [<nToken>],[<@cTokenEnvironment>] ) -> cToken
+
+[Tokennum |F TokenNum( [<@cTokenEnvironment>] ) -> nNumberofTokens|Get the total number of tokens in a token environment ]
+TokenNum( [<@cTokenEnvironment>] ) -> nNumberofTokens
+
+[Tokensep |F TokenSep( [<lMode>] ) -> cSeparator|Retrieves the token separators of the last Token() call ]
+TokenSep( [<lMode>] ) -> cSeparator
+
+[Tokenupper |F TokenUpper( <[@]cString>, [<cTokenizer>], [<nTokenCount>],[<nSkipWidth>] ) -> cString|Change the first letter of tokens to upper case ]
+TokenUpper( <[@]cString>, [<cTokenizer>], [<nTokenCount>],[<nSkipWidth>] ) -> cString
+
+[Tone |F Tone(<nFrequency>, <nDuration>) -> Nil|Sound a tone with a specified frequency and duration. - Terminal ]
+Tone(<nFrequency>, <nDuration>) -> Nil
+
+[Tracelog |F TraceLog( <xVariables> ) -> lTrue ]
+TraceLog( <xVariables> ) -> lTrue
+
+[Transform |F Transform(<exp>, <cSayPicture>) -> cFormatString|Converte qualquer valor para uma cadeia de caracteres formatada - String - String ]
+Transform(<exp>, <cSayPicture>) -> cFormatString
+
+[Trim |F Trim(<cString>) -> cTrimString|Remove trailing spaces from a string. - String - String ]
+Trim(<cString>) -> cTrimString
+
+[Tstring |F TString( <nSeconds> ) -> cTimeString|String Time - String ]
+TString( <nSeconds> ) -> cTimeString
+
+[Type |F Type(<cExp>) -> cType|Display the contents of a text file - Programming - Programming ]
+Type(<cExp>) -> cType
+
+[U2bin |F U2bin( <nNumber> ) -> cInteger|Convert Harbour numeric into unsigned long encoded bytes ]
+U2bin( <nNumber> ) -> cInteger
+
+[Unselected |F Unselected() -> <cEmptyString>|Select the "UNSELECTED" color value for output ]
+Unselected() -> <cEmptyString>
+
+[Untextwin |F UnTextWin( <nTopLine>, <nLeftColumn>, <nBottomLine>, <nRightColumn>,<cReplacementCharacter OR nReplacementCharacter>,[<cInitialCharacter|nInitialCharacter>],[<cEndCharacter ]
+UnTextWin( <nTopLine>, <nLeftColumn>, <nBottomLine>, <nRightColumn>,<cReplacementCharacter OR nReplacementCharacter>,[<cInitialCharacter
+
+[Updated |F Updated() -> lChange|Update current database file from another database file ]
+Updated() -> lChange
+
+[Upper |F Upper(<cString>) -> cUpperString|Converts a character expression to uppercase format - String - String ]
+Upper(<cString>) -> cUpperString
+
+[Used |F Used() -> lDfbOpen|Determina se ha um arquivo de banco de dados em uso em uma area de trabalho especifica - Dbf - Dbf ]
+Used() -> lDfbOpen
+
+[Val |F Val(<cNumber>) -> nNumber|Converte uma sequencia de caracteres que contem digitos numericos, em um valor numerico - Conversion String Numeric - Conversion String Numeric ]
+Val(<cNumber>) -> nNumber
+
+[Valpos |F ValPos( <cString>, [<nPosition>] ) --> nDigitValue|Numerical value of a character at a certain position ]
+ValPos( <cString>, [<nPosition>] ) --> nDigitValue
+
+[Valtoprgexp |F ValToPrgExp( <xValue> ) -> cMacroExpression ]
+ValToPrgExp( <xValue> ) -> cMacroExpression
+
+[Valtype |F ValType(<exp>) -> cType|Tem o objetivo de retornar uma string contendo a descricao do tipo da variavel informada por parametro - Programming ]
+ValType(<exp>) -> cType
+
+[Version |F Version() -> cVersion|Returns the HARBOUR Version or the Harbour/Compiler Version. - Programming - Programming ]
+Version() -> cVersion
+
+[Vgapalette |F VGAPalette( [<cColor OR nColor>, [<nRedValue>, <nGreenValue>,<nBlueValue]] ) --> lValid|Changes VGA palette colors ]
+VGAPalette( [<cColor OR nColor>, [<nRedValue>, <nGreenValue>,<nBlueValue]] ) --> lValid
+
+[Videotype |F VideoType() --> nMask|Detects supported video adapter modes ]
+VideoType() --> nMask
+
+[W2bin |F W2Bin( <nNumber> ) -> cInteger|Converte um valor numerico para um inteiro com sinal de 16 bits. ]
+W2Bin( <nNumber> ) -> cInteger
+
+[Waitforthreads |F WaitForThreads( ) -> NIL|Suspend program processing until a key is pressed ]
+WaitForThreads( ) -> NIL
+
+[Waitperiod |F WaitPeriod( [<nDelay>] ) --> lNotElapsed|Pauses a specified time in increments of 1/100 seconds ]
+WaitPeriod( [<nDelay>] ) --> lNotElapsed
+
+[Week |F Week( [<dDate>][, <lSWN>] ) -> nWeek|Returns the calendar week a number - Date ]
+Week( [<dDate>][, <lSWN>] ) -> nWeek
+
+[Wildmatch |F WildMatch( <cPattern>, <cString>, <lFullMatch> ) -> lFound ]
+WildMatch( <cPattern>, <cString>, <lFullMatch> ) -> lFound
+
+[Word |F Word(<nNumber>) -> Nil|Converts double to integer values. ]
+Word(<nNumber>) -> Nil
+
+[Wordone |F WordOne( [<cDoubleCharactersToReduce>,] <cString> ) -> cReducedString|Reduce multiple occurences of a double character to one ]
+WordOne( [<cDoubleCharactersToReduce>,] <cString> ) -> cReducedString
+
+[Wordonly |F WordOnly( <cThisDoubleCharactersOnly>, <cString> ) -> cReducedString|Intersectional set of two strings based on double characters ]
+WordOnly( <cThisDoubleCharactersOnly>, <cString> ) -> cReducedString
+
+[Wordrem |F WordRem( <cDeleteThisDoubleCharacters>, <cString> ) -> cReducedString|Removes characters from a string ]
+WordRem( <cDeleteThisDoubleCharacters>, <cString> ) -> cReducedString
+
+[Wordrepl |F WordRepl( <cDoubleCharacterSearchString>, <[@]cString>,<cDoubleCharacterReplaceString>, [<lMode>] ) -> cString|Replacement of double characters ]
+WordRepl( <cDoubleCharacterSearchString>, <[@]cString>,<cDoubleCharacterReplaceString>, [<lMode>] ) -> cString
+
+[Wordswap |F WordSwap( <[@]cString> [, <lSwapCharacters>] ) -> cSwappedString|Swap neighbouring double characters in a string ]
+WordSwap( <[@]cString> [, <lSwapCharacters>] ) -> cSwappedString
+
+[Wordtochar |F WordToChar( <cDoubleCharacterSearchString>, <cString>,<cSingleCharacterReplaceString> ) -> cString|Replace double with single characters ]
+WordToChar( <cDoubleCharacterSearchString>, <cString>,<cSingleCharacterReplaceString> ) -> cString
+
+[Xtoc |F XToC( <expValue> ) --> cValue ]
+XToC( <expValue> ) --> cValue
+
+[Year |F Year(<dDate>) -> nYear|Converte o valor da data no valor numerico do ano - Date Conversion - Date Conversion ]
+Year(<dDate>) -> nYear
+
+[__atprompt |F __AtPrompt( <nRow>, <nCol>, <cPrompt>, [<xMsg>] ) --> .F.|Display a menu item on screen and define a message ]
+__AtPrompt( <nRow>, <nCol>, <cPrompt>, [<xMsg>] ) --> .F.
+
+[__dbcopyxstruct |F __dbCopyXStruct( <cFileName> ) --> lSuccess|Copy current database structure into a definition file ]
+__dbCopyXStruct( <cFileName> ) --> lSuccess
+
+[__dbcreate |F __dbCreate( <cFileName>, [<cFileFrom>], [<cRDDName>], [<lNew>], [<cAlias>] ) --> lUsed|Create structure extended file or use one to create new file ]
+__dbCreate( <cFileName>, [<cFileFrom>], [<cRDDName>], [<lNew>], [<cAlias>] ) --> lUsed
+
+[__dbstructfilter |F __dbStructFilter( <aStruct>, [<aFieldList>] ) --> aStructFiltered|Filter a database structure array ]
+__dbStructFilter( <aStruct>, [<aFieldList>] ) --> aStructFiltered
+
+[__dir |F __Dir( [<cFileMask>] ) --> NIL|Display listings of files ]
+__Dir( [<cFileMask>] ) --> NIL
+
+[__fledit |F __FLedit( <aStruct>, [<aFieldList>] ) --> aStructFiltered|Filter a database structure array ]
+__FLedit( <aStruct>, [<aFieldList>] ) --> aStructFiltered
+
+[__input |F __Input( <cMessage> ) --> <cString>|Stops application ]
+__Input( <cMessage> ) --> <cString>
+
+[__menuto |F __MenuTo( <bBlock>, <cVariable> ) --> nChoice|Invoked a menu defined by set of @...PROMPT ]
+__MenuTo( <bBlock>, <cVariable> ) --> nChoice
+
+[__mvclear |F __mvClear()|This function releases all PRIVATE and PUBLIC variables ]
+__mvClear()
+
+[__mvdbginfo |F __mvDbgInfo( <nScope> [, <nPosition> [, @<cVarName>] ] )|This function returns the information about the variables for debugger ]
+__mvDbgInfo( <nScope> [, <nPosition> [, @<cVarName>] ] )
+
+[__mvexist |F __mvExist( <cVarName> ) --> <lVariableExist>|Determine if a given name is a PUBLIC or PRIVATE memory variable ]
+__mvExist( <cVarName> ) --> <lVariableExist>
+
+[__mvget |F __mvGet( <cVarName> ) --> <xVar>|This function returns value of memory variable ]
+__mvGet( <cVarName> ) --> <xVar>
+
+[__mvprivate |F __mvPrivate( <variable_name> )|This function creates a PRIVATE variable ]
+__mvPrivate( <variable_name> )
+
+[__mvpublic |F __mvPublic( <variable_name> )|This function creates a PUBLIC variable ]
+__mvPublic( <variable_name> )
+
+[__mvrelease |F __mvRelease( <skeleton>, <include_exclude_flag> )|This function releases PRIVATE variables ]
+__mvRelease( <skeleton>, <include_exclude_flag> )
+
+[__mvscope |F __mvScope( <cVarName> )|If variable exists then returns its scope. ]
+__mvScope( <cVarName> )
+
+[__mvxrelease |F __mvXRelease( <variable_name> )|This function releases value stored in PRIVATE or PUBLIC variable ]
+__mvXRelease( <variable_name> )
+
+[__objadddata |F __objAddData( <oObject>, <cDataName> ) --> oObject|Add a VAR to an already existing class ]
+__objAddData( <oObject>, <cDataName> ) --> oObject
+
+[__objaddinline |F __objAddInline( <oObject>, <cInlineName>, <bInline> ) --> oObject|Add an INLINE to an already existing class ]
+__objAddInline( <oObject>, <cInlineName>, <bInline> ) --> oObject
+
+[__objaddmethod |F __objAddMethod( <oObject>, <cMethodName>, <nFuncPtr> ) --> oObject|Add a METHOD to an already existing class ]
+__objAddMethod( <oObject>, <cMethodName>, <nFuncPtr> ) --> oObject
+
+[__objdelinline |F __objDelInline( <oObject>, <cSymbol> ) --> oObject|Delete a METHOD INLINE from class ]
+__objDelInline( <oObject>, <cSymbol> ) --> oObject
+
+[__objdelmethod |F __objDelMethod( <oObject>, <cDataName> ) --> oObject|Delete a VAR (instance variable) from class ]
+__objDelMethod( <oObject>, <cDataName> ) --> oObject
+
+[__objderivedfrom |F __objDerivedFrom( <oObject>, <xSuper> ) --> lIsParent|Determine whether a class is derived from another class ]
+__objDerivedFrom( <oObject>, <xSuper> ) --> lIsParent
+
+[__objgetmethodlist |F __objGetMethodList( <oObject> ) --> aMethodNames|Return names of all METHOD for a given object ]
+__objGetMethodList( <oObject> ) --> aMethodNames
+
+[__objgetmsglist |F __objGetMsgList( <oObject>, [<lData>], [nClassType] ) --> aNames|Return names of all VAR or METHOD for a given object ]
+__objGetMsgList( <oObject>, [<lData>], [nClassType] ) --> aNames
+
+[__objgetvaluelist |F __objGetValueList( <oObject>, [<aExcept>] ) --> aData|Return an array of VAR names and values for a given object ]
+__objGetValueList( <oObject>, [<aExcept>] ) --> aData
+
+[__objhasdata |F __objHasData( <oObject>, <cSymbol> ) --> lExist|Determine whether a symbol exist in object as VAR ]
+__objHasData( <oObject>, <cSymbol> ) --> lExist
+
+[__objhasmethod |F __objHasMethod( <oObject>, <cSymbol> ) --> lExist|Determine whether a symbol exist in object as METHOD ]
+__objHasMethod( <oObject>, <cSymbol> ) --> lExist
+
+[__objmodinline |F __objModInline( <oObject>, <cInlineName>, <bInline> ) --> oObject|Modify (replace) an INLINE method in an already existing class ]
+__objModInline( <oObject>, <cInlineName>, <bInline> ) --> oObject
+
+[__objmodmethod |F __objModMethod( <oObject>, <cMethodName>, <nFuncPtr> ) --> oObject|Modify (replace) a METHOD in an already existing class ]
+__objModMethod( <oObject>, <cMethodName>, <nFuncPtr> ) --> oObject
+
+[__objsetvaluelist |F __objSetValueList( <oObject>, <aData> ) --> oObject|Set object with an array of VAR names and values ]
+__objSetValueList( <oObject>, <aData> ) --> oObject
+
+[__setcentury |F __SetCentury([<lFlag>  OR  <cOnOff> ] ) --> lPreviousValue|Set the Current Century ]
+__SetCentury([<lFlag>  OR  <cOnOff> ] ) --> lPreviousValue
+
+[__typefile |F __TypeFile( <cFile>, [<lPrint>] ) --> NIL|Show the content of a file on the console and/or printer ]
+__TypeFile( <cFile>, [<lPrint>] ) --> NIL
+
+[__wait |F __Wait( <cMessage> ) --> <cKey>|Stops the application until a key is pressed. ]
+__Wait( <cMessage> ) --> <cKey>
+
+[__xhelp |F __XHelp() --> <xValue>|Determines whether a HELP() user defined function exists. ]
+__XHelp() --> <xValue>
+
