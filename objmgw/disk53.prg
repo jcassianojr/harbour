@@ -883,6 +883,10 @@ FOR nCont := 1 TO Len(cXml)
       cLetra := "c"
    CASE nAscii == 199
       cLetra := "C"
+   CASE nAscii == 241
+       cLetra := "n"
+   CASE nAscii == 209
+        cLetra := "N"    
    CASE AScan({193,194,195,192},nAscii) != 0
       cLetra := "A"
    CASE AScan({224,225,226,227,228,229},nAscii) != 0
